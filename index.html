@@ -3,30 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>loczb - 个人主页</title>
-    <link rel="stylesheet" href="style.css">
+    <meta name="description" content="loczb - 全栈开发者个人主页，专注于创造优雅的 Web 解决方案">
+    <meta name="keywords" content="全栈开发, Web开发, React, Node.js, 前端, 后端">
+    <meta name="author" content="loczb">
+    <meta property="og:title" content="loczb - 全栈开发者">
+    <meta property="og:description" content="热爱编程，专注于创造优雅的解决方案">
+    <meta property="og:type" content="website">
+    
+    <!-- 预加载关键资源 -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" as="style">
+    
+    <title>loczb - 全栈开发者 | 个人主页</title>
+    
+    <!-- 样式表 -->
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👨‍💻</text></svg>">
 </head>
 <body>
+    <!-- 页面加载动画 -->
+    <div class="page-loader" id="pageLoader">
+        <div class="loader-content">
+            <div class="loader-spinner"></div>
+            <p class="loader-text">Loading...</p>
+        </div>
+    </div>
+
+    <!-- 鼠标跟随效果 -->
+    <div class="cursor-follower" id="cursorFollower"></div>
+    <div class="cursor-dot" id="cursorDot"></div>
+
     <!-- 导航栏 -->
-    <nav class="navbar">
+    <header class="navbar" role="banner">
         <div class="nav-container">
-            <a href="#" class="nav-logo">loczb</a>
-            <button class="nav-toggle" aria-label="打开菜单">
-                <span></span>
-                <span></span>
-                <span></span>
+            <a href="#" class="nav-logo" aria-label="返回首页">
+                <span class="logo-bracket">&lt;</span>loczb<span class="logo-bracket">/&gt;</span>
+            </a>
+            
+            <button class="nav-toggle" aria-label="打开菜单" aria-expanded="false" aria-controls="navMenu">
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
             </button>
-            <ul class="nav-menu">
-                <li><a href="#about" class="nav-link">关于</a></li>
-                <li><a href="#skills" class="nav-link">技能</a></li>
-                <li><a href="#projects" class="nav-link">项目</a></li>
-                <li><a href="#contact" class="nav-link">联系</a></li>
-            </ul>
-            <button class="theme-toggle" aria-label="切换主题">
-                <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            
+            <nav class="nav-menu" id="navMenu" role="navigation">
+                <ul class="nav-list">
+                    <li><a href="#about" class="nav-link magnetic-btn">关于</a></li>
+                    <li><a href="#timeline" class="nav-link magnetic-btn">经历</a></li>
+                    <li><a href="#skills" class="nav-link magnetic-btn">技能</a></li>
+                    <li><a href="#projects" class="nav-link magnetic-btn">作品</a></li>
+                    <li><a href="#blog" class="nav-link magnetic-btn">博客</a></li>
+                    <li><a href="#contact" class="nav-link magnetic-btn">联系</a></li>
+                </ul>
+            </nav>
+            
+            <button class="theme-toggle magnetic-btn" aria-label="切换主题" id="themeToggle">
+                <svg class="theme-icon sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                     <circle cx="12" cy="12" r="5"></circle>
                     <line x1="12" y1="1" x2="12" y2="3"></line>
                     <line x1="12" y1="21" x2="12" y2="23"></line>
@@ -37,138 +73,790 @@
                     <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
                     <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
                 </svg>
-                <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <svg class="theme-icon moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                     <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
                 </svg>
             </button>
         </div>
-    </nav>
+    </header>
 
-    <!-- 英雄区域 -->
-    <section class="hero">
-        <div class="hero-content">
-            <h1>你好，我是 <span>loczb</span></h1>
-            <p class="subtitle">全栈开发者</p>
-            <p class="description">热爱编程，专注于创造优雅的解决方案</p>
-        </div>
-    </section>
-
-    <!-- 关于我 -->
-    <section id="about" class="section">
-        <div class="container">
-            <h2>关于我</h2>
-            <div class="about-content">
-                <div class="about-text">
-                    <p>我是一名充满热情的全栈开发者，拥有多年的 Web 开发经验。热爱创造美观、高效、用户友好的应用程序。</p>
-                    <p>我的技术栈涵盖前端和后端开发，始终保持对新技术的学习热情。</p>
+    <main id="mainContent">
+        <!-- 英雄区域 -->
+        <section class="hero" aria-label="简介">
+            <div class="hero-background">
+                <div class="gradient-orb orb-1"></div>
+                <div class="gradient-orb orb-2"></div>
+                <div class="gradient-orb orb-3"></div>
+            </div>
+            <div class="hero-content">
+                <p class="hero-greeting">👋 你好，我是</p>
+                <h1 class="hero-title">
+                    <span class="typewriter" data-text="loczb"></span>
+                    <span class="cursor">|</span>
+                </h1>
+                <p class="hero-subtitle">
+                    <span class="highlight">全栈开发者</span> & 
+                    <span class="highlight">UI 设计师</span>
+                </p>
+                <p class="hero-description">
+                    热爱编程，专注于创造<span class="text-gradient">优雅</span>、
+                    <span class="text-gradient">高效</span>、
+                    <span class="text-gradient">用户友好</span>的应用程序
+                </p>
+                <div class="hero-cta">
+                    <a href="#projects" class="btn btn-primary magnetic-btn">
+                        <span>查看作品</span>
+                        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </a>
+                    <a href="#contact" class="btn btn-secondary magnetic-btn">联系我</a>
                 </div>
-                <div class="stats">
-                    <div class="stat" data-target="5">
-                        <span class="number">0</span>
-                        <span class="label">年经验</span>
+                <div class="hero-social">
+                    <a href="https://github.com/zzdbilly" target="_blank" rel="noopener noreferrer" class="social-link magnetic-btn" aria-label="GitHub">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                    </a>
+                    <a href="mailto:loczb@example.com" class="social-link magnetic-btn" aria-label="邮箱">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                    </a>
+                    <a href="#" class="social-link magnetic-btn" aria-label="Twitter">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/></svg>
+                    </a>
+                </div>
+            </div>
+            <div class="scroll-indicator">
+                <div class="mouse">
+                    <div class="wheel"></div>
+                </div>
+                <p>向下滚动</p>
+            </div>
+        </section>
+
+        <!-- 关于我 -->
+        <section id="about" class="section about-section" aria-labelledby="aboutTitle">
+            <div class="container">
+                <header class="section-header">
+                    <span class="section-tag">关于我</span>
+                    <h2 id="aboutTitle" class="section-title">了解我的<span class="text-gradient">故事</span></h2>
+                    <p class="section-subtitle">用代码构建梦想，用设计传递价值</p>
+                </header>
+                
+                <div class="about-grid">
+                    <article class="about-card about-intro">
+                        <div class="about-icon">💡</div>
+                        <h3>创意开发者</h3>
+                        <p>我是一名充满热情的全栈开发者，拥有多年的 Web 开发经验。热爱创造美观、高效、用户友好的应用程序。</p>
+                        <p>我的技术栈涵盖前端和后端开发，始终保持对新技术的学习热情。</p>
+                    </article>
+                    
+                    <article class="about-card about-philosophy">
+                        <div class="about-icon">🎯</div>
+                        <h3>开发理念</h3>
+                        <p>相信代码不仅是功能的实现，更是艺术的表达。每一行代码都追求简洁、优雅、可维护。</p>
+                        <p>用户体验至上，性能优化不懈，持续学习不止。</p>
+                    </article>
+                    
+                    <article class="about-card about-goal">
+                        <div class="about-icon">🚀</div>
+                        <h3>未来目标</h3>
+                        <p>致力于成为技术领域的终身学习者，探索 AI、Web3 等前沿技术，创造更有价值的产品。</p>
+                        <p>期待与志同道合的伙伴一起，打造改变世界的应用。</p>
+                    </article>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card" data-target="5">
+                        <div class="stat-icon">📅</div>
+                        <div class="stat-content">
+                            <span class="stat-number" data-suffix="+">0</span>
+                            <span class="stat-label">年开发经验</span>
+                        </div>
+                        <div class="stat-progress"></div>
                     </div>
-                    <div class="stat" data-target="50">
-                        <span class="number">0</span>
-                        <span class="label">项目</span>
+                    <div class="stat-card" data-target="50">
+                        <div class="stat-icon">📦</div>
+                        <div class="stat-content">
+                            <span class="stat-number" data-suffix="+">0</span>
+                            <span class="stat-label">完成项目</span>
+                        </div>
+                        <div class="stat-progress"></div>
                     </div>
-                    <div class="stat" data-target="30">
-                        <span class="number">0</span>
-                        <span class="label">客户</span>
+                    <div class="stat-card" data-target="30">
+                        <div class="stat-icon">😊</div>
+                        <div class="stat-content">
+                            <span class="stat-number" data-suffix="+">0</span>
+                            <span class="stat-label">满意客户</span>
+                        </div>
+                        <div class="stat-progress"></div>
+                    </div>
+                    <div class="stat-card" data-target="100">
+                        <div class="stat-icon">☕</div>
+                        <div class="stat-content">
+                            <span class="stat-number" data-suffix="+" data-prefix="~">0</span>
+                            <span class="stat-label">杯咖啡</span>
+                        </div>
+                        <div class="stat-progress"></div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- 技能 -->
-    <section id="skills" class="section alt">
-        <div class="container">
-            <h2>我的技能</h2>
-            <div class="skills-grid">
-                <div class="skill-card">
-                    <h3>前端开发</h3>
-                    <p>HTML5, CSS3, JavaScript, React, Vue</p>
-                    <div class="progress"><div class="progress-bar" data-percent="90"></div></div>
-                </div>
-                <div class="skill-card">
-                    <h3>后端开发</h3>
-                    <p>Node.js, Python, Go, RESTful APIs</p>
-                    <div class="progress"><div class="progress-bar" data-percent="85"></div></div>
-                </div>
-                <div class="skill-card">
-                    <h3>数据库</h3>
-                    <p>MySQL, PostgreSQL, MongoDB, Redis</p>
-                    <div class="progress"><div class="progress-bar" data-percent="80"></div></div>
-                </div>
-                <div class="skill-card">
-                    <h3>DevOps</h3>
-                    <p>Docker, CI/CD, Linux, Cloud</p>
-                    <div class="progress"><div class="progress-bar" data-percent="75"></div></div>
+        <!-- 时间线 -->
+        <section id="timeline" class="section timeline-section" aria-labelledby="timelineTitle">
+            <div class="container">
+                <header class="section-header">
+                    <span class="section-tag">经历</span>
+                    <h2 id="timelineTitle" class="section-title">我的<span class="text-gradient">成长轨迹</span></h2>
+                    <p class="section-subtitle">从入门到精通，每一步都算数</p>
+                </header>
+                
+                <div class="timeline">
+                    <div class="timeline-line"></div>
+                    
+                    <article class="timeline-item">
+                        <div class="timeline-marker">
+                            <span class="timeline-dot"></span>
+                            <span class="timeline-date">2024 - 至今</span>
+                        </div>
+                        <div class="timeline-content">
+                            <div class="timeline-card">
+                                <span class="timeline-badge">当前</span>
+                                <h3>高级全栈工程师</h3>
+                                <p class="timeline-company">某知名科技公司</p>
+                                <p class="timeline-desc">负责核心产品的前后端架构设计与开发，带领团队完成多个大型项目。</p>
+                                <ul class="timeline-highlights">
+                                    <li>主导微服务架构迁移</li>
+                                    <li>优化系统性能，提升 200%</li>
+                                    <li>建立前端工程化体系</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </article>
+                    
+                    <article class="timeline-item">
+                        <div class="timeline-marker">
+                            <span class="timeline-dot"></span>
+                            <span class="timeline-date">2022 - 2024</span>
+                        </div>
+                        <div class="timeline-content">
+                            <div class="timeline-card">
+                                <h3>全栈开发工程师</h3>
+                                <p class="timeline-company">某互联网创业公司</p>
+                                <p class="timeline-desc">参与产品从0到1的全过程，负责前后端开发和数据库设计。</p>
+                                <ul class="timeline-highlights">
+                                    <li>独立完成 10+ 个核心功能模块</li>
+                                    <li>设计并实现 RESTful API</li>
+                                    <li>搭建 CI/CD 自动化流程</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </article>
+                    
+                    <article class="timeline-item">
+                        <div class="timeline-marker">
+                            <span class="timeline-dot"></span>
+                            <span class="timeline-date">2020 - 2022</span>
+                        </div>
+                        <div class="timeline-content">
+                            <div class="timeline-card">
+                                <h3>前端开发工程师</h3>
+                                <p class="timeline-company">某数字营销公司</p>
+                                <p class="timeline-desc">专注于响应式网站开发和交互体验优化。</p>
+                                <ul class="timeline-highlights">
+                                    <li>开发 20+ 企业官网</li>
+                                    <li>实现复杂动画效果</li>
+                                    <li>获得客户 100% 满意度</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </article>
+                    
+                    <article class="timeline-item">
+                        <div class="timeline-marker">
+                            <span class="timeline-dot"></span>
+                            <span class="timeline-date">2019 - 2020</span>
+                        </div>
+                        <div class="timeline-content">
+                            <div class="timeline-card">
+                                <h3>自学编程</h3>
+                                <p class="timeline-company">学习之旅</p>
+                                <p class="timeline-desc">通过在线课程和开源项目自学 Web 开发，打下坚实的技术基础。</p>
+                                <ul class="timeline-highlights">
+                                    <li>完成 FreeCodeCamp 全栈课程</li>
+                                    <li>参与 5+ 开源项目贡献</li>
+                                    <li>建立个人技术博客</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </article>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- 项目 -->
-    <section id="projects" class="section">
-        <div class="container">
-            <h2>项目作品</h2>
-            <div class="projects-grid">
-                <div class="project-card">
-                    <h3>个人博客系统</h3>
-                    <p>功能完整的博客平台，支持文章管理、评论系统</p>
-                    <div class="tags"><span>React</span><span>Node.js</span><span>MongoDB</span></div>
+        <!-- 技能 -->
+        <section id="skills" class="section skills-section" aria-labelledby="skillsTitle">
+            <div class="container">
+                <header class="section-header">
+                    <span class="section-tag">技能</span>
+                    <h2 id="skillsTitle" class="section-title">技术<span class="text-gradient">能力栈</span></h2>
+                    <p class="section-subtitle">不断扩展的技术武器库</p>
+                </header>
+                
+                <div class="skills-container">
+                    <div class="skills-category">
+                        <h3 class="category-title">
+                            <span class="category-icon">🎨</span>
+                            前端开发
+                        </h3>
+                        <div class="skills-list">
+                            <div class="skill-item" data-percent="95">
+                                <div class="skill-info">
+                                    <span class="skill-name">HTML5 / CSS3</span>
+                                    <span class="skill-percent">95%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item" data-percent="90">
+                                <div class="skill-info">
+                                    <span class="skill-name">JavaScript / TypeScript</span>
+                                    <span class="skill-percent">90%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item" data-percent="88">
+                                <div class="skill-info">
+                                    <span class="skill-name">React / Next.js</span>
+                                    <span class="skill-percent">88%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item" data-percent="82">
+                                <div class="skill-info">
+                                    <span class="skill-name">Vue.js / Nuxt</span>
+                                    <span class="skill-percent">82%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="skills-category">
+                        <h3 class="category-title">
+                            <span class="category-icon">⚙️</span>
+                            后端开发
+                        </h3>
+                        <div class="skills-list">
+                            <div class="skill-item" data-percent="85">
+                                <div class="skill-info">
+                                    <span class="skill-name">Node.js / Express</span>
+                                    <span class="skill-percent">85%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item" data-percent="78">
+                                <div class="skill-info">
+                                    <span class="skill-name">Python / Django</span>
+                                    <span class="skill-percent">78%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item" data-percent="75">
+                                <div class="skill-info">
+                                    <span class="skill-name">Go</span>
+                                    <span class="skill-percent">75%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item" data-percent="80">
+                                <div class="skill-info">
+                                    <span class="skill-name">RESTful API / GraphQL</span>
+                                    <span class="skill-percent">80%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="skills-category">
+                        <h3 class="category-title">
+                            <span class="category-icon">🗄️</span>
+                            数据库 & DevOps
+                        </h3>
+                        <div class="skills-list">
+                            <div class="skill-item" data-percent="85">
+                                <div class="skill-info">
+                                    <span class="skill-name">PostgreSQL / MySQL</span>
+                                    <span class="skill-percent">85%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item" data-percent="80">
+                                <div class="skill-info">
+                                    <span class="skill-name">MongoDB / Redis</span>
+                                    <span class="skill-percent">80%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item" data-percent="78">
+                                <div class="skill-info">
+                                    <span class="skill-name">Docker / Kubernetes</span>
+                                    <span class="skill-percent">78%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item" data-percent="82">
+                                <div class="skill-info">
+                                    <span class="skill-name">AWS / Vercel</span>
+                                    <span class="skill-percent">82%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="project-card">
-                    <h3>任务管理工具</h3>
-                    <p>团队协作平台，看板视图、进度追踪</p>
-                    <div class="tags"><span>Vue.js</span><span>Express</span><span>SQLite</span></div>
-                </div>
-                <div class="project-card">
-                    <h3>电商平台</h3>
-                    <p>完整的电商解决方案，商品管理、购物车</p>
-                    <div class="tags"><span>Next.js</span><span>Stripe</span><span>PostgreSQL</span></div>
+
+                <div class="tech-stack">
+                    <h3 class="tech-stack-title">常用工具</h3>
+                    <div class="tech-icons">
+                        <div class="tech-icon" title="VS Code">💻</div>
+                        <div class="tech-icon" title="Git">📦</div>
+                        <div class="tech-icon" title="Figma">🎨</div>
+                        <div class="tech-icon" title="Docker">🐳</div>
+                        <div class="tech-icon" title="Linux">🐧</div>
+                        <div class="tech-icon" title="Postman">📮</div>
+                        <div class="tech-icon" title="Jest">🧪</div>
+                        <div class="tech-icon" title="Webpack">📦</div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- 联系 -->
-    <section id="contact" class="section alt">
-        <div class="container">
-            <h2>联系我</h2>
-            <div class="contact-content">
-                <p>无论你是想讨论项目、合作机会，还是只是想聊天，我都很高兴收到你的消息。</p>
-                <form class="contact-form" id="contactForm">
-                    <div class="form-group">
-                        <input type="text" id="name" name="name" placeholder="您的姓名" required>
-                        <span class="error-message"></span>
-                    </div>
-                    <div class="form-group">
-                        <input type="email" id="email" name="email" placeholder="您的邮箱" required>
-                        <span class="error-message"></span>
-                    </div>
-                    <div class="form-group">
-                        <textarea id="message" name="message" rows="5" placeholder="您的消息" required></textarea>
-                        <span class="error-message"></span>
-                    </div>
-                    <button type="submit" class="submit-btn">
-                        <span class="btn-text">发送消息</span>
-                        <span class="btn-loading">发送中...</span>
-                    </button>
-                </form>
-                <div class="links">
-                    <a href="https://github.com/zzdbilly" target="_blank">GitHub</a>
-                    <a href="mailto:loczb@example.com">邮箱</a>
+        <!-- 项目作品 -->
+        <section id="projects" class="section projects-section" aria-labelledby="projectsTitle">
+            <div class="container">
+                <header class="section-header">
+                    <span class="section-tag">作品集</span>
+                    <h2 id="projectsTitle" class="section-title">精选<span class="text-gradient">项目</span></h2>
+                    <p class="section-subtitle">每一个项目都是一次全新的挑战</p>
+                </header>
+                
+                <div class="projects-filter">
+                    <button class="filter-btn active" data-filter="all">全部</button>
+                    <button class="filter-btn" data-filter="web">Web应用</button>
+                    <button class="filter-btn" data-filter="mobile">移动端</button>
+                    <button class="filter-btn" data-filter="tool">工具</button>
+                </div>
+                
+                <div class="projects-gallery">
+                    <article class="project-card" data-category="web">
+                        <div class="project-image">
+                            <div class="project-placeholder" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                                <span class="project-icon">📝</span>
+                            </div>
+                            <div class="project-overlay">
+                                <a href="#" class="project-link magnetic-btn" aria-label="查看项目">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                        <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                    </svg>
+                                </a>
+                                <a href="#" class="project-link magnetic-btn" aria-label="查看代码">
+                                    <svg viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="project-content">
+                            <h3>个人博客系统</h3>
+                            <p>功能完整的博客平台，支持 Markdown 编辑、文章管理、评论系统、标签分类等功能。</p>
+                            <div class="project-tags">
+                                <span class="tag">React</span>
+                                <span class="tag">Node.js</span>
+                                <span class="tag">MongoDB</span>
+                            </div>
+                        </div>
+                    </article>
+                    
+                    <article class="project-card" data-category="web">
+                        <div class="project-image">
+                            <div class="project-placeholder" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                                <span class="project-icon">📊</span>
+                            </div>
+                            <div class="project-overlay">
+                                <a href="#" class="project-link magnetic-btn" aria-label="查看项目">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                        <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                    </svg>
+                                </a>
+                                <a href="#" class="project-link magnetic-btn" aria-label="查看代码">
+                                    <svg viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="project-content">
+                            <h3>任务管理工具</h3>
+                            <p>团队协作平台，支持看板视图、进度追踪、实时通知、团队成员管理等功能。</p>
+                            <div class="project-tags">
+                                <span class="tag">Vue.js</span>
+                                <span class="tag">Express</span>
+                                <span class="tag">Socket.io</span>
+                            </div>
+                        </div>
+                    </article>
+                    
+                    <article class="project-card" data-category="web">
+                        <div class="project-image">
+                            <div class="project-placeholder" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                                <span class="project-icon">🛒</span>
+                            </div>
+                            <div class="project-overlay">
+                                <a href="#" class="project-link magnetic-btn" aria-label="查看项目">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                        <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                    </svg>
+                                </a>
+                                <a href="#" class="project-link magnetic-btn" aria-label="查看代码">
+                                    <svg viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="project-content">
+                            <h3>电商平台</h3>
+                            <p>完整的电商解决方案，包含商品管理、购物车、支付集成、订单追踪等功能。</p>
+                            <div class="project-tags">
+                                <span class="tag">Next.js</span>
+                                <span class="tag">Stripe</span>
+                                <span class="tag">PostgreSQL</span>
+                            </div>
+                        </div>
+                    </article>
+                    
+                    <article class="project-card" data-category="mobile">
+                        <div class="project-image">
+                            <div class="project-placeholder" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+                                <span class="project-icon">💪</span>
+                            </div>
+                            <div class="project-overlay">
+                                <a href="#" class="project-link magnetic-btn" aria-label="查看项目">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                        <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                    </svg>
+                                </a>
+                                <a href="#" class="project-link magnetic-btn" aria-label="查看代码">
+                                    <svg viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="project-content">
+                            <h3>健身追踪 App</h3>
+                            <p>移动端健身应用，支持训练计划、运动记录、数据分析、社交分享等功能。</p>
+                            <div class="project-tags">
+                                <span class="tag">React Native</span>
+                                <span class="tag">Firebase</span>
+                                <span class="tag">Redux</span>
+                            </div>
+                        </div>
+                    </article>
+                    
+                    <article class="project-card" data-category="tool">
+                        <div class="project-image">
+                            <div class="project-placeholder" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);">
+                                <span class="project-icon">🤖</span>
+                            </div>
+                            <div class="project-overlay">
+                                <a href="#" class="project-link magnetic-btn" aria-label="查看项目">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                        <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                    </svg>
+                                </a>
+                                <a href="#" class="project-link magnetic-btn" aria-label="查看代码">
+                                    <svg viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="project-content">
+                            <h3>AI 代码助手</h3>
+                            <p>基于 GPT 的智能代码助手，支持代码补全、Bug 修复、代码解释等功能。</p>
+                            <div class="project-tags">
+                                <span class="tag">Python</span>
+                                <span class="tag">OpenAI API</span>
+                                <span class="tag">VS Code Ext</span>
+                            </div>
+                        </div>
+                    </article>
+                    
+                    <article class="project-card" data-category="tool">
+                        <div class="project-image">
+                            <div class="project-placeholder" style="background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);">
+                                <span class="project-icon">📈</span>
+                            </div>
+                            <div class="project-overlay">
+                                <a href="#" class="project-link magnetic-btn" aria-label="查看项目">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                        <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                    </svg>
+                                </a>
+                                <a href="#" class="project-link magnetic-btn" aria-label="查看代码">
+                                    <svg viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="project-content">
+                            <h3>数据可视化平台</h3>
+                            <p>企业级数据可视化解决方案，支持多种图表类型、实时数据更新、导出功能。</p>
+                            <div class="project-tags">
+                                <span class="tag">D3.js</span>
+                                <span class="tag">React</span>
+                                <span class="tag">WebSocket</span>
+                            </div>
+                        </div>
+                    </article>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
+
+        <!-- 博客预览 -->
+        <section id="blog" class="section blog-section" aria-labelledby="blogTitle">
+            <div class="container">
+                <header class="section-header">
+                    <span class="section-tag">博客</span>
+                    <h2 id="blogTitle" class="section-title">最新<span class="text-gradient">文章</span></h2>
+                    <p class="section-subtitle">分享技术心得，记录成长历程</p>
+                </header>
+                
+                <div class="blog-grid">
+                    <article class="blog-card featured">
+                        <div class="blog-image">
+                            <div class="blog-placeholder" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                                <span class="blog-icon">⚛️</span>
+                            </div>
+                            <span class="blog-category">React</span>
+                        </div>
+                        <div class="blog-content">
+                            <div class="blog-meta">
+                                <time datetime="2024-01-15">2024年1月15日</time>
+                                <span class="read-time">8 分钟阅读</span>
+                            </div>
+                            <h3>深入理解 React 18 并发特性</h3>
+                            <p>探索 React 18 带来的并发渲染新特性，包括 Suspense、Transitions 和自动批处理等核心概念...</p>
+                            <a href="#" class="read-more">
+                                阅读更多
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </article>
+                    
+                    <article class="blog-card">
+                        <div class="blog-image">
+                            <div class="blog-placeholder" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);">
+                                <span class="blog-icon">🚀</span>
+                            </div>
+                            <span class="blog-category">性能优化</span>
+                        </div>
+                        <div class="blog-content">
+                            <div class="blog-meta">
+                                <time datetime="2024-01-10">2024年1月10日</time>
+                                <span class="read-time">5 分钟阅读</span>
+                            </div>
+                            <h3>前端性能优化实战指南</h3>
+                            <p>从加载性能到运行时性能，全面提升 Web 应用体验...</p>
+                            <a href="#" class="read-more">
+                                阅读更多
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </article>
+                    
+                    <article class="blog-card">
+                        <div class="blog-image">
+                            <div class="blog-placeholder" style="background: linear-gradient(135deg, #fc4a1a 0%, #f7b733 100%);">
+                                <span class="blog-icon">🎨</span>
+                            </div>
+                            <span class="blog-category">CSS</span>
+                        </div>
+                        <div class="blog-content">
+                            <div class="blog-meta">
+                                <time datetime="2024-01-05">2024年1月5日</time>
+                                <span class="read-time">6 分钟阅读</span>
+                            </div>
+                            <h3>CSS 容器查询完全指南</h3>
+                            <p>告别媒体查询，拥抱容器查询带来的全新响应式设计体验...</p>
+                            <a href="#" class="read-more">
+                                阅读更多
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </article>
+                </div>
+                
+                <div class="blog-cta">
+                    <a href="#" class="btn btn-outline">
+                        查看全部文章
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 联系 -->
+        <section id="contact" class="section contact-section" aria-labelledby="contactTitle">
+            <div class="container">
+                <header class="section-header">
+                    <span class="section-tag">联系</span>
+                    <h2 id="contactTitle" class="section-title">让我们<span class="text-gradient">合作</span></h2>
+                    <p class="section-subtitle">无论你是想讨论项目、合作机会，还是只是想聊天</p>
+                </header>
+                
+                <div class="contact-grid">
+                    <div class="contact-info">
+                        <div class="contact-card">
+                            <div class="contact-icon">📧</div>
+                            <h3>邮箱</h3>
+                            <a href="mailto:loczb@example.com">loczb@example.com</a>
+                        </div>
+                        <div class="contact-card">
+                            <div class="contact-icon">💬</div>
+                            <h3>微信</h3>
+                            <span>loczb_dev</span>
+                        </div>
+                        <div class="contact-card">
+                            <div class="contact-icon">📍</div>
+                            <h3>位置</h3>
+                            <span>中国 · 北京</span>
+                        </div>
+                        <div class="contact-card">
+                            <div class="contact-icon">⏰</div>
+                            <h3>工作时间</h3>
+                            <span>周一至周五 9:00 - 18:00</span>
+                        </div>
+                    </div>
+                    
+                    <form class="contact-form" id="contactForm" novalidate>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="name" class="form-label">您的姓名</label>
+                                <input type="text" id="name" name="name" class="form-input" placeholder="请输入您的姓名" required>
+                                <span class="error-message" aria-live="polite"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="email" class="form-label">您的邮箱</label>
+                                <input type="email" id="email" name="email" class="form-input" placeholder="请输入您的邮箱" required>
+                                <span class="error-message" aria-live="polite"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="subject" class="form-label">主题</label>
+                            <input type="text" id="subject" name="subject" class="form-input" placeholder="请输入消息主题" required>
+                            <span class="error-message" aria-live="polite"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="message" class="form-label">您的消息</label>
+                            <textarea id="message" name="message" class="form-textarea" rows="5" placeholder="请输入您的消息..." required></textarea>
+                            <span class="error-message" aria-live="polite"></span>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-full magnetic-btn" id="submitBtn">
+                            <span class="btn-text">发送消息</span>
+                            <span class="btn-loading">
+                                <span class="loading-spinner"></span>
+                                发送中...
+                            </span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
 
     <!-- 页脚 -->
-    <footer>
-        <p>&copy; 2024 loczb. 保留所有权利。</p>
+    <footer class="footer" role="contentinfo">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <a href="#" class="footer-logo">
+                        <span class="logo-bracket">&lt;</span>loczb<span class="logo-bracket">/&gt;</span>
+                    </a>
+                    <p>用代码构建梦想，用设计传递价值</p>
+                </div>
+                <nav class="footer-links" aria-label="页脚导航">
+                    <a href="#about">关于</a>
+                    <a href="#skills">技能</a>
+                    <a href="#projects">作品</a>
+                    <a href="#blog">博客</a>
+                    <a href="#contact">联系</a>
+                </nav>
+                <div class="footer-social">
+                    <a href="https://github.com/zzdbilly" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                    </a>
+                    <a href="#" aria-label="Twitter">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/></svg>
+                    </a>
+                    <a href="#" aria-label="LinkedIn">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                    </a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; <span id="currentYear">2024</span> loczb. 保留所有权利。</p>
+                <p class="footer-made">用 ❤️ 和 ☕ 制作</p>
+            </div>
+        </div>
     </footer>
+
+    <!-- 回到顶部按钮 -->
+    <button class="back-to-top" id="backToTop" aria-label="回到顶部">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 15l-6-6-6 6"/>
+        </svg>
+    </button>
 
     <script src="script.js"></script>
 </body>
