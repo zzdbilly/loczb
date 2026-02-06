@@ -1,0 +1,57 @@
+/* ========================================
+   Print Styles
+   ======================================== */
+
+@media print {
+  .site-header,
+  .scroll-indicator,
+  .back-to-top,
+  .theme-toggle,
+  .nav-toggle,
+  .cursor-follower,
+  .cursor-dot,
+  .page-loader {
+    display: none !important;
+  }
+  
+  .hero {
+    min-height: auto;
+    padding-block: var(--space-8);
+  }
+  
+  .section {
+    padding-block: var(--space-8);
+    page-break-inside: avoid;
+  }
+  
+  body {
+    background: white !important;
+    color: black !important;
+    font-size: 12pt;
+  }
+  
+  a {
+    text-decoration: underline;
+    color: black !important;
+  }
+  
+  a[href]::after {
+    content: " (" attr(href) ")";
+    font-size: 10pt;
+    color: #666;
+  }
+  
+  .card,
+  .timeline-content,
+  .project-card,
+  .blog-card {
+    border: 1px solid #ccc !important;
+    box-shadow: none !important;
+  }
+  
+  .gradient-orb,
+  .project-overlay,
+  .skill-progress {
+    display: none !important;
+  }
+}
