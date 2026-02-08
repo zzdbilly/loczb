@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>表格样式示例 - loczb</title>
+    <link rel="stylesheet" href="../src/css/main.css">
+    <style>
+        body {
+            padding: 2rem;
+            background: var(--color-bg);
+            color: var(--color-text);
+            font-family: var(--font-sans);
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .example-section {
+            margin: 3rem 0;
+        }
+        
+        h1, h2, h3 {
+            color: var(--color-text);
+            margin-bottom: 1rem;
+        }
+        
+        h1 {
+            font-size: var(--text-4xl);
+            margin-bottom: 2rem;
+        }
+        
+        h2 {
+            font-size: var(--text-2xl);
+            border-bottom: 2px solid var(--color-border);
+            padding-bottom: 0.5rem;
+        }
+        
+        h3 {
+            font-size: var(--text-xl);
+            color: var(--color-text-secondary);
+        }
+        
+        .code-block {
+            background: var(--color-bg-alt);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            padding: 1rem;
+            margin: 1rem 0;
+            font-family: var(--font-mono);
+            font-size: var(--text-sm);
+            overflow-x: auto;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .feature-card {
+            background: var(--color-bg-elevated);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            transition: all var(--transition-normal) ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <h1>📊 loczb表格样式系统</h1>
+    
+    <div class="feature-grid">
+        <div class="feature-card">
+            <div class="feature-icon">🎨</div>
+            <h3>现代化设计</h3>
+            <p>渐变表头、阴影效果、圆角设计，符合现代UI趋势</p>
+        </div>
+        
+        <div class="feature-card">
+            <div class="feature-icon">📱</div>
+            <h3>响应式布局</h3>
+            <p>移动端卡片式展示，完美适配各种屏幕尺寸</p>
+        </div>
+        
+        <div class="feature-card">
+            <div class="feature-icon">♿</div>
+            <h3>无障碍访问</h3>
+            <p>屏幕阅读器友好，键盘导航支持，高对比度模式</p>
+        </div>
+        
+        <div class="feature-card">
+            <div class="feature-icon">⚡</div>
+            <h3>高性能</h3>
+            <p>CSS变量驱动，硬件加速动画，最小化重绘</p>
+        </div>
+    </div>
+    
+    <!-- 示例1：基础表格 -->
+    <div class="example-section">
+        <h2>1. 基础表格</h2>
+        <p>简洁优雅的基础表格样式，包含响应式包装器。</p>
+        
+        <div class="table-wrapper">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>技术</th>
+                        <th>熟练度</th>
+                        <th>使用年限</th>
+                        <th>主要项目</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>React</td>
+                        <td>精通</td>
+                        <td>4年</td>
+                        <td>电商平台、管理系统</td>
+                    </tr>
+                    <tr>
+                        <td>Vue.js</td>
+                        <td>熟练</td>
+                        <td>3年</td>
+                        <td>内部工具、仪表板</td>
+                    </tr>
+                    <tr>
+                        <td>Node.js</td>
+                        <td>精通</td>
+                        <td>4年</td>
+                        <td>API服务、微服务架构</td>
+                    </tr>
+                    <tr>
+                        <td>TypeScript</td>
+                        <td>熟练</td>
+                        <td>3年</td>
+                        <td>企业级应用、工具库</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="code-block">
+&lt;div class="table-wrapper"&gt;
+    &lt;table class="table"&gt;
+        &lt;thead&gt;
+            &lt;tr&gt;
+                &lt;th&gt;技术&lt;/th&gt;
+                &lt;th&gt;熟练度&lt;/th&gt;
+                &lt;th&gt;使用年限&lt;/th&gt;
+                &lt;th&gt;主要项目&lt;/th&gt;
+            &lt;/tr&gt;
+        &lt;/thead&gt;
+        &lt;tbody&gt;
+            &lt;tr&gt;
+                &lt;td&gt;React&lt;/td&gt;
+                &lt;td&gt;精通&lt;/td&gt;
+                &lt;td&gt;4年&lt;/td&gt;
+                &lt;td&gt;电商平台、管理系统&lt;/td&gt;
+            &lt;/tr&gt;
+            &lt;!-- 更多行 --&gt;
+        &lt;/tbody&gt;
+    &lt;/table&gt;
+&lt;/div&gt;
+        </div>
+    </div>
+    
+    <!-- 示例2：斑马条纹表格 -->
+    <div class="example-section">
+        <h2>2. 斑马条纹表格</h2>
+        <p>添加 <code>.striped</code> 类实现斑马条纹效果，提高可读性。</p>
+        
+        <div class="table-wrapper">
+            <table class="table striped">
+                <thead>
+                    <tr>
+                        <th>项目</th>
+                        <th>技术栈</th>
+                        <th>周期</th>
+                        <th>状态</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>个人博客系统</td>
+                        <td>React + Node.js + MongoDB</td>
+                        <td>3个月</td>
+                        <td>
+                            <span class="status-indicator status-active"></span>
+                            进行中
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>任务管理工具</td>
+                        <td>Vue.js + Express + Socket.io</td>
+                        <td>6个月</td>
+                        <td>
+                            <span class="status-indicator status-active"></span>
+                            已上线
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>电商平台</td>
+                        <td>Next.js + Stripe + PostgreSQL</td>
+                        <td>8个月</td>
+                        <td>
+                            <span class="status-indicator status-pending"></span>
+                            规划中
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>数据分析仪表板</td>
+                        <td>Python + FastAPI + D3.js</td>
+                        <td>4个月</td>
+                        <td>
+                            <span class="status-indicator status-inactive"></span>
+                            暂停
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="code-block">
+&lt;div class="table-wrapper"&gt;
+    &lt;table class="table striped"&gt;
+        &lt;!-- 表格内容 --&gt;
+    &lt;/table&gt;
+&lt;/div&gt;
+        </div>
+    </div>
+    
+    <!-- 示例3：紧凑表格 -->
+    <div class="example-section">
+        <h2>3. 紧凑表格</h2>
+        <p>添加 <code>.compact</code> 类减少内边距，适合数据密集的场景。</p>
+        
+        <div class="table-wrapper">
+            <table class="table compact">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>名称</th>
+                        <th>类型</th>
+                        <th>日期</th>
+                        <th>大小</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>project-backend.zip</td>
+                        <td>压缩文件</td>
+                        <td>2026-02-08</td>
+                        <td>45.2 MB</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>design-mockups.fig</td>
+                        <td>设计文件</td>
+                        <td>2026-02-07</td>
+                        <td>12.8 MB</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>database-backup.sql</td>
+                        <td>数据库</td>
+                        <td>2026-02-06</td>
+                        <td>89.5 MB</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="code-block">
+&lt;div class="table-wrapper"&gt;
+    &lt;table class="table compact"&gt;
+        &lt;!-- 紧凑布局 --&gt;
+    &lt;/table&gt;
+&lt;/div&gt;
+        </div>
+    </div>
+    
+    <!-- 示例4：带操作的表格 -->
+    <div class="example-section">
+        <h2>4. 带操作按钮的表格</h2>
+        <p>集成操作按钮，适合管理系统和后台界面。</p>
+        
+        <div class="table-wrapper">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>用户</th>
+                        <th>角色</th>
+                        <th>注册时间</th>
+                        <th>状态</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>张三</td>
+                        <td>管理员</td>
+                        <td>2025-12-15</td>
+                        <td>
+                            <span class="status-indicator status-active"></span>
+                            活跃
+                        </td>
+                        <td>
+                            <div class="table-actions">
+                                <button class="table-action-btn">编辑</button>
+                                <button class="table-action-btn">禁用</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>李四</td>
+                        <td>编辑</td>
+                        <td>2026-01-20</td>
+                        <td>
+                            <span class="status-indicator status-active"></span>
+                            活跃
+                        </td>
+                        <td>
+                            <div class="table-actions">
+                                <button class="table-action-btn">编辑</button>
+                                <button class="table-action-btn">禁用</button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <!-- 示例5：移动端卡片式表格 -->
+    <div class="example-section">
+        <h2>5. 移动端卡片式表格</h2>
+        <p>在移动设备上自动转换为卡片布局，优化小屏幕体验。</p>
+        
+        <div class="table-wrapper cards">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>技能</th>
+                        <th>等级</th>
+                        <th>经验</th>
+                        <th>认证</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td data-label="技能">前端开发</td>
+                        <td data-label="等级">专家</td>
+                        <td data-label="经验">5年+</td>
+                        <td data-label="认证">React认证</td>
+                    </tr>
+                    <tr>
+                        <td data-label="技能">后端开发</td>
+                        <td data-label="等级">高级</td>
+                        <td data-label="经验">4年</td>
+                        <td data-label="认证">AWS认证</td>
+                    </tr>
+                    <tr>
+                        <td data-label="技能">DevOps</td>
+                        <td data-label="等级">中级</td>
+                        <td data-label="经验">2年</td>
+                        <td data-label="认证">Docker认证</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="code-block">
+&lt;div class="table-wrapper cards"&gt;
+    &lt;table class="table"&gt;
+        &lt;tbody&gt;
+            &lt;tr&gt;
+                &lt;td data-label="技能"&gt;前端开发&lt;/td&gt;
+                &lt;td data-label="等级"&gt;专家&lt;/td&gt;
+                &lt;td data-label="经验"&gt;5年+&lt;/td&gt;
+                &lt;td data-label="认证"&gt;React认证&lt;/td&gt;
+            &lt;/tr&gt;
+        &lt;/tbody&gt;
+    &lt;/table&gt;
+&lt;/div&gt;
+        </div>
+    </div>
+    
+    <div class="example-section">
+        <h2>使用说明</h2>
+        
+        <h3>可用CSS类</h3>
+        <div class="code-block">
+/* 基础表格 */
+.table
+
+/* 变体 */
+.table.striped    /* 斑马条纹 */
+.table.compact    /* 紧凑布局 */  
+.table.bordered   /* 带边框 */
+.table.hover-rows /* 增强悬停效果 */
+
+/* 包装器 */
+.table-wrapper    /* 基础包装器 */
+.table-wrapper.cards /* 移动端卡片式 */
+        </div>
+        
+        <h3>可访问性特性</h3>
+        <ul>
+            <li>键盘导航支持（Tab键切换焦点）</li>
+            <li>屏幕阅读器友好标记</li>
+            <li>高对比度模式兼容</li>
+            <li>缩放友好设计</li>
+        </ul>
+        
+        <h3>浏览器兼容性</h3>
+        <ul>
+            <li>Chrome 58+ ✅</li>
+            <li>Firefox 52+ ✅</li>
+            <li>Safari 10+ ✅</li>
+            <li>Edge 79+ ✅</li>
+        </ul>
+    </div>
+    
+    <footer style="margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--color-border); text-align: center; color: var(--color-text-secondary);">
+        <p>loczb表格样式系统 | 版本 1.0 | 最后更新: 2026-02-08</p>
+        <p>设计原则：简洁、现代、响应式、无障碍</p>
+    </footer>
+</body>
+</html>

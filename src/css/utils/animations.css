@@ -133,37 +133,6 @@
   }
 }
 
-/* Cursor Effects */
-.cursor-follower {
-  position: fixed;
-  width: 40px;
-  height: 40px;
-  border: 2px solid var(--color-primary-500);
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 9998;
-  opacity: 0;
-  transition: transform 0.1s ease-out, opacity 0.3s ease;
-}
-
-.cursor-dot {
-  position: fixed;
-  width: 8px;
-  height: 8px;
-  background: var(--color-primary-500);
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 9999;
-  opacity: 0;
-}
-
-@media (pointer: fine) {
-  .cursor-follower,
-  .cursor-dot {
-    opacity: 0.5;
-  }
-}
-
 /* Magnetic Button Effect */
 .magnetic-btn {
   transition: transform 0.2s ease-out;

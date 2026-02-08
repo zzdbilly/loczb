@@ -8,8 +8,6 @@
   .back-to-top,
   .theme-toggle,
   .nav-toggle,
-  .cursor-follower,
-  .cursor-dot,
   .page-loader {
     display: none !important;
   }

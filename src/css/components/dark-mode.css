@@ -1,0 +1,251 @@
+/* ========================================
+   Dark Mode System for loczb
+   ======================================== */
+
+/* Root CSS Variables for Dark Mode */
+:root {
+  /* Light mode variables (already defined, ensure they're here) */
+  --color-bg: var(--color-gray-50);
+  --color-bg-alt: var(--color-gray-0);
+  --color-bg-elevated: var(--color-gray-0);
+  --color-text: var(--color-gray-900);
+  --color-text-secondary: var(--color-gray-600);
+  --color-text-muted: var(--color-gray-500);
+  --color-border: var(--color-gray-200);
+  --color-border-subtle: var(--color-gray-100);
+}
+
+/* Dark Mode Variables */
+[data-theme="dark"] {
+  --color-bg: #0f172a;
+  --color-bg-alt: #1e293b;
+  --color-bg-elevated: #334155;
+  --color-text: #f1f5f9;
+  --color-text-secondary: #cbd5e1;
+  --color-text-muted: #94a3b8;
+  --color-border: #475569;
+  --color-border-subtple: #1e293b;
+  
+  /* Dark mode specific colors */
+  --color-card-bg: rgba(30, 41, 59, 0.7);
+  --color-card-border: rgba(71, 85, 105, 0.3);
+  
+  /* Dark mode shadows */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.6), 0 2px 4px -2px rgba(0, 0, 0, 0.6);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.7), 0 4px 6px -4px rgba(0, 0, 0, 0.7);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.8), 0 8px 10px -6px rgba(0, 0, 0, 0.8);
+  --shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.3);
+}
+
+/* Theme Toggle Component */
+.theme-toggle {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: var(--radius-full);
+  background-color: var(--color-bg-alt);
+  border: 1px solid var(--color-border);
+  cursor: pointer;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+  overflow: hidden;
+}
+
+.theme-toggle:hover {
+  background-color: var(--color-gray-100);
+  border-color: var(--color-primary-300);
+}
+
+.theme-toggle-icon {
+  position: absolute;
+  font-size: 1.25rem;
+  transition: transform var(--transition-normal), opacity var(--transition-normal);
+}
+
+.theme-toggle-icon.sun {
+  color: #f59e0b;
+}
+
+.theme-toggle-icon.moon {
+  color: #94a3b8;
+}
+
+/* Light mode: show sun */
+[data-theme="light"] .theme-toggle-icon.sun {
+  transform: scale(1);
+  opacity: 1;
+}
+
+[data-theme="light"] .theme-toggle-icon.moon {
+  transform: scale(0);
+  opacity: 0;
+}
+
+/* Dark mode: show moon */
+[data-theme="dark"] .theme-toggle-icon.sun {
+  transform: scale(0);
+  opacity: 0;
+}
+
+[data-theme="dark"] .theme-toggle-icon.moon {
+  transform: scale(1);
+  opacity: 1;
+}
+
+/* Theme Switch (Checkbox style) */
+.theme-switch {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  cursor: pointer;
+}
+
+.theme-switch-input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.theme-switch-track {
+  position: relative;
+  width: 3.5rem;
+  height: 2rem;
+  background-color: var(--color-gray-300);
+  border-radius: var(--radius-full);
+  transition: background-color var(--transition-fast);
+}
+
+.theme-switch-thumb {
+  position: absolute;
+  top: 0.25rem;
+  left: 0.25rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  background-color: white;
+  border-radius: var(--radius-full);
+  transition: transform var(--transition-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.theme-switch-icon {
+  font-size: 0.75rem;
+  color: var(--color-gray-700);
+}
+
+/* Light mode */
+[data-theme="light"] .theme-switch-track {
+  background-color: var(--color-primary-400);
+}
+
+[data-theme="light"] .theme-switch-thumb {
+  transform: translateX(0);
+}
+
+/* Dark mode */
+[data-theme="dark"] .theme-switch-track {
+  background-color: var(--color-gray-600);
+}
+
+[data-theme="dark"] .theme-switch-thumb {
+  transform: translateX(1.5rem);
+}
+
+/* Animated Theme Transition */
+.theme-transition {
+  transition: background-color 0.3s ease,
+              color 0.3s ease,
+              border-color 0.3s ease;
+}
+
+/* Dark mode specific adjustments */
+[data-theme="dark"] {
+  /* Card adjustments */
+  .card {
+    background-color: var(--color-card-bg);
+    border-color: var(--color-card-border);
+    backdrop-filter: blur(10px);
+  }
+  
+  /* Button adjustments */
+  .btn-outline {
+    border-color: var(--color-primary-500);
+    color: var(--color-primary-300);
+  }
+  
+  .btn-outline:hover {
+    background-color: rgba(var(--primary-rgb), 0.1);
+  }
+  
+  .btn-secondary {
+    background-color: var(--color-gray-800);
+    color: var(--color-text);
+    border-color: var(--color-border);
+  }
+  
+  .btn-secondary:hover {
+    background-color: var(--color-gray-700);
+  }
+  
+  /* Progress bar adjustments */
+  .progress {
+    background-color: var(--color-gray-700);
+  }
+  
+  .progress-fill {
+    background-color: var(--color-primary-400);
+  }
+  
+  /* Input adjustments */
+  .input-field {
+    background-color: var(--color-gray-800);
+    border-color: var(--color-border);
+    color: var(--color-text);
+  }
+  
+  .input-field:focus {
+    border-color: var(--color-primary-400);
+    box-shadow: 0 0 0 2px rgba(var(--primary-rgb), 0.2);
+  }
+  
+  .input-label {
+    color: var(--color-text);
+  }
+}
+
+/* Smooth theme switching animation */
+* {
+  transition: background-color 0.3s ease,
+              border-color 0.3s ease,
+              color 0.3s ease;
+}
+
+/* Theme indicator badge */
+.theme-indicator {
+  position: fixed;
+  bottom: var(--space-6);
+  right: var(--space-6);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-full);
+  background-color: var(--color-bg-alt);
+  border: 1px solid var(--color-border);
+  font-size: var(--text-xs);
+  color: var(--color-text-secondary);
+  z-index: 1000;
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+[data-theme="light"] .theme-indicator {
+  content: "🌞 白天模式";
+}
+
+[data-theme="dark"] .theme-indicator {
+  content: "🌙 夜间模式";
+}

@@ -140,6 +140,20 @@
   /* Navbar */
   --navbar-height: 72px;
   --navbar-height-mobile: 64px;
+  
+  /* Table Specific */
+  --table-bg: var(--color-bg-elevated);
+  --table-border-color: var(--color-border);
+  --table-head-bg: var(--color-primary-600);
+  --table-row-hover-bg: rgba(var(--color-primary-500), 0.04);
+  --table-stripe-bg: rgba(var(--color-gray-500), 0.02);
+  
+  /* Color RGB values for rgba usage */
+  --primary-rgb: 59, 130, 246;   /* #3b82f6 */
+  --success-rgb: 16, 185, 129;   /* #10b981 */
+  --warning-rgb: 245, 158, 11;   /* #f59e0b */
+  --danger-rgb: 239, 68, 68;     /* #ef4444 */
+  --text-rgb: 15, 23, 42;        /* #0f172a */
 }
 
 /* Dark Mode */
