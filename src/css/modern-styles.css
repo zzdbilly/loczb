@@ -162,6 +162,14 @@
     color: var(--color-primary-500);
     box-shadow: var(--shadow-md);
     animation: float-element 6s ease-in-out infinite;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+}
+
+.floating-element:hover {
+    transform: scale(1.2) !important;
+    box-shadow: var(--shadow-xl);
+    z-index: 10;
 }
 
 .floating-element.react {

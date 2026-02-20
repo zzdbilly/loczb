@@ -3,17 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="loczb - 全栈开发者个人主页，基于现代shadcn/ui设计系统">
-    <meta name="keywords" content="全栈开发, Web开发, React, Node.js, 前端, 后端, shadcn/ui, 现代设计">
+    <meta name="description" content="loczb - 全栈开发者个人主页，专注现代Web技术栈，提供React、Node.js、TypeScript等开发服务">
+    <meta name="keywords" content="全栈开发, Web开发, React, Node.js, 前端, 后端, TypeScript, Vue.js, 技术博客">
     <meta name="author" content="loczb">
+    <meta name="robots" content="index, follow">
     <meta property="og:title" content="loczb - 全栈开发者 | 现代个人主页">
     <meta property="og:description" content="热爱编程，专注于创造优雅的解决方案，使用现代shadcn/ui设计系统">
     <meta property="og:type" content="website">
+    <meta property="og:url" content="https://zzdbilly.github.io/loczb/">
+    <meta property="og:image" content="https://zzdbilly.github.io/loczb/og-image.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="loczb - 全栈开发者">
+    <meta name="twitter:description" content="用代码创造价值，用技术改变世界">
+    
+    <!-- 结构化数据 -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "loczb",
+        "url": "https://zzdbilly.github.io/loczb/",
+        "jobTitle": "全栈开发者",
+        "knowsAbout": ["React", "Node.js", "TypeScript", "Vue.js", "Python"]
+    }
+    </script>
     
     <!-- 预加载关键资源 -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" as="style">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
     
     <title>loczb - 全栈开发者 | 现代个人主页</title>
     
@@ -507,6 +526,82 @@
                             </form>
                         </div>
                     </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 博客区域 -->
+        <section class="blog-section" id="blog">
+            <div class="container">
+                <div class="section-header">
+                    <div class="badge badge-outline">
+                        <i class="fas fa-pen-nib"></i>
+                        技术博客
+                    </div>
+                    <h2 class="section-title">最新文章</h2>
+                    <p class="section-description">
+                        分享技术见解、开发经验和最佳实践。
+                    </p>
+                </div>
+                
+                <div class="blog-grid">
+                    <article class="blog-card">
+                        <div class="blog-image">
+                            <i class="fas fa-react"></i>
+                        </div>
+                        <div class="blog-content">
+                            <div class="blog-meta">
+                                <span class="blog-date">2026-02-15</span>
+                                <span class="blog-tag">React</span>
+                            </div>
+                            <h3 class="blog-title">React 19 新特性深度解析</h3>
+                            <p class="blog-excerpt">探索 React 19带来的革命性新功能，包括 Actions、use() hook 等...</p>
+                            <a href="#" class="blog-link">
+                                阅读全文 <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </article>
+                    
+                    <article class="blog-card">
+                        <div class="blog-image">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="blog-content">
+                            <div class="blog-meta">
+                                <span class="blog-date">2026-02-10</span>
+                                <span class="blog-tag">AI</span>
+                            </div>
+                            <h3 class="blog-title">AI Agent 开发实战指南</h3>
+                            <p class="blog-excerpt">从零开始构建你的第一个 AI Agent，集成大语言模型与工具调用...</p>
+                            <a href="#" class="blog-link">
+                                阅读全文 <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </article>
+                    
+                    <article class="blog-card">
+                        <div class="blog-image">
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <div class="blog-content">
+                            <div class="blog-meta">
+                                <span class="blog-date">2026-02-05</span>
+                                <span class="blog-tag">TypeScript</span>
+                            </div>
+                            <h3 class="blog-title">TypeScript 5.4 新特性</h3>
+                            <p class="blog-excerpt">深入理解 TypeScript 5.4 的新特性，提升代码类型安全性...</p>
+                            <a href="#" class="blog-link">
+                                阅读全文 <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </article>
+                </div>
+                
+                <div class="blog-cta">
+                    <a href="#" class="btn btn-outline">
+                        <i class="fas fa-book"></i>
+                        查看全部文章
+                    </a>
                 </div>
             </div>
         </section>
