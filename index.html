@@ -89,6 +89,11 @@
                     <li><a href="#blog" class="nav-link btn btn-ghost">博客</a></li>
                     <li><a href="#contact" class="nav-link btn btn-ghost">联系</a></li>
                     <li>
+                        <button class="btn btn-ghost btn-icon" id="themeToggle" aria-label="切换主题">
+                            <i class="fas fa-moon"></i>
+                        </button>
+                    </li>
+                    <li>
                         <a href="#resume" class="btn btn-primary">
                             <i class="fas fa-download"></i>
                             简历
@@ -599,6 +604,32 @@
                 this.setAttribute('aria-expanded', !isExpanded);
                 navMenu.classList.toggle('nav-menu-open');
             });
+            
+            // 主题切换功能
+            const themeToggle = document.getElementById('themeToggle');
+            const themeIcon = themeToggle.querySelector('i');
+            
+            // 读取主题
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            updateThemeIcon(savedTheme);
+            
+            // 切换主题
+            themeToggle.addEventListener('click', () => {
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                updateThemeIcon(newTheme);
+            });
+            
+            function updateThemeIcon(theme) {
+                if (theme === 'dark') {
+                    themeIcon.className = 'fas fa-sun';
+                } else {
+                    themeIcon.className = 'fas fa-moon';
+                }
+            }
         }
     </script>
 </body>
