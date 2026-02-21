@@ -193,15 +193,13 @@
     padding: calc(var(--navbar-height-mobile) + var(--space-8)) var(--space-6) var(--space-6);
     background: var(--color-bg-alt);
     border-left: 1px solid var(--color-border);
-    transition: right var(--transition-normal);
-    visibility: hidden;
-    pointer-events: none;
+    transition: right 0.3s ease-in-out;
+    display: none;
   }
   
   .nav-menu.active {
     right: 0;
-    visibility: visible;
-    pointer-events: auto;
+    display: flex;
     z-index: calc(var(--z-fixed) + 200);
   }
   
@@ -242,11 +240,5 @@ body::before {
 }
 
 body.menu-open::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: calc(var(--z-fixed) + 50);
-  opacity: 1;
-  visibility: visible;
+  display: none;
 }
