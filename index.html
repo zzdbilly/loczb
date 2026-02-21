@@ -697,7 +697,7 @@
             navToggle.addEventListener('click', function() {
                 const isExpanded = this.getAttribute('aria-expanded') === 'true';
                 this.setAttribute('aria-expanded', !isExpanded);
-                navMenu.classList.toggle('nav-menu-open');
+                navMenu.classList.toggle('active'); document.body.classList.toggle('menu-open');
             });
             
             // 主题切换功能
