@@ -697,7 +697,19 @@
             navToggle.addEventListener('click', function() {
                 const isExpanded = this.getAttribute('aria-expanded') === 'true';
                 this.setAttribute('aria-expanded', !isExpanded);
-                navMenu.classList.toggle('active'); document.body.classList.toggle('menu-open');
+                navMenu.classList.toggle('active');
+                document.body.classList.toggle('menu-open');
+            });
+            
+            // 点击遮罩关闭菜单
+            document.addEventListener('click', function(e) {
+                if (navMenu.classList.contains('active') && 
+                    !navMenu.contains(e.target) && 
+                    !navToggle.contains(e.target)) {
+                    navMenu.classList.remove('active');
+                    document.body.classList.remove('menu-open');
+                    navToggle.setAttribute('aria-expanded', 'false');
+                }
             });
             
             // 主题切换功能
