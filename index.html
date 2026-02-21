@@ -742,11 +742,14 @@
             document.querySelectorAll('.nav-link').forEach(link => {
                 link.addEventListener('click', function(e) {
                     e.preventDefault();
+                    console.log('菜单链接被点击:', this.getAttribute('href'));
                     const targetId = this.getAttribute('href');
                     const targetSection = document.querySelector(targetId);
+                    console.log('目标元素:', targetSection);
                     if (targetSection) {
                         const offset = 70;
                         const targetPosition = targetSection.offsetTop - offset;
+                        console.log('滚动到:', targetPosition);
                         window.scrollTo({ top: targetPosition, behavior: 'smooth' });
                         // 关闭菜单
                         navMenu.classList.remove('active');
