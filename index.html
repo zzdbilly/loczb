@@ -737,6 +737,24 @@
                     themeIcon.className = 'fas fa-moon';
                 }
             }
+            
+            // 平滑滚动 - 修复移动端菜单链接点击
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    const targetSection = document.querySelector(targetId);
+                    if (targetSection) {
+                        const offset = 70;
+                        const targetPosition = targetSection.offsetTop - offset;
+                        window.scrollTo({ top: targetPosition, behavior: 'smooth' });
+                        // 关闭菜单
+                        navMenu.classList.remove('active');
+                        document.body.classList.remove('menu-open');
+                        navToggle.setAttribute('aria-expanded', 'false');
+                    }
+                });
+            });
         }
     </script>
 </body>
