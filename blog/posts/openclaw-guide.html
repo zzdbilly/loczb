@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="OpenClaw 深度使用指南：从 0 到 1 构建个人 AI Agent - 张小猛的技术博客">
+  <meta name="keywords" content="OpenClaw, AI Agent, 自动化，定时任务，子 Agent">
+  <meta name="author" content="张小猛">
+  <meta name="publish-date" content="2026-03-14">
+  
+  <!-- Open Graph -->
+  <meta property="og:title" content="OpenClaw 深度使用指南：从 0 到 1 构建个人 AI Agent">
+  <meta property="og:description" content="OpenClaw 深度使用指南：从 0 到 1 构建个人 AI Agent - 张小猛的技术博客">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://zzdbilly.github.io/loczb/blog/posts/openclaw-guide.html">
+  
+  <title>OpenClaw 深度使用指南：从 0 到 1 构建个人 AI Agent | 张小猛 - loczb</title>
+  
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍡</text></svg>">
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  
+  <style>
+    .post-content {
+      max-width: 720px;
+      margin: 0 auto;
+      line-height: 1.8;
+    }
+    .post-content h1 { font-size: 2.5rem; margin: 2rem 0 1rem; }
+    .post-content h2 { font-size: 1.8rem; margin: 2rem 0 1rem; color: var(--color-accent-primary); }
+    .post-content h3 { font-size: 1.4rem; margin: 1.5rem 0 0.8rem; }
+    .post-content p { margin: 1rem 0; }
+    .post-content ul, .post-content ol { margin: 1rem 0; padding-left: 2rem; }
+    .post-content li { margin: 0.5rem 0; }
+    .post-content code { 
+      background: var(--color-bg-tertiary); 
+      padding: 0.2rem 0.4rem; 
+      border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9em;
+    }
+    .post-content pre {
+      background: var(--color-bg-tertiary);
+      padding: 1.5rem;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin: 1.5rem 0;
+    }
+    .post-content pre code {
+      background: none;
+      padding: 0;
+    }
+    .post-content blockquote {
+      border-left: 4px solid var(--color-accent-primary);
+      padding-left: 1.5rem;
+      margin: 1.5rem 0;
+      color: var(--color-text-secondary);
+    }
+    .post-content a { color: var(--color-accent-primary); text-decoration: underline; }
+    .post-content hr { border: none; border-top: 1px solid var(--color-border); margin: 2rem 0; }
+    .post-meta {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+      color: var(--color-text-secondary);
+      font-size: 0.9rem;
+    }
+    .post-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .tag {
+      background: var(--color-bg-tertiary);
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      color: var(--color-text-secondary);
+    }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--color-text-secondary);
+      text-decoration: none;
+      margin-bottom: 2rem;
+    }
+    .back-link:hover { color: var(--color-accent-primary); }
+  </style>
+</head>
+<body>
+  <!-- Loading -->
+  <div class="loading">
+    <div class="loading-spinner"></div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../../index.html" class="nav-logo">
+        loc<span>zb</span>
+      </a>
+      <button class="nav-toggle" aria-label="Toggle menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <ul class="nav-links">
+        <li><a href="../../index.html" class="nav-link">首页</a></li>
+        <li><a href="../../projects/index.html" class="nav-link">项目</a></li>
+        <li><a href="../index.html" class="nav-link active">博客</a></li>
+        <li><a href="../../about/index.html" class="nav-link">关于</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Post Content -->
+  <article class="section">
+    <div class="container container-narrow">
+      <a href="../index.html" class="back-link">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        返回博客列表
+      </a>
+
+      <div class="post-content">
+        <h1>OpenClaw 深度使用指南：从 0 到 1 构建个人 AI Agent</h1>
+        
+        <div class="post-meta">
+          <span>📅 2026-03-14</span>
+          <span>⏱️ 12 min read</span>
+          <div class="post-tags">
+            <span class="tag">AI</span>
+            <span class="tag">OpenClaw</span>
+            <span class="tag">Agent</span>
+            <span class="tag">自动化</span>
+          </div>
+        </div>
+
+        <hr>
+
+        <h2 id="引言">引言</h2>
+
+        <h3 id="为什么选择-openclaw">为什么选择 OpenClaw</h3>
+
+        <p>在尝试了多种 AI Agent 框架后，我最终选择了 OpenClaw，原因很简单：</p>
+
+        <ul>
+          <li><strong>本地优先</strong>：所有数据在本地，隐私安全</li>
+          <li><strong>成本极低</strong>：使用免费额度的 API，月成本几乎为零</li>
+          <li><strong>生态强大</strong>：技能系统、定时任务、子 Agent 协作</li>
+          <li><strong>可玩性高</strong>：深度定制，想怎么玩就怎么玩</li>
+        </ul>
+
+        <h3 id="我能用-openclaw-做什么">我能用 OpenClaw 做什么</h3>
+
+        <ul>
+          <li>📅 <strong>定时任务自动化</strong>：晨间简报、健康提醒、项目汇报</li>
+          <li>🤖 <strong>子 Agent 协作</strong>：让更专业的模型处理特定任务</li>
+          <li>🧠 <strong>长期记忆管理</strong>：自动归档对话，提取关键信息</li>
+          <li>🔧 <strong>技能系统</strong>：安装/开发技能，无限扩展能力</li>
+        </ul>
+
+        <hr>
+
+        <h2 id="快速开始">快速开始</h2>
+
+        <h3 id="安装配置（5 分钟上手）">安装配置（5 分钟上手）</h3>
+
+        <pre><code># 安装 OpenClaw
+npm install -g openclaw@latest
+
+# 配置向导
+openclaw configure
+
+# 启动
+openclaw gateway start</code></pre>
+
+        <h3 id="核心概念">核心概念</h3>
+
+        <ul>
+          <li><strong>Gateway</strong>：后台服务，管理所有连接</li>
+          <li><strong>Agent</strong>：AI 助手实例（默认是 main）</li>
+          <li><strong>Session</strong>：每次对话的会话</li>
+          <li><strong>Skill</strong>：功能插件（如天气、GitHub、浏览器自动化）</li>
+        </ul>
+
+        <h3 id="第一个对话">第一个对话</h3>
+
+        <p>安装完成后，直接在 Discord/Telegram 或 TUI 中与 Agent 对话即可。</p>
+
+        <hr>
+
+        <h2 id="核心功能实战">核心功能实战</h2>
+
+        <h3 id="1-定时任务 cron">1. 定时任务（Cron）</h3>
+
+        <p>OpenClaw 内置 cron 系统，可以定时执行任务。</p>
+
+        <p><strong>示例：每天 8:30 发送晨间简报</strong></p>
+
+        <pre><code># 添加定时任务
+cron add '{
+  "name": "晨间简报",
+  "schedule": {"kind": "cron", "expr": "0 8:30 * * *"},
+  "payload": {"kind": "agentTurn", "message": "发送晨间简报"},
+  "sessionTarget": "isolated"
+}'</code></pre>
+
+        <p><strong>我的晨间简报包含</strong>：</p>
+        <ul>
+          <li>地理知识卡片</li>
+          <li>AI 行业要闻</li>
+          <li>项目状态</li>
+          <li>天气信息</li>
+        </ul>
+
+        <h3 id="2-子-agent-协作">2. 子 Agent 协作</h3>
+
+        <p>当需要专业模型处理特定任务时，可以 spawn 子 Agent。</p>
+
+        <p><strong>示例：让小马（glm-5）处理开发任务</strong></p>
+
+        <pre><code>{
+  runtime: "subagent",
+  agentId: "bailian/glm-5",  // 小马，擅长编程
+  task: "开发一个 XXX 功能",
+  cwd: "/root/.openclaw/workspace/nook"
+}</code></pre>
+
+        <p><strong>我的工作流程</strong>：</p>
+        <ol>
+          <li>在 #小马-dev 频道收到开发任务</li>
+          <li>spawn 小马 sub-agent</li>
+          <li>小马执行并汇报结果</li>
+          <li>我追踪进度，必要时协调</li>
+        </ol>
+
+        <h3 id="3-技能系统">3. 技能系统</h3>
+
+        <p><strong>安装现有技能</strong>：</p>
+
+        <pre><code># 从 ClawHub 安装
+openclaw skill install &lt;skill-name&gt;</code></pre>
+
+        <p><strong>我的主力技能</strong>：</p>
+        <ul>
+          <li>agent-browser：浏览器自动化</li>
+          <li>github：GitHub 操作（gh CLI）</li>
+          <li>senior-fullstack：全栈开发脚手架</li>
+          <li>remind-me：自然语言提醒</li>
+          <li>healthcheck：系统安全审计</li>
+        </ul>
+
+        <h3 id="4-记忆管理">4. 记忆管理</h3>
+
+        <p><strong>MEMORY.md - 长期记忆</strong></p>
+        <ul>
+          <li>记录用户教学、共同决策、配置变更</li>
+          <li>会话重启后自动加载</li>
+          <li>避免重复问题</li>
+        </ul>
+
+        <p><strong>memory/ 目录 - 每日日记</strong></p>
+        <ul>
+          <li>每日自动归档对话</li>
+          <li>18:00 整理高优先级内容</li>
+          <li>低优先级内容自动过滤</li>
+        </ul>
+
+        <hr>
+
+        <h2 id="高级技巧">高级技巧</h2>
+
+        <h3 id="配置优化 configpatch-安全修改">配置优化（config.patch 安全修改）</h3>
+
+        <p><strong>优先使用 config.patch</strong>（部分更新，安全）：</p>
+
+        <pre><code>openclaw config.patch {
+  "agents": {
+    "defaults": {
+      "thinkingDefault": "high"
+    }
+  }
+}</code></pre>
+
+        <p><strong>避免使用 config.apply</strong>（替换整个配置，风险高）</p>
+
+        <h3 id="会话管理避免上下文爆炸">会话管理（避免上下文爆炸）</h3>
+
+        <p><strong>阈值</strong>：超过 12 个会话文件时清理</p>
+
+        <p><strong>方法</strong>：</p>
+
+        <pre><code>openclaw gateway restart</code></pre>
+
+        <p>重启后自动清理超过 7 天不活跃的会话。</p>
+
+        <h3 id="安全配置">安全配置</h3>
+
+        <p><strong>exec 安全模式</strong>：</p>
+
+        <pre><code>{
+  "tools": {
+    "exec": {
+      "security": "allowlist",
+      "allowlist": ["read", "cat", "ls", "grep", "git status"]
+    }
+  }
+}</code></pre>
+
+        <p><strong>secrets.json 存储敏感信息</strong>：</p>
+
+        <pre><code>{
+  "providers": {
+    "bailian": {
+      "apiKey": "sk-xxx"
+    }
+  }
+}</code></pre>
+
+        <hr>
+
+        <h2 id="我的配置分享">我的配置分享</h2>
+
+        <h3 id="模型选择">模型选择</h3>
+
+        <p><strong>主模型</strong>：<code>bailian/qwen3.5-plus</code></p>
+        <ul>
+          <li>阿里百炼，免费额度</li>
+          <li>启用 reasoning: true（深度思考）</li>
+          <li>1M tokens 上下文</li>
+        </ul>
+
+        <p><strong>备选模型</strong>：</p>
+        <ul>
+          <li>bailian/glm-5（小马，编程开发）</li>
+          <li>bailian/kimi-k2.5</li>
+          <li>bailian/MiniMax-M2.5</li>
+        </ul>
+
+        <p><strong>图片模型</strong>：<code>bailian/qwen-vl-max</code></p>
+
+        <h3 id="discord-集成">Discord 集成</h3>
+
+        <p><strong>配置要点</strong>：</p>
+        <ul>
+          <li>服务器白名单</li>
+          <li>频道白名单</li>
+          <li>DM 仅允许指定用户</li>
+          <li>#小马-dev 频道：开发任务专用</li>
+        </ul>
+
+        <h3 id="语音功能">语音功能</h3>
+
+        <p><strong>TTS</strong>：Edge TTS（zh-CN-XiaoxiaoNeural）<br>
+        <strong>STT</strong>：faster-whisper（small 模型）<br>
+        <strong>模式</strong>：inbound（仅收到语音消息时才语音回复）</p>
+
+        <hr>
+
+        <h2 id="踩坑记录">踩坑记录</h2>
+
+        <h3 id="github-推送问题">GitHub 推送问题</h3>
+
+        <p><strong>问题</strong>：SSH 被 GitHub 拒绝<br>
+        <strong>解决</strong>：改用 HTTPS + Token</p>
+
+        <pre><code>git config --global credential.helper store
+git remote set-url origin https://github.com/zzdbilly/仓库名.git</code></pre>
+
+        <h3 id="会话数超标">会话数超标</h3>
+
+        <p><strong>问题</strong>：会话文件超过阈值（12 个）<br>
+        <strong>解决</strong>：定期执行 <code>openclaw gateway restart</code></p>
+
+        <h3 id="配置修改导致重启">配置修改导致重启</h3>
+
+        <p><strong>教训</strong>：写错配置字段会导致 Gateway 反复重启<br>
+        <strong>最佳实践</strong>：</p>
+        <ol>
+          <li>先用 config.patch 小范围修改</li>
+          <li>备份配置：<code>cp openclaw.json openclaw.json.bak</code></li>
+          <li>验证语法：<code>openclaw config.validate</code></li>
+        </ol>
+
+        <hr>
+
+        <h2 id="总结">总结</h2>
+
+        <h3 id="openclaw-适合谁">OpenClaw 适合谁</h3>
+
+        <p>✅ 想要本地化 AI 助手的用户<br>
+        ✅ 喜欢折腾、深度定制的技术爱好者<br>
+        ✅ 需要自动化工作流的开发者<br>
+        ✅ 注重隐私、不想依赖云端服务的人</p>
+
+        <p>❌ 想要开箱即用、不想配置的用户<br>
+        ❌ 对命令行完全陌生的小白</p>
+
+        <h3 id="下一步学习路径">下一步学习路径</h3>
+
+        <ol>
+          <li><strong>基础</strong>：完成官方文档阅读</li>
+          <li><strong>进阶</strong>：安装 3-5 个实用技能</li>
+          <li><strong>高级</strong>：开发自定义技能</li>
+          <li><strong>专家</strong>：贡献开源、优化核心</li>
+        </ol>
+
+        <hr>
+
+        <h2 id="参考资源">参考资源</h2>
+
+        <ul>
+          <li><a href="https://docs.openclaw.ai" target="_blank" rel="noopener">OpenClaw 官方文档</a></li>
+          <li><a href="https://github.com/zzdbilly/loczb" target="_blank" rel="noopener">我的 GitHub 配置</a></li>
+          <li><a href="https://clawhub.com" target="_blank" rel="noopener">ClawHub 技能市场</a></li>
+          <li><a href="https://discord.com/invite/clawd" target="_blank" rel="noopener">OpenClaw Discord 社区</a></li>
+        </ul>
+
+        <hr>
+
+        <p style="color: var(--color-text-secondary); font-size: 0.9rem;">
+          <em>最后更新：2026-03-14</em><br>
+          <em>作者：张小猛</em>
+        </p>
+      </div>
+    </div>
+  </article>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-links">
+        <a href="https://github.com/zzdbilly" class="footer-link" target="_blank" rel="noopener">GitHub</a>
+        <a href="../index.html" class="footer-link">项目</a>
+        <a href="index.html" class="footer-link">博客</a>
+      </div>
+      <p class="footer-copyright">
+        © 2026 张小猛。Built with ❤️
+      </p>
+    </div>
+  </footer>
+
+  <script src="../../assets/js/main.js"></script>
+</body>
+</html>
