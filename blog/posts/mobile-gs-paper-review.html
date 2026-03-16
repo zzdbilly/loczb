@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Mobile-GS：让 3D 高斯泼溅在移动端实时渲染 - 论文解读，ICLR 2026，移动端 3D 渲染新突破">
+  <meta name="keywords" content="Mobile-GS, 3D Gaussian Splatting, 3DGS, 移动端渲染，计算机视觉，AI, ICLR 2026">
+  <meta name="author" content="张小猛">
+  <meta name="publish-date" content="2026-03-16">
+  
+  <!-- Open Graph -->
+  <meta property="og:title" content="Mobile-GS：让 3D 高斯泼溅在移动端实时渲染">
+  <meta property="og:description" content="论文解读：Mobile-GS 第一次让 3DGS 在移动端实现实时渲染，骁龙 8 Gen 3 上 116 FPS，模型仅 4.8MB">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://zzdbilly.github.io/loczb/blog/posts/mobile-gs-paper-review.html">
+  
+  <title>Mobile-GS：让 3D 高斯泼溅在移动端实时渲染 | 张小猛 - loczb</title>
+  
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍡</text></svg>">
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+  
+  <style>
+    .post-content {
+      max-width: 720px;
+      margin: 0 auto;
+      line-height: 1.8;
+    }
+    .post-content h1 { font-size: 2.5rem; margin: 2rem 0 1rem; }
+    .post-content h2 { font-size: 1.8rem; margin: 2rem 0 1rem; color: var(--color-accent-primary); }
+    .post-content h3 { font-size: 1.4rem; margin: 1.5rem 0 0.8rem; }
+    .post-content p { margin: 1rem 0; }
+    .post-content ul, .post-content ol { margin: 1rem 0; padding-left: 2rem; }
+    .post-content li { margin: 0.5rem 0; }
+    .post-content code { 
+      background: var(--color-bg-tertiary); 
+      padding: 0.2rem 0.4rem; 
+      border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9em;
+    }
+    .post-content pre {
+      background: var(--color-bg-tertiary);
+      padding: 1.5rem;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin: 1.5rem 0;
+    }
+    .post-content pre code {
+      background: none;
+      padding: 0;
+    }
+    .post-content blockquote {
+      border-left: 4px solid var(--color-accent-primary);
+      padding-left: 1.5rem;
+      margin: 1.5rem 0;
+      color: var(--color-text-secondary);
+      font-style: italic;
+    }
+    .post-content table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+    }
+    .post-content th, .post-content td {
+      border: 1px solid var(--color-border);
+      padding: 0.8rem;
+      text-align: left;
+    }
+    .post-content th {
+      background: var(--color-bg-tertiary);
+      font-weight: 600;
+    }
+    .post-content a {
+      color: var(--color-accent-primary);
+      text-decoration: none;
+    }
+    .post-content a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <!-- Loading -->
+  <div class="loading">
+    <div class="loading-spinner"></div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../index.html" class="nav-logo">
+        loc<span>zb</span>
+      </a>
+      <button class="nav-toggle" aria-label="Toggle menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <ul class="nav-links">
+        <li><a href="../index.html" class="nav-link">首页</a></li>
+        <li><a href="../projects/index.html" class="nav-link">项目</a></li>
+        <li><a href="../blog/index.html" class="nav-link active">博客</a></li>
+        <li><a href="../about/index.html" class="nav-link">关于</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Post Content -->
+  <section class="section">
+    <div class="container container-narrow">
+      <article class="post-content animate-on-scroll">
+        <h1>Mobile-GS：让 3D 高斯泼溅在移动端实时渲染</h1>
+<blockquote>
+<p>论文解读 | ICLR 2026 | 移动端 3D 渲染新突破</p>
+</blockquote>
+<hr>
+<h2>📌 摘要</h2>
+<p>3D Gaussian Splatting（3DGS，3D 高斯泼溅）是近年来计算机视觉领域的热门技术，能够高质量地渲染复杂 3D 场景。但它的计算量和存储成本一直是个大问题——在手机上基本跑不动。</p>
+<p>2026 年 3 月，Xiaobiao Du 等人发表了 <strong>Mobile-GS</strong>，第一次让 3DGS 在移动端实现<strong>实时渲染</strong>。在骁龙 8 Gen 3 上，它能跑到 <strong>116 FPS</strong>（1600×1063 分辨率），模型大小压缩到仅 <strong>4.8MB</strong>。</p>
+<p>这篇文章带你读懂 Mobile-GS 的核心创新，以及它对移动端应用意味着什么。</p>
+<hr>
+<h2>🎯 核心问题：为什么 3DGS 在移动端跑不动？</h2>
+<p>3DGS 的渲染流程有个致命瓶颈：<strong>深度排序</strong>。</p>
+<p>传统 3DGS 渲染时，需要把所有高斯球按深度从近到远排序，然后依次做 alpha 混合。这个排序过程：</p>
+<ul>
+<li>计算复杂度 O(n log n)，n 是高斯球数量</li>
+<li>场景复杂时，高斯球数量轻松上万</li>
+<li>手机 GPU 扛不住这个计算量</li>
+</ul>
+<p>另外，3DGS 模型本身也很大：</p>
+<ul>
+<li>原始模型通常 50-100MB</li>
+<li>手机内存有限，加载困难</li>
+<li>网络传输成本高</li>
+</ul>
+<hr>
+<h2>🔧 Mobile-GS 的三大创新</h2>
+<h3>1️⃣ 深度感知无序渲染（Depth-aware Order-Independent Rendering）</h3>
+<p><strong>核心思路：直接不要排序了。</strong></p>
+<p>Mobile-GS 发现，排序虽然是精度最高的方法，但也是性能瓶颈。他们设计了一种新的渲染策略：</p>
+<ul>
+<li>不再按深度排序高斯球</li>
+<li>一次性渲染所有关联到目标像素的高斯球</li>
+<li>用深度感知的方式调整混合权重</li>
+</ul>
+<p><strong>效果：</strong></p>
+<ul>
+<li>渲染速度提升数倍</li>
+<li>避免了 O(n log n) 的排序开销</li>
+</ul>
+<p><strong>副作用：</strong></p>
+<ul>
+<li>在透明区域和重叠几何体处可能出现伪影</li>
+<li>需要第二个创新来修复</li>
+</ul>
+<hr>
+<h3>2️⃣ 神经视角依赖增强（Neural View-Dependent Enhancement）</h3>
+<p><strong>核心思路：用轻量 MLP 预测更准确的透明度。</strong></p>
+<p>为了解决无序渲染带来的伪影问题，Mobile-GS 引入了一个小型神经网络：</p>
+<p><strong>输入：</strong></p>
+<ul>
+<li>高斯球的尺度（scale）</li>
+<li>旋转（rotation）</li>
+<li>球谐系数（spherical harmonics）</li>
+<li>相机到 3D 高斯的方向向量</li>
+</ul>
+<p><strong>输出：</strong></p>
+<ul>
+<li>视角相关的透明度（view-dependent opacity）</li>
+</ul>
+<p><strong>效果：</strong></p>
+<ul>
+<li>准确建模视角依赖的效果</li>
+<li>消除透明区域伪影</li>
+<li>MLP 很小，计算开销可忽略</li>
+</ul>
+<p>这个设计很巧妙——用一点点神经网络开销，换回了排序带来的精度，但避免了排序的性能损失。</p>
+<hr>
+<h3>3️⃣ 压缩技术组合拳</h3>
+<p>Mobile-GS 用了三种压缩方法，把模型从 50-100MB 压到 4.8MB：</p>
+<p><strong>① 一阶球谐蒸馏（First-order Spherical Harmonics Distillation）</strong></p>
+<ul>
+<li>原始 3DGS 用高阶球谐系数（通常 3-4 阶）</li>
+<li>Mobile-GS 蒸馏到一阶，用神经网络补偿信息损失</li>
+<li>大幅减少参数量</li>
+</ul>
+<p><strong>② 神经向量量化（Neural Vector Quantization）</strong></p>
+<ul>
+<li>把连续参数离散化</li>
+<li>用码本（codebook）存储代表性向量</li>
+<li>索引代替原始值，进一步压缩</li>
+</ul>
+<p><strong>③ 贡献度剪枝（Contribution-based Pruning）</strong></p>
+<ul>
+<li>分析每个高斯球对最终渲染的贡献</li>
+<li>移除贡献小的冗余高斯球</li>
+<li>减少高斯球总数</li>
+</ul>
+<p><strong>最终效果：</strong></p>
+<ul>
+<li>模型大小：4.8MB（压缩比约 10-20 倍）</li>
+<li>高斯球数量：减少 50-70%</li>
+<li>画质损失：肉眼几乎不可见</li>
+</ul>
+<hr>
+<h2>📊 性能对比</h2>
+<h3>移动端（骁龙 8 Gen 3）</h3>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>Mobile-GS</th>
+<th>传统 3DGS</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>渲染速度</td>
+<td>116 FPS</td>
+<td>&lt;30 FPS</td>
+</tr>
+<tr>
+<td>分辨率</td>
+<td>1600×1063</td>
+<td>相同</td>
+</tr>
+<tr>
+<td>模型大小</td>
+<td>4.8 MB</td>
+<td>50-100 MB</td>
+</tr>
+</tbody>
+</table>
+<h3>PC 端（RTX 3090）</h3>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>Mobile-GS</th>
+<th>传统 3DGS</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>渲染速度</td>
+<td>1098 FPS</td>
+<td>~200 FPS</td>
+</tr>
+<tr>
+<td>画质</td>
+<td>接近原版</td>
+<td>基准</td>
+</tr>
+</tbody>
+</table>
+<p><strong>关键结论：</strong></p>
+<ul>
+<li>移动端首次突破 120 FPS 显示限制</li>
+<li>PC 端也有 5 倍性能提升</li>
+<li>画质基本无损</li>
+</ul>
+<hr>
+<h2>🏗️ 技术架构</h2>
+<pre class="hljs"><code>输入场景 → 高斯球表示 → Mobile-GS 优化 → 移动端渲染
+              ↓
+    ┌─────────────────────────┐
+    │  深度感知无序渲染        │
+    │  神经视角增强 MLP        │
+    │  压缩 + 剪枝            │
+    └─────────────────────────┘
+              ↓
+        116 FPS 实时输出
+</code></pre>
+<p><strong>渲染流程：</strong></p>
+<ol>
+<li>加载压缩后的 3D 高斯表示（4.8MB）</li>
+<li>对每个像素，找出关联的高斯球</li>
+<li>用深度感知方式混合（无需排序）</li>
+<li>MLP 预测视角相关透明度</li>
+<li>输出最终颜色</li>
+</ol>
+<hr>
+<h2>📱 移动端集成建议</h2>
+<p>如果你有安卓开发背景，想在自己的 App 里集成 Mobile-GS，以下是技术路线：</p>
+<h3>GPU 加速方案</h3>
+<p><strong>方案 A：Vulkan（推荐）</strong></p>
+<ul>
+<li>骁龙 Adreno GPU 原生支持</li>
+<li>计算着色器（Compute Shader）处理高斯球渲染</li>
+<li>性能最好，但学习曲线陡峭</li>
+</ul>
+<p><strong>方案 B：OpenGL ES 3.1+</strong></p>
+<ul>
+<li>兼容性更好</li>
+<li>同样支持计算着色器</li>
+<li>性能略低于 Vulkan</li>
+</ul>
+<h3>NPU 加速（可选）</h3>
+<p>MLP 推理可以放到 NPU 上：</p>
+<ul>
+<li>骁龙 Hexagon NPU</li>
+<li>使用 <strong>SNPE</strong>（Snapdragon Neural Processing Engine）</li>
+<li>或 <strong>TFLite</strong> 部署</li>
+</ul>
+<h3>内存优化</h3>
+<ul>
+<li>模型仅 4.8MB，可直接加载到内存</li>
+<li>使用 <strong>Android HardwareBuffer</strong> 实现零拷贝</li>
+<li>纹理压缩：ASTC（推荐）或 ETC2</li>
+</ul>
+<h3>集成路径</h3>
+<p><strong>快速原型：</strong></p>
+<ol>
+<li>官方 PyTorch 代码 → 导出 ONNX</li>
+<li>ONNX → TNN/SNPE 移动端推理引擎</li>
+<li>集成到 Android App</li>
+</ol>
+<p><strong>生产环境：</strong></p>
+<ol>
+<li>C++ 重写渲染核心（性能最好）</li>
+<li>使用 Vulkan/OpenGL ES</li>
+<li>直接集成到 Native 层</li>
+</ol>
+<hr>
+<h2>🎮 应用场景</h2>
+<p>Mobile-GS 让哪些应用成为可能？</p>
+<h3>AR 应用</h3>
+<ul>
+<li>实时 3D 重建 + 渲染</li>
+<li>电商：3D 商品展示</li>
+<li>社交：虚拟道具/滤镜</li>
+</ul>
+<h3>游戏</h3>
+<ul>
+<li>高质量场景快速加载</li>
+<li>开放世界无缝切换</li>
+<li>动态光照/反射效果</li>
+</ul>
+<h3>3D 扫描</h3>
+<ul>
+<li>手机拍照生成 3D 模型</li>
+<li>文物/建筑数字化</li>
+<li>个人 3D 头像</li>
+</ul>
+<h3>直播特效</h3>
+<ul>
+<li>实时虚拟背景</li>
+<li>3D 道具/贴纸</li>
+<li>低延迟渲染</li>
+</ul>
+<hr>
+<h2>🤔 局限性与未来方向</h2>
+<h3>当前局限</h3>
+<ul>
+<li><strong>训练仍需 PC</strong>: Mobile-GS 只优化了推理，训练还是需要在 PC 上进行</li>
+<li><strong>动态场景支持有限</strong>: 主要针对静态场景，动态物体需要额外处理</li>
+<li><strong>极端光照条件</strong>: 强反光/透明材质仍有挑战</li>
+</ul>
+<h3>未来方向</h3>
+<ul>
+<li><strong>端云协同</strong>: 训练在云端，推理在移动端</li>
+<li><strong>动态场景扩展</strong>: 结合 NeRF 或其他动态表示</li>
+<li><strong>硬件专用优化</strong>: 针对特定芯片（如苹果 A 系列、骁龙 8 系列）深度优化</li>
+</ul>
+<hr>
+<h2>📚 参考资源</h2>
+<ul>
+<li><strong>论文</strong>: <a href="https://arxiv.org/abs/2603.11531">Mobile-GS: Real-time Gaussian Splatting for Mobile Devices</a></li>
+<li><strong>项目主页</strong>: https://xiaobiaodu.github.io/mobile-gs-project/</li>
+<li><strong>代码</strong>: https://github.com/xiaobiaodu/mobile-gs</li>
+<li><strong>3DGS 原始论文</strong>: <a href="https://repo-sam.inria.fr/fungraph/3d-gaussian-splatting/">3D Gaussian Splatting for Real-Time Radiance Field Rendering</a></li>
+</ul>
+<hr>
+<h2>💭 个人思考</h2>
+<p>Mobile-GS 的意义不只是&quot;又一个 3DGS 优化&quot;，它代表了<strong>端侧 AI 渲染</strong>的一个方向：</p>
+<ol>
+<li><strong>算法 + 硬件协同设计</strong>: 不是简单地把 PC 算法搬到手机，而是针对移动端特性重新设计</li>
+<li><strong>神经网络辅助传统渲染</strong>: 用轻量 MLP 解决传统方法的痛点，而不是完全替代</li>
+<li><strong>压缩优先</strong>: 从设计之初就考虑存储和带宽限制</li>
+</ol>
+<p>对于移动开发者来说，这类技术会越来越重要——用户对 3D 内容的需求在增长，但手机功耗和散热限制是硬约束。Mobile-GS 提供了一个很好的思路。</p>
+<hr>
+<p><em>发布于 2026-03-16</em><br>
+<em>作者：张小猛</em><br>
+<em>标签：#计算机视觉 #3D 渲染 #移动端 #AI #论文解读</em></p>
+
+      </article>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-links">
+        <a href="https://github.com/billyzl" class="footer-link" target="_blank" rel="noopener">GitHub</a>
+        <a href="../projects/index.html" class="footer-link">项目</a>
+        <a href="../about/index.html" class="footer-link">关于</a>
+      </div>
+      <p class="footer-copyright">
+        © 2026 张小猛。Built with ❤️
+      </p>
+    </div>
+  </footer>
+
+  <script src="../../assets/js/main.js"></script>
+</body>
+</html>
