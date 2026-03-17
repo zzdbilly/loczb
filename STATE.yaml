@@ -1,32 +1,17 @@
-# loczb 项目状态
-# 最后更新：2026-03-14
+#  项目状态
+# 最后更新：2026/3/16
 
-project:
-  name: loczb
-  description: 个人主页（GitHub Pages）
-  status: active
-  priority: high
-
-current_phase:
-  name: 初始开发
-  progress: 进行中
-  started: 2026-03-14
-
-completed:
-  - 项目重新创建
-  - 基础页面结构（index.html）
-  - 目录结构（about/, blog/, projects/, assets/）
-  - README.md
-
-in_progress:
-  - 页面内容完善
-  - 样式优化
+project: 
+name: 
+status: unknown
+priority: medium
+last_updated: 2026-03-16
 
 next_actions:
-  - 完善个人介绍页面
-  - 添加项目展示内容
-  - 优化响应式设计
+  - "完善个人介绍页面"
+  - "添加项目展示内容"
+  - "优化响应式设计"
 
-notes:
-  - 2026-03-14：清理所有旧项目，重新创建 loczb
+notes: |
+  | - 2026-03-14：清理所有旧项目，重新创建 loczb
   - GitHub Pages 部署
