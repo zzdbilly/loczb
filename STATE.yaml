@@ -1,11 +1,11 @@
 #  项目状态
-# 最后更新：2026/3/16
+# 最后更新：2026/3/17
 
 project: 
 name: 
 status: unknown
 priority: medium
-last_updated: 2026-03-16
+last_updated: 2026-03-17
 
 next_actions:
   - "完善个人介绍页面"
@@ -13,5 +13,5 @@ next_actions:
   - "优化响应式设计"
 
 notes: |
-  | - 2026-03-14：清理所有旧项目，重新创建 loczb
+  |- 2026-03-14：清理所有旧项目，重新创建 loczb
   - GitHub Pages 部署
