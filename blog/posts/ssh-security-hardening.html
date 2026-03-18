@@ -282,7 +282,7 @@ $ sudo grep "Failed password" /var/log/secure | wc -l
           <ul>
             <li><strong>云服务商</strong>：腾讯云 CVM（轻量应用服务器同样适用）</li>
             <li><strong>操作系统</strong>：OpenCloudOS 9.4（兼容 CentOS/RHEL 9）</li>
-            <li><strong>公网 IP</strong>：101.34.254.132（示例，请替换为你的真实 IP）</li>
+            <li><strong>公网 IP</strong>：你的服务器公网IP（示例，请替换为你的真实 IP）</li>
             <li><strong>SSH 版本</strong>：OpenSSH 8.7+</li>
           </ul>
         </div>
@@ -340,7 +340,7 @@ cat ~/.ssh/id_ed25519.pub</code></pre>
         
         <p><strong>方法一：使用 ssh-copy-id（推荐）</strong></p>
         <pre><code># 本地执行（替换用户名和 IP）
-ssh-copy-id -i ~/.ssh/id_ed25519.pub yourname@101.34.254.132</code></pre>
+ssh-copy-id -i ~/.ssh/id_ed25519.pub yourname@你的服务器公网IP</code></pre>
 
         <p><strong>方法二：手动复制（如果没有 ssh-copy-id）</strong></p>
         <pre><code># 在服务器上执行
@@ -355,7 +355,7 @@ chmod 600 ~/.ssh/authorized_keys</code></pre>
 
         <h4>步骤 3：测试密钥登录</h4>
         <pre><code># 本地执行，测试是否能免密登录
-ssh yourname@101.34.254.132
+ssh yourname@你的服务器公网IP
 
 # 成功后，应显示类似：
 # Last login: Wed Mar 18 20:00:00 2026 from xxx.xxx.xxx.xxx</code></pre>
@@ -471,12 +471,12 @@ sudo systemctl status sshd</code></pre>
         <p><strong>在关闭当前连接前，新开一个终端测试连接！</strong></p>
 
         <pre><code># 本地执行，指定新端口连接
-ssh -p 22222 yourname@101.34.254.132
+ssh -p 22222 yourname@你的服务器公网IP
 
 # 简化连接：编辑本地 ~/.ssh/config
 # 添加以下内容：
 Host myserver
-    HostName 101.34.254.132
+    HostName 你的服务器公网IP
     Port 22222
     User yourname
     IdentityFile ~/.ssh/id_ed25519
