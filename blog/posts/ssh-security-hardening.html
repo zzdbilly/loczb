@@ -652,19 +652,19 @@ sudo last -n 10</code></pre>
         
         <h3>6.1 SSH 连接命令</h3>
         <pre><code># 标准连接
-ssh -p 22222 yourname@101.34.254.132
+ssh -p 22222 yourname@你的服务器公网IP
 
 # 使用配置别名
 ssh myserver
 
 # 指定密钥文件
-ssh -i ~/.ssh/id_ed25519 -p 22222 yourname@101.34.254.132
+ssh -i ~/.ssh/id_ed25519 -p 22222 yourname@你的服务器公网IP
 
 # SCP 传输文件
-scp -P 22222 file.txt yourname@101.34.254.132:/home/yourname/
+scp -P 22222 file.txt yourname@你的服务器公网IP:/home/yourname/
 
 # SFTP 连接
-sftp -P 22222 yourname@101.34.254.132</code></pre>
+sftp -P 22222 yourname@你的服务器公网IP</code></pre>
 
         <h3>6.2 查看备份</h3>
         <pre><code># 列出所有备份
