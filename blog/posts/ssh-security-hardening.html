@@ -3,18 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="腾讯云 OpenCloudOS 服务器 SSH 安全加固完整指南 - 从端口修改到密钥认证，全方位提升服务器安全性">
-  <meta name="keywords" content="SSH, 安全加固, 腾讯云, OpenCloudOS, 服务器安全, 密钥认证, 安全组">
+  <meta name="description" content="云服务器 SSH 安全加固完整指南 - 从端口修改到密钥认证，全方位提升 Linux VPS 安全性。适用于 AWS、阿里云、腾讯云、DigitalOcean 等主流云服务商">
+  <meta name="keywords" content="SSH, 安全加固, 云服务器, Linux VPS, 服务器安全, 密钥认证, 防火墙, OpenCloudOS">
   <meta name="author" content="张小猛">
   <meta name="publish-date" content="2026-03-18">
   
   <!-- Open Graph -->
-  <meta property="og:title" content="腾讯云 OpenCloudOS 服务器 SSH 安全加固完整指南">
-  <meta property="og:description" content="从端口修改到密钥认证，全方位提升服务器安全性。适合新手的详细教程">
+  <meta property="og:title" content="云服务器 SSH 安全加固完整指南 - 适用于 AWS/阿里云/腾讯云/DigitalOcean 等">
+  <meta property="og:description" content="从端口修改到密钥认证，全方位提升服务器安全性。适用于主流云服务商的通用指南">
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://zzdbilly.github.io/loczb/blog/posts/ssh-security-hardening.html">
   
-  <title>腾讯云 SSH 安全加固完整指南 | 张小猛 - loczb</title>
+  <title>云服务器 SSH 安全加固完整指南 | 张小猛 - loczb</title>
   
   <!-- Favicon -->
   <link rel="icon" type="image/x-icon" href="../../assets/images/favicon.ico">
@@ -219,7 +219,7 @@
       </a>
 
       <article class="post-content">
-        <h1>🔒 腾讯云 OpenCloudOS 服务器 SSH 安全加固完整指南</h1>
+        <h1>🔒 云服务器 SSH 安全加固完整指南</h1>
         
         <div class="post-meta">
           <span>📅 2026-03-18</span>
@@ -231,7 +231,7 @@
           <span class="tag">DevOps</span>
           <span class="tag">安全</span>
           <span class="tag">SSH</span>
-          <span class="tag">腾讯云</span>
+          <span class="tag">云服务器</span>
         </div>
 
         <!-- TOC -->
@@ -239,7 +239,7 @@
           <h4>📑 目录</h4>
           <ul>
             <li><a href="#intro">一、引言：为什么需要 SSH 加固</a></li>
-            <li><a href="#env">二、环境信息</a></li>
+            <li><a href="#env">二、环境信息（适用于各类云服务器）</a></li>
             <li><a href="#hardening">三、SSH 安全加固步骤</a></li>
             <li><a href="#backup">四、自动备份系统</a></li>
             <li><a href="#monitor">五、系统监控脚本</a></li>
@@ -250,6 +250,11 @@
 
         <!-- Section 1: Introduction -->
         <h2 id="intro">一、引言：为什么需要 SSH 加固</h2>
+        
+        <div class="tip-box">
+          <h4>📖 关于本指南</h4>
+          <p>这是一份<strong>通用的云服务器 SSH 安全加固指南</strong>，适用于 AWS、阿里云、腾讯云、华为云、DigitalOcean、Vultr、Linode 等主流云服务商。无论你使用哪家云平台，核心操作步骤都是相同的，唯一的区别在于云服务商控制台的界面和入口位置。</p>
+        </div>
         
         <p>当你购买了一台云服务器，默认的 SSH 配置通常是「开箱即用」的，方便但不安全。每天，你的服务器都在遭受来自全球的暴力破解攻击。让我给你看一组触目惊心的数据：</p>
         
@@ -275,13 +280,13 @@ $ sudo grep "Failed password" /var/log/secure | wc -l
         <!-- Section 2: Environment -->
         <h2 id="env">二、环境信息</h2>
         
-        <p>本指南基于以下环境，操作类似配置的腾讯云服务器可参考：</p>
+        <p>本指南基于以下环境，适用于各类云服务器：</p>
         
         <div class="highlight-box">
           <h4>🖥️ 服务器配置</h4>
           <ul>
-            <li><strong>云服务商</strong>：腾讯云 CVM（轻量应用服务器同样适用）</li>
-            <li><strong>操作系统</strong>：OpenCloudOS 9.4（兼容 CentOS/RHEL 9）</li>
+            <li><strong>云服务商</strong>：AWS / 阿里云 / 腾讯云 / DigitalOcean / Vultr 等（本指南通用）</li>
+            <li><strong>操作系统</strong>：OpenCloudOS 9.4（兼容 CentOS/RHEL 9，Ubuntu/Debian 同样适用）</li>
             <li><strong>公网 IP</strong>：你的服务器公网IP（示例，请替换为你的真实 IP）</li>
             <li><strong>SSH 版本</strong>：OpenSSH 8.7+</li>
           </ul>
@@ -289,7 +294,7 @@ $ sudo grep "Failed password" /var/log/secure | wc -l
 
         <div class="tip-box">
           <h4>💡 提示</h4>
-          <p>OpenCloudOS 是腾讯云推出的 Linux 发行版，完全兼容 CentOS/RHEL 生态。如果你使用的是 Ubuntu/Debian，命令略有不同，我会特别标注。</p>
+          <p>本指南是一份通用的云服务器 SSH 加固教程。不同云服务商的控制台界面略有差异，但核心操作步骤相同。如果你使用 Ubuntu/Debian，部分命令略有不同，我会特别标注。</p>
         </div>
 
         <!-- Section 3: Hardening Steps -->
@@ -431,20 +436,29 @@ sudo firewall-cmd --reload
 # 查看已放行端口
 sudo firewall-cmd --list-ports</code></pre>
 
-        <h3>3.5 配置腾讯云安全组</h3>
-        <p>云服务器有双重防火墙：系统防火墙 + 云安全组。两者都要配置！</p>
+        <h3>3.5 配置云服务商安全组/防火墙</h3>
+        <p>云服务器通常有双重防火墙：系统防火墙（firewalld/ufw）+ 云服务商安全组。两者都要配置！</p>
 
         <div class="highlight-box">
-          <h4>☁️ 腾讯云控制台操作步骤</h4>
+          <h4>☁️ 云服务商控制台操作步骤</h4>
+          <p><strong>不同云服务商的入口略有不同：</strong></p>
+          <ul>
+            <li><strong>阿里云</strong>：云服务器 ECS → 实例详情 → 安全组</li>
+            <li><strong>腾讯云</strong>：云服务器 CVM → 实例详情 → 安全组</li>
+            <li><strong>AWS</strong>：EC2 → 实例 → Security Groups</li>
+            <li><strong>DigitalOcean</strong>：Networking → Firewalls</li>
+            <li><strong>Vultr</strong>：实例详情 → Firewall</li>
+          </ul>
+          <p><strong>通用配置步骤：</strong></p>
           <ol>
-            <li>登录 <a href="https://console.cloud.tencent.com/" target="_blank">腾讯云控制台</a></li>
-            <li>进入「云服务器」→ 找到你的实例</li>
-            <li>点击「安全组」标签</li>
-            <li>「添加规则」：
+            <li>登录你的云服务商控制台</li>
+            <li>找到对应的服务器实例</li>
+            <li>进入「安全组」或「防火墙」设置</li>
+            <li>添加入站规则：
               <ul>
                 <li>协议：TCP</li>
-                <li>端口：22222</li>
-                <li>来源：0.0.0.0/0（或限制为你的 IP）</li>
+                <li>端口：22222（你设置的新 SSH 端口）</li>
+                <li>来源：0.0.0.0/0（或限制为你的 IP，更安全）</li>
                 <li>策略：允许</li>
               </ul>
             </li>
@@ -454,7 +468,7 @@ sudo firewall-cmd --list-ports</code></pre>
 
         <div class="tip-box">
           <h4>💡 安全组最佳实践</h4>
-          <p>如果你的 IP 是固定的（如公司网络、家庭宽带），强烈建议将来源设为你的 IP 地址，这样即使端口暴露，也只有你能连接。</p>
+          <p>如果你的 IP 是固定的（如公司网络、家庭宽带），强烈建议将来源设为你的 IP 地址，这样即使端口暴露，也只有你能连接。不同云服务商的安全组界面略有差异，但核心配置相同。</p>
         </div>
 
         <h3>3.6 验证并重启 SSH</h3>
@@ -572,7 +586,7 @@ sudo crontab -e
             <li><strong>每日备份</strong>：保留 30 天，自动清理</li>
             <li><strong>周备份</strong>：保留 12 周（约 3 个月）</li>
             <li><strong>月备份</strong>：保留 12 个月</li>
-            <li><strong>异地备份</strong>：定期同步到对象存储（COS）或本地电脑</li>
+            <li><strong>异地备份</strong>：定期同步到对象存储（阿里云 OSS / 腾讯云 COS / AWS S3）或本地电脑</li>
           </ul>
         </div>
 
@@ -715,7 +729,15 @@ ssh -p 22222 yourname@localhost</code></pre>
         <!-- Section 7: Summary -->
         <h2 id="summary">七、总结</h2>
         
-        <p>恭喜你！完成以上步骤后，你的服务器 SSH 安全已经达到了生产级别。让我们回顾一下做了什么：</p>
+        <p>恭喜你！完成以上步骤后，你的云服务器 SSH 安全已经达到了生产级别。本指南是一份<strong>通用的 SSH 加固方案</strong>，适用于：</p>
+        
+        <ul>
+          <li>☁️ <strong>主流云服务商</strong>：AWS、阿里云、腾讯云、华为云、DigitalOcean、Vultr、Linode 等</li>
+          <li>🐧 <strong>主流 Linux 发行版</strong>：CentOS/RHEL/Rocky/AlmaLinux（使用 firewalld）、Ubuntu/Debian（使用 ufw）</li>
+          <li>🏠 <strong>自建服务器</strong>：家庭实验室、NAS、树莓派等</li>
+        </ul>
+
+        <p>让我们回顾一下做了什么：</p>
 
         <div class="highlight-box">
           <h4>✅ 完成的安全加固</h4>
