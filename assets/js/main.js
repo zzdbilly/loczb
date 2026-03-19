@@ -373,6 +373,38 @@ function validateForm(form) {
 }
 
 // ===================================
+// Blog Filters
+// ===================================
+function initBlogFilters() {
+  const filterButtons = document.querySelectorAll('.blog-filters .tag');
+  const blogPosts = document.querySelectorAll('.blog-post');
+  
+  if (filterButtons.length === 0 || blogPosts.length === 0) return;
+  
+  filterButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      filterButtons.forEach(btn => btn.classList.remove('tag-accent'));
+      button.classList.add('tag-accent');
+      
+      const filter = button.textContent.trim();
+      
+      blogPosts.forEach(post => {
+        if (filter === '全部') {
+          post.style.display = '';
+          post.classList.add('animate-on-scroll');
+        } else {
+          const tags = post.querySelectorAll('.tag-accent');
+          const hasTag = Array.from(tags).some(tag => 
+            tag.textContent.trim().toLowerCase().includes(filter.toLowerCase())
+          );
+          post.style.display = hasTag ? '' : 'none';
+        }
+      });
+    });
+  });
+}
+
+// ===================================
 // Initialize Everything
 // ===================================
 document.addEventListener('DOMContentLoaded', () => {
@@ -380,6 +412,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initLazyLoad();
   initScrollProgress();
   setActiveNavLink();
+  initBlogFilters();
   
   // Add loading animation to page
   document.body.classList.add('loaded');
