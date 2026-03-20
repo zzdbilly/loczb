@@ -406,14 +406,10 @@ function initBlogFilters() {
   // Support both old (.tag) and new (.filter-btn) filter buttons
   const filterButtons = document.querySelectorAll('.blog-filters .tag, .blog-filters .filter-btn');
   const blogPosts = document.querySelectorAll('.blog-post, .blog-list-item');
-  const blogContainer = document.querySelector('.blog-list-container, .container-narrow');
+  const blogContainer = document.querySelector('.blog-list-container');
+  const emptyState = document.getElementById('blog-empty-state');
   
   if (filterButtons.length === 0 || blogPosts.length === 0) return;
-  
-  // Create empty state message (hidden by default)
-  let emptyState = document.createElement('div');
-  emptyState.className = 'blog-empty-state';
-  emptyState.innerHTML = '<p class="blog-empty-text">这个分类暂时还没有文章</p>';
   
   function applyFilter(filter) {
     let visibleCount = 0;
@@ -445,15 +441,8 @@ function initBlogFilters() {
     });
     
     // Show/hide empty state
-    if (blogContainer) {
-      if (visibleCount === 0) {
-        if (!blogContainer.querySelector('.blog-empty-state')) {
-          blogContainer.appendChild(emptyState);
-        }
-        emptyState.style.display = 'block';
-      } else {
-        emptyState.style.display = 'none';
-      }
+    if (emptyState) {
+      emptyState.style.display = visibleCount === 0 ? 'block' : 'none';
     }
   }
   
@@ -461,6 +450,37 @@ function initBlogFilters() {
   filterButtons.forEach(button => {
     button.addEventListener('click', () => {
       const filter = button.getAttribute('data-filter') || button.textContent.trim();
+      applyFilter(filter);
+    });
+  });
+  
+  // Check URL hash on page load
+  if (window.location.hash) {
+    const hashFilter = decodeURIComponent(window.location.hash.substring(1));
+    applyFilter(hashFilter);
+  }
+}
+
+// ===================================
+// Initialize Everything
+// ===================================
+document.addEventListener('DOMContentLoaded', () => {
+  initCountUp();
+  initLazyLoad();
+  initScrollProgress();
+  setActiveNavLink();
+  initBlogFilters();
+  
+  // Add loading animation to page
+  document.body.classList.add('loaded');
+});
+
+// Export utilities
+window.loczb = {
+  copyToClipboard,
+  validateForm,
+  validateEmail
+};ent.trim();
       applyFilter(filter);
     });
   });
