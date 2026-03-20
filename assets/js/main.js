@@ -436,7 +436,11 @@ function initBlogFilters() {
     filterButtons.forEach(btn => {
       btn.classList.remove('tag-accent', 'filter-btn-active');
       const btnFilter = btn.getAttribute('data-filter') || btn.textContent.trim();
-      if (btnFilter === filter || btnFilter === 'all') {
+      // 精确匹配：只有当前选中的按钮才高亮
+      // "全部" 按钮对应 'all' 或 '全部'
+      const isAllButton = btnFilter === 'all' || btnFilter === '全部';
+      const isActive = (filter === 'all' || filter === '全部') ? isAllButton : (btnFilter === filter);
+      if (isActive) {
         btn.classList.add('tag-accent', 'filter-btn-active');
       }
     });
@@ -465,6 +469,9 @@ function initBlogFilters() {
   if (window.location.hash) {
     const hashFilter = decodeURIComponent(window.location.hash.substring(1));
     applyFilter(hashFilter);
+  } else {
+    // Initialize with default filter (show Featured section for "all")
+    applyFilter('all');
   }
 }
 
