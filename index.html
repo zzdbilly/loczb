@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="张小猛 - 安卓开发工程师 | 全栈探索者 | AI 爱好者">
-  <meta name="keywords" content="张小猛, loczb, Android, 开发, 全栈, AI">
+  <meta name="keywords" content="张小猛，loczb, Android, 开发，全栈，AI">
   <meta name="author" content="张小猛">
   
   <!-- Open Graph -->
@@ -54,36 +54,117 @@
     </div>
   </nav>
 
-  <!-- Hero Section -->
+  <!-- Hero Section - 双栏布局 -->
   <section class="hero">
     <div class="hero-bg">
       <div class="hero-glow"></div>
       <div class="hero-grid"></div>
     </div>
     
-    <div class="hero-content">
-      <div class="hero-label">
-        <span>Available for work</span>
-      </div>
-      
-      <h1 class="hero-title">
-        Hi, I'm <span class="gradient-text">张小猛</span>
-      </h1>
-      
-      <p class="hero-subtitle">
-        专注 Android + AI 接入 · 把模型真正做成可用功能
-      </p>
-      
-      <div class="hero-actions">
-        <a href="projects/index.html" class="btn btn-primary">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
-          </svg>
-          查看项目
-        </a>
-        <a href="about/index.html" class="btn btn-secondary">
-          了解更多
-        </a>
+    <div class="container container-wide">
+      <div class="hero-grid-layout">
+        <!-- 左侧内容 -->
+        <div class="hero-left">
+          <div class="hero-label">
+            <span>Available for work</span>
+          </div>
+          
+          <h1 class="hero-title">
+            Hi, I'm <span class="gradient-text">张小猛</span>
+          </h1>
+          
+          <p class="hero-subtitle">
+            专注 Android + AI 接入 · 把模型真正做成可用功能
+          </p>
+          
+          <p class="hero-description">
+            关注端侧体验、AI 能力落地，以及把 demo 做成真正能用的产品。<br>
+            我在做移动端开发，也在持续探索 AI Agent、端侧推理和模型接入。
+          </p>
+          
+          <div class="hero-actions">
+            <a href="projects/index.html" class="btn btn-primary">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+              </svg>
+              查看项目
+            </a>
+            <a href="blog/index.html" class="btn btn-secondary">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+              </svg>
+              读博客
+            </a>
+          </div>
+          
+          <!-- 数据统计 -->
+          <div class="hero-stats">
+            <div class="stat">
+              <div class="stat-value">5+</div>
+              <div class="stat-label">年开发经验</div>
+            </div>
+            <div class="stat">
+              <div class="stat-value">20+</div>
+              <div class="stat-label">项目实践</div>
+            </div>
+            <div class="stat">
+              <div class="stat-value">1000+</div>
+              <div class="stat-label">Commits</div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- 右侧 Now 面板 -->
+        <div class="hero-right">
+          <div class="now-panel">
+            <div class="now-header">
+              <div class="now-indicator"></div>
+              <span class="now-title">Now / 当前状态</span>
+            </div>
+            
+            <div class="now-content">
+              <div class="now-item">
+                <div class="now-item-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+                  </svg>
+                </div>
+                <div class="now-item-content">
+                  <div class="now-item-label">Building</div>
+                  <p class="now-item-desc">维护 OpenClaw，持续打磨真实工作流里的 AI Agent 体验</p>
+                </div>
+              </div>
+              
+              <div class="now-item">
+                <div class="now-item-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+                  </svg>
+                </div>
+                <div class="now-item-content">
+                  <div class="now-item-label">Shipping</div>
+                  <p class="now-item-desc">把 AI 能力接进 Android 与日常工具，而不是只停留在展示层</p>
+                </div>
+              </div>
+              
+              <div class="now-item">
+                <div class="now-item-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 19l7-7 3 3-7 7-3-3z"/>
+                    <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/>
+                    <path d="M2 2l7.586 7.586"/>
+                    <circle cx="11" cy="11" r="2"/>
+                  </svg>
+                </div>
+                <div class="now-item-content">
+                  <div class="now-item-label">Writing</div>
+                  <p class="now-item-desc">记录实践、复盘踩坑，把经验写成别人能直接拿去用的文章</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -96,29 +177,48 @@
         <h2 class="section-title">当前重点</h2>
       </div>
       
-      <div class="grid grid-3">
-        <div class="card">
-          <div class="card-header">
-            <div class="project-icon">🤖</div>
-            <h3 class="card-title">AI Agent 开发</h3>
+      <div class="focus-grid">
+        <!-- Building - 主卡片 -->
+        <div class="focus-card focus-card-primary animate-on-scroll">
+          <div class="focus-card-header">
+            <div class="focus-card-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+              </svg>
+            </div>
+            <div class="focus-card-badge">核心方向</div>
           </div>
-          <p class="card-desc">维护 OpenClaw 项目，探索端侧 AI 能力接入</p>
+          <h3 class="focus-card-title">AI Agent 开发</h3>
+          <p class="focus-card-desc">围绕 OpenClaw 和个人工作流，探索 AI Agent 在真实场景里的可用性。</p>
         </div>
         
-        <div class="card">
-          <div class="card-header">
-            <div class="project-icon">📱</div>
-            <h3 class="card-title">Android + AI</h3>
+        <!-- Shipping - 次卡片 -->
+        <div class="focus-card animate-on-scroll">
+          <div class="focus-card-header">
+            <div class="focus-card-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+              </svg>
+            </div>
           </div>
-          <p class="card-desc">将 AI 能力落地到移动端，打造实用功能</p>
+          <h3 class="focus-card-title">Android + AI 接入</h3>
+          <p class="focus-card-desc">关注端侧体验与模型能力结合，把 AI 做成用户真正能感知到的功能。</p>
         </div>
         
-        <div class="card">
-          <div class="card-header">
-            <div class="project-icon">✍️</div>
-            <h3 class="card-title">技术写作</h3>
+        <!-- Writing - 次卡片 -->
+        <div class="focus-card animate-on-scroll">
+          <div class="focus-card-header">
+            <div class="focus-card-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 19l7-7 3 3-7 7-3-3z"/>
+                <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/>
+                <path d="M2 2l7.586 7.586"/>
+                <circle cx="11" cy="11" r="2"/>
+              </svg>
+            </div>
           </div>
-          <p class="card-desc">记录技术实践，分享踩坑经验</p>
+          <h3 class="focus-card-title">技术写作</h3>
+          <p class="focus-card-desc">持续输出 Android、AI Agent、端侧 AI 和工具实践，把经验沉淀成文章。</p>
         </div>
       </div>
     </div>
@@ -133,64 +233,89 @@
         <p class="section-desc">我擅长和正在学习的技术</p>
       </div>
       
-      <div class="grid grid-4">
-        <div class="card animate-on-scroll">
-          <div class="card-header">
-            <div class="project-icon">📱</div>
-            <h3 class="card-title">Android</h3>
+      <div class="tech-grid">
+        <!-- Android - 主轴 -->
+        <div class="tech-card tech-card-primary animate-on-scroll">
+          <div class="tech-card-header">
+            <div class="tech-card-icon">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
+                <line x1="12" y1="18" x2="12.01" y2="18"/>
+              </svg>
+            </div>
+            <div class="tech-card-badge">核心能力</div>
           </div>
-          <div class="card-body">
-            <p class="card-desc">Kotlin, Java, Jetpack Compose, Coroutines, Room, Hilt</p>
-          </div>
-          <div class="tech-stack">
-            <span class="tag">Kotlin</span>
-            <span class="tag">Java</span>
-            <span class="tag">Compose</span>
-          </div>
-        </div>
-        
-        <div class="card animate-on-scroll">
-          <div class="card-header">
-            <div class="project-icon">🤖</div>
-            <h3 class="card-title">AI & Tools</h3>
-          </div>
-          <div class="card-body">
-            <p class="card-desc">LLM, RAG, 端侧推理, 模型接入, Prompt Engineering, OpenClaw</p>
-          </div>
-          <div class="tech-stack">
-            <span class="tag">LLM</span>
-            <span class="tag">RAG</span>
-            <span class="tag">OpenClaw</span>
+          <h3 class="tech-card-title">Android</h3>
+          <p class="tech-card-desc">Kotlin, Jetpack Compose, Coroutines, Room, Hilt</p>
+          <div class="tech-tags">
+            <span class="tech-tag">Kotlin</span>
+            <span class="tech-tag">Compose</span>
+            <span class="tech-tag">Java</span>
+            <span class="tech-tag">Coroutines</span>
+            <span class="tech-tag">Room</span>
           </div>
         </div>
         
-        <div class="card animate-on-scroll">
-          <div class="card-header">
-            <div class="project-icon">🌐</div>
-            <h3 class="card-title">Frontend <span class="tag tag-sm">辅助能力</span></h3>
+        <!-- AI & Tools - 主轴 -->
+        <div class="tech-card tech-card-primary animate-on-scroll">
+          <div class="tech-card-header">
+            <div class="tech-card-icon">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2z"/>
+                <path d="M9 12a3 3 0 1 0 6 0 3 3 0 0 0-6 0"/>
+              </svg>
+            </div>
+            <div class="tech-card-badge">核心能力</div>
           </div>
-          <div class="card-body">
-            <p class="card-desc">React, Vue.js, TypeScript, Tailwind CSS, Next.js</p>
-          </div>
-          <div class="tech-stack">
-            <span class="tag">React</span>
-            <span class="tag">Vue</span>
-            <span class="tag">TypeScript</span>
+          <h3 class="tech-card-title">AI & Tools</h3>
+          <p class="tech-card-desc">LLM, RAG, 端侧推理，模型接入，Prompt Engineering, OpenClaw</p>
+          <div class="tech-tags">
+            <span class="tech-tag">LLM</span>
+            <span class="tech-tag">RAG</span>
+            <span class="tech-tag">OpenClaw</span>
+            <span class="tech-tag">端侧推理</span>
+            <span class="tech-tag">Prompt</span>
           </div>
         </div>
         
-        <div class="card animate-on-scroll">
-          <div class="card-header">
-            <div class="project-icon">⚙️</div>
-            <h3 class="card-title">Backend <span class="tag tag-sm">辅助能力</span></h3>
+        <!-- Frontend - 辅助 -->
+        <div class="tech-card tech-card-secondary animate-on-scroll">
+          <div class="tech-card-header">
+            <div class="tech-card-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="12 2 2 7 12 12 22 7 12 2"/>
+                <polyline points="2 17 12 22 22 17"/>
+                <polyline points="2 12 12 17 22 12"/>
+              </svg>
+            </div>
+            <span class="tech-card-label">辅助能力</span>
           </div>
-          <div class="card-body">
-            <p class="card-desc">Node.js, Python, Go, PostgreSQL, Redis, Docker</p>
+          <h3 class="tech-card-title">Frontend</h3>
+          <p class="tech-card-desc">React, Vue.js, TypeScript, Tailwind CSS</p>
+          <div class="tech-tags">
+            <span class="tech-tag">React</span>
+            <span class="tech-tag">Vue</span>
+            <span class="tech-tag">TypeScript</span>
           </div>
-          <div class="tech-stack">
-            <span class="tag">Node.js</span>
-            <span class="tag">Python</span>
-            <span class="tag">Go</span>
+        </div>
+        
+        <!-- Backend - 辅助 -->
+        <div class="tech-card tech-card-secondary animate-on-scroll">
+          <div class="tech-card-header">
+            <div class="tech-card-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="3"/>
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+              </svg>
+            </div>
+            <span class="tech-card-label">辅助能力</span>
+          </div>
+          <h3 class="tech-card-title">Backend</h3>
+          <p class="tech-card-desc">Node.js, Python, Go, PostgreSQL, Docker</p>
+          <div class="tech-tags">
+            <span class="tech-tag">Node.js</span>
+            <span class="tech-tag">Python</span>
+            <span class="tech-tag">Go</span>
           </div>
         </div>
       </div>
@@ -206,43 +331,84 @@
         <p class="section-desc">我最近参与的一些项目</p>
       </div>
       
-      <div class="grid grid-2">
-        <div class="card project-card animate-on-scroll">
-          <div class="card-header">
-            <div class="project-icon">🌐</div>
-            <h3 class="card-title">loczb</h3>
-            <p class="card-desc">个人品牌网站 — 统一展示技术能力、项目和博客内容，月访问量 500+</p>
-          </div>
-          <div class="card-footer">
-            <div class="project-tags">
-              <span class="tag">HTML/CSS</span>
-              <span class="tag">JavaScript</span>
+      <div class="projects-grid">
+        <!-- 主项目卡 -->
+        <div class="project-card project-card-featured animate-on-scroll">
+          <div class="project-card-featured-header">
+            <div class="project-card-icon">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+              </svg>
             </div>
-            <a href="https://709527.xyz" class="btn btn-ghost" target="_blank" rel="noopener" aria-label="访问 loczb 网站">
+            <div class="project-card-badge">代表项目</div>
+          </div>
+          <h3 class="project-card-title">OpenClaw</h3>
+          <p class="project-card-desc">个人 AI Agent 系统 — 定时任务、子 Agent 协作、技能系统、记忆管理。深度定制个人工作流，日均处理 20+ 自动化任务。</p>
+          <div class="project-card-tags">
+            <span class="tech-tag">AI Agent</span>
+            <span class="tech-tag">自动化</span>
+            <span class="tech-tag">TypeScript</span>
+          </div>
+          <div class="project-card-footer">
+            <a href="https://github.com/zzdbilly" class="btn btn-ghost" target="_blank" rel="noopener">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+              </svg>
+              GitHub
+            </a>
+          </div>
+        </div>
+        
+        <!-- 次项目卡 -->
+        <div class="project-card animate-on-scroll">
+          <div class="project-card-header">
+            <div class="project-card-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                <line x1="3" y1="9" x2="21" y2="9"/>
+                <line x1="9" y1="21" x2="9" y2="9"/>
+              </svg>
+            </div>
+          </div>
+          <h3 class="project-card-title">loczb</h3>
+          <p class="project-card-desc">个人品牌网站 — 统一展示技术能力、项目和博客内容</p>
+          <div class="project-card-tags">
+            <span class="tech-tag">HTML/CSS</span>
+            <span class="tech-tag">JavaScript</span>
+          </div>
+          <div class="project-card-footer">
+            <a href="https://709527.xyz" class="btn btn-ghost" target="_blank" rel="noopener">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
                 <polyline points="15 3 21 3 21 9"/>
                 <line x1="10" y1="14" x2="21" y2="3"/>
               </svg>
+              访问
             </a>
           </div>
         </div>
         
-        <div class="card project-card animate-on-scroll">
-          <div class="card-header">
-            <div class="project-icon">🎯</div>
-            <h3 class="card-title">No Fap Tracker Web</h3>
-            <p class="card-desc">习惯养成 Web 应用 — 可视化追踪、成就系统、进度展示</p>
-          </div>
-          <div class="card-footer">
-            <div class="project-tags">
-              <span class="tag">React</span>
-              <span class="tag">Go</span>
+        <!-- 次项目卡 -->
+        <div class="project-card animate-on-scroll">
+          <div class="project-card-header">
+            <div class="project-card-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+              </svg>
             </div>
-            <a href="https://github.com/zzdbilly/no-fap-tracker-web" class="btn btn-ghost" target="_blank" rel="noopener" aria-label="访问 No Fap Tracker Web GitHub 仓库">
+          </div>
+          <h3 class="project-card-title">No Fap Tracker Web</h3>
+          <p class="project-card-desc">习惯养成 Web 应用 — 可视化追踪、成就系统、进度展示</p>
+          <div class="project-card-tags">
+            <span class="tech-tag">React</span>
+            <span class="tech-tag">Go</span>
+          </div>
+          <div class="project-card-footer">
+            <a href="https://github.com/zzdbilly/no-fap-tracker-web" class="btn btn-ghost" target="_blank" rel="noopener">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
               </svg>
+              GitHub
             </a>
           </div>
         </div>
@@ -250,7 +416,7 @@
     </div>
   </section>
 
-  <!-- Latest Blog Posts Section -->
+  <!-- Blog Section -->
   <section class="section" id="blog">
     <div class="container">
       <div class="section-header">
@@ -259,10 +425,10 @@
         <p class="section-desc">我的技术文章与思考</p>
       </div>
       
-      <div class="grid grid-2">
-        <!-- Post 1: SSH Security Hardening -->
-        <article class="card blog-card animate-on-scroll">
-          <div class="card-header">
+      <div class="blog-grid">
+        <!-- 代表文章大卡 -->
+        <article class="blog-card-featured animate-on-scroll">
+          <div class="blog-card-featured-header">
             <div class="blog-meta">
               <span class="blog-date">2026-03-18</span>
               <span>·</span>
@@ -274,72 +440,83 @@
                 15 min
               </span>
             </div>
-            <h3 class="card-title">
-              <a href="blog/posts/ssh-security-hardening.html">云服务器 SSH 安全加固完整指南</a>
-            </h3>
+            <span class="blog-card-badge">代表文章</span>
           </div>
-          <p class="card-desc">从禁用密码登录到配置 Fail2ban，一份完整的 SSH 安全加固指南，让你的服务器远离暴力破解...</p>
-          <div class="card-footer">
-            <div class="project-tags">
-              <span class="tag tag-accent">安全</span>
-              <span class="tag">运维</span>
+          <h3 class="blog-card-featured-title">
+            <a href="blog/posts/ssh-security-hardening.html">云服务器 SSH 安全加固完整指南</a>
+          </h3>
+          <p class="blog-card-featured-desc">从禁用密码登录到配置 Fail2ban，一份完整的 SSH 安全加固指南，让你的服务器远离暴力破解。适用于 AWS、阿里云、腾讯云等主流云服务商。</p>
+          <div class="blog-card-featured-footer">
+            <div class="blog-tags">
+              <span class="tech-tag tag-accent">安全</span>
+              <span class="tech-tag">运维</span>
             </div>
+            <a href="blog/posts/ssh-security-hardening.html" class="btn btn-ghost">
+              阅读全文
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </a>
           </div>
         </article>
-
-        <!-- Post 2: Tailscale DERP Server -->
-        <article class="card blog-card animate-on-scroll">
-          <div class="card-header">
-            <div class="blog-meta">
+        
+        <!-- 最新文章列表 -->
+        <div class="blog-list">
+          <article class="blog-list-item animate-on-scroll">
+            <div class="blog-list-meta">
               <span class="blog-date">2026-03-17</span>
               <span>·</span>
-              <span class="blog-read-time">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <circle cx="12" cy="12" r="10"/>
-                  <polyline points="12 6 12 12 16 14"/>
-                </svg>
-                12 min
-              </span>
+              <span class="blog-read-time">12 min</span>
             </div>
-            <h3 class="card-title">
+            <h4 class="blog-list-title">
               <a href="blog/posts/tailscale-derp-server.html">自建 Tailscale DERP 中继服务器完整指南</a>
-            </h3>
-          </div>
-          <p class="card-desc">摆脱官方 DERP 服务器限制，自建中继节点提升连接速度和稳定性，支持国内服务器部署...</p>
-          <div class="card-footer">
-            <div class="project-tags">
-              <span class="tag tag-accent">网络</span>
-              <span class="tag">Tailscale</span>
+            </h4>
+            <div class="blog-list-tags">
+              <span class="tech-tag">网络</span>
+              <span class="tech-tag">Tailscale</span>
             </div>
-          </div>
-        </article>
-
-        <!-- Post 3: VS Code Port Forward -->
-        <article class="card blog-card animate-on-scroll">
-          <div class="card-header">
-            <div class="blog-meta">
+          </article>
+          
+          <article class="blog-list-item animate-on-scroll">
+            <div class="blog-list-meta">
               <span class="blog-date">2026-03-17</span>
               <span>·</span>
-              <span class="blog-read-time">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <circle cx="12" cy="12" r="10"/>
-                  <polyline points="12 6 12 12 16 14"/>
-                </svg>
-                10 min
-              </span>
+              <span class="blog-read-time">10 min</span>
             </div>
-            <h3 class="card-title">
+            <h4 class="blog-list-title">
               <a href="blog/posts/vscode-port-forward.html">VS Code 端口转发原理详解</a>
-            </h3>
-          </div>
-          <p class="card-desc">深入理解 VS Code 端口转发的工作原理，包括 SSH 隧道、自动转发机制，以及常见问题的排查方法...</p>
-          <div class="card-footer">
-            <div class="project-tags">
-              <span class="tag tag-accent">开发工具</span>
-              <span class="tag">VS Code</span>
+            </h4>
+            <div class="blog-list-tags">
+              <span class="tech-tag">开发工具</span>
+              <span class="tech-tag">VS Code</span>
             </div>
-          </div>
-        </article>
+          </article>
+          
+          <article class="blog-list-item animate-on-scroll">
+            <div class="blog-list-meta">
+              <span class="blog-date">2026-03-16</span>
+              <span>·</span>
+              <span class="blog-read-time">20 min</span>
+            </div>
+            <h4 class="blog-list-title">
+              <a href="blog/posts/mobile-gs-paper-review.html">Mobile-GS：让 3D 高斯泼溅在移动端实时渲染</a>
+            </h4>
+            <div class="blog-list-tags">
+              <span class="tech-tag">AI</span>
+              <span class="tech-tag">3DGS</span>
+            </div>
+          </article>
+        </div>
+      </div>
+      
+      <!-- 常写主题 -->
+      <div class="blog-topics">
+        <span class="topic-label">常写主题：</span>
+        <a href="blog/index.html" class="topic-tag">Android</a>
+        <a href="blog/index.html" class="topic-tag">AI Agent</a>
+        <a href="blog/index.html" class="topic-tag">端侧 AI</a>
+        <a href="blog/index.html" class="topic-tag">工具实践</a>
+        <a href="blog/index.html" class="topic-tag">网络与运维</a>
       </div>
       
       <div class="text-center mt-3xl">
@@ -353,29 +530,23 @@
     </div>
   </section>
 
-  <!-- Contact CTA Section -->
-  <section class="section">
-    <div class="container container-narrow text-center">
-      <div class="animate-on-scroll">
-        <h2 class="section-title">Let's Connect</h2>
-        <p class="section-desc mb-xl">
-          想要合作或者只是打个招呼？随时联系我
+  <!-- About Me Section -->
+  <section class="section section-about">
+    <div class="container container-narrow">
+      <div class="section-header">
+        <div class="section-label">About Me</div>
+        <h2 class="section-title">关于我</h2>
+      </div>
+      
+      <div class="about-content animate-on-scroll">
+        <p class="about-text">
+          我是一名 Android 开发工程师，也在持续探索端侧 + AI 接入这条路。<br>
+          比起追逐概念，我更在意一项技术能不能真正落地，能不能变成顺手、稳定、长期可用的功能。
         </p>
-        <div class="flex justify-center gap-md" style="flex-wrap: wrap;">
-          <a href="https://github.com/zzdbilly" class="btn btn-secondary" target="_blank" rel="noopener" aria-label="访问 GitHub 主页">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-            </svg>
-            GitHub
-          </a>
-          <a href="mailto:contact@loczb.com" class="btn btn-primary">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-              <polyline points="22,6 12,13 2,6"/>
-            </svg>
-            联系我
-          </a>
-        </div>
+        <p class="about-text">
+          我喜欢把复杂东西做简单，也喜欢把实践写清楚。<br>
+          工作之外，会弹一点吉他，也会继续折腾工具、效率和生活本身。
+        </p>
       </div>
     </div>
   </section>
@@ -383,13 +554,14 @@
   <!-- Footer -->
   <footer class="footer">
     <div class="footer-inner">
+      <p class="footer-signature">写代码，做产品，也认真生活。</p>
       <div class="footer-links">
         <a href="https://github.com/zzdbilly" class="footer-link" target="_blank" rel="noopener">GitHub</a>
         <a href="blog/index.html" class="footer-link">博客</a>
         <a href="about/index.html" class="footer-link">关于</a>
       </div>
       <p class="footer-copyright">
-        © 2026 张小猛. Built with ❤️
+        © 2026 张小猛
       </p>
     </div>
   </footer>
