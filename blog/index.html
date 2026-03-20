@@ -45,6 +45,7 @@
   </nav>
 
   <!-- Hero -->
+  <main id="main-content">
   <section class="blog-hero">
     <div class="container">
       <div class="section-header">
@@ -208,16 +209,17 @@
           <p class="blog-list-excerpt">全面介绍 OpenClaw 的安装配置、核心功能、高级技巧和踩坑记录。</p>
         </article>
         
-        <!-- Empty State -->
-        <div class="blog-empty-state" style="display: none;">
+        <!-- Empty State (shown by JS when no posts match filter) -->
+        <div class="blog-empty-state" id="blog-empty-state" style="display: none;">
           <p class="blog-empty-text">这个分类暂时还没有文章</p>
         </div>
       </div>
     </div>
   </section>
+  </main>
 
   <!-- Footer -->
-  <footer class="footer">
+  <footer class="footer" role="contentinfo">
     <div class="footer-inner">
       <p class="footer-signature">写代码，做产品，也认真生活。</p>
       <div class="footer-links">
