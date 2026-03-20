@@ -480,35 +480,4 @@ window.loczb = {
   copyToClipboard,
   validateForm,
   validateEmail
-};ent.trim();
-      applyFilter(filter);
-    });
-  });
-  
-  // Check URL hash on page load
-  if (window.location.hash) {
-    const hashFilter = decodeURIComponent(window.location.hash.substring(1));
-    applyFilter(hashFilter);
-  }
-}
-
-// ===================================
-// Initialize Everything
-// ===================================
-document.addEventListener('DOMContentLoaded', () => {
-  initCountUp();
-  initLazyLoad();
-  initScrollProgress();
-  setActiveNavLink();
-  initBlogFilters();
-  
-  // Add loading animation to page
-  document.body.classList.add('loaded');
-});
-
-// Export utilities
-window.loczb = {
-  copyToClipboard,
-  validateForm,
-  validateEmail
 };
