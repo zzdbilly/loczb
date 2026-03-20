@@ -34,6 +34,7 @@
         <span></span>
         <span></span>
       </button>
+      <div class="nav-overlay"></div>
       <ul class="nav-links">
         <li><a href="../index.html" class="nav-link">首页</a></li>
         <li><a href="../projects/index.html" class="nav-link">项目</a></li>
@@ -54,164 +55,164 @@
       
       <!-- Filters -->
       <div class="blog-filters">
-        <button class="tag tag-accent">全部</button>
-        <button class="tag">Android</button>
-        <button class="tag">Kotlin</button>
-        <button class="tag">AI</button>
-        <button class="tag">Web</button>
-        <button class="tag">随笔</button>
+        <button class="filter-btn filter-btn-active" data-filter="all">全部</button>
+        <button class="filter-btn" data-filter="Android">Android</button>
+        <button class="filter-btn" data-filter="AI">AI</button>
+        <button class="filter-btn" data-filter="DevOps">DevOps</button>
+        <button class="filter-btn" data-filter="AI Agent">AI Agent</button>
+        <button class="filter-btn" data-filter="安全">安全</button>
       </div>
     </div>
   </section>
 
-  <!-- Blog Posts -->
-  <section class="section" style="padding-top: 0;">
-    <div class="container container-narrow">
-      <!-- Post 6: SSH Security Hardening -->
-      <article class="blog-post animate-on-scroll">
-        <div class="blog-meta">
-          <span class="blog-date">2026-03-18</span>
-          <span>·</span>
-          <span class="blog-read-time">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="12" cy="12" r="10"/>
-              <polyline points="12 6 12 12 16 14"/>
-            </svg>
-            15 min read
-          </span>
-          <span>·</span>
-          <span class="tag tag-accent">安全</span>
+  <!-- Featured Post -->
+  <section class="section section-narrow">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-label">Featured</div>
+        <h2 class="section-title">代表文章</h2>
+      </div>
+      
+      <article class="blog-card-featured animate-on-scroll">
+        <div class="blog-card-featured-header">
+          <div class="blog-meta">
+            <span class="blog-date">2026-03-18</span>
+            <span>·</span>
+            <span class="blog-read-time">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12 6 12 12 16 14"/>
+              </svg>
+              15 min
+            </span>
+          </div>
+          <span class="blog-card-badge">推荐阅读</span>
         </div>
-        <h2 class="blog-post-title">
+        <h3 class="blog-card-featured-title">
           <a href="posts/ssh-security-hardening.html">云服务器 SSH 安全加固完整指南</a>
-        </h2>
-        <p class="blog-post-excerpt">
-          从端口修改到密钥认证，全方位提升 Linux VPS 安全性。适用于 AWS、阿里云、腾讯云、DigitalOcean 等主流云服务商，包含防火墙配置、Fail2ban 防护、自动备份和监控脚本。
-        </p>
-        <a href="posts/ssh-security-hardening.html" class="btn btn-ghost">阅读全文 →</a>
-      </article>
-
-      <!-- Post 5: Tailscale DERP Server -->
-      <article class="blog-post animate-on-scroll">
-        <div class="blog-meta">
-          <span class="blog-date">2026-03-17</span>
-          <span>·</span>
-          <span class="blog-read-time">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="12" cy="12" r="10"/>
-              <polyline points="12 6 12 12 16 14"/>
+        </h3>
+        <p class="blog-card-featured-desc">从禁用密码登录到配置 Fail2ban，一份完整的 SSH 安全加固指南，让你的服务器远离暴力破解。适用于 AWS、阿里云、腾讯云等主流云服务商。</p>
+        <div class="blog-card-featured-footer">
+          <div class="blog-tags">
+            <span class="tech-tag tag-accent">安全</span>
+            <span class="tech-tag">运维</span>
+          </div>
+          <a href="posts/ssh-security-hardening.html" class="btn btn-ghost">
+            阅读全文
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
             </svg>
-            15 min read
-          </span>
-          <span>·</span>
-          <span class="tag tag-accent">DevOps</span>
+          </a>
         </div>
-        <h2 class="blog-post-title">
-          <a href="posts/tailscale-derp-server.html">自建 Tailscale DERP 中继服务器完整指南</a>
-        </h2>
-        <p class="blog-post-excerpt">
-          从原理到实战，手把手教你搭建私有 DERP 服务器。解决官方 DERP 延迟高、隐私顾虑问题，让你的 Tailscale 连接速度提升 10 倍。
-        </p>
-        <a href="posts/tailscale-derp-server.html" class="btn btn-ghost">阅读全文 →</a>
       </article>
+    </div>
+  </section>
 
-      <!-- Post 4: VS Code Port Forward -->
-      <article class="blog-post animate-on-scroll">
-        <div class="blog-meta">
-          <span class="blog-date">2026-03-17</span>
-          <span>·</span>
-          <span class="blog-read-time">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="12" cy="12" r="10"/>
-              <polyline points="12 6 12 12 16 14"/>
-            </svg>
-            10 min read
-          </span>
-          <span>·</span>
-          <span class="tag tag-accent">DevOps</span>
+  <!-- Blog Posts List -->
+  <section class="section section-narrow">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-label">Archive</div>
+        <h2 class="section-title">全部文章</h2>
+      </div>
+      
+      <div class="blog-list-container">
+        <!-- Post List -->
+        <article class="blog-list-item animate-on-scroll" data-category="安全">
+          <div class="blog-list-header">
+            <div class="blog-list-meta">
+              <span class="blog-date">2026-03-18</span>
+              <span>·</span>
+              <span class="blog-read-time">15 min</span>
+            </div>
+            <span class="blog-list-tag">安全</span>
+          </div>
+          <h3 class="blog-list-title">
+            <a href="posts/ssh-security-hardening.html">云服务器 SSH 安全加固完整指南</a>
+          </h3>
+          <p class="blog-list-excerpt">从端口修改到密钥认证，全方位提升 Linux VPS 安全性。适用于 AWS、阿里云、腾讯云等主流云服务商。</p>
+        </article>
+
+        <article class="blog-list-item animate-on-scroll" data-category="DevOps">
+          <div class="blog-list-header">
+            <div class="blog-list-meta">
+              <span class="blog-date">2026-03-17</span>
+              <span>·</span>
+              <span class="blog-read-time">15 min</span>
+            </div>
+            <span class="blog-list-tag">DevOps</span>
+          </div>
+          <h3 class="blog-list-title">
+            <a href="posts/tailscale-derp-server.html">自建 Tailscale DERP 中继服务器完整指南</a>
+          </h3>
+          <p class="blog-list-excerpt">从原理到实战，手把手教你搭建私有 DERP 服务器。解决官方 DERP 延迟高、隐私顾虑问题。</p>
+        </article>
+
+        <article class="blog-list-item animate-on-scroll" data-category="DevOps">
+          <div class="blog-list-header">
+            <div class="blog-list-meta">
+              <span class="blog-date">2026-03-17</span>
+              <span>·</span>
+              <span class="blog-read-time">10 min</span>
+            </div>
+            <span class="blog-list-tag">DevOps</span>
+          </div>
+          <h3 class="blog-list-title">
+            <a href="posts/vscode-port-forward.html">VS Code 端口转发原理详解：SSH 隧道工作机制</a>
+          </h3>
+          <p class="blog-list-excerpt">深入解析 VS Code 端口转发背后的 SSH 隧道原理，对比 Tailscale、Nginx 反向代理方案。</p>
+        </article>
+
+        <article class="blog-list-item animate-on-scroll" data-category="AI">
+          <div class="blog-list-header">
+            <div class="blog-list-meta">
+              <span class="blog-date">2026-03-16</span>
+              <span>·</span>
+              <span class="blog-read-time">20 min</span>
+            </div>
+            <span class="blog-list-tag">AI</span>
+          </div>
+          <h3 class="blog-list-title">
+            <a href="posts/mobile-gs-paper-review.html">Mobile-GS：让 3D 高斯泼溅在移动端实时渲染</a>
+          </h3>
+          <p class="blog-list-excerpt">论文解读：Mobile-GS 第一次让 3DGS 在移动端实现实时渲染。骁龙 8 Gen 3 上 116 FPS，模型仅 4.8MB。</p>
+        </article>
+
+        <article class="blog-list-item animate-on-scroll" data-category="AI Agent">
+          <div class="blog-list-header">
+            <div class="blog-list-meta">
+              <span class="blog-date">2026-03-15</span>
+              <span>·</span>
+              <span class="blog-read-time">15 min</span>
+            </div>
+            <span class="blog-list-tag">AI Agent</span>
+          </div>
+          <h3 class="blog-list-title">
+            <a href="posts/ai-agent-skill-development.html">AI Agent 技能开发实战：从需求到上线的完整流程</a>
+          </h3>
+          <p class="blog-list-excerpt">手把手教你开发一个 GitHub 项目分析技能。从需求分析、技术选型、核心开发到集成测试。</p>
+        </article>
+
+        <article class="blog-list-item animate-on-scroll" data-category="AI">
+          <div class="blog-list-header">
+            <div class="blog-list-meta">
+              <span class="blog-date">2026-03-14</span>
+              <span>·</span>
+              <span class="blog-read-time">12 min</span>
+            </div>
+            <span class="blog-list-tag">AI</span>
+          </div>
+          <h3 class="blog-list-title">
+            <a href="posts/openclaw-guide.html">OpenClaw 深度使用指南：从 0 到 1 构建个人 AI Agent</a>
+          </h3>
+          <p class="blog-list-excerpt">全面介绍 OpenClaw 的安装配置、核心功能、高级技巧和踩坑记录。</p>
+        </article>
+        
+        <!-- Empty State -->
+        <div class="blog-empty-state" style="display: none;">
+          <p class="blog-empty-text">这个分类暂时还没有文章</p>
         </div>
-        <h2 class="blog-post-title">
-          <a href="posts/vscode-port-forward.html">VS Code 端口转发原理详解：SSH 隧道工作机制</a>
-        </h2>
-        <p class="blog-post-excerpt">
-          深入解析 VS Code 端口转发背后的 SSH 隧道原理，对比 Tailscale、Nginx 反向代理方案，帮助你根据场景选择最适合的方案。
-        </p>
-        <a href="posts/vscode-port-forward.html" class="btn btn-ghost">阅读全文 →</a>
-      </article>
-
-      <!-- Post 3: Mobile-GS Paper Review -->
-      <article class="blog-post animate-on-scroll">
-        <div class="blog-meta">
-          <span class="blog-date">2026-03-16</span>
-          <span>·</span>
-          <span class="blog-read-time">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="12" cy="12" r="10"/>
-              <polyline points="12 6 12 12 16 14"/>
-            </svg>
-            20 min read
-          </span>
-          <span>·</span>
-          <span class="tag tag-accent">AI</span>
-        </div>
-        <h2 class="blog-post-title">
-          <a href="posts/mobile-gs-paper-review.html">Mobile-GS：让 3D 高斯泼溅在移动端实时渲染</a>
-        </h2>
-        <p class="blog-post-excerpt">
-          论文解读：Mobile-GS 第一次让 3DGS 在移动端实现实时渲染。骁龙 8 Gen 3 上 116 FPS，模型仅 4.8MB。详解深度感知无序渲染、神经视角增强、压缩技术三大创新。
-        </p>
-        <a href="posts/mobile-gs-paper-review.html" class="btn btn-ghost">阅读全文 →</a>
-      </article>
-
-      <!-- Post 2: AI Agent Skill Development -->
-      <article class="blog-post animate-on-scroll">
-        <div class="blog-meta">
-          <span class="blog-date">2026-03-15</span>
-          <span>·</span>
-          <span class="blog-read-time">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="12" cy="12" r="10"/>
-              <polyline points="12 6 12 12 16 14"/>
-            </svg>
-            15 min read
-          </span>
-          <span>·</span>
-          <span class="tag tag-accent">AI Agent</span>
-        </div>
-        <h2 class="blog-post-title">
-          <a href="posts/ai-agent-skill-development.html">AI Agent 技能开发实战：从需求到上线的完整流程</a>
-        </h2>
-        <p class="blog-post-excerpt">
-          手把手教你开发一个 GitHub 项目分析技能。从需求分析、技术选型、核心开发到集成测试，完整呈现 AI Agent 技能开发的每个环节，包含可直接运行的代码示例。
-        </p>
-        <a href="posts/ai-agent-skill-development.html" class="btn btn-ghost">阅读全文 →</a>
-      </article>
-
-      <!-- Post 1: OpenClaw Guide -->
-      <article class="blog-post animate-on-scroll">
-        <div class="blog-meta">
-          <span class="blog-date">2026-03-14</span>
-          <span>·</span>
-          <span class="blog-read-time">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="12" cy="12" r="10"/>
-              <polyline points="12 6 12 12 16 14"/>
-            </svg>
-            12 min read
-          </span>
-          <span>·</span>
-          <span class="tag tag-accent">AI</span>
-        </div>
-        <h2 class="blog-post-title">
-          <a href="posts/openclaw-guide.html">OpenClaw 深度使用指南：从 0 到 1 构建个人 AI Agent</a>
-        </h2>
-        <p class="blog-post-excerpt">
-          全面介绍 OpenClaw 的安装配置、核心功能（定时任务、子 Agent 协作、技能系统、记忆管理）、高级技巧和踩坑记录。帮助你从 0 到 1 构建属于自己的个人 AI Agent。
-        </p>
-        <a href="posts/openclaw-guide.html" class="btn btn-ghost">阅读全文 →</a>
-      </article>
-
-
+      </div>
     </div>
   </section>
 
