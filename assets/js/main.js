@@ -77,21 +77,48 @@ function initNavScroll() {
 function initMobileMenu() {
   const toggle = document.querySelector('.nav-toggle');
   const links = document.querySelector('.nav-links');
+  const overlay = document.querySelector('.nav-overlay');
   
   if (!toggle || !links) return;
   
+  function openMenu() {
+    links.classList.add('open');
+    toggle.classList.add('active');
+    if (overlay) overlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+  
+  function closeMenu() {
+    links.classList.remove('open');
+    toggle.classList.remove('active');
+    if (overlay) overlay.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+  
   toggle.addEventListener('click', () => {
-    links.classList.toggle('open');
-    toggle.classList.toggle('active');
+    if (links.classList.contains('open')) {
+      closeMenu();
+    } else {
+      openMenu();
+    }
   });
+  
+  // Close when clicking overlay
+  if (overlay) {
+    overlay.addEventListener('click', closeMenu);
+  }
   
   // Close menu when clicking a link
   const navLinks = links.querySelectorAll('.nav-link');
   navLinks.forEach(link => {
-    link.addEventListener('click', () => {
-      links.classList.remove('open');
-      toggle.classList.remove('active');
-    });
+    link.addEventListener('click', closeMenu);
+  });
+  
+  // Close on escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && links.classList.contains('open')) {
+      closeMenu();
+    }
   });
 }
 
@@ -376,53 +403,72 @@ function validateForm(form) {
 // Blog Filters
 // ===================================
 function initBlogFilters() {
-  const filterButtons = document.querySelectorAll('.blog-filters .tag');
-  const blogPosts = document.querySelectorAll('.blog-post');
-  const blogContainer = document.querySelector('.container-narrow');
+  // Support both old (.tag) and new (.filter-btn) filter buttons
+  const filterButtons = document.querySelectorAll('.blog-filters .tag, .blog-filters .filter-btn');
+  const blogPosts = document.querySelectorAll('.blog-post, .blog-list-item');
+  const blogContainer = document.querySelector('.blog-list-container, .container-narrow');
   
   if (filterButtons.length === 0 || blogPosts.length === 0) return;
   
   // Create empty state message (hidden by default)
   let emptyState = document.createElement('div');
   emptyState.className = 'blog-empty-state';
-  emptyState.style.cssText = 'text-align: center; padding: 60px 20px; color: var(--color-text-secondary); display: none;';
-  emptyState.innerHTML = '<p style="font-size: var(--text-lg); margin-bottom: 0;">这个分类暂时还没有文章</p>';
+  emptyState.innerHTML = '<p class="blog-empty-text">这个分类暂时还没有文章</p>';
   
-  filterButtons.forEach(button => {
-    button.addEventListener('click', () => {
-      filterButtons.forEach(btn => btn.classList.remove('tag-accent'));
-      button.classList.add('tag-accent');
-      
-      const filter = button.textContent.trim();
-      let visibleCount = 0;
-      
-      blogPosts.forEach(post => {
-        if (filter === '全部') {
-          post.style.display = '';
-          post.classList.add('animate-on-scroll');
-          visibleCount++;
-        } else {
-          const tags = post.querySelectorAll('.tag-accent');
-          const hasTag = Array.from(tags).some(tag => 
+  function applyFilter(filter) {
+    let visibleCount = 0;
+    
+    blogPosts.forEach(post => {
+      if (filter === 'all' || filter === '全部') {
+        post.style.display = '';
+        post.classList.add('animate-on-scroll');
+        visibleCount++;
+      } else {
+        // Check data-category attribute first, then fall back to tag matching
+        const category = post.getAttribute('data-category');
+        const hasMatch = category === filter || 
+          Array.from(post.querySelectorAll('.tag-accent, .blog-list-tag')).some(tag => 
             tag.textContent.trim().toLowerCase().includes(filter.toLowerCase())
           );
-          post.style.display = hasTag ? '' : 'none';
-          if (hasTag) visibleCount++;
+        post.style.display = hasMatch ? '' : 'none';
+        if (hasMatch) visibleCount++;
+      }
+    });
+    
+    // Update button active states
+    filterButtons.forEach(btn => {
+      btn.classList.remove('tag-accent', 'filter-btn-active');
+      const btnFilter = btn.getAttribute('data-filter') || btn.textContent.trim();
+      if (btnFilter === filter || btnFilter === 'all') {
+        btn.classList.add('tag-accent', 'filter-btn-active');
+      }
+    });
+    
+    // Show/hide empty state
+    if (blogContainer) {
+      if (visibleCount === 0) {
+        if (!blogContainer.querySelector('.blog-empty-state')) {
+          blogContainer.appendChild(emptyState);
         }
-      });
-      
-      // Show/hide empty state
-      if (emptyState.parentNode && visibleCount === 0) {
         emptyState.style.display = 'block';
-      } else if (emptyState.parentNode && visibleCount > 0) {
+      } else {
         emptyState.style.display = 'none';
       }
+    }
+  }
+  
+  // Click handlers
+  filterButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const filter = button.getAttribute('data-filter') || button.textContent.trim();
+      applyFilter(filter);
     });
   });
   
-  // Add empty state to container
-  if (blogContainer && !blogContainer.querySelector('.blog-empty-state')) {
-    blogContainer.appendChild(emptyState);
+  // Check URL hash on page load
+  if (window.location.hash) {
+    const hashFilter = decodeURIComponent(window.location.hash.substring(1));
+    applyFilter(hashFilter);
   }
 }
 
