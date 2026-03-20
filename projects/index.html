@@ -34,6 +34,7 @@
         <span></span>
         <span></span>
       </button>
+      <div class="nav-overlay"></div>
       <ul class="nav-links">
         <li><a href="../index.html" class="nav-link">首页</a></li>
         <li><a href="index.html" class="nav-link active">项目</a></li>
@@ -49,70 +50,118 @@
       <div class="section-header">
         <div class="section-label">Projects</div>
         <h1 class="section-title">我的项目</h1>
-        <p class="section-desc">探索我创建和维护的开源项目</p>
+        <p class="section-desc">探索我创建和维护的项目，从个人网站到开源工具</p>
       </div>
     </div>
   </section>
 
-  <!-- Projects Grid -->
+  <!-- Featured Project - loczb -->
+  <section class="section section-narrow">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-label">Featured</div>
+        <h2 class="section-title">代表项目</h2>
+      </div>
+      
+      <div class="project-card project-card-featured animate-on-scroll">
+        <div class="project-card-featured-header">
+          <div class="project-card-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+              <line x1="3" y1="9" x2="21" y2="9"/>
+              <line x1="9" y1="21" x2="9" y2="9"/>
+            </svg>
+          </div>
+          <div class="project-card-badge">代表项目</div>
+        </div>
+        <h3 class="project-card-title">loczb - 个人品牌网站</h3>
+        <p class="project-card-desc">
+          统一展示技术能力、项目和博客内容的个人品牌网站。采用暗色主题、精致动效、响应式布局，月访问量 500+。
+          从设计到开发全流程独立完成，实践现代化的前端开发方法。
+        </p>
+        <div class="project-card-tags">
+          <span class="tech-tag">HTML/CSS</span>
+          <span class="tech-tag">JavaScript</span>
+          <span class="tech-tag">GitHub Pages</span>
+        </div>
+        <div class="project-card-footer">
+          <a href="https://709527.xyz" class="btn btn-ghost" target="_blank" rel="noopener">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+              <polyline points="15 3 21 3 21 9"/>
+              <line x1="10" y1="14" x2="21" y2="3"/>
+            </svg>
+            在线访问
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Other Projects -->
   <section class="section" style="padding-top: 0;">
     <div class="container">
+      <div class="section-header">
+        <div class="section-label">Other Projects</div>
+        <h2 class="section-title">其他项目</h2>
+        <p class="section-desc">更多实践项目，涵盖 Web 开发、AI 应用等方向</p>
+      </div>
+      
       <div class="projects-grid">
-        <!-- Project 1: loczb -->
-        <article class="card project-card stagger-item">
-          <div class="card-header">
-            <div class="project-icon">🌐</div>
-            <h3 class="card-title">loczb</h3>
-            <p class="card-desc">个人品牌网站 — 统一展示技术能力、项目和博客内容，月访问量 500+</p>
-          </div>
-          <div class="card-body">
-            <div class="tech-stack">
-              <span class="tag">HTML/CSS</span>
-              <span class="tag">JavaScript</span>
-              <span class="tag">GitHub Pages</span>
-            </div>
-          </div>
-          <div class="card-footer">
-            <div class="project-tags">
-              <span class="tag tag-accent">个人网站</span>
-            </div>
-            <a href="https://709527.xyz" class="btn btn-ghost" target="_blank" rel="noopener" aria-label="访问 loczb 网站">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-                <polyline points="15 3 21 3 21 9"/>
-                <line x1="10" y1="14" x2="21" y2="3"/>
+        <!-- Project: No Fap Tracker Web -->
+        <div class="project-card animate-on-scroll">
+          <div class="project-card-header">
+            <div class="project-card-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
               </svg>
-              访问
-            </a>
-          </div>
-        </article>
-
-        <!-- Project 2: no-fap-tracker-web -->
-        <article class="card project-card stagger-item">
-          <div class="card-header">
-            <div class="project-icon">🎯</div>
-            <h3 class="card-title">No Fap Tracker Web</h3>
-            <p class="card-desc">习惯养成 Web 应用 — 可视化追踪、成就系统、进度展示</p>
-          </div>
-          <div class="card-body">
-            <div class="tech-stack">
-              <span class="tag">React</span>
-              <span class="tag">Go</span>
-              <span class="tag">Tailwind CSS</span>
             </div>
           </div>
-          <div class="card-footer">
-            <div class="project-tags">
-              <span class="tag tag-accent">Web App</span>
-            </div>
-            <a href="https://github.com/zzdbilly/no-fap-tracker-web" class="btn btn-ghost" target="_blank" rel="noopener" aria-label="访问 No Fap Tracker Web GitHub 仓库">
+          <h3 class="project-card-title">No Fap Tracker Web</h3>
+          <p class="project-card-desc">习惯养成 Web 应用 — 可视化追踪、成就系统、进度展示。本地存储、隐私优先。</p>
+          <div class="project-card-tags">
+            <span class="tech-tag">React</span>
+            <span class="tech-tag">Go</span>
+            <span class="tech-tag">Tailwind CSS</span>
+          </div>
+          <div class="project-card-footer">
+            <a href="https://github.com/zzdbilly/no-fap-tracker-web" class="btn btn-ghost" target="_blank" rel="noopener">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
               </svg>
               GitHub
             </a>
           </div>
-        </article>
+        </div>
+        
+        <!-- Project: OpenClaw 实践 -->
+        <div class="project-card animate-on-scroll">
+          <div class="project-card-header">
+            <div class="project-card-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+              </svg>
+            </div>
+          </div>
+          <h3 class="project-card-title">OpenClaw 实践</h3>
+          <p class="project-card-desc">基于 OpenClaw 搭建个人 AI 工作流 — 定时任务、子 Agent 协作、技能定制。探索 AI Agent 在真实场景的可用性。</p>
+          <div class="project-card-tags">
+            <span class="tech-tag">AI Agent</span>
+            <span class="tech-tag">自动化</span>
+            <span class="tech-tag">工作流</span>
+          </div>
+          <div class="project-card-footer">
+            <a href="../blog/posts/openclaw-guide.html" class="btn btn-ghost">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7"/>
+                <polyline points="14 3 14 9 20 9"/>
+                <path d="M10 13L8 15l2 2"/>
+                <path d="M14 3v6H8"/>
+              </svg>
+              实践文章
+            </a>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -120,13 +169,14 @@
   <!-- Footer -->
   <footer class="footer">
     <div class="footer-inner">
+      <p class="footer-signature">写代码，做产品，也认真生活。</p>
       <div class="footer-links">
         <a href="https://github.com/zzdbilly" class="footer-link" target="_blank" rel="noopener">GitHub</a>
         <a href="../blog/index.html" class="footer-link">博客</a>
         <a href="../about/index.html" class="footer-link">关于</a>
       </div>
       <p class="footer-copyright">
-        © 2026 张小猛. Built with ❤️
+        © 2026 张小猛
       </p>
     </div>
   </footer>
