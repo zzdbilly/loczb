@@ -378,8 +378,15 @@ function validateForm(form) {
 function initBlogFilters() {
   const filterButtons = document.querySelectorAll('.blog-filters .tag');
   const blogPosts = document.querySelectorAll('.blog-post');
+  const blogContainer = document.querySelector('.container-narrow');
   
   if (filterButtons.length === 0 || blogPosts.length === 0) return;
+  
+  // Create empty state message (hidden by default)
+  let emptyState = document.createElement('div');
+  emptyState.className = 'blog-empty-state';
+  emptyState.style.cssText = 'text-align: center; padding: 60px 20px; color: var(--color-text-secondary); display: none;';
+  emptyState.innerHTML = '<p style="font-size: var(--text-lg); margin-bottom: 0;">这个分类暂时还没有文章</p>';
   
   filterButtons.forEach(button => {
     button.addEventListener('click', () => {
@@ -387,21 +394,36 @@ function initBlogFilters() {
       button.classList.add('tag-accent');
       
       const filter = button.textContent.trim();
+      let visibleCount = 0;
       
       blogPosts.forEach(post => {
         if (filter === '全部') {
           post.style.display = '';
           post.classList.add('animate-on-scroll');
+          visibleCount++;
         } else {
           const tags = post.querySelectorAll('.tag-accent');
           const hasTag = Array.from(tags).some(tag => 
             tag.textContent.trim().toLowerCase().includes(filter.toLowerCase())
           );
           post.style.display = hasTag ? '' : 'none';
+          if (hasTag) visibleCount++;
         }
       });
+      
+      // Show/hide empty state
+      if (emptyState.parentNode && visibleCount === 0) {
+        emptyState.style.display = 'block';
+      } else if (emptyState.parentNode && visibleCount > 0) {
+        emptyState.style.display = 'none';
+      }
     });
   });
+  
+  // Add empty state to container
+  if (blogContainer && !blogContainer.querySelector('.blog-empty-state')) {
+    blogContainer.appendChild(emptyState);
+  }
 }
 
 // ===================================

@@ -19,8 +19,8 @@
   /* Text Colors */
   --color-text-primary: #fafafa;
   --color-text-secondary: #a1a1aa;
-  --color-text-tertiary: #71717a;
-  --color-text-muted: #71717a;
+  --color-text-tertiary: #8a8a93;
+  --color-text-muted: #8a8a93;
   
   /* Accent Colors */
   --color-accent-primary: #6366f1;
@@ -555,7 +555,7 @@ a:hover {
   gap: var(--space-sm);
   font-family: var(--font-mono);
   font-size: var(--text-xs);
-  color: var(--color-accent-primary);
+  color: #818cf8;
   text-transform: uppercase;
   letter-spacing: 0.1em;
   margin-bottom: var(--space-md);
@@ -800,7 +800,7 @@ a:hover {
 }
 
 .footer-copyright {
-  color: var(--color-text-muted);
+  color: #a1a1aa;
   font-size: var(--text-xs);
 }
 
