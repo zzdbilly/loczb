@@ -408,6 +408,7 @@ function initBlogFilters() {
   const blogPosts = document.querySelectorAll('.blog-post, .blog-list-item');
   const blogContainer = document.querySelector('.blog-list-container');
   const emptyState = document.getElementById('blog-empty-state');
+  const featuredSection = document.getElementById('featured-section');
   
   if (filterButtons.length === 0 || blogPosts.length === 0) return;
   
@@ -439,6 +440,12 @@ function initBlogFilters() {
         btn.classList.add('tag-accent', 'filter-btn-active');
       }
     });
+    
+    // Show/hide Featured section - only show on "all" filter
+    if (featuredSection) {
+      const isAllFilter = filter === 'all' || filter === '全部';
+      featuredSection.style.display = isAllFilter ? '' : 'none';
+    }
     
     // Show/hide empty state
     if (emptyState) {
