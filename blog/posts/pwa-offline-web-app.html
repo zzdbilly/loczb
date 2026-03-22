@@ -31,6 +31,7 @@
       max-width: 720px;
       margin: 0 auto;
       line-height: 1.8;
+      padding-top: 120px;
     }
     .post-content h1 { font-size: 2.5rem; margin: 2rem 0 1rem; }
     .post-content h2 { font-size: 1.8rem; margin: 2rem 0 1rem; color: var(--color-accent-primary); }
@@ -114,20 +115,33 @@
   </style>
 </head>
 <body>
+  <!-- Loading -->
+  <div class="loading">
+    <div class="loading-spinner"></div>
+  </div>
+
   <!-- Navigation -->
   <nav class="nav">
-    <div class="nav-container">
-      <a href="../../index.html" class="nav-brand">loczb</a>
-      <div class="nav-links">
-        <a href="../../index.html">首页</a>
-        <a href="../index.html">博客</a>
-        <a href="../../projects/index.html">项目</a>
-        <a href="../../about/index.html">关于</a>
-      </div>
+    <div class="nav-inner">
+      <a href="../../index.html" class="nav-logo">
+        loc<span>zb</span>
+      </a>
+      <button class="nav-toggle" aria-label="Toggle menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <div class="nav-overlay"></div>
+      <ul class="nav-links">
+        <li><a href="../../index.html" class="nav-link">首页</a></li>
+        <li><a href="../../projects/index.html" class="nav-link">项目</a></li>
+        <li><a href="../index.html" class="nav-link active">博客</a></li>
+        <li><a href="../../about/index.html" class="nav-link">关于</a></li>
+      </ul>
     </div>
   </nav>
 
-  <main class="main">
+  <main id="main-content" class="main">
     <article class="post-content">
       <header>
         <h1>PWA 实战：从零打造离线可用的 Web 应用</h1>
