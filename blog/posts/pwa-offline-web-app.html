@@ -31,7 +31,6 @@
       max-width: 720px;
       margin: 0 auto;
       line-height: 1.8;
-      padding-top: 120px;
     }
     .post-content h1 { font-size: 2.5rem; margin: 2rem 0 1rem; }
     .post-content h2 { font-size: 1.8rem; margin: 2rem 0 1rem; color: var(--color-accent-primary); }
@@ -141,8 +140,17 @@
     </div>
   </nav>
 
-  <main id="main-content" class="main">
-    <article class="post-content">
+  <!-- Post Header -->
+  <section class="section" style="padding-bottom: 0;">
+    <div class="container container-narrow">
+      <a href="../index.html" class="back-link">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        返回博客列表
+      </a>
+
+      <article class="post-content">
       <header>
         <h1>PWA 实战：从零打造离线可用的 Web 应用</h1>
         <div class="post-meta">
@@ -434,17 +442,23 @@ self.addEventListener('notificationclick', (event) => {
         </li>
       </ul>
     </section>
-  </main>
+  </section>
 
   <!-- Footer -->
   <footer class="footer">
-    <div class="footer-container">
-      <p>&copy; 2026 张小猛 - loczb</p>
+    <div class="footer-inner">
+      <p class="footer-signature">写代码，做产品，也认真生活。</p>
       <div class="footer-links">
-        <a href="https://github.com/zzdbilly" target="_blank">GitHub</a>
-        <a href="mailto:billyzl@foxmail.com">Email</a>
+        <a href="https://github.com/zzdbilly" class="footer-link" target="_blank" rel="noopener">GitHub</a>
+        <a href="../../projects/index.html" class="footer-link">项目</a>
+        <a href="../../about/index.html" class="footer-link">关于</a>
       </div>
+      <p class="footer-copyright">
+        © 2026 张小猛
+      </p>
     </div>
   </footer>
+
+  <script src="../../assets/js/main.js"></script>
 </body>
 </html>
