@@ -1,16 +1,16 @@
 # 个人主页网站 项目状态
-# 最后更新：2026-03-21
+# 最后更新：2026-03-22
 
 project: loczb
 name: 个人主页网站
 status: active
 priority: high
-last_updated: 2026-03-21
+last_updated: 2026-03-22
 
 # 最新 Git 提交
-latest_commit: 55b74c1
-commit_message: fix: 加强移动端侧边栏菜单遮罩效果
-commit_date: 2026-03-20
+latest_commit: b113f34
+commit_message: feat: 首页代表文章也改为随机选择
+commit_date: 2026-03-22
 
 # 当前进度
 progress:
