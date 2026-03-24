@@ -1,16 +1,16 @@
 # 个人主页网站 项目状态
-# 最后更新：2026-03-22
+# 最后更新：2026-03-24
 
 project: loczb
 name: 个人主页网站
 status: active
 priority: high
-last_updated: 2026-03-22
+last_updated: 2026-03-24
 
 # 最新 Git 提交
-latest_commit: b113f34
-commit_message: feat: 首页代表文章也改为随机选择
-commit_date: 2026-03-22
+latest_commit: a3b9221
+commit_message: fix: 可访问性和 CTA 文案优化
+commit_date: 2026-03-23
 
 # 当前进度
 progress:
