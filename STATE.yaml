@@ -1,16 +1,16 @@
 # 个人主页网站 项目状态
-# 最后更新：2026-03-28
+# 最后更新：2026-03-29
 
 project: loczb
 name: 个人主页网站
 status: active
 priority: high
-last_updated: 2026-03-28
+last_updated: 2026-03-29
 
 # 最新 Git 提交
-latest_commit: 793bd72
-commit_message: fix: 可访问性和 CTA 文案优化
-commit_date: 2026-03-24
+latest_commit: e89d118
+commit_message: fix: 移动端菜单改为全屏模式，解决遮罩视觉冲突
+commit_date: 2026-03-29
 
 # 当前进度
 progress:
@@ -22,11 +22,11 @@ progress:
 next_actions:
   - "完善个人介绍页面"
   - "添加项目展示内容"
-  - "优化响应式设计"
 
 # 备注
 notes: |
   - 2026-03-14：清理所有旧项目，重新创建 loczb
   - 2026-03-19：P0-P3 完整优化完成
   - 2026-03-20：移动端导航统一修复
+  - 2026-03-29：移动端菜单改为全屏模式
   - GitHub Pages 部署：https://zzdbilly.github.io/loczb/

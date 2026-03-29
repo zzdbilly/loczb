@@ -391,46 +391,60 @@ a:hover {
   .nav-toggle {
     display: flex;
     z-index: calc(var(--z-modal) + 10);
+    min-width: 44px;
+    min-height: 44px;
+    padding: var(--space-md);
   }
 
   .nav-toggle.active {
     position: fixed;
-    top: var(--space-xl);
-    right: var(--space-xl);
+    top: var(--space-lg);
+    right: var(--space-lg);
   }
 
   .nav-overlay {
-    display: none; /* 全屏菜单不需要单独遮罩 */
+    display: none; /* 全屏菜单不需要单独遮罩层 */
   }
 
   .nav-links {
     position: fixed;
     inset: 0;
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    min-height: 100dvh;
+    height: 100dvh;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
-    background: var(--color-bg);
-    padding: var(--space-2xl);
-    gap: var(--space-xl);
+    background: var(--color-bg-primary);
+    padding-top: calc(var(--space-3xl) + 60px);
+    padding-bottom: var(--space-3xl);
+    padding-left: var(--space-xl);
+    padding-right: var(--space-xl);
+    gap: var(--space-lg);
     opacity: 0;
     pointer-events: none;
-    transform: scale(0.95);
-    transition: opacity var(--transition-smooth), transform var(--transition-smooth);
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s ease;
     z-index: var(--z-modal);
+    overflow-y: auto;
   }
 
   .nav-links.open {
     opacity: 1;
     pointer-events: auto;
-    transform: scale(1);
+    visibility: visible;
+    transform: translateY(0);
   }
 
   .nav-link {
-    font-size: var(--text-2xl);
-    padding: var(--space-lg) var(--space-xl);
+    font-size: var(--text-xl);
+    padding: var(--space-md) var(--space-xl);
     text-align: center;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }
 
