@@ -8,8 +8,8 @@ priority: high
 last_updated: 2026-03-29
 
 # 最新 Git 提交
-latest_commit: c8788e1
-commit_message: fix: 移动端菜单全面修复 - 100dvh全屏、背景色、可访问性
+latest_commit: 2a83465
+commit_message: fix: 移动端菜单视觉分层优化 - 遮罩加深、间距增加
 commit_date: 2026-03-29
 
 # 当前进度
@@ -28,5 +28,5 @@ notes: |
   - 2026-03-14：清理所有旧项目，重新创建 loczb
   - 2026-03-19：P0-P3 完整优化完成
   - 2026-03-20：移动端导航统一修复
-  - 2026-03-29：移动端菜单全面修复（100dvh、背景色、可访问性）
+  - 2026-03-29：移动端菜单改为下拉卡片式，视觉分层优化
   - GitHub Pages 部署：https://zzdbilly.github.io/loczb/
