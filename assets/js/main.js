@@ -78,23 +78,27 @@ function initMobileMenu() {
   const toggle = document.querySelector('.nav-toggle');
   const links = document.querySelector('.nav-links');
   const overlay = document.querySelector('.nav-overlay');
-  
+
   if (!toggle || !links) return;
-  
+
   function openMenu() {
     links.classList.add('open');
     toggle.classList.add('active');
+    toggle.setAttribute('aria-expanded', 'true');
+    toggle.setAttribute('aria-label', '关闭菜单');
     if (overlay) overlay.classList.add('active');
     document.body.style.overflow = 'hidden';
   }
-  
+
   function closeMenu() {
     links.classList.remove('open');
     toggle.classList.remove('active');
+    toggle.setAttribute('aria-expanded', 'false');
+    toggle.setAttribute('aria-label', '打开菜单');
     if (overlay) overlay.classList.remove('active');
     document.body.style.overflow = '';
   }
-  
+
   toggle.addEventListener('click', () => {
     if (links.classList.contains('open')) {
       closeMenu();
@@ -102,18 +106,18 @@ function initMobileMenu() {
       openMenu();
     }
   });
-  
+
   // Close when clicking overlay
   if (overlay) {
     overlay.addEventListener('click', closeMenu);
   }
-  
+
   // Close menu when clicking a link
   const navLinks = links.querySelectorAll('.nav-link');
   navLinks.forEach(link => {
     link.addEventListener('click', closeMenu);
   });
-  
+
   // Close on escape key
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && links.classList.contains('open')) {
