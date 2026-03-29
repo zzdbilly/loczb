@@ -390,61 +390,75 @@ a:hover {
 @media (max-width: 768px) {
   .nav-toggle {
     display: flex;
-    z-index: calc(var(--z-modal) + 10);
     min-width: 44px;
     min-height: 44px;
-    padding: var(--space-md);
+    padding: var(--space-sm);
   }
 
-  .nav-toggle.active {
-    position: fixed;
-    top: var(--space-lg);
-    right: var(--space-lg);
-  }
-
+  /* 下拉菜单遮罩 - 轻量半透明 */
   .nav-overlay {
-    display: none; /* 全屏菜单不需要单独遮罩层 */
+    display: block;
+    top: 64px; /* 从导航栏下方开始 */
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    z-index: calc(var(--z-overlay) - 1);
   }
 
+  /* 下拉卡片式菜单 */
   .nav-links {
     position: fixed;
-    inset: 0;
-    width: 100vw;
-    min-height: 100dvh;
-    height: 100dvh;
+    top: 72px; /* 导航栏高度 + 8px 间距 */
+    left: 16px;
+    right: 16px;
+    width: auto;
+    max-width: calc(100vw - 32px);
     flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    background: var(--color-bg-primary);
-    padding-top: calc(var(--space-3xl) + 60px);
-    padding-bottom: var(--space-3xl);
-    padding-left: var(--space-xl);
-    padding-right: var(--space-xl);
-    gap: var(--space-lg);
+    background: var(--color-bg-secondary);
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05);
+    padding: var(--space-sm);
+    gap: 0;
     opacity: 0;
     pointer-events: none;
     visibility: hidden;
-    transform: translateY(-10px);
-    transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s ease;
-    z-index: var(--z-modal);
-    overflow-y: auto;
+    transform: translateY(-8px) scale(0.98);
+    transform-origin: top center;
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
+    z-index: var(--z-overlay);
   }
 
   .nav-links.open {
     opacity: 1;
     pointer-events: auto;
     visibility: visible;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
   }
 
   .nav-link {
-    font-size: var(--text-xl);
-    padding: var(--space-md) var(--space-xl);
-    text-align: center;
-    min-height: 44px;
+    font-size: var(--text-base);
+    font-weight: 500;
+    padding: var(--space-md) var(--space-lg);
+    min-height: 48px;
     display: flex;
     align-items: center;
-    justify-content: center;
+    border-radius: 8px;
+    transition: background var(--transition-fast), color var(--transition-fast);
+  }
+
+  .nav-link:hover {
+    background: var(--color-bg-tertiary);
+    color: var(--color-text-primary);
+  }
+
+  .nav-link.active {
+    background: var(--color-bg-tertiary);
+    color: var(--color-accent-primary);
+  }
+
+  /* 移除下划线动效，改用背景高亮 */
+  .nav-link::after {
+    display: none;
   }
 }
 
