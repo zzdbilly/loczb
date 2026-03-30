@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="ONNX 移动端侧模型实践：从模型转换到端侧部署的完整指南，涵盖模型优化、量化压缩、多框架推理对比">
+  <meta name="keywords" content="ONNX, 移动端AI, 端侧推理, 模型量化, ONNX Runtime, NCNN, MNN, TFLite, Android AI">
+  <meta name="author" content="张小猛">
+  <meta name="publish-date" content="2026-03-30">
+  
+  <!-- Open Graph -->
+  <meta property="og:title" content="ONNX 移动端侧模型实践：从转换到部署">
+  <meta property="og:description" content="深入探讨 ONNX 模型在移动端的部署实践，包括模型优化、量化策略、推理框架选型与性能对比">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://709527.xyz/blog/posts/onnx-mobile-deployment.html">
+  
+  <title>ONNX 移动端侧模型实践：从转换到部署 | 张小猛 - loczb</title>
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="../../assets/images/favicon.ico">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
+  <link rel="icon" type="image/png" sizes="16x16" href="../../assets/images/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="../../assets/images/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="../../assets/images/apple-touch-icon.png">
+  <link rel="manifest" href="../../site.webmanifest">
+  <meta name="theme-color" content="#3b82f6">
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  
+  <style>
+    .post-content {
+      max-width: 720px;
+      margin: 0 auto;
+      line-height: 1.8;
+    }
+    .post-content h1 { font-size: 2.5rem; margin: 2rem 0 1rem; }
+    .post-content h2 { font-size: 1.8rem; margin: 2rem 0 1rem; color: var(--color-accent-primary); }
+    .post-content h3 { font-size: 1.4rem; margin: 1.5rem 0 0.8rem; }
+    .post-content p { margin: 1rem 0; }
+    .post-content ul, .post-content ol { margin: 1rem 0; padding-left: 2rem; }
+    .post-content li { margin: 0.5rem 0; }
+    .post-content code { 
+      background: var(--color-bg-tertiary); 
+      padding: 0.2rem 0.4rem; 
+      border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9em;
+    }
+    .post-content pre {
+      background: var(--color-bg-tertiary);
+      padding: 1.5rem;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin: 1.5rem 0;
+    }
+    .post-content pre code {
+      background: none;
+      padding: 0;
+    }
+    .post-content blockquote {
+      border-left: 4px solid var(--color-accent-primary);
+      padding-left: 1.5rem;
+      margin: 1.5rem 0;
+      color: var(--color-text-secondary);
+    }
+    .post-content table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+    }
+    .post-content th, .post-content td {
+      border: 1px solid var(--color-border);
+      padding: 0.75rem;
+      text-align: left;
+    }
+    .post-content th {
+      background: var(--color-bg-tertiary);
+    }
+    .post-meta {
+      color: var(--color-text-secondary);
+      font-size: 0.9rem;
+      margin-bottom: 2rem;
+    }
+    .post-tags {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-top: 3rem;
+    }
+    .post-tags span {
+      background: var(--color-bg-tertiary);
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.85rem;
+      color: var(--color-accent-primary);
+    }
+    .highlight-box {
+      background: var(--color-bg-tertiary);
+      border-left: 4px solid var(--color-accent-primary);
+      padding: 1rem 1.5rem;
+      margin: 1.5rem 0;
+      border-radius: 0 8px 8px 0;
+    }
+    .comparison-table {
+      overflow-x: auto;
+    }
+  </style>
+</head>
+<body class="dark">
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../../index.html" class="nav-logo">
+        loc<span>zb</span>
+      </a>
+      <button class="nav-toggle" aria-label="打开菜单" aria-expanded="false" aria-controls="nav-links-menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <div class="nav-overlay"></div>
+      <ul class="nav-links" id="nav-links-menu">
+        <li><a href="../../index.html" class="nav-link">首页</a></li>
+        <li><a href="../../projects/index.html" class="nav-link">项目</a></li>
+        <li><a href="../index.html" class="nav-link active">博客</a></li>
+        <li><a href="../../about/index.html" class="nav-link">关于</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main id="main-content">
+    <article class="post-content" style="padding: calc(64px + var(--space-3xl)) var(--space-lg) var(--space-3xl);">
+      
+      <h1>ONNX 移动端侧模型实践：从转换到部署</h1>
+      
+      <div class="post-meta">
+        <span>📅 2026-03-30</span>
+        <span style="margin-left: 1rem;">⏱️ 阅读约 12 分钟</span>
+      </div>
+      
+      <p>随着移动端 AI 能力的不断提升，越来越多的模型开始从云端下沉到端侧运行。ONNX（Open Neural Network Exchange）作为业界主流的模型交换格式，为跨框架、跨平台的模型部署提供了便利。本文将分享 ONNX 模型在移动端部署的完整实践路径。</p>
+
+      <h2>为什么选择 ONNX</h2>
+      
+      <p>在实际项目中，我们可能使用 PyTorch、TensorFlow、MXNet 等不同框架训练模型，但移动端推理引擎往往只支持特定格式。ONNX 的价值在于：</p>
+      
+      <ul>
+        <li><strong>框架无关</strong>：PyTorch、TensorFlow、PaddlePaddle 等主流框架都支持导出 ONNX</li>
+        <li><strong>生态丰富</strong>：有完善的工具链支持模型优化、量化和验证</li>
+        <li><strong>推理引擎兼容</strong>：ONNX Runtime、NCNN、MNN 等都支持 ONNX 格式</li>
+        <li><strong>可移植性强</strong>：一次转换，多端部署</li>
+      </ul>
+
+      <h2>模型转换实战</h2>
+      
+      <h3>PyTorch 导出 ONNX</h3>
+      
+      <p>以一个简单的图像分类模型为例：</p>
+      
+      <pre><code>import torch
+import torchvision.models as models
+
+# 加载预训练模型
+model = models.mobilenet_v3_small(pretrained=True)
+model.eval()
+
+# 创建示例输入
+dummy_input = torch.randn(1, 3, 224, 224)
+
+# 导出 ONNX
+torch.onnx.export(
+    model,
+    dummy_input,
+    "mobilenet_v3.onnx",
+    input_names=['input'],
+    output_names=['output'],
+    dynamic_axes={
+        'input': {0: 'batch_size'},
+        'output': {0: 'batch_size'}
+    },
+    opset_version=14,
+    do_constant_folding=True
+)</code></pre>
+
+      <div class="highlight-box">
+        <strong>💡 关键参数说明：</strong>
+        <ul style="margin-top: 0.5rem;">
+          <li><code>opset_version</code>：建议使用 12+，支持更多算子</li>
+          <li><code>dynamic_axes</code>：支持动态 batch size，提高灵活性</li>
+          <li><code>do_constant_folding</code>：常量折叠优化，减小模型体积</li>
+        </ul>
+      </div>
+
+      <h3>模型验证</h3>
+      
+      <p>导出后务必验证模型正确性：</p>
+      
+      <pre><code>import onnx
+import onnxruntime as ort
+import numpy as np
+
+# 检查模型格式
+onnx_model = onnx.load("mobilenet_v3.onnx")
+onnx.checker.check_model(onnx_model)
+
+# 对比推理结果
+session = ort.InferenceSession("mobilenet_v3.onnx")
+onnx_output = session.run(None, {"input": dummy_input.numpy()})
+
+# PyTorch 原始输出
+with torch.no_grad():
+    torch_output = model(dummy_input)
+
+# 验证数值一致性
+np.testing.assert_allclose(
+    torch_output.numpy(), 
+    onnx_output[0], 
+    rtol=1e-3, 
+    atol=1e-5
+)
+print("✅ 模型验证通过！")</code></pre>
+
+      <h2>模型优化与量化</h2>
+      
+      <p>移动端资源有限，模型优化是必须的环节。</p>
+
+      <h3>1. 模型简化</h3>
+      
+      <p>使用 <code>onnx-simplifier</code> 消除冗余算子：</p>
+      
+      <pre><code># 安装
+pip install onnx-simplifier
+
+# 简化模型
+onnxsim mobilenet_v3.onnx mobilenet_v3_sim.onnx</code></pre>
+
+      <h3>2. 量化压缩</h3>
+      
+      <p>INT8 量化可以显著降低模型体积和推理延迟：</p>
+      
+      <pre><code>from onnxruntime.quantization import quantize_dynamic, QuantType
+
+# 动态量化（无需校准数据）
+quantize_dynamic(
+    "mobilenet_v3_sim.onnx",
+    "mobilenet_v3_int8.onnx",
+    weight_type=QuantType.QUInt8
+)</code></pre>
+
+      <p>量化效果对比：</p>
+      
+      <div class="comparison-table">
+        <table>
+          <thead>
+            <tr>
+              <th>模型版本</th>
+              <th>体积</th>
+              <th>精度损失</th>
+              <th>推理加速</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>FP32 原始</td>
+              <td>12.8 MB</td>
+              <td>-</td>
+              <td>1.0x</td>
+            </tr>
+            <tr>
+              <td>FP32 简化</td>
+              <td>11.2 MB</td>
+              <td>~0%</td>
+              <td>1.1x</td>
+            </tr>
+            <tr>
+              <td>INT8 动态量化</td>
+              <td>3.2 MB</td>
+              <td>~0.5%</td>
+              <td>1.8x</td>
+            </tr>
+            <tr>
+              <td>INT8 静态量化</td>
+              <td>3.0 MB</td>
+              <td>~0.8%</td>
+              <td>2.5x</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>移动端推理框架选型</h2>
+      
+      <p>主流的移动端推理框架对比：</p>
+      
+      <div class="comparison-table">
+        <table>
+          <thead>
+            <tr>
+              <th>框架</th>
+              <th>平台支持</th>
+              <th>ONNX 支持</th>
+              <th>特点</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>ONNX Runtime Mobile</strong></td>
+              <td>Android / iOS</td>
+              <td>⭐⭐⭐⭐⭐</td>
+              <td>官方支持，算子全，体积较大</td>
+            </tr>
+            <tr>
+              <td><strong>NCNN</strong></td>
+              <td>Android / iOS</td>
+              <td>⭐⭐⭐⭐</td>
+              <td>腾讯开源，轻量，无依赖</td>
+            </tr>
+            <tr>
+              <td><strong>MNN</strong></td>
+              <td>Android / iOS</td>
+              <td>⭐⭐⭐⭐</td>
+              <td>阿里开源，性能优秀</td>
+            </tr>
+            <tr>
+              <td><strong>TFLite</strong></td>
+              <td>Android / iOS</td>
+              <td>⭐⭐⭐</td>
+              <td>Google 官方，生态完善</td>
+            </tr>
+            <tr>
+              <td><strong>Paddle Lite</strong></td>
+              <td>Android / iOS</td>
+              <td>⭐⭐⭐</td>
+              <td>百度开源，国产化友好</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>我的选择建议</h3>
+      
+      <ul>
+        <li><strong>快速验证</strong>：ONNX Runtime Mobile，开箱即用</li>
+        <li><strong>生产部署</strong>：NCNN 或 MNN，包体积小，性能优</li>
+        <li><strong>Flutter 跨平台</strong>：考虑封装 FFI 调用</li>
+      </ul>
+
+      <h2>Android 集成实战</h2>
+      
+      <h3>1. 添加依赖</h3>
+      
+      <pre><code>// build.gradle
+dependencies {
+    implementation 'com.microsoft.onnxruntime:onnxruntime-android:1.16.0'
+}</code></pre>
+
+      <h3>2. 加载与推理</h3>
+      
+      <pre><code>// Kotlin
+class ONNXModel(private val context: Context) {
+    private var session: OrtSession? = null
+    
+    fun init() {
+        val env = OrtEnvironment.getEnvironment()
+        val modelBytes = context.assets.open("mobilenet_v3_int8.onnx")
+            .use { it.readBytes() }
+        session = env.createSession(modelBytes)
+    }
+    
+    fun infer(input: FloatArray): FloatArray {
+        val inputTensor = OnnxTensor.createTensor(
+            OrtEnvironment.getEnvironment(),
+            input.reshape(intArrayOf(1, 3, 224, 224))
+        )
+        
+        val output = session?.run(mapOf("input" to inputTensor))
+        return output?.get(0)?.value as FloatArray
+    }
+    
+    fun release() {
+        session?.close()
+    }
+}</code></pre>
+
+      <h3>3. 性能优化技巧</h3>
+      
+      <div class="highlight-box">
+        <strong>🚀 实测有效的优化手段：</strong>
+        <ul style="margin-top: 0.5rem;">
+          <li>使用 <code>nnapi</code> 后端加速（Android 8.1+）</li>
+          <li>开启 <code>CoreML</code> 后端（iOS）</li>
+          <li>输入图片使用 <code>Bitmap</code> 直接转 Tensor，避免多次拷贝</li>
+          <li>推理线程绑定大核，提高调度优先级</li>
+          <li>批处理多条数据，摊薄启动开销</li>
+        </ul>
+      </div>
+
+      <h2>常见问题与解决</h2>
+      
+      <h3>Q1: 算子不支持怎么办？</h3>
+      <p>部分自定义算子可能不被推理引擎支持，解决方案：</p>
+      <ul>
+        <li>检查 ONNX opset version，尝试降低版本</li>
+        <li>使用 <code>onnx-simplifier</code> 简化算子组合</li>
+        <li>手动替换等价算子（如 Reshape 替代 View）</li>
+        <li>向推理框架提交 Issue 或 PR 支持新算子</li>
+      </ul>
+
+      <h3>Q2: 量化后精度下降明显？</h3>
+      <p>某些模型对量化敏感（如检测、分割），建议：</p>
+      <ul>
+        <li>使用静态量化 + 校准数据，而非动态量化</li>
+        <li>尝试混合精度：敏感层保持 FP16/FP32</li>
+        <li>量化感知训练（QAT），在训练时模拟量化</li>
+      </ul>
+
+      <h3>Q3: 首次推理慢？</h3>
+      <p>推理引擎首次运行需要编译优化图：</p>
+      <ul>
+        <li>App 启动时预热模型，避免用户等待</li>
+        <li>使用 <code>SessionOptions</code> 设置图优化级别</li>
+        <li>考虑模型缓存（部分框架支持）</li>
+      </ul>
+
+      <h2>总结</h2>
+      
+      <p>ONNX 为移动端 AI 部署提供了标准化的桥梁。实践中需要注意：</p>
+      
+      <ol>
+        <li><strong>模型设计阶段</strong>就考虑端侧限制，避免复杂算子</li>
+        <li><strong>量化要趁早</strong>，FP32 和 INT8 模型差异需要及时验证</li>
+        <li><strong>推理框架选型</strong>要综合考虑包体积、性能、维护成本</li>
+        <li><strong>持续监控</strong>端侧推理性能，不同设备差异很大</li>
+      </ol>
+      
+      <p>随着 NPU 的普及，端侧 AI 的潜力才刚刚开始释放。希望这篇实践总结能帮助你在移动端 AI 落地之路上少走弯路。</p>
+
+      <div class="post-tags">
+        <span>ONNX</span>
+        <span>移动端AI</span>
+        <span>模型量化</span>
+        <span>Android</span>
+        <span>端侧推理</span>
+      </div>
+      
+    </article>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <p>&copy; 2026 张小猛. All rights reserved.</p>
+      <div class="footer-links">
+        <a href="https://github.com/zzdbilly" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="../../assets/js/main.js"></script>
+</body>
+</html>
