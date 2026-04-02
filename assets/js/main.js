@@ -23,6 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initTypingEffect();
   initParallax();
   initSmoothScroll();
+  initThemeToggle();
 });
 
 // ===================================
@@ -284,26 +285,25 @@ function copyToClipboard(text) {
 }
 
 // ===================================
-// Theme Toggle (Future Feature)
+// Theme Toggle
 // ===================================
 function initThemeToggle() {
-  const toggle = document.querySelector('[data-theme-toggle]');
+  const toggle = document.querySelector('.theme-toggle');
   if (!toggle) return;
-  
-  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
   
   function setTheme(theme) {
     document.documentElement.setAttribute('data-theme', theme);
     localStorage.setItem('theme', theme);
+    // 更新 meta theme-color（移动端浏览器地址栏颜色）
+    const metaTheme = document.querySelector('meta[name="theme-color"]');
+    if (metaTheme) {
+      metaTheme.setAttribute('content', theme === 'light' ? '#ffffff' : '#3b82f6');
+    }
   }
   
-  // Check saved preference or system preference
-  const savedTheme = localStorage.getItem('theme');
-  if (savedTheme) {
-    setTheme(savedTheme);
-  } else if (prefersDark.matches) {
-    setTheme('dark');
-  }
+  // Check saved preference, default to dark if not set
+  const savedTheme = localStorage.getItem('theme') || 'dark';
+  setTheme(savedTheme);
   
   toggle.addEventListener('click', () => {
     const currentTheme = document.documentElement.getAttribute('data-theme');
