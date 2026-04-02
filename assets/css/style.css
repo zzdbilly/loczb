@@ -295,16 +295,31 @@ a:hover {
   left: 0;
   right: 0;
   z-index: var(--z-overlay);
-  background: rgba(10, 10, 11, 0.8);
+  background: var(--color-bg-primary);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--color-border);
   transition: all var(--transition-base);
 }
 
+[data-theme="dark"] .nav {
+  background: rgba(10, 10, 11, 0.8);
+}
+
+[data-theme="light"] .nav {
+  background: rgba(255, 255, 255, 0.9);
+}
+
 .nav.scrolled {
-  background: rgba(10, 10, 11, 0.95);
   box-shadow: var(--shadow-lg);
+}
+
+[data-theme="dark"] .nav.scrolled {
+  background: rgba(10, 10, 11, 0.95);
+}
+
+[data-theme="light"] .nav.scrolled {
+  background: rgba(255, 255, 255, 0.98);
 }
 
 .nav-inner {
@@ -477,29 +492,36 @@ a:hover {
     padding: var(--space-sm);
   }
 
-  /* 下拉菜单遮罩 - 加深 */
+  /* 下拉菜单遮罩 */
   .nav-overlay {
     display: block;
-    top: 64px; /* 从导航栏下方开始 */
-    background: rgba(0, 0, 0, 0.75);
+    top: 64px;
     backdrop-filter: blur(4px);
     -webkit-backdrop-filter: blur(4px);
     z-index: calc(var(--z-overlay) - 1);
     transition: opacity 0.25s ease;
   }
 
-  /* 下拉卡片式菜单 - 不透明深色背景 */
+  [data-theme="dark"] .nav-overlay {
+    background: rgba(0, 0, 0, 0.75);
+  }
+
+  [data-theme="light"] .nav-overlay {
+    background: rgba(0, 0, 0, 0.3);
+  }
+
+  /* 下拉卡片式菜单 */
   .nav-links {
     position: fixed;
-    top: 80px; /* 导航栏高度 + 16px 间距 */
+    top: 80px;
     left: 16px;
     right: 16px;
     width: auto;
     max-width: calc(100vw - 32px);
     flex-direction: column;
-    background: #0d0d10; /* 明确的不透明深色背景 */
+    background: var(--color-bg-secondary);
     border-radius: 16px;
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+    box-shadow: var(--shadow-xl);
     padding: var(--space-sm);
     gap: 0;
     opacity: 0;
