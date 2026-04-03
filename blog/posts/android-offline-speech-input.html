@@ -3,48 +3,28 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Android 离线语音输入实现方案：Sherpa ONNX、Whisper、Vosk 三大主流方案深度对比，含完整 Kotlin 集成代码">
-  <meta name="keywords" content="Android, 离线语音识别, Sherpa ONNX, Whisper, Vosk, 语音输入, 端侧AI, 本地语音识别">
+  <meta name="description" content="Android 离线语音输入实现方案：Sherpa ONNX、Whisper、Vosk 三大主流方案深度对比">
+  <meta name="keywords" content="Android, 离线语音识别, Sherpa ONNX, Whisper, Vosk, 语音输入, 端侧AI">
   <meta name="author" content="张小猛">
   <meta name="publish-date" content="2026-04-03">
-  
-  <meta property="og:title" content="Android 离线语音输入实现方案">
-  <meta property="og:description" content="深度对比 Sherpa ONNX、Whisper、Vosk 三大离线语音识别方案，提供完整 Android 集成代码">
-  <meta property="og:type" content="article">
-  
   <title>Android 离线语音输入实现方案 | 张小猛 - loczb</title>
-  
   <link rel="icon" type="image/x-icon" href="../../assets/images/favicon.ico">
   <link rel="stylesheet" href="../../assets/css/style.css">
-  
   <style>
     .post-content { max-width: 760px; margin: 0 auto; line-height: 1.85; }
-    .post-content h1 { font-size: 2.4rem; margin: 2rem 0 1rem; line-height: 1.3; }
+    .post-content h1 { font-size: 2.4rem; margin: 2rem 0 1rem; }
     .post-content h2 { font-size: 1.7rem; margin: 2.5rem 0 1rem; color: var(--color-accent-primary); border-bottom: 1px solid var(--color-border); padding-bottom: 0.5rem; }
-    .post-content h3 { font-size: 1.3rem; margin: 1.8rem 0 0.8rem; color: var(--color-text-primary); }
-    .post-content h4 { font-size: 1.1rem; margin: 1.5rem 0 0.6rem; color: var(--color-text-secondary); }
-    .post-content p { margin: 1rem 0; }
-    .post-content ul, .post-content ol { margin: 1rem 0; padding-left: 1.8rem; }
-    .post-content li { margin: 0.6rem 0; }
-    .post-content code { background: var(--color-bg-tertiary); padding: 0.15rem 0.4rem; border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 0.9em; }
+    .post-content h3 { font-size: 1.3rem; margin: 1.8rem 0 0.8rem; }
     .post-content pre { background: var(--color-bg-tertiary); padding: 1.2rem; border-radius: 8px; overflow-x: auto; margin: 1.2rem 0; font-size: 0.9rem; }
-    .post-content pre code { background: none; padding: 0; }
-    .post-content blockquote { border-left: 3px solid var(--color-accent-primary); padding-left: 1.2rem; margin: 1.5rem 0; color: var(--color-text-secondary); font-style: italic; }
-    .post-content table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.95rem; }
-    .post-content th, .post-content td { border: 1px solid var(--color-border); padding: 0.7rem; text-align: left; }
-    .post-content th { background: var(--color-bg-tertiary); font-weight: 600; }
-    .post-content tr:nth-child(even) { background: rgba(255,255,255,0.02); }
-    .post-meta { color: var(--color-text-secondary); font-size: 0.9rem; margin-bottom: 2rem; display: flex; gap: 1rem; }
+    .post-content code { background: var(--color-bg-tertiary); padding: 0.15rem 0.4rem; border-radius: 4px; font-family: monospace; font-size: 0.9em; }
+    .post-meta { color: var(--color-text-secondary); font-size: 0.9rem; margin-bottom: 2rem; }
     .post-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 3rem; }
     .post-tags span { background: var(--color-bg-tertiary); padding: 0.3rem 0.8rem; border-radius: 9999px; font-size: 0.85rem; color: var(--color-accent-primary); }
-    .highlight-box { background: var(--color-bg-tertiary); border-left: 3px solid var(--color-accent-primary); padding: 1rem 1.2rem; margin: 1.5rem 0; border-radius: 0 6px 6px 0; }
-    .warning-box { background: rgba(234, 179, 8, 0.1); border-left: 3px solid #eab308; padding: 1rem 1.2rem; margin: 1.5rem 0; border-radius: 0 6px 6px 0; }
     .tip-box { background: rgba(34, 197, 94, 0.1); border-left: 3px solid #22c55e; padding: 1rem 1.2rem; margin: 1.5rem 0; border-radius: 0 6px 6px 0; }
-    .comparison-table { overflow-x: auto; }
-    .arch-diagram { background: var(--color-bg-tertiary); padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0; text-align: center; font-family: monospace; }
-    .step-list { counter-reset: step; }
-    .step-list li { counter-increment: step; list-style: none; position: relative; padding-left: 2.5rem; }
-    .step-list li::before { content: counter(step); position: absolute; left: 0; top: 0; width: 1.8rem; height: 1.8rem; background: var(--color-accent-primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 600; }
+    .warning-box { background: rgba(234, 179, 8, 0.1); border-left: 3px solid #eab308; padding: 1rem 1.2rem; margin: 1.5rem 0; border-radius: 0 6px 6px 0; }
+    table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.95rem; }
+    th, td { border: 1px solid var(--color-border); padding: 0.7rem; text-align: left; }
+    th { background: var(--color-bg-tertiary); font-weight: 600; }
   </style>
 </head>
 <body>
@@ -75,701 +55,99 @@
       
       <h1>Android 离线语音输入实现方案</h1>
       
-      <div class="post-meta">
-        <span>2026年4月3日</span>
-        <span>·</span>
-        <span>阅读时间 25 分钟</span>
-      </div>
+      <div class="post-meta">2026年4月3日 · 阅读时间 10 分钟</div>
 
       <p>在移动应用开发中，语音输入已成为提升用户体验的重要交互方式。然而，传统的云端语音识别方案存在明显的痛点：<strong>网络依赖、隐私风险、延迟抖动、成本不可控</strong>。对于需要高隐私保护、弱网环境可用、或实时性要求高的场景，<strong>真正的离线语音识别</strong>成为必需。</p>
 
-      <p>本文将深入对比 Android 平台三大主流离线语音识别方案：<strong>Sherpa ONNX</strong>（新一代高性能方案）、<strong>Whisper</strong>（OpenAI 开源模型）、<strong>Vosk</strong>（成熟的 Kaldi 方案），并提供完整的 Kotlin 集成代码和性能优化建议。</p>
-
-      <h2>为什么必须选择真正的离线方案？</h2>
-
-      <p>在讨论具体方案前，有必要澄清一个常见误区：<strong>Google SpeechRecognizer 的"离线模式"并非真正的离线方案</strong>。它仍然依赖系统预装的语音包，且可控性差、无法自定义模型、隐私保护有限。</p>
-
       <div class="warning-box">
-        <strong>⚠️ 注意</strong>：本文讨论的"离线语音识别"指的是<strong>完全端侧运行</strong>的方案，模型文件打包在 APK 中或下载到本地，识别过程不依赖任何网络请求。
+        <strong>⚠️ 注意</strong>：本文讨论的"离线语音识别"指的是<strong>完全端侧运行</strong>的方案，模型文件打包在 APK 中或下载到本地，识别过程不依赖任何网络请求。Google SpeechRecognizer 的"离线模式"并非真正的离线方案。
       </div>
 
-      <h3>离线语音识别的核心价值</h3>
+      <h2>三大主流方案对比</h2>
 
-      <ul>
-        <li><strong>零网络依赖</strong>：地下室、飞机、偏远地区、弱网环境完全可用</li>
-        <li><strong>隐私绝对保护</strong>：语音数据永不上传，满足医疗、金融等敏感场景合规要求</li>
-        <li><strong>超低延迟</strong>：端到端延迟通常 < 200ms，云端方案通常 500ms-2s</li>
-        <li><strong>零运营成本</strong>：无 API 调用费用，适合高频使用场景</li>
-        <li><strong>完全可控</strong>：可自定义模型、热词、领域词汇，不受第三方服务限制</li>
-      </ul>
+      <table>
+        <tr><th>方案</th><th>模型大小</th><th>准确率</th><th>实时性</th><th>推荐指数</th></tr>
+        <tr><td><strong>Sherpa ONNX</strong></td><td>30MB-200MB</td><td>⭐⭐⭐⭐⭐</td><td>优秀</td><td>⭐⭐⭐⭐⭐ 首选</td></tr>
+        <tr><td><strong>Whisper</strong></td><td>39MB-155MB</td><td>⭐⭐⭐⭐⭐</td><td>一般</td><td>⭐⭐⭐⭐ 适合转写</td></tr>
+        <tr><td><strong>Vosk</strong></td><td>50MB-1GB</td><td>⭐⭐⭐⭐</td><td>优秀</td><td>⭐⭐⭐⭐ 备选</td></tr>
+      </table>
 
-      <h2>三大主流方案深度对比</h2>
-
-      <div class="comparison-table">
-        <table>
-          <tr>
-            <th style="width:18%">方案</th>
-            <th style="width:15%">模型大小</th>
-            <th style="width:12%">准确率</th>
-            <th style="width:12%">中文支持</th>
-            <th style="width:12%">实时性</th>
-            <th style="width:15%">集成难度</th>
-            <th style="width:16%">推荐指数</th>
-          </tr>
-          <tr>
-            <td><strong>Sherpa ONNX</strong></td>
-            <td>30MB-200MB</td>
-            <td>⭐⭐⭐⭐⭐</td>
-            <td>优秀</td>
-            <td>优秀</td>
-            <td>中等</td>
-            <td>⭐⭐⭐⭐⭐</td>
-          </tr>
-          <tr>
-            <td><strong>Whisper</strong></td>
-            <td>39MB-155MB</td>
-            <td>⭐⭐⭐⭐⭐</td>
-            <td>优秀</td>
-            <td>一般</td>
-            <td>较高</td>
-            <td>⭐⭐⭐⭐</td>
-          </tr>
-          <tr>
-            <td><strong>Vosk</strong></td>
-            <td>50MB-1GB</td>
-            <td>⭐⭐⭐⭐</td>
-            <td>优秀</td>
-            <td>优秀</td>
-            <td>简单</td>
-            <td>⭐⭐⭐⭐</td>
-          </tr>
-        </table>
-      </div>
-
-      <h3>方案详解</h3>
-
-      <h4>1. Sherpa ONNX（强烈推荐）</h4>
+      <h2>Sherpa ONNX（强烈推荐）</h2>
 
       <p><a href="https://github.com/k2-fsa/sherpa-onnx" target="_blank">Sherpa ONNX</a> 是新一代开源语音识别工具包，基于下一代 Kaldi（k2）和 ONNX Runtime，专为嵌入式和移动设备优化。</p>
 
       <div class="tip-box">
-        <strong>✅ 核心优势</strong>：
-        <ul style="margin-top: 0.5rem;">
-          <li>支持多种模型架构（Transducer、CTC、Paraformer）</li>
-          <li>模型体积小巧，量化后仅 30MB 即可达到商用级准确率</li>
-          <li>支持流式识别，延迟极低</li>
-          <li>中文模型效果优异，支持方言</li>
-          <li>活跃的社区维护，持续更新</li>
-        </ul>
+        <strong>核心优势</strong>：模型小巧、支持流式识别、延迟极低、中文效果优异、活跃社区维护。
       </div>
 
-      <h4>2. Whisper（OpenAI）</h4>
+      <h3>快速集成</h3>
 
-      <p>OpenAI 开源的通用语音识别模型，以大模型思路实现多语言语音识别。需要通过 <code>whisper.cpp</code> 或 <code>faster-whisper</code> 移植到移动端。</p>
-
-      <div class="highlight-box">
-        <strong>适用场景</strong>：对准确率要求极高、可接受一定延迟、需要多语言支持的离线场景。不适合实时流式识别。
-      </div>
-
-      <h4>3. Vosk</h4>
-
-      <p>基于传统 Kaldi 的轻量级语音识别工具包，API 设计简洁，适合快速集成。但模型相对老旧，Sherpa ONNX 正在逐步替代 Vosk 成为更好的选择。</p>
-
-      <h2>Sherpa ONNX 集成实战</h2>
-
-      <p>下面提供完整的 Sherpa ONNX Android 集成代码，包含模型准备、录音、流式识别、结果回调全流程。</p>
-
-      <h3>1. 准备工作</h3>
-
-      <h4>下载模型</h4>
-
-      <p>从 <a href="https://github.com/k2-fsa/sherpa-onnx/releases" target="_blank">Sherpa ONNX Releases</a> 下载预训练模型。推荐以下中文模型：</p>
-
-      <ul>
-        <li><strong>sherpa-onnx-streaming-zipformer-zh-14M-2023-02-23</strong>：14MB，适合资源受限设备</li>
-        <li><strong>sherpa-onnx-streaming-zipformer-zh-20M-2023-02-23</strong>：20MB，平衡性能和准确率</li>
-        <li><strong>sherpa-onnx-paraformer-zh-2023-03-28</strong>：Paraformer 架构，非流式但准确率更高</li>
-      </ul>
-
-      <p>模型文件结构：</p>
-
-      <pre><code>assets/
-└── sherpa-onnx-model/
-    ├── encoder.onnx          # 编码器模型
-    ├── decoder.onnx          # 解码器模型（Transducer）
-    ├── joiner.onnx           # Joiner 模型（Transducer）
-    ├── tokens.txt            # 词表文件
-    └── config.yaml           # 配置文件（可选）</code></pre>
-
-      <h3>2. 添加依赖</h3>
-
-      <pre><code>// build.gradle (Module: app)
-dependencies {
-    // Sherpa ONNX Android
-    implementation 'com.github.k2-fsa:sherpa-onnx-android:1.10.0'
-    
-    // Kotlin Coroutines
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3'
-    
-    // AudioRecord 权限处理
-    implementation 'com.google.accompanist:accompanist-permissions:0.32.0'
-}</code></pre>
-
-      <h3>3. 核心识别类</h3>
-
-      <pre><code>import android.content.Context
-import android.media.AudioFormat
-import android.media.AudioRecord
-import android.media.MediaRecorder
-import com.k2fsa.sherpa.onnx.OfflineRecognizer
-import com.k2fsa.sherpa.onnx.OfflineRecognizerConfig
-import com.k2fsa.sherpa.onnx.OfflineModelConfig
-import com.k2fsa.sherpa.onnx.OfflineParaformerModelConfig
-import com.k2fsa.sherpa.onnx.OfflineTransducerModelConfig
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
-import java.io.File
-import java.io.FileOutputStream
-
-/**
- * Sherpa ONNX 离线语音识别器
- * 
- * 支持两种模式：
- * 1. 流式识别（Streaming）：适合实时语音输入，延迟低
- * 2. 非流式识别（Offline）：适合短音频文件，准确率更高
- */
-class SherpaOnnxRecognizer(private val context: Context) {
-    
-    companion object {
-        const val SAMPLE_RATE = 16000
-        const val BUFFER_SIZE = 1600  // 100ms @ 16kHz
-    }
-    
-    // 模型路径
-    private val modelDir by lazy { 
-        File(context.filesDir, "sherpa-onnx-model").absolutePath 
-    }
-    
-    // 识别器实例
-    private var recognizer: OfflineRecognizer? = null
-    
-    // 录音相关
-    private var audioRecord: AudioRecord? = null
-    private var recordingJob: Job? = null
-    
-    // 状态管理
-    private val _state = MutableStateFlow<RecognitionState>(RecognitionState.Idle)
-    val state: StateFlow<RecognitionState> = _state.asStateFlow()
-    
-    private val _partialResult = MutableStateFlow("")
-    val partialResult: StateFlow<String> = _partialResult.asStateFlow()
-    
-    private val _finalResult = MutableStateFlow("")
-    val finalResult: StateFlow<String> = _finalResult.asStateFlow()
-    
-    /**
-     * 初始化：复制模型到本地并创建识别器
-     */
-    suspend fun initialize(modelType: ModelType = ModelType.ZIPFORMER_20M) = withContext(Dispatchers.IO) {
-        try {
-            _state.value = RecognitionState.Initializing
-            
-            // 首次运行：从 assets 复制模型
-            if (!File(modelDir).exists()) {
-                copyModelFromAssets(modelType.assetPath)
-            }
-            
-            // 创建识别器配置
-            val config = createRecognizerConfig(modelType)
-            recognizer = OfflineRecognizer(config)
-            
-            _state.value = RecognitionState.Ready
-        } catch (e: Exception) {
-            _state.value = RecognitionState.Error("初始化失败: ${e.message}")
-        }
-    }
-    
-    /**
-     * 从 Assets 复制模型文件
-     */
-    private fun copyModelFromAssets(assetPath: String) {
-        val destDir = File(modelDir)
-        destDir.mkdirs()
-        
-        context.assets.list(assetPath)?.forEach { fileName ->
-            val input = context.assets.open("$assetPath/$fileName")
-            val output = FileOutputStream(File(destDir, fileName))
-            input.copyTo(output)
-            input.close()
-            output.close()
-        }
-    }
-    
-    /**
-     * 创建识别器配置
-     */
-    private fun createRecognizerConfig(type: ModelType): OfflineRecognizerConfig {
-        return when (type) {
-            ModelType.ZIPFORMER_14M, ModelType.ZIPFORMER_20M -> {
-                // Transducer 模型配置（流式）
-                val modelConfig = OfflineModelConfig().apply {
-                    transducer = OfflineTransducerModelConfig().apply {
-                        encoder = "$modelDir/encoder.onnx"
-                        decoder = "$modelDir/decoder.onnx"
-                        joiner = "$modelDir/joiner.onnx"
-                    }
-                    tokens = "$modelDir/tokens.txt"
-                    numThreads = 4
-                    debug = false
-                }
-                OfflineRecognizerConfig().apply {
-                    modelConfig = modelConfig
-                }
-            }
-            
-            ModelType.PARAFORMER -> {
-                // Paraformer 模型配置（非流式，准确率更高）
-                val modelConfig = OfflineModelConfig().apply {
-                    paraformer = OfflineParaformerModelConfig().apply {
-                        model = "$modelDir/model.onnx"
-                    }
-                    tokens = "$modelDir/tokens.txt"
-                    numThreads = 4
-                }
-                OfflineRecognizerConfig().apply {
-                    modelConfig = modelConfig
-                }
-            }
-        }
-    }
-    
-    /**
-     * 开始实时录音识别
-     */
-    fun startListening() {
-        if (recognizer == null) {
-            _state.value = RecognitionState.Error("识别器未初始化")
-            return
-        }
-        
-        // 初始化 AudioRecord
-        val minBufferSize = AudioRecord.getMinBufferSize(
-            SAMPLE_RATE,
-            AudioFormat.CHANNEL_IN_MONO,
-            AudioFormat.ENCODING_PCM_16BIT
-        )
-        
-        audioRecord = AudioRecord(
-            MediaRecorder.AudioSource.MIC,
-            SAMPLE_RATE,
-            AudioFormat.CHANNEL_IN_MONO,
-            AudioFormat.ENCODING_PCM_16BIT,
-            minBufferSize
-        )
-        
-        audioRecord?.startRecording()
-        _state.value = RecognitionState.Listening
-        
-        // 启动录音协程
-        recordingJob = CoroutineScope(Dispatchers.IO).launch {
-            val buffer = ShortArray(BUFFER_SIZE)
-            val samples = mutableListOf<Float>()
-            
-            while (isActive && audioRecord?.recordingState == AudioRecord.RECORDSTATE_RECORDING) {
-                val read = audioRecord?.read(buffer, 0, BUFFER_SIZE) ?: 0
-                if (read > 0) {
-                    // 转换为 float 样本
-                    for (i in 0 until read) {
-                        samples.add(buffer[i] / 32768.0f)
-                    }
-                    
-                    // 每 1 秒进行一次识别
-                    if (samples.size >= SAMPLE_RATE) {
-                        val audioData = samples.toFloatArray()
-                        samples.clear()
-                        
-                        val result = recognizer?.decode(audioData, SAMPLE_RATE)
-                        result?.let {
-                            _partialResult.value = it.text
-                        }
-                    }
-                }
-            }
-        }
-    }
-    
-    /**
-     * 停止录音并获取最终结果
-     */
-    fun stopListening() {
-        recordingJob?.cancel()
-        recordingJob = null
-        
-        audioRecord?.apply {
-            stop()
-            release()
-        }
-        audioRecord = null
-        
-        _state.value = RecognitionState.Idle
-    }
-    
-    /**
-     * 识别音频文件（非实时）
-     */
-    suspend fun recognizeFile(audioFile: File): String = withContext(Dispatchers.IO) {
-        val audioData = readAudioFile(audioFile)
-        val result = recognizer?.decode(audioData, SAMPLE_RATE)
-        result?.text ?: ""
-    }
-    
-    /**
-     * 读取音频文件（假设为 16kHz 16bit PCM）
-     */
-    private fun readAudioFile(file: File): FloatArray {
-        val bytes = file.readBytes()
-        val shorts = ShortArray(bytes.size / 2)
-        
-        // 小端序转换
-        for (i in shorts.indices) {
-            shorts[i] = ((bytes[i * 2 + 1].toInt() shl 8) or 
-                        (bytes[i * 2].toInt() and 0xFF)).toShort()
-        }
-        
-        return shorts.map { it / 32768.0f }.toFloatArray()
-    }
-    
-    /**
-     * 释放资源
-     */
-    fun release() {
-        stopListening()
-        recognizer?.release()
-        recognizer = null
-    }
-    
-    /**
-     * 支持的模型类型
-     */
-    enum class ModelType(val assetPath: String) {
-        ZIPFORMER_14M("sherpa-onnx-model-14m"),
-        ZIPFORMER_20M("sherpa-onnx-model-20m"),
-        PARAFORMER("sherpa-onnx-paraformer")
-    }
-    
-    /**
-     * 识别状态
-     */
-    sealed class RecognitionState {
-        object Idle : RecognitionState()
-        object Initializing : RecognitionState()
-        object Ready : RecognitionState()
-        object Listening : RecognitionState()
-        data class Error(val message: String) : RecognitionState()
-    }
-}</code></pre>
-
-      <h3>4. Jetpack Compose UI 组件</h3>
-
-      <pre><code>@Composable
-fun VoiceInputScreen(
-    modifier: Modifier = Modifier
-) {
-    val context = LocalContext.current
-    val recognizer = remember { SherpaOnnxRecognizer(context) }
-    
-    val state by recognizer.state.collectAsState()
-    val partialText by recognizer.partialResult.collectAsState()
-    var finalText by remember { mutableStateOf("") }
-    
-    // 权限申请
-    val recordPermission = rememberPermissionState(
-        permission = Manifest.permission.RECORD_AUDIO
-    )
-    
-    // 初始化识别器
-    LaunchedEffect(Unit) {
-        recognizer.initialize(SherpaOnnxRecognizer.ModelType.ZIPFORMER_20M)
-    }
-    
-    // 清理资源
-    DisposableEffect(Unit) {
-        onDispose { recognizer.release() }
-    }
-    
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        // 状态显示
-        when (state) {
-            is SherpaOnnxRecognizer.RecognitionState.Initializing -> {
-                CircularProgressIndicator()
-                Text("正在加载模型...", modifier = Modifier.padding(top = 8.dp))
-            }
-            is SherpaOnnxRecognizer.RecognitionState.Error -> {
-                Text(
-                    text = (state as SherpaOnnxRecognizer.RecognitionState.Error).message,
-                    color = MaterialTheme.colorScheme.error
-                )
-            }
-            else -> {
-                // 识别结果显示
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f)
-                        .padding(bottom = 16.dp)
-                ) {
-                    Column(modifier = Modifier.padding(16.dp)) {
-                        Text(
-                            text = "识别结果",
-                            style = MaterialTheme.typography.titleMedium
-                        )
-                        
-                        // 实时部分结果
-                        if (partialText.isNotEmpty()) {
-                            Text(
-                                text = partialText,
-                                style = MaterialTheme.typography.bodyLarge,
-                                color = MaterialTheme.colorScheme.primary,
-                                modifier = Modifier.padding(top = 8.dp)
-                            )
-                        }
-                        
-                        // 最终结果
-                        if (finalText.isNotEmpty()) {
-                            Text(
-                                text = finalText,
-                                style = MaterialTheme.typography.bodyLarge,
-                                modifier = Modifier.padding(top = 8.dp)
-                            )
-                        }
-                    }
-                }
-                
-                // 录音按钮
-                FloatingActionButton(
-                    onClick = {
-                        when (state) {
-                            is SherpaOnnxRecognizer.RecognitionState.Listening -> {
-                                recognizer.stopListening()
-                                finalText = partialText
-                            }
-                            is SherpaOnnxRecognizer.RecognitionState.Ready -> {
-                                if (recordPermission.status.isGranted) {
-                                    recognizer.startListening()
-                                } else {
-                                    recordPermission.launchPermissionRequest()
-                                }
-                            }
-                            else -> {}
-                        }
-                    },
-                    containerColor = when (state) {
-                        is SherpaOnnxRecognizer.RecognitionState.Listening -> 
-                            MaterialTheme.colorScheme.error
-                        else -> MaterialTheme.colorScheme.primary
-                    }
-                ) {
-                    Icon(
-                        imageVector = if (state is SherpaOnnxRecognizer.RecognitionState.Listening) {
-                            Icons.Default.Stop
-                        } else {
-                            Icons.Default.Mic
-                        },
-                        contentDescription = "语音输入"
-                    )
-                }
-            }
-        }
-    }
-}</code></pre>
-
-      <h3>5. AndroidManifest 配置</h3>
-
-      <pre><code>&lt;manifest&gt;
-    &lt;uses-permission android:name="android.permission.RECORD_AUDIO" /&gt;
-    &lt;uses-permission android:name="android.permission.INTERNET" /&gt;
-    
-    &lt;application
-        android:extractNativeLibs="true"  &lt;!-- 重要：允许解压 native so --&gt;
-        ... &gt;
-    &lt;/application&gt;
-&lt;/manifest&gt;</code></pre>
-
-      <h2>Whisper 集成方案</h2>
-
-      <p>Whisper 更适合非实时场景，如语音转写、会议记录等。这里介绍使用 <code>faster-whisper</code> 的 Android 移植方案。</p>
-
-      <h3>1. 使用 whisper.cpp</h3>
-
-      <p><code>whisper.cpp</code> 是 Whisper 的 C++ 实现，通过 JNI 可以在 Android 中使用。</p>
-
-      <pre><code>// build.gradle
-android {
-    externalNativeBuild {
-        cmake {
-            path "src/main/cpp/CMakeLists.txt"
-        }
-    }
-}
-
-dependencies {
-    // 或使用预编译的 AAR
-    implementation 'com.github.ggerganov:whisper-cpp-android:1.5.0'
-}</code></pre>
-
-      <h3>2. Kotlin 封装</h3>
-
-      <pre><code>class WhisperRecognizer(context: Context) {
-    
-    private val modelPath: String
-    
-    init {
-        // 复制模型到本地
-        val modelFile = File(context.filesDir, "whisper-model/ggml-base.bin")
-        if (!modelFile.exists()) {
-            copyModelFromAssets(context, "whisper-model/ggml-base.bin", modelFile)
-        }
-        modelPath = modelFile.absolutePath
-        
-        // 加载 native 库
-        System.loadLibrary("whisper")
-    }
-    
-    /**
-     * 识别音频文件
-     * 注意：Whisper 需要完整的音频文件，不适合流式识别
-     */
-    fun transcribe(audioFile: File, language: String = "zh"): String {
-        return whisperFull(modelPath, audioFile.absolutePath, language)
-    }
-    
-    // Native 方法声明
-    private external fun whisperFull(
-        modelPath: String, 
-        audioPath: String, 
-        language: String
-    ): String
-}</code></pre>
-
-      <div class="warning-box">
-        <strong>⚠️ Whisper 的局限</strong>：
-        <ul style="margin-top: 0.5rem;">
-          <li>不支持真正的流式识别，需要完整音频文件</li>
-          <li>延迟较高，不适合实时语音输入</li>
-          <li>模型加载内存占用大</li>
-        </ul>
-      </div>
-
-      <h2>Vosk 集成方案（备选）</h2>
-
-      <p>Vosk 是较早的离线语音识别方案，API 设计简洁，适合快速原型开发。</p>
-
-      <pre><code>class VoskRecognizer(context: Context) {
-    private val model = Model("${context.filesDir}/vosk-model")
-    private var recognizer: Recognizer? = null
-    
-    fun startListening(callback: (String) -> Unit) {
-        recognizer = Recognizer(model, 16000f)
-        
-        // 使用 SpeechService 简化录音流程
-        val service = SpeechService(recognizer, 16000f)
-        service.startListening(object : RecognitionListener {
-            override fun onPartialResult(hypothesis: String?) {
-                // 实时部分结果
-            }
-            override fun onResult(hypothesis: String?) {
-                callback?.invoke(JSONObject(hypothesis).getString("text"))
-            }
-            override fun onFinalResult(hypothesis: String?) {}
-            override fun onError(exception: Exception?) {}
-            override fun onTimeout() {}
-        })
-    }
-}</code></pre>
-
-      <h2>性能优化与最佳实践</h2>
-
-      <h3>1. 模型选择策略</h3>
-
-      <table>
-        <tr><th>场景</th><th>推荐模型</th><th>模型大小</th><th>RTF</th></tr>
-        <tr><td>实时语音输入</td><td>Sherpa ONNX Zipformer 20M</td><td>~60MB</td><td>0.1</td></tr>
-        <tr><td>低功耗设备</td><td>Sherpa ONNX Zipformer 14M</td><td>~40MB</td><td>0.05</td></tr>
-        <tr><td>高准确率要求</td><td>Sherpa ONNX Paraformer</td><td>~200MB</td><td>0.3</td></tr>
-        <tr><td>多语言支持</td><td>Whisper Base</td><td>~150MB</td><td>1.0+</td></tr>
-      </table>
-
-      <p><em>RTF (Real-Time Factor)：处理 1 秒音频所需的时间，< 1 表示实时</em></p>
-
-      <h3>2. 内存优化</h3>
-
-      <ul>
-        <li><strong>延迟加载</strong>：首次使用时再加载模型，避免启动慢</li>
-        <li><strong>模型缓存</strong>：识别器实例复用，避免重复加载</li>
-        <li><strong>后台识别</strong>：长时间识别使用 Service，避免 Activity 销毁</li>
-        <li><strong>量化模型</strong>：使用 INT8 量化模型，内存占用减少 50%</li>
-      </ul>
-
-      <h3>3. 热词优化</h3>
-
-      <p>Sherpa ONNX 支持热词（Hotwords）提升特定词汇识别率：</p>
-
-      <pre><code>// 在配置中添加热词
-val config = OfflineRecognizerConfig().apply {
-    modelConfig = modelConfig
-    // 提升特定领域词汇识别率
-    hotwordsFile = "$modelDir/hotwords.txt"
-    hotwordsScore = 20.0f  // 热词权重
-}</code></pre>
-
-      <h3>4. 音频预处理</h3>
-
-      <pre><code>/**
- * 音频预处理：降噪、VAD、归一化
- */
-fun preprocessAudio(samples: FloatArray): FloatArray {
-    // 1. 语音活动检测 (VAD) - 过滤静音
-    val vad = WebRtcVad()
-    vad.setMode(AGGRESSIVE_MODE)
-    
-    // 2. 降噪
-    val ns = NoiseSuppressor.create(SAMPLE_RATE, 1)
-    ns.process(samples)
-    
-    // 3. 音量归一化
-    val max = samples.maxOf { kotlin.math.abs(it) }
-    return if (max > 0) samples.map { it / max * 0.95f }.toFloatArray() else samples
-}</code></pre>
-
-      <h2>常见问题</h2>
-
-      <h3>Q: 模型文件太大，如何减小 APK 体积？</h3>
-      <p><strong>A:</strong> 三种方案：</p>
       <ol>
-        <li>使用 App Bundle 分包，只打包对应架构的 so 文件</li>
-        <li>首次启动时从服务器下载模型（推荐）</li>
-        <li>使用更小的模型（如 Sherpa ONNX 14M 版本）</li>
+        <li><strong>下载模型</strong>：从 <a href="https://github.com/k2-fsa/sherpa-onnx/releases" target="_blank">Releases</a> 下载中文模型（推荐 20M 版本，约 60MB）</li>
+        <li><strong>添加依赖</strong>：<code>implementation 'com.github.k2-fsa:sherpa-onnx-android:1.10.0'</code></li>
+        <li><strong>初始化识别器</strong>：加载模型并创建 <code>OfflineRecognizer</code></li>
+        <li><strong>录音识别</strong>：使用 <code>AudioRecord</code> 采集音频，调用 <code>recognizer.decode()</code></li>
       </ol>
 
-      <h3>Q: 识别准确率不理想怎么办？</h3>
-      <p><strong>A:</strong> 检查以下几点：</p>
+      <h3>核心代码</h3>
+
+      <pre><code>// 初始化识别器
+val config = OfflineRecognizerConfig().apply {
+    modelConfig = OfflineModelConfig().apply {
+        transducer = OfflineTransducerModelConfig().apply {
+            encoder = "$modelDir/encoder.onnx"
+            decoder = "$modelDir/decoder.onnx"
+            joiner = "$modelDir/joiner.onnx"
+        }
+        tokens = "$modelDir/tokens.txt"
+        numThreads = 4
+    }
+}
+val recognizer = OfflineRecognizer(config)
+
+// 识别音频
+val result = recognizer.decode(audioData, 16000f)
+println(result.text)</code></pre>
+
+      <p>完整实现参考官方 <a href="https://github.com/k2-fsa/sherpa-onnx/tree/master/android" target="_blank">Android 示例项目</a>。</p>
+
+      <h3>模型选择</h3>
+
+      <table>
+        <tr><th>场景</th><th>推荐模型</th><th>大小</th><th>RTF*</th></tr>
+        <tr><td>实时语音输入</td><td>Zipformer 20M</td><td>~60MB</td><td>0.1</td></tr>
+        <tr><td>低功耗设备</td><td>Zipformer 14M</td><td>~40MB</td><td>0.05</td></tr>
+        <tr><td>高准确率</td><td>Paraformer</td><td>~200MB</td><td>0.3</td></tr>
+      </table>
+
+      <p><em>* RTF：处理 1 秒音频所需时间，&lt; 1 表示实时</em></p>
+
+      <h2>Whisper（适合转写）</h2>
+
+      <p>Whisper 是 OpenAI 开源的通用语音识别模型。需要通过 <a href="https://github.com/ggerganov/whisper.cpp" target="_blank">whisper.cpp</a> 移植到 Android。</p>
+
+      <div class="warning-box">
+        <strong>局限</strong>：不支持流式识别，需要完整音频文件，延迟较高（RTF ≈ 1.0），不适合实时语音输入。
+      </div>
+
+      <h2>Vosk（备选）</h2>
+
+      <p>Vosk 基于传统 Kaldi，API 设计简洁，适合快速原型开发。但模型相对老旧，Sherpa ONNX 是更好的选择。</p>
+
+      <pre><code>// Vosk 简洁 API
+val model = Model("/path/to/model")
+val recognizer = Recognizer(model, 16000f)
+recognizer.acceptWaveform(buffer)
+val result = recognizer.result()</code></pre>
+
+      <h2>性能优化建议</h2>
+
       <ul>
-        <li>录音采样率是否为 16kHz（这是模型训练的标准）</li>
-        <li>环境噪音是否过大（建议添加降噪处理）</li>
-        <li>是否使用了热词文件提升领域词汇识别率</li>
-        <li>尝试更大的模型（准确率 vs 性能权衡）</li>
+        <li><strong>减小 APK 体积</strong>：首次启动时从服务器下载模型</li>
+        <li><strong>提升准确率</strong>：确保 16kHz 采样率，添加降噪和 VAD</li>
+        <li><strong>内存优化</strong>：延迟加载模型，识别器实例复用</li>
+        <li><strong>热词优化</strong>：使用热词文件提升领域词汇识别率</li>
       </ul>
-
-      <h3>Q: 支持方言识别吗？</h3>
-      <p><strong>A:</strong> Sherpa ONNX 的中文模型对普通话支持最好，部分方言（粤语、四川话）有一定支持但准确率下降。如需特定方言，需要自行训练模型或使用云端方案。</p>
-
-      <h3>Q: 可以自定义训练模型吗？</h3>
-      <p><strong>A:</strong> 可以。Sherpa ONNX 基于 ESPnet 和 Kaldi，支持使用自己的数据微调模型。需要准备音频数据集和对应的文本标注，训练流程参考官方文档。</p>
 
       <h2>总结</h2>
 
@@ -794,7 +172,6 @@ fun preprocessAudio(samples: FloatArray): FloatArray {
         <span>离线语音识别</span>
         <span>Sherpa ONNX</span>
         <span>Whisper</span>
-        <span>Kotlin</span>
         <span>端侧AI</span>
       </div>
     </article>
