@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Android 离线语音输入实现方案：从选型到落地的完整指南">
+  <meta name="keywords" content="Android, 离线语音识别, Vosk, 语音输入">
+  <meta name="author" content="张小猛">
+  <meta name="publish-date" content="2026-04-03">
+  <meta property="og:title" content="Android 离线语音输入实现方案">
+  <meta property="og:description" content="深入对比 Android 离线语音识别方案">
+  <meta property="og:type" content="article">
+  <title>Android 离线语音输入实现方案 | 张小猛 - loczb</title>
+  <link rel="icon" type="image/x-icon" href="../../assets/images/favicon.ico">
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <style>
+    .post-content { max-width: 720px; margin: 0 auto; line-height: 1.8; }
+    .post-content h1 { font-size: 2.5rem; margin: 2rem 0 1rem; }
+    .post-content h2 { font-size: 1.8rem; margin: 2rem 0 1rem; color: var(--color-accent-primary); }
+    .post-content pre { background: var(--color-bg-tertiary); padding: 1.5rem; border-radius: 8px; overflow-x: auto; }
+    .post-content code { background: var(--color-bg-tertiary); padding: 0.2rem 0.4rem; border-radius: 4px; font-family: monospace; }
+    .post-meta { color: var(--color-text-secondary); font-size: 0.9rem; margin-bottom: 2rem; }
+    .highlight-box { background: var(--color-bg-tertiary); border-left: 4px solid var(--color-accent-primary); padding: 1rem 1.5rem; margin: 1.5rem 0; }
+    table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
+    th, td { border: 1px solid var(--color-border); padding: 0.75rem; text-align: left; }
+    th { background: var(--color-bg-tertiary); }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../../index.html" class="nav-logo">loc<span>zb</span></a>
+      <button class="nav-toggle" aria-label="打开菜单"><span></span><span></span><span></span></button>
+      <div class="nav-overlay"></div>
+      <ul class="nav-links">
+        <li><a href="../../index.html" class="nav-link">首页</a></li>
+        <li><a href="../../projects/index.html" class="nav-link">项目</a></li>
+        <li><a href="../index.html" class="nav-link active">博客</a></li>
+        <li><a href="../../about/index.html" class="nav-link">关于</a></li>
+      </ul>
+      <button class="theme-toggle" aria-label="切换主题">
+        <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line></svg>
+        <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+      </button>
+    </div>
+  </nav>
+
+  <main>
+    <article class="post-content" style="padding: calc(64px + 4rem) 1rem 4rem;">
+      <a href="../index.html" style="display: inline-flex; align-items: center; gap: 0.5rem; color: var(--color-text-secondary); text-decoration: none; margin-bottom: 2rem;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        返回博客
+      </a>
+      
+      <h1>Android 离线语音输入实现方案</h1>
+      <div class="post-meta">2026年4月3日 · 阅读时间 12 分钟</div>
+
+      <p>在移动应用中集成语音输入功能时，网络依赖往往成为最大的痛点。弱网环境、隐私敏感场景、实时性要求高的应用，都需要离线语音识别方案。</p>
+
+      <h2>主流方案对比</h2>
+      <table>
+        <tr><th>方案</th><th>模型大小</th><th>准确率</th><th>中文支持</th><th>推荐指数</th></tr>
+        <tr><td>Vosk</td><td>50MB-1GB</td><td>高</td><td>优秀</td><td>5/5</td></tr>
+        <tr><td>Whisper</td><td>39MB-155MB</td><td>很高</td><td>优秀</td><td>4/5</td></tr>
+        <tr><td>PocketSphinx</td><td>25MB-100MB</td><td>中等</td><td>一般</td><td>3/5</td></tr>
+        <tr><td>Google Speech</td><td>内置</td><td>高</td><td>优秀</td><td>4/5</td></tr>
+      </table>
+
+      <h2>Vosk 集成实战</h2>
+      
+      <h3>1. 添加依赖</h3>
+      <pre><code>dependencies {
+    implementation 'com.alphacephei:vosk-android:0.3.47'
+}</code></pre>
+
+      <h3>2. 核心代码</h3>
+      <pre><code>class VoskRecognizer(context: Context) {
+    private val modelPath = File(context.filesDir, "vosk-model").absolutePath
+    private var model: Model? = null
+    
+    fun init() {
+        model = Model(modelPath)
+    }
+    
+    fun startListening(callback: (String) -> Unit) {
+        val recognizer = Recognizer(model, 16000f)
+        // 实现录音和识别逻辑
+    }
+}</code></pre>
+
+      <div class="highlight-box">
+        <strong>提示</strong>：完整代码和示例项目已开源，访问 GitHub 获取详细实现。
+      </div>
+
+      <h2>性能优化建议</h2>
+      <ul>
+        <li>小型模型(40MB)适合实时场景</li>
+        <li>中型模型(120MB)平衡准确率和性能</li>
+        <li>后台Service执行长时间识别</li>
+      </ul>
+    </article>
+  </main>
+  <script src="../../assets/js/main.js"></script>
+</body>
+</html>
