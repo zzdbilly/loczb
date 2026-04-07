@@ -454,53 +454,8 @@
         </article>
         
         <!-- 最新文章列表 -->
-        <div class="blog-list">
-          <article class="blog-list-item animate-on-scroll">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-04-07</span>
-              <span>·</span>
-              <span class="blog-read-time">15 min</span>
-            </div>
-            <h4 class="blog-list-title">
-              <a href="blog/posts/local-rag-ollama.html">RAG 本地实践：用 Ollama + Embedding 搭建私有知识库</a>
-            </h4>
-            <div class="blog-list-tags">
-              <span class="tech-tag">AI</span>
-              <span class="tech-tag">LLM</span>
-            </div>
-          </article>
-          
-          <article class="blog-list-item animate-on-scroll">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-04-03</span>
-              <span>·</span>
-              <span class="blog-read-time">12 min</span>
-            </div>
-            <h4 class="blog-list-title">
-              <a href="blog/posts/android-offline-speech-input.html">Android 离线语音输入实现方案</a>
-            </h4>
-            <div class="blog-list-tags">
-              <span class="tech-tag">Android</span>
-              <span class="tech-tag">AI</span>
-            </div>
-          </article>
-          
-          <article class="blog-list-item animate-on-scroll">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-03-30</span>
-              <span>·</span>
-              <span class="blog-read-time">12 min</span>
-            </div>
-            <h4 class="blog-list-title">
-              <a href="blog/posts/onnx-mobile-deployment.html">ONNX 移动端侧模型实践：从转换到部署</a>
-            </h4>
-            <div class="blog-list-tags">
-              <span class="tech-tag">AI</span>
-              <span class="tech-tag">ONNX</span>
-            </div>
-          </article>
-          
-          <!-- 更多文章请访问博客页面 -->
+        <div class="blog-list" id="home-blog-list">
+          <!-- 动态填充 -->
         </div>
       </div>
       
@@ -658,6 +613,29 @@
         </a>
       </div>
     `;
+  
+  // 加载最新文章列表（最新 3 篇）
+  fetch('blog/articles.json')
+    .then(res => res.json())
+    .then(articles => {
+      const recent = articles.slice(0, 3);
+      const container = document.getElementById('home-blog-list');
+      container.innerHTML = recent.map(article => `
+        <article class="blog-list-item animate-on-scroll">
+          <div class="blog-list-meta">
+            <span class="blog-date">${article.date}</span>
+            <span>·</span>
+            <span class="blog-read-time">${article.readTime}</span>
+          </div>
+          <h4 class="blog-list-title">
+            <a href="blog/${article.url}">${article.title}</a>
+          </h4>
+          <div class="blog-list-tags">
+            ${article.tags.map(tag => `<span class="tech-tag">${tag}</span>`).join('')}
+          </div>
+        </article>
+      `).join('');
+    });
   </script>
 </body>
 </html>
