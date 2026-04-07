@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="RAG 本地实践：用 Ollama + Embedding 搭建私有知识库，实现完全离线的智能问答">
+  <meta name="keywords" content="RAG, Ollama, Embedding, 向量数据库, 私有知识库, LLM, 本地部署">
+  <meta name="author" content="张小猛">
+  <meta name="publish-date" content="2026-04-07">
+  <title>RAG 本地实践：用 Ollama + Embedding 搭建私有知识库 | 张小猛 - loczb</title>
+  <link rel="icon" type="image/x-icon" href="../../assets/images/favicon.ico">
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <style>
+    .post-content { max-width: 760px; margin: 0 auto; line-height: 1.85; }
+    .post-content h1 { font-size: 2.4rem; margin: 2rem 0 1rem; }
+    .post-content h2 { font-size: 1.7rem; margin: 2.5rem 0 1rem; color: var(--color-accent-primary); border-bottom: 1px solid var(--color-border); padding-bottom: 0.5rem; }
+    .post-content h3 { font-size: 1.3rem; margin: 1.8rem 0 0.8rem; }
+    .post-content pre { background: var(--color-bg-tertiary); padding: 1.2rem; border-radius: 8px; overflow-x: auto; margin: 1.2rem 0; font-size: 0.9rem; }
+    .post-content code { background: var(--color-bg-tertiary); padding: 0.15rem 0.4rem; border-radius: 4px; font-family: monospace; font-size: 0.9em; }
+    .post-meta { color: var(--color-text-secondary); font-size: 0.9rem; margin-bottom: 2rem; }
+    .post-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 3rem; }
+    .post-tags span { background: var(--color-bg-tertiary); padding: 0.3rem 0.8rem; border-radius: 9999px; font-size: 0.85rem; color: var(--color-accent-primary); }
+    .tip-box { background: rgba(34, 197, 94, 0.1); border-left: 3px solid #22c55e; padding: 1rem 1.2rem; margin: 1.5rem 0; border-radius: 0 6px 6px 0; }
+    .warning-box { background: rgba(234, 179, 8, 0.1); border-left: 3px solid #eab308; padding: 1rem 1.2rem; margin: 1.5rem 0; border-radius: 0 6px 6px 0; }
+    table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.95rem; }
+    th, td { border: 1px solid var(--color-border); padding: 0.7rem; text-align: left; }
+    th { background: var(--color-bg-tertiary); font-weight: 600; }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../../index.html" class="nav-logo">loc<span>zb</span></a>
+      <button class="nav-toggle" aria-label="打开菜单"><span></span><span></span><span></span></button>
+      <div class="nav-overlay"></div>
+      <ul class="nav-links">
+        <li><a href="../../index.html" class="nav-link">首页</a></li>
+        <li><a href="../../projects/index.html" class="nav-link">项目</a></li>
+        <li><a href="../index.html" class="nav-link active">博客</a></li>
+        <li><a href="../../about/index.html" class="nav-link">关于</a></li>
+      </ul>
+      <button class="theme-toggle" aria-label="切换主题">
+        <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line></svg>
+        <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+      </button>
+    </div>
+  </nav>
+
+  <main>
+    <article class="post-content" style="padding: calc(64px + 4rem) 1rem 4rem;">
+      <a href="../index.html" style="display: inline-flex; align-items: center; gap: 0.5rem; color: var(--color-text-secondary); text-decoration: none; margin-bottom: 2rem;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        返回博客
+      </a>
+      
+      <h1>RAG 本地实践：用 Ollama + Embedding 搭建私有知识库</h1>
+      
+      <div class="post-meta">2026年4月7日 · 阅读时间 15 分钟</div>
+
+      <p>大模型虽然强大，但有两个致命弱点：<strong>知识截止</strong>和<strong>幻觉问题</strong>。RAG（Retrieval-Augmented Generation，检索增强生成）通过在回答前检索相关知识，有效解决了这两个问题。</p>
+
+      <p>但云端 RAG 服务存在隐私风险。本文介绍如何<strong>完全本地化</strong>搭建 RAG 系统，数据不出本机，同时获得接近 GPT-4 的问答体验。</p>
+
+      <div class="tip-box">
+        <strong>核心优势</strong>：完全离线、数据私有、零 API 费用、响应速度快
+      </div>
+
+      <h2>技术架构</h2>
+
+      <table>
+        <tr><th>组件</th><th>选型</th><th>作用</th></tr>
+        <tr><td>LLM</td><td>Ollama</td><td>本地运行大模型，提供生成能力</td></tr>
+        <tr><td>Embedding</td><td>nomic-embed-text / mxbai-embed-large</td><td>文本向量化，用于语义检索</td></tr>
+        <tr><td>向量数据库</td><td>ChromaDB / Qdrant</td><td>存储和检索向量</td></tr>
+        <tr><td>框架</td><td>LangChain / LlamaIndex</td><td>编排 RAG 流程</td></tr>
+      </table>
+
+      <h2>环境准备</h2>
+
+      <h3>1. 安装 Ollama</h3>
+
+      <pre><code># macOS / Linux
+curl -fsSL https://ollama.com/install.sh | sh
+
+# 拉取模型（推荐 qwen2.5:7b 中文效果好）
+ollama pull qwen2.5:7b
+ollama pull nomic-embed-text</code></pre>
+
+      <h3>2. 安装依赖</h3>
+
+      <pre><code>pip install ollama chromadb langchain langchain-ollama</code></pre>
+
+      <h2>核心实现</h2>
+
+      <h3>文档加载与切分</h3>
+
+      <pre><code>from langchain_community.document_loaders import TextLoader
+from langchain_text_splitters import RecursiveCharacterTextSplitter
+
+# 加载文档
+loader = TextLoader("docs/my_notes.txt")
+docs = loader.load()
+
+# 切分文档（每块 500 字符，重叠 50）
+splitter = RecursiveCharacterTextSplitter(
+    chunk_size=500, chunk_overlap=50
+)
+chunks = splitter.split_documents(docs)</code></pre>
+
+      <h3>向量化与存储</h3>
+
+      <pre><code>from langchain_ollama import OllamaEmbeddings
+from langchain_chroma import Chroma
+
+# 初始化 Embedding 模型
+embeddings = OllamaEmbeddings(model="nomic-embed-text")
+
+# 存入向量数据库
+vectorstore = Chroma.from_documents(
+    documents=chunks,
+    embedding=embeddings,
+    persist_directory="./chroma_db"
+)</code></pre>
+
+      <h3>检索与生成</h3>
+
+      <pre><code>from langchain_ollama import ChatOllama
+from langchain.chains import RetrievalQA
+
+# 初始化 LLM
+llm = ChatOllama(model="qwen2.5:7b", temperature=0.7)
+
+# 创建 RAG Chain
+qa_chain = RetrievalQA.from_chain_type(
+    llm=llm,
+    retriever=vectorstore.as_retriever(search_kwargs={"k": 3}),
+    return_source_documents=True
+)
+
+# 提问
+result = qa_chain.invoke({"query": "我的项目用了什么技术栈？"})
+print(result["result"])</code></pre>
+
+      <h2>性能优化</h2>
+
+      <ul>
+        <li><strong>文档切分策略</strong>：按语义段落切分，避免在句子中间断开</li>
+        <li><strong>重排序（Rerank）</strong>：用 cross-encoder 对检索结果重排序，提升相关性</li>
+        <li><strong>混合检索</strong>：结合关键词检索（BM25）和向量检索</li>
+        <li><strong>量化模型</strong>：使用 4-bit 量化模型减少显存占用</li>
+      </ul>
+
+      <h2>踩坑记录</h2>
+
+      <div class="warning-box">
+        <strong>Embedding 模型选择</strong>：nomic-embed-text 对英文效果好，中文建议用 mxbai-embed-large 或 bge-m3
+      </div>
+
+      <div class="warning-box">
+        <strong>文档切分大小</strong>：chunk_size 太大导致检索不精确，太小导致上下文丢失，建议 300-500 字符
+      </div>
+
+      <div class="warning-box">
+        <strong>显存不足</strong>：7B 模型需要 4-8GB 显存，可用量化版本（qwen2.5:7b-q4_K_M）
+      </div>
+
+      <h2>进阶：Web 界面</h2>
+
+      <p>用 Streamlit 快速搭建问答界面：</p>
+
+      <pre><code>import streamlit as st
+
+st.title("📚 私有知识库问答")
+question = st.text_input("提问")
+
+if question:
+    with st.spinner("思考中..."):
+        result = qa_chain.invoke({"query": question})
+    st.write(result["result"])
+    
+    with st.expander("参考来源"):
+        for doc in result["source_documents"]:
+            st.markdown(f"- {doc.page_content[:200]}...")</code></pre>
+
+
+
+      <h2>总结</h2>
+
+      <p>本地 RAG 方案让大模型真正"可用"：</p>
+
+      <ul>
+        <li>✅ 数据完全私有，适合敏感信息</li>
+        <li>✅ 无 API 费用，长期使用成本低</li>
+        <li>✅ 响应速度快，无需网络等待</li>
+        <li>✅ 可定制性强，模型、参数完全可控</li>
+      </ul>
+
+      <p>对于个人知识管理、企业内部文档问答等场景，本地 RAG 是性价比最高的方案。</p>
+
+      <div class="tip-box">
+        <strong>参考资源</strong>：<br>
+        Ollama：<a href="https://github.com/ollama/ollama" target="_blank">github.com/ollama/ollama</a><br>
+        LangChain：<a href="https://github.com/langchain-ai/langchain" target="_blank">github.com/langchain-ai/langchain</a><br>
+        ChromaDB：<a href="https://github.com/chroma-core/chroma" target="_blank">github.com/chroma-core/chroma</a>
+      </div>
+
+      <div class="post-tags">
+        <span>RAG</span>
+        <span>Ollama</span>
+        <span>LLM</span>
+        <span>向量数据库</span>
+        <span>本地部署</span>
+      </div>
+    </article>
+  </main>
+  
+  <script src="../../assets/js/main.js"></script>
+</body>
+</html>
