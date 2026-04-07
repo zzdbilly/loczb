@@ -341,7 +341,7 @@ a:hover {
 }
 
 .nav-logo span {
-  color: var(--color-accent-primary);
+  color: #7c7cf7;
 }
 
 .nav-links {
@@ -740,7 +740,7 @@ a:hover {
   gap: var(--space-sm);
   font-family: var(--font-mono);
   font-size: var(--text-xs);
-  color: #818cf8;
+  color: #a5b4fc;
   text-transform: uppercase;
   letter-spacing: 0.1em;
   margin-bottom: var(--space-md);
@@ -985,7 +985,7 @@ a:hover {
 }
 
 .footer-copyright {
-  color: #b0b0b8;
+  color: #d1d5db;
   font-size: var(--text-xs);
 }
 
