@@ -211,6 +211,9 @@ function setActiveNavLink() {
   const sections = document.querySelectorAll('section[id]');
   const navLinks = document.querySelectorAll('.nav-link');
   
+  // 只处理锚点链接，保留页面链接的 active 状态
+  const anchorLinks = Array.from(navLinks).filter(link => link.getAttribute('href').startsWith('#'));
+  
   window.addEventListener('scroll', () => {
     let current = '';
     
@@ -223,7 +226,7 @@ function setActiveNavLink() {
       }
     });
     
-    navLinks.forEach(link => {
+    anchorLinks.forEach(link => {
       link.classList.remove('active');
       if (link.getAttribute('href') === `#${current}`) {
         link.classList.add('active');
