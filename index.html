@@ -616,26 +616,32 @@
   
   // 加载最新文章列表（最新 3 篇）
   fetch('blog/articles.json')
-    .then(res => res.json())
+    .then(res => {
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      return res.json();
+    })
     .then(articles => {
       const recent = articles.slice(0, 3);
       const container = document.getElementById('home-blog-list');
-      container.innerHTML = recent.map(article => `
-        <article class="blog-list-item animate-on-scroll">
-          <div class="blog-list-meta">
-            <span class="blog-date">${article.date}</span>
-            <span>·</span>
-            <span class="blog-read-time">${article.readTime}</span>
-          </div>
-          <h4 class="blog-list-title">
-            <a href="blog/${article.url}">${article.title}</a>
-          </h4>
-          <div class="blog-list-tags">
-            ${article.tags.map(tag => `<span class="tech-tag">${tag}</span>`).join('')}
-          </div>
-        </article>
-      `).join('');
-    });
+      if (container) {
+        container.innerHTML = recent.map(article => `
+          <article class="blog-list-item animate-on-scroll">
+            <div class="blog-list-meta">
+              <span class="blog-date">${article.date}</span>
+              <span>·</span>
+              <span class="blog-read-time">${article.readTime}</span>
+            </div>
+            <h4 class="blog-list-title">
+              <a href="blog/${article.url}">${article.title}</a>
+            </h4>
+            <div class="blog-list-tags">
+              ${article.tags.slice(0, 2).map(tag => `<span class="tech-tag">${tag}</span>`).join('')}
+            </div>
+          </article>
+        `).join('');
+      }
+    })
+    .catch(err => console.error('Failed to load articles:', err));
   </script>
 </body>
 </html>
