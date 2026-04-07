@@ -1,92 +1,165 @@
 [
   {
-    "title": "RAG 本地实践：用 Ollama + Embedding 搭建私有知识库",
+    "url": "posts/local-rag-ollama.html",
+    "title": "RAG 本地实践：用 Ollama + Embedding 搭建私有知识库 | 张小猛 - loczb",
     "date": "2026-04-07",
-    "readTime": "15 min",
-    "category": "AI",
-    "tags": ["RAG", "Ollama", "LLM"],
-    "excerpt": "完全本地化搭建 RAG 系统，数据不出本机，实现接近 GPT-4 的智能问答体验。",
-    "url": "posts/local-rag-ollama.html"
+    "readTime": "10 min",
+    "category": "RAG",
+    "excerpt": "RAG 本地实践：用 Ollama + Embedding 搭建私有知识库，实现完全离线的智能问答",
+    "tags": [
+      "RAG",
+      "Ollama",
+      "Embedding",
+      "向量数据库",
+      "私有知识库",
+      "LLM",
+      "本地部署"
+    ]
   },
   {
-    "title": "Android 离线语音输入实现方案",
+    "url": "posts/android-offline-speech-input.html",
+    "title": "Android 离线语音输入实现方案 | 张小猛 - loczb",
     "date": "2026-04-03",
-    "readTime": "12 min",
+    "readTime": "10 min",
     "category": "Android",
-    "tags": ["Android", "AI"],
-    "excerpt": "深度对比 Sherpa ONNX、Whisper、Vosk 三大离线语音识别方案，提供核心集成代码与性能优化建议。",
-    "url": "posts/android-offline-speech-input.html"
+    "excerpt": "Android 离线语音输入实现方案：Sherpa ONNX、Whisper、Vosk 三大主流方案深度对比",
+    "tags": [
+      "Android",
+      "离线语音识别",
+      "Sherpa ONNX",
+      "Whisper",
+      "Vosk",
+      "语音输入",
+      "端侧AI"
+    ]
   },
   {
+    "url": "posts/onnx-mobile-deployment.html",
     "title": "ONNX 移动端侧模型实践：从转换到部署",
     "date": "2026-03-30",
-    "readTime": "12 min",
-    "category": "AI",
-    "tags": ["AI", "ONNX"],
-    "excerpt": "深入探讨 ONNX 模型在移动端的部署实践，包括模型优化、量化策略、推理框架选型与性能对比。",
-    "url": "posts/onnx-mobile-deployment.html"
+    "readTime": "10 min",
+    "category": "ONNX",
+    "excerpt": "ONNX 移动端侧模型实践：从模型转换到端侧部署的完整指南，涵盖模型优化、量化压缩、多框架推理对比",
+    "tags": [
+      "ONNX",
+      "移动端AI",
+      "端侧推理",
+      "模型量化",
+      "ONNX Runtime",
+      "NCNN",
+      "MNN",
+      "TFLite",
+      "Android AI"
+    ]
   },
   {
+    "url": "posts/pwa-offline-web-app.html",
     "title": "PWA 实战：从零打造离线可用的 Web 应用",
     "date": "2026-03-22",
     "readTime": "10 min",
-    "category": "前端",
-    "tags": ["前端", "PWA"],
-    "excerpt": "深入解析 Service Worker 缓存策略、manifest.json 配置、推送通知实现，让你的 Web 应用像原生 App 一样运行。",
-    "url": "posts/pwa-offline-web-app.html"
+    "category": "PWA",
+    "excerpt": "PWA 实战：从零开始打造离线可用的 Web 应用，详解 Service Worker、manifest.json 配置与缓存策略",
+    "tags": [
+      "PWA",
+      "Service Worker",
+      "manifest.json",
+      "离线应用",
+      "Web App",
+      "缓存策略"
+    ]
   },
   {
-    "title": "云服务器 SSH 安全加固完整指南",
+    "url": "posts/ssh-security-hardening.html",
+    "title": "云服务器 SSH 安全加固完整指南 - 适用于 AWS/阿里云/腾讯云/DigitalOcean 等",
     "date": "2026-03-18",
-    "readTime": "15 min",
-    "category": "安全",
-    "tags": ["安全", "运维"],
-    "excerpt": "从端口修改到密钥认证，全方位提升 Linux VPS 安全性。适用于 AWS、阿里云、腾讯云等主流云服务商。",
-    "url": "posts/ssh-security-hardening.html"
+    "readTime": "10 min",
+    "category": "SSH",
+    "excerpt": "云服务器 SSH 安全加固完整指南 - 从端口修改到密钥认证，全方位提升 Linux VPS 安全性。适用于 AWS、阿里云、腾讯云、DigitalOcean 等主流云服务商",
+    "tags": [
+      "SSH",
+      "安全加固",
+      "云服务器",
+      "Linux VPS",
+      "服务器安全",
+      "密钥认证",
+      "防火墙",
+      "OpenCloudOS"
+    ]
   },
   {
+    "url": "posts/tailscale-derp-server.html",
     "title": "自建 Tailscale DERP 中继服务器完整指南",
     "date": "2026-03-17",
-    "readTime": "12 min",
-    "category": "DevOps",
-    "tags": ["网络", "Tailscale"],
-    "excerpt": "从原理到实战，手把手教你搭建私有 DERP 服务器。解决官方 DERP 延迟高、隐私顾虑问题。",
-    "url": "posts/tailscale-derp-server.html"
+    "readTime": "10 min",
+    "category": "Tailscale",
+    "excerpt": "自建 Tailscale DERP 中继服务器完整指南 - 从原理到实战，掌握私有 DERP 服务器搭建",
+    "tags": [
+      "Tailscale",
+      "DERP",
+      "中继服务器",
+      "WireGuard",
+      "VPN",
+      "自建服务器",
+      "网络穿透"
+    ]
   },
   {
+    "url": "posts/vscode-port-forward.html",
     "title": "VS Code 端口转发原理详解：SSH 隧道工作机制",
     "date": "2026-03-17",
     "readTime": "10 min",
-    "category": "DevOps",
-    "tags": ["开发工具", "VS Code"],
-    "excerpt": "深入解析 VS Code 端口转发背后的 SSH 隧道原理，对比 Tailscale、Nginx 反向代理方案。",
-    "url": "posts/vscode-port-forward.html"
+    "category": "VS Code",
+    "excerpt": "VS Code 端口转发原理详解：SSH 隧道工作机制与实战应用 - 张小猛的技术博客",
+    "tags": [
+      "VS Code",
+      "端口转发",
+      "SSH Tunnel",
+      "远程开发",
+      "Tailscale",
+      "Nginx"
+    ]
   },
   {
+    "url": "posts/mobile-gs-paper-review.html",
     "title": "Mobile-GS：让 3D 高斯泼溅在移动端实时渲染",
-    "date": "2026-03-16",
-    "readTime": "20 min",
-    "category": "AI",
-    "tags": ["AI", "3DGS"],
-    "excerpt": "论文解读：Mobile-GS 第一次让 3DGS 在移动端实现实时渲染。骁龙 8 Gen 3 上 116 FPS，模型仅 4.8MB。",
-    "url": "posts/mobile-gs-paper-review.html"
-  },
-  {
-    "title": "AI Agent 技能开发实战：从需求到上线的完整流程",
     "date": "2026-03-15",
-    "readTime": "15 min",
-    "category": "AI Agent",
-    "tags": ["AI Agent", "OpenClaw"],
-    "excerpt": "手把手教你开发一个 GitHub 项目分析技能。从需求分析、技术选型、核心开发到集成测试。",
-    "url": "posts/ai-agent-skill-development.html"
+    "readTime": "10 min",
+    "category": "Mobile-GS",
+    "excerpt": "Mobile-GS：让 3D 高斯泼溅在移动端实时渲染 - 论文解读，ICLR 2026，移动端 3D 渲染新突破",
+    "tags": [
+      "Mobile-GS",
+      "3D Gaussian Splatting",
+      "3DGS",
+      "移动端渲染，计算机视觉，AI",
+      "ICLR 2026"
+    ]
   },
   {
-    "title": "OpenClaw 深度使用指南：从 0 到 1 构建个人 AI Agent",
+    "url": "posts/ai-agent-skill-development.html",
+    "title": "AI Agent 技能开发实战：从需求到上线的完整流程",
     "date": "2026-03-14",
-    "readTime": "12 min",
-    "category": "AI",
-    "tags": ["AI", "OpenClaw"],
-    "excerpt": "全面介绍 OpenClaw 的安装配置、核心功能、高级技巧和踩坑记录。",
-    "url": "posts/openclaw-guide.html"
+    "readTime": "10 min",
+    "category": "AI Agent",
+    "excerpt": "AI Agent 技能开发实战：从需求到上线的完整流程 - 张小猛的技术博客",
+    "tags": [
+      "AI Agent",
+      "Skill Development",
+      "OpenClaw",
+      "自动化",
+      "JavaScript"
+    ]
+  },
+  {
+    "url": "posts/openclaw-guide.html",
+    "title": "OpenClaw 深度使用指南：从 0 到 1 构建个人 AI Agent",
+    "date": "2026-03-13",
+    "readTime": "10 min",
+    "category": "OpenClaw",
+    "excerpt": "OpenClaw 深度使用指南：从 0 到 1 构建个人 AI Agent - 张小猛的技术博客",
+    "tags": [
+      "OpenClaw",
+      "AI Agent",
+      "自动化，定时任务，子 Agent"
+    ]
   }
 ]
