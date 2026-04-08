@@ -500,21 +500,6 @@
             </div>
           </article>
           
-          <article class="blog-list-item animate-on-scroll">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-03-30</span>
-              <span>·</span>
-              <span class="blog-read-time">12 min</span>
-            </div>
-            <h4 class="blog-list-title">
-              <a href="blog/posts/onnx-mobile-deployment.html">ONNX 移动端侧模型实践：从转换到部署</a>
-            </h4>
-            <div class="blog-list-tags">
-              <span class="tech-tag">AI</span>
-              <span class="tech-tag">ONNX</span>
-            </div>
-          </article>
-          
           <!-- 更多文章请访问博客页面 -->
         </div>
       </div>
@@ -673,6 +658,32 @@
         </a>
       </div>
     `;
+
+  // 动态加载最新 3 篇博客
+  fetch('blog/articles.json')
+    .then(res => res.json())
+    .then(articles => {
+      const container = document.getElementById('home-blog-list');
+      if (!container) return;
+      
+      const recent = articles.slice(0, 3);
+      container.innerHTML = recent.map(a => 
+        '<article class="blog-list-item animate-on-scroll">' +
+        '<div class="blog-list-meta">' +
+        '<span class="blog-date">' + a.date + '</span>' +
+        '<span>·</span>' +
+        '<span class="blog-read-time">' + a.readTime + '</span>' +
+        '</div>' +
+        '<h4 class="blog-list-title">' +
+        '<a href="blog/' + a.url + '">' + a.title.replace(/ \| 张小猛 - loczb$/, '') + '</a>' +
+        '</h4>' +
+        '<div class="blog-list-tags">' +
+        a.tags.slice(0, 2).map(t => '<span class="tech-tag">' + t + '</span>').join('') +
+        '</div>' +
+        '</article>'
+      ).join('');
+    })
+    .catch(err => console.error('Load articles failed:', err));
   </script>
 </body>
 </html>

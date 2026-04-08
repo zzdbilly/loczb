@@ -1,5 +1,21 @@
 [
   {
+    "url": "posts/kotlin-coroutines-best-practices.html",
+    "title": "Kotlin Coroutines 最佳实践 | 张小猛 - loczb",
+    "date": "2026-04-08",
+    "readTime": "10 min",
+    "category": "Kotlin",
+    "excerpt": "Kotlin Coroutines 最佳实践：从入门到精通，掌握异步编程的核心技巧与常见陷阱",
+    "tags": [
+      "Kotlin",
+      "Coroutines",
+      "协程",
+      "异步编程",
+      "Android",
+      "并发"
+    ]
+  },
+  {
     "url": "posts/local-rag-ollama.html",
     "title": "RAG 本地实践：用 Ollama + Embedding 搭建私有知识库 | 张小猛 - loczb",
     "date": "2026-04-07",
