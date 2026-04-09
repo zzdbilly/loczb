@@ -1,5 +1,21 @@
 [
   {
+    "url": "posts/github-pages-blog-setup.html",
+    "title": "从零搭建个人博客系统（GitHub Pages + 自定义域名 + 自动化部署） | 张小猛 - loczb",
+    "date": "2026-04-09",
+    "readTime": "10 min",
+    "category": "GitHub Pages",
+    "excerpt": "从零搭建个人博客系统：GitHub Pages + 自定义域名 + 自动化部署完整指南",
+    "tags": [
+      "GitHub Pages",
+      "博客系统",
+      "自定义域名",
+      "自动化部署",
+      "静态网站",
+      "CI/CD"
+    ]
+  },
+  {
     "url": "posts/kotlin-coroutines-best-practices.html",
     "title": "Kotlin Coroutines 最佳实践 | 张小猛 - loczb",
     "date": "2026-04-08",
