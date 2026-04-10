@@ -1,5 +1,19 @@
 [
   {
+    "url": "posts/gemini-notebooklm-workflow.html",
+    "title": "Gemini + NotebookLM 结合使用指南 | 张小猛 - loczb",
+    "date": "2026-04-10",
+    "readTime": "10 min",
+    "category": "Gemini",
+    "excerpt": "Gemini + NotebookLM 结合使用指南：打造个人 AI 知识工作流",
+    "tags": [
+      "Gemini",
+      "NotebookLM",
+      "AI 工具，知识管理，Google AI",
+      "生产力"
+    ]
+  },
+  {
     "url": "posts/github-pages-blog-setup.html",
     "title": "从零搭建个人博客系统（GitHub Pages + 自定义域名 + 自动化部署） | 张小猛 - loczb",
     "date": "2026-04-09",
