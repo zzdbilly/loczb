@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="主流 AI 编程工具深度对比：Cursor、Claude Code、OpenCode、GitHub Copilot 选型指南">
+  <meta name="keywords" content="AI 编程工具，Cursor, Claude Code, GitHub Copilot, 代码生成，AI 辅助编程">
+  <meta name="author" content="张小猛">
+  <meta name="publish-date" content="2026-04-19">
+  <title>主流 AI 编程工具深度对比：Cursor、Claude Code、OpenCode、GitHub Copilot | 张小猛 - loczb</title>
+  <link rel="icon" type="image/x-icon" href="../../assets/images/favicon.ico">
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <style>
+    .post-content { max-width: 760px; margin: 0 auto; line-height: 1.85; }
+    .post-content h1 { font-size: 2.4rem; margin: 2rem 0 1rem; }
+    .post-content h2 { font-size: 1.7rem; margin: 2.5rem 0 1rem; color: var(--color-accent-primary); border-bottom: 1px solid var(--color-border); padding-bottom: 0.5rem; }
+    .post-content h3 { font-size: 1.3rem; margin: 1.8rem 0 0.8rem; }
+    .post-content pre { background: var(--color-bg-tertiary); padding: 1.2rem; border-radius: 8px; overflow-x: auto; margin: 1.2rem 0; font-size: 0.9rem; }
+    .post-content code { background: var(--color-bg-tertiary); padding: 0.15rem 0.4rem; border-radius: 4px; font-family: monospace; font-size: 0.9em; }
+    .post-meta { color: var(--color-text-secondary); font-size: 0.9rem; margin-bottom: 2rem; }
+    .post-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 3rem; }
+    .post-tags span { background: var(--color-bg-tertiary); padding: 0.3rem 0.8rem; border-radius: 9999px; font-size: 0.85rem; color: var(--color-accent-primary); }
+    .tip-box { background: rgba(34, 197, 94, 0.1); border-left: 3px solid #22c55e; padding: 1rem 1.2rem; margin: 1.5rem 0; border-radius: 0 6px 6px 0; }
+    .warning-box { background: rgba(234, 179, 8, 0.1); border-left: 3px solid #eab308; padding: 1rem 1.2rem; margin: 1.5rem 0; border-radius: 0 6px 6px 0; }
+    table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.95rem; }
+    th, td { border: 1px solid var(--color-border); padding: 0.7rem; text-align: left; }
+    th { background: var(--color-bg-tertiary); font-weight: 600; }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../../index.html" class="nav-logo">loc<span>zb</span></a>
+      <button class="nav-toggle" aria-label="打开菜单"><span></span><span></span><span></span></button>
+      <div class="nav-overlay"></div>
+      <ul class="nav-links">
+        <li><a href="../../index.html" class="nav-link">首页</a></li>
+        <li><a href="../../projects/index.html" class="nav-link">项目</a></li>
+        <li><a href="../index.html" class="nav-link active">博客</a></li>
+        <li><a href="../../about/index.html" class="nav-link">关于</a></li>
+      </ul>
+      <button class="theme-toggle" aria-label="切换主题">
+        <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line></svg>
+        <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+      </button>
+    </div>
+  </nav>
+
+  <main>
+    <article class="post-content" style="padding: calc(64px + 4rem) 1rem 4rem;">
+      <a href="../index.html" style="display: inline-flex; align-items: center; gap: 0.5rem; color: var(--color-text-secondary); text-decoration: none; margin-bottom: 2rem;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        返回博客
+      </a>
+      
+      <h1>主流 AI 编程工具深度对比</h1>
+      
+      <div class="post-meta">2026 年 4 月 19 日 · 阅读时间 18 分钟</div>
+
+      <p>2026 年的 AI 编程工具市场已经百花齐放。从最早的 GitHub Copilot，到后来的 Cursor、Claude Code、OpenCode，每个工具都有自己的特色和优势。</p>
+
+      <p>经过三个月的深度使用，我来分享一份<strong>真实、全面、不带偏见</strong>的对比评测。</p>
+
+      <div class="tip-box">
+        <strong>核心结论</strong>：没有最好的工具，只有最适合的工具。根据你的使用场景选择，而不是盲目跟风。
+      </div>
+
+      <h2>参评工具</h2>
+
+      <table>
+        <tr><th>工具</th><th>开发商</th><th>核心模型</th><th>定价</th></tr>
+        <tr><td><strong>Cursor</strong></td><td>Cursor Inc.</td><td>Claude 3.5/GPT-4o</td><td>$20/月</td></tr>
+        <tr><td><strong>Claude Code</strong></td><td>Anthropic</td><td>Claude 3.5 Sonnet</td><td>$20/月</td></tr>
+        <tr><td><strong>OpenCode</strong></td><td>开源社区</td><td>多模型支持</td><td>免费</td></tr>
+        <tr><td><strong>GitHub Copilot</strong></td><td>Microsoft</td><td>GPT-4/Codex</td><td>$10/月</td></tr>
+        <tr><td><strong>Codeium</strong></td><td>Codeium Inc.</td><td>自研模型</td><td>免费</td></tr>
+      </table>
+
+      <h2>Cursor：集成度最高的 AI IDE</h2>
+
+      <h3>核心优势</h3>
+
+      <ul>
+        <li><strong>基于 VS Code 深度定制</strong>：熟悉的界面，零学习成本</li>
+        <li><strong>项目级上下文理解</strong>：能理解整个项目的代码结构</li>
+        <li><strong>Chat + Edit 双模式</strong>：对话和编辑无缝切换</li>
+        <li><strong>多模型支持</strong>：可切换 Claude 3.5、GPT-4o 等</li>
+      </ul>
+
+      <h3>使用场景</h3>
+
+      <pre><code>// 1. 按 Cmd+K，输入需求直接生成代码
+// "创建一个 React Hook，用于防抖搜索"
+
+// 2. 按 Cmd+L 打开聊天，询问代码问题
+// "这段代码的潜在 bug 是什么？"
+
+// 3. 选中代码，按 Cmd+I 智能编辑
+// "添加错误处理和类型定义"</code></pre>
+
+      <h3>实际体验</h3>
+
+      <div class="tip-box">
+        <strong>优点</strong>：
+        <ul>
+          <li>代码生成质量高，尤其是 React/TypeScript</li>
+          <li>项目上下文理解准确，不会"断章取义"</li>
+          <li>编辑模式非常流畅，像有一个结对编程伙伴</li>
+        </ul>
+      </div>
+
+      <div class="warning-box">
+        <strong>缺点</strong>：
+        <ul>
+          <li>需要迁移到 Cursor IDE（虽然基于 VS Code）</li>
+          <li>大项目索引较慢，首次打开需要等待</li>
+          <li>付费版才有无限使用</li>
+        </ul>
+      </div>
+
+      <h3>适合人群</h3>
+      <ul>
+        <li>✅ 前端/全栈开发者（React/Vue/Node.js）</li>
+        <li>✅ 愿意尝试新 IDE 的开发者</li>
+        <li>✅ 需要深度理解项目上下文的场景</li>
+      </ul>
+
+      <h2>Claude Code：最智能的代码助手</h2>
+
+      <h3>核心优势</h3>
+
+      <ul>
+        <li><strong>Claude 3.5 Sonnet 加持</strong>：代码理解和生成能力顶尖</li>
+        <li><strong>命令行优先</strong>：适合终端工作者</li>
+        <li><strong>长上下文窗口</strong>：200K tokens，能处理大型文件</li>
+        <li><strong>精准的任务分解</strong>：复杂任务自动拆解步骤</li>
+      </ul>
+
+      <h3>使用场景</h3>
+
+      <pre><code># 终端中直接对话
+$ claude "帮我重构这个 Python 模块，添加类型注解"
+
+# 处理复杂任务
+$ claude "分析这个代码库的架构，给出优化建议"
+
+# 代码审查
+$ claude "审查这个 PR，找出潜在问题"</code></pre>
+
+      <h3>实际体验</h3>
+
+      <div class="tip-box">
+        <strong>优点</strong>：
+        <ul>
+          <li>代码理解能力最强，能准确捕捉意图</li>
+          <li>生成的代码质量高，注释清晰</li>
+          <li>擅长重构和优化建议</li>
+        </ul>
+      </div>
+
+      <div class="warning-box">
+        <strong>缺点</strong>：
+        <ul>
+          <li>命令行界面，需要适应</li>
+          <li>没有图形界面，可视化较弱</li>
+          <li>对中文支持一般</li>
+        </ul>
+      </div>
+
+      <h3>适合人群</h3>
+      <ul>
+        <li>✅ 后端开发者（Python/Go/Java）</li>
+        <li>✅ 习惯命令行工作的开发者</li>
+        <li>✅ 需要深度代码分析和重构</li>
+      </ul>
+
+      <h2>OpenCode：开源免费的轻量选择</h2>
+
+      <h3>核心优势</h3>
+
+      <ul>
+        <li><strong>完全开源免费</strong>：无使用限制</li>
+        <li><strong>VS Code 插件</strong>：无需更换 IDE</li>
+        <li><strong>多模型支持</strong>：可配置 Ollama、OpenAI 等</li>
+        <li><strong>本地部署</strong>：数据隐私有保障</li>
+      </ul>
+
+      <h3>使用场景</h3>
+
+      <pre><code>// 1. 安装 VS Code 插件
+// 2. 配置模型（Ollama/OpenAI/自定义）
+// 3. 按 Cmd+Shift+P 打开对话框
+// 4. 输入需求生成代码</code></pre>
+
+      <h3>实际体验</h3>
+
+      <div class="tip-box">
+        <strong>优点</strong>：
+        <ul>
+          <li>免费，无使用门槛</li>
+          <li>可配置本地模型，隐私安全</li>
+          <li>轻量级，不占用太多资源</li>
+        </ul>
+      </div>
+
+      <div class="warning-box">
+        <strong>缺点</strong>：
+        <ul>
+          <li>代码生成质量不如商业产品</li>
+          <li>需要自己配置模型</li>
+          <li>功能相对简单</li>
+        </ul>
+      </div>
+
+      <h3>适合人群</h3>
+      <ul>
+        <li>✅ 预算有限的学生/个人开发者</li>
+        <li>✅ 注重数据隐私的企业</li>
+        <li>✅ 愿意折腾配置的开发者</li>
+      </ul>
+
+      <h2>GitHub Copilot：老牌稳定之选</h2>
+
+      <h3>核心优势</h3>
+
+      <ul>
+        <li><strong>与 GitHub 深度集成</strong>：PR、Issue 无缝衔接</li>
+        <li><strong>IDE 支持广泛</strong>：VS Code、JetBrains、Vim 等</li>
+        <li><strong>稳定性高</strong>：多年迭代，成熟可靠</li>
+        <li><strong>价格亲民</strong>：$10/月，学生免费</li>
+      </ul>
+
+      <h3>使用场景</h3>
+
+      <pre><code>// 1. 写注释，自动补全代码
+// "验证用户邮箱格式"
+function validateEmail(email) { ... }
+
+// 2. 写函数名，自动补全实现
+function formatDate(date) { ... }
+
+// 3. Copilot Chat 询问代码问题</code></pre>
+
+      <h3>实际体验</h3>
+
+      <div class="tip-box">
+        <strong>优点</strong>：
+        <ul>
+          <li>代码补全准确率高</li>
+          <li>与 GitHub 工作流完美整合</li>
+          <li>支持 IDE 多，切换方便</li>
+        </ul>
+      </div>
+
+      <div class="warning-box">
+        <strong>缺点</strong>：
+        <ul>
+          <li>创新功能较少，迭代慢</li>
+          <li>项目级理解不如 Cursor</li>
+          <li>Chat 功能相对较弱</li>
+        </ul>
+      </div>
+
+      <h3>适合人群</h3>
+      <ul>
+        <li>✅ GitHub 重度用户</li>
+        <li>✅ 需要稳定可靠的日常辅助</li>
+        <li>✅ 多 IDE 切换的开发者</li>
+      </ul>
+
+      <h2>Codeium：免费版的 Copilot</h2>
+
+      <h3>核心优势</h3>
+
+      <ul>
+        <li><strong>完全免费</strong>：个人用户无限制使用</li>
+        <li><strong>响应速度快</strong>：自研模型优化好</li>
+        <li><strong>IDE 支持广</strong>：20+ IDE 插件</li>
+        <li><strong>企业版功能强</strong>：私有化部署选项</li>
+      </ul>
+
+      <h3>实际体验</h3>
+
+      <div class="tip-box">
+        <strong>优点</strong>：
+        <ul>
+          <li>免费，性价比高</li>
+          <li>代码补全速度快</li>
+          <li>基础功能够用</li>
+        </ul>
+      </div>
+
+      <div class="warning-box">
+        <strong>缺点</strong>：
+        <ul>
+          <li>复杂任务处理能力一般</li>
+          <li>上下文理解不如付费产品</li>
+          <li>高级功能需要企业版</li>
+        </ul>
+      </div>
+
+      <h2>综合对比</h2>
+
+      <table>
+        <tr><th>维度</th><th>Cursor</th><th>Claude Code</th><th>OpenCode</th><th>Copilot</th><th>Codeium</th></tr>
+        <tr><td>代码生成质量</td><td>⭐⭐⭐⭐⭐</td><td>⭐⭐⭐⭐⭐</td><td>⭐⭐⭐</td><td>⭐⭐⭐⭐</td><td>⭐⭐⭐</td></tr>
+        <tr><td>项目理解能力</td><td>⭐⭐⭐⭐⭐</td><td>⭐⭐⭐⭐</td><td>⭐⭐</td><td>⭐⭐⭐</td><td>⭐⭐⭐</td></tr>
+        <tr><td>使用便捷性</td><td>⭐⭐⭐⭐⭐</td><td>⭐⭐⭐</td><td>⭐⭐⭐</td><td>⭐⭐⭐⭐⭐</td><td>⭐⭐⭐⭐</td></tr>
+        <tr><td>价格</td><td>$$$</td><td>$$$</td><td>免费</td><td>$$</td><td>免费</td></tr>
+        <tr><td>隐私安全</td><td>⭐⭐⭐</td><td>⭐⭐⭐</td><td>⭐⭐⭐⭐⭐</td><td>⭐⭐⭐</td><td>⭐⭐⭐⭐</td></tr>
+      </table>
+
+      <h2>我的推荐</h2>
+
+      <h3>前端/全栈开发者</h3>
+      <p><strong>首选 Cursor</strong>，React/Vue/TypeScript支持最好，项目理解能力强。</p>
+
+      <h3>后端开发者</h3>
+      <p><strong>Claude Code</strong> 或 <strong>Copilot</strong>，前者适合深度分析，后者适合日常辅助。</p>
+
+      <h3>学生/预算有限</h3>
+      <p><strong>Codeium</strong> 或 <strong>OpenCode</strong>，免费且基础功能够用。</p>
+
+      <h3>企业用户</h3>
+      <p>考虑<strong>私有化部署</strong>方案，如 OpenCode + 本地模型，或 Codeium 企业版。</p>
+
+      <h2>使用技巧</h2>
+
+      <h3>1. 写好 Prompt</h3>
+      <pre><code>// ❌ 模糊的需求
+"优化这段代码"
+
+// ✅ 具体的需求
+"将这个函数的时间复杂度从 O(n²) 优化到 O(n)，
+使用哈希表存储中间结果，添加类型注解"</code></pre>
+
+      <h3>2. 分步生成</h3>
+      <pre><code>// ❌ 一次性生成整个模块
+"创建一个用户管理系统"
+
+// ✅ 分步骤生成
+"1. 先定义 User 类型和接口"
+"2. 实现用户验证函数"
+"3. 添加用户存储逻辑"</code></pre>
+
+      <h3>3. 代码审查</h3>
+      <pre><code>// 让 AI 审查生成的代码
+"检查这段代码的潜在问题：
+1. 边界条件处理
+2. 类型安全
+3. 性能问题"</code></pre>
+
+      <h2>总结</h2>
+
+      <p>AI 编程工具已经成熟到可以<strong>显著提升开发效率</strong>，但选择哪个工具取决于你的具体需求：</p>
+
+      <ul>
+        <li>✅ <strong>Cursor</strong>：集成度最高，前端首选</li>
+        <li>✅ <strong>Claude Code</strong>：最智能，后端/分析首选</li>
+        <li>✅ <strong>OpenCode</strong>：开源免费，隐私优先</li>
+        <li>✅ <strong>Copilot</strong>：稳定可靠，GitHub 用户首选</li>
+        <li>✅ <strong>Codeium</strong>：免费替代，基础够用</li>
+      </ul>
+
+      <div class="tip-box">
+        <strong>建议</strong>：先试用免费版本（Codeium/OpenCode），确定 AI 编程适合你的工作流后，再考虑付费升级。
+      </div>
+
+      <div class="post-tags">
+        <span>AI 工具</span>
+        <span>Cursor</span>
+        <span>Claude Code</span>
+        <span>GitHub Copilot</span>
+        <span>编程效率</span>
+      </div>
+    </article>
+  </main>
+  
+  <script src="../../assets/js/main.js"></script>
+</body>
+</html>
