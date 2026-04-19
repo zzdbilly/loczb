@@ -1,5 +1,19 @@
 [
   {
+    "url": "posts/ai-coding-tools-comparison.html",
+    "title": "主流 AI 编程工具深度对比：Cursor、Claude Code、OpenCode、GitHub Copilot | 张小猛 - loczb",
+    "date": "2026-04-19",
+    "readTime": "10 min",
+    "category": "AI 编程工具，Cursor",
+    "excerpt": "主流 AI 编程工具深度对比：Cursor、Claude Code、OpenCode、GitHub Copilot 选型指南",
+    "tags": [
+      "AI 编程工具，Cursor",
+      "Claude Code",
+      "GitHub Copilot",
+      "代码生成，AI 辅助编程"
+    ]
+  },
+  {
     "url": "posts/gemini-notebooklm-integration.html",
     "title": "Gemini Notebooks 深度体验：与 NotebookLM 无缝整合后的全新 AI 工作流 | 张小猛 - loczb",
     "date": "2026-04-11",
