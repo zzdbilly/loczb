@@ -145,22 +145,23 @@
       }
 
       container.innerHTML = posts.map(post => {
+        const category = (post.category || '其他').split(',')[0].trim();
         const tags = (post.tags || []).slice(0, 2).map(t => 
           `<span class="tech-tag">${t}</span>`
         ).join('');
         
         return `
-        <article class="blog-list-item animate-on-scroll" data-category="${post.category || '其他'}">
+        <article class="blog-list-item animate-on-scroll" data-category="${category}">
           <div class="blog-list-header">
             <div class="blog-list-meta">
               <span class="blog-date">${post.date}</span>
               <span>·</span>
               <span class="blog-read-time">${post.readTime || '10 min'}</span>
             </div>
-            <span class="blog-list-tag">${post.category || '其他'}</span>
+            <span class="blog-list-tag">${category}</span>
           </div>
           <h3 class="blog-list-title">
-            <a href="posts/${post.url.replace('posts/', '')}">${post.title.replace(/ \| 张小猛 - loczb$/, '')}</a>
+            <a href="${post.url}">${post.title.replace(/ \| 张小猛 - loczb$/, '')}</a>
           </h3>
           <p class="blog-list-excerpt">${post.excerpt || ''}</p>
         </article>`;
@@ -226,6 +227,12 @@
       try {
         const res = await fetch('articles.json');
         allArticles = await res.json();
+        
+        // 规范化 category 字段（取第一个值）
+        allArticles = allArticles.map(a => ({
+          ...a,
+          category: (a.category || '其他').split(',')[0].trim()
+        }));
         
         // 设置当前筛选按钮
         document.querySelectorAll('.filter-btn').forEach(btn => {
