@@ -16,14 +16,6 @@
   <link rel="manifest" href="../site.webmanifest">
   <meta name="theme-color" content="#3b82f6">
   <link rel="stylesheet" href="../assets/css/style.css">
-  <style>
-    .pagination { display: flex; justify-content: center; align-items: center; gap: 0.5rem; margin-top: 3rem; padding: 2rem 0; }
-    .pagination-btn { padding: 0.5rem 1rem; border-radius: 6px; border: 1px solid var(--color-border); background: var(--color-bg-secondary); color: var(--color-text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s; }
-    .pagination-btn:hover { background: var(--color-bg-tertiary); border-color: var(--color-border-hover); color: var(--color-text-primary); }
-    .pagination-btn.disabled { opacity: 0.5; pointer-events: none; }
-    .pagination-btn.active { background: var(--color-accent-primary); border-color: var(--color-accent-primary); color: white; }
-    .pagination-info { color: var(--color-text-secondary); font-size: 0.85rem; margin: 0 1rem; }
-  </style>
 </head>
 <body>
   <!-- Loading -->
@@ -34,9 +26,13 @@
   <!-- Navigation -->
   <nav class="nav">
     <div class="nav-inner">
-      <a href="../index.html" class="nav-logo">loc<span>zb</span></a>
+      <a href="../index.html" class="nav-logo">
+        loc<span>zb</span>
+      </a>
       <button class="nav-toggle" aria-label="打开菜单" aria-expanded="false" aria-controls="nav-links-menu">
-        <span></span><span></span><span></span>
+        <span></span>
+        <span></span>
+        <span></span>
       </button>
       <div class="nav-overlay"></div>
       <ul class="nav-links" id="nav-links-menu">
@@ -46,8 +42,20 @@
         <li><a href="../about/index.html" class="nav-link">关于</a></li>
       </ul>
       <button class="theme-toggle" aria-label="切换主题" title="切换亮/暗模式">
-        <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line></svg>
-        <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+        <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="5"></circle>
+          <line x1="12" y1="1" x2="12" y2="3"></line>
+          <line x1="12" y1="21" x2="12" y2="23"></line>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+          <line x1="1" y1="12" x2="3" y2="12"></line>
+          <line x1="21" y1="12" x2="23" y2="12"></line>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+        <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
       </button>
     </div>
   </nav>
@@ -69,7 +77,23 @@
         <button class="filter-btn" data-filter="Android">Android</button>
         <button class="filter-btn" data-filter="AI">AI</button>
         <button class="filter-btn" data-filter="DevOps">DevOps</button>
+        <button class="filter-btn" data-filter="AI Agent">AI Agent</button>
+        <button class="filter-btn" data-filter="安全">安全</button>
       </div>
+    </div>
+  </section>
+
+  <!-- Featured Post -->
+  <section id="featured-section" class="section section-narrow">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-label">Featured</div>
+        <h2 class="section-title">代表文章</h2>
+      </div>
+      
+      <article class="blog-card-featured animate-on-scroll" id="featured-post">
+        <!-- 动态填充 -->
+      </article>
     </div>
   </section>
 
@@ -81,13 +105,253 @@
         <h2 class="section-title">全部文章</h2>
       </div>
       
-      <div class="blog-list-container" id="blog-list-container">
-        <!-- 动态加载 -->
-        <div class="text-center py-8">加载中...</div>
-      </div>
+      <div class="blog-list-container">
+        <!-- Post List -->
+        <article class="blog-list-item animate-on-scroll" data-category="前端">
+          <div class="blog-list-header">
+            <div class="blog-list-meta">
+              <span class="blog-date">2026-04-20</span>
+              <span>·</span>
+              <span class="blog-read-time">20 min</span>
+            </div>
+            <span class="blog-list-tag">前端</span>
+          </div>
+          <h3 class="blog-list-title">
+            <a href="posts/nextjs-16-tutorial.html">Next.js 16 实战：App Router + Server Actions + Turbopack</a>
+          </h3>
+          <p class="blog-list-excerpt">通过完整博客系统示例，掌握 Next.js 16 核心特性与最佳实践。</p>
+        </article>
 
-      <!-- 分页 -->
-      <div class="pagination" id="pagination"></div>
+        <article class="blog-list-item animate-on-scroll" data-category="AI">
+          <div class="blog-list-header">
+            <div class="blog-list-meta">
+              <span class="blog-date">2026-04-19</span>
+              <span>·</span>
+              <span class="blog-read-time">18 min</span>
+            </div>
+            <span class="blog-list-tag">AI</span>
+          </div>
+          <h3 class="blog-list-title">
+            <a href="posts/ai-coding-tools-comparison.html">主流 AI 编程工具深度对比：Cursor、Claude Code、OpenCode、GitHub Copilot</a>
+          </h3>
+          <p class="blog-list-excerpt">三个月深度使用后的真实对比评测，帮你选择最适合的 AI 编程助手。</p>
+        </article>
+
+        <article class="blog-list-item animate-on-scroll" data-category="AI">
+          <div class="blog-list-header">
+            <div class="blog-list-meta">
+              <span class="blog-date">2026-04-11</span>
+              <span>·</span>
+              <span class="blog-read-time">12 min</span>
+            </div>
+            <span class="blog-list-tag">AI</span>
+          </div>
+          <h3 class="blog-list-title">
+            <a href="posts/gemini-notebooklm-integration.html">Gemini Notebooks 深度体验：与 NotebookLM 无缝整合后的全新 AI 工作流</a>
+          </h3>
+          <p class="blog-list-excerpt">2026-04-09 Google 宣布深度整合后，第一时间深度体验。一个界面搞定文档分析和创意生成。</p>
+        </article>
+
+        <article class="blog-list-item animate-on-scroll" data-category="AI">
+          <div class="blog-list-header">
+            <div class="blog-list-meta">
+              <span class="blog-date">2026-04-10</span>
+              <span>·</span>
+              <span class="blog-read-time">15 min</span>
+            </div>
+            <span class="blog-list-tag">AI</span>
+          </div>
+          <h3 class="blog-list-title">
+            <a href="posts/gemini-notebooklm-workflow.html">Gemini + NotebookLM 结合使用指南</a>
+          </h3>
+          <p class="blog-list-excerpt">Google 两大 AI 工具协同工作：NotebookLM 理解私有文档，Gemini 创意生成，打造高效知识工作流。</p>
+        </article>
+
+        <article class="blog-list-item animate-on-scroll" data-category="DevOps">
+          <div class="blog-list-header">
+            <div class="blog-list-meta">
+              <span class="blog-date">2026-04-09</span>
+              <span>·</span>
+              <span class="blog-read-time">20 min</span>
+            </div>
+            <span class="blog-list-tag">DevOps</span>
+          </div>
+          <h3 class="blog-list-title">
+            <a href="posts/github-pages-blog-setup.html">从零搭建个人博客系统（GitHub Pages + 自定义域名 + 自动化部署）</a>
+          </h3>
+          <p class="blog-list-excerpt">GitHub Pages + 自定义域名 + GitHub Actions 自动化部署完整指南，零成本搭建高性能博客。</p>
+        </article>
+
+        <article class="blog-list-item animate-on-scroll" data-category="Kotlin">
+          <div class="blog-list-header">
+            <div class="blog-list-meta">
+              <span class="blog-date">2026-04-08</span>
+              <span>·</span>
+              <span class="blog-read-time">18 min</span>
+            </div>
+            <span class="blog-list-tag">Kotlin</span>
+          </div>
+          <h3 class="blog-list-title">
+            <a href="posts/kotlin-coroutines-best-practices.html">Kotlin Coroutines 最佳实践</a>
+          </h3>
+          <p class="blog-list-excerpt">从入门到精通，掌握 Kotlin 协程的核心技巧与常见陷阱，写出更优雅的异步代码。</p>
+        </article>
+
+        <article class="blog-list-item animate-on-scroll" data-category="AI">
+          <div class="blog-list-header">
+            <div class="blog-list-meta">
+              <span class="blog-date">2026-04-07</span>
+              <span>·</span>
+              <span class="blog-read-time">15 min</span>
+            </div>
+            <span class="blog-list-tag">AI</span>
+          </div>
+          <h3 class="blog-list-title">
+            <a href="posts/local-rag-ollama.html">RAG 本地实践：用 Ollama + Embedding 搭建私有知识库</a>
+          </h3>
+          <p class="blog-list-excerpt">完全本地化搭建 RAG 系统，数据不出本机，实现接近 GPT-4 的智能问答体验。</p>
+        </article>
+
+        <article class="blog-list-item animate-on-scroll" data-category="Android">
+          <div class="blog-list-header">
+            <div class="blog-list-meta">
+              <span class="blog-date">2026-04-03</span>
+              <span>·</span>
+              <span class="blog-read-time">12 min</span>
+            </div>
+            <span class="blog-list-tag">Android</span>
+          </div>
+          <h3 class="blog-list-title">
+            <a href="posts/android-offline-speech-input.html">Android 离线语音输入实现方案</a>
+          </h3>
+          <p class="blog-list-excerpt">深度对比 Sherpa ONNX、Whisper、Vosk 三大离线语音识别方案，提供核心集成代码与性能优化建议。</p>
+        </article>
+
+        <article class="blog-list-item animate-on-scroll" data-category="AI">
+          <div class="blog-list-header">
+            <div class="blog-list-meta">
+              <span class="blog-date">2026-03-30</span>
+              <span>·</span>
+              <span class="blog-read-time">12 min</span>
+            </div>
+            <span class="blog-list-tag">AI</span>
+          </div>
+          <h3 class="blog-list-title">
+            <a href="posts/onnx-mobile-deployment.html">ONNX 移动端侧模型实践：从转换到部署</a>
+          </h3>
+          <p class="blog-list-excerpt">深入探讨 ONNX 模型在移动端的部署实践，包括模型优化、量化策略、推理框架选型与性能对比。</p>
+        </article>
+
+        <article class="blog-list-item animate-on-scroll" data-category="前端">
+          <div class="blog-list-header">
+            <div class="blog-list-meta">
+              <span class="blog-date">2026-03-22</span>
+              <span>·</span>
+              <span class="blog-read-time">10 min</span>
+            </div>
+            <span class="blog-list-tag">前端</span>
+          </div>
+          <h3 class="blog-list-title">
+            <a href="posts/pwa-offline-web-app.html">PWA 实战：从零打造离线可用的 Web 应用</a>
+          </h3>
+          <p class="blog-list-excerpt">深入解析 Service Worker 缓存策略、manifest.json 配置、推送通知实现，让你的 Web 应用像原生 App 一样运行。</p>
+        </article>
+
+        <article class="blog-list-item animate-on-scroll" data-category="安全">
+          <div class="blog-list-header">
+            <div class="blog-list-meta">
+              <span class="blog-date">2026-03-18</span>
+              <span>·</span>
+              <span class="blog-read-time">15 min</span>
+            </div>
+            <span class="blog-list-tag">安全</span>
+          </div>
+          <h3 class="blog-list-title">
+            <a href="posts/ssh-security-hardening.html">云服务器 SSH 安全加固完整指南</a>
+          </h3>
+          <p class="blog-list-excerpt">从端口修改到密钥认证，全方位提升 Linux VPS 安全性。适用于 AWS、阿里云、腾讯云等主流云服务商。</p>
+        </article>
+
+        <article class="blog-list-item animate-on-scroll" data-category="DevOps">
+          <div class="blog-list-header">
+            <div class="blog-list-meta">
+              <span class="blog-date">2026-03-17</span>
+              <span>·</span>
+              <span class="blog-read-time">15 min</span>
+            </div>
+            <span class="blog-list-tag">DevOps</span>
+          </div>
+          <h3 class="blog-list-title">
+            <a href="posts/tailscale-derp-server.html">自建 Tailscale DERP 中继服务器完整指南</a>
+          </h3>
+          <p class="blog-list-excerpt">从原理到实战，手把手教你搭建私有 DERP 服务器。解决官方 DERP 延迟高、隐私顾虑问题。</p>
+        </article>
+
+        <article class="blog-list-item animate-on-scroll" data-category="DevOps">
+          <div class="blog-list-header">
+            <div class="blog-list-meta">
+              <span class="blog-date">2026-03-17</span>
+              <span>·</span>
+              <span class="blog-read-time">10 min</span>
+            </div>
+            <span class="blog-list-tag">DevOps</span>
+          </div>
+          <h3 class="blog-list-title">
+            <a href="posts/vscode-port-forward.html">VS Code 端口转发原理详解：SSH 隧道工作机制</a>
+          </h3>
+          <p class="blog-list-excerpt">深入解析 VS Code 端口转发背后的 SSH 隧道原理，对比 Tailscale、Nginx 反向代理方案。</p>
+        </article>
+
+        <article class="blog-list-item animate-on-scroll" data-category="AI">
+          <div class="blog-list-header">
+            <div class="blog-list-meta">
+              <span class="blog-date">2026-03-16</span>
+              <span>·</span>
+              <span class="blog-read-time">20 min</span>
+            </div>
+            <span class="blog-list-tag">AI</span>
+          </div>
+          <h3 class="blog-list-title">
+            <a href="posts/mobile-gs-paper-review.html">Mobile-GS：让 3D 高斯泼溅在移动端实时渲染</a>
+          </h3>
+          <p class="blog-list-excerpt">论文解读：Mobile-GS 第一次让 3DGS 在移动端实现实时渲染。骁龙 8 Gen 3 上 116 FPS，模型仅 4.8MB。</p>
+        </article>
+
+        <article class="blog-list-item animate-on-scroll" data-category="AI Agent">
+          <div class="blog-list-header">
+            <div class="blog-list-meta">
+              <span class="blog-date">2026-03-15</span>
+              <span>·</span>
+              <span class="blog-read-time">15 min</span>
+            </div>
+            <span class="blog-list-tag">AI Agent</span>
+          </div>
+          <h3 class="blog-list-title">
+            <a href="posts/ai-agent-skill-development.html">AI Agent 技能开发实战：从需求到上线的完整流程</a>
+          </h3>
+          <p class="blog-list-excerpt">手把手教你开发一个 GitHub 项目分析技能。从需求分析、技术选型、核心开发到集成测试。</p>
+        </article>
+
+        <article class="blog-list-item animate-on-scroll" data-category="AI">
+          <div class="blog-list-header">
+            <div class="blog-list-meta">
+              <span class="blog-date">2026-03-14</span>
+              <span>·</span>
+              <span class="blog-read-time">12 min</span>
+            </div>
+            <span class="blog-list-tag">AI</span>
+          </div>
+          <h3 class="blog-list-title">
+            <a href="posts/openclaw-guide.html">OpenClaw 深度使用指南：从 0 到 1 构建个人 AI Agent</a>
+          </h3>
+          <p class="blog-list-excerpt">全面介绍 OpenClaw 的安装配置、核心功能、高级技巧和踩坑记录。</p>
+        </article>
+        
+        <!-- Empty State (shown by JS when no posts match filter) -->
+        <div class="blog-empty-state" id="blog-empty-state" style="display: none;">
+          <p class="blog-empty-text">这个分类暂时还没有文章</p>
+        </div>
+      </div>
     </div>
   </section>
   </main>
@@ -101,181 +365,101 @@
         <a href="../projects/index.html" class="footer-link">项目</a>
         <a href="../about/index.html" class="footer-link">关于</a>
       </div>
-      <p class="footer-copyright">© 2026 张小猛</p>
+      <p class="footer-copyright">
+        © 2026 张小猛
+      </p>
     </div>
   </footer>
 
   <script src="../assets/js/main.js"></script>
   <script>
-    // 博客列表分页
-    const POSTS_PER_PAGE = 10;
-    let allArticles = [];
-    let currentPage = 1;
-    let currentFilter = 'all';
-
-    // 获取 URL 参数
-    function getUrlParams() {
-      const params = new URLSearchParams(window.location.search);
-      return {
-        page: parseInt(params.get('page')) || 1,
-        filter: params.get('filter') || 'all'
-      };
-    }
-
-    // 更新 URL 参数
-    function updateUrlParams(page, filter) {
-      const params = new URLSearchParams();
-      if (page > 1) params.set('page', page);
-      if (filter !== 'all') params.set('filter', filter);
-      
-      const newUrl = params.toString() ? '?' + params.toString() : window.location.pathname;
-      window.history.pushState({ page, filter }, '', newUrl);
-    }
-
-    // 渲染文章列表
-    function renderPosts(articles, page) {
-      const container = document.getElementById('blog-list-container');
-      const start = (page - 1) * POSTS_PER_PAGE;
-      const end = start + POSTS_PER_PAGE;
-      const posts = articles.slice(start, end);
-
-      if (posts.length === 0) {
-        container.innerHTML = '<div class="text-center py-8">暂无文章</div>';
-        return;
+    // 随机选择代表文章
+    const posts = [
+      {
+        url: 'posts/pwa-offline-web-app.html',
+        title: 'PWA 实战：从零打造离线可用的 Web 应用',
+        date: '2026-03-22',
+        readTime: '10 min',
+        category: '前端',
+        desc: '深入解析 Service Worker 缓存策略、manifest.json 配置、推送通知实现，让你的 Web 应用像原生 App 一样运行。'
+      },
+      {
+        url: 'posts/ssh-security-hardening.html',
+        title: '云服务器 SSH 安全加固完整指南',
+        date: '2026-03-18',
+        readTime: '15 min',
+        category: '安全',
+        desc: '从禁用密码登录到配置 Fail2ban，一份完整的 SSH 安全加固指南，让你的服务器远离暴力破解。适用于 AWS、阿里云、腾讯云等主流云服务商。'
+      },
+      {
+        url: 'posts/tailscale-derp-server.html',
+        title: '自建 Tailscale DERP 中继服务器完整指南',
+        date: '2026-03-17',
+        readTime: '12 min',
+        category: 'DevOps',
+        desc: '详解 Tailscale DERP 中继原理，手把手教你自建高性能 DERP 服务器，实现全球低延迟连接。'
+      },
+      {
+        url: 'posts/vscode-port-forward.html',
+        title: 'VS Code 端口转发原理详解',
+        date: '2026-03-17',
+        readTime: '10 min',
+        category: 'DevOps',
+        desc: '深入解析 VS Code 端口转发的 SSH 隧道原理，对比 Tailscale、Nginx 方案，帮你选择最适合的方案。'
+      },
+      {
+        url: 'posts/ai-agent-skill-development.html',
+        title: 'AI Agent 技能开发实战：从需求到上线的完整流程',
+        date: '2026-03-15',
+        readTime: '20 min',
+        category: 'AI Agent',
+        desc: '手把手教你开发一个 GitHub 项目分析技能。从需求分析、技术选型、核心开发到集成测试。'
+      },
+      {
+        url: 'posts/openclaw-guide.html',
+        title: 'OpenClaw 深度使用指南',
+        date: '2026-03-14',
+        readTime: '12 min',
+        category: 'AI',
+        desc: '全面介绍 OpenClaw 的安装配置、核心功能、高级技巧和踩坑记录。'
       }
-
-      container.innerHTML = posts.map(post => {
-        const category = (post.category || '其他').split(',')[0].trim();
-        const tags = (post.tags || []).slice(0, 2).map(t => 
-          `<span class="tech-tag">${t}</span>`
-        ).join('');
-        
-        return `<article class="blog-list-item animate-on-scroll" data-category="${category}">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">${post.date}</span>
-              <span>·</span>
-              <span class="blog-read-time">${post.readTime || '10 min'}</span>
-            </div>
-            <span class="blog-list-tag">${category}</span>
-          </div>
-          <h3 class="blog-list-title">
-            <a href="${post.url}">${post.title.replace(/ \| 张小猛 - loczb$/, '')}</a>
-          </h3>
-          <p class="blog-list-excerpt">${post.excerpt || ''}</p>
-        </article>`;
-      }).join('');
-    }
-
-    // 渲染分页
-    function renderPagination(totalPages, page) {
-      const container = document.getElementById('pagination');
-      
-      if (totalPages <= 1) {
-        container.innerHTML = '';
-        return;
-      }
-
-      let html = '';
-      
-      // 上一页
-      html += `<a href="?page=${page - 1}${currentFilter !== 'all' ? '&filter=' + currentFilter : ''}" 
-        class="pagination-btn ${page === 1 ? 'disabled' : ''}">← 上一页</a>`;
-      
-      // 页码
-      html += `<span class="pagination-info">第 ${page} / ${totalPages} 页</span>`;
-      
-      // 下一页
-      html += `<a href="?page=${page + 1}${currentFilter !== 'all' ? '&filter=' + currentFilter : ''}" 
-        class="pagination-btn ${page === totalPages ? 'disabled' : ''}">下一页 →</a>`;
-
-      container.innerHTML = html;
-    }
-
-    // 筛选功能
-    function setupFilters() {
-      const filterBtns = document.querySelectorAll('.filter-btn');
-      filterBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-          filterBtns.forEach(b => b.classList.remove('filter-btn-active'));
-          btn.classList.add('filter-btn-active');
-          
-          const filter = btn.dataset.filter;
-          currentFilter = filter;
-          currentPage = 1;
-          
-          const filtered = filter === 'all' 
-            ? allArticles 
-            : allArticles.filter(a => a.category === filter);
-          
-          const totalPages = Math.ceil(filtered.length / POSTS_PER_PAGE);
-          renderPosts(filtered, currentPage);
-          renderPagination(totalPages, currentPage);
-          updateUrlParams(currentPage, filter);
-        });
-      });
-    }
-
-    // 初始化
-    async function init() {
-      try {
-        const res = await fetch('articles.json');
-        if (!res.ok) throw new Error('HTTP ' + res.status);
-        allArticles = await res.json();
-        
-        // 规范化 category 字段
-        allArticles = allArticles.map(a => ({
-          ...a,
-          category: (a.category || '其他').split(',')[0].trim()
-        }));
-        
-        const { page, filter } = getUrlParams();
-        currentPage = page;
-        currentFilter = filter;
-        
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-          btn.classList.toggle('filter-btn-active', btn.dataset.filter === filter);
-        });
-
-        const filtered = filter === 'all' 
-          ? allArticles 
-          : allArticles.filter(a => a.category === filter);
-        
-        const totalPages = Math.ceil(filtered.length / POSTS_PER_PAGE);
-        renderPosts(filtered, currentPage);
-        renderPagination(totalPages, currentPage);
-        setupFilters();
-      } catch (err) {
-        console.error('加载文章失败:', err);
-        document.getElementById('blog-list-container').innerHTML = 
-          '<div class="text-center py-8">加载失败</div>';
-      }
-    }
-
-    // 处理浏览器后退
-    window.addEventListener('popstate', (e) => {
-      if (e.state) {
-        currentPage = e.state.page;
-        currentFilter = e.state.filter;
-        const filtered = currentFilter === 'all' 
-          ? allArticles 
-          : allArticles.filter(a => a.category === currentFilter);
-        const totalPages = Math.ceil(filtered.length / POSTS_PER_PAGE);
-        renderPosts(filtered, currentPage);
-        renderPagination(totalPages, currentPage);
-        
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-          btn.classList.toggle('filter-btn-active', btn.dataset.filter === currentFilter);
-        });
-      }
-    });
-
-    // DOM 加载完成后初始化
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', init);
-    } else {
-      init();
-    }
+    ];
+    
+    // 随机选一篇
+    const randomPost = posts[Math.floor(Math.random() * posts.length)];
+    
+    // 渲染代表文章
+    document.getElementById('featured-post').innerHTML = `
+      <div class="blog-card-featured-header">
+        <div class="blog-meta">
+          <span class="blog-date">${randomPost.date}</span>
+          <span>·</span>
+          <span class="blog-read-time">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <polyline points="12 6 12 12 16 14"/>
+            </svg>
+            ${randomPost.readTime}
+          </span>
+        </div>
+        <span class="blog-card-badge">推荐阅读</span>
+      </div>
+      <h3 class="blog-card-featured-title">
+        <a href="${randomPost.url}">${randomPost.title}</a>
+      </h3>
+      <p class="blog-card-featured-desc">${randomPost.desc}</p>
+      <div class="blog-card-featured-footer">
+        <div class="blog-tags">
+          <span class="tech-tag tag-accent">${randomPost.category}</span>
+        </div>
+        <a href="${randomPost.url}" class="btn btn-ghost">
+          阅读全文
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </a>
+      </div>
+    `;
   </script>
 </body>
 </html>
