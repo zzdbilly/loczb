@@ -150,8 +150,7 @@
           `<span class="tech-tag">${t}</span>`
         ).join('');
         
-        return `
-        <article class="blog-list-item animate-on-scroll" data-category="${category}">
+        return `<article class="blog-list-item animate-on-scroll" data-category="${category}">
           <div class="blog-list-header">
             <div class="blog-list-meta">
               <span class="blog-date">${post.date}</span>
@@ -205,7 +204,6 @@
           currentFilter = filter;
           currentPage = 1;
           
-          // 筛选文章
           const filtered = filter === 'all' 
             ? allArticles 
             : allArticles.filter(a => a.category === filter);
@@ -220,26 +218,25 @@
 
     // 初始化
     async function init() {
-      const { page, filter } = getUrlParams();
-      currentPage = page;
-      currentFilter = filter;
-
       try {
         const res = await fetch('articles.json');
+        if (!res.ok) throw new Error('HTTP ' + res.status);
         allArticles = await res.json();
         
-        // 规范化 category 字段（取第一个值）
+        // 规范化 category 字段
         allArticles = allArticles.map(a => ({
           ...a,
           category: (a.category || '其他').split(',')[0].trim()
         }));
         
-        // 设置当前筛选按钮
+        const { page, filter } = getUrlParams();
+        currentPage = page;
+        currentFilter = filter;
+        
         document.querySelectorAll('.filter-btn').forEach(btn => {
           btn.classList.toggle('filter-btn-active', btn.dataset.filter === filter);
         });
 
-        // 筛选文章
         const filtered = filter === 'all' 
           ? allArticles 
           : allArticles.filter(a => a.category === filter);
@@ -267,14 +264,18 @@
         renderPosts(filtered, currentPage);
         renderPagination(totalPages, currentPage);
         
-        // 更新筛选按钮
         document.querySelectorAll('.filter-btn').forEach(btn => {
           btn.classList.toggle('filter-btn-active', btn.dataset.filter === currentFilter);
         });
       }
     });
 
-    init();
+    // DOM 加载完成后初始化
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
   </script>
 </body>
 </html>
