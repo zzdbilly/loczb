@@ -345,43 +345,49 @@
 
   <script src="../assets/js/main.js"></script>
   <script>
-    // 简单分页：用 CSS 显示/隐藏文章
-    (function() {
-      const POSTS_PER_PAGE = 10;
-      const allPosts = document.querySelectorAll('.blog-list-item');
-      const totalPages = Math.ceil(allPosts.length / POSTS_PER_PAGE);
-      let currentPage = 1;
+    // 博客列表分页 - 优雅方案
+    window.addEventListener('load', function() {
+      var POSTS_PER_PAGE = 10;
+      var allPosts = document.querySelectorAll('.blog-list-container .blog-list-item');
+      var totalPages = Math.ceil(allPosts.length / POSTS_PER_PAGE);
+      var currentPage = 1;
 
+      // 显示指定页
       function showPage(page) {
-        allPosts.forEach((post, index) => {
-          const shouldShow = index >= (page - 1) * POSTS_PER_PAGE && index < page * POSTS_PER_PAGE;
-          post.classList.toggle('hidden', !shouldShow);
+        if (page < 1 || page > totalPages) return;
+        
+        allPosts.forEach(function(post, index) {
+          var shouldShow = index >= (page - 1) * POSTS_PER_PAGE && index < page * POSTS_PER_PAGE;
+          post.style.display = shouldShow ? '' : 'none';
         });
         
         updatePagination(page);
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
 
+      // 更新分页按钮
       function updatePagination(page) {
-        const container = document.getElementById('pagination');
+        var container = document.getElementById('pagination');
+        if (!container) return;
+        
         if (totalPages <= 1) {
           container.innerHTML = '';
           return;
         }
 
-        container.innerHTML = `
-          <button class="pagination-btn ${page === 1 ? 'disabled' : ''}" onclick="window.showPage(${page - 1})">← 上一页</button>
-          <span class="pagination-info">第 ${page} / ${totalPages} 页（共 ${allPosts.length} 篇）</span>
-          <button class="pagination-btn ${page === totalPages ? 'disabled' : ''}" onclick="window.showPage(${page + 1})">下一页 →</button>
-        `;
+        container.innerHTML = [
+          '<button class="pagination-btn' + (page === 1 ? ' disabled" disabled' : '"') + ' onclick="window.showBlogPage(' + (page - 1) + ')">← 上一页</button>',
+          '<span class="pagination-info">第 ' + page + ' / ' + totalPages + ' 页（共 ' + allPosts.length + ' 篇）</span>',
+          '<button class="pagination-btn' + (page === totalPages ? ' disabled" disabled' : '"') + ' onclick="window.showBlogPage(' + (page + 1) + ')">下一页 →</button>'
+        ].join('');
       }
 
-      // 暴露给全局
-      window.showPage = showPage;
+      // 暴露到全局
+      window.showBlogPage = showPage;
       
-      // 初始化显示第一页
+      // 初始化
       showPage(1);
-    })();
+    });
   </script>
 </body>
 </html>
