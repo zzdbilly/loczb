@@ -16,6 +16,14 @@
   <link rel="manifest" href="../site.webmanifest">
   <meta name="theme-color" content="#3b82f6">
   <link rel="stylesheet" href="../assets/css/style.css">
+  <style>
+    .blog-list-item.hidden { display: none; }
+    .pagination { display: flex; justify-content: center; align-items: center; gap: 0.5rem; margin-top: 3rem; padding: 2rem 0; }
+    .pagination-btn { padding: 0.5rem 1rem; border-radius: 6px; border: 1px solid var(--color-border); background: var(--color-bg-secondary); color: var(--color-text-secondary); cursor: pointer; font-size: 0.9rem; transition: all 0.2s; }
+    .pagination-btn:hover { background: var(--color-bg-tertiary); border-color: var(--color-border-hover); color: var(--color-text-primary); }
+    .pagination-btn.disabled { opacity: 0.5; cursor: not-allowed; }
+    .pagination-info { color: var(--color-text-secondary); font-size: 0.85rem; margin: 0 1rem; }
+  </style>
 </head>
 <body>
   <!-- Loading -->
@@ -26,13 +34,9 @@
   <!-- Navigation -->
   <nav class="nav">
     <div class="nav-inner">
-      <a href="../index.html" class="nav-logo">
-        loc<span>zb</span>
-      </a>
+      <a href="../index.html" class="nav-logo">loc<span>zb</span></a>
       <button class="nav-toggle" aria-label="打开菜单" aria-expanded="false" aria-controls="nav-links-menu">
-        <span></span>
-        <span></span>
-        <span></span>
+        <span></span><span></span><span></span>
       </button>
       <div class="nav-overlay"></div>
       <ul class="nav-links" id="nav-links-menu">
@@ -42,20 +46,8 @@
         <li><a href="../about/index.html" class="nav-link">关于</a></li>
       </ul>
       <button class="theme-toggle" aria-label="切换主题" title="切换亮/暗模式">
-        <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="12" cy="12" r="5"></circle>
-          <line x1="12" y1="1" x2="12" y2="3"></line>
-          <line x1="12" y1="21" x2="12" y2="23"></line>
-          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-          <line x1="1" y1="12" x2="3" y2="12"></line>
-          <line x1="21" y1="12" x2="23" y2="12"></line>
-          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-        </svg>
-        <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-        </svg>
+        <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line></svg>
+        <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
       </button>
     </div>
   </nav>
@@ -77,23 +69,7 @@
         <button class="filter-btn" data-filter="Android">Android</button>
         <button class="filter-btn" data-filter="AI">AI</button>
         <button class="filter-btn" data-filter="DevOps">DevOps</button>
-        <button class="filter-btn" data-filter="AI Agent">AI Agent</button>
-        <button class="filter-btn" data-filter="安全">安全</button>
       </div>
-    </div>
-  </section>
-
-  <!-- Featured Post -->
-  <section id="featured-section" class="section section-narrow">
-    <div class="container">
-      <div class="section-header">
-        <div class="section-label">Featured</div>
-        <h2 class="section-title">代表文章</h2>
-      </div>
-      
-      <article class="blog-card-featured animate-on-scroll" id="featured-post">
-        <!-- 动态填充 -->
-      </article>
     </div>
   </section>
 
@@ -277,7 +253,7 @@
             <div class="blog-list-meta">
               <span class="blog-date">2026-03-17</span>
               <span>·</span>
-              <span class="blog-read-time">15 min</span>
+              <span class="blog-read-time">12 min</span>
             </div>
             <span class="blog-list-tag">DevOps</span>
           </div>
@@ -346,12 +322,10 @@
           </h3>
           <p class="blog-list-excerpt">全面介绍 OpenClaw 的安装配置、核心功能、高级技巧和踩坑记录。</p>
         </article>
-        
-        <!-- Empty State (shown by JS when no posts match filter) -->
-        <div class="blog-empty-state" id="blog-empty-state" style="display: none;">
-          <p class="blog-empty-text">这个分类暂时还没有文章</p>
-        </div>
       </div>
+
+      <!-- 分页 -->
+      <div class="pagination" id="pagination"></div>
     </div>
   </section>
   </main>
@@ -365,101 +339,49 @@
         <a href="../projects/index.html" class="footer-link">项目</a>
         <a href="../about/index.html" class="footer-link">关于</a>
       </div>
-      <p class="footer-copyright">
-        © 2026 张小猛
-      </p>
+      <p class="footer-copyright">© 2026 张小猛</p>
     </div>
   </footer>
 
   <script src="../assets/js/main.js"></script>
   <script>
-    // 随机选择代表文章
-    const posts = [
-      {
-        url: 'posts/pwa-offline-web-app.html',
-        title: 'PWA 实战：从零打造离线可用的 Web 应用',
-        date: '2026-03-22',
-        readTime: '10 min',
-        category: '前端',
-        desc: '深入解析 Service Worker 缓存策略、manifest.json 配置、推送通知实现，让你的 Web 应用像原生 App 一样运行。'
-      },
-      {
-        url: 'posts/ssh-security-hardening.html',
-        title: '云服务器 SSH 安全加固完整指南',
-        date: '2026-03-18',
-        readTime: '15 min',
-        category: '安全',
-        desc: '从禁用密码登录到配置 Fail2ban，一份完整的 SSH 安全加固指南，让你的服务器远离暴力破解。适用于 AWS、阿里云、腾讯云等主流云服务商。'
-      },
-      {
-        url: 'posts/tailscale-derp-server.html',
-        title: '自建 Tailscale DERP 中继服务器完整指南',
-        date: '2026-03-17',
-        readTime: '12 min',
-        category: 'DevOps',
-        desc: '详解 Tailscale DERP 中继原理，手把手教你自建高性能 DERP 服务器，实现全球低延迟连接。'
-      },
-      {
-        url: 'posts/vscode-port-forward.html',
-        title: 'VS Code 端口转发原理详解',
-        date: '2026-03-17',
-        readTime: '10 min',
-        category: 'DevOps',
-        desc: '深入解析 VS Code 端口转发的 SSH 隧道原理，对比 Tailscale、Nginx 方案，帮你选择最适合的方案。'
-      },
-      {
-        url: 'posts/ai-agent-skill-development.html',
-        title: 'AI Agent 技能开发实战：从需求到上线的完整流程',
-        date: '2026-03-15',
-        readTime: '20 min',
-        category: 'AI Agent',
-        desc: '手把手教你开发一个 GitHub 项目分析技能。从需求分析、技术选型、核心开发到集成测试。'
-      },
-      {
-        url: 'posts/openclaw-guide.html',
-        title: 'OpenClaw 深度使用指南',
-        date: '2026-03-14',
-        readTime: '12 min',
-        category: 'AI',
-        desc: '全面介绍 OpenClaw 的安装配置、核心功能、高级技巧和踩坑记录。'
+    // 简单分页：用 CSS 显示/隐藏文章
+    (function() {
+      const POSTS_PER_PAGE = 10;
+      const allPosts = document.querySelectorAll('.blog-list-item');
+      const totalPages = Math.ceil(allPosts.length / POSTS_PER_PAGE);
+      let currentPage = 1;
+
+      function showPage(page) {
+        allPosts.forEach((post, index) => {
+          const shouldShow = index >= (page - 1) * POSTS_PER_PAGE && index < page * POSTS_PER_PAGE;
+          post.classList.toggle('hidden', !shouldShow);
+        });
+        
+        updatePagination(page);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       }
-    ];
-    
-    // 随机选一篇
-    const randomPost = posts[Math.floor(Math.random() * posts.length)];
-    
-    // 渲染代表文章
-    document.getElementById('featured-post').innerHTML = `
-      <div class="blog-card-featured-header">
-        <div class="blog-meta">
-          <span class="blog-date">${randomPost.date}</span>
-          <span>·</span>
-          <span class="blog-read-time">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="12" cy="12" r="10"/>
-              <polyline points="12 6 12 12 16 14"/>
-            </svg>
-            ${randomPost.readTime}
-          </span>
-        </div>
-        <span class="blog-card-badge">推荐阅读</span>
-      </div>
-      <h3 class="blog-card-featured-title">
-        <a href="${randomPost.url}">${randomPost.title}</a>
-      </h3>
-      <p class="blog-card-featured-desc">${randomPost.desc}</p>
-      <div class="blog-card-featured-footer">
-        <div class="blog-tags">
-          <span class="tech-tag tag-accent">${randomPost.category}</span>
-        </div>
-        <a href="${randomPost.url}" class="btn btn-ghost">
-          阅读全文
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M5 12h14M12 5l7 7-7 7"/>
-          </svg>
-        </a>
-      </div>
-    `;
+
+      function updatePagination(page) {
+        const container = document.getElementById('pagination');
+        if (totalPages <= 1) {
+          container.innerHTML = '';
+          return;
+        }
+
+        container.innerHTML = `
+          <button class="pagination-btn ${page === 1 ? 'disabled' : ''}" onclick="window.showPage(${page - 1})">← 上一页</button>
+          <span class="pagination-info">第 ${page} / ${totalPages} 页（共 ${allPosts.length} 篇）</span>
+          <button class="pagination-btn ${page === totalPages ? 'disabled' : ''}" onclick="window.showPage(${page + 1})">下一页 →</button>
+        `;
+      }
+
+      // 暴露给全局
+      window.showPage = showPage;
+      
+      // 初始化显示第一页
+      showPage(1);
+    })();
   </script>
 </body>
 </html>
