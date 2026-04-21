@@ -344,37 +344,79 @@
 
   <script src="../assets/js/main.js"></script>
   <script>
-    // 博客列表分页 - 稳定方案
+    // 博客列表分页 + 筛选 - 稳定方案
     var POSTS_PER_PAGE = 10;
     var allPosts = document.querySelectorAll('.blog-list-item');
-    var totalPages = Math.ceil(allPosts.length / POSTS_PER_PAGE);
+    var filteredPosts = Array.from(allPosts); // 筛选后的文章
+    var totalPages = 1;
     var currentPage = 1;
+    var currentFilter = 'all';
 
-    // 从 URL 读取页码
+    // 计算总页数
+    function calcTotalPages() {
+      return Math.max(1, Math.ceil(filteredPosts.length / POSTS_PER_PAGE));
+    }
+
+    // 从 URL 读取参数
     function initFromURL() {
       var params = new URLSearchParams(window.location.search);
       var pageParam = params.get('page');
+      var filterParam = params.get('filter');
+      
+      if (filterParam) currentFilter = filterParam;
       if (pageParam && !isNaN(pageParam)) {
-        currentPage = Math.max(1, Math.min(parseInt(pageParam), totalPages));
+        currentPage = Math.max(1, parseInt(pageParam));
       }
     }
 
-    // 显示指定页（全局函数）
+    // 应用筛选
+    function applyFilter(filter) {
+      currentFilter = filter;
+      currentPage = 1; // 筛选后重置到第一页
+      
+      // 更新筛选按钮
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.classList.toggle('filter-btn-active', btn.dataset.filter === filter);
+      });
+      
+      // 筛选文章
+      filteredPosts = filter === 'all' 
+        ? Array.from(allPosts)
+        : Array.from(allPosts).filter(post => post.dataset.category === filter);
+      
+      totalPages = calcTotalPages();
+      showPage(1);
+      
+      // 更新 URL
+      var params = new URLSearchParams();
+      if (filter !== 'all') params.set('filter', filter);
+      if (currentPage > 1) params.set('page', currentPage);
+      var newUrl = params.toString() ? '?' + params.toString() : window.location.pathname;
+      window.history.pushState({ page: currentPage, filter: filter }, '', newUrl);
+    }
+
+    // 显示指定页
     window.showPage = function(page) {
       if (page < 1 || page > totalPages) return;
       
-      allPosts.forEach(function(post, index) {
-        var shouldShow = index >= (page - 1) * POSTS_PER_PAGE && index < page * POSTS_PER_PAGE;
-        post.style.display = shouldShow ? '' : 'none';
-      });
+      // 先隐藏所有文章
+      allPosts.forEach(post => post.style.display = 'none');
       
+      // 显示当前页的筛选文章
+      var start = (page - 1) * POSTS_PER_PAGE;
+      var end = start + POSTS_PER_PAGE;
+      filteredPosts.slice(start, end).forEach(post => post.style.display = '');
+      
+      currentPage = page;
       updatePagination(page);
       
-      // 更新 URL（不刷新）
-      var newUrl = page === 1 ? window.location.pathname : window.location.pathname + '?page=' + page;
-      window.history.pushState({ page: page }, '', newUrl);
+      // 更新 URL
+      var params = new URLSearchParams();
+      if (currentFilter !== 'all') params.set('filter', currentFilter);
+      if (page > 1) params.set('page', page);
+      var newUrl = params.toString() ? '?' + params.toString() : window.location.pathname;
+      window.history.pushState({ page: page, filter: currentFilter }, '', newUrl);
       
-      // 滚动到顶部
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
@@ -390,30 +432,52 @@
 
       var prevDisabled = page === 1 ? 'disabled' : '';
       var nextDisabled = page === totalPages ? 'disabled' : '';
-      var prevPage = page - 1;
-      var nextPage = page + 1;
-      var prevHref = prevPage === 1 ? window.location.pathname : '?page=' + prevPage;
-      var nextHref = '?page=' + nextPage;
 
       container.innerHTML = [
-        '<a href="' + prevHref + '" class="pagination-btn ' + prevDisabled + '" onclick="event.preventDefault(); showPage(' + prevPage + ')">← 上一页</a>',
-        '<span class="pagination-info">第 ' + page + ' / ' + totalPages + ' 页（共 ' + allPosts.length + ' 篇）</span>',
-        '<a href="' + nextHref + '" class="pagination-btn ' + nextDisabled + '" onclick="event.preventDefault(); showPage(' + nextPage + ')">下一页 →</a>'
+        '<a href="#" class="pagination-btn ' + prevDisabled + '" onclick="event.preventDefault(); showPage(' + (page - 1) + ')">← 上一页</a>',
+        '<span class="pagination-info">第 ' + page + ' / ' + totalPages + ' 页（共 ' + filteredPosts.length + ' 篇）</span>',
+        '<a href="#" class="pagination-btn ' + nextDisabled + '" onclick="event.preventDefault(); showPage(' + (page + 1) + ')">下一页 →</a>'
       ].join('');
     }
 
     // 初始化
     window.addEventListener('DOMContentLoaded', function() {
       initFromURL();
-      showPage(currentPage);
+      
+      // 设置初始筛选状态
+      if (currentFilter !== 'all') {
+        applyFilter(currentFilter);
+      } else {
+        totalPages = calcTotalPages();
+        showPage(currentPage);
+      }
+      
+      // 绑定筛选按钮
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+          e.preventDefault();
+          applyFilter(this.dataset.filter);
+        });
+      });
       
       // 处理浏览器后退
       window.addEventListener('popstate', function(e) {
-        if (e.state && e.state.page) {
-          currentPage = e.state.page;
+        if (e.state) {
+          currentPage = e.state.page || 1;
+          currentFilter = e.state.filter || 'all';
+          filteredPosts = currentFilter === 'all' 
+            ? Array.from(allPosts)
+            : Array.from(allPosts).filter(post => post.dataset.category === currentFilter);
+          totalPages = calcTotalPages();
+          
+          // 更新筛选按钮
+          document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.classList.toggle('filter-btn-active', btn.dataset.filter === currentFilter);
+          });
+          
           showPage(currentPage);
         } else {
-          showPage(1);
+          applyFilter('all');
         }
       });
     });
