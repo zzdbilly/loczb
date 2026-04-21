@@ -17,11 +17,11 @@
   <meta name="theme-color" content="#3b82f6">
   <link rel="stylesheet" href="../assets/css/style.css">
   <style>
-    .blog-list-item.hidden { display: none; }
+    .blog-list-item[data-page]:not([data-page="active"]) { display: none; }
     .pagination { display: flex; justify-content: center; align-items: center; gap: 0.5rem; margin-top: 3rem; padding: 2rem 0; }
-    .pagination-btn { padding: 0.5rem 1rem; border-radius: 6px; border: 1px solid var(--color-border); background: var(--color-bg-secondary); color: var(--color-text-secondary); cursor: pointer; font-size: 0.9rem; transition: all 0.2s; }
+    .pagination-btn { padding: 0.5rem 1rem; border-radius: 6px; border: 1px solid var(--color-border); background: var(--color-bg-secondary); color: var(--color-text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s; }
     .pagination-btn:hover { background: var(--color-bg-tertiary); border-color: var(--color-border-hover); color: var(--color-text-primary); }
-    .pagination-btn.disabled { opacity: 0.5; cursor: not-allowed; }
+    .pagination-btn.disabled { opacity: 0.5; pointer-events: none; }
     .pagination-info { color: var(--color-text-secondary); font-size: 0.85rem; margin: 0 1rem; }
   </style>
 </head>
@@ -83,7 +83,7 @@
       
       <div class="blog-list-container">
         <!-- Post List -->
-        <article class="blog-list-item animate-on-scroll" data-category="前端">
+        <article class="blog-list-item animate-on-scroll" data-category="前端" data-page="1">
           <div class="blog-list-header">
             <div class="blog-list-meta">
               <span class="blog-date">2026-04-20</span>
@@ -98,7 +98,7 @@
           <p class="blog-list-excerpt">通过完整博客系统示例，掌握 Next.js 16 核心特性与最佳实践。</p>
         </article>
 
-        <article class="blog-list-item animate-on-scroll" data-category="AI">
+        <article class="blog-list-item animate-on-scroll" data-category="AI" data-page="1">
           <div class="blog-list-header">
             <div class="blog-list-meta">
               <span class="blog-date">2026-04-19</span>
@@ -113,7 +113,7 @@
           <p class="blog-list-excerpt">三个月深度使用后的真实对比评测，帮你选择最适合的 AI 编程助手。</p>
         </article>
 
-        <article class="blog-list-item animate-on-scroll" data-category="AI">
+        <article class="blog-list-item animate-on-scroll" data-category="AI" data-page="1">
           <div class="blog-list-header">
             <div class="blog-list-meta">
               <span class="blog-date">2026-04-11</span>
@@ -128,7 +128,7 @@
           <p class="blog-list-excerpt">2026-04-09 Google 宣布深度整合后，第一时间深度体验。一个界面搞定文档分析和创意生成。</p>
         </article>
 
-        <article class="blog-list-item animate-on-scroll" data-category="AI">
+        <article class="blog-list-item animate-on-scroll" data-category="AI" data-page="1">
           <div class="blog-list-header">
             <div class="blog-list-meta">
               <span class="blog-date">2026-04-10</span>
@@ -143,7 +143,7 @@
           <p class="blog-list-excerpt">Google 两大 AI 工具协同工作：NotebookLM 理解私有文档，Gemini 创意生成，打造高效知识工作流。</p>
         </article>
 
-        <article class="blog-list-item animate-on-scroll" data-category="DevOps">
+        <article class="blog-list-item animate-on-scroll" data-category="DevOps" data-page="1">
           <div class="blog-list-header">
             <div class="blog-list-meta">
               <span class="blog-date">2026-04-09</span>
@@ -158,7 +158,7 @@
           <p class="blog-list-excerpt">GitHub Pages + 自定义域名 + GitHub Actions 自动化部署完整指南，零成本搭建高性能博客。</p>
         </article>
 
-        <article class="blog-list-item animate-on-scroll" data-category="Kotlin">
+        <article class="blog-list-item animate-on-scroll" data-category="Kotlin" data-page="1">
           <div class="blog-list-header">
             <div class="blog-list-meta">
               <span class="blog-date">2026-04-08</span>
@@ -173,7 +173,7 @@
           <p class="blog-list-excerpt">从入门到精通，掌握 Kotlin 协程的核心技巧与常见陷阱，写出更优雅的异步代码。</p>
         </article>
 
-        <article class="blog-list-item animate-on-scroll" data-category="AI">
+        <article class="blog-list-item animate-on-scroll" data-category="AI" data-page="1">
           <div class="blog-list-header">
             <div class="blog-list-meta">
               <span class="blog-date">2026-04-07</span>
@@ -188,7 +188,7 @@
           <p class="blog-list-excerpt">完全本地化搭建 RAG 系统，数据不出本机，实现接近 GPT-4 的智能问答体验。</p>
         </article>
 
-        <article class="blog-list-item animate-on-scroll" data-category="Android">
+        <article class="blog-list-item animate-on-scroll" data-category="Android" data-page="1">
           <div class="blog-list-header">
             <div class="blog-list-meta">
               <span class="blog-date">2026-04-03</span>
@@ -203,7 +203,7 @@
           <p class="blog-list-excerpt">深度对比 Sherpa ONNX、Whisper、Vosk 三大离线语音识别方案，提供核心集成代码与性能优化建议。</p>
         </article>
 
-        <article class="blog-list-item animate-on-scroll" data-category="AI">
+        <article class="blog-list-item animate-on-scroll" data-category="AI" data-page="1">
           <div class="blog-list-header">
             <div class="blog-list-meta">
               <span class="blog-date">2026-03-30</span>
@@ -218,7 +218,7 @@
           <p class="blog-list-excerpt">深入探讨 ONNX 模型在移动端的部署实践，包括模型优化、量化策略、推理框架选型与性能对比。</p>
         </article>
 
-        <article class="blog-list-item animate-on-scroll" data-category="前端">
+        <article class="blog-list-item animate-on-scroll" data-category="前端" data-page="1">
           <div class="blog-list-header">
             <div class="blog-list-meta">
               <span class="blog-date">2026-03-22</span>
@@ -233,7 +233,7 @@
           <p class="blog-list-excerpt">深入解析 Service Worker 缓存策略、manifest.json 配置、推送通知实现，让你的 Web 应用像原生 App 一样运行。</p>
         </article>
 
-        <article class="blog-list-item animate-on-scroll" data-category="安全">
+        <article class="blog-list-item animate-on-scroll" data-category="安全" data-page="2">
           <div class="blog-list-header">
             <div class="blog-list-meta">
               <span class="blog-date">2026-03-18</span>
@@ -248,7 +248,7 @@
           <p class="blog-list-excerpt">从端口修改到密钥认证，全方位提升 Linux VPS 安全性。适用于 AWS、阿里云、腾讯云等主流云服务商。</p>
         </article>
 
-        <article class="blog-list-item animate-on-scroll" data-category="DevOps">
+        <article class="blog-list-item animate-on-scroll" data-category="DevOps" data-page="2">
           <div class="blog-list-header">
             <div class="blog-list-meta">
               <span class="blog-date">2026-03-17</span>
@@ -263,7 +263,7 @@
           <p class="blog-list-excerpt">从原理到实战，手把手教你搭建私有 DERP 服务器。解决官方 DERP 延迟高、隐私顾虑问题。</p>
         </article>
 
-        <article class="blog-list-item animate-on-scroll" data-category="DevOps">
+        <article class="blog-list-item animate-on-scroll" data-category="DevOps" data-page="2">
           <div class="blog-list-header">
             <div class="blog-list-meta">
               <span class="blog-date">2026-03-17</span>
@@ -278,7 +278,7 @@
           <p class="blog-list-excerpt">深入解析 VS Code 端口转发背后的 SSH 隧道原理，对比 Tailscale、Nginx 反向代理方案。</p>
         </article>
 
-        <article class="blog-list-item animate-on-scroll" data-category="AI">
+        <article class="blog-list-item animate-on-scroll" data-category="AI" data-page="2">
           <div class="blog-list-header">
             <div class="blog-list-meta">
               <span class="blog-date">2026-03-16</span>
@@ -293,7 +293,7 @@
           <p class="blog-list-excerpt">论文解读：Mobile-GS 第一次让 3DGS 在移动端实现实时渲染。骁龙 8 Gen 3 上 116 FPS，模型仅 4.8MB。</p>
         </article>
 
-        <article class="blog-list-item animate-on-scroll" data-category="AI Agent">
+        <article class="blog-list-item animate-on-scroll" data-category="AI Agent" data-page="2">
           <div class="blog-list-header">
             <div class="blog-list-meta">
               <span class="blog-date">2026-03-15</span>
@@ -308,7 +308,7 @@
           <p class="blog-list-excerpt">手把手教你开发一个 GitHub 项目分析技能。从需求分析、技术选型、核心开发到集成测试。</p>
         </article>
 
-        <article class="blog-list-item animate-on-scroll" data-category="AI">
+        <article class="blog-list-item animate-on-scroll" data-category="AI" data-page="2">
           <div class="blog-list-header">
             <div class="blog-list-meta">
               <span class="blog-date">2026-03-14</span>
@@ -345,12 +345,19 @@
 
   <script src="../assets/js/main.js"></script>
   <script>
-    // 博客列表分页 - 优雅方案
-    window.addEventListener('load', function() {
+    // 博客列表分页 - 稳定方案
+    window.addEventListener('DOMContentLoaded', function() {
       var POSTS_PER_PAGE = 10;
-      var allPosts = document.querySelectorAll('.blog-list-container .blog-list-item');
+      var allPosts = document.querySelectorAll('.blog-list-item');
       var totalPages = Math.ceil(allPosts.length / POSTS_PER_PAGE);
       var currentPage = 1;
+
+      // 从 URL 读取页码
+      var params = new URLSearchParams(window.location.search);
+      var pageParam = params.get('page');
+      if (pageParam && !isNaN(pageParam)) {
+        currentPage = Math.max(1, Math.min(parseInt(pageParam), totalPages));
+      }
 
       // 显示指定页
       function showPage(page) {
@@ -362,6 +369,12 @@
         });
         
         updatePagination(page);
+        
+        // 更新 URL（不刷新）
+        var newUrl = page === 1 ? window.location.pathname : window.location.pathname + '?page=' + page;
+        window.history.pushState({ page: page }, '', newUrl);
+        
+        // 滚动到顶部
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
 
@@ -375,18 +388,32 @@
           return;
         }
 
+        var prevDisabled = page === 1 ? 'disabled' : '';
+        var nextDisabled = page === totalPages ? 'disabled' : '';
+        var prevPage = page - 1;
+        var nextPage = page + 1;
+        var prevHref = prevPage === 1 ? window.location.pathname : '?page=' + prevPage;
+        var nextHref = '?page=' + nextPage;
+
         container.innerHTML = [
-          '<button class="pagination-btn' + (page === 1 ? ' disabled" disabled' : '"') + ' onclick="window.showBlogPage(' + (page - 1) + ')">← 上一页</button>',
+          '<a href="' + prevHref + '" class="pagination-btn ' + prevDisabled + '" onclick="event.preventDefault(); showPage(' + prevPage + ')">← 上一页</a>',
           '<span class="pagination-info">第 ' + page + ' / ' + totalPages + ' 页（共 ' + allPosts.length + ' 篇）</span>',
-          '<button class="pagination-btn' + (page === totalPages ? ' disabled" disabled' : '"') + ' onclick="window.showBlogPage(' + (page + 1) + ')">下一页 →</button>'
+          '<a href="' + nextHref + '" class="pagination-btn ' + nextDisabled + '" onclick="event.preventDefault(); showPage(' + nextPage + ')">下一页 →</a>'
         ].join('');
       }
 
-      // 暴露到全局
-      window.showBlogPage = showPage;
-      
+      // 处理浏览器后退
+      window.addEventListener('popstate', function(e) {
+        if (e.state && e.state.page) {
+          currentPage = e.state.page;
+          showPage(currentPage);
+        } else {
+          showPage(1);
+        }
+      });
+
       // 初始化
-      showPage(1);
+      showPage(currentPage);
     });
   </script>
 </body>
