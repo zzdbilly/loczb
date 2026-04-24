@@ -38,3 +38,6 @@ logs/
 tmp/
 temp/
 STATE.yaml
+
+# AI Assistant Config
+assets/js/ai-config.js
