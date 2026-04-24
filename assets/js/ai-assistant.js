@@ -167,7 +167,11 @@ class AIAssistant {
       this.saveHistory(message, response);
     } catch (error) {
       this.removeLoadingMessage();
-      this.addMessage('抱歉，出现了一些问题，请稍后再试。', 'assistant');
+      // 显示详细错误信息（开发环境）
+      const errorMsg = error.message.includes('HTTP 4') || error.message.includes('HTTP 5')
+        ? `API 错误：${error.message}`
+        : '抱歉，出现了一些问题，请稍后再试。';
+      this.addMessage(errorMsg, 'assistant');
       console.error('AI Assistant Error:', error);
     }
 
@@ -267,11 +271,30 @@ class AIAssistant {
       body: JSON.stringify(requestBody)
     });
 
+    // 读取响应文本（即使失败）
+    const responseText = await response.text();
+    
     if (!response.ok) {
-      throw new Error(`API Error: ${response.status}`);
+      const errorDetails = `HTTP ${response.status}: ${responseText.substring(0, 200)}`;
+      console.error('AI API Error:', errorDetails);
+      throw new Error(errorDetails);
     }
 
-    const data = await response.json();
+    let data;
+    try {
+      data = JSON.parse(responseText);
+    } catch (e) {
+      const errorDetails = 'API 响应不是有效 JSON: ' + responseText.substring(0, 100);
+      console.error('AI API Error:', errorDetails);
+      throw new Error(errorDetails);
+    }
+    
+    if (!data.choices || !data.choices[0] || !data.choices[0].message) {
+      const errorDetails = 'API 响应格式错误：' + responseText.substring(0, 100);
+      console.error('AI API Error:', errorDetails);
+      throw new Error(errorDetails);
+    }
+    
     const reply = data.choices[0].message.content;
     
     // 保存消息历史
