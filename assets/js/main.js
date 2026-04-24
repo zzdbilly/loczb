@@ -211,28 +211,46 @@ function setActiveNavLink() {
   const sections = document.querySelectorAll('section[id]');
   const navLinks = document.querySelectorAll('.nav-link');
   
-  // 只处理锚点链接，保留页面链接的 active 状态
+  // 处理页面链接的 active 状态（基于当前 URL 路径）
+  const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+  
+  navLinks.forEach(link => {
+    const href = link.getAttribute('href');
+    
+    // 跳过锚点链接（由 scroll 事件处理）
+    if (href.startsWith('#')) return;
+    
+    // 处理页面链接
+    const linkPage = href.split('/').pop();
+    if (linkPage === currentPage) {
+      link.classList.add('active');
+    }
+  });
+  
+  // 处理锚点链接的 active 状态（基于滚动位置）
   const anchorLinks = Array.from(navLinks).filter(link => link.getAttribute('href').startsWith('#'));
   
-  window.addEventListener('scroll', () => {
-    let current = '';
-    
-    sections.forEach(section => {
-      const sectionTop = section.offsetTop;
-      const sectionHeight = section.clientHeight;
+  if (anchorLinks.length > 0 && sections.length > 0) {
+    window.addEventListener('scroll', () => {
+      let current = '';
       
-      if (window.pageYOffset >= sectionTop - 200) {
-        current = section.getAttribute('id');
-      }
-    });
-    
-    anchorLinks.forEach(link => {
-      link.classList.remove('active');
-      if (link.getAttribute('href') === `#${current}`) {
-        link.classList.add('active');
-      }
-    });
-  }, { passive: true });
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        const sectionHeight = section.clientHeight;
+        
+        if (window.pageYOffset >= sectionTop - 200) {
+          current = section.getAttribute('id');
+        }
+      });
+      
+      anchorLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === `#${current}`) {
+          link.classList.add('active');
+        }
+      });
+    }, { passive: true });
+  }
 }
 
 // ===================================
