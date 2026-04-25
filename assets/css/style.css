@@ -3,8 +3,7 @@
    极简主义 + 精致细节
    =================================== */
 
-/* Google Fonts Import */
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Noto+Serif+SC:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+/* Google Fonts: loaded via <link> in HTML to avoid render-blocking */
 
 /* ===================================
    CSS Variables - Theme System
