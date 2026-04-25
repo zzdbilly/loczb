@@ -13,7 +13,8 @@
       "Turbopack",
       "React",
       "全栈开发"
-    ]
+    ],
+    "id": "nextjs-16-实战-app-router-server-actions-turbopack"
   },
   {
     "url": "posts/ai-coding-tools-comparison.html",
@@ -27,7 +28,8 @@
       "Claude Code",
       "GitHub Copilot",
       "代码生成，AI 辅助编程"
-    ]
+    ],
+    "id": "主流-ai-编程工具深度对比-cursorclaude-codeopencodegithub-copilot"
   },
   {
     "url": "posts/gemini-notebooklm-integration.html",
@@ -42,7 +44,8 @@
       "Notebooks",
       "AI 工具，Google AI",
       "生产力，知识管理"
-    ]
+    ],
+    "id": "gemini-notebooks-深度体验-与-notebooklm-无缝整合后的全新-ai-工作流"
   },
   {
     "url": "posts/gemini-notebooklm-workflow.html",
@@ -56,7 +59,8 @@
       "NotebookLM",
       "AI 工具，知识管理，Google AI",
       "生产力"
-    ]
+    ],
+    "id": "gemini-notebooklm-结合使用指南"
   },
   {
     "url": "posts/github-pages-blog-setup.html",
@@ -72,7 +76,8 @@
       "自动化部署",
       "静态网站",
       "CI/CD"
-    ]
+    ],
+    "id": "从零搭建个人博客系统github-pages-自定义域名-自动化部署"
   },
   {
     "url": "posts/kotlin-coroutines-best-practices.html",
@@ -88,7 +93,8 @@
       "异步编程",
       "Android",
       "并发"
-    ]
+    ],
+    "id": "kotlin-coroutines-最佳实践"
   },
   {
     "url": "posts/local-rag-ollama.html",
@@ -105,7 +111,8 @@
       "私有知识库",
       "LLM",
       "本地部署"
-    ]
+    ],
+    "id": "rag-本地实践-用-ollama-embedding-搭建私有知识库"
   },
   {
     "url": "posts/android-offline-speech-input.html",
@@ -122,7 +129,8 @@
       "Vosk",
       "语音输入",
       "端侧AI"
-    ]
+    ],
+    "id": "android-离线语音输入实现方案"
   },
   {
     "url": "posts/onnx-mobile-deployment.html",
@@ -141,7 +149,8 @@
       "MNN",
       "TFLite",
       "Android AI"
-    ]
+    ],
+    "id": "onnx-移动端侧模型实践-从转换到部署"
   },
   {
     "url": "posts/pwa-offline-web-app.html",
@@ -157,7 +166,8 @@
       "离线应用",
       "Web App",
       "缓存策略"
-    ]
+    ],
+    "id": "pwa-实战-从零打造离线可用的-web-应用"
   },
   {
     "url": "posts/ssh-security-hardening.html",
@@ -175,7 +185,8 @@
       "密钥认证",
       "防火墙",
       "OpenCloudOS"
-    ]
+    ],
+    "id": "云服务器-ssh-安全加固完整指南-适用于-aws阿里云腾讯云digitalocean-等"
   },
   {
     "url": "posts/tailscale-derp-server.html",
@@ -192,7 +203,8 @@
       "VPN",
       "自建服务器",
       "网络穿透"
-    ]
+    ],
+    "id": "自建-tailscale-derp-中继服务器完整指南"
   },
   {
     "url": "posts/vscode-port-forward.html",
@@ -208,7 +220,8 @@
       "远程开发",
       "Tailscale",
       "Nginx"
-    ]
+    ],
+    "id": "vs-code-端口转发原理详解-ssh-隧道工作机制"
   },
   {
     "url": "posts/mobile-gs-paper-review.html",
@@ -223,7 +236,8 @@
       "3DGS",
       "移动端渲染，计算机视觉，AI",
       "ICLR 2026"
-    ]
+    ],
+    "id": "mobile-gs-让-3d-高斯泼溅在移动端实时渲染"
   },
   {
     "url": "posts/ai-agent-skill-development.html",
@@ -238,7 +252,8 @@
       "OpenClaw",
       "自动化",
       "JavaScript"
-    ]
+    ],
+    "id": "ai-agent-技能开发实战-从需求到上线的完整流程"
   },
   {
     "url": "posts/openclaw-guide.html",
@@ -251,6 +266,7 @@
       "OpenClaw",
       "AI Agent",
       "自动化，定时任务，子 Agent"
-    ]
+    ],
+    "id": "openclaw-深度使用指南-从-0-到-1-构建个人-ai-agent"
   }
 ]

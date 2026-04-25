@@ -25,6 +25,11 @@
   <link rel="manifest" href="site.webmanifest">
   <meta name="theme-color" content="#3b82f6">
   
+  <!-- Preconnect to Google Fonts (non-blocking) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600&family=Noto+Serif+SC:wght@600;700&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap">
+  
   <!-- Styles -->
   <link rel="stylesheet" href="assets/css/style.css">
 </head>
@@ -658,8 +663,13 @@
     `;
   </script>
   
-  <!-- AI Assistant -->
-  <script src="assets/js/ai-config.js"></script>
+  <!-- AI Assistant (config loaded inline, api-config.js excluded from git) -->
+  <script>
+    // Fallback config: API key loaded dynamically if ai-config.js exists (local dev)
+    // On production, the AI assistant will use embedded config from setup script
+    window.AI_ASSISTANT_CONFIG = window.AI_ASSISTANT_CONFIG || null;
+  </script>
+  <script src="assets/js/ai-config.js" onerror="window.AI_ASSISTANT_CONFIG = window.AI_ASSISTANT_CONFIG || { available: false };"></script>
   <link rel="stylesheet" href="assets/css/ai-assistant.css">
   <script src="assets/js/ai-assistant.js"></script>
 </body>
