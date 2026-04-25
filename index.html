@@ -462,46 +462,46 @@
         <div class="blog-list">
           <article class="blog-list-item animate-on-scroll">
             <div class="blog-list-meta">
-              <span class="blog-date">2026-04-20</span>
+              <span class="blog-date">2026-04-25</span>
+              <span>·</span>
+              <span class="blog-read-time">15 min</span>
+            </div>
+            <h4 class="blog-list-title">
+              <a href="blog/posts/jetpack-compose-animation.html">Jetpack Compose 动画实战</a>
+            </h4>
+            <div class="blog-list-tags">
+              <span class="tech-tag">Android</span>
+              <span class="tech-tag">Compose</span>
+            </div>
+          </article>
+          
+          <article class="blog-list-item animate-on-scroll">
+            <div class="blog-list-meta">
+              <span class="blog-date">2026-04-25</span>
               <span>·</span>
               <span class="blog-read-time">20 min</span>
             </div>
             <h4 class="blog-list-title">
-              <a href="blog/posts/nextjs-16-tutorial.html">Next.js 16 实战：App Router + Server Actions + Turbopack</a>
+              <a href="blog/posts/typescript-type-gymnastics.html">TypeScript 类型体操指南</a>
             </h4>
             <div class="blog-list-tags">
-              <span class="tech-tag">Next.js</span>
-              <span class="tech-tag">React</span>
+              <span class="tech-tag">TypeScript</span>
+              <span class="tech-tag">前端</span>
             </div>
           </article>
           
           <article class="blog-list-item animate-on-scroll">
             <div class="blog-list-meta">
-              <span class="blog-date">2026-04-19</span>
+              <span class="blog-date">2026-04-25</span>
               <span>·</span>
               <span class="blog-read-time">18 min</span>
             </div>
             <h4 class="blog-list-title">
-              <a href="blog/posts/ai-coding-tools-comparison.html">主流 AI 编程工具深度对比</a>
+              <a href="blog/posts/git-advanced-techniques.html">Git 高级技巧：变基、挑拣和交互式暂存</a>
             </h4>
             <div class="blog-list-tags">
-              <span class="tech-tag">AI</span>
-              <span class="tech-tag">Cursor</span>
-            </div>
-          </article>
-          
-          <article class="blog-list-item animate-on-scroll">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-04-11</span>
-              <span>·</span>
-              <span class="blog-read-time">12 min</span>
-            </div>
-            <h4 class="blog-list-title">
-              <a href="blog/posts/gemini-notebooklm-integration.html">Gemini Notebooks 深度体验</a>
-            </h4>
-            <div class="blog-list-tags">
-              <span class="tech-tag">AI</span>
-              <span class="tech-tag">Google AI</span>
+              <span class="tech-tag">Git</span>
+              <span class="tech-tag">开发</span>
             </div>
           </article>
         </div>
@@ -665,11 +665,10 @@
   
   <!-- AI Assistant (config loaded inline, api-config.js excluded from git) -->
   <script>
-    // Fallback config: API key loaded dynamically if ai-config.js exists (local dev)
-    // On production, the AI assistant will use embedded config from setup script
-    window.AI_ASSISTANT_CONFIG = window.AI_ASSISTANT_CONFIG || null;
+    // Default AI config (API key not committed to git, loaded from ai-config.js if present)
+    // On production (GitHub Pages), AI assistant is disabled by default to avoid 404 errors
+    window.AI_ASSISTANT_CONFIG = window.AI_ASSISTANT_CONFIG || { available: false };
   </script>
-  <script src="assets/js/ai-config.js" onerror="window.AI_ASSISTANT_CONFIG = window.AI_ASSISTANT_CONFIG || { available: false };"></script>
   <link rel="stylesheet" href="assets/css/ai-assistant.css">
   <script src="assets/js/ai-assistant.js"></script>
 </body>
