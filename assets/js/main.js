@@ -9,12 +9,12 @@
 document.addEventListener('DOMContentLoaded', () => {
   const loading = document.querySelector('.loading');
   
-  // Hide loading after content loads
-  setTimeout(() => {
+  // Hide loading quickly for better LCP
+  requestAnimationFrame(() => {
     if (loading) {
       loading.classList.add('hidden');
     }
-  }, 300);
+  });
   
   // Initialize all animations
   initScrollAnimations();
@@ -211,8 +211,13 @@ function setActiveNavLink() {
   const sections = document.querySelectorAll('section[id]');
   const navLinks = document.querySelectorAll('.nav-link');
   
-  // 处理页面链接的 active 状态（基于当前 URL 路径）
-  const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+  // 处理页面链接的 active 状态（基于完整路径）
+  const currentPath = window.location.pathname;
+  // 标准化路径：移除末尾斜杠，添加 index.html 如果是目录
+  let normalizedPath = currentPath.replace(/\/$/, '');
+  if (normalizedPath === '' || !normalizedPath.endsWith('.html')) {
+    normalizedPath += '/index.html';
+  }
   
   navLinks.forEach(link => {
     const href = link.getAttribute('href');
@@ -220,9 +225,22 @@ function setActiveNavLink() {
     // 跳过锚点链接（由 scroll 事件处理）
     if (href.startsWith('#')) return;
     
-    // 处理页面链接
-    const linkPage = href.split('/').pop();
-    if (linkPage === currentPage) {
+    // 处理页面链接 - 使用完整路径匹配
+    // 将相对路径转为绝对路径进行比较
+    let absoluteHref = href;
+    if (!href.startsWith('/')) {
+      // 根据当前路径计算绝对路径
+      const baseDir = currentPath.replace(/[^/]*$/, ''); // 获取目录部分
+      absoluteHref = baseDir + href;
+    }
+    
+    // 标准化链接路径
+    let normalizedHref = absoluteHref.replace(/\/$/, '');
+    if (!normalizedHref.endsWith('.html')) {
+      normalizedHref += '/index.html';
+    }
+    
+    if (normalizedHref === normalizedPath) {
       link.classList.add('active');
     }
   });

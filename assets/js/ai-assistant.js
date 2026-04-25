@@ -16,6 +16,11 @@ class AIAssistant {
   }
 
   init() {
+    // 检查 API Key 是否有效
+    if (!this.apiKey || this.apiKey.length < 10) {
+      console.warn('AI Assistant: API Key not configured, feature disabled');
+      return; // 不初始化 UI
+    }
     this.createUI();
     this.bindEvents();
     this.loadHistory();
