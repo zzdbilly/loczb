@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Git 高级技巧：掌握变基、挑拣、交互式暂存等进阶操作，提升代码管理效率">
+  <meta name="keywords" content="Git, 变基, rebase, cherry-pick, 交互式暂存, add -p, stash, bisect">
+  <meta name="author" content="张小猛">
+  <meta name="publish-date" content="2026-04-25">
+  <title>Git 高级技巧：变基、挑拣和交互式暂存 | 张小猛 - loczb</title>
+  <link rel="icon" type="image/x-icon" href="../../assets/images/favicon.ico">
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <style>
+    .post-content { max-width: 760px; margin: 0 auto; line-height: 1.85; }
+    .post-content h1 { font-size: 2.4rem; margin: 2rem 0 1rem; }
+    .post-content h2 { font-size: 1.7rem; margin: 2.5rem 0 1rem; color: var(--color-accent-primary); border-bottom: 1px solid var(--color-border); padding-bottom: 0.5rem; }
+    .post-content h3 { font-size: 1.3rem; margin: 1.8rem 0 0.8rem; }
+    .post-content pre { background: var(--color-bg-tertiary); padding: 1.2rem; border-radius: 8px; overflow-x: auto; margin: 1.2rem 0; font-size: 0.9rem; }
+    .post-content code { background: var(--color-bg-tertiary); padding: 0.15rem 0.4rem; border-radius: 4px; font-family: monospace; font-size: 0.9em; }
+    .post-meta { color: var(--color-text-secondary); font-size: 0.9rem; margin-bottom: 2rem; }
+    .post-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 3rem; }
+    .post-tags span { background: var(--color-bg-tertiary); padding: 0.3rem 0.8rem; border-radius: 9999px; font-size: 0.85rem; color: var(--color-accent-primary); }
+    .tip-box { background: rgba(34, 197, 94, 0.1); border-left: 3px solid #22c55e; padding: 1rem 1.2rem; margin: 1.5rem 0; border-radius: 0 6px 6px 0; }
+    .warning-box { background: rgba(234, 179, 8, 0.1); border-left: 3px solid #eab308; padding: 1rem 1.2rem; margin: 1.5rem 0; border-radius: 0 6px 6px 0; }
+    .danger-box { background: rgba(239, 68, 68, 0.1); border-left: 3px solid #ef4444; padding: 1rem 1.2rem; margin: 1.5rem 0; border-radius: 0 6px 6px 0; }
+    table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.95rem; }
+    th, td { border: 1px solid var(--color-border); padding: 0.7rem; text-align: left; }
+    th { background: var(--color-bg-tertiary); font-weight: 600; }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../../index.html" class="nav-logo">loc<span>zb</span></a>
+      <button class="nav-toggle" aria-label="打开菜单"><span></span><span></span><span></span></button>
+      <div class="nav-overlay"></div>
+      <ul class="nav-links">
+        <li><a href="../../index.html" class="nav-link">首页</a></li>
+        <li><a href="../../projects/index.html" class="nav-link">项目</a></li>
+        <li><a href="../index.html" class="nav-link active">博客</a></li>
+        <li><a href="../../about/index.html" class="nav-link">关于</a></li>
+      </ul>
+      <button class="theme-toggle" aria-label="切换主题">
+        <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line></svg>
+        <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+      </button>
+    </div>
+  </nav>
+
+  <main>
+    <article class="post-content" style="padding: calc(64px + 4rem) 1rem 4rem;">
+      <a href="../index.html" style="display: inline-flex; align-items: center; gap: 0.5rem; color: var(--color-text-secondary); text-decoration: none; margin-bottom: 2rem;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        返回博客
+      </a>
+      
+      <h1>Git 高级技巧：变基、挑拣和交互式暂存</h1>
+      
+      <div class="post-meta">2026年4月25日 · 阅读时间 18 分钟</div>
+
+      <p>大多数开发者熟悉 <code>git add</code>、<code>git commit</code>、<code>git push</code> 这些基础命令。但 Git 还有许多强大的高级功能，掌握它们能显著提升代码管理效率和代码库质量。</p>
+
+      <div class="tip-box">
+        <strong>本文覆盖</strong>：交互式变基、cherry-pick、交互式暂存、stash 进阶、bisect 调试、reflog 救援
+      </div>
+
+      <h2>一、交互式变基（Interactive Rebase）</h2>
+
+      <p><code>git rebase -i</code> 是整理提交历史的利器：</p>
+
+      <pre><code># 交互式变基最近 4 个提交
+git rebase -i HEAD~4
+
+# 或基于某个提交
+git rebase -i &lt;base-commit&gt;</code></pre>
+
+      <h3>常用操作</h3>
+
+      <pre><code># 打开的编辑器中会显示类似内容：
+pick a1b2c3d 添加用户登录功能
+pick e4f5g6h 修复登录验证 bug
+pick i7j8k9l 优化登录性能
+pick m0n1o2p 添加登出功能
+
+# 修改命令前缀来操作提交：
+# pick    - 保留提交
+# reword  - 保留提交，但修改提交信息
+# edit    - 保留提交，但停下来修改
+# squash  - 合并到前一个提交，保留提交信息
+# fixup   - 合并到前一个提交，丢弃提交信息
+# drop    - 删除提交</code></pre>
+
+      <h3>实战场景</h3>
+
+      <p><strong>场景 1：合并多个小提交</strong></p>
+
+      <pre><code># 将多个小修改合并为一个完整的提交
+pick a1b2c3d 添加登录 API
+squash e4f5g6h 修复 typo
+squash i7j8k9l 添加日志
+
+# 结果：一个干净的提交 "添加登录 API"</code></pre>
+
+      <p><strong>场景 2：修改历史提交</strong></p>
+
+      <pre><code># 标记要修改的提交为 edit
+pick a1b2c3d 添加用户模块
+edit e4f5g6h 添加登录功能    # 停在这里修改
+pick i7j8k9l 添加登出功能
+
+# 执行后会停在该提交，你可以：
+git add &lt;files&gt;           # 添加修改
+git commit --amend        # 修改当前提交
+git rebase --continue     # 继续变基</code></pre>
+
+      <div class="warning-box">
+        <strong>黄金法则</strong>：永远不要变基已推送到远程仓库的提交。变基会改写历史，可能导致协作混乱。
+      </div>
+
+      <h2>二、Cherry-pick（挑拣提交）</h2>
+
+      <p><code>git cherry-pick</code> 用于将特定提交应用到当前分支：</p>
+
+      <pre><code># 挑拣单个提交
+git cherry-pick &lt;commit-hash&gt;
+
+# 挑拣多个提交
+git cherry-pick &lt;commit1&gt; &lt;commit2&gt;
+
+# 挑拣提交范围（不包含 start）
+git cherry-pick &lt;start&gt;..&lt;end&gt;
+
+# 只挑拣但不提交（可以修改后再提交）
+git cherry-pick -n &lt;commit-hash&gt;</code></pre>
+
+      <h3>实战场景</h3>
+
+      <p><strong>场景：将 hotfix 从开发分支应用到生产分支</strong></p>
+
+      <pre><code># 当前在 develop 分支
+git log --oneline -5
+# abc1234 修复登录验证漏洞
+# def5678 添加新功能
+# ...
+
+# 切换到 main 分支
+git checkout main
+
+# 只挑拣修复提交
+git cherry-pick abc1234
+
+# 推送到远程
+git push origin main</code></pre>
+
+      <h3>处理冲突</h3>
+
+      <pre><code># cherry-pick 遇到冲突时
+# 1. 手动解决冲突
+# 2. 标记为已解决
+git add &lt;resolved-files&gt;
+
+# 3. 继续 cherry-pick
+git cherry-pick --continue
+
+# 或放弃
+git cherry-pick --abort</code></pre>
+
+      <h2>三、交互式暂存（git add -p）</h2>
+
+      <p><code>git add -p</code>（patch mode）允许你选择性地暂存文件的部分修改：</p>
+
+      <pre><code>git add -p &lt;file&gt;
+
+# Git 会逐块显示修改，询问操作：
+# y - 暂存此块
+# n - 不暂存此块
+# q - 退出
+# a - 暂存此块和后续所有块
+# d - 不暂存此块和后续所有块
+# e - 手动编辑此块
+# s - 分割成更小的块</code></pre>
+
+      <h3>实战场景</h3>
+
+      <p><strong>场景：一个文件包含多个不相关的修改</strong></p>
+
+      <pre><code># 你在 utils.js 中做了两件事：
+# 1. 修复了一个 bug
+# 2. 添加了一个新工具函数
+
+# 想要分成两个提交
+git add -p utils.js
+
+# 第一块（bug 修复）
+@@ -10,7 +10,7 @@
+ function validate(input) {
+-    return input !== null;
++    return input !== null && input !== undefined;
+ }
+(1/2) Stage this hunk [y,n,q,a,d,e,?]? y
+
+# 第二块（新函数）
+@@ -50,6 +50,10 @@
+     return a + b;
+ }
++
++function multiply(a, b) {
++    return a * b;
++}
+(2/2) Stage this hunk [y,n,q,a,d,e,?]? n
+
+# 现在暂存区只有 bug 修复
+git commit -m "fix: 修复 validate 函数的 undefined 检查"
+
+# 暂存新函数
+git add utils.js
+git commit -m "feat: 添加 multiply 工具函数"</code></pre>
+
+      <div class="tip-box">
+        <strong>最佳实践</strong>：每次提交只做一件事。使用 <code>git add -p</code> 可以帮你保持提交的原子性。
+      </div>
+
+      <h2>四、Stash 进阶</h2>
+
+      <p>基础 <code>git stash</code> 很常用，但 stash 有更多技巧：</p>
+
+      <pre><code># 基础用法
+git stash                    # 暂存当前修改
+git stash pop                # 恢复并删除 stash
+git stash list               # 查看所有 stash
+
+# 进阶用法
+git stash save "描述信息"     # 带描述的 stash
+git stash push -m "描述"      # 同上（新语法）
+
+# 包含未跟踪的文件
+git stash -u                 # 包含 untracked 文件
+git stash --include-untracked # 同上
+
+# 只暂存部分文件
+git stash push -p            # 交互式选择暂存内容
+
+# 从 stash 创建分支
+git stash branch &lt;branch-name&gt; &lt;stash&gt;
+
+# 应用特定 stash
+git stash apply stash@{2}
+
+# 删除特定 stash
+git stash drop stash@{2}
+
+# 清空所有 stash
+git stash clear</code></pre>
+
+      <h3>实战场景</h3>
+
+      <p><strong>场景：紧急修复生产问题</strong></p>
+
+      <pre><code># 正在开发新功能
+vim src/new-feature.js
+
+# 收到紧急 bug 报告，需要立即修复
+git stash push -m "WIP: 新功能开发"
+git checkout main
+git checkout -b hotfix/urgent
+
+# 修复 bug
+vim src/bug.js
+git add . && git commit -m "fix: 紧急修复"
+git push origin hotfix/urgent
+
+# 回到开发分支
+git checkout feature/new-feature
+
+# 恢复工作进度
+git stash pop</code></pre>
+
+      <h2>五、Bisect：二分查找 Bug</h2>
+
+      <p><code>git bisect</code> 用于定位引入 bug 的提交：</p>
+
+      <pre><code># 开始 bisect
+git bisect start
+
+# 标记当前提交为有 bug
+git bisect bad
+
+# 标记某个已知正常的提交
+git bisect good v1.0.0
+
+# Git 会自动 checkout 中间提交
+# 测试后标记
+git bisect good   # 如果这个提交是好的
+git bisect bad    # 如果这个提交有问题
+
+# 重复直到找到问题提交
+# Git 会显示：
+# abc1234 is the first bad commit
+
+# 结束 bisect
+git bisect reset</code></pre>
+
+      <h3>自动化 bisect</h3>
+
+      <pre><code># 如果有自动化测试脚本
+git bisect start
+git bisect bad
+git bisect good v1.0.0
+git bisect run npm test
+
+# Git 会自动运行测试并找到问题提交</code></pre>
+
+      <h2>六、Reflog：时光倒流</h2>
+
+      <p><code>git reflog</code> 记录所有 HEAD 的移动，可以找回"丢失"的提交：</p>
+
+      <pre><code># 查看操作历史
+git reflog
+
+# 输出示例：
+# abc1234 HEAD@{0}: reset: moving to HEAD~2
+# def5678 HEAD@{1}: commit: 添加新功能
+# ghi9012 HEAD@{2}: commit: 修复 bug
+# ...
+
+# 恢复到某个状态
+git reset --hard HEAD@{1}
+
+# 或直接用提交 hash
+git reset --hard def5678</code></pre>
+
+      <h3>实战场景</h3>
+
+      <p><strong>场景：误删分支或错误 reset</strong></p>
+
+      <pre><code># 不小心 hard reset 丢了工作
+git reset --hard HEAD~3
+
+# 惊慌... 不怕！
+git reflog
+
+# 找到之前的状态
+# abc1234 HEAD@{0}: reset: moving to HEAD~3
+# def5678 HEAD@{1}: commit: 重要的工作
+
+# 恢复
+git reset --hard def5678
+
+# 找回误删的分支
+git reflog
+# 找到分支删除前的提交
+git checkout -b recovered-branch &lt;commit-hash&gt;</code></pre>
+
+      <div class="tip-box">
+        <strong>Reflog 有效期</strong>：默认 90 天。可以通过 <code>gc.reflogExpire</code> 配置。
+      </div>
+
+      <h2>七、其他实用技巧</h2>
+
+      <h3>1. 交互式重置</h3>
+
+      <pre><code># 类似 add -p，但是针对重置
+git reset -p
+
+# 撤销部分暂存
+git reset HEAD -p</code></pre>
+
+      <h3>2. 清理工作区</h3>
+
+      <pre><code># 查看将被删除的文件（预览）
+git clean -n
+
+# 删除未跟踪的文件
+git clean -f
+
+# 删除未跟踪的文件和目录
+git clean -fd
+
+# 同时删除忽略的文件
+git clean -fdx</code></pre>
+
+      <h3>3. 提交搜索</h3>
+
+      <pre><code># 搜索提交信息
+git log --grep="关键词"
+
+# 搜索代码变更
+git log -S "function_name"
+
+# 搜索代码变更（正则）
+git log -G "pattern"
+
+# 查看某个文件的修改历史
+git log -p -- path/to/file
+
+# 谁修改了这行代码
+git blame -L 10,20 path/to/file</code></pre>
+
+      <h3>4. 工作区 vs 暂存区 vs HEAD</h3>
+
+      <pre><code># 工作区 vs 暂存区
+git diff
+
+# 暂存区 vs HEAD
+git diff --staged
+git diff --cached  # 同上
+
+# 工作区 vs HEAD
+git diff HEAD
+
+# 两个提交之间
+git diff abc123..def456</code></pre>
+
+      <h2>总结</h2>
+
+      <table>
+        <tr><th>命令</th><th>用途</th><th>危险程度</th></tr>
+        <tr><td>git rebase -i</td><td>整理提交历史</td><td>⚠️ 不要变基已推送的提交</td></tr>
+        <tr><td>git cherry-pick</td><td>选择性应用提交</td><td>✅ 安全</td></tr>
+        <tr><td>git add -p</td><td>部分暂存</td><td>✅ 安全</td></tr>
+        <tr><td>git stash -u</td><td>暂存工作进度</td><td>✅ 安全</td></tr>
+        <tr><td>git bisect</td><td>二分查找 bug</td><td>✅ 安全（只读）</td></tr>
+        <tr><td>git reflog</td><td>找回丢失提交</td><td>✅ 救命神器</td></tr>
+        <tr><td>git clean -fd</td><td>清理未跟踪文件</td><td>⚠️ 不可恢复</td></tr>
+      </table>
+
+      <div class="danger-box">
+        <strong>危险操作清单</strong>：<br>
+        • <code>git reset --hard</code> - 丢弃所有未提交的修改<br>
+        • <code>git clean -fd</code> - 删除未跟踪的文件<br>
+        • <code>git push --force</code> - 强制推送，覆盖远程历史<br>
+        • <code>git rebase</code> 已推送的提交 - 改写公共历史
+      </div>
+
+      <div class="tip-box">
+        <strong>学习资源</strong>：<br>
+        Pro Git 书籍：<a href="https://git-scm.com/book/zh/v2" target="_blank">git-scm.com/book/zh/v2</a><br>
+        Git 官方文档：<a href="https://git-scm.com/docs" target="_blank">git-scm.com/docs</a><br>
+        Learn Git Branching：<a href="https://learngitbranching.js.org" target="_blank">learngitbranching.js.org</a>
+      </div>
+
+      <div class="post-tags">
+        <span>Git</span>
+        <span>版本控制</span>
+        <span>开发技巧</span>
+        <span>团队协作</span>
+      </div>
+    </article>
+  </main>
+  
+  <script src="../../assets/js/main.js"></script>
+</body>
+</html>
