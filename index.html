@@ -28,7 +28,12 @@
   <!-- Preconnect to Google Fonts (non-blocking) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600&family=Noto+Serif+SC:wght@600;700&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600&family=Noto+Serif+SC:wght@600;700&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap" media="print" onload="this.media='all'">
+  
+  <!-- Fallback for fonts -->
+  <noscript>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600&family=Noto+Serif+SC:wght@600;700&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap">
+  </noscript>
   
   <!-- Styles -->
   <link rel="stylesheet" href="assets/css/style.css">
@@ -670,6 +675,6 @@
     window.AI_ASSISTANT_CONFIG = window.AI_ASSISTANT_CONFIG || { available: false };
   </script>
   <link rel="stylesheet" href="assets/css/ai-assistant.css">
-  <script src="assets/js/ai-assistant.js"></script>
+  <script src="assets/js/ai-assistant.js" defer></script>
 </body>
 </html>
