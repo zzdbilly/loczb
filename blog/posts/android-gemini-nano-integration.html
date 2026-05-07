@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Android 端侧 AI 实战：Gemini Nano 集成指南 - 深入解析 AICore 架构与 ML Kit GenAI API 实战">
+  <meta name="keywords" content="Android, Gemini Nano, AICore, 端侧AI, ML Kit, on-device AI, Android AI">
+  <meta name="author" content="张小猛">
+  <meta name="publish-date" content="2026-05-07">
+  <title>Android 端侧 AI 实战：Gemini Nano 集成指南 | 张小猛 - loczb</title>
+  <link rel="icon" type="image/x-icon" href="../../assets/images/favicon.ico">
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <style>
+    .post-content { max-width: 760px; margin: 0 auto; line-height: 1.85; }
+    .post-content h1 { font-size: 2.4rem; margin: 2rem 0 1rem; }
+    .post-content h2 { font-size: 1.7rem; margin: 2.5rem 0 1rem; color: var(--color-accent-primary); border-bottom: 1px solid var(--color-border); padding-bottom: 0.5rem; }
+    .post-content h3 { font-size: 1.3rem; margin: 1.8rem 0 0.8rem; }
+    .post-content pre { background: var(--color-bg-tertiary); padding: 1.2rem; border-radius: 8px; overflow-x: auto; margin: 1.2rem 0; font-size: 0.9rem; }
+    .post-content code { background: var(--color-bg-tertiary); padding: 0.15rem 0.4rem; border-radius: 4px; font-family: monospace; font-size: 0.9em; }
+    .post-meta { color: var(--color-text-secondary); font-size: 0.9rem; margin-bottom: 2rem; }
+    .post-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 3rem; }
+    .post-tags span { background: var(--color-bg-tertiary); padding: 0.3rem 0.8rem; border-radius: 9999px; font-size: 0.85rem; color: var(--color-accent-primary); }
+    .tip-box { background: rgba(34, 197, 94, 0.1); border-left: 3px solid #22c55e; padding: 1rem 1.2rem; margin: 1.5rem 0; border-radius: 0 6px 6px 0; }
+    .warning-box { background: rgba(234, 179, 8, 0.1); border-left: 3px solid #eab308; padding: 1rem 1.2rem; margin: 1.5rem 0; border-radius: 0 6px 6px 0; }
+    .info-box { background: rgba(59, 130, 246, 0.1); border-left: 3px solid #3b82f6; padding: 1rem 1.2rem; margin: 1.5rem 0; border-radius: 0 6px 6px 0; }
+    table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.95rem; }
+    th, td { border: 1px solid var(--color-border); padding: 0.7rem; text-align: left; }
+    th { background: var(--color-bg-tertiary); font-weight: 600; }
+    .code-block { background: #1a1a2e; padding: 1.2rem; border-radius: 8px; overflow-x: auto; margin: 1.2rem 0; }
+    .code-block code { background: transparent; padding: 0; color: #e0e0e0; }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../../index.html" class="nav-logo">loc<span>zb</span></a>
+      <button class="nav-toggle" aria-label="打开菜单"><span></span><span></span><span></span></button>
+      <div class="nav-overlay"></div>
+      <ul class="nav-links">
+        <li><a href="../../index.html" class="nav-link">首页</a></li>
+        <li><a href="../../projects/index.html" class="nav-link">项目</a></li>
+        <li><a href="../index.html" class="nav-link active">博客</a></li>
+        <li><a href="../../about/index.html" class="nav-link">关于</a></li>
+      </ul>
+      <button class="theme-toggle" aria-label="切换主题">
+        <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line></svg>
+        <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+      </button>
+    </div>
+  </nav>
+
+  <main>
+    <article class="post-content" style="padding: calc(64px + 4rem) 1rem 4rem;">
+      <a href="../index.html" style="display: inline-flex; align-items: center; gap: 0.5rem; color: var(--color-text-secondary); text-decoration: none; margin-bottom: 2rem;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        返回博客
+      </a>
+      
+      <h1>Android 端侧 AI 实战：Gemini Nano 集成指南</h1>
+      
+      <div class="post-meta">2026年5月7日 · 阅读时间 15 分钟</div>
+
+      <p>2026 年是端侧 AI 从概念走向落地的关键之年。从 Google 的 Gemini Nano 到 Apple 的端侧模型，各厂商都在推动 AI 能力「走出云端」。本文基于我的实际集成经验，深入解析 Android 端侧 AI 的核心方案：<strong>Gemini Nano + AICore + ML Kit GenAI API</strong>，并提供一个完整的实战案例。</p>
+
+      <div class="info-box">
+        <strong>📌 前置要求</strong>：本文适用于 Android 14+ 设备，需要支持 AICore（Android 16/17 原生支持）。部分功能可能因设备硬件差异而表现不同。
+      </div>
+
+      <h2>为什么选择端侧 AI？</h2>
+
+      <p>在将 AI 能力集成到移动应用时，传统方案存在几个显著痛点：</p>
+
+      <ul>
+        <li><strong>网络依赖</strong>：需要实时联网，弱网环境下无法使用</li>
+        <li><strong>隐私风险</strong>：用户数据需要上传到云端处理</li>
+        <li><strong>延迟抖动</strong>：网络状况直接影响响应时间</li>
+        <li><strong>成本不可控</strong>：API 调用按量收费，大规模使用成本高昂</li>
+      </ul>
+
+      <p>端侧 AI（On-Device AI）完美解决以上问题：</p>
+
+      <ul>
+        <li>✅ <strong>完全离线</strong>：模型本地运行，无需网络</li>
+        <li>✅ <strong>隐私保护</strong>：数据不出设备用户完全掌控</li>
+        <li>✅ <strong>零延迟</strong>：本地推理响应即时</li>
+        <li>✅ <strong>零 成本</strong>：无 API 调用费用</li>
+      </ul>
+
+      <h2>Gemini Nano 架构解析</h2>
+
+      <p>Gemini Nano 是 Google 专为端侧运行优化的轻量级模型通过 Android 系统层的 <strong>AICore</strong> 运行时提供服务。理解这个架构是成功集成的关键。</p>
+
+      <h3>三层架构</h3>
+
+      <table>
+        <tr><th>层级</th><th>组件</th><th>职责</th></tr>
+        <tr><td>应用层</td><td>ML Kit GenAI API</td><td>高级封装提供简洁的调用接口</td></tr>
+        <tr><td>系统层</td><td>AICore</td><td>模型管理、推理调度、NPU 加速</td></tr>
+        <tr><td>模型层</td><td>Gemini Nano</td><td>实际的 AI 推理计算</td></tr>
+      </table>
+
+      <h3>AICore 的核心职责</h3>
+
+      <p><strong>AICore</strong> 是 Android 16/17 引入的系统级 AI 运行时它充当 App 与 Gemini Nano 模型的 broker：</p>
+
+      <ul>
+        <li><strong>模型管理</strong>：动态下载、更新、缓存模型文件</li>
+        <li><strong>推理调度</strong>：将推理任务分配到 NPU/GPU/CPU</li>
+        <li><strong>资源管理</strong>：控制模型占用内存避免系统卡顿</li>
+        <li><strong>权限控制</strong>：管理哪些 App 可以使用端侧 AI 能力</li>
+      </ul>
+
+      <div class="tip-box">
+        <strong>💡 关键点</strong>：你的应用不需要直接与 AICore 交互而是通过 ML Kit 的高级 API。ML Kit 会自动处理与 AICore 的通信。
+      </div>
+
+      <h2>环境配置</h2>
+
+      <h3>1. 添加依赖</h3>
+
+      <p>在 <code>build.gradle</code> (app) 中添加 ML Kit 生成式 AI 依赖：</p>
+
+      <pre><code>dependencies {
+    // ML Kit GenAI API (powered by Gemini Nano)
+    implementation 'com.google.mlkit:genai-common:0.1.0'
+    implementation 'com.google.mlkit:text-generation:16.0.0'
+    
+    // 如果需要图像描述功能
+    implementation 'com.google.mlkit:image-labeling:17.0.7'
+}</code></pre>
+
+      <h3>2. 检查设备兼容性</h3>
+
+      <p>在调用前检查设备是否支持端侧 AI 能力：</p>
+
+      <pre><code>import com.google.mlkit.common.MlKitException
+import com.google.mlkit.common.model.RemoteModelManager
+import com.google.mlkit.textgeneration.TextGeneration
+
+// 检查设备是否支持
+fun checkDeviceSupport(): Boolean {
+    return try {
+        // 尝试获取模型管理器
+        val manager = RemoteModelManager.getInstance()
+        // 如果能正常获取说明支持
+        true
+    } catch (e: MlKitException) {
+        // 不支持的设备会抛出异常
+        false
+    }
+}</code></pre>
+
+      <h3>3. 配置权限</h3>
+
+      <p>AICore 不需要特殊权限但首次调用会触发模型下载。建议：</p>
+
+      <ul>
+        <li>在 WiFi 环境下首次调用让模型下载完成</li>
+        <li>可以在设置中查看 AI 模型下载状态</li>
+      </ul>
+
+      <h2>功能一：文本摘要</h2>
+
+      <p>ML Kit 提供文本摘要功能可以将长文本压缩为简洁摘要：</p>
+
+      <pre><code>import com.google.mlkit.textgeneration.TextGeneration
+import com.google.mlkit.textgeneration.TextGenerator
+import com.google.mlkit.textgeneration.TextGeneratorOptions
+
+// 创建生成器
+val options = TextGeneratorOptions.Builder()
+    .setModelType(TextGeneratorOptions.LOCAL_LITE)
+    .build()
+
+val textGenerator = TextGeneration.getClient(options)
+
+// 生成摘要
+fun summarizeText(longText: String) {
+    val input = "Provide a brief summary of the following text: $longText"
+    
+    textGenerator.generate(input)
+        .addOnSuccessListener { result ->
+            val summary = result.text
+            Log.d("GeminiNano", "Summary: $summary")
+        }
+        .addOnFailureListener { e ->
+            Log.e("GeminiNano", "Error: ${e.message}")
+        }
+}</code></pre>
+
+      <h3>完整示例：摘要功能</h3>
+
+      <pre><code>class Summarizer(private val context: Context) {
+    
+    private val textGenerator: TextGenerator by lazy {
+        val options = TextGeneratorOptions.Builder()
+            .setModelType(TextGeneratorOptions.LOCAL_LITE)
+            .build()
+        TextGeneration.getClient(options)
+    }
+    
+    fun summarize(
+        text: String,
+        onSuccess: (String) -> Unit,
+        onError: (Exception) -> Unit
+    ) {
+        // 构建提示词
+        val prompt = buildPrompt(text)
+        
+        textGenerator.generate(prompt)
+            .addOnSuccessListener { result ->
+                onSuccess(result.text.trim())
+            }
+            .addOnFailureListener { e ->
+                onError(e)
+            }
+    }
+    
+    private fun buildPrompt(text: String): String {
+        return """
+            请用不超过 100 字总结以下内容：
+            
+            $text
+            
+            摘要：
+        """.trimIndent()
+    }
+    
+    fun close() {
+        textGenerator.close()
+    }
+}</code></pre>
+
+      <h2>功能二：文本校对</h2>
+
+      <p>校对功能可以检测并修正文本中的语法错误和用词问题：</p>
+
+      <pre><code>import com.google.mlkit.textgeneration.TextGeneration
+
+// 文本校对
+fun proofreadText(text: String) {
+    val prompt = """
+        请校对以下文本修正语法错误和用词问题只返回修正后的文本：
+        
+        $text
+    """.trimIndent()
+    
+    textGenerator.generate(prompt)
+        .addOnSuccessListener { result ->
+            val corrected = result.text.trim()
+            Log.d("Proofread", "Corrected: $corrected")
+        }
+        .addOnFailureListener { e ->
+            Log.e("Proofread", "Error: ${e.message}")
+        }
+}</code></pre>
+
+      <div class="warning-box">
+        <strong>⚠️ 注意</strong>：校对功能同样使用本地 Lite 模型响应质量可能不如云端版本。对于正式场景建议人工复核。
+      </div>
+
+      <h2>功能三：文本重写</h2>
+
+      <p>重写功能可以将文本改写成不同风格（如正式、口语化、简洁）：</p>
+
+      <pre><code>// 风格重写示例
+fun rewriteToStyle(text: String, style: String) {
+    val stylePrompt = when (style) {
+        "formal" -> "正式"
+        "casual" -> "口语化"
+        "concise" -> "简洁"
+        else -> "保持原样"
+    }
+    
+    val prompt = """
+        请将以下文本改写成$stylePrompt 风格只返回改写后的文本：
+        
+        $text
+    """.trimIndent()
+    
+    textGenerator.generate(prompt)
+        .addOnSuccessListener { result ->
+            val rewritten = result.text.trim()
+            // 处理结果
+        }
+}</code></pre>
+
+      <h2>功能四：图像描述（进阶）</h2>
+
+      <p>虽然 ML Kit 的主 API 是文本能力但可以通过组合实现图像理解：</p>
+
+      <div class="info-box">
+        <strong>📌 说明</strong>：原生 Gemini Nano 主要面向文本任务。对于图像理解推荐结合 ML Kit 的图像标注 API 或使用云端 API + 本地缓存的混合方案。
+      </div>
+
+      <pre><code>// 结合图像标注实现图像理解
+import com.google.mlkit.image labeling.ImageLabeling
+import com.google.mlkit.image labeling.defaultImageLabeler
+
+class ImageDescriber(private val context: Context) {
+    
+    private val imageLabeler = ImageLabeling.getClient(
+        defaultImageLabelerOptions {
+            setConfidenceThreshold(0.7f)
+        }
+    )
+    
+    private val textGenerator = TextGeneration.getClient(
+        TextGeneratorOptions.Builder()
+            .setModelType(TextGeneratorOptions.LOCAL_LITE)
+            .build()
+    )
+    
+    // 获取图像标签后生成描述
+    fun describeImage(bitmap: Bitmap) {
+        imageLabeler.process(bitmap)
+            .addOnSuccessListener { labels ->
+                // 提取标签
+                val tags = labels.joinToString("、") { it.text }
+                
+                // 使用 Gemini Nano 生成自然语言描述
+                val prompt = "用一句话描述这张图片包含的要素：$tags"
+                
+                textGenerator.generate(prompt)
+                    .addOnSuccessListener { result ->
+                        val description = result.text.trim()
+                        Log.d("ImageDesc", description)
+                    }
+            }
+            .addOnFailureListener { e ->
+                Log.e("ImageDesc", e.message ?: "Error")
+            }
+    }
+}</code></pre>
+
+      <h2>设备兼容性与踩坑记录</h2>
+
+      <p>集成过程中我遇到以下问题整理成避坑指南：</p>
+
+      <h3>常见问题</h3>
+
+      <table>
+        <tr><th>问题</th><th>原因</th><th>解决方案</th></tr>
+        <tr><td>首次调用特别慢</td><td>模型需要下载</td><td>提示用户在 WiFi 下使用或预加载</td></tr>
+        <tr><td>返回空结果</td><td>模型未就绪</td><td>检查 AICore 状态等待模型下载完成</td></tr>
+        <tr><td>抛出 ModuleNotFoundException</td><td>设备不支持 AICore</td><td>回退到云端 API 或提示用户</td></tr>
+        <tr><td>内存占用高</td><td>模型运行在 CPU</td><td>确保设备有足够内存或降低并发</td></tr>
+      </table>
+
+      <h3>兼容性检查工具</h3>
+
+      <pre><code>// 完整的兼容性检查
+object AICoreChecker {
+    
+    fun checkCompatibility(context: Context): CompatibilityResult {
+        return try {
+            // 尝试初始化
+            val options = TextGeneratorOptions.Builder()
+                .setModelType(TextGeneratorOptions.LOCAL_LITE)
+                .build()
+            val client = TextGeneration.getClient(options)
+            client.close()
+            
+            CompatibilityResult(
+                supported = true,
+                message = "设备支持端侧 AI"
+            )
+        } catch (e: Exception) {
+            CompatibilityResult(
+                supported = false,
+                message = "设备不支持: ${e.message}"
+            )
+        }
+    }
+    
+    data class CompatibilityResult(
+        val supported: Boolean,
+        val message: String
+    )
+}</code></pre>
+
+      <h2>性能优化建议</h2>
+
+      <h3>1. 模型预加载</h3>
+
+      <pre><code>// 在 Application 中预加载模型
+class MyApp : Application() {
+    
+    private val textGenerator: TextGenerator by lazy {
+        TextGeneration.getClient(
+            TextGeneratorOptions.Builder()
+                .setModelType(TextGeneratorOptions.LOCAL_LITE)
+                .build()
+        )
+    }
+    
+    override fun onCreate() {
+        super.onCreate()
+        // 预热模型
+        warmUpModel()
+    }
+    
+    private fun warmUpModel() {
+        // 发送一个空请求预热
+        textGenerator.generate("Hello")
+            .addOnSuccessListener { /* 预热完成 */ }
+    }
+}</code></pre>
+
+      <h3>2. 批量处理</h3>
+
+      <p>对于多个文本处理使用批量模式减少模型加载开销：</p>
+
+      <pre><code>// 不要频繁创建和销毁生成器
+class TextProcessor {
+    // 复用单个生成器实例
+    private val generator: TextGenerator by lazy { 
+        TextGeneration.getClient(/* options */)
+    }
+    
+    // 批量处理
+    fun processBatch(texts: List<String>) {
+        // 将多个文本组合成一个请求
+        val combined = texts.mapIndexed { index, text ->
+            "${index + 1}. $text"
+        }.joinToString("\n")
+        
+        val prompt = "处理以下内容：\n$combined"
+        // 一次性调用
+    }
+    
+    // 使用完后统一释放
+    fun release() {
+        generator.close()
+    }
+}</code></pre>
+
+      <h3>3. 异步处理</h3>
+
+      <p>模型推理是耗时操作务必在后台线程执行：</p>
+
+      <pre><code>// 使用协程处理
+fun generateAsync(prompt: String): Deferred<String> {
+    return CoroutineScope(Dispatchers.IO).async {
+        try {
+            textGenerator.generate(prompt).await().text.trim()
+        } catch (e: Exception) {
+            throw e
+        }
+    }
+}</code></pre>
+
+      <h3>4. 结果缓存</h3>
+
+      <p>相同输入可以缓存结果避免重复计算：</p>
+
+      <pre><code>// 简单的 LRU 缓存
+class ResultCache(private val maxSize: Int = 100) {
+    
+    private val cache = object : LinkedHashMap<String, String>(maxSize, 0.75f, true) {
+        override fun removeEldestEntry(eldest: MutableMap.MutableEntry<String, String>?): Boolean {
+            return size > maxSize
+        }
+    }
+    
+    fun get(key: String): String? = cache[key]
+    
+    fun put(key: String, value: String) {
+        cache[key] = value
+    }
+}</code></pre>
+
+      <h2>实战案例：智能笔记应用</h2>
+
+      <p>结合以上所有功能以下是简化的智能笔记应用架构：</p>
+
+      <pre><code>class SmartNoteProcessor(
+    private val context: Context,
+    private val summarizer: Summarizer,
+    private val proofreader: Proofreader
+) {
+    
+    // 智能摘要
+    fun autoSummarize(note: String): String {
+        // 输入验证
+        if (note.length < 100) return note
+        
+        return summarizer.summarize(note)
+    }
+    
+    // 自动校对
+    fun autoProofread(note: String): String {
+        return proofreader.proofread(note)
+    }
+    
+    // 智能处理流程
+    fun processNote(note: String): ProcessedNote {
+        val proofread = autoProofread(note)
+        val summarized = if (note.length > 500) {
+            autoSummarize(note)
+        } else null
+        
+        return ProcessedNote(
+            original = note,
+            corrected = proofread,
+            summary = summarized,
+            timestamp = System.currentTimeMillis()
+        )
+    }
+    
+    data class ProcessedNote(
+        val original: String,
+        val corrected: String,
+        val summary: String?,
+        val timestamp: Long
+    )
+}</code></pre>
+
+      <h2>总结</h2>
+
+      <p>Gemini Nano 代表了移动端侧 AI 的重要方向通过 ML Kit 的高级 API 开发者可以快速将 AI 能力引入应用而无需关心底层模型管理。但需要注意：</p>
+
+      <ul>
+        <li><strong>设备兼容性</strong>：并非所有设备都支持需要优雅降级</li>
+        <li><strong>能力边界</strong>：端侧模型能力弱于云端适用于简单任务</li>
+        <li><strong>用户体验</strong>：首次加载慢需要做好预期管理</li>
+      </ul>
+
+      <p>随着 Android 系统的演进和芯片能力的提升端侧 AI 将成为移动开发的标配。建议现在就开始尝试为未来做好准备。</p>
+
+      <div class="tip-box">
+        <strong>💡 扩展方向</strong>：如果端侧能力不满足需求可以考虑「本地 + 云端」混合方案使用本地模型处理简单任务复杂任务交给云端。
+      </div>
+
+      <div class="post-tags">
+        <span>Android</span>
+        <span>AI</span>
+        <span>Gemini Nano</span>
+        <span>端侧AI</span>
+        <span>ML Kit</span>
+      </div>
+      
+    </article>
+  </main>
+</body>
+</html>
