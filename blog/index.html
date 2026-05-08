@@ -3,7 +3,28 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="张小猛的技术博客 - Android、Kotlin、AI、全栈开发">
+  
+  <!-- SEO Basic -->
+  <meta name="description" content="张小猛的技术博客 - Android、Kotlin、AI、全栈开发。分享技术文章、学习笔记与思考。">
+  <meta name="keywords" content="技术博客, Android, Kotlin, AI, 前端, DevOps, 张小猛">
+  <meta name="author" content="张小猛">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://709527.xyz/blog/">
+  
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://709527.xyz/blog/">
+  <meta property="og:title" content="博客 | 张小猛 - loczb">
+  <meta property="og:description" content="张小猛的技术博客 - Android、Kotlin、AI、全栈开发。分享技术文章、学习笔记与思考。">
+  <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
+  <meta property="og:locale" content="zh_CN">
+  
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="博客 | 张小猛 - loczb">
+  <meta name="twitter:description" content="张小猛的技术博客 - Android、Kotlin、AI、全栈开发。">
+  <meta name="twitter:image" content="https://709527.xyz/assets/images/og-image.png">
+  
   <title>博客 | 张小猛 - loczb</title>
   
   <!-- Favicon -->
@@ -62,12 +83,15 @@
       </div>
       
       <!-- Filters -->
-      <div class="blog-filters">
-        <button class="filter-btn filter-btn-active" data-filter="all">全部</button>
-        <button class="filter-btn" data-filter="前端">前端</button>
-        <button class="filter-btn" data-filter="Android">Android</button>
-        <button class="filter-btn" data-filter="AI">AI</button>
-        <button class="filter-btn" data-filter="DevOps">DevOps</button>
+      <div class="blog-filters" role="tablist" aria-label="博客分类筛选">
+        <button class="filter-btn filter-btn-active" data-filter="all" role="tab" aria-selected="true">全部</button>
+        <button class="filter-btn" data-filter="AI" role="tab" aria-selected="false">AI</button>
+        <button class="filter-btn" data-filter="Android" role="tab" aria-selected="false">Android</button>
+        <button class="filter-btn" data-filter="前端" role="tab" aria-selected="false">前端</button>
+        <button class="filter-btn" data-filter="DevOps" role="tab" aria-selected="false">DevOps</button>
+        <button class="filter-btn" data-filter="数据库" role="tab" aria-selected="false">数据库</button>
+        <button class="filter-btn" data-filter="系统编程" role="tab" aria-selected="false">系统编程</button>
+        <button class="filter-btn" data-filter="安全" role="tab" aria-selected="false">安全</button>
       </div>
     </div>
   </section>
@@ -77,7 +101,7 @@
     <div class="container">
       <div class="section-header">
         <div class="section-label">Archive</div>
-        <h2 class="section-title">全部文章</h2>
+        <h2 class="section-title" id="blog-filter-title">全部文章</h2>
       </div>
       
       <div class="blog-list-container">
@@ -527,12 +551,23 @@
       // 更新筛选按钮
       document.querySelectorAll('.filter-btn').forEach(btn => {
         btn.classList.toggle('filter-btn-active', btn.dataset.filter === filter);
+        btn.setAttribute('aria-selected', btn.dataset.filter === filter);
       });
       
       // 筛选文章
       filteredPosts = filter === 'all' 
         ? Array.from(allPosts)
         : Array.from(allPosts).filter(post => post.dataset.category === filter);
+      
+      // 更新标题显示
+      var titleEl = document.getElementById('blog-filter-title');
+      if (titleEl) {
+        if (filter === 'all') {
+          titleEl.textContent = '全部文章';
+        } else {
+          titleEl.textContent = filter + ' 文章 · ' + filteredPosts.length + ' 篇';
+        }
+      }
       
       totalPages = calcTotalPages();
       showPage(1);
@@ -632,5 +667,6 @@
       });
     });
   </script>
+  <script src="../assets/js/search.js"></script>
 </body>
 </html>
