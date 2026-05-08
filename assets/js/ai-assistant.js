@@ -16,14 +16,37 @@ class AIAssistant {
   }
 
   init() {
-    // 检查 API Key 是否有效
-    if (!this.apiKey || this.apiKey.length < 10) {
-      console.warn('AI Assistant: API Key not configured, feature disabled');
-      return; // 不初始化 UI
+    // 检查是否配置了代理地址
+    const proxyUrl = this.apiUrl;
+    if (!proxyUrl || proxyUrl.length < 10) {
+      // 代理未配置，隐藏入口而不是 console warning
+      console.info('AI Assistant: Proxy not configured, feature disabled');
+      this.createDisabledUI();
+      return;
     }
     this.createUI();
     this.bindEvents();
     this.loadHistory();
+  }
+
+  createDisabledUI() {
+    // 创建优雅的降级 UI - 显示为"维护中"状态
+    const html = `
+      <button id="ai-assistant-toggle" class="ai-assistant-toggle ai-assistant-disabled" aria-label="AI 助手维护中" title="AI 助手维护中">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2z"/>
+          <path d="M9 12a3 3 0 1 0 6 0 3 3 0 0 0-6 0"/>
+        </svg>
+      </button>
+    `;
+    document.body.insertAdjacentHTML('beforeend', html);
+    
+    // 禁用点击
+    const toggle = document.getElementById('ai-assistant-toggle');
+    toggle.addEventListener('click', () => {
+      // 可选：显示提示
+      console.info('AI Assistant is currently under maintenance');
+    });
   }
 
   createUI() {
@@ -256,22 +279,21 @@ class AIAssistant {
 - 不涉及政治、色情、暴力等敏感话题
 - 回答控制在 200 字以内`;
 
+    // 构建消息，包含当前页面上下文
+    const context = window.location.pathname;
     const requestBody = {
-      model: this.model,
       messages: [
-        { role: 'system', content: systemPrompt },
-        ...this.messages.slice(-10), // 保留最近 10 条消息
+        ...this.messages.slice(-10),
         { role: 'user', content: message }
       ],
-      max_tokens: 500,
-      temperature: 0.7
+      context: context
     };
 
     const response = await fetch(this.apiUrl, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${this.apiKey}`
+        'Content-Type': 'application/json'
+        // 不再需要 Authorization 头，代理服务处理
       },
       body: JSON.stringify(requestBody)
     });
@@ -344,11 +366,10 @@ class AIAssistant {
   }
 }
 
-// 初始化 AI 助手（API Key 从 ai-config.js 加载）
+// 初始化 AI 助手（配置从 ai-config.js 加载）
 document.addEventListener('DOMContentLoaded', () => {
   const config = window.AI_ASSISTANT_CONFIG || {
-    apiKey: '',
-    apiUrl: 'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions',
+    apiUrl: '',
     model: 'qwen3.5-plus'
   };
   
