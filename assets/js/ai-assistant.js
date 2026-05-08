@@ -16,11 +16,16 @@ class AIAssistant {
   }
 
   init() {
-    // 检查是否配置了代理地址
+    // 检查是否配置了有效的代理地址
     const proxyUrl = this.apiUrl;
-    if (!proxyUrl || proxyUrl.length < 10) {
+    const isPlaceholder = !proxyUrl || 
+                         proxyUrl.includes('your-subdomain') || 
+                         proxyUrl.includes('placeholder') ||
+                         proxyUrl.length < 10;
+    
+    if (isPlaceholder) {
       // 代理未配置，隐藏入口而不是 console warning
-      console.info('AI Assistant: Proxy not configured, feature disabled');
+      console.info('AI Assistant: Service not configured');
       this.createDisabledUI();
       return;
     }
@@ -302,24 +307,34 @@ class AIAssistant {
     const responseText = await response.text();
     
     if (!response.ok) {
-      const errorDetails = `HTTP ${response.status}: ${responseText.substring(0, 200)}`;
-      console.error('AI API Error:', errorDetails);
-      throw new Error(errorDetails);
+      // 友好错误提示，不暴露原始 JSON
+      console.error('AI API Error:', response.status);
+      if (response.status === 404) {
+        throw new Error('AI 助手服务暂未部署，请稍后再试');
+      } else if (response.status >= 500) {
+        throw new Error('服务暂时不可用，请稍后再试');
+      } else {
+        throw new Error('请求失败，请检查网络后重试');
+      }
     }
 
     let data;
     try {
       data = JSON.parse(responseText);
     } catch (e) {
-      const errorDetails = 'API 响应不是有效 JSON: ' + responseText.substring(0, 100);
-      console.error('AI API Error:', errorDetails);
-      throw new Error(errorDetails);
+      console.error('AI API Error: Invalid JSON');
+      throw new Error('服务响应异常，请稍后再试');
+    }
+    
+    // 检查是否有错误信息
+    if (data.error) {
+      console.error('AI API Error:', data.error);
+      throw new Error('AI 助手暂时不可用，请稍后再试');
     }
     
     if (!data.choices || !data.choices[0] || !data.choices[0].message) {
-      const errorDetails = 'API 响应格式错误：' + responseText.substring(0, 100);
-      console.error('AI API Error:', errorDetails);
-      throw new Error(errorDetails);
+      console.error('AI API Error: Invalid response format');
+      throw new Error('服务响应格式异常，请稍后再试');
     }
     
     const reply = data.choices[0].message.content;
