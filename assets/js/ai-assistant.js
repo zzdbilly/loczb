@@ -16,6 +16,14 @@ class AIAssistant {
   }
 
   init() {
+    // 检查是否配置为不可用
+    const config = window.AI_ASSISTANT_CONFIG || {};
+    if (config.available === false) {
+      console.info('AI Assistant: Service disabled');
+      this.createDisabledUI();
+      return;
+    }
+    
     // 检查是否配置了有效的代理地址
     const proxyUrl = this.apiUrl;
     const isPlaceholder = !proxyUrl || 
@@ -287,6 +295,7 @@ class AIAssistant {
     // 构建消息，包含当前页面上下文
     const context = window.location.pathname;
     const requestBody = {
+      model: this.model,
       messages: [
         ...this.messages.slice(-10),
         { role: 'user', content: message }
