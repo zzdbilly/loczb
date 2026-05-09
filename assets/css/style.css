@@ -670,6 +670,25 @@ a:hover {
   animation-delay: 0.8s;
 }
 
+.hero-links {
+  margin-top: var(--space-lg);
+  text-align: center;
+  opacity: 0;
+  animation: fadeInUp 0.8s ease forwards;
+  animation-delay: 1s;
+}
+
+.hero-links a {
+  color: var(--color-text-tertiary);
+  font-size: var(--text-sm);
+  text-decoration: none;
+  transition: color var(--transition-base);
+}
+
+.hero-links a:hover {
+  color: var(--color-accent-primary);
+}
+
 /* ===================================
    Buttons
    =================================== */
@@ -1582,6 +1601,98 @@ pre code {
 }
 
 /* ===================================
+   Homepage - Collaboration Grid
+   =================================== */
+.collab-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-lg);
+}
+
+.collab-card {
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: var(--space-xl);
+  text-align: center;
+  transition: all var(--transition-base);
+}
+
+.collab-card:hover {
+  border-color: var(--color-accent-primary);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.collab-icon {
+  width: 56px;
+  height: 56px;
+  margin: 0 auto var(--space-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-accent-subtle);
+  border-radius: var(--radius-lg);
+  color: var(--color-accent-primary);
+}
+
+.collab-title {
+  font-size: var(--text-lg);
+  font-weight: 600;
+  margin-bottom: var(--space-sm);
+  color: var(--color-text-primary);
+}
+
+.collab-desc {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ===================================
+   Homepage - Tech Stack Grid Compact
+   =================================== */
+.tech-grid-compact {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-lg);
+}
+
+.tech-item {
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  transition: all var(--transition-base);
+}
+
+.tech-item:hover {
+  border-color: var(--color-border-hover);
+}
+
+.tech-item-title {
+  font-size: var(--text-base);
+  font-weight: 600;
+  margin-bottom: var(--space-sm);
+  color: var(--color-text-primary);
+}
+
+.tech-item-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+}
+
+.tech-item-tags span {
+  font-size: var(--text-xs);
+  padding: var(--space-xs) var(--space-sm);
+  background: var(--color-bg-tertiary);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-secondary);
+}
+
+/* ===================================
    Homepage - Tech Stack Grid
    =================================== */
 .tech-grid {
@@ -2277,6 +2388,14 @@ pre code {
   
   .focus-grid {
     grid-template-columns: 1fr;
+  }
+  
+  .collab-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .tech-grid-compact {
+    grid-template-columns: repeat(2, 1fr);
   }
   
   .section-header {
