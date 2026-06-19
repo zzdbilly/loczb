@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Android 16 新特性详解 - Live Updates、大屏强制适配、AICore 增强、APV 编码支持等开发者必知内容">
+  <meta name="keywords" content="Android 16, Live Updates, 大屏适配, AICore, APV, Android, 开发者">
+  <meta name="author" content="张小猛">
+  <meta name="publish-date" content="2026-06-19">
+  <title>Android 16 新特性详解：开发者需要知道的 8 件事 | 张小猛 - loczb</title>
+  <link rel="canonical" href="https://709527.xyz/blog/posts/android-16-features.html">
+  <meta name="robots" content="index, follow">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://709527.xyz/blog/posts/android-16-features.html">
+  <meta property="og:title" content="Android 16 新特性详解：开发者需要知道的 8 件事 | 张小猛 - loczb">
+  <meta property="og:description" content="Live Updates、大屏强制适配、AICore 增强、APV 编码支持等开发者必知的 Android 16 新特性。">
+  <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="article:author" content="张小猛">
+  <meta property="article:published_time" content="2026-06-19">
+  
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Android 16 新特性详解 | 张小猛 - loczb">
+  <meta name="twitter:description" content="Live Updates、大屏强制适配、AICore 增强等 Android 16 开发者必知内容。">
+  <meta name="twitter:image" content="https://709527.xyz/assets/images/og-image.png">
+
+  <link rel="icon" type="image/x-icon" href="../../assets/images/favicon.ico">
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <style>
+    .post-content { max-width: 760px; margin: 0 auto; line-height: 1.85; }
+    .post-content h1 { font-size: 2.4rem; margin: 2rem 0 1rem; }
+    .post-content h2 { font-size: 1.7rem; margin: 2.5rem 0 1rem; color: var(--color-accent-primary); border-bottom: 1px solid var(--color-border); padding-bottom: 0.5rem; }
+    .post-content h3 { font-size: 1.3rem; margin: 1.8rem 0 0.8rem; }
+    .post-content pre { background: var(--color-bg-tertiary); padding: 1.2rem; border-radius: 8px; overflow-x: auto; margin: 1.2rem 0; font-size: 0.9rem; }
+    .post-content code { background: var(--color-bg-tertiary); padding: 0.15rem 0.4rem; border-radius: 4px; font-family: monospace; font-size: 0.9em; }
+    .post-meta { color: var(--color-text-secondary); font-size: 0.9rem; margin-bottom: 2rem; }
+    .post-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 3rem; }
+    .post-tags span { background: var(--color-bg-tertiary); padding: 0.3rem 0.8rem; border-radius: 9999px; font-size: 0.85rem; color: var(--color-accent-primary); }
+    .tip-box { background: rgba(34, 197, 94, 0.1); border-left: 3px solid #22c55e; padding: 1rem 1.2rem; margin: 1.5rem 0; border-radius: 0 6px 6px 0; }
+    .warning-box { background: rgba(234, 179, 8, 0.1); border-left: 3px solid #eab308; padding: 1rem 1.2rem; margin: 1.5rem 0; border-radius: 0 6px 6px 0; }
+    .info-box { background: rgba(59, 130, 246, 0.1); border-left: 3px solid #3b82f6; padding: 1rem 1.2rem; margin: 1.5rem 0; border-radius: 0 6px 6px 0; }
+    table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.95rem; }
+    th, td { border: 1px solid var(--color-border); padding: 0.7rem; text-align: left; }
+    th { background: var(--color-bg-tertiary); font-weight: 600; }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../../index.html" class="nav-logo">loc<span>zb</span></a>
+      <button class="nav-toggle" aria-label="打开菜单"><span></span><span></span><span></span></button>
+      <div class="nav-overlay"></div>
+      <ul class="nav-links">
+        <li><a href="../../index.html" class="nav-link">首页</a></li>
+        <li><a href="../../projects/index.html" class="nav-link">项目</a></li>
+        <li><a href="../index.html" class="nav-link active">博客</a></li>
+        <li><a href="../../about/index.html" class="nav-link">关于</a></li>
+      </ul>
+      <button class="theme-toggle" aria-label="切换主题">
+        <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line></svg>
+        <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+      </button>
+    </div>
+  </nav>
+
+  <main>
+    <article class="post-content" style="padding: calc(64px + 4rem) 1rem 4rem;">
+      <a href="../index.html" style="display: inline-flex; align-items: center; gap: 0.5rem; color: var(--color-text-secondary); text-decoration: none; margin-bottom: 2rem;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        返回博客
+      </a>
+      
+      <h1>Android 16 新特性详解：开发者需要知道的 8 件事</h1>
+      
+      <div class="post-meta">2026年6月19日 · 阅读时间 16 分钟</div>
+
+      <p>Android 16 是 Google 在 2026 年推出的重大版本更新，代号为「Baklava」。它带来了一系列对开发者影响深远的变化——从全新的通知范式到强制性的屏幕适配政策，从端侧 AI 能力的增强到专业级媒体编码支持。</p>
+
+      <p>本文系统梳理 Android 16 中开发者最需要关注的 8 个新特性，并提供实用的适配指南。</p>
+
+      <h2>1. Live Updates：全新的实时通知范式</h2>
+
+      <p>Android 16 引入的 <strong>Live Updates</strong> 是通知系统近十年来最大的变革。它允许应用在通知栏和锁屏上展示持续更新的动态信息，类似于 iOS 的 Live Activities。</p>
+
+      <h3>使用场景</h3>
+      <ul>
+        <li><strong>外卖配送</strong>：实时显示骑手位置、预计到达时间</li>
+        <li><strong>导航</strong>：锁屏显示下一个转弯指示</li>
+        <li><strong>运动健身</strong>：实时心率、配速、运动时长</li>
+        <li><strong>计时器</strong>：倒计时实时显示</li>
+        <li><strong>打车</strong>：车辆位置、到达时间实时更新</li>
+      </ul>
+
+      <h3>实现方式</h3>
+      <pre><code>// Live Updates 实现示例
+val liveUpdate = LiveUpdate.Builder(context, "delivery_tracking")
+    .setContentTitle("外卖配送中")
+    .setContentText("距您还有 1.2 公里")
+    .addProgressBar(progress = 0.75f)
+    .build()
+
+// 更新内容
+liveUpdate.update {
+    setContentText("距您还有 500 米")
+    addProgressBar(progress = 0.92f)
+}</code></pre>
+
+      <div class="tip-box">
+        <strong>💡 最佳实践</strong>：Live Updates 不是为了替代普通通知，而是针对「持续关注型」场景优化。对于一次性提醒，继续使用常规通知即可。同时注意不要在短时间内频繁更新，建议更新间隔 ≥ 1 秒。
+      </div>
+
+      <h2>2. 大屏强制适配：不再有 opt-out</h2>
+
+      <p>这是 Android 16 中对现有应用影响最大的变化。Google 正在推进大屏设备（平板、折叠屏）的体验统一：</p>
+
+      <ul>
+        <li><strong>API 36（Android 16）</strong>：>600dp 宽屏幕的应用必须适配，但有 opt-out 选项</li>
+        <li><strong>API 37（Android 17）</strong>：取消 opt-out，所有应用必须原生支持大屏布局</li>
+      </ul>
+
+      <div class="warning-box">
+        <strong>⚠️ 即刻行动</strong>：如果你的应用在平板或折叠屏上布局异常（例如拉伸、截断、布局重叠），现在就必须开始适配。API 36 的 opt-out 只是过渡方案，越早适配你的技术债越少。
+      </div>
+
+      <h3>适配清单</h3>
+      <table>
+        <tr><th>检查项</th><th>说明</th></tr>
+        <tr><td>布局适应性</td><td>使用 ConstraintLayout / Compose 响应式布局，避免固定像素</td></tr>
+        <tr><td>canResizeableActivity</td><td>确保 manifest 中没有设置 <code>android:resizeableActivity="false"</code></td></tr>
+        <tr><td>最大宽高比</td><td>移除 <code>maxAspectRatio</code> 限制</td></tr>
+        <tr><td>多窗口支持</td><td>确保分屏、自由窗口模式下运行正常</td></tr>
+        <tr><td>配置变更</td><td>正确处理屏幕旋转和尺寸变化时的配置变更</td></tr>
+      </table>
+
+      <h2>3. AICore 增强：端侧 AI 能力大幅提升</h2>
+
+      <p>Android 16 对系统级 AI 运行时 <strong>AICore</strong> 进行了重大升级：</p>
+
+      <ul>
+        <li><strong>推理性能提升 2x</strong>：通过更高效的 NPU 调度和模型量化</li>
+        <li><strong>支持更大模型</strong>：从原来的 3.8B 参数扩展到 7B 参数级别</li>
+        <li><strong>动态模型加载</strong>：支持按需下载和卸载 AI 模型，减少存储占用</li>
+        <li><strong>多模型并发</strong>：多个应用可以同时使用不同的 AI 模型</li>
+      </ul>
+
+      <p>这意味着更多复杂的 AI 任务可以在端侧完成，而不再需要联网调用云端 API。</p>
+
+      <h2>4. APV 编码支持：专业级视频质量</h2>
+
+      <p>Android 16 Beta 1 增加了对 <strong>APV 422-10 Profile</strong>（Advanced Professional Video）的支持。这是一个面向专业视频应用的编码配置文件：</p>
+
+      <ul>
+        <li><strong>YUV422 色彩采样</strong>：比常见的 YUV420 保留更多色彩细节</li>
+        <li><strong>10-bit 编码</strong>：减少色彩带现象，支持 HDR 内容</li>
+        <li><strong>目标比特率高</strong>：满足专业视频制作的画质要求</li>
+      </ul>
+
+      <div class="info-box">
+        <strong>📌 适用场景</strong>：这个特性主要面向视频编辑和拍摄类应用。如果你在开发相机 App 或视频编辑器，APV 支持让你能在 Android 设备上实现接近专业摄像机的色彩深度。
+      </div>
+
+      <h2>5. 隐私和安全增强</h2>
+
+      <p>Android 16 在隐私保护方面继续加强：</p>
+
+      <ul>
+        <li><strong>照片选择器增强</strong>：新增对云存储照片的支持，用户可以选择 Google Photos 等云服务中的照片</li>
+        <li><strong>权限自动重置</strong>：未使用的应用权限将更快被自动撤销</li>
+        <li><strong>后台位置访问收紧</strong>：后台获取位置的审核标准更加严格</li>
+        <li><strong>网络沙箱</strong>：新的网络安全模型，进一步隔离应用网络访问</li>
+      </ul>
+
+      <h2>6. 媒体与相机改进</h2>
+
+      <h3>Ultra HDR 图片支持</h3>
+      <p>Android 16 增强了对 Ultra HDR 图片的支持，使应用能够显示和编辑高动态范围的图片内容。</p>
+
+      <h3>相机 API 增强</h3>
+      <p>新的 Camera 2 扩展支持：</p>
+      <ul>
+        <li>夜景模式 API 标准化</li>
+        <li>高清慢动作视频支持</li>
+        <li>多摄像头同时流传输优化</li>
+      </ul>
+
+      <h2>7. 性能与节能优化</h2>
+
+      <table>
+        <tr><th>特性</th><th>说明</th></tr>
+        <tr><td>App Startup 优化</td><td>冷启动速度提升 15-30%，特别是大型应用</td></tr>
+        <tr><td>后台限制加强</td><td>进一步限制后台广播和唤醒锁</td></tr>
+        <tr><td>GPU 优先调度</td><td>UI 渲染线程优先使用 GPU，减少掉帧</td></tr>
+        <tr><td>内存压缩 2.0</td><td>更高效的内存压缩算法，减少 OOM</td></tr>
+        <tr><td>电池使用优化</td><td>智能调度后台任务，延长续航</td></tr>
+      </table>
+
+      <h2>8. 开发工具与 API 变更</h2>
+
+      <h3>targetSdkVersion 要求</h3>
+      <p>Android 16 要求新应用和更新的 target SDK 版本为 36（对应 API level 36）。如果你的应用目前 target 低于 34，需要更新到 36 才能在 Google Play 上架更新。</p>
+
+      <h3>关键 API 弃用/移除</h3>
+      <ul>
+        <li><strong>Apache HTTP 客户端</strong>：完全移除，请使用 HttpURLConnection 或 OkHttp</li>
+        <li><strong>AsyncTask</strong>：正式废弃，推荐使用 Kotlin Coroutines 或 Java Executors</li>
+        <li><strong>LocalBroadcastManager</strong>：废弃，推荐使用 LiveData 或 Flow</li>
+        <li><strong>SqliteCursor 相关 API</strong>：部分废弃，推荐使用 Room</li>
+      </ul>
+
+      <div class="tip-box">
+        <strong>💡 迁移建议</strong>：如果你还在使用 AsyncTask 或 LocalBroadcastManager，Android 16 是最后的过渡期。Android 17 可能会直接移除这些 API。
+      </div>
+
+      <h2>升级适配清单</h2>
+
+      <p>总结一下，升级到 Android 16 时需要检查的清单：</p>
+
+      <ol>
+        <li><strong>大屏适配</strong>：检查所有布局在大屏设备上的表现</li>
+        <li><strong>targetSdkVersion</strong>：更新到 36</li>
+        <li><strong>废弃 API</strong>：替换 AsyncTask、LocalBroadcastManager 等</li>
+        <li><strong>Live Updates</strong>：考虑是否有适合实时更新的场景</li>
+        <li><strong>权限策略</strong>：检查后台权限使用情况</li>
+        <li><strong>AICore</strong>：探索端侧 AI 的集成机会</li>
+        <li><strong>Edge-to-Edge</strong>：确保应用支持全面屏手势和沉浸式显示</li>
+        <li><strong>测试</strong>：在 Android 16 模拟器和真机上全面测试</li>
+      </ol>
+
+      <h2>总结</h2>
+
+      <p>Android 16 不是一个大幅改变 UI 的版本，但它通过 Live Updates、大屏强制适配和 AICore 增强等特性，为未来的 Android 体验定下了基调。对开发者来说，大屏适配是今年最紧迫的任务，而端侧 AI 则是最值得投资的新能力。</p>
+
+      <p>建议尽快下载 Android 16 的官方模拟器镜像进行测试，确保应用在新版本上的兼容性。</p>
+
+      <div class="post-tags">
+        <span>Android</span>
+        <span>Android 16</span>
+        <span>Live Updates</span>
+        <span>AICore</span>
+        <span>大屏适配</span>
+      </div>
+    </article>
+  </main>
+
+  <footer class="footer" role="contentinfo">
+    <div class="footer-inner">
+      <p class="footer-signature">写代码，做产品，也认真生活。</p>
+      <div class="footer-links">
+        <a href="https://github.com/zzdbilly" class="footer-link" target="_blank" rel="noopener">GitHub</a>
+        <a href="../../projects/index.html" class="footer-link">项目</a>
+        <a href="../../about/index.html" class="footer-link">关于</a>
+      </div>
+      <p class="footer-copyright">© 2026 张小猛</p>
+    </div>
+  </footer>
+
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../assets/js/search.js"></script>
+</body>
+</html>

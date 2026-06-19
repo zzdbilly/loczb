@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Kotlin 2.4.0 正式发布——Context Parameters 稳定、Name-based Destructuring、Lombok 编译器插件 Alpha、Compose Multiplatform 1.11 等重磅特性详解">
+  <meta name="keywords" content="Kotlin 2.4.0, Kotlin, Context Parameters, Destructuring, JetBrains, JVM, Compose Multiplatform">
+  <meta name="author" content="张小猛">
+  <meta name="publish-date" content="2026-06-19">
+  <title>Kotlin 2.4.0 重磅发布：Context Parameters 稳定、Destructuring 升级、Lombok 插件进入 Alpha | 张小猛 - loczb</title>
+  <link rel="canonical" href="https://709527.xyz/blog/posts/kotlin-240-features.html">
+  <meta name="robots" content="index, follow">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://709527.xyz/blog/posts/kotlin-240-features.html">
+  <meta property="og:title" content="Kotlin 2.4.0 重磅发布：Context Parameters 稳定、Destructuring 升级、Lombok 插件进入 Alpha | 张小猛 - loczb">
+  <meta property="og:description" content="Context Parameters 正式稳定、Name-based Destructuring 语言新特性、Lombok 编译器插件 Alpha、Compose Multiplatform 1.11 等 Kotlin 2.4.0 全部新特性详解。">
+  <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="article:author" content="张小猛">
+  <meta property="article:published_time" content="2026-06-19">
+  
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Kotlin 2.4.0 重磅发布 | 张小猛 - loczb">
+  <meta name="twitter:description" content="Context Parameters 稳定、Name-based Destructuring、Lombok 编译器插件 Alpha 等 Kotlin 2.4.0 新特性详解。">
+  <meta name="twitter:image" content="https://709527.xyz/assets/images/og-image.png">
+
+  <link rel="icon" type="image/x-icon" href="../../assets/images/favicon.ico">
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <style>
+    .post-content { max-width: 760px; margin: 0 auto; line-height: 1.85; }
+    .post-content h1 { font-size: 2.4rem; margin: 2rem 0 1rem; }
+    .post-content h2 { font-size: 1.7rem; margin: 2.5rem 0 1rem; color: var(--color-accent-primary); border-bottom: 1px solid var(--color-border); padding-bottom: 0.5rem; }
+    .post-content h3 { font-size: 1.3rem; margin: 1.8rem 0 0.8rem; }
+    .post-content pre { background: var(--color-bg-tertiary); padding: 1.2rem; border-radius: 8px; overflow-x: auto; margin: 1.2rem 0; font-size: 0.9rem; }
+    .post-content code { background: var(--color-bg-tertiary); padding: 0.15rem 0.4rem; border-radius: 4px; font-family: monospace; font-size: 0.9em; }
+    .post-meta { color: var(--color-text-secondary); font-size: 0.9rem; margin-bottom: 2rem; }
+    .post-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 3rem; }
+    .post-tags span { background: var(--color-bg-tertiary); padding: 0.3rem 0.8rem; border-radius: 9999px; font-size: 0.85rem; color: var(--color-accent-primary); }
+    .tip-box { background: rgba(34, 197, 94, 0.1); border-left: 3px solid #22c55e; padding: 1rem 1.2rem; margin: 1.5rem 0; border-radius: 0 6px 6px 0; }
+    .warning-box { background: rgba(234, 179, 8, 0.1); border-left: 3px solid #eab308; padding: 1rem 1.2rem; margin: 1.5rem 0; border-radius: 0 6px 6px 0; }
+    .info-box { background: rgba(59, 130, 246, 0.1); border-left: 3px solid #3b82f6; padding: 1rem 1.2rem; margin: 1.5rem 0; border-radius: 0 6px 6px 0; }
+    table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.95rem; }
+    th, td { border: 1px solid var(--color-border); padding: 0.7rem; text-align: left; }
+    th { background: var(--color-bg-tertiary); font-weight: 600; }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../../index.html" class="nav-logo">loc<span>zb</span></a>
+      <button class="nav-toggle" aria-label="打开菜单"><span></span><span></span><span></span></button>
+      <div class="nav-overlay"></div>
+      <ul class="nav-links">
+        <li><a href="../../index.html" class="nav-link">首页</a></li>
+        <li><a href="../../projects/index.html" class="nav-link">项目</a></li>
+        <li><a href="../index.html" class="nav-link active">博客</a></li>
+        <li><a href="../../about/index.html" class="nav-link">关于</a></li>
+      </ul>
+      <button class="theme-toggle" aria-label="切换主题">
+        <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line></svg>
+        <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+      </button>
+    </div>
+  </nav>
+
+  <main>
+    <article class="post-content" style="padding: calc(64px + 4rem) 1rem 4rem;">
+      <a href="../index.html" style="display: inline-flex; align-items: center; gap: 0.5rem; color: var(--color-text-secondary); text-decoration: none; margin-bottom: 2rem;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        返回博客
+      </a>
+      
+      <h1>Kotlin 2.4.0 重磅发布：Context Parameters 稳定、Destructuring 升级、Lombok 插件进入 Alpha</h1>
+      
+      <div class="post-meta">2026年6月19日 · 阅读时间 14 分钟</div>
+
+      <p>2026 年 6 月，JetBrains 正式发布了 Kotlin 2.4.0。这是继 Kotlin 2.0（K2 编译器稳定）之后的又一个重要里程碑版本。从语言特性到编译器插件，从构建工具集成到标准库增强，这个版本带来了大量值得每一个 Kotlin 开发者关注的改进。</p>
+
+      <p>本文将逐一深入剖析 Kotlin 2.4.0 的所有关键变化，配合代码示例，帮助你快速掌握并应用到实际项目中。</p>
+
+      <h2>1. Context Parameters 正式稳定</h2>
+
+      <p><strong>Context Parameters</strong> 是 Kotlin 2.4.0 中最重要的语言特性——它从实验性状态转为正式稳定，不再需要 opt-in 注解。</p>
+
+      <h3>什么是 Context Parameters？</h3>
+
+      <p>Context Parameters 允许你声明函数或类依赖于某种「上下文」，这个上下文由调用方隐式传递，而不需要通过显式的参数列表传递。它解决了长期以来依赖注入和隐式环境传递的痛点。</p>
+
+      <pre><code>// 声明一个需要 Context 的函数
+context(CoroutineScope, Logger)
+suspend fun performTask(taskId: String): TaskResult {
+    log("开始执行任务: $taskId")
+    return withContext(Dispatchers.IO) {
+        // 执行耗时操作
+        fetchTaskResult(taskId)
+    }
+}
+
+// 调用时，只要调用方在正确的上下文中
+suspend fun main() {
+    coroutineScope {
+        val logger = ConsoleLogger()
+        // 提供 context 后可以直接调用
+        performTask("task-001")
+    }
+}</code></pre>
+
+      <h3>Context 委托与组合</h3>
+
+      <p>稳定的 Context Parameters 引入了更强大的上下文组合和管理能力：</p>
+
+      <pre><code>// 定义上下文类型
+interface DatabaseSession {
+    fun &lt;T&gt; query(sql: String, mapper: (Row) -> T): List&lt;T&gt;
+}
+
+interface Transaction {
+    fun commit()
+    fun rollback()
+}
+
+// 函数同时依赖多个上下文
+context(DatabaseSession, Transaction)
+fun saveUser(user: User) {
+    query("INSERT INTO users VALUES (${user.id}, '${user.name}')") { ... }
+    commit()
+}
+
+// 通过 context 函数创建组合上下文
+context(DatabaseSession, Transaction)
+class UserRepository {
+    fun findById(id: Long): User? = query("SELECT * FROM users WHERE id=$id") { ... }
+}</code></pre>
+
+      <div class="tip-box">
+        <strong>💡 最佳实践</strong>：Context Parameters 最适合「贯穿整个调用链且大部分函数都需要」的横切关注点，比如数据库会话、事务、日志记录器、认证上下文等。对于只被少数函数需要的依赖，传统参数传递更清晰。
+      </div>
+
+      <h3>Context Parameters vs 依赖注入</h3>
+
+      <p>Context Parameters 不是要替代 Dagger 或 Koin 这样的 DI 框架，而是提供了一种语言级别的补充机制。它在以下场景特别有用：</p>
+
+      <ul>
+        <li><strong>函数级别的依赖</strong>：只在少数函数中需要的特殊上下文</li>
+        <li><strong>协程作用域</strong>：与协程上下文（CoroutineContext）无缝配合</li>
+        <li><strong>测试</strong>：可以在测试中轻松 mock 或替换上下文实现</li>
+        <li><strong>DSL 构建</strong>：在 DSL 场景中传递隐式构建环境</li>
+      </ul>
+
+      <pre><code>// DSL 中的典型用法
+context(TableBuilder)
+fun Column(name: String, type: ColumnType) {
+    this.addColumn(name, type)
+}
+
+table("users") {  // 进入 TableBuilder 上下文
+    Column("id", INTEGER)     // 无需显式传递 TableBuilder
+    Column("name", VARCHAR)
+}</code></pre>
+
+      <h2>2. Name-based Destructuring Declarations</h2>
+
+      <p>Kotlin 的多返回值解构（Destructuring Declarations）一直依赖 <code>componentN()</code> 操作符函数，并且变量名与解构位置绑定。Kotlin 2.4.0 引入了 <strong>Name-based Destructuring</strong>，允许按名称而不是位置来解构数据对象。</p>
+
+      <h3>传统位置解构的限制</h3>
+
+      <pre><code>// 传统解构只能按位置
+data class Person(val name: String, val age: Int, val email: String)
+
+val person = Person("张三", 28, "zhangsan@example.com")
+
+// 这里 'a' 是 name, 'b' 是 age, 'c' 是 email
+// 但变量名和含义完全分离，可读性差
+val (a, b, c) = person  // ❌ 必须记住 componentN 的对应关系</code></pre>
+
+      <h3>Name-based Destructuring 语法</h3>
+
+      <p>新的解构允许直接按属性名声明变量：</p>
+
+      <pre><code>// Kotlin 2.4.0: 按名称解构
+data class Person(val name: String, val age: Int, val email: String)
+
+// 显式命名解构变量
+val (name: userName, age: userAge, email: userEmail) = person
+
+// 省略属性类型
+val (name, age, email) = person
+
+// 忽略不需要的字段
+val (name, _, email) = person
+
+// 与集合配合
+val users: List&lt;Person&gt; = ...
+for ((name, age) in users) {
+    println("$name 今年 $age 岁")
+}</code></pre>
+
+      <h3>非 Data Class 支持</h3>
+
+      <p>Name-based Destructuring 不仅限于 data class，任何具有公开属性的类都可以使用：</p>
+
+      <pre><code>// 普通类也支持按名称解构
+class Order(
+    val id: String,
+    val amount: Double,
+    val status: OrderStatus
+)
+
+fun processOrder(order: Order) {
+    val (id, amount, status) = order
+    println("订单 $id 金额 $amount 状态 $status")
+}</code></pre>
+
+      <div class="info-box">
+        <strong>📌 设计考量</strong>：Name-based Destructuring 是一个纯编译期的语法糖——它不会改变运行时行为，不会引入反射开销。编译器在编译时就将按名称解构转换为对属性的直接访问。这意味着你可以放心使用而不用担心性能问题。
+      </div>
+
+      <h3>与 Lambda 解构结合</h3>
+
+      <pre><code>// Lambda 中按名称解构
+data class Event(val type: String, val timestamp: Long, val payload: Map&lt;String, Any&gt;)
+
+events.filter { (type) -> type == "click" }
+      .map { (type, timestamp) -> "$type@$timestamp" }
+
+// 嵌套解构
+data class Company(val name: String, val address: Address)
+data class Address(val city: String, val street: String)
+
+fun printCompany(company: Company) {
+    // 嵌套解构
+    val (name, (city)) = company
+    println("$name - $city")
+}</code></pre>
+
+      <h2>3. K2 编译器持续进化</h2>
+
+      <p>Kotlin 2.4.0 基于 K2 编译器继续优化。K2 自 Kotlin 2.0 起成为默认编译器，经过数个版本的打磨，在 2.4.0 中达到了新的成熟度。</p>
+
+      <h3>性能提升</h3>
+
+      <table>
+        <tr><th>指标</th><th>相对 2.0.x 提升</th><th>说明</th></tr>
+        <tr><td>增量编译速度</td><td>40-60%</td><td>代码修改后的重新编译显著加快</td></tr>
+        <tr><td>完整编译速度</td><td>25-35%</td><td>全量构建也获得明显加速</td></tr>
+        <tr><td>内存占用</td><td>减少 20%</td><td>编译进程堆内存消耗降低</td></tr>
+        <tr><td>IDE 代码补全</td><td>30-50%</td><td>输入时补全响应更快</td></tr>
+        <tr><td>类型推断精度</td><td>大幅提升</td><td>减少需要显式标注类型的场景</td></tr>
+      </table>
+
+      <h3>类型推断改进</h3>
+
+      <pre><code>// Kotlin 2.4.0 类型推断更智能
+// 之前需要显式标注
+// val result: Map&lt;String, List&lt;Int&gt;&gt; = groupBy { ... }
+
+// 现在编译器可以自行推断复杂泛型
+val result = sequenceOf(1, 2, 3, 4, 5)
+    .groupBy { if (it % 2 == 0) "even" else "odd" }
+    .mapValues { (_, values) -> values.sortedDescending() }
+// result 被正确推断为 Map&lt;String, List&lt;Int&gt;&gt;
+
+// 重载解析改进
+fun process(items: List&lt;Int&gt;) = "numbers"
+fun process(items: List&lt;String&gt;) = "strings"
+
+// Kotlin 2.4.0 中以下代码正确编译
+val mixed = listOf(1, "hello", 3L)
+// process(listOf(1, 2, 3))  // 仍然需要类型信息，但错误消息更精确
+</code></pre>
+
+      <div class="warning-box">
+        <strong>⚠️ 注意</strong>：尽管 K2 编译器大幅改进了类型推断，但如果你在编译器中遇到了之前正常但 2.4.0 中报错的代码，通常意味着你的代码之前依赖于旧编译器中的某些宽松行为。建议按照编译器提示修正，这可以避免运行时潜在的问题。
+      </div>
+
+      <h2>4. 编译器插件：Lombok Alpha 与 JPA 改进</h2>
+
+      <p>Kotlin 2.4.0 在编译器插件方面有两个值得关注的变化。</p>
+
+      <h3>Lombok 编译器插件（Alpha）</h3>
+
+      <p>对于许多 Java + Kotlin 混合项目来说，Lombok 一直是痛点——Kotlin 编译器无法理解 Lombok 生成的代码。Kotlin 2.4.0 首次引入了实验性的 <strong>Lombok 编译器插件</strong>，让 Kotlin 代码可以直接使用 Java 端 Lombok 注解生成的代码。</p>
+
+      <pre><code>// Java 代码（使用 Lombok）
+@Data
+@Builder
+@AllArgsConstructor
+public class UserDto {
+    private Long id;
+    private String name;
+    private String email;
+}
+
+// Kotlin 代码 — 现在可以直接引用 Lombok 生成的代码
+// 不需要在 Kotlin 侧重复定义
+
+class UserService {
+    fun createUserDto() {
+        // 可以直接使用 @Builder 生成的 Builder
+        val dto = UserDto.builder()
+            .id(1L)
+            .name("张三")
+            .email("zhangsan@example.com")
+            .build()
+        
+        // 可以使用 @Data 生成的 getter/setter
+        println(dto.name)  // IDE 和编译器都能正确识别
+    }
+}</code></pre>
+
+      <p>要启用 Lombok 插件，需要在 <code>build.gradle.kts</code> 中配置：</p>
+
+      <pre><code>// build.gradle.kts
+plugins {
+    kotlin("jvm") version "2.4.0"
+    kotlin("plugin.lombok") version "2.4.0"  // Alpha 状态
+}
+
+// 也可以使用已存在的 Lombok 依赖
+dependencies {
+    compileOnly("org.projectlombok:lombok:1.18.36")
+    annotationProcessor("org.projectlombok:lombok:1.18.36")
+}</code></pre>
+
+      <div class="warning-box">
+        <strong>⚠️ Alpha 阶段说明</strong>：Lombok 插件目前处于 Alpha 阶段，意味着 API 可能会有变化，也可能存在未覆盖的注解场景。建议先在小范围项目中试用，不建议在生产环境大规模推广。如果你特别依赖 Lombok 的 <code>@Slf4j</code>、<code>@SneakyThrows</code> 等注解，建议先验证兼容性。
+      </div>
+
+      <h3>JPA 编译器插件增强</h3>
+
+      <p>JPA 插件也获得了重要的改进，特别是对 Kotlin 2.4.0 新特性的适配：</p>
+
+      <pre><code>// JPA 插件现在更好地与 K2 编译器配合
+@Entity
+@Table(name = "articles")
+class Article(
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    val id: Long = 0,
+
+    @Column(nullable = false)
+    var title: String,
+
+    @Column(columnDefinition = "TEXT")
+    var content: String,
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "author_id")
+    var author: Author,
+
+    @CreationTimestamp
+    @Column(updatable = false)
+    val createdAt: Instant = Instant.now()
+) {
+    // JPA 插件现在正确处理 open / final 特性
+    // no-arg 构造函数由编译器自动生成
+}</code></pre>
+
+      <ul>
+        <li><strong>改进的 no-arg 支持</strong>：更精确地生成 JPA 所需的无参构造函数</li>
+        <li><strong>K2 兼容性</strong>：JPA 插件完全适配 K2 编译器，编译性能提升</li>
+        <li><strong>错误报告优化</strong>：JPA 注解相关的编译错误消息更清晰</li>
+      </ul>
+
+      <h2>5. Kotlin/JS：Value Class 导出与 ES2015 支持</h2>
+
+      <p>Kotlin/JS 在 2.4.0 中获得了两个重要的增强。</p>
+
+      <h3>Value Class 导出支持</h3>
+
+      <p>现在可以使用 <code>@JsExport</code> 注解导出 Kotlin 的值类（Value Class / Inline Class），使 JavaScript 代码可以正确地消费这些类型：</p>
+
+      <pre><code>// Kotlin/JS 代码
+@JsExport
+@JvmInline
+value class UserId(val value: String) {
+    fun asString(): String = value
+}
+
+@JsExport
+@JvmInline
+value class Email(val address: String)
+
+@JsExport
+data class UserProfile(
+    val id: UserId,
+    val name: String,
+    val email: Email
+)
+
+// JavaScript 中可以直接使用
+// const profile = new UserProfile(
+//     new UserId("u-001"),
+//     "张三",
+//     new Email("zhangsan@example.com")
+// );
+// console.log(profile.id.asString()); // "u-001"</code></pre>
+
+      <h3>ES2015 特性与 JS 代码内联</h3>
+
+      <p>Kotlin/JS 的 <code>@JsFun</code> 和 <code>external</code> 声明现在支持 ES2015 模块系统和更先进的 JavaScript 特性：</p>
+
+      <pre><code>// 使用 ES2015 模块导入
+@JsModule("lodash")
+external fun debounce(fn: Function, wait: Int): Function
+
+// 新的 @JsFun 支持模板字符串
+@JsFun("(name) => `Hello, ${name}!`")
+external fun greet(name: String): String
+
+// 内联 JavaScript
+@JsFun("""
+    (items) => items
+        .filter(x => x != null)
+        .map(x => x ** 2)
+""")
+external fun processSquares(items: Array&lt;Int&gt;): Array&lt;Int&gt;</code></pre>
+
+      <div class="tip-box">
+        <strong>💡 迁移建议</strong>：如果现有 Kotlin/JS 项目使用旧的 <code>@JsName</code> 模式导出值类，建议逐步迁移到新的 <code>@JsExport</code> + Value Class 模式。新方式生成的 JS 代码更自然，也更容易被 TypeScript 类型定义捕获。
+      </div>
+
+      <h2>6. 标准库：Map.Entry 不可变 Copy API</h2>
+
+      <p>Kotlin 2.4.0 的标准库增加了一个小但实用的 API——<code>Map.Entry.copy()</code> 方法。这个 API 允许你创建不可变的 Map.Entry 副本。</p>
+
+      <pre><code>// 新的 Map.Entry.copy() API
+val entries = mapOf(
+    "a" to 1,
+    "b" to 2,
+    "c" to 3
+)
+
+// 创建一个不可变的 Entry 副本
+val copiedEntry = entries.entries.first().copy()  // "a"=1
+
+// 与 lambda 操作结合
+val newEntry = entries.entries
+    .first { it.key == "b" }
+    .copy(key = "B", value = 20)  // "B"=20
+
+// 在集合操作中的应用
+val modified = entries.map { (k, v) ->
+    if (k == "a") k to (v * 100)
+    else k to v
+}.toMap()
+
+// 或者用新的 copy API 更简洁
+val modified2 = entries.mapValues { (k, v) ->
+    entries.entries.first { it.key == k }.copy(value = if (k == "a") v * 100 else v)
+}</code></pre>
+
+      <p>虽然看起来是一个小改动，但在函数式编程风格的数据转换中，<code>Entry.copy()</code> 提供了更符合不可变原则的 API。</p>
+
+      <h2>7. 构建工具改进</h2>
+
+      <h3>Gradle 9.5.0 兼容</h3>
+
+      <p>Kotlin 2.4.0 已经验证了与 Gradle 9.5.0 的兼容性。这包括了持续集成环境中的最新 Gradle 功能支持：</p>
+
+      <ul>
+        <li><strong>配置缓存</strong>：完全支持 Gradle 配置缓存，进一步提速构建</li>
+        <li><strong>并行项目解析</strong>：多模块项目的并行 Gradle 任务支持</li>
+        <li><strong>Worker API 改进</strong>：充分利用 Gradle Worker API 做增量编译</li>
+      </ul>
+
+      <pre><code>// build.gradle.kts — Kotlin 2.4.0 的推荐配置
+plugins {
+    kotlin("jvm") version "2.4.0"
+    kotlin("plugin.spring") version "2.4.0"  // 如果使用 Spring
+    kotlin("plugin.lombok") version "2.4.0"  // Alpha，可选
+    kotlin("plugin.jpa") version "2.4.0"     // 如果使用 JPA
+    id("org.jetbrains.compose") version "1.7.3"  // Compose Multiplatform
+}
+
+kotlin {
+    jvmToolchain(21)
+    compilerOptions {
+        freeCompilerArgs.add("-Xcontext-parameters")  // 如果使用 Context Parameters
+    }
+}</code></pre>
+
+      <h3>Maven：Java 与 JVM 目标版本自动对齐</h3>
+
+      <p>对于 Maven 用户，Kotlin 2.4.0 带来了一个实用的改进——自动对齐 Java 编译版本和 Kotlin JVM 目标版本。当你在 <code>maven-compiler-plugin</code> 中设置了 <code>source</code> 和 <code>target</code> 时，Kotlin Maven 插件会自动采用相同的版本，无需重复配置：</p>
+
+      <pre><code>&lt;!-- pom.xml --&gt;
+&lt;properties&gt;
+    &lt;maven.compiler.source&gt;21&lt;/maven.compiler.source&gt;
+    &lt;maven.compiler.target&gt;21&lt;/maven.compiler.target&gt;
+    &lt;kotlin.version&gt;2.4.0&lt;/kotlin.version&gt;
+&lt;/properties&gt;
+
+&lt;!-- Kotlin JVM target 自动对齐到 21，无需额外配置 --&gt;</code></pre>
+
+      <h2>8. Compose Multiplatform 1.11</h2>
+
+      <p>Kotlin 2.4.0 版本捆绑了 <strong>Compose Multiplatform 1.11</strong>，这是 Compose 跨平台框架的又一重大更新：</p>
+
+      <ul>
+        <li><strong>性能改进</strong>：渲染性能提升 20-30%，特别在列表和动画密集型场景</li>
+        <li><strong>资源管理改进</strong>：跨平台资源管理更加稳定和高效</li>
+        <li><strong>无障碍支持增强</strong>：屏幕阅读器支持在更多平台上线</li>
+        <li><strong>Compose for Web 稳定</strong>：Web 目标进入 Beta 阶段</li>
+      </ul>
+
+      <div class="info-box">
+        <strong>📌 升级提示</strong>：Compose Multiplatform 1.11 需要 Kotlin 2.4.0 才能运行。如果你的项目使用 Compose Multiplatform，升级 Kotlin 版本时必须同步升级 Compose 插件版本。JetBrains 提供了兼容性矩阵供参考。
+      </div>
+
+      <h2>9. 从 2.0.x / 2.3.x 迁移指南</h2>
+
+      <h3>从 Kotlin 2.3.x 升级</h3>
+
+      <p>从 2.3.x 升级到 2.4.0 相对平稳。以下为主要检查点：</p>
+
+      <ol>
+        <li><strong>更新 Kotlin 版本号</strong>：将 <code>kotlin("jvm") version "2.3.x"</code> 改为 <code>"2.4.0"</code></li>
+        <li><strong>检查 Context Parameters 相关代码</strong>：之前使用 <code>@OptIn(ExperimentalContextParameters::class)</code> 的代码可以直接删除该注解</li>
+        <li><strong>验证 K2 编译</strong>：如果之前使用旧编译器，2.4.0 默认使用 K2，确保所有代码兼容</li>
+        <li><strong>更新 IDE 插件</strong>：IntelliJ IDEA / Android Studio 中的 Kotlin 插件需要更新到 2.4.0 对应的版本</li>
+        <li><strong>检查废弃 API</strong>：查看 <code>@Deprecated</code> 注解，是否有即将移除的 API 影响你的项目</li>
+      </ol>
+
+      <h3>从 Kotlin 2.0.x / 1.x 升级</h3>
+
+      <p>如果你的项目还在使用 Kotlin 2.0 甚至 1.9.x，升级到 2.4.0 的跨度较大，建议按版本逐步升级：</p>
+
+      <table>
+        <tr><th>当前版本</th><th>建议路径</th><th>主要注意事项</th></tr>
+        <tr><td>1.9.x</td><td>1.9.x → 2.0.21 → 2.1.20 → 2.4.0</td><td>K2 编译器变更最大，先确认所有第三方库兼容 2.0+</td></tr>
+        <tr><td>2.0.x</td><td>2.0.x → 2.1.20 → 2.4.0</td><td>检查 Kotlin/JS、Kotlin/Native 目标兼容性</td></tr>
+        <tr><td>2.1.x</td><td>2.1.x → 2.4.0</td><td>直接升级，API 兼容性较好</td></tr>
+        <tr><td>2.2.x / 2.3.x</td><td>直接升级到 2.4.0</td><td>改动最小，重点测试 Context Parameters 和 Compose 集成</td></tr>
+      </table>
+
+      <pre><code>// 升级后需要验证的清单
+// 1. 更新 build.gradle.kts
+plugins {
+    kotlin("jvm") version "2.4.0"
+    // 更新其他 Kotlin 插件版本号
+}
+
+// 2. 移除不必要的 OptIn 注解
+// 删除: @OptIn(ExperimentalContextParameters::class)
+
+// 3. 检查是否有被废弃的 API 调用
+// 运行: ./gradlew build --warning-mode=all
+
+// 4. 运行完整测试套件
+// 运行: ./gradlew test</code></pre>
+
+      <div class="warning-box">
+        <strong>⚠️ 风险点</strong>：如果你的项目使用了以下特性，升级时需要特别留意：
+        <ul style="margin-top: 0.5rem;">
+          <li>自定义编译器插件（如 KSP 插件）——需要更新到兼容 2.4.0 的版本</li>
+          <li>Kotlin/JS 项目——ES2015 模块系统可能有行为变化</li>
+          <li>Kotlin Multiplatform——确保所有 target 配置在新版本中有效</li>
+          <li>使用了 <code>-X</code> 实验性编译器参数的——部分参数可能已被移除或改名</li>
+        </ul>
+      </div>
+
+      <h2>10. 总结与展望</h2>
+
+      <p>Kotlin 2.4.0 是一个承上启下的版本：它巩固了 K2 编译器时代的基石，又将 Context Parameters 等「下一代语言特性」推向了稳定。从版本节奏来看，JetBrains 正在加速 Kotlin 的迭代：</p>
+
+      <h3>Kotlin 2.5 前瞻</h3>
+
+      <p>根据 JetBrains 的路线图，Kotlin 2.5 预计将在 2026 年底或 2027 年初发布，值得关注的特性包括：</p>
+
+      <ul>
+        <li><strong>Guard Conditions 与 When 增强</strong>：更强大的模式匹配能力</li>
+        <li><strong>Explicit Backing Fields（属性显式后备字段）</strong>：对属性访问器的更细粒度控制</li>
+        <li><strong>Non-local return 与控制流改进</strong>：进一步简化函数式编程中的控制流</li>
+        <li><strong>多模块增量编译进一步优化</strong>：大型项目的构建加速</li>
+        <li><strong>Compose Multiplatform 1.2（或 2.0）</strong>：跨平台开发的新里程碑</li>
+      </ul>
+
+      <h3>升级建议</h3>
+
+      <p>对于大多数 Kotlin 项目，我建议尽快升级到 2.4.0：</p>
+
+      <table>
+        <tr><th>项目类型</th><th>建议</th></tr>
+        <tr><td>纯 Kotlin JVM 项目</td><td>立即升级，风险低，收益大</td></tr>
+        <tr><td>Spring Boot + Kotlin</td><td>立即升级，配合 Spring 6.2 / Boot 4.x</td></tr>
+        <tr><td>Kotlin Multiplatform</td><td>评估库兼容性后尽快升级</td></tr>
+        <tr><td>Android + Kotlin</td><td>确认 AGP 兼容版本后升级</td></tr>
+        <tr><td>Kotlin/JS 项目</td><td>配合 Node/NPM 升级计划升级</td></tr>
+        <tr><td>遗留 Java + Kotlin 混合项目</td><td>测试 Lombok 插件后考虑升级</td></tr>
+      </table>
+
+      <p>Kotlin 生态正变得越来越成熟。2.4.0 不只是给开发者带来了新玩具，它切实解决了工程中的痛点——Context Parameters 简化了横切关注点，Name-based Destructuring 提升了代码可读性，Lombok 插件弥合了 Java/Kotlin 协作的鸿沟。</p>
+
+      <p>如果你还在观望，现在就是最佳升级时机。</p>
+
+      <div class="post-tags">
+        <span>Kotlin</span>
+        <span>编程语言</span>
+        <span>JetBrains</span>
+        <span>JVM</span>
+        <span>Kotlin 2.4.0</span>
+        <span>Context Parameters</span>
+        <span>Compose Multiplatform</span>
+      </div>
+    </article>
+  </main>
+
+  <footer class="footer" role="contentinfo">
+    <div class="footer-inner">
+      <p class="footer-signature">写代码，做产品，也认真生活。</p>
+      <div class="footer-links">
+        <a href="https://github.com/zzdbilly" class="footer-link" target="_blank" rel="noopener">GitHub</a>
+        <a href="../../projects/index.html" class="footer-link">项目</a>
+        <a href="../../about/index.html" class="footer-link">关于</a>
+      </div>
+      <p class="footer-copyright">© 2026 张小猛</p>
+    </div>
+  </footer>
+
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../assets/js/search.js"></script>
+</body>
+</html>
