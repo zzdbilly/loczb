@@ -519,6 +519,94 @@ function initBlogFilters() {
 }
 
 // ===================================
+// ===================================
+// Code Block Copy Button
+// ===================================
+function initCodeCopy() {
+  const codeBlocks = document.querySelectorAll('.post-content pre');
+  
+  codeBlocks.forEach(pre => {
+    // Wrap in container if not already wrapped
+    if (!pre.parentElement.classList.contains('code-block-wrapper')) {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'code-block-wrapper';
+      pre.parentNode.insertBefore(wrapper, pre);
+      wrapper.appendChild(pre);
+    }
+  });
+
+  // Add copy buttons
+  document.querySelectorAll('.code-block-wrapper').forEach(wrapper => {
+    if (wrapper.querySelector('.copy-code-btn')) return;
+    
+    const btn = document.createElement('button');
+    btn.className = 'copy-code-btn';
+    btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> 复制';
+    
+    btn.addEventListener('click', async () => {
+      const code = wrapper.querySelector('code') || wrapper.querySelector('pre');
+      const text = code ? code.textContent : '';
+      
+      try {
+        await copyToClipboard(text);
+        btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> 已复制';
+        btn.classList.add('copied');
+        setTimeout(() => {
+          btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> 复制';
+          btn.classList.remove('copied');
+        }, 2000);
+      } catch {
+        btn.textContent = '复制失败';
+      }
+    });
+    
+    wrapper.appendChild(btn);
+  });
+}
+
+// ===================================
+// Image Lightbox (click to enlarge)
+// ===================================
+function initLightbox() {
+  const images = document.querySelectorAll('.post-content img');
+  if (images.length === 0) return;
+  
+  // Create lightbox elements
+  const overlay = document.createElement('div');
+  overlay.className = 'lightbox-overlay';
+  overlay.innerHTML = '<img class="lightbox-image" src="" alt=""><div class="lightbox-caption"></div>';
+  document.body.appendChild(overlay);
+  
+  const lightboxImg = overlay.querySelector('.lightbox-image');
+  const lightboxCaption = overlay.querySelector('.lightbox-caption');
+  
+  images.forEach(img => {
+    // Skip small icons (under 80px)
+    if (img.naturalWidth <= 80) return;
+    
+    img.addEventListener('click', () => {
+      lightboxImg.src = img.src;
+      lightboxImg.alt = img.alt;
+      lightboxCaption.textContent = img.alt || '';
+      overlay.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    });
+  });
+  
+  overlay.addEventListener('click', () => {
+    overlay.classList.remove('active');
+    document.body.style.overflow = '';
+  });
+  
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && overlay.classList.contains('active')) {
+      overlay.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+  });
+}
+
+// ===================================
 // Initialize Everything
 // ===================================
 document.addEventListener('DOMContentLoaded', () => {
@@ -527,6 +615,8 @@ document.addEventListener('DOMContentLoaded', () => {
   initScrollProgress();
   setActiveNavLink();
   initBlogFilters();
+  initCodeCopy();
+  initLightbox();
   
   // Add loading animation to page
   document.body.classList.add('loaded');
