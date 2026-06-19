@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Jetpack Compose April 2026 Update 完整解读 — BOM 2026.04.01、Compose 1.11、共享元素过渡调试工具、触控板事件、Testing v2 默认启用、Navigation3 1.1.1 等全解析">
+  <meta name="keywords" content="Jetpack Compose, Android, Compose Multiplatform, UI, Kotlin, Navigation3, Shared Element Transition, Trackpad, Compose Testing">
+  <meta name="author" content="张小猛">
+  <meta name="publish-date" content="2026-06-19">
+  <title>Jetpack Compose April 2026 Update 深度解读 | 张小猛 - loczb</title>
+  <link rel="canonical" href="https://709527.xyz/blog/posts/compose-april-2026-update.html">
+  <meta name="robots" content="index, follow">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://709527.xyz/blog/posts/compose-april-2026-update.html">
+  <meta property="og:title" content="Jetpack Compose April 2026 Update 深度解读 | 张小猛 - loczb">
+  <meta property="og:description" content="BOM 2026.04.01 来了：Compose 1.11、共享元素过渡调试、触控板事件、Testing v2 默认、Navigation3 补丁——Android 开发者必读的全方位解读。">
+  <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="article:author" content="张小猛">
+  <meta property="article:published_time" content="2026-06-19">
+  
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Jetpack Compose April 2026 Update 深度解读 | 张小猛 - loczb">
+  <meta name="twitter:description" content="BOM 2026.04.01 全面解读：Compose 1.11、共享元素过渡调试、触控板事件、Testing v2、Navigation3 更新。">
+  <meta name="twitter:image" content="https://709527.xyz/assets/images/og-image.png">
+
+  <link rel="icon" type="image/x-icon" href="../../assets/images/favicon.ico">
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <style>
+    .post-content { max-width: 760px; margin: 0 auto; line-height: 1.85; }
+    .post-content h1 { font-size: 2.4rem; margin: 2rem 0 1rem; }
+    .post-content h2 { font-size: 1.7rem; margin: 2.5rem 0 1rem; color: var(--color-accent-primary); border-bottom: 1px solid var(--color-border); padding-bottom: 0.5rem; }
+    .post-content h3 { font-size: 1.3rem; margin: 1.8rem 0 0.8rem; }
+    .post-content pre { background: var(--color-bg-tertiary); padding: 1.2rem; border-radius: 8px; overflow-x: auto; margin: 1.2rem 0; font-size: 0.9rem; }
+    .post-content code { background: var(--color-bg-tertiary); padding: 0.15rem 0.4rem; border-radius: 4px; font-family: monospace; font-size: 0.9em; }
+    .post-meta { color: var(--color-text-secondary); font-size: 0.9rem; margin-bottom: 2rem; }
+    .post-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 3rem; }
+    .post-tags span { background: var(--color-bg-tertiary); padding: 0.3rem 0.8rem; border-radius: 9999px; font-size: 0.85rem; color: var(--color-accent-primary); }
+    .tip-box { background: rgba(34, 197, 94, 0.1); border-left: 3px solid #22c55e; padding: 1rem 1.2rem; margin: 1.5rem 0; border-radius: 0 6px 6px 0; }
+    .warning-box { background: rgba(234, 179, 8, 0.1); border-left: 3px solid #eab308; padding: 1rem 1.2rem; margin: 1.5rem 0; border-radius: 0 6px 6px 0; }
+    .info-box { background: rgba(59, 130, 246, 0.1); border-left: 3px solid #3b82f6; padding: 1rem 1.2rem; margin: 1.5rem 0; border-radius: 0 6px 6px 0; }
+    table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.95rem; }
+    th, td { border: 1px solid var(--color-border); padding: 0.7rem; text-align: left; }
+    th { background: var(--color-bg-tertiary); font-weight: 600; }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../../index.html" class="nav-logo">loc<span>zb</span></a>
+      <button class="nav-toggle" aria-label="打开菜单"><span></span><span></span><span></span></button>
+      <div class="nav-overlay"></div>
+      <ul class="nav-links">
+        <li><a href="../../index.html" class="nav-link">首页</a></li>
+        <li><a href="../../projects/index.html" class="nav-link">项目</a></li>
+        <li><a href="../index.html" class="nav-link active">博客</a></li>
+        <li><a href="../../about/index.html" class="nav-link">关于</a></li>
+      </ul>
+      <button class="theme-toggle" aria-label="切换主题">
+        <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line></svg>
+        <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+      </button>
+    </div>
+  </nav>
+
+  <main>
+    <article class="post-content" style="padding: calc(64px + 4rem) 1rem 4rem;">
+      <a href="../index.html" style="display: inline-flex; align-items: center; gap: 0.5rem; color: var(--color-text-secondary); text-decoration: none; margin-bottom: 2rem;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        返回博客
+      </a>
+      
+      <h1>Jetpack Compose April 2026 Update 深度解读</h1>
+      
+      <div class="post-meta">2026年6月19日 · 阅读时间约 12 分钟</div>
+
+      <p>2026 年 4 月，Jetpack Compose 发布了 BOM 2026.04.01，核心模块版本号攀升至 <strong>1.11</strong>。这是一次「分量十足」的月度更新：共享元素过渡终于有了真正的调试工具、触控板事件进入实验性 API、Testing v2 正式成为默认选择、Navigation 家族迎来稳健补丁和稳定里程碑，Compose Multiplatform 也在桌面端持续发力。</p>
+
+      <p>本文从 Android 开发者的角度，逐项拆解这次更新中最值得关注的变化。</p>
+
+      <div class="info-box">
+        <strong>📌 版本速览</strong>：Compose BOM 2026.04.01 | Core 1.11 | Compose Multiplatform 1.11.1 | Navigation3 1.1.1 | Navigationevent 1.1.0 | Webkit 1.16.0-rc01 | Lint 1.0.0-beta01
+      </div>
+
+      <h2>Overview：2026 年 Compose 的节奏</h2>
+
+      <p>从 2025 年开始，Jetpack Compose 进入了「每月 BOM、季度大版本」的快速迭代周期。2026 年 4 月的 BOM 更新虽然不是季度大版本，但汇集了过去几个月积累的多项重要改进：从实验性 API 的完善（触控板、共享元素调试）到生产级工具的稳定化（Testing v2、Navigationevent），再到工具链的推进（Webkit RC、Lint Beta），覆盖了开发体验的方方面面。</p>
+
+      <p>从版本号的演进来看，Compose 1.11 标志着平台成熟度的进一步提升。相比 1.10 时代的主攻性能优化，1.11 更多聚焦在<strong>交互模式的扩展</strong>和<strong>开发工具链的完善</strong>上。</p>
+
+      <h2>Compose 1.11：核心运行时改进</h2>
+
+      <p>Compose Runtime 和 UI 模块在 1.11 中获得了多项底层增强：</p>
+
+      <h3>性能与稳定性</h3>
+      <ul>
+        <li><strong>懒布局性能持续优化</strong>：LazyColumn / LazyRow 在复杂 item 场景下的重组范围进一步收窄，减少不必要的子树重组</li>
+        <li><strong>Modifier 链优化</strong>：Modifier 组合的开销进一步降低，尤其在大量使用 <code>.graphicsLayer()</code> 和 <code>.clip()</code> 的场景下</li>
+        <li><strong>CompositionLocal 改进</strong>：CompositionLocal 的读取性能在 1.11 中获得了��项优化，对主题和配置密集型应用有明显收益</li>
+        <li><strong>快照状态系统增强</strong>：读写锁的竞争减少，多线程场景下的状态同步更加高效</li>
+      </ul>
+
+      <div class="tip-box">
+        <strong>💡 迁移建议</strong>：如果你的项目目前使用 BOM 2025.12.01 或更早版本，1.11 的编译时间预期会略长于 1.10，因为新增的 lint 检查和代码生成增加了一些构建时开销，但运行时性能是正向收益。
+      </div>
+
+      <h2>共享元素过渡调试工具</h2>
+
+      <p>共享元素过渡（Shared Element Transition）自 Compose 1.7 引入以来，一直是开发者又爱又恨的功能——效果华丽，但调试起来极其痛苦。在 1.11 中，Google 终于为它补上了缺失的工具链。</p>
+
+      <h3>新工具能力</h3>
+      <p>新的调试支持包含以下关键特性：</p>
+
+      <pre><code>// 在 build.gradle.kts 中启用过渡调试
+android {
+    composeOptions {
+        sharedElementTransitionDebug = true
+    }
+}
+
+// 或者在运行时通过系统标志开启
+adb shell setprop debug.compose.shared_element_transition true</code></pre>
+
+      <ul>
+        <li><strong>视觉叠加层（Overlay）</strong>：开启调试后，共享元素过渡会以半透明线框叠加显示源和目标的边界框，让你直观地看到动画的起点和终点</li>
+        <li><strong>路径可视化</strong>：过渡路径（缩放、位移、裁剪等）以实时绘制的方式显示在屏幕上，方便排查「元素飞到奇怪位置」的问题</li>
+        <li><strong>日志追踪</strong>：每个共享元素的生命周期事件（enter/exit/reenter/return）都会输出详细日志，包含各属性的插值状态</li>
+        <li><strong>Layout Inspector 集成</strong>：在 Android Studio 的 Layout Inspector 中可以看到共享元素的配对状态，以及当前正在运行的过渡动画</li>
+      </ul>
+
+      <div class="info-box">
+        <strong>📌 使用场景</strong>：如果你的应用使用了 <code>SharedTransitionLayout</code> 和 <code>Modifier.sharedElement()</code> / <code>Modifier.sharedBounds()</code>，强烈建议在开发阶段开启调试模式。最常见的调试场景包括：列表到详情页的过渡错位、bounds 计算不准确导致的裁剪异常、以及多共享元素同时过渡时的时序冲突。
+      </div>
+
+      <h3>新增实验性 API</h3>
+      <p>除了调试工具，1.11 还扩展了共享元素过渡的 API 能力：</p>
+
+      <pre><code>// 新的实验性 API：精细控制共享元素的渲染阶段
+@ExperimentalSharedElementApi
+Modifier.sharedElement(
+    state = sharedTransitionState,
+    key = "avatar",
+    renderMode = SharedElementRenderMode.ContentFirst
+)
+
+// 支持的渲染模式
+enum class SharedElementRenderMode {
+    ContentFirst,      // 优先渲染目标内容（默认行为）
+    BoundsFirst,       // 优先对齐边界再变换内容
+    Parallel           // 边界和内容同时变换
+}</code></pre>
+
+      <p>新的 <code>SharedElementRenderMode</code> 允许开发者控制过渡动画中「边界变换」和「内容变换」的执行顺序。对于包含圆角图片或复杂裁剪的共享元素，选择合适的渲染模式可以显著提升视觉平滑度。</p>
+
+      <h2>触控板事件——桌面与 Web 的新交互模式</h2>
+
+      <p>Compose 1.11 引入了一项新的实验性 API：<strong>触控板事件（Trackpad Events）</strong>。这虽然看起来是为 Desktop / Web 平台准备的，但对 Android 开发者同样有意义——尤其是那些正在或计划使用 Compose Multiplatform 构建跨平台应用的人。</p>
+
+      <h3>为什么需要触控板事件</h3>
+      <p>传统的 Compose 指针事件（<code>pointerInput</code>）是为触摸屏设计的：单指点击、滑动、长按。但触控板（Trackpad / Touchpad）的交互模式不同：它支持多指手势（双指缩放、三指滑动）、精确滚动（带 momentum）、压力感应等。如果没有原生支持，触控板在这些平台上只能模拟鼠标事件，体��大打折扣。</p>
+
+      <h3>API 概览</h3>
+
+      <pre><code>@ExperimentalTrackpadApi
+@Composable
+fun TrackpadDemo() {
+    var scale by remember { mutableFloatStateOf(1f) }
+    var offset by remember { mutableStateOf(Offset.Zero) }
+    
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .trackpadInput(
+                onScroll = { scrollDelta, sourceType ->
+                    // 处理触控板滚动（带 momentum）
+                    offset += scrollDelta
+                },
+                onGesture = { gesture ->
+                    when (gesture) {
+                        is TrackpadGesture.Pinch -> {
+                            scale *= gesture.zoomFactor
+                        }
+                        is TrackpadGesture.Swipe -> {
+                            // 三指/四指滑动
+                        }
+                    }
+                }
+            )
+    ) {
+        Image(
+            painter = ...,
+            contentDescription = null,
+            modifier = Modifier
+                .graphicsLayer {
+                    scaleX = scale
+                    scaleY = scale
+                    translationX = offset.x
+                    translationY = offset.y
+                }
+        )
+    }
+}</code></pre>
+
+      <h3>主要事件类型</h3>
+      <table>
+        <tr><th>事件</th><th>描述</th><th>适用场景</th></tr>
+        <tr><td><code>onScroll</code></td><td>精确滚动，携带 momentum 和 sourceType（触摸板 vs 鼠标滚轮）</td><td>列表滚动、画布平移</td></tr>
+        <tr><td><code>onGesture.Pinch</code></td><td>双指捏合缩放</td><td>图片/地图缩放</td></tr>
+        <tr><td><code>onGesture.Rotate</code></td><td>双指旋转</td><td>图片编辑器</td></tr>
+        <tr><td><code>onGesture.Swipe</code></td><td>多指滑动</td><td>页面切换、手势导航</td></tr>
+        <tr><td><code>onSecondaryClick</code></td><td>双指轻点 / 右键</td><td>上下文菜单</td></tr>
+      </table>
+
+      <div class="tip-box">
+        <strong>💡 跨平台开发者的福利</strong>：对于使用 Compose Multiplatform 构建桌面端应用的团队，触控板 API 意味着你的用户终于可以在 MacBook 触控板或 Windows Precision Touchpad 上获得原生级的操作体验。配合 <code>FoundationGestures</code> 中的 <code>detectTransformGestures</code>，可以构建丝滑的多点触控 + 触控板统一交互方案。
+      </div>
+
+      <h2>Testing v2 API 正式成为默认</h2>
+
+      <p>这是本次更新中对开发者日常工作影响<strong>最直接</strong>的变化。Compose Testing v2 API 在经历多个版本的实验期后，终于在 1.11 中成为默认配置。</p>
+
+      <h3>核心变化</h3>
+      <p>最重要的变化是：<strong><code>StandardTestDispatcher</code> 取代 <code>UnconfinedTestDispatcher</code> 成为默认测试调度器</strong>。</p>
+
+      <table>
+        <tr><th>方面</th><th>v1（旧）</th><th>v2（新默认）</th></tr>
+        <tr><td>测试调度器</td><td>UnconfinedTestDispatcher</td><td>StandardTestDispatcher</td></tr>
+        <tr><td>ComposeTestRule</td><td>createComposeRule()</td><td>createComposeRule()（已更新）</td></tr>
+        <tr><td>等待动画</td><td>mainClock.autoAdvance = true</td><td>默认 autoAdvance（同 v1 行为）</td></tr>
+        <tr><td>协程调度</td><td>立即执行协程</td><td>按序调度，更接近真实环境</td></tr>
+        <tr><td>Semantics 节点</td><td>基本 API</td><td>增强的 find/filter 能力</td></tr>
+        <tr><td>自定义 Matcher</td><td>有限的扩展性</td><td>更灵活的 Matcher 组合</td></tr>
+      </table>
+
+      <h3>迁移指南：从 Testing v1 到 v2</h3>
+
+      <p>如果你的项目还在使用旧的 Compose Testing API，以下是需要修改的关键点：</p>
+
+      <p><strong>1. 更新依赖</strong></p>
+
+      <pre><code>// 移除旧的测试依赖
+// debugImplementation("androidx.compose.ui:ui-test-manifest")
+// debugImplementation("androidx.compose.ui:ui-test-junit4")
+
+// 启用 v2（BOM 2026.04.01 后默认）
+android {
+    composeOptions {
+        useComposeTestingV2 = true // 旧项目需要显式设置
+    }
+}
+
+// 测试依赖保持不变
+debugImplementation("androidx.compose.ui:ui-test-manifest")
+debugImplementation("androidx.compose.ui:ui-test-junit4")</code></pre>
+
+      <p><strong>2. 调整测试中的协程调度</strong></p>
+
+      <pre><code>// 旧：UnconfinedTestDispatcher——协程立即执行
+@Test
+fun oldApproach() {
+    composeTestRule.setContent { ... }
+    // 协程在 setContent 中立即执行完毕
+}
+
+// 新：StandardTestDispatcher——协程按序调度
+@Test
+fun newApproach() = runTest {
+    composeTestRule.setContent { ... }
+    // 协程不会立即执行，需要：
+    composeTestRule.waitForIdle()        // 等待 compose 空闲
+    // 或
+    advanceUntilIdle()                    // 推进调度器直到空闲
+}</code></pre>
+
+      <p><strong>3. 利用增强的 Semantics API</strong></p>
+
+      <pre><code>// Testing v2 增强的节点查找
+composeTestRule
+    .onAllNodes(
+        hasTestTag("item")
+            .and(hasText("Hello"))
+            .and(isEnabled())
+    )
+    .assertCountEquals(3)
+
+// 新的条件等待
+composeTestRule.waitUntil(
+    condition = { composeTestRule.onAllNodes(hasTestTag("loaded")).fetchSemanticsNodes().isNotEmpty() },
+    timeoutMillis = 5000
+)</code></pre>
+
+      <div class="warning-box">
+        <strong>⚠️ 迁移风险</strong>：如果你的测试中大量依赖「协程在 setContent 内立即执行完毕」的假设（UnconfinedTestDispatcher 的行为），切换到 StandardTestDispatcher 后可能会暴露一些竞态条件（race condition）。这不是 bug，而是你的测试之前过于乐观了。建议在迁移期间为每个测试文件添加 <code>@RunWith(TestRunner::class)</code>，逐步替换非兼容测试。
+      </div>
+
+      <h3>为什么 Google 选择 StandardTestDispatcher</h3>
+      <p>UnconfinedTestDispatcher 在 setContent 完成后立即执行所有协程，这在简单测试中很方便，但它掩盖了真实世界中协程调度的随机性。StandardTestDispatcher 按序调度协程，更能模拟真实运行环境，帮助开发者提前发现异步相关的 bug。这也是 Jetpack 整体测试策略的演进方向——此前 ViewModel 和 Room 的测试指南已经推荐使用 StandardTestDispatcher。</p>
+
+      <h2>Navigation 更新：Navigation3 1.1.1 与 Navigationevent 1.1.0 稳定</h2>
+
+      <p>Navigation 系列在 4 月获得了重要更新，包含两个关键版本：</p>
+
+      <h3>Navigation3 1.1.1：稳健补丁</h3>
+      <p>Navigation3（基于类型安全导航的新一代导航库）在 1.1.0 稳定版发布后迎来了第一个补丁版本，主要修复包括：</p>
+      <ul>
+        <li><strong>深层链接修复</strong>：修复了从通知打开深层链接时，<code>NavBackStackEntry</code> 的参数解析在某些场景下丢失的问题</li>
+        <li><strong>返回栈管理改进</strong>：修复了 <code>popUpTo(inclusive = true)</code> 在复杂图结构下清除不完整的边缘情况</li>
+        <li><strong>序列化兼容性</strong>：改进了 <code>@Serializable</code> 路由参数与 Kotlinx Serialization 1.8+ 的兼容性</li>
+        <li><strong>性能优化</strong>：减少了导航图构建期间不必要的重组</li>
+      </ul>
+
+      <pre><code>// Navigation3 典型用法（类型���全路由）
+@Serializable
+sealed class Route {
+    @Serializable
+    data class Home(val tab: String = "feed") : Route()
+    
+    @Serializable
+    data class Article(val id: Long, val title: String) : Route()
+    
+    @Serializable
+    data class Settings(val section: String? = null) : Route()
+}
+
+@Composable
+fun AppNavigation() {
+    val navController = rememberNavController3<Route>(
+        startDestination = Route.Home()
+    )
+    
+    NavHost3(navController = navController) {
+        composable<Route.Home> {
+            HomeScreen(
+                onArticleClick = { id, title ->
+                    navController.navigate(Route.Article(id, title))
+                }
+            )
+        }
+        composable<Route.Article> { backStackEntry ->
+            val article = backStackEntry.toRoute<Route.Article>()
+            ArticleScreen(articleId = article.id, title = article.title)
+        }
+    }
+}</code></pre>
+
+      <h3>Navigationevent 1.1.0：稳定里程碑</h3>
+      <p>Navigationevent 库（用于监听和处理导航事件的工具库）在 4 月正式达到 <strong>1.1.0 稳定版</strong>。这个版本标志着导航事件追踪能力已足够成熟，可以用于生产环境。</p>
+
+      <ul>
+        <li><strong>事件类型扩展</strong>：新增 <code>NavigationEvent.ScreenChanged</code> 和 <code>NavigationEvent.DeeplinkResolved</code> 事件类型</li>
+        <li><strong>Analytics 集成</strong>：内置与 Firebase Analytics 和自建分析系���的集成示例</li>
+        <li><strong>条件监听</strong>：支持基于 <code>NavDestination</code> 属性的条件过滤，只收集关心的导航事件</li>
+        <li><strong>性能开销降低</strong>：事件发射路径上的序列化开销减少了约 40%</li>
+      </ul>
+
+      <div class="tip-box">
+        <strong>💡 什么时候用 Navigationevent</strong>：如果你的应用需要精细的导航分析（如用户流失点分析、A/B 测试的路径追踪），或者需要将导航事件与业务指标关联，Navigationevent 1.1.0 提供了一个开箱即用且类型安全的解决方案。对于小型应用，直接监听 <code>NavController.currentBackStackEntry</code> 可能就足够了。
+      </div>
+
+      <h2>Webkit 1.16.0-rc01：Beta 到 RC</h2>
+
+      <p><code>androidx.webkit</code> 库从 Beta 推进到了 RC 阶段，发布了 <strong>1.16.0-rc01</strong>。对于在 Compose 中使用 <code>AndroidView</code> 集成 WebView 的场景，这个版本的更新包括：</p>
+
+      <ul>
+        <li><strong>WebView 安装状态 API</strong>：新增用于检测系统 WebView 安装和更新状态的 API，帮助开发者优雅处理 WebView 不可用的情况</li>
+        <li><strong>增强的 Cookie 管理</strong>：改进了跨域 Cookie 的处理逻辑，适配最新的 WebView 安全策略</li>
+        <li><strong>安全沙箱改进</strong>：WebView 渲染进程的安全性进一步增强</li>
+      </ul>
+
+      <p>从 Beta 到 RC 通常意味着功能已经冻结，下一个版本大概率是 1.16.0 稳定版。</p>
+
+      <h2>Lint 1.0.0-beta01：Alpha 到 Beta</h2>
+
+      <p><code>androidx.compose.lint</code> 从 Alpha 晋升到了 <strong>Beta</strong>，版本号为 1.0.0-beta01。这是 Compose 专用 Lint 检查器走向稳定的重要一步。</p>
+
+      <h3>新增检查规则</h3>
+      <table>
+        <tr><th>规则名</th><th>作用</th><th>严重级别</th></tr>
+        <tr><td><code>ComposeUnstableReceiver</code></td><td>检测 Composable lambda 中使用了不稳定的接收者类型</td><td>Error</td></tr>
+        <tr><td><code>ComposeModifierReusing</code></td><td>检测 Modifier 是否在重组中被正确复用</td><td>Warning</td></tr>
+        <tr><td><code>ComposeContentScaleUsage</code></td><td>检测 Image 组件是否正确设置了 contentScale</td><td>Warning</td></tr>
+        <tr><td><code>ComposeNavigationTypeSafety</code></td><td>检测 Navigation3 路由参数的类型安全性</td><td>Error</td></tr>
+        <tr><td><code>ComposeSharedElementUsage</code></td><td>检测共享元素过渡的常见误用模式</td><td>Warning</td></tr>
+      </table>
+
+      <p>其中 <code>ComposeNavigationTypeSafety</code> 和 <code>ComposeSharedElementUsage</code> 是 1.0.0-beta01 新增的规则。前者可以在编译阶段就发现 Navigation3 路由参数类型不匹配的问题，后者帮助开发者避免共享元素过渡的常见陷阱（如 key 重复、父容器缺少 SharedTransitionLayout 等）。</p>
+
+      <div class="info-box">
+        <strong>📌 如何在项目中启用</strong>：Compose Lint 检查默认集成在 AGP 的 lint 检查中。使用最新 BOM 后，IDE 和构建时会自动应用这些检查规则。你也可以通过 <code>lintOptions</code> 配置检查的严重级别。
+      </div>
+
+      <h2>Compose Multiplatform 1.11.1</h2>
+
+      <p>JetBrains 在 4 月同步发布了 <strong>Compose Multiplatform 1.11.1</strong>，与 Jetpack Compose 1.11 保持核心同步。这次更新的亮点集中在桌面端能力的提升上。</p>
+
+      <h3>关键更新</h3>
+      <ul>
+        <li><strong>Shader-based Navigation</strong>：桌面端引入了基于 Shader 的导航过渡效果，支持复杂的 GPU 加速过渡动画（如扭曲、溶解、分形效果），为桌面应用带来更丰富的视觉体验</li>
+        <li><strong>铰链（Hinge）支持</strong>：为可折叠设备和双屏设备（如 Surface Duo 类设备）添加了铰链传感器支持，Compose 组件可以感知设备的折叠角度并做出响应</li>
+        <li><strong>Camera 支持（桌面端）</strong>：桌面端应用现在可以使用摄像头 API，支持视频通话、AR 等场景。这对于使用 Compose Multiplatform 构建远程协作或会议应用的团队是一个重大利好</li>
+        <li><strong>窗口管理改进</strong>：桌面端的窗口大小变化处理更加平滑，减少了不必要的重组</li>
+      </ul>
+
+      <pre><code>// Compose Multiplatform 1.11.1 的摄像头 API 示例（桌面端）
+@Composable
+fun CameraPreview() {
+    val cameraManager = rememberCameraManager()
+    val camera = cameraManager.getCamera()
+    
+    DisposableEffect(camera) {
+        camera.start()
+        onDispose { camera.stop() }
+    }
+    
+    AndroidView(
+        factory = { context ->
+            SurfaceView(context).apply {
+                camera.setPreviewDisplay(holder)
+            }
+        }
+    )
+}</code></pre>
+
+      <div class="tip-box">
+        <strong>💡 跨平台实践</strong>：如果你同时在 Android 和 Desktop 上使用 Compose Multiplatform，建议将平台特定逻辑（摄像头、窗口管理）放在 <code>expect</code>/<code>actual</code> 声明中，共享 UI 部分则用 commonMain 中的纯 Compose 组件。1.11.1 中窗口管理的改进使得 <code>expect</code>/<code>actual</code> 的边界更加清晰。
+      </div>
+
+      <h2>Material3 Adaptive：还在 Alpha</h2>
+
+      <p>虽然 Material3 Adaptive 库在本轮更新中仍然处于 Alpha 阶段，但它获得了新的构建版本，带来了以下改进：</p>
+      <ul>
+        <li><strong>自适应布局组件优化</strong>：<code>ListDetailPaneScaffold</code>、<code>SupportingPaneScaffold</code> 等组件在大屏设备上的行为更加可预测</li>
+        <li><strong>导航适配器增强</strong>：与 Navigation3 的集成更加紧密，支持自动根据窗口尺寸切换导航模式（底部导航栏 ↔ 侧边导航栏）</li>
+      </ul>
+
+      <p>对于计划适配大屏（平板、可折叠设备）的应用，可以浏览 <a href="https://developer.android.com/jetpack/compose/layouts/adaptive" target="_blank" rel="noopener">Google 的自适应布局指南</a>了解 Material3 Adaptive 的使用路径。</p>
+
+      <h2>实战迁移检查清单</h2>
+
+      <p>如果你计划升级到 Compose BOM 2026.04.01（或之后的 BOM），以下是一份实用的迁移检查清单：</p>
+
+      <div class="info-box">
+        <strong>⬜ Compose BOM 升级</strong><br>
+        更新 <code>build.gradle.kts</code> 中的 <code>compose-bom</code> 版本为 <code>2026.04.01</code>。
+      </div>
+
+      <pre><code>// build.gradle.kts
+dependencies {
+    val composeBom = platform("androidx.compose:compose-bom:2026.04.01")
+    implementation(composeBom)
+    implementation("androidx.compose.ui:ui")
+    implementation("androidx.compose.material3:material3")
+    // ...
+}</code></pre>
+
+      <div class="info-box">
+        <strong>⬜ Testing v2 迁移</strong><br>
+        检查所有 Compose 测试文件，将 <code>createComposeRule()</code> 的测试迁至 StandardTestDispatcher 语义。添加 <code>composeOptions.useComposeTestingV2 = true</code>（如未默认启用）。增加 <code>waitForIdle()</code> / <code>advanceUntilIdle()</code> 调用。
+      </div>
+
+      <div class="info-box">
+        <strong>⬜ Navigation3 升级</strong><br>
+        更新 <code>androidx.navigation:navigation-compose</code> 到 2.9+（含 Navigation3 1.1.1）。检查深层链接和返回栈逻辑。评估是否需要引入 <code>navigationevent</code> 1.1.0。
+      </div>
+
+      <div class="info-box">
+        <strong>⬜ 共享元素过渡调试</strong><br>
+        在开发 flavor 中启用 <code>sharedElementTransitionDebug</code> 标志。运行共享元素过渡的 UI 测试，使用新的调试工具排查动画问题。尝试新的 <code>SharedElementRenderMode</code> API 优化视觉效果。
+      </div>
+
+      <div class="info-box">
+        <strong>⬜ Compose Lint 检查</strong><br>
+        运行 <code>./gradlew lint</code>，检查是否有新的警告和错误。重点关注 <code>ComposeNavigationTypeSafety</code> 和 <code>ComposeSharedElementUsage</code> 规则。
+      </div>
+
+      <div class="info-box">
+        <strong>⬜ 跨平台评估</strong><br>
+        如果你在使用 Compose Multiplatform，评估 1.11.1 的 Shader Navigation、Hinge 和 Desktop Camera API 是否对你的项目有价值。
+      </div>
+
+      <h2>总结</h2>
+
+      <p>Jetpack Compose April 2026 Update（BOM 2026.04.01）是一份「厚积薄发」的月度更新。它没有带来革命性的新概念，但在以下四个维度上让 Compose 生态成熟了一大步：</p>
+
+      <ol>
+        <li><strong>开发工具链</strong>——共享元素过渡调试工具和 Compose Lint 的 Beta 晋升，让「写 Compose」变得更安心</li>
+        <li><strong>测试基础设施</strong>——Testing v2 成为默认方案，虽然迁移需要一些功夫，但长期来看会让测试更加可靠</li>
+        <li><strong>交互模式扩展</strong>——触控板事件为 Desktop/Web 平台打开了新的交互维度，跨平台应用的用户体验将再上一个台阶</li>
+        <li><strong>生态成熟度</strong>——Navigationevent 稳定、Webkit RC、Lint Beta、Material3 Adaptive 持续迭代，都表明 Compose 生态正在全面走向生产就绪</li>
+      </ol>
+
+      <p>对于 Android 开发者，这次更新最直接的行动点就是：<strong>升级 BOM、迁移 Testing v2、打开共享元素调试</strong>。前两者是生产环境的硬要求，后者是开发体验的明显提升。</p>
+
+      <p>Compose 的进化从未停止。从 1.0 到 1.11，我们见证了 Android UI 开发从 View 系统到声明式范式的完整迁移。而 2026 年的 Compose，已经做好了迎接多平台时代的准备。</p>
+
+      <div class="post-tags">
+        <span>Jetpack Compose</span>
+        <span>Android</span>
+        <span>Compose Multiplatform</span>
+        <span>UI</span>
+        <span>Kotlin</span>
+      </div>
+    </article>
+  </main>
+
+  <footer class="footer" role="contentinfo">
+    <div class="footer-inner">
+      <p class="footer-signature">写代码，做产品，也认真生活。</p>
+      <div class="footer-links">
+        <a href="https://github.com/zzdbilly" class="footer-link" target="_blank" rel="noopener">GitHub</a>
+        <a href="../../projects/index.html" class="footer-link">项目</a>
+        <a href="../../about/index.html" class="footer-link">关于</a>
+      </div>
+      <p class="footer-copyright">© 2026 张小猛</p>
+    </div>
+  </footer>
+
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../assets/js/search.js"></script>
+</body>
+</html>
