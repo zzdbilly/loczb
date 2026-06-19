@@ -152,8 +152,13 @@ class SiteSearch {
       return;
     }
 
+    // Calculate correct URL based on current page location
+    const isBlogPage = window.location.pathname.includes('/blog/');
+    const isPostPage = window.location.pathname.includes('/blog/posts/');
+    const basePath = isPostPage ? '../' : (isBlogPage ? '' : 'blog/');
+    
     const html = results.map(post => `
-      <a href="${post.url}" class="search-result-item">
+      <a href="${basePath}${post.url}" class="search-result-item">
         <div class="search-result-meta">
           <span class="search-result-category">${post.category}</span>
           <span class="search-result-date">${post.date}</span>
