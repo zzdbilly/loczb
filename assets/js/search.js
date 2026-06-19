@@ -152,20 +152,13 @@ class SiteSearch {
       return;
     }
 
-    // Calculate correct URL based on current page location
+    // Calculate correct URL based on current page depth
     // post.url is always 'blog/posts/xxx.html' (relative from site root)
-    const isPostPage = window.location.pathname.includes('/blog/posts/');
-    const isBlogPage = window.location.pathname.includes('/blog/');
-    // From post page: need ../../ to get to root, then post.url
-    // From blog index: need ../ to get to root, then post.url
-    // From root (homepage, projects, etc): just use post.url directly
-    let basePath = '';
-    if (isPostPage) {
-      basePath = '../../';
-    } else if (isBlogPage) {
-      basePath = '../';
-    }
-    // If already at root, basePath stays '' and post.url works as-is
+    // Count how many directory levels deep we are from the root
+    const pathParts = window.location.pathname.replace(/\/$/, '').split('/').filter(Boolean);
+    const depth = pathParts.length;
+    // depth 0 = root (homepage), depth 1 = /blog/ or /projects/, depth 2 = /blog/posts/
+    const basePath = depth > 0 ? '../'.repeat(depth) : '';
     
     const html = results.map(post => `
       <a href="${basePath}${post.url}" class="search-result-item">
