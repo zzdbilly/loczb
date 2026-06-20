@@ -112,6 +112,12 @@
     const listContainer = document.querySelector('.blog-list-container');
     const pagination = document.getElementById('pagination');
     const archiveView = document.getElementById('archive-view');
+    const buttons = document.querySelectorAll('.view-toggle-btn');
+    
+    // Toggle button active state
+    buttons.forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.view === view);
+    });
     
     if (view === 'list') {
       listContainer.classList.remove('hidden');
