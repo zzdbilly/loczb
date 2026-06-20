@@ -99,7 +99,7 @@
           ${arch.posts.map(post => `
             <div class="archive-post">
               <span class="archive-post-date">${post.date}</span>
-              <span class="archive-post-title"><a href="posts/${post.url.split('/').pop()}">${post.title}</a></span>
+              <span class="archive-post-title"><a href="${post.url.replace('blog/', '')}">${post.title}</a></span>
             </div>
           `).join('')}
         </div>
@@ -158,7 +158,7 @@
     };
 
     searchResults.innerHTML = results.map(post => `
-      <a href="${post.url}" class="sr-item">
+      <a href="${post.url.replace('blog/', '')}" class="sr-item">
         <div class="sr-title">${highlight(post.title, query)}</div>
         <div class="sr-excerpt">${highlight(post.excerpt, query)}</div>
         <div class="sr-meta">${post.date} · ${post.category}</div>
