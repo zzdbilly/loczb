@@ -65,7 +65,7 @@
     });
   }
 
-  // 按标签搜索
+  // 按标签搜索 - 直接渲染到列表
   function searchByTag(tag) {
     if (!fuse) return;
     
@@ -73,14 +73,72 @@
     document.querySelectorAll('.tag-cloud-item').forEach(b => {
       b.classList.toggle('active', b.dataset.tag === tag);
     });
+    // 清除搜索框
+    searchInput.value = '';
+    searchResults.classList.remove('active');
+    searchClear.classList.remove('visible');
     
     const results = searchData.posts.filter(post => 
       post.tags.some(t => t.toLowerCase().includes(tag.toLowerCase()))
     );
     
-    // 显示搜索结果
-    displayResults(results, tag);
+    // 直接渲染到页面列表
+    renderPostsToList(results, `标签: ${tag}`);
   }
+
+  // 渲染文章到列表容器
+  function renderPostsToList(posts, title) {
+    const container = document.querySelector('.blog-list-container');
+    const pagination = document.getElementById('pagination');
+    const filterTitle = document.getElementById('blog-filter-title');
+    
+    if (!container) return;
+    
+    // 确保在列表视图
+    container.classList.remove('hidden');
+    pagination.classList.remove('hidden');
+    document.getElementById('archive-view')?.classList.remove('active');
+    
+    // 更新标题
+    if (filterTitle) filterTitle.textContent = title || '全部文章';
+    
+    // 渲染文章
+    container.innerHTML = posts.map(post => `
+      <article class="blog-list-item" data-category="${post.category}">
+        <div class="blog-list-meta">
+          <time datetime="${post.date}">${post.date}</time>
+          <span class="blog-list-tag">${post.category}</span>
+        </div>
+        <h3 class="blog-list-title">
+          <a href="posts/${post.slug}.html">${post.title}</a>
+        </h3>
+        <p class="blog-list-excerpt">${post.excerpt}</p>
+      </article>
+    `).join('');
+    
+    // 隐藏分页
+    pagination.style.display = 'none';
+    
+    // 添加返回全部按钮
+    if (title) {
+      const backBtn = document.createElement('div');
+      backBtn.id = 'tag-search-back';
+      backBtn.innerHTML = `<button onclick="clearTagFilter()" style="margin: 1rem auto; padding: 0.5rem 1.5rem; border-radius: var(--radius-full); border: 1px solid var(--color-border); background: var(--color-bg-secondary); color: var(--color-text-secondary); cursor: pointer;">← 显示全部文章</button>`;
+      container.before(backBtn);
+    }
+  }
+
+  // 清除标签过滤
+  window.clearTagFilter = function() {
+    const backBtn = document.getElementById('tag-search-back');
+    if (backBtn) backBtn.remove();
+    
+    document.querySelectorAll('.tag-cloud-item').forEach(b => b.classList.remove('active'));
+    document.getElementById('pagination').style.display = 'flex';
+    
+    // 重新加载原始列表（刷新页面最简单）
+    window.location.reload();
+  };
 
   // 渲染归档视图
   function renderArchive(archives) {
