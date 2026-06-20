@@ -1,0 +1,1449 @@
+{
+  "posts": [
+    {
+      "slug": "android-16-features",
+      "title": "Android 16 新特性详解：开发者需要知道的 8 件事",
+      "date": "2026-06-19",
+      "category": "Android",
+      "tags": [
+        "Android 16",
+        "Live Updates",
+        "大屏适配",
+        "AICore",
+        "APV",
+        "Android",
+        "开发者"
+      ],
+      "excerpt": "Android 16 新特性详解 - Live Updates、大屏强制适配、AICore 增强、APV 编码支持等开发者必知内容",
+      "url": "blog/posts/android-16-features.html"
+    },
+    {
+      "slug": "android-app-security-hardening",
+      "title": "Android 应用签名与安全加固完整指南",
+      "date": "2026-06-19",
+      "category": "安全",
+      "tags": [
+        "Android",
+        "应用签名",
+        "安全加固",
+        "反编译",
+        "代码混淆",
+        "R8",
+        "Play Integrity",
+        "防篡改"
+      ],
+      "excerpt": "Android 应用签名与安全加固完整指南 - 签名机制、加固方案、完整性校验、混淆策略等",
+      "url": "blog/posts/android-app-security-hardening.html"
+    },
+    {
+      "slug": "compose-april-2026-update",
+      "title": "Jetpack Compose April 2026 Update 深度解读",
+      "date": "2026-06-19",
+      "category": "Android",
+      "tags": [
+        "Jetpack Compose",
+        "Android",
+        "Compose Multiplatform",
+        "UI",
+        "Kotlin",
+        "Navigation3",
+        "Shared Element Transition",
+        "Trackpad",
+        "Compose Testing"
+      ],
+      "excerpt": "Jetpack Compose April 2026 Update 完整解读 — BOM 2026.04.01、Compose 1.11、共享元素过渡调试工具、触控板事件、Testing v2 默认启用、Navigation3 1.1.1 等全解析",
+      "url": "blog/posts/compose-april-2026-update.html"
+    },
+    {
+      "slug": "google-io-2026-recap",
+      "title": "Google I/O 2026 完整回顾：AI 重塑一切",
+      "date": "2026-06-19",
+      "category": "AI",
+      "tags": [
+        "Google I/O 2026",
+        "Gemini 3.5 Flash",
+        "Android 17",
+        "Android XR",
+        "Google Antigravity",
+        "AI Agent"
+      ],
+      "excerpt": "Google I/O 2026 完整回顾 - Gemini 3.5 Flash、Android 17、Android XR、Managed Agents 等重大发布全解析",
+      "url": "blog/posts/google-io-2026-recap.html"
+    },
+    {
+      "slug": "kotlin-240-features",
+      "title": "Kotlin 2.4.0 重磅发布：Context Parameters 稳定、Destructuring 升级、Lombok 插件进入 Alpha",
+      "date": "2026-06-19",
+      "category": "Kotlin",
+      "tags": [
+        "Kotlin 2.4.0",
+        "Kotlin",
+        "Context Parameters",
+        "Destructuring",
+        "JetBrains",
+        "JVM",
+        "Compose Multiplatform"
+      ],
+      "excerpt": "Kotlin 2.4.0 正式发布——Context Parameters 稳定、Name-based Destructuring、Lombok 编译器插件 Alpha、Compose Multiplatform 1.11 等重磅特性详解",
+      "url": "blog/posts/kotlin-240-features.html"
+    },
+    {
+      "slug": "mcp-android-integration",
+      "title": "MCP 协议在 Android 端的应用：AI 工具调用新范式",
+      "date": "2026-06-19",
+      "category": "Android",
+      "tags": [
+        "MCP",
+        "Model Context Protocol",
+        "Android",
+        "AI",
+        "工具调用",
+        "Agent",
+        "Kotlin"
+      ],
+      "excerpt": "MCP (Model Context Protocol) 协议在 Android 端的集成实战 - 从概念到手写实现，构建 AI 驱动的 Android 应用",
+      "url": "blog/posts/mcp-android-integration.html"
+    },
+    {
+      "slug": "ai-coding-workflow-optimization",
+      "title": "AI 编程工作流优化：从 Prompt 设计到上下文管理",
+      "date": "2026-05-08",
+      "category": "AI",
+      "tags": [
+        "AI编程",
+        "Prompt设计",
+        "Claude",
+        "Cursor",
+        "AI工作流",
+        "上下文管理",
+        "编程效率"
+      ],
+      "excerpt": "AI 编程工作流优化 - 从 Prompt 设计到上下文管理的实战指南，提升 AI 辅助编程效率",
+      "url": "blog/posts/ai-coding-workflow-optimization.html"
+    },
+    {
+      "slug": "android-gemini-nano-integration",
+      "title": "Android 端侧 AI 实战：Gemini Nano 集成指南",
+      "date": "2026-05-07",
+      "category": "Android",
+      "tags": [
+        "Android",
+        "Gemini Nano",
+        "AICore",
+        "端侧AI",
+        "ML Kit",
+        "on-device AI",
+        "Android AI"
+      ],
+      "excerpt": "Android 端侧 AI 实战：Gemini Nano 集成指南 - 深入解析 AICore 架构与 ML Kit GenAI API 实战",
+      "url": "blog/posts/android-gemini-nano-integration.html"
+    },
+    {
+      "slug": "css-container-queries",
+      "title": "CSS Container Queries 实战",
+      "date": "2026-04-26",
+      "category": "前端",
+      "tags": [
+        "CSS",
+        "Container Queries",
+        "容器查询",
+        "响应式设计",
+        "CSS 新特性"
+      ],
+      "excerpt": "CSS Container Queries 实战：基于容器尺寸的响应式设计，比媒体查询更灵活的组件级响应式方案",
+      "url": "blog/posts/css-container-queries.html"
+    },
+    {
+      "slug": "docker-compose-best-practices",
+      "title": "Docker Compose 最佳实践",
+      "date": "2026-04-26",
+      "category": "DevOps",
+      "tags": [
+        "Docker",
+        "Docker Compose",
+        "容器编排",
+        "微服务",
+        "DevOps",
+        "容器化"
+      ],
+      "excerpt": "Docker Compose 最佳实践：多容器编排、网络配置、数据持久化、环境变量管理、健康检查等实战技巧",
+      "url": "blog/posts/docker-compose-best-practices.html"
+    },
+    {
+      "slug": "react-server-components",
+      "title": "React Server Components 深入解析",
+      "date": "2026-04-26",
+      "category": "前端",
+      "tags": [
+        "React",
+        "Server Components",
+        "RSC",
+        "React 19",
+        "Next.js App Router",
+        "服务端渲染",
+        "SSR"
+      ],
+      "excerpt": "React Server Components 深入解析：理解服务端组件的工作原理、数据获取方式、与客户端组件的交互，以及最佳实践",
+      "url": "blog/posts/react-server-components.html"
+    },
+    {
+      "slug": "rust-getting-started",
+      "title": "Rust 入门：从零到生产",
+      "date": "2026-04-26",
+      "category": "系统编程",
+      "tags": [
+        "Rust",
+        "编程语言",
+        "所有权",
+        "借用",
+        "生命周期",
+        "系统编程"
+      ],
+      "excerpt": "Rust 入门指南：从零开始学习 Rust，掌握所有权、借用、生命周期等核心概念，构建高性能安全程序",
+      "url": "blog/posts/rust-getting-started.html"
+    },
+    {
+      "slug": "sqlite-wal-performance",
+      "title": "SQLite 进阶：WAL 模式与性能优化",
+      "date": "2026-04-26",
+      "category": "数据库",
+      "tags": [
+        "SQLite",
+        "WAL",
+        "数据库优化",
+        "PRAGMA",
+        "索引",
+        "并发",
+        "嵌入式数据库"
+      ],
+      "excerpt": "SQLite 进阶：WAL 模式原理、性能优化技巧、并发处理、索引策略、PRAGMA 配置详解",
+      "url": "blog/posts/sqlite-wal-performance.html"
+    },
+    {
+      "slug": "git-advanced-techniques",
+      "title": "Git 高级技巧：变基、挑拣和交互式暂存",
+      "date": "2026-04-25",
+      "category": "开发",
+      "tags": [
+        "Git",
+        "变基",
+        "rebase",
+        "cherry-pick",
+        "交互式暂存",
+        "add -p",
+        "stash",
+        "bisect"
+      ],
+      "excerpt": "Git 高级技巧：掌握变基、挑拣、交互式暂存等进阶操作，提升代码管理效率",
+      "url": "blog/posts/git-advanced-techniques.html"
+    },
+    {
+      "slug": "jetpack-compose-animation",
+      "title": "Jetpack Compose 动画实战",
+      "date": "2026-04-25",
+      "category": "Android",
+      "tags": [
+        "Jetpack Compose",
+        "Android",
+        "动画",
+        "Animation",
+        "声明式 UI",
+        "Material Design"
+      ],
+      "excerpt": "Jetpack Compose 动画实战：掌握声明式 UI 动画的核心技巧，打造流畅的用户体验",
+      "url": "blog/posts/jetpack-compose-animation.html"
+    },
+    {
+      "slug": "typescript-type-gymnastics",
+      "title": "TypeScript 类型体操指南",
+      "date": "2026-04-25",
+      "category": "前端",
+      "tags": [
+        "TypeScript",
+        "类型体操",
+        "条件类型",
+        "映射类型",
+        "模板字面量",
+        "类型推断"
+      ],
+      "excerpt": "TypeScript 类型体操指南：从基础到高级，掌握条件类型、映射类型、模板字面量类型等核心技巧",
+      "url": "blog/posts/typescript-type-gymnastics.html"
+    },
+    {
+      "slug": "nextjs-16-tutorial",
+      "title": "Next.js 16 实战：App Router + Server Actions + Turbopack",
+      "date": "2026-04-20",
+      "category": "前端",
+      "tags": [
+        "Next.js 16",
+        "App Router",
+        "Server Actions",
+        "Turbopack",
+        "React",
+        "全栈开发"
+      ],
+      "excerpt": "Next.js 16 实战指南：App Router、Server Actions、Turbopack 完整教程与最佳实践",
+      "url": "blog/posts/nextjs-16-tutorial.html"
+    },
+    {
+      "slug": "ai-coding-tools-comparison",
+      "title": "主流 AI 编程工具深度对比：Cursor、Claude Code、OpenCode、GitHub Copilot",
+      "date": "2026-04-19",
+      "category": "AI",
+      "tags": [
+        "AI 编程工具，Cursor",
+        "Claude Code",
+        "GitHub Copilot",
+        "代码生成，AI 辅助编程"
+      ],
+      "excerpt": "主流 AI 编程工具深度对比：Cursor、Claude Code、OpenCode、GitHub Copilot 选型指南",
+      "url": "blog/posts/ai-coding-tools-comparison.html"
+    },
+    {
+      "slug": "gemini-notebooklm-integration",
+      "title": "Gemini Notebooks 深度体验：与 NotebookLM 无缝整合后的全新 AI 工作流",
+      "date": "2026-04-11",
+      "category": "AI",
+      "tags": [
+        "Gemini",
+        "NotebookLM",
+        "Notebooks",
+        "AI 工具，Google AI",
+        "生产力，知识管理"
+      ],
+      "excerpt": "Gemini Notebooks 深度体验：与 NotebookLM 无缝整合后的全新 AI 工作流",
+      "url": "blog/posts/gemini-notebooklm-integration.html"
+    },
+    {
+      "slug": "gemini-notebooklm-workflow",
+      "title": "Gemini + NotebookLM 结合使用指南",
+      "date": "2026-04-10",
+      "category": "AI",
+      "tags": [
+        "Gemini",
+        "NotebookLM",
+        "AI 工具，知识管理，Google AI",
+        "生产力"
+      ],
+      "excerpt": "Gemini + NotebookLM 结合使用指南：打造个人 AI 知识工作流",
+      "url": "blog/posts/gemini-notebooklm-workflow.html"
+    },
+    {
+      "slug": "github-pages-blog-setup",
+      "title": "从零搭建个人博客系统（GitHub Pages + 自定义域名 + 自动化部署）",
+      "date": "2026-04-09",
+      "category": "DevOps",
+      "tags": [
+        "GitHub Pages",
+        "博客系统",
+        "自定义域名",
+        "自动化部署",
+        "静态网站",
+        "CI/CD"
+      ],
+      "excerpt": "从零搭建个人博客系统：GitHub Pages + 自定义域名 + 自动化部署完整指南",
+      "url": "blog/posts/github-pages-blog-setup.html"
+    },
+    {
+      "slug": "kotlin-coroutines-best-practices",
+      "title": "Kotlin Coroutines 最佳实践",
+      "date": "2026-04-08",
+      "category": "Kotlin",
+      "tags": [
+        "Kotlin",
+        "Coroutines",
+        "协程",
+        "异步编程",
+        "Android",
+        "并发"
+      ],
+      "excerpt": "Kotlin Coroutines 最佳实践：从入门到精通，掌握异步编程的核心技巧与常见陷阱",
+      "url": "blog/posts/kotlin-coroutines-best-practices.html"
+    },
+    {
+      "slug": "local-rag-ollama",
+      "title": "RAG 本地实践：用 Ollama + Embedding 搭建私有知识库",
+      "date": "2026-04-07",
+      "category": "AI",
+      "tags": [
+        "RAG",
+        "Ollama",
+        "Embedding",
+        "向量数据库",
+        "私有知识库",
+        "LLM",
+        "本地部署"
+      ],
+      "excerpt": "RAG 本地实践：用 Ollama + Embedding 搭建私有知识库，实现完全离线的智能问答",
+      "url": "blog/posts/local-rag-ollama.html"
+    },
+    {
+      "slug": "android-offline-speech-input",
+      "title": "Android 离线语音输入实现方案",
+      "date": "2026-04-03",
+      "category": "Android",
+      "tags": [
+        "Android",
+        "离线语音识别",
+        "Sherpa ONNX",
+        "Whisper",
+        "Vosk",
+        "语音输入",
+        "端侧AI"
+      ],
+      "excerpt": "Android 离线语音输入实现方案：Sherpa ONNX、Whisper、Vosk 三大主流方案深度对比",
+      "url": "blog/posts/android-offline-speech-input.html"
+    },
+    {
+      "slug": "onnx-mobile-deployment",
+      "title": "ONNX 移动端侧模型实践：从转换到部署",
+      "date": "2026-03-30",
+      "category": "AI",
+      "tags": [
+        "ONNX",
+        "移动端AI",
+        "端侧推理",
+        "模型量化",
+        "ONNX Runtime",
+        "NCNN",
+        "MNN",
+        "TFLite",
+        "Android AI"
+      ],
+      "excerpt": "ONNX 移动端侧模型实践：从模型转换到端侧部署的完整指南，涵盖模型优化、量化压缩、多框架推理对比",
+      "url": "blog/posts/onnx-mobile-deployment.html"
+    },
+    {
+      "slug": "pwa-offline-web-app",
+      "title": "PWA 实战：从零打造离线可用 Web 应用",
+      "date": "2026-03-22",
+      "category": "前端",
+      "tags": [
+        "PWA",
+        "Service Worker",
+        "manifest.json",
+        "离线应用",
+        "Web App",
+        "缓存策略"
+      ],
+      "excerpt": "PWA 实战：从零开始打造离线可用的 Web 应用，详解 Service Worker、manifest.json 配置与缓存策略",
+      "url": "blog/posts/pwa-offline-web-app.html"
+    },
+    {
+      "slug": "ssh-security-hardening",
+      "title": "云服务器 SSH 安全加固完整指南",
+      "date": "2026-03-18",
+      "category": "安全",
+      "tags": [
+        "SSH",
+        "安全加固",
+        "云服务器",
+        "Linux VPS",
+        "服务器安全",
+        "密钥认证",
+        "防火墙",
+        "OpenCloudOS"
+      ],
+      "excerpt": "云服务器 SSH 安全加固完整指南 - 从端口修改到密钥认证，全方位提升 Linux VPS 安全性。适用于 AWS、阿里云、腾讯云、DigitalOcean 等主流云服务商",
+      "url": "blog/posts/ssh-security-hardening.html"
+    },
+    {
+      "slug": "tailscale-derp-server",
+      "title": "自建 Tailscale DERP 中继服务器完整指南",
+      "date": "2026-03-17",
+      "category": "DevOps",
+      "tags": [
+        "Tailscale",
+        "DERP",
+        "中继服务器",
+        "WireGuard",
+        "VPN",
+        "自建服务器",
+        "网络穿透"
+      ],
+      "excerpt": "自建 Tailscale DERP 中继服务器完整指南 - 从原理到实战，掌握私有 DERP 服务器搭建",
+      "url": "blog/posts/tailscale-derp-server.html"
+    },
+    {
+      "slug": "vscode-port-forward",
+      "title": "VS Code 端口转发原理详解",
+      "date": "2026-03-17",
+      "category": "DevOps",
+      "tags": [
+        "VS Code",
+        "端口转发",
+        "SSH Tunnel",
+        "远程开发",
+        "Tailscale",
+        "Nginx"
+      ],
+      "excerpt": "VS Code 端口转发原理详解：SSH 隧道工作机制与实战应用 - 张小猛的技术博客",
+      "url": "blog/posts/vscode-port-forward.html"
+    },
+    {
+      "slug": "mobile-gs-paper-review",
+      "title": "Mobile-GS：让 3D 高斯泼溅在移动端实时渲染",
+      "date": "2026-03-15",
+      "category": "AI",
+      "tags": [
+        "Mobile-GS",
+        "3D Gaussian Splatting",
+        "3DGS",
+        "移动端渲染，计算机视觉，AI",
+        "ICLR 2026"
+      ],
+      "excerpt": "Mobile-GS：让 3D 高斯泼溅在移动端实时渲染 - 论文解读，ICLR 2026，移动端 3D 渲染新突破",
+      "url": "blog/posts/mobile-gs-paper-review.html"
+    },
+    {
+      "slug": "ai-agent-skill-development",
+      "title": "AI Agent 技能开发实战：从需求到上线的完整流程",
+      "date": "2026-03-14",
+      "category": "AI Agent",
+      "tags": [
+        "AI Agent",
+        "Skill Development",
+        "OpenClaw",
+        "自动化",
+        "JavaScript"
+      ],
+      "excerpt": "AI Agent 技能开发实战：从需求到上线的完整流程 - 张小猛的技术博客",
+      "url": "blog/posts/ai-agent-skill-development.html"
+    },
+    {
+      "slug": "openclaw-guide",
+      "title": "OpenClaw 深度使用指南：从 0 到 1 构建个人 AI Agent",
+      "date": "2026-03-13",
+      "category": "AI",
+      "tags": [
+        "OpenClaw",
+        "AI Agent",
+        "自动化，定时任务，子 Agent"
+      ],
+      "excerpt": "OpenClaw 深度使用指南：从 0 到 1 构建个人 AI Agent - 张小猛的技术博客",
+      "url": "blog/posts/openclaw-guide.html"
+    }
+  ],
+  "tagCloud": [
+    {
+      "tag": "Android",
+      "count": 8
+    },
+    {
+      "tag": "Kotlin",
+      "count": 4
+    },
+    {
+      "tag": "AI Agent",
+      "count": 3
+    },
+    {
+      "tag": "AICore",
+      "count": 2
+    },
+    {
+      "tag": "安全加固",
+      "count": 2
+    },
+    {
+      "tag": "Jetpack Compose",
+      "count": 2
+    },
+    {
+      "tag": "Compose Multiplatform",
+      "count": 2
+    },
+    {
+      "tag": "端侧AI",
+      "count": 2
+    },
+    {
+      "tag": "Android AI",
+      "count": 2
+    },
+    {
+      "tag": "React",
+      "count": 2
+    },
+    {
+      "tag": "并发",
+      "count": 2
+    },
+    {
+      "tag": "Gemini",
+      "count": 2
+    },
+    {
+      "tag": "NotebookLM",
+      "count": 2
+    },
+    {
+      "tag": "Tailscale",
+      "count": 2
+    },
+    {
+      "tag": "OpenClaw",
+      "count": 2
+    },
+    {
+      "tag": "Android 16",
+      "count": 1
+    },
+    {
+      "tag": "Live Updates",
+      "count": 1
+    },
+    {
+      "tag": "大屏适配",
+      "count": 1
+    },
+    {
+      "tag": "APV",
+      "count": 1
+    },
+    {
+      "tag": "开发者",
+      "count": 1
+    },
+    {
+      "tag": "应用签名",
+      "count": 1
+    },
+    {
+      "tag": "反编译",
+      "count": 1
+    },
+    {
+      "tag": "代码混淆",
+      "count": 1
+    },
+    {
+      "tag": "R8",
+      "count": 1
+    },
+    {
+      "tag": "Play Integrity",
+      "count": 1
+    },
+    {
+      "tag": "防篡改",
+      "count": 1
+    },
+    {
+      "tag": "UI",
+      "count": 1
+    },
+    {
+      "tag": "Navigation3",
+      "count": 1
+    },
+    {
+      "tag": "Shared Element Transition",
+      "count": 1
+    },
+    {
+      "tag": "Trackpad",
+      "count": 1
+    },
+    {
+      "tag": "Compose Testing",
+      "count": 1
+    },
+    {
+      "tag": "Google I/O 2026",
+      "count": 1
+    },
+    {
+      "tag": "Gemini 3.5 Flash",
+      "count": 1
+    },
+    {
+      "tag": "Android 17",
+      "count": 1
+    },
+    {
+      "tag": "Android XR",
+      "count": 1
+    },
+    {
+      "tag": "Google Antigravity",
+      "count": 1
+    },
+    {
+      "tag": "Kotlin 2.4.0",
+      "count": 1
+    },
+    {
+      "tag": "Context Parameters",
+      "count": 1
+    },
+    {
+      "tag": "Destructuring",
+      "count": 1
+    },
+    {
+      "tag": "JetBrains",
+      "count": 1
+    },
+    {
+      "tag": "JVM",
+      "count": 1
+    },
+    {
+      "tag": "MCP",
+      "count": 1
+    },
+    {
+      "tag": "Model Context Protocol",
+      "count": 1
+    },
+    {
+      "tag": "AI",
+      "count": 1
+    },
+    {
+      "tag": "工具调用",
+      "count": 1
+    },
+    {
+      "tag": "Agent",
+      "count": 1
+    },
+    {
+      "tag": "AI编程",
+      "count": 1
+    },
+    {
+      "tag": "Prompt设计",
+      "count": 1
+    },
+    {
+      "tag": "Claude",
+      "count": 1
+    },
+    {
+      "tag": "Cursor",
+      "count": 1
+    },
+    {
+      "tag": "AI工作流",
+      "count": 1
+    },
+    {
+      "tag": "上下文管理",
+      "count": 1
+    },
+    {
+      "tag": "编程效率",
+      "count": 1
+    },
+    {
+      "tag": "Gemini Nano",
+      "count": 1
+    },
+    {
+      "tag": "ML Kit",
+      "count": 1
+    },
+    {
+      "tag": "on-device AI",
+      "count": 1
+    },
+    {
+      "tag": "CSS",
+      "count": 1
+    },
+    {
+      "tag": "Container Queries",
+      "count": 1
+    },
+    {
+      "tag": "容器查询",
+      "count": 1
+    },
+    {
+      "tag": "响应式设计",
+      "count": 1
+    },
+    {
+      "tag": "CSS 新特性",
+      "count": 1
+    },
+    {
+      "tag": "Docker",
+      "count": 1
+    },
+    {
+      "tag": "Docker Compose",
+      "count": 1
+    },
+    {
+      "tag": "容器编排",
+      "count": 1
+    },
+    {
+      "tag": "微服务",
+      "count": 1
+    },
+    {
+      "tag": "DevOps",
+      "count": 1
+    },
+    {
+      "tag": "容器化",
+      "count": 1
+    },
+    {
+      "tag": "Server Components",
+      "count": 1
+    },
+    {
+      "tag": "RSC",
+      "count": 1
+    },
+    {
+      "tag": "React 19",
+      "count": 1
+    },
+    {
+      "tag": "Next.js App Router",
+      "count": 1
+    },
+    {
+      "tag": "服务端渲染",
+      "count": 1
+    },
+    {
+      "tag": "SSR",
+      "count": 1
+    },
+    {
+      "tag": "Rust",
+      "count": 1
+    },
+    {
+      "tag": "编程语言",
+      "count": 1
+    },
+    {
+      "tag": "所有权",
+      "count": 1
+    },
+    {
+      "tag": "借用",
+      "count": 1
+    },
+    {
+      "tag": "生命周期",
+      "count": 1
+    },
+    {
+      "tag": "系统编程",
+      "count": 1
+    },
+    {
+      "tag": "SQLite",
+      "count": 1
+    },
+    {
+      "tag": "WAL",
+      "count": 1
+    },
+    {
+      "tag": "数据库优化",
+      "count": 1
+    },
+    {
+      "tag": "PRAGMA",
+      "count": 1
+    },
+    {
+      "tag": "索引",
+      "count": 1
+    },
+    {
+      "tag": "嵌入式数据库",
+      "count": 1
+    },
+    {
+      "tag": "Git",
+      "count": 1
+    },
+    {
+      "tag": "变基",
+      "count": 1
+    },
+    {
+      "tag": "rebase",
+      "count": 1
+    },
+    {
+      "tag": "cherry-pick",
+      "count": 1
+    },
+    {
+      "tag": "交互式暂存",
+      "count": 1
+    },
+    {
+      "tag": "add -p",
+      "count": 1
+    },
+    {
+      "tag": "stash",
+      "count": 1
+    },
+    {
+      "tag": "bisect",
+      "count": 1
+    },
+    {
+      "tag": "动画",
+      "count": 1
+    },
+    {
+      "tag": "Animation",
+      "count": 1
+    },
+    {
+      "tag": "声明式 UI",
+      "count": 1
+    },
+    {
+      "tag": "Material Design",
+      "count": 1
+    },
+    {
+      "tag": "TypeScript",
+      "count": 1
+    },
+    {
+      "tag": "类型体操",
+      "count": 1
+    },
+    {
+      "tag": "条件类型",
+      "count": 1
+    },
+    {
+      "tag": "映射类型",
+      "count": 1
+    },
+    {
+      "tag": "模板字面量",
+      "count": 1
+    },
+    {
+      "tag": "类型推断",
+      "count": 1
+    },
+    {
+      "tag": "Next.js 16",
+      "count": 1
+    },
+    {
+      "tag": "App Router",
+      "count": 1
+    },
+    {
+      "tag": "Server Actions",
+      "count": 1
+    },
+    {
+      "tag": "Turbopack",
+      "count": 1
+    },
+    {
+      "tag": "全栈开发",
+      "count": 1
+    },
+    {
+      "tag": "AI 编程工具，Cursor",
+      "count": 1
+    },
+    {
+      "tag": "Claude Code",
+      "count": 1
+    },
+    {
+      "tag": "GitHub Copilot",
+      "count": 1
+    },
+    {
+      "tag": "代码生成，AI 辅助编程",
+      "count": 1
+    },
+    {
+      "tag": "Notebooks",
+      "count": 1
+    },
+    {
+      "tag": "AI 工具，Google AI",
+      "count": 1
+    },
+    {
+      "tag": "生产力，知识管理",
+      "count": 1
+    },
+    {
+      "tag": "AI 工具，知识管理，Google AI",
+      "count": 1
+    },
+    {
+      "tag": "生产力",
+      "count": 1
+    },
+    {
+      "tag": "GitHub Pages",
+      "count": 1
+    },
+    {
+      "tag": "博客系统",
+      "count": 1
+    },
+    {
+      "tag": "自定义域名",
+      "count": 1
+    },
+    {
+      "tag": "自动化部署",
+      "count": 1
+    },
+    {
+      "tag": "静态网站",
+      "count": 1
+    },
+    {
+      "tag": "CI/CD",
+      "count": 1
+    },
+    {
+      "tag": "Coroutines",
+      "count": 1
+    },
+    {
+      "tag": "协程",
+      "count": 1
+    },
+    {
+      "tag": "异步编程",
+      "count": 1
+    },
+    {
+      "tag": "RAG",
+      "count": 1
+    },
+    {
+      "tag": "Ollama",
+      "count": 1
+    },
+    {
+      "tag": "Embedding",
+      "count": 1
+    },
+    {
+      "tag": "向量数据库",
+      "count": 1
+    },
+    {
+      "tag": "私有知识库",
+      "count": 1
+    },
+    {
+      "tag": "LLM",
+      "count": 1
+    },
+    {
+      "tag": "本地部署",
+      "count": 1
+    },
+    {
+      "tag": "离线语音识别",
+      "count": 1
+    },
+    {
+      "tag": "Sherpa ONNX",
+      "count": 1
+    },
+    {
+      "tag": "Whisper",
+      "count": 1
+    },
+    {
+      "tag": "Vosk",
+      "count": 1
+    },
+    {
+      "tag": "语音输入",
+      "count": 1
+    },
+    {
+      "tag": "ONNX",
+      "count": 1
+    },
+    {
+      "tag": "移动端AI",
+      "count": 1
+    },
+    {
+      "tag": "端侧推理",
+      "count": 1
+    },
+    {
+      "tag": "模型量化",
+      "count": 1
+    },
+    {
+      "tag": "ONNX Runtime",
+      "count": 1
+    },
+    {
+      "tag": "NCNN",
+      "count": 1
+    },
+    {
+      "tag": "MNN",
+      "count": 1
+    },
+    {
+      "tag": "TFLite",
+      "count": 1
+    },
+    {
+      "tag": "PWA",
+      "count": 1
+    },
+    {
+      "tag": "Service Worker",
+      "count": 1
+    },
+    {
+      "tag": "manifest.json",
+      "count": 1
+    },
+    {
+      "tag": "离线应用",
+      "count": 1
+    },
+    {
+      "tag": "Web App",
+      "count": 1
+    },
+    {
+      "tag": "缓存策略",
+      "count": 1
+    },
+    {
+      "tag": "SSH",
+      "count": 1
+    },
+    {
+      "tag": "云服务器",
+      "count": 1
+    },
+    {
+      "tag": "Linux VPS",
+      "count": 1
+    },
+    {
+      "tag": "服务器安全",
+      "count": 1
+    },
+    {
+      "tag": "密钥认证",
+      "count": 1
+    },
+    {
+      "tag": "防火墙",
+      "count": 1
+    },
+    {
+      "tag": "OpenCloudOS",
+      "count": 1
+    },
+    {
+      "tag": "DERP",
+      "count": 1
+    },
+    {
+      "tag": "中继服务器",
+      "count": 1
+    },
+    {
+      "tag": "WireGuard",
+      "count": 1
+    },
+    {
+      "tag": "VPN",
+      "count": 1
+    },
+    {
+      "tag": "自建服务器",
+      "count": 1
+    },
+    {
+      "tag": "网络穿透",
+      "count": 1
+    },
+    {
+      "tag": "VS Code",
+      "count": 1
+    },
+    {
+      "tag": "端口转发",
+      "count": 1
+    },
+    {
+      "tag": "SSH Tunnel",
+      "count": 1
+    },
+    {
+      "tag": "远程开发",
+      "count": 1
+    },
+    {
+      "tag": "Nginx",
+      "count": 1
+    },
+    {
+      "tag": "Mobile-GS",
+      "count": 1
+    },
+    {
+      "tag": "3D Gaussian Splatting",
+      "count": 1
+    },
+    {
+      "tag": "3DGS",
+      "count": 1
+    },
+    {
+      "tag": "移动端渲染，计算机视觉，AI",
+      "count": 1
+    },
+    {
+      "tag": "ICLR 2026",
+      "count": 1
+    },
+    {
+      "tag": "Skill Development",
+      "count": 1
+    },
+    {
+      "tag": "自动化",
+      "count": 1
+    },
+    {
+      "tag": "JavaScript",
+      "count": 1
+    },
+    {
+      "tag": "自动化，定时任务，子 Agent",
+      "count": 1
+    }
+  ],
+  "archives": [
+    {
+      "month": "2026-06",
+      "count": 6,
+      "posts": [
+        {
+          "title": "Android 16 新特性详解：开发者需要知道的 8 件事",
+          "date": "2026-06-19",
+          "url": "blog/posts/android-16-features.html"
+        },
+        {
+          "title": "Android 应用签名与安全加固完整指南",
+          "date": "2026-06-19",
+          "url": "blog/posts/android-app-security-hardening.html"
+        },
+        {
+          "title": "Jetpack Compose April 2026 Update 深度解读",
+          "date": "2026-06-19",
+          "url": "blog/posts/compose-april-2026-update.html"
+        },
+        {
+          "title": "Google I/O 2026 完整回顾：AI 重塑一切",
+          "date": "2026-06-19",
+          "url": "blog/posts/google-io-2026-recap.html"
+        },
+        {
+          "title": "Kotlin 2.4.0 重磅发布：Context Parameters 稳定、Destructuring 升级、Lombok 插件进入 Alpha",
+          "date": "2026-06-19",
+          "url": "blog/posts/kotlin-240-features.html"
+        },
+        {
+          "title": "MCP 协议在 Android 端的应用：AI 工具调用新范式",
+          "date": "2026-06-19",
+          "url": "blog/posts/mcp-android-integration.html"
+        }
+      ]
+    },
+    {
+      "month": "2026-05",
+      "count": 2,
+      "posts": [
+        {
+          "title": "AI 编程工作流优化：从 Prompt 设计到上下文管理",
+          "date": "2026-05-08",
+          "url": "blog/posts/ai-coding-workflow-optimization.html"
+        },
+        {
+          "title": "Android 端侧 AI 实战：Gemini Nano 集成指南",
+          "date": "2026-05-07",
+          "url": "blog/posts/android-gemini-nano-integration.html"
+        }
+      ]
+    },
+    {
+      "month": "2026-04",
+      "count": 16,
+      "posts": [
+        {
+          "title": "CSS Container Queries 实战",
+          "date": "2026-04-26",
+          "url": "blog/posts/css-container-queries.html"
+        },
+        {
+          "title": "Docker Compose 最佳实践",
+          "date": "2026-04-26",
+          "url": "blog/posts/docker-compose-best-practices.html"
+        },
+        {
+          "title": "React Server Components 深入解析",
+          "date": "2026-04-26",
+          "url": "blog/posts/react-server-components.html"
+        },
+        {
+          "title": "Rust 入门：从零到生产",
+          "date": "2026-04-26",
+          "url": "blog/posts/rust-getting-started.html"
+        },
+        {
+          "title": "SQLite 进阶：WAL 模式与性能优化",
+          "date": "2026-04-26",
+          "url": "blog/posts/sqlite-wal-performance.html"
+        },
+        {
+          "title": "Git 高级技巧：变基、挑拣和交互式暂存",
+          "date": "2026-04-25",
+          "url": "blog/posts/git-advanced-techniques.html"
+        },
+        {
+          "title": "Jetpack Compose 动画实战",
+          "date": "2026-04-25",
+          "url": "blog/posts/jetpack-compose-animation.html"
+        },
+        {
+          "title": "TypeScript 类型体操指南",
+          "date": "2026-04-25",
+          "url": "blog/posts/typescript-type-gymnastics.html"
+        },
+        {
+          "title": "Next.js 16 实战：App Router + Server Actions + Turbopack",
+          "date": "2026-04-20",
+          "url": "blog/posts/nextjs-16-tutorial.html"
+        },
+        {
+          "title": "主流 AI 编程工具深度对比：Cursor、Claude Code、OpenCode、GitHub Copilot",
+          "date": "2026-04-19",
+          "url": "blog/posts/ai-coding-tools-comparison.html"
+        },
+        {
+          "title": "Gemini Notebooks 深度体验：与 NotebookLM 无缝整合后的全新 AI 工作流",
+          "date": "2026-04-11",
+          "url": "blog/posts/gemini-notebooklm-integration.html"
+        },
+        {
+          "title": "Gemini + NotebookLM 结合使用指南",
+          "date": "2026-04-10",
+          "url": "blog/posts/gemini-notebooklm-workflow.html"
+        },
+        {
+          "title": "从零搭建个人博客系统（GitHub Pages + 自定义域名 + 自动化部署）",
+          "date": "2026-04-09",
+          "url": "blog/posts/github-pages-blog-setup.html"
+        },
+        {
+          "title": "Kotlin Coroutines 最佳实践",
+          "date": "2026-04-08",
+          "url": "blog/posts/kotlin-coroutines-best-practices.html"
+        },
+        {
+          "title": "RAG 本地实践：用 Ollama + Embedding 搭建私有知识库",
+          "date": "2026-04-07",
+          "url": "blog/posts/local-rag-ollama.html"
+        },
+        {
+          "title": "Android 离线语音输入实现方案",
+          "date": "2026-04-03",
+          "url": "blog/posts/android-offline-speech-input.html"
+        }
+      ]
+    },
+    {
+      "month": "2026-03",
+      "count": 8,
+      "posts": [
+        {
+          "title": "ONNX 移动端侧模型实践：从转换到部署",
+          "date": "2026-03-30",
+          "url": "blog/posts/onnx-mobile-deployment.html"
+        },
+        {
+          "title": "PWA 实战：从零打造离线可用 Web 应用",
+          "date": "2026-03-22",
+          "url": "blog/posts/pwa-offline-web-app.html"
+        },
+        {
+          "title": "云服务器 SSH 安全加固完整指南",
+          "date": "2026-03-18",
+          "url": "blog/posts/ssh-security-hardening.html"
+        },
+        {
+          "title": "自建 Tailscale DERP 中继服务器完整指南",
+          "date": "2026-03-17",
+          "url": "blog/posts/tailscale-derp-server.html"
+        },
+        {
+          "title": "VS Code 端口转发原理详解",
+          "date": "2026-03-17",
+          "url": "blog/posts/vscode-port-forward.html"
+        },
+        {
+          "title": "Mobile-GS：让 3D 高斯泼溅在移动端实时渲染",
+          "date": "2026-03-15",
+          "url": "blog/posts/mobile-gs-paper-review.html"
+        },
+        {
+          "title": "AI Agent 技能开发实战：从需求到上线的完整流程",
+          "date": "2026-03-14",
+          "url": "blog/posts/ai-agent-skill-development.html"
+        },
+        {
+          "title": "OpenClaw 深度使用指南：从 0 到 1 构建个人 AI Agent",
+          "date": "2026-03-13",
+          "url": "blog/posts/openclaw-guide.html"
+        }
+      ]
+    }
+  ],
+  "categories": [
+    "Android",
+    "安全",
+    "AI",
+    "Kotlin",
+    "前端",
+    "DevOps",
+    "系统编程",
+    "数据库",
+    "开发",
+    "AI Agent"
+  ],
+  "stats": {
+    "totalPosts": 32,
+    "totalTags": 179,
+    "latestDate": "2026-06-19",
+    "oldestDate": "2026-03-13"
+  }
+}
