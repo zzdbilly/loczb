@@ -389,6 +389,29 @@ function initScrollProgress() {
 }
 
 // ===================================
+// Back to Top Button
+// ===================================
+function initBackToTop() {
+  const btn = document.createElement('button');
+  btn.className = 'back-to-top';
+  btn.setAttribute('aria-label', '返回顶部');
+  btn.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 15l-6-6-6 6"/></svg>';
+  document.body.appendChild(btn);
+  
+  window.addEventListener('scroll', () => {
+    if (window.pageYOffset > 300) {
+      btn.classList.add('visible');
+    } else {
+      btn.classList.remove('visible');
+    }
+  }, { passive: true });
+  
+  btn.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+}
+
+// ===================================
 // Cursor Effect (Optional)
 // ===================================
 function initCursorEffect() {
@@ -613,6 +636,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initCountUp();
   initLazyLoad();
   initScrollProgress();
+  initBackToTop();
   setActiveNavLink();
   initBlogFilters();
   initCodeCopy();

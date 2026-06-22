@@ -2732,6 +2732,52 @@ pre code {
   border-radius: 2px;
 }
 
+/* ===================================
+   Back to Top Button
+   =================================== */
+.back-to-top {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  z-index: 999;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.back-to-top.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.back-to-top:hover {
+  background: var(--color-accent-primary);
+  color: white;
+  border-color: var(--color-accent-primary);
+  transform: translateY(-3px);
+}
+
+/* Mobile: smaller button */
+@media (max-width: 640px) {
+  .back-to-top {
+    bottom: 1.5rem;
+    right: 1.5rem;
+    width: 40px;
+    height: 40px;
+  }
+}
+
 /* Mobile: hide TOC */
 @media (max-width: 768px) {
   .toc {
