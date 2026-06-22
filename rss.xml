@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>张小猛 - loczb 技术博客</title>
+    <link>https://709527.xyz/blog/</link>
+    <description>Android、Kotlin、AI、全栈开发。分享技术文章、学习笔记与思考。</description>
+    <language>zh-CN</language>
+    <lastBuildDate>Mon, 22 Jun 2026 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://709527.xyz/rss.xml" rel="self" type="application/rss+xml"/>
+    <image>
+      <url>https://709527.xyz/assets/images/og-image.png</url>
+      <title>loczb</title>
+      <link>https://709527.xyz/</link>
+    </image>
+
+    <item>
+      <title>Google I/O 2026 完整回顾：AI 重塑一切</title>
+      <link>https://709527.xyz/blog/posts/google-io-2026-recap.html</link>
+      <description>100 项发布，从 Gemini 3.5 Flash 到 Android XR 眼镜，Google I/O 2026 全面回顾。</description>
+      <pubDate>Thu, 19 Jun 2026 00:00:00 +0000</pubDate>
+      <guid>https://709527.xyz/blog/posts/google-io-2026-recap.html</guid>
+      <category>AI</category>
+      <category>Android</category>
+    </item>
+
+    <item>
+      <title>Android 16 新特性详解：开发者需要知道的 8 件事</title>
+      <link>https://709527.xyz/blog/posts/android-16-features.html</link>
+      <description>Live Updates、大屏强制适配、AICore 增强、APV 编码支持等开发者必知的 Android 16 新特性。</description>
+      <pubDate>Thu, 19 Jun 2026 00:00:00 +0000</pubDate>
+      <guid>https://709527.xyz/blog/posts/android-16-features.html</guid>
+      <category>Android</category>
+    </item>
+
+    <item>
+      <title>Jetpack Compose April 2026 Update 深度解读</title>
+      <link>https://709527.xyz/blog/posts/compose-april-2026-update.html</link>
+      <description>BOM 2026.04.01 来了：Compose 1.11、共享元素过渡调试、触控板事件、Testing v2 默认、Navigation3 补丁——全方位解读。</description>
+      <pubDate>Thu, 19 Jun 2026 00:00:00 +0000</pubDate>
+      <guid>https://709527.xyz/blog/posts/compose-april-2026-update.html</guid>
+      <category>Android</category>
+    </item>
+
+    <item>
+      <title>Kotlin 2.4.0 重磅发布：Context Parameters 稳定</title>
+      <link>https://709527.xyz/blog/posts/kotlin-240-features.html</link>
+      <description>Context Parameters 正式稳定、Name-based Destructuring、Lombok 编译器插件 Alpha、Compose Multiplatform 1.11 等全部新特性详解。</description>
+      <pubDate>Thu, 19 Jun 2026 00:00:00 +0000</pubDate>
+      <guid>https://709527.xyz/blog/posts/kotlin-240-features.html</guid>
+      <category>Kotlin</category>
+    </item>
+
+    <item>
+      <title>MCP 协议在 Android 端的应用：AI 工具调用新范式</title>
+      <link>https://709527.xyz/blog/posts/mcp-android-integration.html</link>
+      <description>MCP 协议在 Android 端的集成实战，从概念到代码实现，构建 AI 驱动的 Android 应用。</description>
+      <pubDate>Thu, 19 Jun 2026 00:00:00 +0000</pubDate>
+      <guid>https://709527.xyz/blog/posts/mcp-android-integration.html</guid>
+      <category>Android</category>
+    </item>
+
+    <item>
+      <title>Android 应用签名与安全加固完整指南</title>
+      <link>https://709527.xyz/blog/posts/android-app-security-hardening.html</link>
+      <description>Android 应用签名与安全加固完整指南，覆盖签名机制、混淆、完整性校验、Play Integrity API 等。</description>
+      <pubDate>Thu, 19 Jun 2026 00:00:00 +0000</pubDate>
+      <guid>https://709527.xyz/blog/posts/android-app-security-hardening.html</guid>
+      <category>安全</category>
+    </item>
+
+    <item>
+      <title>AI 编程工作流优化：从 Prompt 设计到上下文管理</title>
+      <link>https://709527.xyz/blog/posts/ai-coding-workflow-optimization.html</link>
+      <description>从 Prompt 设计到上下文管理的实战指南，掌握高效 AI 辅助编程的核心方法论。</description>
+      <pubDate>Thu, 08 May 2026 00:00:00 +0000</pubDate>
+      <guid>https://709527.xyz/blog/posts/ai-coding-workflow-optimization.html</guid>
+      <category>AI</category>
+    </item>
+
+    <item>
+      <title>Android 端侧 AI 实战：Gemini Nano 集成指南</title>
+      <link>https://709527.xyz/blog/posts/android-gemini-nano-integration.html</link>
+      <description>深入解析 AICore 架构与 ML Kit GenAI API，提供完整集成代码与性能优化建议。</description>
+      <pubDate>Thu, 07 May 2026 00:00:00 +0000</pubDate>
+      <guid>https://709527.xyz/blog/posts/android-gemini-nano-integration.html</guid>
+      <category>AI</category>
+      <category>Android</category>
+    </item>
+
+    <item>
+      <title>SQLite 进阶：WAL 模式与性能优化</title>
+      <link>https://709527.xyz/blog/posts/sqlite-wal-performance.html</link>
+      <description>深入 SQLite 的 WAL 模式原理、并发处理、索引策略、PRAGMA 配置等性能优化技巧。</description>
+      <pubDate>Sun, 26 Apr 2026 00:00:00 +0000</pubDate>
+      <guid>https://709527.xyz/blog/posts/sqlite-wal-performance.html</guid>
+      <category>数据库</category>
+    </item>
+
+    <item>
+      <title>Docker Compose 最佳实践</title>
+      <link>https://709527.xyz/blog/posts/docker-compose-best-practices.html</link>
+      <description>多容器编排、网络配置、数据持久化、环境变量管理、健康检查等实战技巧。</description>
+      <pubDate>Sun, 26 Apr 2026 00:00:00 +0000</pubDate>
+      <guid>https://709527.xyz/blog/posts/docker-compose-best-practices.html</guid>
+      <category>DevOps</category>
+    </item>
+  </channel>
+</rss>
