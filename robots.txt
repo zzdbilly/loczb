@@ -1,0 +1,11 @@
+# https://709527.xyz/
+User-agent: *
+Allow: /
+
+# Disallow paths (if any)
+Disallow: /assets/css/
+Disallow: /assets/js/
+Disallow: /node_modules/
+
+# Sitemap
+Sitemap: https://709527.xyz/sitemap.xml
