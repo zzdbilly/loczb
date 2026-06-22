@@ -14,6 +14,26 @@
     </image>
 
     <item>
+      <title>Jetpack Compose Navigation 进阶指南：从路由设计到深层链接</title>
+      <link>https://709527.xyz/blog/posts/compose-navigation-guide.html</link>
+      <description>类型安全导航、路由设计、DeepLink、动画过渡、多模块解耦��—Compose Navigation 完整进阶实战。</description>
+      <pubDate>Mon, 22 Jun 2026 00:00:00 +0000</pubDate>
+      <guid>https://709527.xyz/blog/posts/compose-navigation-guide.html</guid>
+      <category>Jetpack Compose</category>
+      <category>Android</category>
+    </item>
+
+    <item>
+      <title>Android 性能优化完整实战：从启动到渲染</title>
+      <link>https://709527.xyz/blog/posts/android-performance-optimization.html</link>
+      <description>启动优化、内存管理、渲染调优、工具链与持续监控——Android 性能优化综合实战指南。</description>
+      <pubDate>Mon, 22 Jun 2026 00:00:00 +0000</pubDate>
+      <guid>https://709527.xyz/blog/posts/android-performance-optimization.html</guid>
+      <category>Android</category>
+      <category>性能优化</category>
+    </item>
+
+    <item>
       <title>Google I/O 2026 完整回顾：AI 重塑一切</title>
       <link>https://709527.xyz/blog/posts/google-io-2026-recap.html</link>
       <description>100 项发布，从 Gemini 3.5 Flash 到 Android XR 眼镜，Google I/O 2026 全面回顾。</description>
@@ -85,24 +105,6 @@
       <guid>https://709527.xyz/blog/posts/android-gemini-nano-integration.html</guid>
       <category>AI</category>
       <category>Android</category>
-    </item>
-
-    <item>
-      <title>SQLite 进阶：WAL 模式与性能优化</title>
-      <link>https://709527.xyz/blog/posts/sqlite-wal-performance.html</link>
-      <description>深入 SQLite 的 WAL 模式原理、并发处理、索引策略、PRAGMA 配置等性能优化技巧。</description>
-      <pubDate>Sun, 26 Apr 2026 00:00:00 +0000</pubDate>
-      <guid>https://709527.xyz/blog/posts/sqlite-wal-performance.html</guid>
-      <category>数据库</category>
-    </item>
-
-    <item>
-      <title>Docker Compose 最佳实践</title>
-      <link>https://709527.xyz/blog/posts/docker-compose-best-practices.html</link>
-      <description>多容器编排、网络配置、数据持久化、环境变量管理、健康检查等实战技巧。</description>
-      <pubDate>Sun, 26 Apr 2026 00:00:00 +0000</pubDate>
-      <guid>https://709527.xyz/blog/posts/docker-compose-best-practices.html</guid>
-      <category>DevOps</category>
     </item>
   </channel>
 </rss>
