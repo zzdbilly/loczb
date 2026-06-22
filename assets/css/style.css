@@ -2954,3 +2954,47 @@ pre code {
     padding: 0.8rem 1rem;
   }
 }
+
+/* ===================================
+   Share Buttons
+   =================================== */
+.share-buttons {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+}
+
+.share-label {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+  margin-right: 0.25rem;
+}
+
+.share-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-secondary);
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.share-btn:hover {
+  background: var(--color-bg-tertiary);
+  border-color: var(--color-accent-primary);
+  color: var(--color-accent-primary);
+}
+
+.share-btn.copied {
+  background: #22c55e;
+  border-color: #22c55e;
+  color: white;
+}
