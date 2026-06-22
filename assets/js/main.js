@@ -644,6 +644,11 @@ document.addEventListener('DOMContentLoaded', () => {
   
   // Add loading animation to page
   document.body.classList.add('loaded');
+  
+  // Register Service Worker for PWA
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js').catch(() => {});
+  }
 });
 
 // Export utilities

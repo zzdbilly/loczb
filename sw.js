@@ -1,0 +1,66 @@
+// Service Worker for loczb PWA
+const CACHE_NAME = 'loczb-v1';
+
+// Core pages to cache on install
+const CORE_URLS = [
+  '/',
+  '/blog/',
+  '/projects/',
+  '/about/',
+  '/assets/css/style.css',
+  '/assets/js/main.js',
+  '/assets/js/search.js',
+  '/assets/js/toc.js'
+];
+
+// Install: cache core pages
+self.addEventListener('install', (event) => {
+  event.waitUntil(
+    caches.open(CACHE_NAME).then((cache) => {
+      return cache.addAll(CORE_URLS);
+    })
+  );
+  self.skipWaiting();
+});
+
+// Activate: clean old caches
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
+    caches.keys().then((names) => {
+      return Promise.all(
+        names.filter((name) => name !== CACHE_NAME).map((name) => caches.delete(name))
+      );
+    })
+  );
+  self.clients.claim();
+});
+
+// Fetch: Network first, fallback to cache
+self.addEventListener('fetch', (event) => {
+  // Skip non-GET requests
+  if (event.request.method !== 'GET') return;
+
+  // Skip external requests (fonts, analytics, etc.)
+  const url = new URL(event.request.url);
+  if (url.origin !== self.location.origin) return;
+
+  event.respondWith(
+    fetch(event.request)
+      .then((response) => {
+        // Cache successful responses
+        if (response.ok) {
+          const clone = response.clone();
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(event.request, clone);
+          });
+        }
+        return response;
+      })
+      .catch(() => {
+        // Fallback to cache when offline
+        return caches.match(event.request).then((cached) => {
+          return cached || new Response('离线不可用', { status: 503 });
+        });
+      })
+  );
+});
