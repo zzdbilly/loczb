@@ -1,6 +1,43 @@
 {
   "posts": [
     {
+      "slug": "android-performance-optimization",
+      "title": "Android 性能优化完整实战：从启动到渲染",
+      "date": "2026-06-22",
+      "category": "Android",
+      "tags": [
+        "Android",
+        "性能优化",
+        "启动优化",
+        "内存优化",
+        "渲染优化",
+        "Baseline Profiles",
+        "R8",
+        "App Startup",
+        "LeakCanary"
+      ],
+      "excerpt": "Android 性能优化完整实战指南 - 从启动优化、内存管理到渲染调优，涵盖 Baseline Profiles、R8、App Startup、LeakCanary 等工具和最佳实践",
+      "url": "blog/posts/android-performance-optimization.html"
+    },
+    {
+      "slug": "compose-navigation-guide",
+      "title": "Jetpack Compose Navigation 进阶指南：从路由设计到深层链接",
+      "date": "2026-06-22",
+      "category": "Android",
+      "tags": [
+        "Jetpack Compose",
+        "Navigation",
+        "Android",
+        "导航",
+        "Kotlin",
+        "DeepLink",
+        "路由设计",
+        "导航动画"
+      ],
+      "excerpt": "Jetpack Compose Navigation 进阶指南 - 路由设计、参数传递、深层链接、类型安全导航、动画过渡等实战技巧",
+      "url": "blog/posts/compose-navigation-guide.html"
+    },
+    {
       "slug": "android-16-features",
       "title": "Android 16 新特性详解：开发者需要知道的 8 件事",
       "date": "2026-06-19",
@@ -527,15 +564,23 @@
   "tagCloud": [
     {
       "tag": "Android",
-      "count": 8
+      "count": 10
     },
     {
       "tag": "Kotlin",
-      "count": 4
+      "count": 5
+    },
+    {
+      "tag": "Jetpack Compose",
+      "count": 3
     },
     {
       "tag": "AI Agent",
       "count": 3
+    },
+    {
+      "tag": "R8",
+      "count": 2
     },
     {
       "tag": "AICore",
@@ -543,10 +588,6 @@
     },
     {
       "tag": "安全加固",
-      "count": 2
-    },
-    {
-      "tag": "Jetpack Compose",
       "count": 2
     },
     {
@@ -586,6 +627,54 @@
       "count": 2
     },
     {
+      "tag": "性能优化",
+      "count": 1
+    },
+    {
+      "tag": "启动优化",
+      "count": 1
+    },
+    {
+      "tag": "内存优化",
+      "count": 1
+    },
+    {
+      "tag": "渲染优化",
+      "count": 1
+    },
+    {
+      "tag": "Baseline Profiles",
+      "count": 1
+    },
+    {
+      "tag": "App Startup",
+      "count": 1
+    },
+    {
+      "tag": "LeakCanary",
+      "count": 1
+    },
+    {
+      "tag": "Navigation",
+      "count": 1
+    },
+    {
+      "tag": "导航",
+      "count": 1
+    },
+    {
+      "tag": "DeepLink",
+      "count": 1
+    },
+    {
+      "tag": "路由设计",
+      "count": 1
+    },
+    {
+      "tag": "导航动画",
+      "count": 1
+    },
+    {
       "tag": "Android 16",
       "count": 1
     },
@@ -615,10 +704,6 @@
     },
     {
       "tag": "代码混淆",
-      "count": 1
-    },
-    {
-      "tag": "R8",
       "count": 1
     },
     {
@@ -1245,8 +1330,18 @@
   "archives": [
     {
       "month": "2026-06",
-      "count": 6,
+      "count": 8,
       "posts": [
+        {
+          "title": "Android 性能优化完整实战：从启动到渲染",
+          "date": "2026-06-22",
+          "url": "blog/posts/android-performance-optimization.html"
+        },
+        {
+          "title": "Jetpack Compose Navigation 进阶指南：从路由设计到深层链接",
+          "date": "2026-06-22",
+          "url": "blog/posts/compose-navigation-guide.html"
+        },
         {
           "title": "Android 16 新特性详解：开发者需要知道的 8 件事",
           "date": "2026-06-19",
@@ -1441,9 +1536,9 @@
     "AI Agent"
   ],
   "stats": {
-    "totalPosts": 32,
-    "totalTags": 179,
-    "latestDate": "2026-06-19",
+    "totalPosts": 34,
+    "totalTags": 191,
+    "latestDate": "2026-06-22",
     "oldestDate": "2026-03-13"
   }
 }
