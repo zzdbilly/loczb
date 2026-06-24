@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Kotlin Multiplatform 实战：将 Android 业务逻辑共享到 iOS - 架构设计、expect/actual、网络层、数据层完整实现">
+  <meta name="keywords" content="Kotlin Multiplatform, KMP, 跨平台, Android, iOS, 共享逻辑, expect actual">
+  <meta name="author" content="张小猛">
+  <meta name="publish-date" content="2026-06-24">
+  <title>Kotlin Multiplatform 实战：共享业务逻辑到 iOS | 张小猛 - loczb</title>
+  <link rel="canonical" href="https://709527.xyz/blog/posts/kotlin-multiplatform-practice.html">
+  <meta name="robots" content="index, follow">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://709527.xyz/blog/posts/kotlin-multiplatform-practice.html">
+  <meta property="og:title" content="Kotlin Multiplatform 实战：共享业务逻辑到 iOS | 张小猛 - loczb">
+  <meta property="og:description" content="从架构设计到代码实现，完整演示如何用 KMP 将 Android 业务逻辑共享到 iOS。">
+  <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="article:author" content="张小猛">
+  <meta property="article:published_time" content="2026-06-24">
+  
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Kotlin Multiplatform 实战：共享业务逻辑到 iOS | 张小猛 - loczb">
+  <meta name="twitter:description" content="从架构设计到代码实现，完整演示如何用 KMP 将 Android 业务逻辑共享到 iOS。">
+  <meta name="twitter:image" content="https://709527.xyz/assets/images/og-image.png">
+
+  <link rel="icon" type="image/x-icon" href="../../assets/images/favicon.ico">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
+  <link rel="icon" type="image/png" sizes="16x16" href="../../assets/images/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="../../assets/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="48x48" href="../../assets/images/favicon-48x48.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="../../assets/images/apple-touch-icon.png">
+  <link rel="manifest" href="../../site.webmanifest">
+  <meta name="theme-color" content="#3b82f6">
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <style>
+    .post-content { max-width: 760px; margin: 0 auto; line-height: 1.85; }
+    .post-content h1 { font-size: 2.4rem; margin: 2rem 0 1rem; }
+    .post-content h2 { font-size: 1.7rem; margin: 2.5rem 0 1rem; color: var(--color-accent-primary); border-bottom: 1px solid var(--color-border); padding-bottom: 0.5rem; }
+    .post-content h3 { font-size: 1.3rem; margin: 1.8rem 0 0.8rem; }
+    .post-content pre { background: var(--color-bg-tertiary); padding: 1.2rem; border-radius: 8px; overflow-x: auto; margin: 1.2rem 0; font-size: 0.9rem; }
+    .post-content code { background: var(--color-bg-tertiary); padding: 0.15rem 0.4rem; border-radius: 4px; font-family: monospace; font-size: 0.9em; }
+    .post-meta { color: var(--color-text-secondary); font-size: 0.9rem; margin-bottom: 2rem; }
+    .post-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 3rem; }
+    .post-tags span { background: var(--color-bg-tertiary); padding: 0.3rem 0.8rem; border-radius: 9999px; font-size: 0.85rem; color: var(--color-accent-primary); }
+    .tip-box { background: rgba(34, 197, 94, 0.1); border-left: 3px solid #22c55e; padding: 1rem 1.2rem; margin: 1.5rem 0; border-radius: 0 6px 6px 0; }
+    .warning-box { background: rgba(234, 179, 8, 0.1); border-left: 3px solid #eab308; padding: 1rem 1.2rem; margin: 1.5rem 0; border-radius: 0 6px 6px 0; }
+    .info-box { background: rgba(59, 130, 246, 0.1); border-left: 3px solid #3b82f6; padding: 1rem 1.2rem; margin: 1.5rem 0; border-radius: 0 6px 6px 0; }
+    table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.95rem; }
+    th, td { border: 1px solid var(--color-border); padding: 0.7rem; text-align: left; }
+    th { background: var(--color-bg-tertiary); font-weight: 600; }
+    .arch-diagram { background: var(--color-bg-tertiary); border-radius: 12px; padding: 1.5rem; margin: 2rem 0; font-family: monospace; font-size: 0.85rem; line-height: 1.6; overflow-x: auto; white-space: pre; }
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500;600&display=swap" media="print" onload="this.media='all'">
+  <noscript>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500;600&display=swap">
+  </noscript>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../../index.html" class="nav-logo">loc<span>zb</span></a>
+      <button class="nav-toggle" aria-label="打开菜单"><span></span><span></span><span></span></button>
+      <div class="nav-overlay"></div>
+      <ul class="nav-links">
+        <li><a href="../../index.html" class="nav-link">首页</a></li>
+        <li><a href="../../projects/index.html" class="nav-link">项目</a></li>
+        <li><a href="../index.html" class="nav-link active">博客</a></li>
+        <li><a href="../../about/index.html" class="nav-link">关于</a></li>
+      </ul>
+      <button class="theme-toggle" aria-label="切换主题">
+        <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line></svg>
+        <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+      </button>
+    </div>
+  </nav>
+<div class="scroll-progress"></div>
+
+  <main>
+    <article class="post-content" style="padding: calc(64px + 4rem) 1rem 4rem;">
+      <a href="../index.html" style="display: inline-flex; align-items: center; gap: 0.5rem; color: var(--color-text-secondary); text-decoration: none; margin-bottom: 2rem;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        返回博客
+      </a>
+      
+      <h1>Kotlin Multiplatform 实战：共享业务逻辑到 iOS</h1>
+      
+      <div class="post-meta">2026年6月24日 · 阅读时间 22 分钟</div>
+
+      <p>Kotlin Multiplatform（KMP）已经从「实验特性」进化到「生产可用」。2024 年 Google 宣布 KMP 成为 Android 官方推荐的跨平台方案，2026 年 Compose Multiplatform for iOS 进入 Stable，KMP 的生态已经成熟到可以认真考虑在商业项目中使用了。</p>
+
+      <p>但对很多 Android 开发者来说，KMP 仍然是个模糊的概念——知道能跨平台，但不知道从哪里下手。这篇文章就是为你准备的：<strong>从一个纯 Android 项目出发，逐步把业务逻辑抽到 shared module，最终让 iOS 端也能调用</strong>。</p>
+
+      <div class="info-box">
+        <strong>📌 核心思路</strong>：KMP 不是「一套代码跑所有平台」，而是<strong>共享业务逻辑，保留原生 UI</strong>。你的 Android 端继续用 Jetpack Compose，iOS 端继续用 SwiftUI，中间的网络层、数据层、领域逻辑由 KMP shared module 统一提供。
+      </div>
+
+      <h2>架构设计</h2>
+
+      <p>KMP 项目的核心架构是把代码分成三层：</p>
+
+      <div class="arch-diagram">
+┌─────────────────────────────────────────────────┐
+│                   shared module                  │
+│  ┌───────────────────────────────────────────┐  │
+│  │           commonMain (纯 Kotlin)          │  │
+│  │  · Domain 层 (UseCase, Repository 接口)    │  │
+│  │  · Data 层 (Repository 实现, DTO)          │  │
+│  │  · Network 层 (Ktor 客户端)               │  │
+│  │  · Storage 层 (DataStore 接口)            │  │
+│  └─────────┬───────────────┬─────────────────┘  │
+│            │               │                     │
+│  ┌─────────▼──────┐ ┌──────▼──────────┐         │
+│  │  androidMain   │ │   iosMain       │         │
+│  │  · DataStore   │ │  · DataStore    │         │
+│  │  · 日志/Context │ │  · 日志/NSLog   │         │
+│  └────────────────┘ └─────────────────┘         │
+└─────────────────────────────────────────────────┘
+        ↑                    ↑
+┌───────┴────────┐  ┌──────┴──────────┐
+│  Android App   │  │   iOS App       │
+│  Compose UI    │  │   SwiftUI UI    │
+│  ViewModel     │  │   ObservableObj │
+└────────────────┘  └─────────────────┘</div>
+
+      <p>关键原则：</p>
+
+      <ul>
+        <li><strong>commonMain</strong>：纯 Kotlin 代码，不依赖任何平台 API</li>
+        <li><strong>androidMain</strong>：Android 特定实现（DataStore、Context 相关）</li>
+        <li><strong>iosMain</strong>：iOS 特定实现（NSUserDefaults、NSLog 等）</li>
+        <li><strong>UI 层不共享</strong>：Android 用 Compose，iOS 用 SwiftUI，各自原生</li>
+      </ul>
+
+      <h2>项目搭建</h2>
+
+      <h3>目录结构</h3>
+
+      <pre><code>MyApp/
+├── shared/                         # KMP shared module
+│   ├── build.gradle.kts
+│   └── src/
+│       ├── commonMain/kotlin/
+│       │   └── com/example/shared/
+│       │       ├── domain/
+│       │       │   ├── model/
+│       │       │   ├── repository/
+│       │       │   └── usecase/
+│       │       ├── data/
+│       │       │   ├── repository/
+│       │       │   ├── network/
+│       │       │   └── storage/
+│       │       └── AppModule.kt
+│       ├── androidMain/kotlin/
+│       │   └── com/example/shared/
+│       │       └── platform/
+│       └── iosMain/kotlin/
+│           └── com/example/shared/
+│               └── platform/
+├── androidApp/                     # Android 应用
+│   ├── build.gradle.kts
+│   └── src/main/
+├── iosApp/                         # iOS 应用
+│   └── iosApp/
+└── build.gradle.kts</code></pre>
+
+      <h3>shared/build.gradle.kts</h3>
+
+      <pre><code>plugins {
+    kotlin("multiplatform")
+    kotlin("native.cocoapods")  // iOS 集成需要
+    id("com.android.library")
+    id("org.jetbrains.kotlinx.serialization")
+}
+
+kotlin {
+    androidTarget()
+    iosX64()
+    iosArm64()
+    iosSimulatorArm64()
+
+    cocoapods {
+        summary = "Shared module for MyApp"
+        homepage = "https://github.com/zzdbilly/MyApp"
+        ios.deploymentTarget = "15.0"
+        podfile = project.file("../iosApp/Podfile")
+        framework {
+            baseName = "shared"
+            isStatic = true  // 推荐使用静态框架
+        }
+    }
+
+    sourceSets {
+        commonMain.dependencies {
+            implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1")
+            implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
+            implementation("io.ktor:ktor-client-core:2.3.11")
+            implementation("io.ktor:ktor-client-content-negotiation:2.3.11")
+            implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.11")
+            implementation("androidx.datastore:datastore-core-okio:1.1.1")
+        }
+        androidMain.dependencies {
+            implementation("io.ktor:ktor-client-okhttp:2.3.11")
+            implementation("androidx.datastore:datastore-preferences:1.1.1")
+        }
+        iosMain.dependencies {
+            implementation("io.ktor:ktor-client-darwin:2.3.11")
+        }
+    }
+}
+
+android {
+    namespace = "com.example.shared"
+    compileSdk = 34
+    defaultConfig { minSdk = 24 }
+}</code></pre>
+
+      <div class="tip-box">
+        <strong>💡 iOS 引擎选择</strong>：Ktor 在 iOS 上用 <code>ktor-client-darwin</code>（基于 NSURLSession），而不是 OkHttp。这是 KMP 的精髓——同一套 API，不同平台用不同的底层实现。
+      </div>
+
+      <h2>expect/actual：平台差异的桥梁</h2>
+
+      <p><code>expect/actual</code> 是 KMP 处理平台差异的核心机制。简单说：</p>
+
+      <ul>
+        <li><code>expect</code> 声明一个接口（在 commonMain 中）</li>
+        <li><code>actual</code> 提供各平台的具体实现（在 androidMain/iosMain 中）</li>
+      </ul>
+
+      <h3>示例 1：日志</h3>
+
+      <pre><code>// commonMain - 声明期望
+expect object Logger {
+    fun d(tag: String, message: String)
+    fun e(tag: String, message: String, throwable: Throwable? = null)
+}
+
+// androidMain - Android 实现
+actual object Logger {
+    actual fun d(tag: String, message: String) {
+        android.util.Log.d(tag, message)
+    }
+    actual fun e(tag: String, message: String, throwable: Throwable?) {
+        android.util.Log.e(tag, message, throwable)
+    }
+}
+
+// iosMain - iOS 实现
+actual object Logger {
+    actual fun d(tag: String, message: String) {
+        NSLog("[$tag] $message")
+    }
+    actual fun e(tag: String, message: String, throwable: Throwable?) {
+        NSLog("[$tag] ERROR: $message ${throwable?.stackTraceToString() ?: ""}")
+    }
+}</code></pre>
+
+      <h3>示例 2：平台线程调度器</h3>
+
+      <pre><code>// commonMain
+expect object AppDispatchers {
+    val io: CoroutineDispatcher
+    val main: CoroutineDispatcher
+}
+
+// androidMain
+actual object AppDispatchers {
+    actual val io: CoroutineDispatcher = Dispatchers.IO
+    actual val main: CoroutineDispatcher = Dispatchers.Main
+}
+
+// iosMain
+actual object AppDispatchers {
+    actual val io: CoroutineDispatcher = Dispatchers.Default
+    actual val main: CoroutineDispatcher = Dispatchers.Main
+}</code></pre>
+
+      <div class="warning-box">
+        <strong>⚠️ iOS Main Dispatcher 的坑</strong>：KMP 的 <code>Dispatchers.Main</code> 在 iOS 上需要额外依赖 <code>kotlinx-coroutines-core</code> 的 Main 支持。确保 shared module 的 iosMain 依赖中包含 <code>kotlinx-coroutines-core</code>，否则运行时崩溃。
+      </div>
+
+      <h2>网络层：Ktor 实战</h2>
+
+      <p>Ktor 是 KMP 生态中最成熟的 HTTP 客户端，API 设计类似 Retrofit，但完全基于 Kotlin 协程。</p>
+
+      <h3>API 接口定义</h3>
+
+      <pre><code>// commonMain/domain/model/User.kt
+@Serializable
+data class User(
+    val id: String,
+    val name: String,
+    val email: String,
+    val avatar: String
+)
+
+@Serializable
+data class LoginRequest(
+    val email: String,
+    val password: String
+)
+
+@Serializable
+data class LoginResponse(
+    val token: String,
+    val user: User
+)
+
+@Serializable
+data class ApiError(
+    val code: Int,
+    val message: String
+)</code></pre>
+
+      <h3>Ktor 客户端配置</h3>
+
+      <pre><code>// commonMain/data/network/HttpClientFactory.kt
+object HttpClientFactory {
+    fun create(baseUrl: String): HttpClient {
+        return HttpClient {
+            defaultRequest {
+                url(baseUrl)
+                contentType(ContentType.Application.Json)
+            }
+
+            install(ContentNegotiation) {
+                json(Json {
+                    prettyPrint = false
+                    isLenient = true
+                    ignoreUnknownKeys = true
+                    encodeDefaults = true
+                })
+            }
+
+            install(Logging) {
+                logger = object : Logger {
+                    override fun log(message: String) {
+                        Logger.d("Ktor", message)
+                    }
+                }
+                level = LogLevel.INFO
+            }
+
+            // Token 拦截器
+            install(Auth) {
+                bearer {
+                    loadTokens {
+                        // 从 DataStore 读取 token
+                        val token = tokenProvider.getToken()
+                        if (token != null) {
+                            BearerTokens(token, "")
+                        } else {
+                            null
+                        }
+                    }
+                    refreshTokens {
+                        // Token 刷新逻辑
+                        val response = client.post("/auth/refresh") {
+                            setBody(mapOf("refreshToken" to oldTokens?.refreshToken))
+                        }
+                        val newToken = response.body&lt;LoginResponse&gt;()
+                        BearerTokens(newToken.token, "")
+                    }
+                }
+            }
+        }
+    }
+}</code></pre>
+
+      <h3>Repository 实现</h3>
+
+      <pre><code>// commonMain/domain/repository/UserRepository.kt
+interface UserRepository {
+    suspend fun login(email: String, password: String): Result&lt;User&gt;
+    suspend fun getProfile(): Result&lt;User&gt;
+    suspend fun logout()
+}
+
+// commonMain/data/repository/UserRepositoryImpl.kt
+class UserRepositoryImpl(
+    private val httpClient: HttpClient,
+    private val storage: TokenStorage
+) : UserRepository {
+
+    override suspend fun login(email: String, password: String): Result&lt;User&gt; = runCatching {
+        val response = httpClient.post("/auth/login") {
+            setBody(LoginRequest(email, password))
+        }
+        val loginResponse = response.body&lt;LoginResponse&gt;()
+        storage.saveToken(loginResponse.token)
+        loginResponse.user
+    }
+
+    override suspend fun getProfile(): Result&lt;User&gt; = runCatching {
+        httpClient.get("/user/profile").body&lt;User&gt;()
+    }
+
+    override suspend fun logout() {
+        storage.clearToken()
+    }
+}</code></pre>
+
+      <h2>数据存储：DataStore 跨平台</h2>
+
+      <p>Preferences DataStore 可以在 KMP 中直接使用，但初始化方式需要通过 <code>expect/actual</code> 处理。</p>
+
+      <pre><code>// commonMain/data/storage/SettingsStorage.kt
+interface SettingsStorage {
+    suspend fun getString(key: String): String?
+    suspend fun putString(key: String, value: String)
+    suspend fun getBoolean(key: String): Boolean?
+    suspend fun putBoolean(key: String, value: Boolean)
+    suspend fun remove(key: String)
+    suspend fun clear()
+}
+
+// commonMain - 使用 DataStore 实现
+class DataStoreSettingsStorage(
+    private val dataStore: DataStore&lt;Preferences&gt;
+) : SettingsStorage {
+
+    override suspend fun getString(key: String): String? =
+        dataStore.data.map { it[stringPreferencesKey(key)] }.first()
+
+    override suspend fun putString(key: String, value: String) {
+        dataStore.edit { it[stringPreferencesKey(key)] = value }
+    }
+
+    override suspend fun getBoolean(key: String): Boolean? =
+        dataStore.data.map { it[booleanPreferencesKey(key)] }.first()
+
+    override suspend fun putBoolean(key: String, value: Boolean) {
+        dataStore.edit { it[booleanPreferencesKey(key)] = value }
+    }
+
+    override suspend fun remove(key: String) {
+        dataStore.edit { it.remove(stringPreferencesKey(key)) }
+    }
+
+    override suspend fun clear() {
+        dataStore.edit { it.clear() }
+    }
+}</code></pre>
+
+      <pre><code>// commonMain - DataStore 创建需要 expect
+expect fun createDataStore(): DataStore&lt;Preferences&gt;
+
+// androidMain
+actual fun createDataStore(): DataStore&lt;Preferences&gt; {
+    val context = ApplicationHolder.context  // 通过 expect/actual 拿到 Context
+    return PreferenceDataStoreFactory.createWithPath(
+        produceFile = { context.dataStoreFile("shared_prefs.preferences_pb") }
+    )
+}
+
+// iosMain - 使用 okio 的文件路径
+actual fun createDataStore(): DataStore&lt;Preferences&gt; {
+    return PreferenceDataStoreFactory.createWithPath(
+        produceFile = {
+            val documentDirectory = NSSearchPathForDirectoriesInDomains(
+                NSDocumentDirectory, NSUserDomainMask, true
+            ).first() as String
+            path = "$documentDirectory/shared_prefs.preferences_pb"
+            okio.Path.toPath(path)
+        }
+    )
+}</code></pre>
+
+      <h2>UseCase 层</h2>
+
+      <pre><code>// commonMain/domain/usecase/LoginUseCase.kt
+class LoginUseCase(
+    private val userRepository: UserRepository,
+    private val settingsStorage: SettingsStorage
+) {
+    suspend operator fun invoke(email: String, password: String): Result&lt;User&gt; {
+        return userRepository.login(email, password).onSuccess { user ->
+            // 登录成功后缓存用户信息
+            settingsStorage.putString("user_id", user.id)
+            settingsStorage.putString("user_name", user.name)
+        }
+    }
+}
+
+// commonMain/domain/usecase/GetUserProfileUseCase.kt
+class GetUserProfileUseCase(
+    private val userRepository: UserRepository
+) {
+    suspend operator fun invoke(): Result&lt;User&gt; {
+        return userRepository.getProfile()
+    }
+}</code></pre>
+
+      <h2>依赖注入</h2>
+
+      <p>KMP 中没有 Hilt/Dagger（它们依赖 Android），但有轻量替代方案。推荐两种：</p>
+
+      <h3>方案 1: 手动 DI（最简单）</h3>
+
+      <pre><code>// commonMain/AppModule.kt
+class AppModule {
+    // 懒加载，线程安全
+    val httpClient: HttpClient by lazy {
+        HttpClientFactory.create("https://api.example.com")
+    }
+
+    val settingsStorage: SettingsStorage by lazy {
+        DataStoreSettingsStorage(createDataStore())
+    }
+
+    val userRepository: UserRepository by lazy {
+        UserRepositoryImpl(httpClient, settingsStorage)
+    }
+
+    val loginUseCase: LoginUseCase by lazy {
+        LoginUseCase(userRepository, settingsStorage)
+    }
+
+    val getUserProfileUseCase: GetUserProfileUseCase by lazy {
+        GetUserProfileUseCase(userRepository)
+    }
+}
+
+// 全局单例
+object AppModuleProvider {
+    lateinit var appModule: AppModule
+
+    fun init() {
+        appModule = AppModule()
+    }
+}</code></pre>
+
+      <h3>方案 2: Koin（推荐）</h3>
+
+      <pre><code>// commonMain/di/AppModule.kt
+val sharedModule = module {
+    single { HttpClientFactory.create("https://api.example.com") }
+    single { DataStoreSettingsStorage(createDataStore()) }
+    single&lt;UserRepository&gt; { UserRepositoryImpl(get(), get()) }
+    single { LoginUseCase(get(), get()) }
+    single { GetUserProfileUseCase(get()) }
+}
+
+// Android 端启动
+class MyApplication : Application() {
+    override fun onCreate() {
+        super.onCreate()
+        startKoin {
+            androidContext(this@MyApplication)
+            modules(sharedModule)
+        }
+    }
+}
+
+// iOS 端启动（在 AppDelegate 中）
+fun initializeKoin() {
+    startKoin {
+        modules(sharedModule)
+    }
+}</code></pre>
+
+      <h2>iOS 端集成</h2>
+
+      <h3>通过 CocoaPods 集成</h3>
+
+      <p>在 <code>iosApp/Podfile</code> 中添加：</p>
+
+      <pre><code>target 'iosApp' do
+  use_frameworks!
+  platform :ios, '15.0'
+  pod 'shared', :path => '../shared'
+end</code></pre>
+
+      <h3>Swift 中调用</h3>
+
+      <pre><code>// iosApp/ContentView.swift
+import shared
+
+class LoginViewModel: ObservableObject {
+    @Published var user: User?
+    @Published var isLoading = false
+    @Published var errorMessage: String?
+
+    private let loginUseCase = AppModule.shared.loginUseCase
+
+    func login(email: String, password: String) {
+        isLoading = true
+        Task {
+            do {
+                let result = try await loginUseCase(email: email, password: password)
+                await MainActor.run {
+                    switch result {
+                    case .success(let user):
+                        self.user = user
+                        self.isLoading = false
+                    case .failure(let error):
+                        self.errorMessage = error.localizedDescription
+                        self.isLoading = false
+                    }
+                }
+            }
+        }
+    }
+}</code></pre>
+
+      <div class="warning-box">
+        <strong>⚠️ 协程与 Swift 的交互</strong>：Kotlin 的 <code>suspend</code> 函数导出到 iOS 后，Swift 需要用 <code>async/await</code> 调用。Kotlin 2.0+ 已经原生支持 Swift async/await，不再需要 <code>callbackFlow</code> 包装。
+      </div>
+
+      <h2>测试</h2>
+
+      <h3>commonTest：纯 Kotlin 单元测试</h3>
+
+      <pre><code>// commonTest/domain/usecase/LoginUseCaseTest.kt
+class LoginUseCaseTest {
+    private lateinit var userRepository: UserRepository
+    private lateinit var settingsStorage: SettingsStorage
+    private lateinit var loginUseCase: LoginUseCase
+
+    @BeforeTest
+    fun setup() {
+        userRepository = mockk()
+        settingsStorage = mockk(relaxed = true)
+        loginUseCase = LoginUseCase(userRepository, settingsStorage)
+    }
+
+    @Test
+    fun `login success saves user info`() = runTest {
+        // Given
+        val user = User("1", "张小猛", "test@example.com", "avatar.png")
+        coEvery { userRepository.login("test@example.com", "123456") } returns Result.success(user)
+
+        // When
+        val result = loginUseCase("test@example.com", "123456")
+
+        // Then
+        assertTrue(result.isSuccess)
+        assertEquals(user, result.getOrNull())
+        coVerify { settingsStorage.putString("user_id", "1") }
+        coVerify { settingsStorage.putString("user_name", "张小猛") }
+    }
+
+    @Test
+    fun `login failure returns error`() = runTest {
+        // Given
+        coEvery { userRepository.login(any(), any()) } returns Result.failure(
+            RuntimeException("Invalid credentials")
+        )
+
+        // When
+        val result = loginUseCase("wrong@example.com", "wrong")
+
+        // Then
+        assertTrue(result.isFailure)
+    }
+}</code></pre>
+
+      <p>shared/build.gradle.kts 中添加测试依赖：</p>
+
+      <pre><code>sourceSets {
+    commonTest.dependencies {
+        implementation(kotlin("test"))
+        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.1")
+        implementation("io.mockk:mockk:1.13.11")
+    }
+}</code></pre>
+
+      <h2>踩坑记录</h2>
+
+      <h3>坑 1: iOS Framework 类型导出</h3>
+
+      <p>KMP 导出到 iOS 的类型有限制：</p>
+
+      <ul>
+        <li><code>sealed class</code> 导出为 Swift 的 protocol + 具体类型，但模式匹配不如 Swift 原生 enum</li>
+        <li><code>Unit</code> 返回的 suspend 函数在 Swift 中返回 <code>KotlinUnit</code>，不是 <code>Void</code></li>
+        <li><code>List&lt;T&gt;</code> 导出为 <code>KotlinArray</code>，需要手动转换</li>
+      </ul>
+
+      <p>解决方案：在 iosMain 中写一层薄薄的适配器：</p>
+
+      <pre><code>// iosMain/platform/IosAdapter.kt
+fun List&lt;User&gt;.toNSArray(): NSArray {
+    return NSArray(array = this.map { it as AnyObject }.toTypedArray())
+}</code></pre>
+
+      <h3>坑 2: 构建速度</h3>
+
+      <p>iOS Framework 的编译比较慢，尤其是首次构建。建议：</p>
+
+      <ul>
+        <li>开发时用 <code>./gradlew shared:assembleDebug</code> 只构建 Android</li>
+        <li>iOS 相关改动才跑 <code>./gradlew shared:linkDebugFrameworkIosArm64</code></li>
+        <li>CI 中加缓存：<code>~/.gradle/caches</code> 和 <code>~/Library/Caches/CocoaPods</code></li>
+      </ul>
+
+      <h3>坑 3: 内存管理</h3>
+
+      <p>iOS 端使用 KMP 对象时要注意循环引用：</p>
+
+      <pre><code>// ❌ 可能循环引用
+class ProfileViewModel: ObservableObject {
+    private let useCase = KoinHelper.shared.getUserProfileUseCase
+    // useCase 持有 HttpClient → HttpClient 持有 closure → ...
+}
+
+// ✅ 显式管理生命周期
+class ProfileViewModel: ObservableObject {
+    private let useCase: GetUserProfileUseCase
+    private var handle: DisposableHandle?
+
+    init(useCase: GetUserProfileUseCase) {
+        self.useCase = useCase
+    }
+
+    deinit {
+        handle?.dispose()
+    }
+}</code></pre>
+
+      <h3>坑 4: 日期时间</h3>
+
+      <p>不要用 <code>java.util.Date</code> 或 <code>java.time</code>（JVM 专属）。使用 <code>kotlinx-datetime</code>：</p>
+
+      <pre><code>// commonMain
+implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.0")
+
+// 使用
+val now = Clock.System.now()
+val localDate = now.toLocalDateTime(TimeZone.currentSystemDefault())</code></pre>
+
+      <h2>什么时候该用 KMP？</h2>
+
+      <table>
+        <tr><th>场景</th><th>推荐度</th><th>说明</th></tr>
+        <tr><td>新项目，需要 Android + iOS</td><td>⭐⭐⭐⭐⭐</td><td>从一开始就规划 KMP，成本最低</td></tr>
+        <tr><td>现有 Android 项目，新增 iOS 端</td><td>⭐⭐⭐⭐</td><td>逐步抽 shared module，Android 端改动小</td></tr>
+        <tr><td>纯 Android 项目</td><td>⭐⭐</td><td>KMP 增加了构建复杂度，短期内没收益</td></tr>
+        <tr><td>只共享网络层</td><td>⭐⭐⭐⭐</td><td>投入产出比最高的切入点</td></tr>
+        <tr><td>共享 UI（Compose Multiplatform）</td><td>⭐⭐⭐</td><td>2026 年 iOS 端已 Stable，但性能和原生体验仍有差距</td></tr>
+      </table>
+
+      <div class="tip-box">
+        <strong>💡 最佳实践</strong>：<strong>从网络层开始</strong>。这是投入产出比最高的切入点——网络请求、JSON 解析、错误处理在两端几乎完全相同，用 KMP 共享后可以立刻减少 30-40% 重复代码。数据层和领域层可以逐步迁移，UI 层保持原生。
+      </div>
+
+      <h2>工具链推荐</h2>
+
+      <table>
+        <tr><th>功能</th><th>推荐库</th><th>说明</th></tr>
+        <tr><td>HTTP 客户端</td><td>Ktor</td><td>KMP 生态事实标准</td></tr>
+        <tr><td>JSON 序列化</td><td>kotlinx.serialization</td><td>编译期生成，零反射</td></tr>
+        <tr><td>协程</td><td>kotlinx-coroutines</td><td>跨平台协程支持</td></tr>
+        <tr><td>日期时间</td><td>kotlinx-datetime</td><td>替代 java.time</td></tr>
+        <tr><td>KV 存储</td><td>DataStore (Multiplatform)</td><td>1.1+ 支持 KMP</td></tr>
+        <tr><td>依赖注入</td><td>Koin</td><td>轻量、KMP 原生支持</td></tr>
+        <tr><td>日志</td><td>kermit / Napier</td><td>KMP 原生日志库</td></tr>
+        <tr><td>测试</td><td>kotlin-test + mockk</td><td>commonTest 统一测试</td></tr>
+      </table>
+
+      <h2>总结</h2>
+
+      <p>KMP 的核心价值不是「写一次代码到处跑」，而是<strong>让 Android 开发者的 Kotlin 能力延伸到 iOS</strong>。你不需要学 Swift 就能写 iOS 端的业务逻辑，你不需要维护两套网络层代码，你不需要担心两端的数据模型不一致。</p>
+
+      <p>迁移路径很务实：</p>
+
+      <ol>
+        <li><strong>从网络层开始</strong>——Ktor + kotlinx.serialization，3-5 天搞定</li>
+        <li><strong>加上数据存储</strong>——DataStore 跨平台，1-2 天</li>
+        <li><strong>抽领域层</strong>——UseCase + Repository 接口，1 周</li>
+        <li><strong>不要动 UI</strong>——Compose 和 SwiftUI 各自原生</li>
+      </ol>
+
+      <p>2026 年的 KMP 已经不是早期实验品了。Kotlin 2.0 的 K2 编译器让构建速度大幅提升，Compose Multiplatform for iOS 进入 Stable，Google 官方背书——如果你在做 Android 开发同时需要 iOS 端，现在是认真考虑 KMP 的时候了。</p>
+
+      <div class="post-tags">
+        <span>Kotlin Multiplatform</span>
+        <span>KMP</span>
+        <span>Android</span>
+        <span>iOS</span>
+        <span>跨平台</span>
+        <span>Ktor</span>
+      </div>
+    </article>
+  </main>
+
+  <footer class="footer" role="contentinfo">
+    <div class="footer-inner">
+      <p class="footer-signature">写代码，做产品，也认真生活。</p>
+      <div class="footer-links">
+        <a href="https://github.com/zzdbilly" class="footer-link" target="_blank" rel="noopener">GitHub</a>
+        <a href="../../projects/index.html" class="footer-link">项目</a>
+        <a href="../../about/index.html" class="footer-link">关于</a>
+      </div>
+      <p class="footer-copyright">© 2026 张小猛</p>
+    </div>
+  </footer>
+
+  <script src="../../assets/js/main.js"></script>
+</body>
+</html>
