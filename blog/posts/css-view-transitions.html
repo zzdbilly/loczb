@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="CSS View Transitions API 实战：从 document.startViewTransition 到跨页面导航过渡、SPA 集成、列表动画完整指南">
+  <meta name="keywords" content="CSS View Transitions, View Transitions API, 页面过渡动画, startViewTransition, SPA, MPA, 前端动画">
+  <meta name="author" content="张小猛">
+  <meta name="publish-date" content="2026-06-27">
+  <title>CSS View Transitions API 实战：页面过渡动画新范式 | 张小猛 - loczb</title>
+  <link rel="canonical" href="https://709527.xyz/blog/posts/css-view-transitions.html">
+  <meta name="robots" content="index, follow">
+  
+  <!-- Open Graph -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://709527.xyz/blog/posts/css-view-transitions.html">
+  <meta property="og:title" content="CSS View Transitions API 实战：页面过渡动画新范式 | 张小猛 - loczb">
+  <meta property="og:description" content="CSS View Transitions API 实战：从 document.startViewTransition 到跨页面导航过渡、SPA 集成、列表动画完整指南">
+  <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="article:author" content="张小猛">
+  <meta property="article:published_time" content="2026-06-27">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="CSS View Transitions API 实战：页面过渡动画新范式 | 张小猛 - loczb">
+  <meta name="twitter:description" content="CSS View Transitions API 实战：从 document.startViewTransition 到跨页面导航过渡、SPA 集成、列表动画完整指南">
+  <meta name="twitter:image" content="https://709527.xyz/assets/images/og-image.png">
+
+  <link rel="icon" type="image/x-icon" href="../../assets/images/favicon.ico">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
+  <link rel="icon" type="image/png" sizes="16x16" href="../../assets/images/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="../../assets/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="48x48" href="../../assets/images/favicon-48x48.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="../../assets/images/apple-touch-icon.png">
+  <link rel="manifest" href="../../site.webmanifest">
+  <meta name="theme-color" content="#3b82f6">
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <style>
+    .post-content { max-width: 760px; margin: 0 auto; line-height: 1.85; }
+    .post-content h1 { font-size: 2.4rem; margin: 2rem 0 1rem; }
+    .post-content h2 { font-size: 1.7rem; margin: 2.5rem 0 1rem; color: var(--color-accent-primary); border-bottom: 1px solid var(--color-border); padding-bottom: 0.5rem; }
+    .post-content h3 { font-size: 1.3rem; margin: 1.8rem 0 0.8rem; }
+    .post-content pre { background: var(--color-bg-tertiary); padding: 1.2rem; border-radius: 8px; overflow-x: auto; margin: 1.2rem 0; font-size: 0.9rem; }
+    .post-content code { background: var(--color-bg-tertiary); padding: 0.15rem 0.4rem; border-radius: 4px; font-family: monospace; font-size: 0.9em; }
+    .post-meta { color: var(--color-text-secondary); font-size: 0.9rem; margin-bottom: 2rem; }
+    .post-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 3rem; }
+    .post-tags span { background: var(--color-bg-tertiary); padding: 0.3rem 0.8rem; border-radius: 9999px; font-size: 0.85rem; color: var(--color-accent-primary); }
+    .tip-box { background: rgba(34, 197, 94, 0.1); border-left: 3px solid #22c55e; padding: 1rem 1.2rem; margin: 1.5rem 0; border-radius: 0 6px 6px 0; }
+    .warning-box { background: rgba(234, 179, 8, 0.1); border-left: 3px solid #eab308; padding: 1rem 1.2rem; margin: 1.5rem 0; border-radius: 0 6px 6px 0; }
+    table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.95rem; }
+    th, td { border: 1px solid var(--color-border); padding: 0.7rem; text-align: left; }
+    th { background: var(--color-bg-tertiary); font-weight: 600; }
+  </style>
+  <!-- Preconnect to Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500;600&display=swap" media="print" onload="this.media='all'">
+  <noscript>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500;600&display=swap">
+  </noscript>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../../index.html" class="nav-logo">loc<span>zb</span></a>
+      <button class="nav-toggle" aria-label="打开菜单"><span></span><span></span><span></span></button>
+      <div class="nav-overlay"></div>
+      <ul class="nav-links">
+        <li><a href="../../index.html" class="nav-link">首页</a></li>
+        <li><a href="../../projects/index.html" class="nav-link">项目</a></li>
+        <li><a href="../index.html" class="nav-link active">博客</a></li>
+        <li><a href="../../about/index.html" class="nav-link">关于</a></li>
+      </ul>
+      <button class="theme-toggle" aria-label="切换主题">
+        <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line></svg>
+        <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+      </button>
+    </div>
+  </nav>
+<div class="scroll-progress"></div>
+
+  <main>
+    <article class="post-content" style="padding: calc(64px + 4rem) 1rem 4rem;">
+      <a href="../index.html" style="display: inline-flex; align-items: center; gap: 0.5rem; color: var(--color-text-secondary); text-decoration: none; margin-bottom: 2rem;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        返回博客
+      </a>
+      
+      <h1>CSS View Transitions API 实战：页面过渡动画新范式</h1>
+      
+      <div class="post-meta">2026年6月27日 · 阅读时间 14 分钟</div>
+
+      <p>页面切换时的过渡动画，一直是前端的痛点。要么用各种 JS 动画库手动管理生命周期，要么干脆放弃——白屏闪烁就白屏闪烁吧。View Transitions API 改变了这一切：浏览器原生支持，一行代码触发，自动处理新旧状态的快照和动画。</p>
+
+      <p>本文从核心概念到跨页面导航、SPA 集成、列表动画，带你完整掌握 View Transitions API。</p>
+
+      <div class="tip-box">
+        <strong>浏览器支持</strong>：Chrome 111+、Edge 111+ 已完整支持。Firefox 和 Safari 正在实现中。本文所有代码均基于最新稳定版 API，并附带渐进增强方案。
+      </div>
+
+      <h2>一、传统 CSS 动画痛点 vs View Transitions API</h2>
+
+      <p>在 View Transitions API 出现之前，页面过渡动画的实现方式大致有三种：</p>
+
+      <table>
+        <tr>
+          <th>方案</th>
+          <th>优点</th>
+          <th>痛点</th>
+        </tr>
+        <tr>
+          <td>CSS transition/animation</td>
+          <td>原生、高性能</td>
+          <td>只适合单个元素；跨页面无法使用；需手动管理状态</td>
+        </tr>
+        <tr>
+          <td>JS 动画库（GSAP、Framer Motion）</td>
+          <td>功能强大、生态丰富</td>
+          <td>包体积大；手动编排复杂；跨页面动画仍需大量胶水代码</td>
+        </tr>
+        <tr>
+          <td>SPA 路由动画</td>
+          <td>路由级别可控</td>
+          <td>框架绑定；MPA 不适用；旧 DOM 已销毁无法做过渡</td>
+        </tr>
+      </table>
+
+      <p>核心痛点一句话概括：<strong>DOM 更新和动画是割裂的</strong>。你先更新 DOM（旧节点销毁、新节点创建），再想办法做动画。但旧节点已经没了，怎么从旧状态过渡到新状态？</p>
+
+      <p>View Transitions API 的解法：<strong>浏览器帮你拍照</strong>。更新 DOM 之前，浏览器给旧状态拍一张快照；更新之后，再给新状态拍一张。然后用 CSS 动画把两张快照连起来——你只需要告诉浏览器"更新 DOM"，过渡动画自动生成。</p>
+
+      <h2>二、核心概念</h2>
+
+      <h3>1. document.startViewTransition()</h3>
+
+      <p>整个 API 的入口就一个函数：</p>
+
+      <pre><code>document.startViewTransition(updateCallback);</code></pre>
+
+      <p><code>updateCallback</code> 是一个函数，在里面做 DOM 更新。浏览器会按以下流程执行：</p>
+
+      <pre><code>1. 调用 startViewTransition()
+2. 浏览器截取当前页面的视觉快照（old state）
+3. 执行 updateCallback，更新 DOM
+4. 浏览器截取更新后的视觉快照（new state）
+5. 构造伪元素树，用动画从 old → new 过渡
+6. 动画结束，清理伪元素</code></pre>
+
+      <div class="tip-box">
+        <strong>关键理解</strong>：<code>updateCallback</code> 返回 Promise 时，浏览器会等 Promise resolve 后再截取新快照。这意味着你可以在回调中做异步数据加载。
+      </div>
+
+      <h3>2. 伪元素树</h3>
+
+      <p>过渡期间，浏览器会插入以下伪元素树：</p>
+
+      <pre><code>::view-transition
+└── ::view-transition-group(root)
+    └── ::view-transition-image-pair(root)
+        ├── ::view-transition-old(root)    ← 旧快照
+        └── ::view-transition-new(root)    ← 新快照</code></pre>
+
+      <p>每个伪元素的职责：</p>
+
+      <table>
+        <tr>
+          <th>伪元素</th>
+          <th>职责</th>
+          <th>默认动画</th>
+        </tr>
+        <tr>
+          <td><code>::view-transition</code></td>
+          <td>顶层容器，覆盖整个视口</td>
+          <td>无</td>
+        </tr>
+        <tr>
+          <td><code>::view-transition-group</code></td>
+          <td>管理一组过渡的定位和尺寸</td>
+          <td>从旧位置/尺寸动画到新位置/尺寸</td>
+        </tr>
+        <tr>
+          <td><code>::view-transition-image-pair</code></td>
+          <td>容纳 old 和 new 快照，负责隔离</td>
+          <td><code>isolation: isolate</code></td>
+        </tr>
+        <tr>
+          <td><code>::view-transition-old</code></td>
+          <td>旧状态的截图（<code>&lt;img&gt;</code> 或截图）</td>
+          <td>opacity 1→0（淡出）</td>
+        </tr>
+        <tr>
+          <td><code>::view-transition-new</code></td>
+          <td>新状态的截图</td>
+          <td>opacity 0→1（淡入）</td>
+        </tr>
+      </table>
+
+      <div class="warning-box">
+        <strong>重要</strong>：过渡期间，真实的 DOM 已经更新完毕，只是被伪元素层盖住了。用户看到的是动画（快照之间的过渡），动画结束后伪元素消失，露出真实 DOM。这意味着 DOM 交互在过渡期间是被遮挡的——但你可以通过 CSS 控制 <code>pointer-events</code> 来调整。
+      </div>
+
+      <h2>三、基础用法</h2>
+
+      <h3>1. 最简单的页面过渡</h3>
+
+      <pre><code>// 点击按钮切换主题
+document.querySelector('.theme-btn').addEventListener('click', () => {
+  // ✅ 只需包裹一层 startViewTransition
+  document.startViewTransition(() => {
+    document.documentElement.classList.toggle('dark');
+  });
+});</code></pre>
+
+      <p>就这么简单。浏览器自动做淡入淡出，不需要写任何 CSS 动画。</p>
+
+      <h3>2. 自定义淡入淡出</h3>
+
+      <p>默认的淡入淡出是 250ms，你可以通过 CSS 修改：</p>
+
+      <pre><code>/* 修改默认过渡时长 */
+::view-transition-old(root) {
+  animation: 0.4s ease-in fade-out;
+}
+
+::view-transition-new(root) {
+  animation: 0.4s ease-out fade-in;
+}
+
+@keyframes fade-out {
+  to { opacity: 0; }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+}</code></pre>
+
+      <h3>3. 禁用默认过渡</h3>
+
+      <pre><code>/* 完全禁用默认的 root 过渡 */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+}</code></pre>
+
+      <p>这在你只想对特定元素做过渡（而非整个页面）时非常有用——先禁用 root，再对特定 group 启用。</p>
+
+      <h2>四、自定义动画</h2>
+
+      <h3>1. view-transition-name：给元素命名</h3>
+
+      <p><code>view-transition-name</code> 是整个自定义动画的关键。给元素设置这个名字后，它会在伪元素树中获得独立的 group，不再跟随 root 一起过渡。</p>
+
+      <pre><code>/* 头像元素独立过渡 */
+.hero-avatar {
+  view-transition-name: hero-avatar;
+}
+
+/* 此时伪元素树变成：
+::view-transition
+├── ::view-transition-group(root)        ← 其他所有内容
+└── ::view-transition-group(hero-avatar) ← 头像独立过渡
+    └── ::view-transition-image-pair(hero-avatar)
+        ├── ::view-transition-old(hero-avatar)
+        └── ::view-transition-new(hero-avatar)
+*/</code></pre>
+
+      <div class="warning-box">
+        <strong>规则</strong>：<code>view-transition-name</code> 必须在同一时刻唯一。如果两个可见元素设置了相同的 name，过渡会跳过。动态设置时务必确保唯一性。
+      </div>
+
+      <h3>2. 修改动画时长和关键帧</h3>
+
+      <pre><code>/* 头像过渡：缩放 + 位移 */
+::view-transition-group(hero-avatar) {
+  animation-duration: 0.5s;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 旧头像：缩小淡出 */
+::view-transition-old(hero-avatar) {
+  animation: 0.5s ease both shrink-out;
+}
+
+/* 新头像：放大淡入 */
+::view-transition-new(hero-avatar) {
+  animation: 0.5s ease both grow-in;
+}
+
+@keyframes shrink-out {
+  to {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+}
+
+@keyframes grow-in {
+  from {
+    opacity: 0;
+    transform: scale(1.2);
+  }
+}</code></pre>
+
+      <h3>3. 多个元素独立过渡</h3>
+
+      <pre><code>/* 列表中的每张卡片独立过渡 */
+.card:nth-child(1) { view-transition-name: card-1; }
+.card:nth-child(2) { view-transition-name: card-2; }
+.card:nth-child(3) { view-transition-name: card-3; }
+
+/* 所有卡片共享同一动画，但各自独立执行 */
+::view-transition-group(card-1),
+::view-transition-group(card-2),
+::view-transition-group(card-3) {
+  animation-duration: 0.3s;
+}</code></pre>
+
+      <div class="tip-box">
+        <strong>动态命名</strong>：在 JS 中根据数据动态设置 <code>view-transition-name</code>，比在 CSS 中写 <code>nth-child</code> 更灵活：
+        <pre><code>document.querySelectorAll('.card').forEach((card, i) => {
+  card.style.viewTransitionName = `card-${card.dataset.id}`;
+});</pre>
+      </div>
+
+      <h2>五、跨页面导航过渡（MPA）</h2>
+
+      <p>SPA 里做过渡还算简单，毕竟 DOM 在同一个文档中。但 MPA（多页应用）怎么办？页面 A 导航到页面 B，浏览器会销毁整个页面 A——传统方案完全无法做过渡。</p>
+
+      <p>Chrome 126+ 支持了<strong>跨文档 View Transitions</strong>（Cross-Document View Transitions），让 MPA 也能拥有丝滑的页面过渡。</p>
+
+      <h3>1. 基础配置</h3>
+
+      <pre><code>/* 在两个页面的 CSS 中都添加 */
+@view-transition {
+  navigation: auto;
+}</code></pre>
+
+      <p>就这一行。当用户在两个页面之间导航（点击链接、前进/后退）时，浏览器自动触发 View Transition。</p>
+
+      <h3>2. 自定义跨页面动画</h3>
+
+      <pre><code>/* 页面 A（列表页） */
+.item-image {
+  view-transition-name: item-image;
+}
+
+/* 页面 B（详情页） */
+.detail-hero-image {
+  view-transition-name: item-image;  /* 同名！这是关键 */
+}
+
+/* 自定义过渡效果 */
+::view-transition-group(item-image) {
+  animation-duration: 0.4s;
+  animation-timing-function: cubic-bezier(0.2, 0, 0, 1);
+}
+
+/* 禁用 root 级别的淡入淡出，只保留图片过渡 */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}</code></pre>
+
+      <p>两个页面中设置<strong>相同的 <code>view-transition-name</code></strong>，浏览器就能把页面 A 的元素和页面 B 的元素"匹配"起来，做跨页面的位移动画——这就是经典的"Hero Animation"。</p>
+
+      <h3>3. 控制哪些导航触发过渡</h3>
+
+      <pre><code>// 使用 pageswap 和 pagereveal 事件精细控制
+// 页面离开时
+document.addEventListener('pageswap', (event) => {
+  // 只对特定链接做过渡
+  const targetUrl = new URL(event.activationEntry.url);
+  if (targetUrl.pathname.startsWith('/blog/')) {
+    // 设置匹配的 view-transition-name
+    setTransitionNames(event);
+  }
+});
+
+// 页面进入时
+document.addEventListener('pagereveal', (event) => {
+  if (event.viewTransition) {
+    // 新页面准备好后，设置匹配名称
+    setupIncomingNames(event);
+  }
+});</code></pre>
+
+      <div class="warning-box">
+        <strong>跨页面过渡的限制</strong>：两个页面必须同源；<code>view-transition-name</code> 必须在页面加载时就设置好（或通过事件动态设置）；不支持跨域导航。
+      </div>
+
+      <h2>六、SPA 集成：React Router / Vue Router 实战</h2>
+
+      <h3>1. React Router</h3>
+
+      <pre><code>import { useNavigate } from 'react-router-dom';
+
+function ProductCard({ product }) {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    // ✅ 用 startViewTransition 包裹导航
+    const transition = document.startViewTransition(() => {
+      navigate(`/product/${product.id}`);
+    });
+  };
+
+  return (
+    &lt;div
+      className="product-card"
+      style={{ viewTransitionName: `product-${product.id}` }}
+      onClick={handleClick}
+    &gt;
+      &lt;img src={product.image} alt={product.name} /&gt;
+      &lt;h3&gt;{product.name}&lt;/h3&gt;
+    &lt;/div&gt;
+  );
+}</code></pre>
+
+      <pre><code>/* 详情页的 Hero 图片 */
+.product-detail-hero {
+  view-transition-name: product-hero; /* 需要与列表页匹配 */
+}</code></pre>
+
+      <div class="tip-box">
+        <strong>React 18+ 的 concurrent 特性</strong>：<code>startViewTransition</code> 的回调中更新状态时，React 18 的自动批处理可能导致 DOM 不立即更新。解决方案：使用 <code>flushSync</code> 强制同步更新。
+        <pre><code>import { flushSync } from 'react-dom';
+
+document.startViewTransition(() => {
+  flushSync(() => {
+    navigate(`/product/${product.id}`);
+  });
+});</pre>
+      </div>
+
+      <h3>2. Vue Router</h3>
+
+      <pre><code>// router/index.js
+import { createRouter, createWebHistory } from 'vue-router';
+
+const router = createRouter({
+  history: createWebHistory(),
+  routes: [...],
+});
+
+// ✅ 全局路由守卫中包裹 View Transition
+router.beforeEach((to, from) => {
+  // 检查浏览器支持
+  if (!document.startViewTransition) return true;
+
+  return new Promise((resolve) => {
+    document.startViewTransition(async () => {
+      resolve(true);
+      await new Promise((r) => requestAnimationFrame(r));
+    });
+  });
+});</code></pre>
+
+      <p>更精细的控制——根据路由设置不同的过渡名称：</p>
+
+      <pre><code>// 在组件中动态设置 view-transition-name
+// ListPage.vue
+&lt;template&gt;
+  &lt;div
+    v-for="item in items"
+    :key="item.id"
+    :style="{ viewTransitionName: `item-${item.id}` }"
+    @click="goToDetail(item.id)"
+  &gt;
+    {{ item.name }}
+  &lt;/div&gt;
+&lt;/template&gt;
+
+// DetailPage.vue
+&lt;template&gt;
+  &lt;div :style="{ viewTransitionName: `item-${itemId}` }" class="detail-hero"&gt;
+    &lt;h1&gt;{{ item.name }}&lt;/h1&gt;
+  &lt;/div&gt;
+&lt;/template&gt;</code></pre>
+
+      <h3>3. 封装通用 Hook / Composable</h3>
+
+      <pre><code>// React: useViewTransition
+function useViewTransition(callback) {
+  return (...args) => {
+    if (!document.startViewTransition) {
+      callback(...args);
+      return;
+    }
+    document.startViewTransition(() => callback(...args));
+  };
+}
+
+// 使用
+const handleNavigate = useViewTransition((id) => {
+  flushSync(() => navigate(`/detail/${id}`));
+});</code></pre>
+
+      <pre><code>// Vue: useViewTransition composable
+import { nextTick } from 'vue';
+
+export function useViewTransition() {
+  const startTransition = async (callback) => {
+    if (!document.startViewTransition) {
+      await callback();
+      return;
+    }
+
+    document.startViewTransition(async () => {
+      await callback();
+      await nextTick();
+    });
+  };
+
+  return { startTransition };
+}</code></pre>
+
+      <h2>七、列表动画</h2>
+
+      <h3>1. 列表重排过渡</h3>
+
+      <p>经典的 FLIP 动画问题——列表排序时元素位置变化，需要平滑过渡。View Transitions API 让这一切变得极其简单：</p>
+
+      <pre><code>function sortList(sortFn) {
+  document.startViewTransition(() => {
+    // 给每个列表项设置唯一的 view-transition-name
+    document.querySelectorAll('.list-item').forEach((item) => {
+      item.style.viewTransitionName = `item-${item.dataset.id}`;
+    });
+
+    // 执行排序，更新 DOM
+    sortFn();
+  });
+}</code></pre>
+
+      <pre><code>/* 列表项重排时自动做位移动画 */
+::view-transition-group(item-*) {
+  animation-duration: 0.3s;
+  animation-timing-function: ease-in-out;
+}
+
+/* 禁用默认的淡入淡出，只保留位移 */
+::view-transition-old(item-*) {
+  animation: none;
+}
+::view-transition-new(item-*) {
+  animation: none;
+}</code></pre>
+
+      <div class="tip-box">
+        <strong>为什么只保留 group 动画？</strong><code>::view-transition-group</code> 默认会从旧的位置/尺寸动画到新的位置/尺寸——这正是 FLIP 动画要做的。禁用 old/new 的淡入淡出后，效果就是纯粹的"滑动到新位置"，非常自然。
+      </div>
+
+      <h3>2. 动态网格过渡</h3>
+
+      <pre><code>function rearrangeGrid(newLayout) {
+  document.startViewTransition(() => {
+    // 每个网格项设置唯一 name
+    document.querySelectorAll('.grid-item').forEach((item) => {
+      item.style.viewTransitionName = `grid-${item.dataset.id}`;
+    });
+
+    // 应用新布局
+    applyLayout(newLayout);
+  });
+}</code></pre>
+
+      <pre><code>/* 网格项过渡：位移 + 尺寸变化 */
+::view-transition-group(grid-*) {
+  animation-duration: 0.4s;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 淡入淡出也保留，增加层次感 */
+::view-transition-old(grid-*) {
+  animation: 0.2s ease fade-out;
+}
+::view-transition-new(grid-*) {
+  animation: 0.2s ease 0.2s fade-in;  /* 延迟淡入，错开节奏 */
+}</code></pre>
+
+      <h3>3. 列表项添加/删除</h3>
+
+      <pre><code>function addItem(newItem) {
+  document.startViewTransition(() => {
+    // 现有项设置 name（保持位置过渡）
+    document.querySelectorAll('.list-item').forEach((item) => {
+      item.style.viewTransitionName = `item-${item.dataset.id}`;
+    });
+
+    // 新项不设 name（走 root 的淡入）
+    addItemToDOM(newItem);
+  });
+}
+
+function removeItem(id) {
+  document.startViewTransition(() => {
+    // 所有项都设 name
+    document.querySelectorAll('.list-item').forEach((item) => {
+      item.style.viewTransitionName = `item-${item.dataset.id}`;
+    });
+
+    // 删除目标项
+    document.querySelector(`[data-id="${id}"]`)?.remove();
+  });
+}</code></pre>
+
+      <h2>八、性能考量与渐进增强</h2>
+
+      <h3>1. 性能原理</h3>
+
+      <p>View Transitions 的性能关键在于：<strong>截图</strong>和<strong>动画</strong>。</p>
+
+      <ul>
+        <li><strong>截图</strong>：浏览器将旧/新状态光栅化为位图，这个操作在合成线程执行，不阻塞主线程。</li>
+        <li><strong>动画</strong>：伪元素层的动画在 GPU 合成，和 CSS transform/opacity 动画一样高效。</li>
+        <li><strong>DOM 更新</strong>：<code>updateCallback</code> 中的 DOM 操作在主线程，这是唯一可能卡顿的环节。</li>
+      </ul>
+
+      <h3>2. 性能优化建议</h3>
+
+      <pre><code>/* ❌ 避免对大区域做复杂动画 */
+::view-transition-group(root) {
+  animation: 1s complex-animation;  /* 整个页面都在动画，GPU 压力大 */
+}
+
+/* ✅ 只对需要的元素做过渡 */
+.special-element {
+  view-transition-name: special;  /* 只这一个元素动画 */
+}
+
+::view-transition-group(root) {
+  animation: none;  /* root 不做动画 */
+}</code></pre>
+
+      <table>
+        <tr>
+          <th>优化点</th>
+          <th>建议</th>
+        </tr>
+        <tr>
+          <td>过渡时长</td>
+          <td>200-400ms 最佳，超过 500ms 用户会感觉拖沓</td>
+        </tr>
+        <tr>
+          <td>同时过渡元素数</td>
+          <td>建议 &lt;10 个独立 name，过多会增加截图和合成开销</td>
+        </tr>
+        <tr>
+          <td>大尺寸元素</td>
+          <td>全屏图片过渡代价高，考虑降级处理</td>
+        </tr>
+        <tr>
+          <td>updateCallback</td>
+          <td>尽量同步完成，避免在回调中做大量异步操作</td>
+        </tr>
+        <tr>
+          <td>prefers-reduced-motion</td>
+          <td>始终尊重用户的无障碍偏好</td>
+        </tr>
+      </table>
+
+      <h3>3. 渐进增强</h3>
+
+      <pre><code>/* 尊重用户的动画偏好 */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root),
+  ::view-transition-group(*) {
+    animation-duration: 0.01ms !important;
+  }
+}
+
+/* JS 中的渐进增强 */
+function updateWithTransition(updateFn) {
+  if (!document.startViewTransition) {
+    // 不支持时直接更新，无动画
+    updateFn();
+    return;
+  }
+
+  document.startViewTransition(updateFn);
+}</code></pre>
+
+      <h2>九、常见陷阱与兼容性</h2>
+
+      <h3>陷阱 1：view-transition-name 不唯一</h3>
+
+      <pre><code>/* ❌ 两个可见元素同名的后果：过渡被跳过 */
+.card:first-child { view-transition-name: card; }
+.card:last-child  { view-transition-name: card; }
+
+/* ✅ 每个元素唯一 name */
+.card { view-transition-name: var(--vt-name); }
+// JS: card.style.setProperty('--vt-name', `card-${id}`);</code></pre>
+
+      <h3>陷阱 2：过渡期间 DOM 不可交互</h3>
+
+      <p>过渡期间，伪元素层覆盖在真实 DOM 之上。用户点击按钮可能没反应。解决方案：</p>
+
+      <pre><code>/* 短过渡通常无影响。如果确实需要交互： */
+::view-transition-old(root),
+::view-transition-new(root) {
+  pointer-events: auto;  /* 允许点击穿透 */
+}
+
+/* 或者干脆缩短过渡时间 */
+::view-transition-group(root) {
+  animation-duration: 150ms;
+}</code></pre>
+
+      <h3>陷阱 3：React 中 startViewTransition 回调不生效</h3>
+
+      <pre><code>// ❌ React 18 自动批处理，DOM 可能不会立即更新
+document.startViewTransition(() => {
+  setState(newValue);  // 不会立即渲染
+});
+
+// ✅ 用 flushSync 强制同步渲染
+import { flushSync } from 'react-dom';
+document.startViewTransition(() => {
+  flushSync(() => {
+    setState(newValue);  // 立即渲染，浏览器能截取新快照
+  });
+});</code></pre>
+
+      <h3>陷阱 4：跨页面过渡时 name 未提前设置</h3>
+
+      <pre><code>// ❌ 页面加载后才设置 name，浏览器已经截取了快照
+window.addEventListener('load', () => {
+  // 太晚了！
+  document.querySelector('.hero').style.viewTransitionName = 'hero';
+});
+
+// ✅ 在 CSS 中静态设置，或在 pagereveal 事件中动态设置
+// CSS 方式：
+.hero { view-transition-name: hero; }
+
+// JS 方式：
+document.addEventListener('pagereveal', (e) => {
+  if (e.viewTransition) {
+    document.querySelector('.hero').style.viewTransitionName = 'hero';
+  }
+});</code></pre>
+
+      <h3>陷阱 5：忘记清理动态设置的 name</h3>
+
+      <pre><code>// ❌ 列表项切换后 name 残留
+function showPage(page) {
+  // 旧页面的 name 还在，可能和新页面冲突
+  document.startViewTransition(() => {
+    renderNewPage(page);
+  });
+}
+
+// ✅ 过渡前清理旧 name，设置新 name
+function showPage(page) {
+  // 先清理
+  document.querySelectorAll('[style*="view-transition-name"]')
+    .forEach(el => el.style.viewTransitionName = 'none');
+
+  document.startViewTransition(() => {
+    renderNewPage(page);
+    // 为新页面元素设置 name
+    document.querySelectorAll('.card').forEach(card => {
+      card.style.viewTransitionName = `card-${card.dataset.id}`;
+    });
+  });
+}</code></pre>
+
+      <h3>兼容性速查（2026 年 6 月）</h3>
+
+      <table>
+        <tr>
+          <th>浏览器</th>
+          <th>同文档过渡</th>
+          <th>跨文档过渡</th>
+          <th>备注</th>
+        </tr>
+        <tr>
+          <td>Chrome 111+</td>
+          <td>✅</td>
+          <td>✅（126+）</td>
+          <td>完整支持</td>
+        </tr>
+        <tr>
+          <td>Edge 111+</td>
+          <td>✅</td>
+          <td>✅（126+）</td>
+          <td>同 Chrome</td>
+        </tr>
+        <tr>
+          <td>Firefox</td>
+          <td>✅（126+）</td>
+          <td>🚧 开发中</td>
+          <td>同文档过渡已支持</td>
+        </tr>
+        <tr>
+          <td>Safari 18+</td>
+          <td>✅</td>
+          <td>🚧 开发中</td>
+          <td>iOS 18+ 支持</td>
+        </tr>
+        <tr>
+          <td>Samsung Internet</td>
+          <td>✅</td>
+          <td>✅</td>
+          <td>跟随 Chrome</td>
+        </tr>
+      </table>
+
+      <h2>十、速查表</h2>
+
+      <table>
+        <tr>
+          <th>场景</th>
+          <th>代码</th>
+          <th>要点</th>
+        </tr>
+        <tr>
+          <td>最简过渡</td>
+          <td><code>document.startViewTransition(fn)</code></td>
+          <td>自动淡入淡出</td>
+        </tr>
+        <tr>
+          <td>修改过渡时长</td>
+          <td><code>::view-transition-old/new(root) { animation-duration }</code></td>
+          <td>默认 250ms</td>
+        </tr>
+        <tr>
+          <td>元素独立过渡</td>
+          <td><code>view-transition-name: xxx</code></td>
+          <td>同一时刻必须唯一</td>
+        </tr>
+        <tr>
+          <td>禁用 root 过渡</td>
+          <td><code>::view-transition-old/new(root) { animation: none }</code></td>
+          <td>只对特定元素过渡</td>
+        </tr>
+        <tr>
+          <td>跨页面过渡（MPA）</td>
+          <td><code>@view-transition { navigation: auto }</code></td>
+          <td>两页面都需设置</td>
+        </tr>
+        <tr>
+          <td>Hero Animation</td>
+          <td>两页面设置相同 <code>view-transition-name</code></td>
+          <td>自动匹配位置/尺寸</td>
+        </tr>
+        <tr>
+          <td>列表重排</td>
+          <td>每项设 <code>view-transition-name</code>，禁用 old/new 动画</td>
+          <td>只保留 group 位移</td>
+        </tr>
+        <tr>
+          <td>React 集成</td>
+          <td><code>flushSync</code> + <code>startViewTransition</code></td>
+          <td>强制同步渲染</td>
+        </tr>
+        <tr>
+          <td>Vue 集成</td>
+          <td>路由守卫 + <code>nextTick()</code></td>
+          <td>等 DOM 更新完成</td>
+        </tr>
+        <tr>
+          <td>渐进增强</td>
+          <td><code>if (!document.startViewTransition) fallback()</code></td>
+          <td>不支持的浏览器直接更新</td>
+        </tr>
+        <tr>
+          <td>无障碍</td>
+          <td><code>@media (prefers-reduced-motion: reduce)</code></td>
+          <td>缩短或禁用动画</td>
+        </tr>
+      </table>
+
+      <div class="tip-box">
+        <strong>一句话总结</strong>：View Transitions API 用"浏览器帮你截图"的思路，彻底解决了 DOM 更新与动画割裂的痛点。<code>startViewTransition</code> 一行代码触发过渡，<code>view-transition-name</code> 实现元素级自定义，<code>@view-transition { navigation: auto }</code> 开启跨页面过渡。渐进增强，不支持时静默降级——没有不用的理由。
+      </div>
+
+      <div class="post-tags">
+        <span>前端</span>
+        <span>CSS</span>
+        <span>View Transitions</span>
+        <span>页面过渡</span>
+        <span>SPA</span>
+      </div>
+    </article>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <p>&copy; 2026 张小猛 - loczb</p>
+    </div>
+  </footer>
+
+  <script>
+    // Scroll progress
+    const scrollProgress = document.querySelector('.scroll-progress');
+    window.addEventListener('scroll', () => {
+      const scrollTop = document.documentElement.scrollTop;
+      const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = (scrollTop / scrollHeight) * 100;
+      scrollProgress.style.width = progress + '%';
+    });
+
+    // Theme toggle
+    const themeToggle = document.querySelector('.theme-toggle');
+    themeToggle?.addEventListener('click', () => {
+      const html = document.documentElement;
+      const current = html.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+    });
+
+    // Mobile nav
+    const navToggle = document.querySelector('.nav-toggle');
+    const navLinks = document.querySelector('.nav-links');
+    navToggle?.addEventListener('click', () => {
+      navLinks.classList.toggle('active');
+    });
+  </script>
+</body>
+</html>
