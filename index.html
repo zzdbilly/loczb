@@ -451,25 +451,41 @@
         <article class="blog-card-featured animate-on-scroll" id="home-featured-post" style="display: block;">
           <div class="blog-card-header">
             <div class="blog-card-meta">
-              <span class="blog-date">2026-06-24</span>
+              <span class="blog-date">2026-06-27</span>
               <span>·</span>
-              <span class="blog-read-time">22 min</span>
+              <span class="blog-read-time">16 min</span>
             </div>
-            <span class="blog-list-tag">Kotlin</span>
+            <span class="blog-list-tag">前端</span>
           </div>
           <h3 class="blog-card-title">
-            <a href="blog/posts/kotlin-multiplatform-practice.html">Kotlin Multiplatform 实战：共享业务逻辑到 iOS</a>
+            <a href="blog/posts/webassembly-in-practice.html">WebAssembly 实战：浏览器端高性能计算</a>
           </h3>
-          <p class="blog-card-excerpt">从架构设计到代码实现，完整演示如何用 KMP 将 Android 业务逻辑共享到 iOS，涵盖 expect/actual、Ktor、DataStore 等核心内容。</p>
+          <p class="blog-card-excerpt">从 Rust 编译到浏览器运行，WASM 与 JS 互操作、内存管理、SIMD 优化与真实应用场景全流程实战。</p>
           <div class="blog-card-tags">
-            <span class="tech-tag">Kotlin Multiplatform</span>
-            <span class="tech-tag">KMP</span>
-            <span class="tech-tag">跨平台</span>
+            <span class="tech-tag">WebAssembly</span>
+            <span class="tech-tag">Rust</span>
+            <span class="tech-tag">前端性能</span>
           </div>
         </article>
         
         <!-- 最新文章列表 -->
         <div class="blog-list">
+          <article class="blog-list-item animate-on-scroll">
+            <div class="blog-list-meta">
+              <span class="blog-date">2026-06-27</span>
+              <span>·</span>
+              <span class="blog-read-time">16 min</span>
+            </div>
+            <h4 class="blog-list-title">
+              <a href="blog/posts/webassembly-in-practice.html">WebAssembly 实战：浏览器端高性能计算</a>
+            </h4>
+            <div class="blog-list-tags">
+              <span class="tech-tag">WASM</span>
+              <span class="tech-tag">Rust</span>
+              <span class="tech-tag">前端性能</span>
+            </div>
+          </article>
+          
           <article class="blog-list-item animate-on-scroll">
             <div class="blog-list-meta">
               <span class="blog-date">2026-06-24</span>
@@ -584,6 +600,15 @@
   <script>
     // 首页随机选择代表文章
     const posts = [
+      {
+        url: 'blog/posts/webassembly-in-practice.html',
+        title: 'WebAssembly 实战：浏览器端高性能计算',
+        date: '2026-06-27',
+        readTime: '16 min',
+        category: '前端',
+        category2: 'WASM',
+        desc: '从 Rust 编译到浏览器运行，WASM 与 JS 互操作、内存管理、SIMD 优化与真实应用场景全流程实战。'
+      },
       {
         url: 'blog/posts/pwa-offline-web-app.html',
         title: 'PWA 实战：从零打造离线可用的 Web 应用',
