@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Zig 语言入门完整指南：comptime 编译期计算、Allocator 模式、错误处理、C 互操作、交叉编译与构建系统深度解析">
+  <meta name="keywords" content="Zig, 系统编程, comptime, Allocator, 交叉编译, build.zig, C 互操作, 安全编程">
+  <meta name="author" content="张小猛">
+  <meta name="publish-date" content="2026-06-27">
+  <title>Zig 语言入门：比 C 更安全的系统编程 | 张小猛 - loczb</title>
+  <link rel="canonical" href="https://709527.xyz/blog/posts/zig-language-introduction.html">
+  <meta name="robots" content="index, follow">
+  
+  <!-- Open Graph -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://709527.xyz/blog/posts/zig-language-introduction.html">
+  <meta property="og:title" content="Zig 语言入门：比 C 更安全的系统编程 | 张小猛 - loczb">
+  <meta property="og:description" content="Zig 语言入门完整指南：comptime 编译期计算、Allocator 模式、错误处理、C 互操作、交叉编译与构建系统深度解析">
+  <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="article:author" content="张小猛">
+  <meta property="article:published_time" content="2026-06-27">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Zig 语言入门：比 C 更安全的系统编程 | 张小猛 - loczb">
+  <meta name="twitter:description" content="Zig 语言入门完整指南：comptime 编译期计算、Allocator 模式、错误处理、C 互操作、交叉编译与构建系统深度解析">
+  <meta name="twitter:image" content="https://709527.xyz/assets/images/og-image.png">
+
+  <link rel="icon" type="image/x-icon" href="../../assets/images/favicon.ico">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
+  <link rel="icon" type="image/png" sizes="16x16" href="../../assets/images/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="../../assets/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="48x48" href="../../assets/images/favicon-48x48.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="../../assets/images/apple-touch-icon.png">
+  <link rel="manifest" href="../../site.webmanifest">
+  <meta name="theme-color" content="#3b82f6">
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <style>
+    .post-content { max-width: 760px; margin: 0 auto; line-height: 1.85; }
+    .post-content h1 { font-size: 2.4rem; margin: 2rem 0 1rem; }
+    .post-content h2 { font-size: 1.7rem; margin: 2.5rem 0 1rem; color: var(--color-accent-primary); border-bottom: 1px solid var(--color-border); padding-bottom: 0.5rem; }
+    .post-content h3 { font-size: 1.3rem; margin: 1.8rem 0 0.8rem; }
+    .post-content pre { background: var(--color-bg-tertiary); padding: 1.2rem; border-radius: 8px; overflow-x: auto; margin: 1.2rem 0; font-size: 0.9rem; }
+    .post-content code { background: var(--color-bg-tertiary); padding: 0.15rem 0.4rem; border-radius: 4px; font-family: monospace; font-size: 0.9em; }
+    .post-meta { color: var(--color-text-secondary); font-size: 0.9rem; margin-bottom: 2rem; }
+    .post-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 3rem; }
+    .post-tags span { background: var(--color-bg-tertiary); padding: 0.3rem 0.8rem; border-radius: 9999px; font-size: 0.85rem; color: var(--color-accent-primary); }
+    .tip-box { background: rgba(34, 197, 94, 0.1); border-left: 3px solid #22c55e; padding: 1rem 1.2rem; margin: 1.5rem 0; border-radius: 0 6px 6px 0; }
+    .warning-box { background: rgba(234, 179, 8, 0.1); border-left: 3px solid #eab308; padding: 1rem 1.2rem; margin: 1.5rem 0; border-radius: 0 6px 6px 0; }
+    table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.95rem; }
+    th, td { border: 1px solid var(--color-border); padding: 0.7rem; text-align: left; }
+    th { background: var(--color-bg-tertiary); font-weight: 600; }
+  </style>
+  <!-- Preconnect to Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500;600&display=swap" media="print" onload="this.media='all'">
+  <noscript>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500;600&display=swap">
+  </noscript>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../../index.html" class="nav-logo">loc<span>zb</span></a>
+      <button class="nav-toggle" aria-label="打开菜单"><span></span><span></span><span></span></button>
+      <div class="nav-overlay"></div>
+      <ul class="nav-links">
+        <li><a href="../../index.html" class="nav-link">首页</a></li>
+        <li><a href="../../projects/index.html" class="nav-link">项目</a></li>
+        <li><a href="../index.html" class="nav-link active">博客</a></li>
+        <li><a href="../../about/index.html" class="nav-link">关于</a></li>
+      </ul>
+      <button class="theme-toggle" aria-label="切换主题">
+        <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line></svg>
+        <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+      </button>
+    </div>
+  </nav>
+<div class="scroll-progress"></div>
+
+  <main>
+    <article class="post-content" style="padding: calc(64px + 4rem) 1rem 4rem;">
+      <a href="../index.html" style="display: inline-flex; align-items: center; gap: 0.5rem; color: var(--color-text-secondary); text-decoration: none; margin-bottom: 2rem;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        返回博客
+      </a>
+      
+      <h1>Zig 语言入门：比 C 更安全的系统编程</h1>
+      
+      <div class="post-meta">2026年6月27日 · 阅读时间 16 分钟</div>
+
+      <p>如果你写 C 写了十年，厌倦了空指针崩溃、隐式转换陷阱和手动内存管理的刀尖跳舞；如果你觉得 Rust 的借用检查器和生命周期标注太过繁重，学习曲线陡峭到让人望而却步——那么 Zig 可能是你一直在找的那个平衡点。</p>
+
+      <p>Zig 是一门现代化的系统编程语言，目标是成为「更好的 C」。它没有运行时、没有隐式控制流、没有垃圾回收，却通过编译期计算、显式内存分配和类型安全的错误处理，提供了远超 C 的安全保障——同时保持与 C 的完美互操作性。</p>
+
+      <div class="tip-box">
+        <strong>本文适合</strong>：有 C/C++/Rust 基础的开发者，想了解 Zig 的核心设计理念和实际用法。如果你是编程新手，建议先学习 C 语言基础。
+      </div>
+
+      <h2>一、Zig 的定位：什么问题在解决</h2>
+
+      <p>Zig 的作者 Andrew Kelley 在设计这门语言时，有一个明确的信条：<strong>最可读的代码是没有的代码</strong>。Zig 的每一个设计决策都围绕一个核心目标——让程序员对程序的行为拥有完全的控制权，同时消除 C 中最常见的陷阱。</p>
+
+      <h3>四大核心原则</h3>
+
+      <table>
+        <tr>
+          <th>原则</th>
+          <th>含义</th>
+          <th>对比 C 的问题</th>
+        </tr>
+        <tr>
+          <td><strong>无隐式控制流</strong></td>
+          <td>没有隐藏的函数调用、没有运算符重载、没有异常</td>
+          <td>C 的隐式类型转换和宏展开让人难以追踪执行流</td>
+        </tr>
+        <tr>
+          <td><strong>无隐式内存分配</strong></td>
+          <td>所有内存分配必须显式传入 Allocator</td>
+          <td>C 的 malloc/free 散落各处，无法统一管理</td>
+        </tr>
+        <tr>
+          <td><strong>零开销抽象</strong></td>
+          <td>comptime 编译期计算，运行时零成本</td>
+          <td>C 的泛型只能靠宏，类型不安全</td>
+        </tr>
+        <tr>
+          <td><strong>无运行时依赖</strong></td>
+          <td>不依赖 libc，可以裸机运行</td>
+          <td>C 程序默认链接 libc，嵌入式受限</td>
+        </tr>
+      </table>
+
+      <p>用一句话概括 Zig 的哲学：<strong>如果你没写，它就不会发生</strong>。</p>
+
+      <pre><code>// C：隐式类型转换，你以为没问题，实际上溢出了
+int x = -1;
+unsigned int y = x;  // y 变成 4294967295，没有警告
+
+// Zig：显式转换，必须写清楚
+var x: i32 = -1;
+var y: u32 = @intCast(x);  // 运行时溢出会 panic，安全！</code></pre>
+
+      <h2>二、基础语法速览</h2>
+
+      <h3>变量声明</h3>
+
+      <pre><code>const std = @import("std");
+
+pub fn main() void {
+    // const 不可变，var 可变
+    const pi: f64 = 3.14159;
+    var count: u32 = 0;
+    count += 1;
+
+    // 类型推导
+    const name = "Zig";      // *const [3:0]u8
+    const version = 0.14;    // comptime_float
+
+    // 未使用变量会编译报错，用 _ 忽略
+    const _unused = 42;
+}</code></pre>
+
+      <div class="tip-box">
+        <strong>Zig 的变量规则</strong>：所有变量必须使用，否则编译错误。用 <code>_</code> 前缀或 <code>_ = var</code> 显式忽略。这避免了 C 中「声明了但没用上」的隐患。
+      </div>
+
+      <h3>函数</h3>
+
+      <pre><code>// 基本函数
+fn add(a: i32, b: i32) i32 {
+    return a + b;
+}
+
+// 错误联合类型
+fn divide(a: f64, b: f64) !f64 {
+    if (b == 0) return error.DivisionByZero;
+    return a / b;
+}
+
+// defer 确保清理
+fn readFile(path: []const u8) ![]u8 {
+    const file = try std.fs.cwd().openFile(path, .{});
+    defer file.close();  // 函数退出时必定执行
+    const stat = try file.stat();
+    const buf = try allocator.alloc(u8, stat.size);
+    _ = try file.readAll(buf);
+    return buf;
+}</code></pre>
+
+      <h3>控制流</h3>
+
+      <pre><code>// if 是表达式
+const max = if (a > b) a else b;
+
+// switch 也是表达式，必须穷尽所有分支
+const tag = switch (node) {
+    .add => "ADD",
+    .sub => "SUB",
+    .mul => "MUL",
+};
+
+// for 遍历（Zig 没有 C 风格的 for(i=0; i&lt;n; i++)）
+const items = [_]i32{ 1, 2, 3, 4, 5 };
+for (items, 0..) |item, index| {
+    std.debug.print("[{}] = {}\n", .{ index, item });
+}
+
+// while 带 continue 表达式
+var i: usize = 0;
+while (i &lt; 10) : (i += 1) {
+    if (i == 3) continue;
+    std.debug.print("{} ", .{i});
+}</code></pre>
+
+      <h3>comptime：编译期计算</h3>
+
+      <p><code>comptime</code> 是 Zig 最强大的特性之一——它让你在编译期执行任意 Zig 代码，而运行时零开销。</p>
+
+      <pre><code>// 编译期常量
+const factorial = comptime {
+    var result: u64 = 1;
+    var i: u64 = 1;
+    while (i &lt;= 20) : (i += 1) {
+        result *= i;
+    }
+    break :result result;
+};
+// factorial 在编译期就已计算完毕，运行时就是一个常量
+
+// 编译期泛型：类型作为参数
+fn Vector(comptime T: type, comptime len: usize) type {
+    return [len]T;
+}
+
+const Vec3f = Vector(f32, 3);  // 等价于 [3]f32
+const Vec4i = Vector(i32, 4);  // 等价于 [4]i32
+
+// 编译期条件编译
+fn log(msg: []const u8) void {
+    if (std.debug.runtime_safety) {
+        std.debug.print("{s}\n", .{msg});
+    }
+    // Release 模式下这段代码根本不存在
+}</code></pre>
+
+      <div class="warning-box">
+        <strong>comptime vs C 宏</strong>：C 的宏是文本替换，没有类型检查，容易出 bug（<code>MAX(a,b)</code> 经典陷阱）。Zig 的 comptime 是真正的编译期代码执行，有完整的类型系统和作用域。宏能做的 comptime 都能做，而且做得更好。
+      </div>
+
+      <h2>三、内存管理哲学</h2>
+
+      <p>Zig 的内存管理哲学可以总结为一句话：<strong>没有隐式分配，分配策略由调用者决定</strong>。每个需要分配内存的函数都接收一个 <code>Allocator</code> 参数，而不是自己在内部调用 <code>malloc</code>。</p>
+
+      <h3>Allocator 模式</h3>
+
+      <pre><code>const allocator = std.heap.page_allocator;  // 最基础的分配器
+
+// 所有分配都显式传入 allocator
+const buf = try allocator.alloc(u8, 1024);
+defer allocator.free(buf);
+
+const item = try allocator.create(MyStruct);
+defer allocator.destroy(item);</code></pre>
+
+      <h3>三种常用分配器</h3>
+
+      <table>
+        <tr>
+          <th>分配器</th>
+          <th>特点</th>
+          <th>适用场景</th>
+        </tr>
+        <tr>
+          <td><code>GeneralPurposeAllocator</code></td>
+          <td>通用、安全、检测内存泄漏</td>
+          <td>应用主分配器</td>
+        </tr>
+        <tr>
+          <td><code>ArenaAllocator</code></td>
+          <td>一次性分配，整体释放</td>
+          <td>HTTP 请求处理、编译期临时数据</td>
+        </tr>
+        <tr>
+          <td><code>FixedBufferAllocator</code></td>
+          <td>预分配固定缓冲区，无堆分配</td>
+          <td>嵌入式、实时系统、零分配场景</td>
+        </tr>
+      </table>
+
+      <h3>ArenaAllocator 实战</h3>
+
+      <pre><code>fn processRequest(allocator: std.mem.Allocator, req: Request) !Response {
+    // Arena 分配器：所有分配在 defer 时一次性释放
+    var arena = std.heap.ArenaAllocator.init(allocator);
+    defer arena.deinit();
+    const aa = arena.allocator();
+
+    // 中间分配不需要单独 free，arena.deinit() 统一释放
+    const headers = try aa.alloc(Header, req.header_count);
+    const body = try aa.alloc(u8, req.body_len);
+    const temp = try aa.alloc(u8, 4096);
+
+    // 处理逻辑...
+    _ = headers;
+    _ = body;
+    _ = temp;
+
+    return Response{ .status = 200 };
+}</code></pre>
+
+      <div class="tip-box">
+        <strong>Arena 的威力</strong>：处理一个 HTTP 请求时可能做几十次临时分配，用 Arena 后只需一次 <code>deinit()</code>，既不泄漏又不低效。这种模式在游戏引擎、编译器中也很常见。
+      </div>
+
+      <h3>FixedBufferAllocator：零堆分配</h3>
+
+      <pre><code>// 嵌入式场景：不用堆，用栈上的缓冲区
+var buf: [4096]u8 = undefined;
+var fba = std.heap.FixedBufferAllocator.init(&buf);
+const allocator = fba.allocator();
+
+// 所有分配都从 buf 中切，用完即止
+const data = try allocator.alloc(u8, 100);
+// 不需要 free，buf 的生命周期由函数栈管理</code></pre>
+
+      <h2>四、可选类型与错误处理</h2>
+
+      <p>Zig 用 <code>?T</code> 表示可选类型，用 <code>!T</code> 表示可能出错的返回值。两者都是显式的，编译器强制你处理。</p>
+
+      <h3>?T：可选类型</h3>
+
+      <pre><code>// ?T 表示 T 或 null
+const maybe_int: ?i32 = null;
+const definitely_int: ?i32 = 42;
+
+// 必须解包才能使用
+if (maybe_int) |value| {
+    std.debug.print("值为: {}\n", .{value});
+} else {
+    std.debug.print("无值\n", .{});
+}
+
+// orelse 提供默认值
+const value = maybe_int orelse 0;
+
+// 可选指针：?*T 比 C 的 NULL 指针更安全
+fn findNode(head: ?*Node, target: i32) ?*Node {
+    var current = head;
+    while (current) |node| : (current = node.next) {
+        if (node.data == target) return node;
+    }
+    return null;
+}</code></pre>
+
+      <h3>!T：错误联合类型</h3>
+
+      <pre><code>// 定义错误集
+const ParseError = error{
+    InvalidFormat,
+    Overflow,
+    EmptyInput,
+};
+
+// 返回类型可以是 ParseError!i32（i32 或 ParseError 中的某个错误）
+fn parsePositiveInt(str: []const u8) ParseError!u32 {
+    if (str.len == 0) return error.EmptyInput;
+    var result: u64 = 0;
+    for (str) |ch| {
+        if (ch &lt; '0' or ch > '9') return error.InvalidFormat;
+        result = result * 10 + (ch - '0');
+        if (result > std.math.maxInt(u32)) return error.Overflow;
+    }
+    return @intCast(result);
+}
+
+// 调用方必须处理错误
+const num = parsePositiveInt("123") catch |err| {
+    std.debug.print("解析失败: {}\n", .{err});
+    return;
+};
+std.debug.print("结果: {}\n", .{num});</code></pre>
+
+      <h3>try 和 catch</h3>
+
+      <pre><code>// try：错误自动向上传播（类似 ? 操作符）
+fn readConfig(path: []const u8) !Config {
+    const file = try std.fs.cwd().openFile(path, .{});
+    defer file.close();
+    const content = try file.readToEndAlloc(allocator, 1024 * 1024);
+    return try parseConfig(content);
+}
+
+// catch：捕获并处理
+const result = parsePositiveInt(input) catch |err| switch (err) {
+    error.InvalidFormat => return error.BadInput,
+    error.Overflow => return std.math.maxInt(u32),
+    error.EmptyInput => return 0,
+};</code></pre>
+
+      <h3>errdefer：错误时的清理</h3>
+
+      <p><code>errdefer</code> 只在函数通过错误返回时执行，成功时不执行。这是 Zig 独有的特性，C 和 Rust 都没有直接等价物。</p>
+
+      <pre><code>fn createConnection(config: Config) !*Connection {
+    const conn = try allocator.create(Connection);
+    errdefer allocator.destroy(conn);  // 出错才销毁
+
+    conn.socket = try openSocket(config.addr);
+    errdefer closeSocket(conn.socket);  // 出错才关闭
+
+    conn.buffer = try allocator.alloc(u8, config.buf_size);
+    errdefer allocator.free(conn.buffer);  // 出错才释放
+
+    conn.state = .connected;
+    return conn;  // 成功，三个 errdefer 都不执行
+}</code></pre>
+
+      <div class="tip-box">
+        <strong>errdefer 的威力</strong>：在多步资源初始化的场景中，<code>errdefer</code> 自动按逆序清理已分配的资源，不需要写嵌套的 <code>if</code> 或 <code>goto cleanup</code>。这是 Zig 对 C 的 <code>goto cleanup</code> 模式的优雅替代。
+      </div>
+
+      <h2>五、与 C 互操作</h2>
+
+      <p>Zig 的 C 互操作能力是同类语言中最强的——不需要 FFI 绑定层，不需要手写 wrapper，直接导入 C 头文件就能用。</p>
+
+      <h3>@cImport：直接导入 C 头文件</h3>
+
+      <pre><code>// 直接在 Zig 中使用 C 库
+const c = @cImport({
+    @cInclude("stdio.h");
+    @cInclude("stdlib.h");
+});
+
+pub fn main() void {
+    // 调用 printf
+    _ = c.printf("Hello from C: %d\n".ptr, 42);
+
+    // 调用 malloc/free
+    const ptr = c.malloc(1024);
+    defer c.free(ptr);
+}</code></pre>
+
+      <h3>翻译 C 头文件</h3>
+
+      <p><code>zig translate-c</code> 可以将 C 头文件翻译成 Zig 代码，方便查看类型映射和调试：</p>
+
+      <pre><code>$ zig translate-c -lc sqlite3.h > sqlite3.zig
+
+// 生成的 sqlite3.zig 中可以直接看到类型映射
+// pub const sqlite3 = opaque {};
+// pub extern fn sqlite3_open(filename: [*c]const u8, ppDb: [*c]?*sqlite3) c_int;</code></pre>
+
+      <h3>在 C 项目中嵌入 Zig</h3>
+
+      <pre><code>// math_utils.zig
+export fn add(a: i32, b: i32) i32 {
+    return a + b;
+}
+
+export fn mul(a: i32, b: i32) i32 {
+    return a * b;
+}
+
+// 编译为 .o，C 项目直接链接
+// $ zig build-obj math_utils.zig -OReleaseFast
+// C 侧：extern int add(int a, int b);</code></pre>
+
+      <h3>Linker 模式</h3>
+
+      <pre><code>// build.zig 中控制链接
+const exe = b.addExecutable(.{
+    .name = "myapp",
+    .root_source_file = b.path("src/main.zig"),
+    .target = target,
+    .optimize = optimize,
+});
+
+// 链接 C 库
+exe.linkSystemLibrary("sqlite3");
+exe.linkLibC();
+
+// 链接静态库
+exe.addObjectFile(b.path("vendor/libfoo.a"));
+
+// 添加 C 源文件
+exe.addCSourceFile(.{
+    .file = b.path("vendor/legacy.c"),
+    .flags = &.{"-Wall", "-O2"},
+});</code></pre>
+
+      <div class="warning-box">
+        <strong>@cImport 的局限</strong>：<code>@cImport</code> 依赖 libclang 做翻译，对于使用了大量宏魔法或 C++ 头文件的 C 库可能不够理想。复杂场景建议用 <code>zig translate-c</code> 生成代码后手动调整。
+      </div>
+
+      <h2>六、交叉编译</h2>
+
+      <p>Zig 内置了交叉编译支持，不需要安装任何交叉编译工具链。一条命令就能为任意目标平台编译。</p>
+
+      <h3>Target 三元组</h3>
+
+      <pre><code>// 格式：arch-os-abi
+// 常用 target：
+// x86_64-linux-gnu      Linux x64 (glibc)
+// x86_64-linux-musl     Linux x64 (musl，静态链接)
+// aarch64-linux-gnu     Linux ARM64
+// x86_64-windows-gnu    Windows x64 (MinGW)
+// x86_64-macos          macOS x64
+// aarch64-macos         macOS Apple Silicon
+// wasm32-freestanding   WebAssembly
+
+// 查看所有支持的目标
+$ zig targets
+
+// 直接交叉编译
+$ zig build-exe src/main.zig -target aarch64-linux-gnu
+$ zig build-exe src/main.zig -target x86_64-windows-gnu
+$ zig build-exe src/main.zig -target wasm32-freestanding</code></pre>
+
+      <h3>sysroot 配置</h3>
+
+      <pre><code>// 交叉编译时指定 sysroot（目标系统的头文件和库）
+$ zig build-exe src/main.zig \
+    -target aarch64-linux-gnu \
+    --sysroot /path/to/sysroot \
+    -L /path/to/sysroot/usr/lib
+
+// build.zig 中配置
+const exe = b.addExecutable(.{
+    .name = "myapp",
+    .root_source_file = b.path("src/main.zig"),
+    .target = b.resolveTargetQuery(.{
+        .cpu_arch = .aarch64,
+        .os_tag = .linux,
+        .abi = .gnu,
+    }),
+    .optimize = .ReleaseFast,
+});
+
+// Zig 自带 glibc 的所有版本，可以精确指定
+// 编译时动态选择 glibc 版本
+exe.setGlibcVersion(.{ .major = 2, .minor = 31 });</code></pre>
+
+      <div class="tip-box">
+        <strong>Zig 交叉编译的优势</strong>：Zig 自带 musl libc 和 glibc 的交叉编译头文件/库，不需要安装 <code>gcc-aarch64-linux-gnu</code> 之类的交叉工具链。一个 Zig 安装包就能编译到几乎所有主流平台。
+      </div>
+
+      <h2>七、构建系统：build.zig</h2>
+
+      <p>Zig 自带构建系统，用 <code>build.zig</code> 文件描述构建规则，取代 Makefile、CMake 等外部工具。</p>
+
+      <h3>基本 build.zig</h3>
+
+      <pre><code>const std = @import("std");
+
+pub fn build(b: *std.Build) void {
+    const target = b.standardTargetOptions(.{});
+    const optimize = b.standardOptimizeOption(.{});
+
+    // 可执行文件
+    const exe = b.addExecutable(.{
+        .name = "myapp",
+        .root_source_file = b.path("src/main.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+
+    // 安装到 zig-out/bin/
+    b.installArtifact(exe);
+
+    // 运行命令：zig build run
+    const run_cmd = b.addRunArtifact(exe);
+    run_cmd.step.dependOn(b.getInstallStep());
+    const run_step = b.step("run", "Run the app");
+    run_step.dependOn(&run_cmd.step);
+
+    // 测试命令：zig build test
+    const unit_tests = b.addTest(.{
+        .root_source_file = b.path("src/main.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    const run_unit_tests = b.addRunArtifact(unit_tests);
+    const test_step = b.step("test", "Run unit tests");
+    test_step.dependOn(&run_unit_tests.step);
+}</code></pre>
+
+      <h3>依赖管理</h3>
+
+      <pre><code>// build.zig.zon：项目清单（类似 package.json）
+// .{
+//     .name = "myapp",
+//     .version = "0.1.0",
+//     .dependencies = .{
+//         // 从 GitHub 获取依赖
+//         .zlib = .{
+//             .url = "https://github.com/...",
+//             .hash = "1220...",
+//         },
+//     },
+// }
+
+// build.zig 中使用依赖
+const zlib_dep = b.dependency("zlib", .{
+    .target = target,
+    .optimize = optimize,
+});
+exe.root_module.addImport("zlib", zlib_dep.module("zlib"));
+
+// 添加依赖
+$ zig fetch --save https://github.com/user/repo/tarball/commit-hash</code></pre>
+
+      <h3>模块化</h3>
+
+      <pre><code>// 创建库模块
+const lib = b.addStaticLibrary(.{
+    .name = "mylib",
+    .root_source_file = b.path("src/lib.zig"),
+    .target = target,
+    .optimize = optimize,
+});
+b.installArtifact(lib);
+
+// 可执行文件依赖库模块
+exe.root_module.addImport("mylib", lib.root_module);
+
+// 源文件中使用
+// const mylib = @import("mylib");</code></pre>
+
+      <h2>八、性能与安全性对比</h2>
+
+      <h3>Zig vs C vs Rust 核心特性对比</h3>
+
+      <table>
+        <tr>
+          <th>特性</th>
+          <th>C</th>
+          <th>Zig</th>
+          <th>Rust</th>
+        </tr>
+        <tr>
+          <td>内存安全</td>
+          <td>❌ 手动管理，容易出错</td>
+          <td>⚠️ 显式管理，编译器辅助</td>
+          <td>✅ 编译期借用检查</td>
+        </tr>
+        <tr>
+          <td>空指针安全</td>
+          <td>❌ NULL 无类型区分</td>
+          <td>✅ <code>?T</code> 可选类型</td>
+          <td>✅ <code>Option&lt;T&gt;</code></td>
+        </tr>
+        <tr>
+          <td>错误处理</td>
+          <td>❌ 错误码，容易忽略</td>
+          <td>✅ <code>!T</code> 错误联合，强制处理</td>
+          <td>✅ <code>Result&lt;T,E&gt;</code></td>
+        </tr>
+        <tr>
+          <td>泛型</td>
+          <td>❌ 宏模拟，类型不安全</td>
+          <td>✅ comptime 类型参数</td>
+          <td>✅ trait 约束泛型</td>
+        </tr>
+        <tr>
+          <td>编译速度</td>
+          <td>⚡ 快</td>
+          <td>⚡ 快（增量编译友好）</td>
+          <td>🐢 慢（借用检查开销）</td>
+        </tr>
+        <tr>
+          <td>学习曲线</td>
+          <td>中等</td>
+          <td>低（C 程序员可快速上手）</td>
+          <td>高（生命周期、trait）</td>
+        </tr>
+        <tr>
+          <td>运行时依赖</td>
+          <td>libc</td>
+          <td>无（可选 libc）</td>
+          <td>无（可选 libc）</td>
+        </tr>
+        <tr>
+          <td>C 互操作</td>
+          <td>—</td>
+          <td>✅ 原生 <code>@cImport</code></td>
+          <td>⚠️ 需要 <code>extern "C"</code> + unsafe</td>
+        </tr>
+        <tr>
+          <td>交叉编译</td>
+          <td>❌ 需要工具链</td>
+          <td>✅ 内置支持</td>
+          <td>⚠️ 需要交叉工具链 + cargo 配置</td>
+        </tr>
+        <tr>
+          <td>构建系统</td>
+          <td>Makefile/CMake（外部）</td>
+          <td>build.zig（内置）</td>
+          <td>cargo（内置）</td>
+        </tr>
+        <tr>
+          <td>生态成熟度</td>
+          <td>⭐⭐⭐⭐⭐</td>
+          <td>⭐⭐（成长中）</td>
+          <td>⭐⭐⭐⭐</td>
+        </tr>
+      </table>
+
+      <h3>性能基准参考</h3>
+
+      <table>
+        <tr>
+          <th>场景</th>
+          <th>C (-O2)</th>
+          <th>Zig (ReleaseFast)</th>
+          <th>Rust (release)</th>
+        </tr>
+        <tr>
+          <td>计算密集（fibonacci）</td>
+          <td>1.0x（基准）</td>
+          <td>1.0x</td>
+          <td>1.0x</td>
+        </tr>
+        <tr>
+          <td>内存分配密集</td>
+          <td>1.0x</td>
+          <td>0.95x（Arena 优化后更快）</td>
+          <td>1.0x</td>
+        </tr>
+        <tr>
+          <td>编译时间</td>
+          <td>1.0x</td>
+          <td>1.2x</td>
+          <td>3-5x</td>
+        </tr>
+        <tr>
+          <td>二进制大小（静态链接）</td>
+          <td>~50KB</td>
+          <td>~50KB</td>
+          <td>~300KB</td>
+        </tr>
+      </table>
+
+      <div class="tip-box">
+        <strong>选型建议</strong>：需要极致安全保证且生态成熟 → Rust；需要 C 互操作、裸机部署、快速上手 → Zig；已有 C 代码库且无迁移需求 → C。
+      </div>
+
+      <h2>九、实战用例</h2>
+
+      <h3>1. CLI 工具</h3>
+
+      <pre><code>const std = @import("std");
+
+pub fn main() !void {
+    var gpa = std.heap.GeneralPurposeAllocator(.{}){};
+    defer _ = gpa.deinit();
+    const allocator = gpa.allocator();
+
+    const args = try std.process.argsAlloc(allocator);
+    defer std.process.argsFree(allocator, args);
+
+    if (args.len &lt; 2) {
+        std.debug.print("用法: {s} &lt;文件路径&gt;\n", .{args[0]});
+        return;
+    }
+
+    const path = args[1];
+    const file = try std.fs.cwd().openFile(path, .{});
+    defer file.close();
+
+    const content = try file.readToEndAlloc(allocator, 1024 * 1024);
+    defer allocator.free(content);
+
+    const line_count = std.mem.count(u8, content, "\n");
+    const word_count = std.mem.count(u8, content, " ") + line_count;
+    const byte_count = content.len;
+
+    std.debug.print("  {d} 行  {d} 词  {d} 字节  {s}\n", .{
+        line_count, word_count, byte_count, path,
+    });
+}</code></pre>
+
+      <h3>2. WebAssembly</h3>
+
+      <pre><code>// 编译目标：wasm32-freestanding
+// $ zig build-lib src/main.zig -target wasm32-freestanding -OReleaseSmall
+
+const std = @import("std");
+
+// 导出给 JS 调用的函数
+export fn add(a: i32, b: i32) i32 {
+    return a + b;
+}
+
+export fn fibonacci(n: i32) i32 {
+    if (n &lt;= 1) return n;
+    var a: i32 = 0;
+    var b: i32 = 1;
+    var i: i32 = 1;
+    while (i &lt; n) : (i += 1) {
+        const tmp = a + b;
+        a = b;
+        b = tmp;
+    }
+    return b;
+}
+
+// JS 侧调用
+// const wasm = await WebAssembly.instantiateStreaming(fetch("main.wasm"));
+// console.log(wasm.instance.exports.add(3, 4));       // 7
+// console.log(wasm.instance.exports.fibonacci(10));   // 55</code></pre>
+
+      <h3>3. 嵌入式</h3>
+
+      <pre><code>// 裸机环境，不依赖 libc
+const std = @import("std");
+const micro = @import("microzig");
+
+// LED 闪烁（基于 MicroZig 框架）
+pub fn main() void {
+    const led = micro.Gpio(13, .{ .mode = .output });
+
+    while (true) {
+        led.write(.high);
+        delay(500_000);
+        led.write(.low);
+        delay(500_000);
+    }
+}
+
+fn delay(cycles: u32) void {
+    var i: u32 = 0;
+    while (i &lt; cycles) : (i += 1) {
+        @noInlineCall(std.mem.doNotOptimizeAway, i);
+    }
+}
+
+// 编译：zig build -Dtarget=avr-atmega328p-freestanding</code></pre>
+
+      <div class="tip-box">
+        <strong>嵌入式选择 Zig 的理由</strong>：零运行时依赖、极小二进制体积、comptime 生成硬件寄存器映射、Arena/FixedBuffer 分配器避免堆碎片——这些都是嵌入式开发的刚需。
+      </div>
+
+      <h2>十、速查表</h2>
+
+      <table>
+        <tr>
+          <th>操作</th>
+          <th>Zig 代码</th>
+        </tr>
+        <tr>
+          <td>声明不可变变量</td>
+          <td><code>const x: i32 = 42;</code></td>
+        </tr>
+        <tr>
+          <td>声明可变变量</td>
+          <td><code>var x: i32 = 0;</code></td>
+        </tr>
+        <tr>
+          <td>可选类型</td>
+          <td><code>const maybe: ?i32 = null;</code></td>
+        </tr>
+        <tr>
+          <td>解包可选值</td>
+          <td><code>const val = maybe orelse 0;</code></td>
+        </tr>
+        <tr>
+          <td>错误联合类型</td>
+          <td><code>fn foo() !i32 { ... }</code></td>
+        </tr>
+        <tr>
+          <td>传播错误</td>
+          <td><code>const result = try mightFail();</code></td>
+        </tr>
+        <tr>
+          <td>捕获错误</td>
+          <td><code>mightFail() catch |err| { ... };</code></td>
+        </tr>
+        <tr>
+          <td>defer 清理</td>
+          <td><code>defer file.close();</code></td>
+        </tr>
+        <tr>
+          <td>错误时清理</td>
+          <td><code>errdefer allocator.destroy(ptr);</code></td>
+        </tr>
+        <tr>
+          <td>编译期计算</td>
+          <td><code>const len = comptime str.len;</code></td>
+        </tr>
+        <tr>
+          <td>泛型函数</td>
+          <td><code>fn max(comptime T: type, a: T, b: T) T { ... }</code></td>
+        </tr>
+        <tr>
+          <td>导入 C 头文件</td>
+          <td><code>const c = @cImport({ @cInclude("stdio.h"); });</code></td>
+        </tr>
+        <tr>
+          <td>内存分配</td>
+          <td><code>const buf = try allocator.alloc(u8, 1024);</code></td>
+        </tr>
+        <tr>
+          <td>内存释放</td>
+          <td><code>allocator.free(buf);</code></td>
+        </tr>
+        <tr>
+          <td>数组遍历</td>
+          <td><code>for (items, 0..) |item, i| { ... }</code></td>
+        </tr>
+        <tr>
+          <td>switch 匹配</td>
+          <td><code>switch (val) { 1 => ..., 2 => ..., else => ... }</code></td>
+        </tr>
+        <tr>
+          <td>交叉编译</td>
+          <td><code>zig build-exe -target aarch64-linux-gnu</code></td>
+        </tr>
+        <tr>
+          <td>运行测试</td>
+          <td><code>zig build test</code></td>
+        </tr>
+        <tr>
+          <td>格式化代码</td>
+          <td><code>zig fmt src/main.zig</code></td>
+        </tr>
+      </table>
+
+      <div class="tip-box">
+        <strong>一句话总结</strong>：Zig 是 C 的精神继任者——它保留了 C 的简洁和直接，用 <code>comptime</code> 替代宏，用 <code>?T/!T</code> 替代空指针和错误码，用 Allocator 替代裸 malloc/free，用 build.zig 替代 Makefile。如果你觉得 C 太危险、Rust 太复杂，Zig 正是中间那个甜点。
+      </div>
+
+      <div class="post-tags">
+        <span>Zig</span>
+        <span>系统编程</span>
+        <span>comptime</span>
+        <span>Allocator</span>
+        <span>交叉编译</span>
+        <span>build.zig</span>
+        <span>C 互操作</span>
+      </div>
+    </article>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <p>&copy; 2026 张小猛 - loczb</p>
+    </div>
+  </footer>
+
+  <script>
+    // Scroll progress
+    const scrollProgress = document.querySelector('.scroll-progress');
+    window.addEventListener('scroll', () => {
+      const scrollTop = document.documentElement.scrollTop;
+      const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = (scrollTop / scrollHeight) * 100;
+      scrollProgress.style.width = progress + '%';
+    });
+
+    // Theme toggle
+    const themeToggle = document.querySelector('.theme-toggle');
+    themeToggle?.addEventListener('click', () => {
+      const html = document.documentElement;
+      const current = html.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+    });
+
+    // Mobile nav
+    const navToggle = document.querySelector('.nav-toggle');
+    const navLinks = document.querySelector('.nav-links');
+    navToggle?.addEventListener('click', () => {
+      navLinks.classList.toggle('active');
+    });
+  </script>
+</body>
+</html>
