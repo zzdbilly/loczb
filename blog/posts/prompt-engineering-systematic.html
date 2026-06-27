@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Prompt Engineering 系统化方法论：从框架思维到工程实践，覆盖 CoT、Few-shot、Agent 提示词设计、结构化输出与评测体系">
+  <meta name="keywords" content="Prompt Engineering, AI, LLM, 提示词工程, CoT, GPT, 大语言模型, 系统化方法">
+  <meta name="author" content="张小猛">
+  <meta name="publish-date" content="2026-06-27">
+  <title>Prompt Engineering 系统化方法论 | 张小猛 - loczb</title>
+  <link rel="canonical" href="https://709527.xyz/blog/posts/prompt-engineering-systematic.html">
+  <meta name="robots" content="index, follow">
+  
+  <!-- Open Graph -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://709527.xyz/blog/posts/prompt-engineering-systematic.html">
+  <meta property="og:title" content="Prompt Engineering 系统化方法论 | 张小猛 - loczb">
+  <meta property="og:description" content="Prompt Engineering 系统化方法论：从框架思维到工程实践，覆盖 CoT、Few-shot、Agent 提示词设计、结构化输出与评测体系">
+  <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="article:author" content="张小猛">
+  <meta property="article:published_time" content="2026-06-27">
+  
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Prompt Engineering 系统化方法论 | 张小猛 - loczb">
+  <meta name="twitter:description" content="Prompt Engineering 系统化方法论：从框架思维到工程实践，覆盖 CoT、Few-shot、Agent 提示词设计、结构化输出与评测体系">
+  <meta name="twitter:image" content="https://709527.xyz/assets/images/og-image.png">
+
+  <link rel="icon" type="image/x-icon" href="../../assets/images/favicon.ico">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
+  <link rel="icon" type="image/png" sizes="16x16" href="../../assets/images/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="../../assets/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="48x48" href="../../assets/images/favicon-48x48.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="../../assets/images/apple-touch-icon.png">
+  <link rel="manifest" href="../../site.webmanifest">
+  <meta name="theme-color" content="#3b82f6">
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <style>
+    .post-content { max-width: 760px; margin: 0 auto; line-height: 1.85; }
+    .post-content h1 { font-size: 2.4rem; margin: 2rem 0 1rem; }
+    .post-content h2 { font-size: 1.7rem; margin: 2.5rem 0 1rem; color: var(--color-accent-primary); border-bottom: 1px solid var(--color-border); padding-bottom: 0.5rem; }
+    .post-content h3 { font-size: 1.3rem; margin: 1.8rem 0 0.8rem; }
+    .post-content pre { background: var(--color-bg-tertiary); padding: 1.2rem; border-radius: 8px; overflow-x: auto; margin: 1.2rem 0; font-size: 0.9rem; }
+    .post-content code { background: var(--color-bg-tertiary); padding: 0.15rem 0.4rem; border-radius: 4px; font-family: monospace; font-size: 0.9em; }
+    .post-meta { color: var(--color-text-secondary); font-size: 0.9rem; margin-bottom: 2rem; }
+    .post-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 3rem; }
+    .post-tags span { background: var(--color-bg-tertiary); padding: 0.3rem 0.8rem; border-radius: 9999px; font-size: 0.85rem; color: var(--color-accent-primary); }
+    .tip-box { background: rgba(34, 197, 94, 0.1); border-left: 3px solid #22c55e; padding: 1rem 1.2rem; margin: 1.5rem 0; border-radius: 0 6px 6px 0; }
+    .warning-box { background: rgba(234, 179, 8, 0.1); border-left: 3px solid #eab308; padding: 1rem 1.2rem; margin: 1.5rem 0; border-radius: 0 6px 6px 0; }
+    table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.95rem; }
+    th, td { border: 1px solid var(--color-border); padding: 0.7rem; text-align: left; }
+    th { background: var(--color-bg-tertiary); font-weight: 600; }
+  </style>
+  <!-- Preconnect to Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500;600&display=swap" media="print" onload="this.media='all'">
+  <noscript>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500;600&display=swap">
+  </noscript>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../../index.html" class="nav-logo">loc<span>zb</span></a>
+      <button class="nav-toggle" aria-label="打开菜单"><span></span><span></span><span></span></button>
+      <div class="nav-overlay"></div>
+      <ul class="nav-links">
+        <li><a href="../../index.html" class="nav-link">首页</a></li>
+        <li><a href="../../projects/index.html" class="nav-link">项目</a></li>
+        <li><a href="../index.html" class="nav-link active">博客</a></li>
+        <li><a href="../../about/index.html" class="nav-link">关于</a></li>
+      </ul>
+      <button class="theme-toggle" aria-label="切换主题">
+        <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line></svg>
+        <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+      </button>
+    </div>
+  </nav>
+<div class="scroll-progress"></div>
+
+  <main>
+    <article class="post-content" style="padding: calc(64px + 4rem) 1rem 4rem;">
+      <a href="../index.html" style="display: inline-flex; align-items: center; gap: 0.5rem; color: var(--color-text-secondary); text-decoration: none; margin-bottom: 2rem;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        返回博客
+      </a>
+      
+      <h1>Prompt Engineering 系统化方法论</h1>
+      
+      <div class="post-meta">2026年6月27日 · 阅读时间 18 分钟</div>
+
+      <p>2026 年的今天，大语言模型的能力已经非常强大，但"用得好"和"用不好"之间的差距依然巨大。很多人觉得 Prompt Engineering 只是"把问题问清楚"，但真正系统化的提示词工程是一门结合认知科学、软件工程和 AI 能力的交叉学科。本文从框架到实战，建立一套可复制、可评测的提示词工程方法论。</p>
+
+      <div class="tip-box">
+        <strong>适用读者</strong>：日常使用 LLM 的开发者、AI 应用构建者、需要稳定输出质量的团队。
+      </div>
+
+      <h2>一、核心框架：COSTAR</h2>
+
+      <p>我推荐使用 <strong>COSTAR</strong> 框架来组织复杂提示词。它比简单的"角色+任务"更完整：</p>
+
+      <table>
+        <tr>
+          <th>字母</th>
+          <th>含义</th>
+          <th>说明</th>
+          <th>示例</th>
+        </tr>
+        <tr>
+          <td><strong>C</strong></td>
+          <td>Context</td>
+          <td>背景和上下文</td>
+          <td>"我们是一个日活 500 万的短视频平台"</td>
+        </tr>
+        <tr>
+          <td><strong>O</strong></td>
+          <td>Objective</td>
+          <td>具体目标</td>
+          <td>"生成 10 条推荐文案，CTR 预估 &gt; 5%"</td>
+        </tr>
+        <tr>
+          <td><strong>S</strong></td>
+          <td>Style</td>
+          <td>风格要求</td>
+          <td>"Z 世代用语，口语化，带 emoji"</td>
+        </tr>
+        <tr>
+          <td><strong>T</strong></td>
+          <td>Tone</td>
+          <td>语气语调</td>
+          <td>"热情，有说服力，但不夸大"</td>
+        </tr>
+        <tr>
+          <td><strong>A</strong></td>
+          <td>Audience</td>
+          <td>目标受众</td>
+          <td>"18-25 岁学生群体"</td>
+        </tr>
+        <tr>
+          <td><strong>R</strong></td>
+          <td>Response</td>
+          <td>输出格式</td>
+          <td>"JSON 数组，每条含 title、body、cta"</td>
+        </tr>
+      </table>
+
+      <pre><code># 一个完整的 COSTAR 提示词示例
+
+【Context】
+我是一名 Android 开发者，正在为一个开源的笔记 App 写 README。
+项目已发布到 GitHub，技术栈是 Jetpack Compose + Room + Kotlin Coroutines。
+
+【Objective】
+写一份清晰、专业、吸引人的 README，帮助用户快速了解项目并参与贡献。
+
+【Style】
+技术文档的正式风格，段落简洁，关键信息用粗体或列表突出。
+
+【Tone】
+专业、热情、开放——既有技术自信，又欢迎社区参与。
+
+【Audience】
+潜在用户（需要快速上手）和潜在贡献者（需要知道如何参与）。
+
+【Response】
+输出为 Markdown 格式，包含以下章节：
+1. 项目名称和一句话介绍
+2. 特性列表（emoji 前缀）
+3. 快速开始步骤
+4. 技术栈说明
+5. 贡献指南
+6. 许可证信息</code></pre>
+
+      <h2>二、进阶技巧：结构化思维链</h2>
+
+      <h3>Chain-of-Thought (CoT)</h3>
+
+      <p>CoT 是当前最有效的推理增强技术。关键是引导模型展示中间推理过程：</p>
+
+      <pre><code># ❌ 差的做法
+请判断这段 Python 代码有没有 bug：
+def fib(n):
+    if n &lt;= 2: return 1
+    return fib(n-1) + fib(n-2)
+
+# ✅ 好的做法
+请逐步分析这段 Python 代码，然后判断是否有 bug：
+
+def fib(n):
+    if n &lt;= 2: return 1
+    return fib(n-1) + fib(n-2)
+
+分析步骤：
+1. 先理解函数的数学定义（斐波那契数列）
+2. 检查 base case 是否正确
+3. 检查递归逻辑是否正确
+4. 考虑 edge cases（n=0, n=负数）
+5. 考虑性能问题
+6. 给出最终判断</code></pre>
+
+      <h3>思维树 (Tree-of-Thoughts)</h3>
+
+      <p>需要探索多种可能路径时，用思维树：</p>
+
+      <pre><code># 思维树提示词示例
+
+我需要设计一个跨平台的推送通知系统。请帮我分析三种方案，
+对每种方案评估优缺点：
+
+方案 A：使用 FCM + APNs 原生推送
+方案 B：使用第三方服务（如 OneSignal）
+方案 C：自建 WebSocket 长连接
+
+对每个方案，按以下维度分析：
+1. 实现复杂度（1-5）
+2. 送达率预估
+3. 电量消耗
+4. 延迟
+5. 成本
+6. 维护工作量
+
+最后给我一个推荐方案及理由。</code></pre>
+
+      <h2>三、系统化提示词管理</h2>
+
+      <p>当需要管理多个提示词时，用版本控制管理提示词文件比在聊天记录里翻来翻去要靠谱得多。</p>
+
+      <h3>提示词目录结构</h3>
+
+      <pre><code>prompts/
+├── system/                  # 系统级提示词
+│   ├── code-reviewer.md     # 代码审查
+│   ├── technical-writer.md  # 技术写作
+│   └── architect.md         # 架构设计
+├── templates/               # 可复用的提示词模板
+│   ├── crud-api.md          # CRUD API 设计
+│   └── error-analysis.md    # 错误分析
+├── workflows/               # 多步工作流
+│   ├── feature-planning.md  # 功能规划流程
+│   └── debugging.md         # 调试流程
+└── prompts.jsonl            # 评测数据集</code></pre>
+
+      <h3>提示词版本管理</h3>
+
+      <pre><code># 每个提示词文件头部包含元数据
+# prompts/system/code-reviewer.md
+---
+version: 2.1.0
+model: claude-opus-4.7
+created: 2026-06-01
+updated: 2026-06-27
+author: 张小猛
+tags: [code-review, clean-code, kotlin]
+---
+
+# System: Code Reviewer
+
+你是一个资深的 Android 代码审查专家……
+
+# Changelog
+## [2.1.0] - 2026-06-27
+### Changed
+- 增加了 Compose 相关审查标准
+- 增加了性能相关的审查点</code></pre>
+
+      <h2>四、结构化输出：让 AI 按你的格式说话</h2>
+
+      <p>最常见也最坑的问题：AI 输出不符合预期格式。解决方案是指定严格的输出约束。</p>
+
+      <h3>JSON 模式示例</h3>
+
+      <pre><code>请分析以下用户需求，返回 JSON 格式：
+
+用户需求：我想做一个记账 App，能记录收支、分类统计、导出报表。
+
+请生成以下 JSON 结构（严格遵循，不要额外字段）：
+{
+  "app_name": "string, 中文应用名",
+  "features": [
+    {
+      "name": "string, 功能名称",
+      "priority": "P0|P1|P2",
+      "effort": "small|medium|large",
+      "description": "string, 一句话描述"
+    }
+  ],
+  "tech_stack": {
+    "frontend": "string",
+    "backend": "string (如果有)",
+    "database": "string",
+    "notes": "string, 技术选择的理由"
+  }
+}</code></pre>
+
+      <h3>XML 标签结构化</h3>
+
+      <p>对于复杂多字段场景，XML 标签比 JSON 更易读：</p>
+
+      <pre><code>请用以下 XML 结构回复：
+
+&lt;analysis&gt;
+  &lt;problem&gt;重新描述问题的理解&lt;/problem&gt;
+  &lt;root_cause&gt;根本原因分析&lt;/root_cause&gt;
+  &lt;solutions&gt;
+    &lt;solution priority="1"&gt;
+      &lt;title&gt;推荐方案&lt;/title&gt;
+      &lt;steps&gt;实现步骤，每步一行&lt;/steps&gt;
+      &lt;pros&gt;优点&lt;/pros&gt;
+      &lt;cons&gt;缺点&lt;/cons&gt;
+    &lt;/solution&gt;
+  &lt;/solutions&gt;
+&lt;/analysis&gt;</code></pre>
+
+      <h2>五、Few-Shot 与示例设计</h2>
+
+      <p>Few-shot 是让模型理解意图最有效的方式之一。关键原则：</p>
+
+      <ul>
+        <li><strong>示例数量</strong>：3-5 个最佳，太少不够泛化，太多浪费 token</li>
+        <li><strong>覆盖边界</strong>：包含正常情况、边缘情况、特殊情况</li>
+        <li><strong>示例质量</strong>：一个糟糕的示例比没有示例更坏</li>
+        <li><strong>示例顺序</strong>：从简单到复杂，从常见到罕见</li>
+      </ul>
+
+      <pre><code># Few-shot 示例：分类电商评论
+
+请将以下用户评论分类到：positive / neutral / negative
+
+示例 1：
+评论："质量特别好，物流也快，下次还会买"
+分类：positive
+
+示例 2：
+评论："一般般吧，没有预期的好"
+分类：neutral
+
+示例 3：
+评论："质量差到令人发指，退货还收运费"
+分类：negative
+
+示例 4（边界情况）：
+评论："还行"
+分类：neutral
+
+示例 5（边界情况）：
+评论："其实也不算差，就是和描述不太符"
+分类：neutral
+
+现在请分类：
+评论："东西摔坏了，客服态度极差，拉黑！"
+分类：</code></pre>
+
+      <h2>六、Agent 提示词设计</h2>
+
+      <p>给 AI Agent 编写提示词时，最重要的是 <strong>工具契约</strong>——精确描述每个工具的用途、输入输出、使用条件：</p>
+
+      <pre><code># Agent 系统提示词
+
+## 角色
+你是一个代码重构助手。
+
+## 可用工具
+
+### 1. read_file(path: str) -> str
+用途：读取源码文件
+使用条件：需要先了解文件内容
+注意事项：每次最多读取 500 行
+
+### 2. search_code(query: str, path: str) -> list
+用途：在项目中搜索代码
+使用条件：需要查找函数、类、变量定义
+注意事项：支持正则表达式
+
+### 3. git_diff(branch: str) -> str
+用途：查看当前分支的修改
+使用条件：需要了解已有的修改
+注意事项：默认比较 main 分支
+
+## 工作流程
+1. 先 read_file 理解上下文
+2. 用 search_code 查找相关代码
+3. 给出重构方案
+4. 等待用户确认后实施
+
+## 约束
+- 不要一次性生成超过 200 行的修改
+- 每次生成代码必须附带解释
+- 不确定时询问用户</code></pre>
+
+      <h2>七、评测体系：用数据说话</h2>
+
+      <p>提示词好不好，不能靠"感觉"。建立评测数据集：</p>
+
+      <h3>评测维度</h3>
+
+      <table>
+        <tr>
+          <th>维度</th>
+          <th>评分标准</th>
+          <th>权重</th>
+        </tr>
+        <tr>
+          <td>正确性</td>
+          <td>输出是否准确</td>
+          <td>40%</td>
+        </tr>
+        <tr>
+          <td>格式合规</td>
+          <td>输出是否符合要求格式</td>
+          <td>20%</td>
+        </tr>
+        <tr>
+          <td>一致性</td>
+          <td>同输入多次输出是否稳定</td>
+          <td>20%</td>
+        </tr>
+        <tr>
+          <td>效率</td>
+          <td>Token 使用是否经济</td>
+          <td>10%</td>
+        </tr>
+        <tr>
+          <td>延迟</td>
+          <td>响应时间</td>
+          <td>10%</td>
+        </tr>
+      </table>
+
+      <h3>自动化评测</h3>
+
+      <pre><code># prompts/prompts.jsonl 评测数据集
+{"input": "写一个二分查找", "expected_output_contains": ["O(log n)", "mid =", "while"]}
+{"input": "解释 RESTful API", "expected_output_contains": ["GET", "POST", "PUT", "DELETE", "无状态"]}
+{"input": "Git merge 和 rebase 的区别", "expected_output_contains": ["合并", "重放", "线性历史"]}
+
+# 自动化评测脚本
+for line in prompts_jsonl:
+    input = parse(line)
+    output = call_llm(system_prompt, input)
+    score = evaluate(output, line.expected_output_contains)
+    report(score)</code></pre>
+
+      <h2>八、常见陷阱与对策</h2>
+
+      <table>
+        <tr>
+          <th>陷阱</th>
+          <th>表现</th>
+          <th>对策</th>
+        </tr>
+        <tr>
+          <td>指令模糊</td>
+          <td>输出偏离预期</td>
+          <td>用 COSTAR 框架结构化</td>
+        </tr>
+        <tr>
+          <td>示例污染</td>
+          <td>过度模仿示例</td>
+          <td>示例多样化，覆盖边界</td>
+        </tr>
+        <tr>
+          <td>格式松动</td>
+          <td>偶尔不按规定输出</td>
+          <td>多次强调格式要求，加校验</td>
+        </tr>
+        <tr>
+          <td>否定歧义</td>
+          <td>"不要提到 X"反而提到 X</td>
+          <td>正面描述想要的行为</td>
+        </tr>
+        <tr>
+          <td>角色冲突</td>
+          <td>Agent 的多角色混淆</td>
+          <td>角色单一化，职责明确</td>
+        </tr>
+        <tr>
+          <td>上下文溢出</td>
+          <td>提示词太长影响注意力</td>
+          <td>精简提示词，关键信息靠前</td>
+        </tr>
+      </table>
+
+      <div class="warning-box">
+        <strong>否定陷阱示例</strong>：<br>
+        ❌ "不要使用任何不安全的方式" → 模型反而会想"不安全的方式有哪些"<br>
+        ✅ "请使用 HTTPS、经过验证的加密库、定期密钥轮换"
+      </div>
+
+      <h2>九、2026 年的 Prompt Engineering 趋势</h2>
+
+      <ul>
+        <li><strong>结构化提示词的标准化</strong>：JSON Schema 约束逐渐取代自由文本格式要求</li>
+        <li><strong>多模态提示</strong>：图片+文字+代码的综合提示逐渐成为主流</li>
+        <li><strong>自进化提示词</strong>：模型根据反馈自动优化自己的提示词</li>
+        <li><strong>AI 写提示词</strong>：用 AI 生成、优化、评测提示词成为常态</li>
+        <li><strong>Agent 编排</strong>：从单一 Prompt 到多 Agent 协作的工作流编排</li>
+      </ul>
+
+      <div class="tip-box">
+        <strong>总结</strong>：Prompt Engineering 正在从"手艺"变成"工程"。建立系统化的框架（COSTAR）、版本管理、评测体系，才能保证大模型输出的稳定性与质量。记住：好的提示词不是靠灵感，而是靠方法论。
+      </div>
+
+      <div class="post-tags">
+        <span>Prompt Engineering</span>
+        <span>AI</span>
+        <span>LLM</span>
+        <span>提示词工程</span>
+        <span>系统化方法</span>
+      </div>
+    </article>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <p>&copy; 2026 张小猛 - loczb</p>
+    </div>
+  </footer>
+
+  <script>
+    const scrollProgress = document.querySelector('.scroll-progress');
+    window.addEventListener('scroll', () => {
+      const scrollTop = document.documentElement.scrollTop;
+      const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = (scrollTop / scrollHeight) * 100;
+      scrollProgress.style.width = progress + '%';
+    });
+    const themeToggle = document.querySelector('.theme-toggle');
+    themeToggle?.addEventListener('click', () => {
+      const html = document.documentElement;
+      const current = html.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+    });
+    const navToggle = document.querySelector('.nav-toggle');
+    const navLinks = document.querySelector('.nav-links');
+    navToggle?.addEventListener('click', () => {
+      navLinks.classList.toggle('active');
+    });
+  </script>
+</body>
+</html>
