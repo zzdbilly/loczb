@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Android 16 后台任务新限制完整解读：JobScheduler 强化、前台服务严格限制、WorkManager 迁移策略与兼容性适配指南">
+  <meta name="keywords" content="Android 16, 后台任务, WorkManager, JobScheduler, 前台服务, 电池优化, 数据同步, 开发者指南">
+  <meta name="author" content="张小猛">
+  <meta name="publish-date" content="2026-06-27">
+  <title>Android 16 后台任务新限制：开发者迁移指南 | 张小猛 - loczb</title>
+  <link rel="canonical" href="https://709527.xyz/blog/posts/android-16-background-tasks.html">
+  <meta name="robots" content="index, follow">
+  
+  <!-- Open Graph -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://709527.xyz/blog/posts/android-16-background-tasks.html">
+  <meta property="og:title" content="Android 16 后台任务新限制：开发者迁移指南 | 张小猛 - loczb">
+  <meta property="og:description" content="Android 16 后台任务新限制完整解读：JobScheduler 强化、前台服务严格限制、WorkManager 迁移策略与兼容性适配指南">
+  <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="article:author" content="张小猛">
+  <meta property="article:published_time" content="2026-06-27">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Android 16 后台任务新限制：开发者迁移指南 | 张小猛 - loczb">
+  <meta name="twitter:description" content="Android 16 后台任务新限制完整解读：JobScheduler 强化、前台服务严格限制、WorkManager 迁移策略与兼容性适配指南">
+  <meta name="twitter:image" content="https://709527.xyz/assets/images/og-image.png">
+
+  <link rel="icon" type="image/x-icon" href="../../assets/images/favicon.ico">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
+  <link rel="icon" type="image/png" sizes="16x16" href="../../assets/images/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="../../assets/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="48x48" href="../../assets/images/favicon-48x48.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="../../assets/images/apple-touch-icon.png">
+  <link rel="manifest" href="../../site.webmanifest">
+  <meta name="theme-color" content="#3b82f6">
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <style>
+    .post-content { max-width: 760px; margin: 0 auto; line-height: 1.85; }
+    .post-content h1 { font-size: 2.4rem; margin: 2rem 0 1rem; }
+    .post-content h2 { font-size: 1.7rem; margin: 2.5rem 0 1rem; color: var(--color-accent-primary); border-bottom: 1px solid var(--color-border); padding-bottom: 0.5rem; }
+    .post-content h3 { font-size: 1.3rem; margin: 1.8rem 0 0.8rem; }
+    .post-content pre { background: var(--color-bg-tertiary); padding: 1.2rem; border-radius: 8px; overflow-x: auto; margin: 1.2rem 0; font-size: 0.9rem; }
+    .post-content code { background: var(--color-bg-tertiary); padding: 0.15rem 0.4rem; border-radius: 4px; font-family: monospace; font-size: 0.9em; }
+    .post-meta { color: var(--color-text-secondary); font-size: 0.9rem; margin-bottom: 2rem; }
+    .post-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 3rem; }
+    .post-tags span { background: var(--color-bg-tertiary); padding: 0.3rem 0.8rem; border-radius: 9999px; font-size: 0.85rem; color: var(--color-accent-primary); }
+    .tip-box { background: rgba(34, 197, 94, 0.1); border-left: 3px solid #22c55e; padding: 1rem 1.2rem; margin: 1.5rem 0; border-radius: 0 6px 6px 0; }
+    .warning-box { background: rgba(234, 179, 8, 0.1); border-left: 3px solid #eab308; padding: 1rem 1.2rem; margin: 1.5rem 0; border-radius: 0 6px 6px 0; }
+    .danger-box { background: rgba(239, 68, 68, 0.1); border-left: 3px solid #ef4444; padding: 1rem 1.2rem; margin: 1.5rem 0; border-radius: 0 6px 6px 0; }
+    table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.95rem; }
+    th, td { border: 1px solid var(--color-border); padding: 0.7rem; text-align: left; }
+    th { background: var(--color-bg-tertiary); font-weight: 600; }
+  </style>
+  <!-- Preconnect to Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500;600&display=swap" media="print" onload="this.media='all'">
+  <noscript>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500;600&display=swap">
+  </noscript>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../../index.html" class="nav-logo">loc<span>zb</span></a>
+      <button class="nav-toggle" aria-label="打开菜单"><span></span><span></span><span></span></button>
+      <div class="nav-overlay"></div>
+      <ul class="nav-links">
+        <li><a href="../../index.html" class="nav-link">首页</a></li>
+        <li><a href="../../projects/index.html" class="nav-link">项目</a></li>
+        <li><a href="../index.html" class="nav-link active">博客</a></li>
+        <li><a href="../../about/index.html" class="nav-link">关于</a></li>
+      </ul>
+      <button class="theme-toggle" aria-label="切换主题">
+        <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line></svg>
+        <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+      </button>
+    </div>
+  </nav>
+<div class="scroll-progress"></div>
+
+  <main>
+    <article class="post-content" style="padding: calc(64px + 4rem) 1rem 4rem;">
+      <a href="../index.html" style="display: inline-flex; align-items: center; gap: 0.5rem; color: var(--color-text-secondary); text-decoration: none; margin-bottom: 2rem;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        返回博客
+      </a>
+      
+      <h1>Android 16 后台任务新限制：开发者迁移指南</h1>
+      
+      <div class="post-meta">2026年6月27日 · 阅读时间 16 分钟</div>
+
+      <p>如果你从 Android Oreo 时代就开始做 Android 开发，一定对"后台限制"这个词不陌生——每隔一个大版本，Google 都在收紧后台任务的生存空间。Android 16 也不例外，而且这次力度空前：JobScheduler 执行时间被进一步压缩，前台服务新增 short-lived 类型和硬性超时，后台定位访问更加严格。</p>
+
+      <p>如果你的 App 还在用 <code>Service</code>、<code>AlarmManager</code> 甚至 <code>BroadcastReceiver</code> 做后台工作，这篇文章就是你的迁移路线图。</p>
+
+      <div class="warning-box">
+        <strong>影响范围</strong>：Android 16（API 36）的所有变更。targetSdkVersion 36+ 的 App 必须适配，targetSdkVersion 较低但在 Android 16 设备上运行的 App 也会受到部分行为约束。
+      </div>
+
+      <h2>一、后台任务演进回顾：Oreo 到 Android 15</h2>
+
+      <p>理解 Android 16 的限制，需要先看看这条收紧曲线是怎么走过来的：</p>
+
+      <table>
+        <tr>
+          <th>版本</th>
+          <th>关键后台限制</th>
+          <th>影响</th>
+        </tr>
+        <tr>
+          <td>Android 8 (Oreo)</td>
+          <td>限制隐式广播、后台 Service 创建限制</td>
+          <td>无法在后台随意 <code>startService()</code></td>
+        </tr>
+        <tr>
+          <td>Android 9 (Pie)</td>
+          <td>App Standby Buckets、电源管理加强</td>
+          <td>低优先级 App 后台任务被限频</td>
+        </tr>
+        <tr>
+          <td>Android 10</td>
+          <td>后台定位需前台服务 + 权限声明</td>
+          <td><code>ACCESS_BACKGROUND_LOCATION</code> 权限引入</td>
+        </tr>
+        <tr>
+          <td>Android 11</td>
+          <td>后台位置权限单独审批、一次性权限</td>
+          <td>用户可撤销后台定位授权</td>
+        </tr>
+        <tr>
+          <td>Android 12</td>
+          <td>前台服务通知延迟、精确闹钟权限</td>
+          <td><code>SCHEDULE_EXACT_ALARM</code> 权限、FGS 通知 10s 后才显示</td>
+        </tr>
+        <tr>
+          <td>Android 13</td>
+          <td>通知权限运行时授权、后台 Body Sensor 限制</td>
+          <td><code>POST_NOTIFICATIONS</code> 权限、<code>BODY_SENSORS_BACKGROUND</code></td>
+        </tr>
+        <tr>
+          <td>Android 14</td>
+          <td>前台服务类型强制声明、隐式 Intent 限制</td>
+          <td><code>foregroundServiceType</code> 必填</td>
+        </tr>
+        <tr>
+          <td>Android 15</td>
+          <td>FGS 超时机制预告、私有 API 灰名单收紧</td>
+          <td>为 Android 16 的超时做铺垫</td>
+        </tr>
+      </table>
+
+      <p>趋势很明显：后台自由度持续收缩，前台服务从"万能兜底"变成了"受监管的特权"。</p>
+
+      <h2>二、Android 16 核心变化</h2>
+
+      <h3>1. JobScheduler 强化执行限制</h3>
+
+      <p>Android 16 对 <code>JobScheduler</code> 做了进一步收紧：</p>
+
+      <ul>
+        <li><strong>执行时间窗口缩短</strong>：<code>JobInfo</code> 的最大执行时间从原来的 10 分钟压缩到更短，具体取决于 App 的 Standby Bucket。</li>
+        <li><strong>催促调度（Expedited Jobs）限制</strong>：<code>setExpedited(true)</code> 的 Job 在 App 处于后台时，系统可能延迟调度而非立即执行。</li>
+        <li><strong>作业排队上限</strong>：同一 App 的待执行 Job 队列有数量上限（约 100 个），超出会被静默丢弃。</li>
+        <li><strong>网络约束更严格</strong>：<code>setRequiredNetworkType(JobInfo.NETWORK_TYPE_UNMETERED)</code> 的 Job 在 Wi-Fi 断开时会被更积极地终止。</li>
+      </ul>
+
+      <pre><code>// Android 16：JobScheduler 执行时间受 Standby Bucket 影响
+val job = JobInfo.Builder(JOB_ID, ComponentName(context, MyJobService::class.java))
+    .setRequiredNetworkType(JobInfo.NETWORK_TYPE_UNMETERED)
+    .setPersisted(true)
+    .setExpedited(true)     // ⚠️ 后台时可能延迟
+    .build()
+
+// 建议改用 WorkManager，它内部已经适配了这些限制
+val workRequest = PeriodicWorkRequestBuilder&lt;SyncWorker&gt;(15, TimeUnit.MINUTES)
+    .setConstraints(
+        Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.UNMETERED)
+            .build()
+    )
+    .build()</code></pre>
+
+      <div class="tip-box">
+        <strong>迁移建议</strong>：直接使用 WorkManager 而非 JobScheduler。WorkManager 在 API 23+ 上自动选择 <code>JobScheduler</code> 或 <code>AlarmManager + BroadcastReceiver</code> 实现，且已经适配了各版本限制。你不需要自己处理版本差异。
+      </div>
+
+      <h3>2. 前台服务严格限制</h3>
+
+      <p>前台服务（Foreground Service, FGS）曾是后台任务的"万能通道"，Android 16 给它上了三道枷锁：</p>
+
+      <ul>
+        <li><strong>类型声明强制执行</strong>：<code>foregroundServiceType</code> 不只是声明，系统会检查你的服务是否真的在执行该类型的工作。</li>
+        <li><strong>Short-lived FGS</strong>：新增短生命周期前台服务，最多运行约 3 分钟。</li>
+        <li><strong>超时机制</strong>：特定类型的前台服务有硬性超时（如 <code>dataSync</code> 类型约 6 小时）。</li>
+      </ul>
+
+      <div class="danger-box">
+        <strong>重要</strong>：如果系统检测到你的前台服务声明了 <code>foregroundServiceType</code> 但实际行为不匹配（比如声明了 <code>location</code> 但没有请求位置更新），Android 16 可能会终止该服务并上报 <code>ForegroundServiceDidNotStartInTimeException</code>。
+      </div>
+
+      <h2>三、WorkManager 最佳实践</h2>
+
+      <p>WorkManager 是 Jetpack 推荐的后台任务解决方案，它封装了 JobScheduler 和 AlarmManager，自动适配各版本限制。在 Android 16 下，掌握 WorkManager 的 Constraint 设计和延迟容忍度规划至关重要。</p>
+
+      <h3>1. Constraint 设计原则</h3>
+
+      <p>Constraint 决定了 WorkManager 何时调度你的任务。约束条件越多，系统越难找到合适的执行窗口。</p>
+
+      <pre><code>// ❌ 过度约束：几乎不可能同时满足
+val constraints = Constraints.Builder()
+    .setRequiredNetworkType(NetworkType.UNMETERED)     // 需要 Wi-Fi
+    .setRequiresBatteryNotLow(true)                     // 电量不低
+    .setRequiresStorageNotLow(true)                     // 存储不低
+    .setRequiresDeviceIdle(true)                        // 设备空闲
+    .setRequiresCharging(true)                          // 正在充电
+    .build()
+
+// ✅ 合理约束：只约束真正必要的条件
+val constraints = Constraints.Builder()
+    .setRequiredNetworkType(NetworkType.CONNECTED)      // 只需网络
+    .build()</code></pre>
+
+      <table>
+        <tr>
+          <th>约束条件</th>
+          <th>影响调度概率</th>
+          <th>适用场景</th>
+        </tr>
+        <tr>
+          <td><code>NETWORK_TYPE_CONNECTED</code></td>
+          <td>中</td>
+          <td>一般网络请求</td>
+        </tr>
+        <tr>
+          <td><code>NETWORK_TYPE_UNMETERED</code></td>
+          <td>高</td>
+          <td>大文件下载/上传</td>
+        </tr>
+        <tr>
+          <td><code>NETWORK_TYPE_NOT_ROAMING</code></td>
+          <td>中</td>
+          <td>漫游时节省流量</td>
+        </tr>
+        <tr>
+          <td><code>requiresCharging</code></td>
+          <td>高</td>
+          <td>批量数据处理、大文件同步</td>
+        </tr>
+        <tr>
+          <td><code>requiresDeviceIdle</code></td>
+          <td>极高</td>
+          <td>仅夜间维护任务</td>
+        </tr>
+        <tr>
+          <td><code>requiresBatteryNotLow</code></td>
+          <td>中</td>
+          <td>耗电操作</td>
+        </tr>
+        <tr>
+          <td><code>requiresStorageNotLow</code></td>
+          <td>低</td>
+          <td>写入大量数据</td>
+        </tr>
+      </table>
+
+      <h3>2. 延迟容忍度规划</h3>
+
+      <p>后台任务的核心问题是：你的任务能容忍多长时间的延迟？不同的容忍度对应不同的调度策略：</p>
+
+      <pre><code>// 立即执行（但可能被系统延迟）— Expedited Work
+val urgentWork = OneTimeWorkRequestBuilder&lt;UploadWorker&gt;()
+    .setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
+    .build()
+
+// 可延迟 — 普通一次性任务
+val normalWork = OneTimeWorkRequestBuilder&lt;CleanupWorker&gt;()
+    .setInitialDelay(5, TimeUnit.MINUTES)    // 最早 5 分钟后执行
+    .build()
+
+// 可大量延迟 — 定期任务（最短间隔 15 分钟）
+val periodicWork = PeriodicWorkRequestBuilder&lt;SyncWorker&gt;(1, TimeUnit.HOURS)
+    .setBackoffCriteria(                     // 失败后指数退避
+        BackoffPolicy.EXPONENTIAL,
+        30, TimeUnit.SECONDS
+    )
+    .build()</code></pre>
+
+      <div class="tip-box">
+        <strong>延迟容忍度决策</strong>：<br>
+        • 用户正在等待结果 → <code>setExpedited()</code>（配额耗尽降级为普通任务）<br>
+        • 可以等几分钟 → <code>OneTimeWorkRequest</code> + <code>setInitialDelay()</code><br>
+        • 可以等几小时 → <code>PeriodicWorkRequest</code>（最短 15 分钟间隔）<br>
+        • 可以等一天 → <code>PeriodicWorkRequest</code> + <code>setConstraints(requiresCharging)</code>
+      </div>
+
+      <h3>3. WorkManager 链式任务</h3>
+
+      <pre><code>// 复杂后台流程：下载 → 解析 → 上传
+val downloadWork = OneTimeWorkRequestBuilder&lt;DownloadWorker&gt;()
+    .setConstraints(
+        Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
+    )
+    .build()
+
+val parseWork = OneTimeWorkRequestBuilder&lt;ParseWorker&gt;().build()
+
+val uploadWork = OneTimeWorkRequestBuilder&lt;UploadWorker&gt;()
+    .setConstraints(
+        Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.UNMETERED)
+            .build()
+    )
+    .build()
+
+// 链式调度
+WorkManager.getInstance(context)
+    .beginWith(downloadWork)
+    .then(parseWork)
+    .then(uploadWork)
+    .enqueue()
+
+// 监听最终结果
+WorkManager.getInstance(context)
+    .getWorkInfoByIdLiveData(uploadWork.id)
+    .observe(lifecycleOwner) { workInfo ->
+        if (workInfo?.state == WorkInfo.State.SUCCEEDED) {
+            showToast("同步完成")
+        }
+    }</code></pre>
+
+      <h2>四、前台服务新规详解</h2>
+
+      <h3>1. Short-lived Foreground Service</h3>
+
+      <p>Android 16 引入了 <strong>short-lived foreground service</strong>（短生命周期前台服务），适用于需要短暂高优先级执行的场景：</p>
+
+      <ul>
+        <li>最大运行时间约 <strong>3 分钟</strong></li>
+        <li>不需要声明 <code>foregroundServiceType</code></li>
+        <li>适用于：快速文件操作、短时数据处理、一次性通知发送</li>
+      </ul>
+
+      <pre><code>// Android 16：Short-lived FGS
+if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+    // 使用短生命周期前台服务
+    val shortLivedType = ServiceInfo.FOREGROUND_SERVICE_TYPE_SHORT_LIVED
+    startForeground(NOTIFICATION_ID, notification, shortLivedType)
+} else {
+    startForeground(NOTIFICATION_ID, notification)
+}</code></pre>
+
+      <div class="warning-box">
+        <strong>3 分钟是硬限制</strong>：超时后系统会终止服务并抛出 <code>ForegroundServiceDidNotStartInTimeException</code>。如果你的任务可能超过 3 分钟，请使用带类型的 FGS 或迁移到 WorkManager。
+      </div>
+
+      <h3>2. 超时机制</h3>
+
+      <p>不同 <code>foregroundServiceType</code> 有不同的超时上限：</p>
+
+      <table>
+        <tr>
+          <th>foregroundServiceType</th>
+          <th>超时时间</th>
+          <th>说明</th>
+        </tr>
+        <tr>
+          <td><code>SHORT_LIVED</code></td>
+          <td>~3 分钟</td>
+          <td>新增类型，短时任务</td>
+        </tr>
+        <tr>
+          <td><code>DATA_SYNC</code></td>
+          <td>~6 小时</td>
+          <td>数据同步，超时后降级为普通服务</td>
+        </tr>
+        <tr>
+          <td><code>LOCATION</code></td>
+          <td>无固定超时</td>
+          <td>持续定位，但受后台定位限制</td>
+        </tr>
+        <tr>
+          <td><code>MEDIA_PLAYBACK</code></td>
+          <td>无固定超时</td>
+          <td>需要媒体会话活跃</td>
+        </tr>
+        <tr>
+          <td><code>CONNECTED_DEVICE</code></td>
+          <td>无固定超时</td>
+          <td>需要活跃的蓝牙/USB 连接</td>
+        </tr>
+        <tr>
+          <td><code>HEALTH</code></td>
+          <td>无固定超时</td>
+          <td>需要声明 BODY_SENSORS 权限</td>
+        </tr>
+      </table>
+
+      <div class="danger-box">
+        <strong>超时后果</strong>：超时后，系统首先发送 <code>onTimeout()</code> 回调（Android 16 新增），给你一个短暂窗口做清理。如果你不主动停止服务，系统会强制终止并上报 ANR 或崩溃。
+      </div>
+
+      <pre><code>// Android 16：处理 FGS 超时
+override fun onTimeout(startId: Int, fgsType: Int) {
+    // 系统给了最后机会做清理
+    cleanupResources()
+    stopSelf()
+    super.onTimeout(startId, fgsType)
+}</code></pre>
+
+      <h3>3. foregroundServiceType 声明清单</h3>
+
+      <p>Android 16 要求 <code>foregroundServiceType</code> 必须在两个地方声明：</p>
+
+      <pre><code>&lt;!-- AndroidManifest.xml --&gt;
+&lt;service
+    android:name=".SyncService"
+    android:foregroundServiceType="dataSync"
+    android:exported="false" /&gt;</code></pre>
+
+      <pre><code>// 代码中启动时也必须声明匹配的类型
+val type = ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC
+startForeground(NOTIFICATION_ID, notification, type)</code></pre>
+
+      <div class="tip-box">
+        <strong>类型选择指南</strong>：<br>
+        • 数据同步/上传下载 → <code>dataSync</code>（有超时）<br>
+        • 持续定位 → <code>location</code>（需后台位置权限）<br>
+        • 音乐/音频播放 → <code>mediaPlayback</code>（需活跃 MediaSession）<br>
+        • 蓝牙设备通信 → <code>connectedDevice</code>（需蓝牙权限）<br>
+        • 短时操作（&lt;3 分钟）→ <code>shortLived</code>（新增，无需额外权限）<br>
+        • 不确定 → 用 WorkManager 替代
+      </div>
+
+      <h2>五、数据同步迁移策略</h2>
+
+      <p>数据同步是后台任务限制影响最大的场景。传统的"后台 Service 持续同步"方案在 Android 16 上几乎不可行。推荐方案：<strong>FCM + WorkManager</strong>。</p>
+
+      <h3>1. 推拉结合架构</h3>
+
+      <pre><code>// 推：FCM 触发即时同步
+class SyncFirebaseMessagingService : FirebaseMessagingService() {
+    override fun onMessageReceived(message: RemoteMessage) {
+        // 收到推送，触发 WorkManager 立即同步
+        val syncWork = OneTimeWorkRequestBuilder&lt;SyncWorker&gt;()
+            .setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
+            .setInputData(workDataOf("syncType" to "push"))
+            .build()
+        WorkManager.getInstance(this).enqueue(syncWork)
+    }
+}
+
+// 拉：定期轮询兜底
+val periodicSync = PeriodicWorkRequestBuilder&lt;SyncWorker&gt;(1, TimeUnit.HOURS)
+    .setConstraints(
+        Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
+    )
+    .build()
+
+WorkManager.getInstance(context)
+    .enqueueUniquePeriodicWork(
+        "periodic_sync",
+        ExistingPeriodicWorkPolicy.KEEP,
+        periodicSync
+    )</code></pre>
+
+      <h3>2. SyncWorker 实现</h3>
+
+      <pre><code>class SyncWorker(
+    context: Context,
+    params: WorkerParameters
+) : CoroutineWorker(context, params) {
+
+    override suspend fun doWork(): Result {
+        return try {
+            val syncType = inputData.getString("syncType") ?: "periodic"
+            
+            // 1. 拉取服务端增量数据
+            val changes = apiService.getDeltaChanges(lastSyncTimestamp)
+            
+            // 2. 本地数据库写入
+            database.withTransaction {
+                changes.forEach { change ->
+                    database.syncDao().upsert(change.toEntity())
+                }
+            }
+            
+            // 3. 更新同步时间戳
+            prefs.edit().putLong("last_sync", System.currentTimeMillis()).apply()
+            
+            // 4. 通知 UI 刷新
+            LocalBroadcastManager.getInstance(applicationContext)
+                .sendBroadcast(Intent("ACTION_SYNC_COMPLETED"))
+            
+            Result.success()
+        } catch (e: IOException) {
+            // 网络错误，自动重试
+            Result.retry()
+        } catch (e: Exception) {
+            // 非网络错误，标记失败
+            Result.failure()
+        }
+    }
+}</code></pre>
+
+      <h3>3. 迁移对照表</h3>
+
+      <table>
+        <tr>
+          <th>旧方案</th>
+          <th>Android 16 推荐方案</th>
+          <th>迁移要点</th>
+        </tr>
+        <tr>
+          <td>后台 Service 持续同步</td>
+          <td>FCM 推送 + WorkManager</td>
+          <td>服务端支持推送是前提</td>
+        </tr>
+        <tr>
+          <td>AlarmManager 定时轮询</td>
+          <td>PeriodicWorkRequest</td>
+          <td>最短间隔 15 分钟</td>
+        </tr>
+        <tr>
+          <td>SyncAdapter</td>
+          <td>WorkManager + Room</td>
+          <td>SyncAdapter 已废弃</td>
+        </tr>
+        <tr>
+          <td>FGS dataSync 长时间运行</td>
+          <td>WorkManager 链式任务</td>
+          <td>FGS 有 6 小时超时</td>
+        </tr>
+        <tr>
+          <td>JobScheduler 直接使用</td>
+          <td>WorkManager（封装 JobScheduler）</td>
+          <td>无需自己处理版本差异</td>
+        </tr>
+      </table>
+
+      <div class="warning-box">
+        <strong>FCM 不是万能药</strong>：FCM 高优先级消息有每日配额限制（约 5 条/用户/天，具体取决于 App 类别）。超出配额后推送消息会被降级为普通优先级，可能延迟数小时送达。所以<strong>定期轮询兜底是必须的</strong>。
+      </div>
+
+      <h2>六、电池优化与自适应电池</h2>
+
+      <p>Android 16 的自适应电池（Adaptive Battery）比以往更加激进：</p>
+
+      <h3>1. App Standby Buckets 更严格</h3>
+
+      <table>
+        <tr>
+          <th>Bucket</th>
+          <th>JobScheduler 频率</th>
+          <th>AlarmManager</th>
+          <th>网络访问</th>
+        </tr>
+        <tr>
+          <td><code>ACTIVE</code></td>
+          <td>无限制</td>
+          <td>无限制</td>
+          <td>无限制</td>
+        </tr>
+        <tr>
+          <td><code>WORKING_SET</code></td>
+          <td>每 10 分钟</td>
+          <td>每 10 分钟</td>
+          <td>有</td>
+        </tr>
+        <tr>
+          <td><code>FREQUENT</code></td>
+          <td>每 30 分钟</td>
+          <td>每 30 分钟</td>
+          <td>有（受限）</td>
+        </tr>
+        <tr>
+          <td><code>RARE</code></td>
+          <td>每 24 小时</td>
+          <td>每 24 小时</td>
+          <td>极有限</td>
+        </tr>
+        <tr>
+          <td><code>RESTRICTED</code></td>
+          <td>每月 1 次</td>
+          <td>每月 1 次</td>
+          <td>几乎无</td>
+        </tr>
+      </table>
+
+      <h3>2. 电池优化豁免</h3>
+
+      <p>某些 App 需要请求电池优化豁免（REQUEST_IGNORE_BATTERY_OPTIMIZATIONS），但 Google Play 对此审核严格：</p>
+
+      <pre><code>// 请求电池优化豁免（谨慎使用）
+if (!PowerManagerCompat.isIgnoringBatteryOptimizations(context)) {
+    val intent = Intent(
+        Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS,
+        Uri.parse("package:${context.packageName}")
+    )
+    startActivity(intent)
+}</code></pre>
+
+      <div class="danger-box">
+        <strong>Google Play 政策</strong>：滥用 <code>REQUEST_IGNORE_BATTERY_OPTIMIZATIONS</code> 会被 Play Store 拒审或下架。只有明确的用户场景（如 VoIP 通话、运动追踪）才允许请求。如果你的 App 不属于这些类别，请通过优化后台任务来适配，而非请求豁免。
+      </div>
+
+      <h3>3. Doze 模式增强</h3>
+
+      <p>Android 16 延长了 Deep Doze 的维护窗口间隔。在 Deep Doze 中：</p>
+
+      <ul>
+        <li>网络访问被完全禁止</li>
+        <li>AlarmManager 只有 <code>setAndAllowWhileIdle()</code> / <code>setExactAndAllowWhileIdle()</code> 可以触发</li>
+        <li>WorkManager 的 PeriodicWorkRequest 会被推迟到下一个维护窗口</li>
+      </ul>
+
+      <div class="tip-box">
+        <strong>应对策略</strong>：利用 <code>setAndAllowWhileIdle()</code> 在 Doze 中触发关键闹钟，然后由 WorkManager 执行实际任务。WorkManager 已经在内部处理了 Doze 模式下的调度问题。
+      </div>
+
+      <h2>七、后台定位访问限制</h2>
+
+      <p>Android 16 对后台定位的管控进一步收紧：</p>
+
+      <h3>1. 权限要求</h3>
+
+      <pre><code>&lt;!-- 必须同时声明前台和后台位置权限 --&gt;
+&lt;uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /&gt;
+&lt;uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /&gt;
+&lt;uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" /&gt;
+
+&lt;!-- 前台服务类型必须声明 location --&gt;
+&lt;service
+    android:name=".LocationTrackingService"
+    android:foregroundServiceType="location"
+    android:exported="false" /&gt;</code></pre>
+
+      <h3>2. 用户授权流程</h3>
+
+      <p>Android 16 要求后台位置权限必须<strong>从设置页面单独授予</strong>，不能在运行时弹窗请求：</p>
+
+      <pre><code>// 第一步：先请求前台位置权限
+when {
+    ContextCompat.checkSelfPermission(context, ACCESS_FINE_LOCATION) 
+        == PackageManager.PERMISSION_GRANTED -> {
+        // 已有前台权限，引导用户去设置开启后台权限
+        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+            data = Uri.fromParts("package", packageName, null)
+        }
+        startActivity(intent)
+    }
+    else -> {
+        // 请求前台权限
+        requestPermissions(arrayOf(ACCESS_FINE_LOCATION), LOCATION_REQUEST_CODE)
+    }
+}</code></pre>
+
+      <h3>3. 后台定位的合法场景</h3>
+
+      <p>Google Play 对后台定位的审查非常严格，只有以下场景才会通过审核：</p>
+
+      <ul>
+        <li>🚗 驾驶导航（实时路线指引）</li>
+        <li>🏃 运动/健身追踪（持续记录轨迹）</li>
+        <li>📦 物流/配送追踪（实时位置共享）</li>
+        <li>🏠 家庭安全/地理围栏（成员位置共享）</li>
+      </ul>
+
+      <div class="warning-box">
+        <strong>如果你的 App 不在这些场景中</strong>，不要请求后台定位权限。改用 Geofencing API 或 WorkManager 的 PeriodicWorkRequest 定期获取位置，每次只在前台时获取。
+      </div>
+
+      <h3>4. Geofencing 替代方案</h3>
+
+      <pre><code>// 使用 Geofencing API 替代持续后台定位
+val geofence = Geofence.Builder()
+    .setRequestId("store_001")
+    .setCircularRegion(latitude, longitude, 200f)  // 200 米半径
+    .setExpirationDuration(Geofence.NEVER_EXPIRE)
+    .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER or Geofence.GEOFENCE_TRANSITION_EXIT)
+    .build()
+
+val geofencingRequest = GeofencingRequest.Builder()
+    .setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER)
+    .addGeofence(geofence)
+    .build()
+
+GeofencingClient(context).addGeofences(geofencingRequest, geofencePendingIntent)
+    .addOnSuccessListener { /* 地理围栏注册成功 */ }
+    .addOnFailureListener { e -> /* 处理失败 */ }</code></pre>
+
+      <h2>八、兼容测试与按需适配</h2>
+
+      <h3>1. targetSdkVersion 渐进式适配</h3>
+
+      <pre><code>// android { defaultConfig { targetSdk = 36 } }
+
+// 代码中按版本适配
+fun startSyncForegroundService(context: Context) {
+    val intent = Intent(context, SyncService::class.java)
+    
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+        // Android 16+：前台服务启动限制
+        // 必须在 type 声明的范围内使用
+        context.startForegroundService(intent)
+    } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+        // Android 14+：需要 foregroundServiceType
+        context.startForegroundService(intent)
+    } else {
+        context.startService(intent)
+    }
+}</code></pre>
+
+      <h3>2. 测试场景清单</h3>
+
+      <table>
+        <tr>
+          <th>测试场景</th>
+          <th>验证方法</th>
+          <th>预期行为</th>
+        </tr>
+        <tr>
+          <td>App 在后台时启动 FGS</td>
+          <td>退到后台后触发同步</td>
+          <td>Android 16 可能延迟或拒绝</td>
+        </tr>
+        <tr>
+          <td>FGS 超时</td>
+          <td>模拟长时间同步</td>
+          <td>6 小时后 <code>onTimeout()</code> 被调用</td>
+        </tr>
+        <tr>
+          <td>Short-lived FGS 超时</td>
+          <td>启动短时服务后等待 3 分钟</td>
+          <td>3 分钟后 <code>onTimeout()</code> 被调用</td>
+        </tr>
+        <tr>
+          <td>Doze 模式下 WorkManager 调度</td>
+          <td><code>adb shell dumpsys battery reset && adb shell dumpsys deviceidle force-idle</code></td>
+          <td>任务推迟到维护窗口</td>
+        </tr>
+        <tr>
+          <td>App Standby Rare 状态</td>
+          <td><code>adb shell am set-standby-bucket {pkg} rare</code></td>
+          <td>Job 频率降到每日一次</td>
+        </tr>
+        <tr>
+          <td>后台位置权限</td>
+          <td>App 在后台时请求位置</td>
+          <td>需引导用户到设置页面授权</td>
+        </tr>
+      </table>
+
+      <h3>3. adb 调试命令</h3>
+
+      <pre><code># 强制进入 Doze 模式
+adb shell dumpsys deviceidle force-idle
+
+# 退出 Doze 模式
+adb shell dumpsys deviceidle unforce
+
+# 设置 App Standby Bucket
+adb shell am set-standby-bucket com.example.app rare
+
+# 查看 App 当前 Bucket
+adb shell am get-standby-bucket com.example.app
+
+# 查看 WorkManager 任务状态
+adb shell dumpsys jobscheduler | grep com.example.app
+
+# 模拟 FGS 超时（需要 root 或 debuggable App）
+adb shell cmd jobscheduler monitor com.example.app
+
+# 查看电池优化状态
+adb shell dumpsys deviceidle whitelist</code></pre>
+
+      <h3>4. 兼容性工具类</h3>
+
+      <pre><code>object BackgroundTaskCompat {
+    
+    /**
+     * 安全地启动前台服务
+     * Android 16+ 会检查 foregroundServiceType 一致性
+     */
+    fun startForegroundServiceSafe(
+        context: Context,
+        serviceClass: Class&lt;out Service&gt;,
+        fgsType: Int? = null
+    ) {
+        val intent = Intent(context, serviceClass)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            context.startForegroundService(intent)
+        } else {
+            context.startService(intent)
+        }
+    }
+
+    /**
+     * 判断是否应该使用 WorkManager 而非前台服务
+     */
+    fun shouldUseWorkManager(taskDurationMinutes: Long): Boolean {
+        return when {
+            taskDurationMinutes <= 3 -> false   // 短任务可用 short-lived FGS
+            taskDurationMinutes <= 360 -> false  // 中等任务可用 dataSync FGS
+            else -> true                          // 超长任务必须用 WorkManager
+        }
+    }
+}</code></pre>
+
+      <h2>九、速查表</h2>
+
+      <table>
+        <tr>
+          <th>场景</th>
+          <th>推荐方案</th>
+          <th>关键限制</th>
+        </tr>
+        <tr>
+          <td>即时数据同步</td>
+          <td>FCM → WorkManager expedited</td>
+          <td>FCM 配额 5 条/天/用户</td>
+        </tr>
+        <tr>
+          <td>定期数据同步</td>
+          <td>PeriodicWorkRequest（1h+）</td>
+          <td>最短间隔 15 分钟</td>
+        </tr>
+        <tr>
+          <td>文件上传/下载</td>
+          <td>WorkManager + UNMETERED 约束</td>
+          <td>大文件用 DownloadManager</td>
+        </tr>
+        <tr>
+          <td>短时后台操作（&lt;3 分钟）</td>
+          <td>Short-lived FGS</td>
+          <td>3 分钟硬超时</td>
+        </tr>
+        <tr>
+          <td>持续定位追踪</td>
+          <td>FGS location + 后台位置权限</td>
+          <td>Play Store 严格审核</td>
+        </tr>
+        <tr>
+          <td>地理围栏</td>
+          <td>GeofencingClient</td>
+          <td>最多 100 个围栏</td>
+        </tr>
+        <tr>
+          <td>音乐播放</td>
+          <td>FGS mediaPlayback + MediaSession</td>
+          <td>需活跃媒体会话</td>
+        </tr>
+        <tr>
+          <td>蓝牙设备通信</td>
+          <td>FGS connectedDevice</td>
+          <td>需蓝牙权限</td>
+        </tr>
+        <tr>
+          <td>精确闹钟</td>
+          <td>AlarmManager + SCHEDULE_EXACT_ALARM</td>
+          <td>需权限申请</td>
+        </tr>
+        <tr>
+          <td>数据清理/缓存维护</td>
+          <td>WorkManager + requiresDeviceIdle</td>
+          <td>只在空闲时执行</td>
+        </tr>
+      </table>
+
+      <div class="tip-box">
+        <strong>一句话总结</strong>：Android 16 后台任务的核心思路是"能延迟就延迟，不能延迟就用 WorkManager，实在需要即时就用带类型的 FGS"。Short-lived FGS 是新的短时利器，但 3 分钟的硬限制意味着你必须认真评估任务的执行时间。FCM + WorkManager 的推拉组合是数据同步的黄金方案。
+      </div>
+
+      <div class="post-tags">
+        <span>Android 16</span>
+        <span>后台任务</span>
+        <span>WorkManager</span>
+        <span>前台服务</span>
+        <span>电池优化</span>
+      </div>
+    </article>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <p>&copy; 2026 张小猛 - loczb</p>
+    </div>
+  </footer>
+
+  <script>
+    // Scroll progress
+    const scrollProgress = document.querySelector('.scroll-progress');
+    window.addEventListener('scroll', () => {
+      const scrollTop = document.documentElement.scrollTop;
+      const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = (scrollTop / scrollHeight) * 100;
+      scrollProgress.style.width = progress + '%';
+    });
+
+    // Theme toggle
+    const themeToggle = document.querySelector('.theme-toggle');
+    themeToggle?.addEventListener('click', () => {
+      const html = document.documentElement;
+      const current = html.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+    });
+
+    // Mobile nav
+    const navToggle = document.querySelector('.nav-toggle');
+    const navLinks = document.querySelector('.nav-links');
+    navToggle?.addEventListener('click', () => {
+      navLinks.classList.toggle('active');
+    });
+  </script>
+</body>
+</html>
