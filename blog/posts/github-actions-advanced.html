@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="GitHub Actions 高级工作流实战：矩阵构建、可复用工作流、自定义 Action、OIDC 集成、安全审计与性能优化完整指南">
+  <meta name="keywords" content="GitHub Actions, CI/CD, DevOps, 矩阵构建, 可复用工作流, OIDC, 自定义 Action, Workflow">
+  <meta name="author" content="张小猛">
+  <meta name="publish-date" content="2026-06-27">
+  <title>GitHub Actions 高级工作流：CI/CD 最佳实践 | 张小猛 - loczb</title>
+  <link rel="canonical" href="https://709527.xyz/blog/posts/github-actions-advanced.html">
+  <meta name="robots" content="index, follow">
+  
+  <!-- Open Graph -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://709527.xyz/blog/posts/github-actions-advanced.html">
+  <meta property="og:title" content="GitHub Actions 高级工作流：CI/CD 最佳实践 | 张小猛 - loczb">
+  <meta property="og:description" content="GitHub Actions 高级工作流实战：矩阵构建、可复用工作流、自定义 Action、OIDC 集成、安全审计与性能优化完整指南">
+  <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="article:author" content="张小猛">
+  <meta property="article:published_time" content="2026-06-27">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="GitHub Actions 高级工作流：CI/CD 最佳实践 | 张小猛 - loczb">
+  <meta name="twitter:description" content="GitHub Actions 高级工作流实战：矩阵构建、可复用工作流、自定义 Action、OIDC 集成、安全审计与性能优化完整指南">
+  <meta name="twitter:image" content="https://709527.xyz/assets/images/og-image.png">
+
+  <link rel="icon" type="image/x-icon" href="../../assets/images/favicon.ico">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
+  <link rel="icon" type="image/png" sizes="16x16" href="../../assets/images/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="../../assets/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="48x48" href="../../assets/images/favicon-48x48.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="../../assets/images/apple-touch-icon.png">
+  <link rel="manifest" href="../../site.webmanifest">
+  <meta name="theme-color" content="#3b82f6">
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <style>
+    .post-content { max-width: 760px; margin: 0 auto; line-height: 1.85; }
+    .post-content h1 { font-size: 2.4rem; margin: 2rem 0 1rem; }
+    .post-content h2 { font-size: 1.7rem; margin: 2.5rem 0 1rem; color: var(--color-accent-primary); border-bottom: 1px solid var(--color-border); padding-bottom: 0.5rem; }
+    .post-content h3 { font-size: 1.3rem; margin: 1.8rem 0 0.8rem; }
+    .post-content pre { background: var(--color-bg-tertiary); padding: 1.2rem; border-radius: 8px; overflow-x: auto; margin: 1.2rem 0; font-size: 0.9rem; }
+    .post-content code { background: var(--color-bg-tertiary); padding: 0.15rem 0.4rem; border-radius: 4px; font-family: monospace; font-size: 0.9em; }
+    .post-meta { color: var(--color-text-secondary); font-size: 0.9rem; margin-bottom: 2rem; }
+    .post-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 3rem; }
+    .post-tags span { background: var(--color-bg-tertiary); padding: 0.3rem 0.8rem; border-radius: 9999px; font-size: 0.85rem; color: var(--color-accent-primary); }
+    .tip-box { background: rgba(34, 197, 94, 0.1); border-left: 3px solid #22c55e; padding: 1rem 1.2rem; margin: 1.5rem 0; border-radius: 0 6px 6px 0; }
+    .warning-box { background: rgba(234, 179, 8, 0.1); border-left: 3px solid #eab308; padding: 1rem 1.2rem; margin: 1.5rem 0; border-radius: 0 6px 6px 0; }
+    table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.95rem; }
+    th, td { border: 1px solid var(--color-border); padding: 0.7rem; text-align: left; }
+    th { background: var(--color-bg-tertiary); font-weight: 600; }
+  </style>
+  <!-- Preconnect to Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500;600&display=swap" media="print" onload="this.media='all'">
+  <noscript>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500;600&display=swap">
+  </noscript>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../../index.html" class="nav-logo">loc<span>zb</span></a>
+      <button class="nav-toggle" aria-label="打开菜单"><span></span><span></span><span></span></button>
+      <div class="nav-overlay"></div>
+      <ul class="nav-links">
+        <li><a href="../../index.html" class="nav-link">首页</a></li>
+        <li><a href="../../projects/index.html" class="nav-link">项目</a></li>
+        <li><a href="../index.html" class="nav-link active">博客</a></li>
+        <li><a href="../../about/index.html" class="nav-link">关于</a></li>
+      </ul>
+      <button class="theme-toggle" aria-label="切换主题">
+        <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line></svg>
+        <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+      </button>
+    </div>
+  </nav>
+<div class="scroll-progress"></div>
+
+  <main>
+    <article class="post-content" style="padding: calc(64px + 4rem) 1rem 4rem;">
+      <a href="../index.html" style="display: inline-flex; align-items: center; gap: 0.5rem; color: var(--color-text-secondary); text-decoration: none; margin-bottom: 2rem;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        返回博客
+      </a>
+      
+      <h1>GitHub Actions 高级工作流：CI/CD 最佳实践</h1>
+      
+      <div class="post-meta">2026年6月27日 · 阅读时间 16 分钟</div>
+
+      <p>GitHub Actions 早已不只是 <code>on: push → run: npm test</code> 那么简单。矩阵构建、可复用工作流、OIDC 免密钥认证、自定义 Action 开发——当你需要构建企业级 CI/CD 管道时，这些高级特性才是生产力倍增器。</p>
+
+      <p>本文从核心概念出发，逐步深入到生产环境中的最佳实践，帮你写出既安全又高效的 GitHub Actions 工作流。</p>
+
+      <div class="tip-box">
+        <strong>前置知识</strong>：本文假设你已经会用 GitHub Actions 编写基本的 YAML 工作流。如果还没有，建议先看 <a href="https://docs.github.com/en/actions/learn-github-actions" style="color: var(--color-accent-primary);">官方入门文档</a>。
+      </div>
+
+      <h2>一、基础回顾与核心概念</h2>
+
+      <p>在深入高级特性之前，先快速梳理 GitHub Actions 的核心抽象：</p>
+
+      <table>
+        <tr>
+          <th>概念</th>
+          <th>说明</th>
+          <th>类比</th>
+        </tr>
+        <tr>
+          <td><strong>Workflow</strong></td>
+          <td>一个 YAML 文件定义的自动化流程</td>
+          <td>一整条流水线</td>
+        </tr>
+        <tr>
+          <td><strong>Event</strong></td>
+          <td>触发 Workflow 的事件（push、PR、schedule…）</td>
+          <td>流水线的启动信号</td>
+        </tr>
+        <tr>
+          <td><strong>Job</strong></td>
+          <td>Workflow 中的一组 Steps，同一 Job 内共享 Runner</td>
+          <td>流水线上的一个工位</td>
+        </tr>
+        <tr>
+          <td><strong>Step</strong></td>
+          <td>Job 中的一个任务单元（Action 或 shell 命令）</td>
+          <td>工位上的一个操作步骤</td>
+        </tr>
+        <tr>
+          <td><strong>Runner</strong></td>
+          <td>执行 Job 的服务器（GitHub-hosted 或 Self-hosted）</td>
+          <td>实际干活的机器</td>
+        </tr>
+        <tr>
+          <td><strong>Action</strong></td>
+          <td>可复用的任务单元（社区或自定义）</td>
+          <td>可插拔的工具组件</td>
+        </tr>
+      </table>
+
+      <pre><code>name: Basic CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm ci
+      - run: npm test</code></pre>
+
+      <p>这是最基本的形态。但当项目变大、团队变多，你需要更多武器。</p>
+
+      <h2>二、矩阵构建：多版本、多平台并行测试</h2>
+
+      <p>你的库需要同时支持 Node 18/20/22、在 Ubuntu/macOS/Windows 上跑测试吗？手动写 9 个 Job 太蠢了。<code>strategy.matrix</code> 让你声明维度，GitHub 自动展开组合并行执行。</p>
+
+      <h3>基本矩阵</h3>
+
+      <pre><code>jobs:
+  test:
+    strategy:
+      matrix:
+        node-version: [18, 20, 22]
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm ci
+      - run: npm test</code></pre>
+
+      <p>这会生成 <strong>3 × 3 = 9</strong> 个并行 Job。GitHub 会自动分配 Runner，所有 Job 同时执行。</p>
+
+      <h3>排除特定组合</h3>
+
+      <p>某些组合可能没意义，比如 Node 18 不支持 macOS ARM：</p>
+
+      <pre><code>strategy:
+  matrix:
+    node-version: [18, 20, 22]
+    os: [ubuntu-latest, macos-latest, windows-latest]
+    exclude:
+      - node-version: 18
+        os: macos-latest   # Node 18 在 macOS ARM 上有兼容问题</code></pre>
+
+      <h3>包含额外组合</h3>
+
+      <p>在矩阵基础上追加特殊组合，比如加一个 Canary 版本的测试：</p>
+
+      <pre><code>strategy:
+  matrix:
+    node-version: [18, 20, 22]
+    include:
+      - node-version: 23
+        os: ubuntu-latest
+        experimental: true  # 自定义变量</code></pre>
+
+      <h3>失败策略</h3>
+
+      <pre><code>strategy:
+  fail-fast: false  # 某个组合失败不取消其他 Job
+  matrix:
+    node-version: [18, 20, 22]</code></pre>
+
+      <div class="tip-box">
+        <strong>推荐</strong>：CI 管道中始终设置 <code>fail-fast: false</code>。否则一个 Node 版本失败就会取消其他版本的测试，你无法一次运行看到所有失败。
+      </div>
+
+      <h2>三、可复用工作流：Caller / Callee 模式</h2>
+
+      <p>当多个仓库的 CI 流程相似，复制粘贴 YAML 不是长久之计。可复用工作流（Reusable Workflows）让你定义一次，到处调用。</p>
+
+      <h3>Callee：定义可复用工作流</h3>
+
+      <pre><code># .github/workflows/ci-template.yml
+name: Reusable CI
+
+on:
+  workflow_call:
+    inputs:
+      node-version:
+        required: true
+        type: string
+      run-lint:
+        required: false
+        type: boolean
+        default: true
+    secrets:
+      npm-token:
+        required: true
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ inputs.node-version }}
+          registry-url: https://registry.npmjs.org
+      - run: npm ci
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.npm-token }}
+      - if: ${{ inputs.run-lint }}
+        run: npm run lint
+      - run: npm test</code></pre>
+
+      <h3>Caller：调用可复用工作流</h3>
+
+      <pre><code># 仓库 A 的 .github/workflows/ci.yml
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  call-ci:
+    uses: my-org/ci-templates/.github/workflows/ci-template.yml@v1
+    with:
+      node-version: 20
+      run-lint: true
+    secrets:
+      npm-token: ${{ secrets.NPM_TOKEN }}</code></pre>
+
+      <h3>可复用工作流的关键限制</h3>
+
+      <table>
+        <tr>
+          <th>限制</th>
+          <th>说明</th>
+        </tr>
+        <tr>
+          <td>最多 4 层嵌套</td>
+          <td>可复用工作流调用可复用工作流，最多嵌套 4 层</td>
+        </tr>
+        <tr>
+          <td>不能使用 <code>workflow_dispatch</code> 触发</td>
+          <td>Caller 只能用 <code>workflow_call</code> 触发 Callee</td>
+        </tr>
+        <tr>
+          <td>Secrets 必须显式传递</td>
+          <td>Callee 不能直接访问 Caller 的 secrets</td>
+        </tr>
+        <tr>
+          <td>矩阵不能在 Caller 传入</td>
+          <td>矩阵策略定义在 Callee 内部，Caller 无法动态指定</td>
+        </tr>
+      </table>
+
+      <div class="tip-box">
+        <strong>组织级模板</strong>：在组织内创建一个 <code>.github</code> 仓库，把可复用工作流放在 <code>.github/workflows/</code> 下，所有仓库都能用 <code>uses: my-org/.github/.github/workflows/ci.yml@v1</code> 引用。
+      </div>
+
+      <h2>四、自定义 Action 开发</h2>
+
+      <p>社区 Action 不能覆盖所有场景？自己写。GitHub Actions 支持三种类型的自定义 Action：</p>
+
+      <h3>三种类型对比</h3>
+
+      <table>
+        <tr>
+          <th>类型</th>
+          <th>语言</th>
+          <th>执行方式</th>
+          <th>适用场景</th>
+        </tr>
+        <tr>
+          <td><strong>JavaScript</strong></td>
+          <td>JS/TS</td>
+          <td>直接在 Runner 上运行</td>
+          <td>通用、速度最快</td>
+        </tr>
+        <tr>
+          <td><strong>Docker</strong></td>
+          <td>任意语言</td>
+          <td>在容器中运行</td>
+          <td>需要特定环境/依赖</td>
+        </tr>
+        <tr>
+          <td><strong>Composite</strong></td>
+          <td>YAML + Shell</td>
+          <td>组合多个 Step</td>
+          <td>流程编排、无需编译</td>
+        </tr>
+      </table>
+
+      <h3>JavaScript Action 示例</h3>
+
+      <pre><code># action.yml
+name: 'PR Size Label'
+description: 'Label PRs based on changed lines count'
+inputs:
+  max-small-size:
+    description: 'Maximum lines for "small" label'
+    required: false
+    default: '50'
+outputs:
+  label:
+    description: 'The applied label'
+    value: ${{ steps.label.outputs.result }}
+runs:
+  using: 'node20'
+  main: 'dist/index.js'</code></pre>
+
+      <pre><code>// src/index.ts
+import * as core from '@actions/core';
+import * as github from '@actions/core';
+
+async function run() {
+  const maxSize = Number(core.getInput('max-small-size'));
+  const pr = github.context.payload.pull_request;
+  const changedLines = pr.additions + pr.deletions;
+
+  let label: string;
+  if (changedLines <= maxSize) {
+    label = 'size/small';
+  } else if (changedLines <= maxSize * 4) {
+    label = 'size/medium';
+  } else {
+    label = 'size/large';
+  }
+
+  core.setOutput('label', label);
+  console.log(`PR has ${changedLines} changed lines → ${label}`);
+}
+
+run().catch(err => core.setFailed(err.message));</code></pre>
+
+      <h3>Docker Action 示例</h3>
+
+      <pre><code># action.yml
+name: 'Lint Python'
+description: 'Run Python linters in a controlled environment'
+inputs:
+  path:
+    description: 'Path to lint'
+    required: false
+    default: '.'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.path }}</code></pre>
+
+      <pre><code># Dockerfile
+FROM python:3.12-slim
+RUN pip install ruff mypy black
+COPY entrypoint.sh /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]</code></pre>
+
+      <h3>Composite Action 示例</h3>
+
+      <pre><code># action.yml
+name: 'Setup Node Project'
+description: 'Checkout + Setup Node + Install Dependencies'
+inputs:
+  node-version:
+    required: false
+    default: '20'
+runs:
+  using: 'composite'
+  steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: ${{ inputs.node-version }}
+        cache: 'npm'
+    - run: npm ci
+      shell: bash</code></pre>
+
+      <div class="tip-box">
+        <strong>选择建议</strong>：90% 场景用 Composite Action（零编译、零依赖、最简单）。需要复杂逻辑用 JavaScript Action。需要特殊系统环境（如 Go 编译工具链）用 Docker Action。
+      </div>
+
+      <h2>五、环境管理与部署环境</h2>
+
+      <p>GitHub Actions 的 <strong>Environments</strong> 功能让你为不同部署阶段（staging、production）配置保护规则、审批流程和专属 Secrets。</p>
+
+      <h3>定义环境</h3>
+
+      <pre><code>jobs:
+  deploy-staging:
+    runs-on: ubuntu-latest
+    environment: staging    # 关联 staging 环境
+    steps:
+      - run: echo "Deploying to staging..."
+
+  deploy-production:
+    runs-on: ubuntu-latest
+    needs: deploy-staging
+    environment:            # 关联 production 环境
+      name: production
+      url: https://myapp.example.com   # 部署链接，显示在 PR 页面
+    steps:
+      - run: echo "Deploying to production..."</code></pre>
+
+      <h3>保护规则</h3>
+
+      <p>在仓库 Settings → Environments 中配置：</p>
+
+      <table>
+        <tr>
+          <th>保护规则</th>
+          <th>说明</th>
+        </tr>
+        <tr>
+          <td><strong>Required reviewers</strong></td>
+          <td>指定审批人，必须有人点 Approve 才能继续</td>
+        </tr>
+        <tr>
+          <td><strong>Wait timer</strong></td>
+          <td>审批后等待指定时间才执行（冷静期）</td>
+        </tr>
+        <tr>
+          <td><strong>Deployment branch</strong></td>
+          <td>限制只有特定分支能部署到该环境</td>
+        </tr>
+        <tr>
+          <td><strong>Environment secrets</strong></td>
+          <td>环境专属 Secret，只有该环境的 Job 能访问</td>
+        </tr>
+      </table>
+
+      <div class="warning-box">
+        <strong>环境 Secrets 的隔离</strong>：<code>production</code> 环境的 Secret 无法在 <code>staging</code> Job 中访问。这比把所有 Secret 放在仓库级别更安全——即使 staging 被入侵，生产密钥也不会泄露。
+      </div>
+
+      <h2>六、工件与缓存</h2>
+
+      <p>跨 Job 传递文件用 <strong>Artifact</strong>，加速构建用 <strong>Cache</strong>。两者目的不同，别搞混。</p>
+
+      <h3>Artifact：跨 Job 传递文件</h3>
+
+      <pre><code>jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: npm run build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+          retention-days: 5   # 保留 5 天
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+      - run: aws s3 sync dist/ s3://my-bucket/</code></pre>
+
+      <h3>Cache：加速依赖安装</h3>
+
+      <pre><code>steps:
+  - uses: actions/checkout@v4
+  - uses: actions/setup-node@v4
+    with:
+      node-version: 20
+      cache: npm          # 自动缓存 node_modules
+  - run: npm ci           # 命中缓存时秒级完成</code></pre>
+
+      <h3>手动缓存控制</h3>
+
+      <pre><code>steps:
+  - uses: actions/cache@v4
+    with:
+      path: |
+        ~/.npm
+        ~/.cache/pip
+      key: deps-${{ runner.os }}-${{ hashFiles('**/package-lock.json', '**/requirements.txt') }}
+      restore-keys: |
+        deps-${{ runner.os }}-   # 部分匹配回退</code></pre>
+
+      <h3>Artifact vs Cache 对比</h3>
+
+      <table>
+        <tr>
+          <th>特性</th>
+          <th>Artifact</th>
+          <th>Cache</th>
+        </tr>
+        <tr>
+          <td>目的</td>
+          <td>跨 Job 传递构建产物</td>
+          <td>加速依赖安装</td>
+        </tr>
+        <tr>
+          <td>作用域</td>
+          <td>同一 Workflow Run</td>
+          <td>跨 Workflow Run、跨分支</td>
+        </tr>
+        <tr>
+          <td>可下载</td>
+          <td>是（UI 手动下载）</td>
+          <td>否</td>
+        </tr>
+        <tr>
+          <td>自动清理</td>
+          <td>按 retention-days</td>
+          <td>7 天未访问自动清理</td>
+        </tr>
+        <tr>
+          <td>典型场景</td>
+          <td>build → deploy 传递 dist/</td>
+          <td>缓存 node_modules、pip、Maven</td>
+        </tr>
+      </table>
+
+      <div class="tip-box">
+        <strong>缓存键设计</strong>：用 <code>hashFiles</code> 基于锁文件生成缓存键，锁文件不变就命中缓存。同时提供 <code>restore-keys</code> 前缀匹配作为回退，避免锁文件微调导致完全 miss。
+      </div>
+
+      <h2>七、OIDC 与云服务集成</h2>
+
+      <p>传统方式：把 AWS Access Key、GCP Service Account Key 存为 GitHub Secret——密钥轮换麻烦、泄露风险高。OIDC（OpenID Connect）让 GitHub Actions 直接向云服务商证明身份，<strong>无需存储任何长期密钥</strong>。</p>
+
+      <h3>工作原理</h3>
+
+      <pre><code>1. GitHub 为 Workflow Run 生成短期 JWT Token
+2. Action 将 JWT 发送给云服务商的 STS 接口
+3. 云服务商验证 JWT 签名和 Claims
+4. 返回临时凭证（有效期通常 1 小时）
+5. Action 用临时凭证操作云资源</code></pre>
+
+      <h3>AWS 集成示例</h3>
+
+      <pre><code>jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write    # 必须声明，允许请求 OIDC Token
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::123456789012:role/GitHubActionsDeploy
+          aws-region: ap-east-1
+      - run: aws s3 sync dist/ s3://my-bucket/</code></pre>
+
+      <h3>AWS 侧 Trust Policy 配置</h3>
+
+      <pre><code>{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Federated": "arn:aws:iam::123456789012:oidc-provider/token.actions.githubusercontent.com"
+      },
+      "Action": "sts:AssumeRoleWithWebIdentity",
+      "Condition": {
+        "StringEquals": {
+          "token.actions.githubusercontent.com:aud": "sts.amazonaws.com"
+        },
+        "StringLike": {
+          "token.actions.githubusercontent.com:sub": "repo:my-org/my-repo:*"
+        }
+      }
+    }
+  ]
+}</code></pre>
+
+      <h3>GCP 集成示例</h3>
+
+      <pre><code>jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: projects/123/locations/global/workloadIdentityPools/github/providers/my-provider
+          service_account: github-actions@my-project.iam.gserviceaccount.com
+      - uses: google-github-actions/deploy-cloudrun@v2
+        with:
+          service: my-service
+          region: asia-east1</code></pre>
+
+      <h3>Azure 集成示例</h3>
+
+      <pre><code>jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      - run: az webapp deploy --resource-group myRG --name myApp --src-path dist.zip</code></pre>
+
+      <div class="tip-box">
+        <strong>OIDC 的核心优势</strong>：零长期密钥、自动过期、细粒度控制（可限制只有特定仓库/分支/环境才能获取凭证）。这是云部署的最佳实践，GitHub 官方也推荐替代传统 Secret 方式。
+      </div>
+
+      <h2>八、工作流安全性</h2>
+
+      <p>CI/CD 管道是攻击面的重要一环。一次 Supply Chain 攻击可能比直接入侵服务器更致命。</p>
+
+      <h3>1. 最小权限原则</h3>
+
+      <pre><code>jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read        # 只读代码
+      packages: write       # 写入包注册表
+      # 不给 id-token: write（不需要 OIDC 就不给）
+      # 不给 actions: write（不需要修改 Workflow 就不给）</code></pre>
+
+      <div class="warning-box">
+        <strong>默认权限问题</strong>：如果不显式声明 <code>permissions</code>，GitHub 默认给 <code>write</code> 权限。强烈建议在 Workflow 顶层设置 <code>permissions: read-all</code>，再按需放开。
+      </div>
+
+      <pre><code># 顶层默认最小权限
+permissions: read-all
+
+jobs:
+  deploy:
+    permissions:
+      contents: read
+      id-token: write       # 按需放开</code></pre>
+
+      <h3>2. 第三方 Action 审计</h3>
+
+      <pre><code># ❌ 不安全的引用：使用可变标签，可能被篡改
+- uses: someone/action@main
+
+# ✅ 安全的引用：使用 SHA 哈希，不可变
+- uses: someone/action@a8c5c03e8f4c1a4e89e6e9b6e4d4a4c8b7d6e5f4</code></pre>
+
+      <h3>3. Pin 住 Action 版本</h3>
+
+      <table>
+        <tr>
+          <th>引用方式</th>
+          <th>安全性</th>
+          <th>可读性</th>
+          <th>推荐度</th>
+        </tr>
+        <tr>
+          <td><code>@main</code></td>
+          <td>❌ 可变，可能被注入恶意代码</td>
+          <td>高</td>
+          <td>不推荐</td>
+        </tr>
+        <tr>
+          <td><code>@v3</code></td>
+          <td>⚠️ 可变，tag 可被强制更新</td>
+          <td>高</td>
+          <td>一般</td>
+        </tr>
+        <tr>
+          <td><code>@SHA</code></td>
+          <td>✅ 不可变，代码锁定</td>
+          <td>低</td>
+          <td>最安全</td>
+        </tr>
+        <tr>
+          <td><code>@v3</code> + comment SHA</td>
+          <td>✅ 兼顾可读与安全</td>
+          <td>中</td>
+          <td>推荐</td>
+        </tr>
+      </table>
+
+      <pre><code># 推荐：tag + SHA 注释
+- uses: actions/checkout@v4             # v4.2.2
+  # pin: actions/checkout@a8c5c03e8f4c1a4e89e6e9b6e4d4a4c8b7d6e5f4</code></pre>
+
+      <h3>4. 防止 Script Injection</h3>
+
+      <pre><code># ❌ 危险：直接拼接用户输入
+- run: echo "Comment: ${{ github.event.issue.title }}"
+
+# ✅ 安全：使用环境变量传递
+- run: echo "Comment: $TITLE"
+  env:
+    TITLE: ${{ github.event.issue.title }}</code></pre>
+
+      <div class="warning-box">
+        <strong>Script Injection 原理</strong>：<code>${{ }}</code> 表达式在 YAML 解析阶段被直接替换。如果用户在 Issue 标题中写 <code>; rm -rf /</code>，它会直接拼进 shell 命令执行。用 <code>env</code> 传递则由 shell 处理，不会执行注入代码。
+      </div>
+
+      <h3>5. 限制 Workflow 触发源</h3>
+
+      <pre><code># 只允许特定人员触发部署
+jobs:
+  deploy:
+    if: github.actor == 'zzdbilly' || contains(fromJSON('["maintainer1", "maintainer2"]'), github.actor)</code></pre>
+
+      <h2>九、性能优化</h2>
+
+      <p>CI 跑得慢，开发体验就差。以下是系统性的优化策略。</p>
+
+      <h3>1. 并发控制：避免重复运行</h3>
+
+      <pre><code># 同一分支的新推送取消旧的运行
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - run: npm test</code></pre>
+
+      <p>当你快速连续推送 3 个 commit，只有最后一次运行的 Workflow 会完整执行，前两次自动取消——节省 Runner 资源，结果也更快出来。</p>
+
+      <h3>2. Job 并行与依赖</h3>
+
+      <pre><code>jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - run: npm run lint
+
+  typecheck:
+    runs-on: ubuntu-latest
+    steps:
+      - run: npm run typecheck
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - run: npm test
+
+  build:
+    needs: [lint, typecheck, test]   # 三个 Job 全部通过才执行
+    runs-on: ubuntu-latest
+    steps:
+      - run: npm run build
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - run: npm run deploy</code></pre>
+
+      <pre><code>执行流程：
+
+  lint ─────┐
+            ├─→ build → deploy
+  typecheck ┤
+            │
+  test ─────┘
+
+  前三个并行，build 等全部完成，deploy 等 build 完成</code></pre>
+
+      <h3>3. 条件执行：跳过不必要的步骤</h3>
+
+      <pre><code>jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # 路径过滤：只有 src/ 变更才跑测试
+      - uses: dorny/paths-filter@v3
+        id: changes
+        with:
+          filters: |
+            src:
+              - 'src/**'
+
+      - if: steps.changes.outputs.src == 'true'
+        run: npm test
+
+  # 只在 tag 推送时构建发布
+  release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    steps:
+      - run: npm run release</code></pre>
+
+      <h3>4. 缓存依赖安装</h3>
+
+      <pre><code># setup-node 自带缓存
+- uses: actions/setup-node@v4
+  with:
+    node-version: 20
+    cache: npm           # 自动基于 lock 文件缓存
+
+# setup-python 自带缓存
+- uses: actions/setup-python@v5
+  with:
+    python-version: '3.12'
+    cache: pip
+
+# setup-go 自带缓存
+- uses: actions/setup-go@v5
+  with:
+    go-version: '1.22'
+    cache: true</code></pre>
+
+      <h3>5. 自托管 Runner</h3>
+
+      <p>GitHub-hosted Runner 有局限：每次都是全新环境、网络受限、免费额度有限。自托管 Runner 适合：</p>
+
+      <ul>
+        <li>需要 GPU 的机器学习任务</li>
+        <li>需要访问内网资源</li>
+        <li>构建时间长的项目（自托管 Runner 不计费）</li>
+        <li>需要特定硬件/软件环境</li>
+      </ul>
+
+      <pre><code># 安装自托管 Runner
+mkdir actions-runner && cd actions-runner
+curl -o actions-runner-linux-x64-2.321.0.tar.gz -L \
+  https://github.com/actions/runner/releases/download/v2.321.0/actions-runner-linux-x64-2.321.0.tar.gz
+tar xzf actions-runner-linux-x64-2.321.0.tar.gz
+./config.sh --url https://github.com/OWNER/REPO --token TOKEN
+./run.sh</code></pre>
+
+      <div class="warning-box">
+        <strong>自托管 Runner 安全风险</strong>：公共仓库不建议用自托管 Runner，因为任何人都可以提交 PR 触发 Workflow，在 Runner 上执行任意代码。私有仓库或配合 <code>environment</code> 保护规则使用更安全。
+      </div>
+
+      <h3>性能优化检查清单</h3>
+
+      <table>
+        <tr>
+          <th>优化项</th>
+          <th>预期提速</th>
+          <th>难度</th>
+        </tr>
+        <tr>
+          <td>并发控制 <code>concurrency</code></td>
+          <td>避免浪费，间接提速</td>
+          <td>⭐</td>
+        </tr>
+        <tr>
+          <td>依赖缓存</td>
+          <td>30-60 秒</td>
+          <td>⭐</td>
+        </tr>
+        <tr>
+          <td>Job 并行化</td>
+          <td>线性→并行，显著</td>
+          <td>⭐⭐</td>
+        </tr>
+        <tr>
+          <td>条件执行 / 路径过滤</td>
+          <td>跳过无用 Job</td>
+          <td>⭐⭐</td>
+        </tr>
+        <tr>
+          <td>自托管 Runner</td>
+          <td>消除冷启动、不计费</td>
+          <td>⭐⭐⭐</td>
+        </tr>
+      </table>
+
+      <h2>十、速查表</h2>
+
+      <table>
+        <tr>
+          <th>场景</th>
+          <th>推荐方案</th>
+          <th>关键配置</th>
+        </tr>
+        <tr>
+          <td>多版本/多平台测试</td>
+          <td><code>strategy.matrix</code></td>
+          <td><code>fail-fast: false</code></td>
+        </tr>
+        <tr>
+          <td>多仓库共享 CI</td>
+          <td>可复用工作流</td>
+          <td><code>workflow_call</code> + <code>uses:</code></td>
+        </tr>
+        <tr>
+          <td>流程编排无编译</td>
+          <td>Composite Action</td>
+          <td><code>using: composite</code></td>
+        </tr>
+        <tr>
+          <td>生产部署保护</td>
+          <td>Environments</td>
+          <td>审批人 + 环境级 Secret</td>
+        </tr>
+        <tr>
+          <td>跨 Job 传递产物</td>
+          <td><code>upload/download-artifact</code></td>
+          <td><code>retention-days</code></td>
+        </tr>
+        <tr>
+          <td>加速依赖安装</td>
+          <td><code>actions/cache</code> 或内置缓存</td>
+          <td><code>hashFiles</code> 生成键</td>
+        </tr>
+        <tr>
+          <td>云服务免密钥认证</td>
+          <td>OIDC</td>
+          <td><code>permissions: id-token: write</code></td>
+        </tr>
+        <tr>
+          <td>第三方 Action 安全</td>
+          <td>Pin SHA + 注释 tag</td>
+          <td><code>@SHA</code> + <code># pin: @v3</code></td>
+        </tr>
+        <tr>
+          <td>防注入攻击</td>
+          <td><code>env</code> 传递变量</td>
+          <td>避免 <code>${{ }}</code> 直接拼接</td>
+        </tr>
+        <tr>
+          <td>避免重复运行</td>
+          <td><code>concurrency</code></td>
+          <td><code>cancel-in-progress: true</code></td>
+        </tr>
+        <tr>
+          <td>私有仓库高性能</td>
+          <td>自托管 Runner</td>
+          <td>⚠️ 公共仓库勿用</td>
+        </tr>
+      </table>
+
+      <div class="tip-box">
+        <strong>一句话总结</strong>：矩阵构建解决多维度测试，可复用工作流消除重复，OIDC 消除密钥风险，最小权限 + SHA Pin 消除供应链攻击，并发控制 + 缓存消除等待时间。把这五件事做好，你的 CI/CD 管道就超过了 90% 的项目。
+      </div>
+
+      <div class="post-tags">
+        <span>DevOps</span>
+        <span>GitHub Actions</span>
+        <span>CI/CD</span>
+        <span>OIDC</span>
+        <span>自动化</span>
+      </div>
+    </article>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <p>&copy; 2026 张小猛 - loczb</p>
+    </div>
+  </footer>
+
+  <script>
+    // Scroll progress
+    const scrollProgress = document.querySelector('.scroll-progress');
+    window.addEventListener('scroll', () => {
+      const scrollTop = document.documentElement.scrollTop;
+      const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = (scrollTop / scrollHeight) * 100;
+      scrollProgress.style.width = progress + '%';
+    });
+
+    // Theme toggle
+    const themeToggle = document.querySelector('.theme-toggle');
+    themeToggle?.addEventListener('click', () => {
+      const html = document.documentElement;
+      const current = html.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+    });
+
+    // Mobile nav
+    const navToggle = document.querySelector('.nav-toggle');
+    const navLinks = document.querySelector('.nav-links');
+    navToggle?.addEventListener('click', () => {
+      navLinks.classList.toggle('active');
+    });
+  </script>
+</body>
+</html>
