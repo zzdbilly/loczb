@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="RAG 检索增强生成完整入门指南：文档分块策略、嵌入模型选型、向量数据库对比、LangChain 实现、HyDE/RAG-Fusion 高级优化与 RAGAS 评估框架">
+  <meta name="keywords" content="RAG, 检索增强生成, LLM, 向量数据库, Embedding, LangChain, HyDE, RAG-Fusion, Reranker, RAGAS">
+  <meta name="author" content="张小猛">
+  <meta name="publish-date" content="2026-06-27">
+  <title>RAG 检索增强生成入门：从理念到落地 | 张小猛 - loczb</title>
+  <link rel="canonical" href="https://709527.xyz/blog/posts/rag-introduction.html">
+  <meta name="robots" content="index, follow">
+  
+  <!-- Open Graph -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://709527.xyz/blog/posts/rag-introduction.html">
+  <meta property="og:title" content="RAG 检索增强生成入门：从理念到落地 | 张小猛 - loczb">
+  <meta property="og:description" content="RAG 检索增强生成完整入门指南：文档分块策略、嵌入模型选型、向量数据库对比、LangChain 实现、HyDE/RAG-Fusion 高级优化与 RAGAS 评估框架">
+  <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="article:author" content="张小猛">
+  <meta property="article:published_time" content="2026-06-27">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="RAG 检索增强生成入门：从理念到落地 | 张小猛 - loczb">
+  <meta name="twitter:description" content="RAG 检索增强生成完整入门指南：文档分块策略、嵌入模型选型、向量数据库对比、LangChain 实现、HyDE/RAG-Fusion 高级优化与 RAGAS 评估框架">
+  <meta name="twitter:image" content="https://709527.xyz/assets/images/og-image.png">
+
+  <link rel="icon" type="image/x-icon" href="../../assets/images/favicon.ico">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
+  <link rel="icon" type="image/png" sizes="16x16" href="../../assets/images/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="../../assets/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="48x48" href="../../assets/images/favicon-48x48.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="../../assets/images/apple-touch-icon.png">
+  <link rel="manifest" href="../../site.webmanifest">
+  <meta name="theme-color" content="#3b82f6">
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <style>
+    .post-content { max-width: 760px; margin: 0 auto; line-height: 1.85; }
+    .post-content h1 { font-size: 2.4rem; margin: 2rem 0 1rem; }
+    .post-content h2 { font-size: 1.7rem; margin: 2.5rem 0 1rem; color: var(--color-accent-primary); border-bottom: 1px solid var(--color-border); padding-bottom: 0.5rem; }
+    .post-content h3 { font-size: 1.3rem; margin: 1.8rem 0 0.8rem; }
+    .post-content pre { background: var(--color-bg-tertiary); padding: 1.2rem; border-radius: 8px; overflow-x: auto; margin: 1.2rem 0; font-size: 0.9rem; }
+    .post-content code { background: var(--color-bg-tertiary); padding: 0.15rem 0.4rem; border-radius: 4px; font-family: monospace; font-size: 0.9em; }
+    .post-meta { color: var(--color-text-secondary); font-size: 0.9rem; margin-bottom: 2rem; }
+    .post-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 3rem; }
+    .post-tags span { background: var(--color-bg-tertiary); padding: 0.3rem 0.8rem; border-radius: 9999px; font-size: 0.85rem; color: var(--color-accent-primary); }
+    .tip-box { background: rgba(34, 197, 94, 0.1); border-left: 3px solid #22c55e; padding: 1rem 1.2rem; margin: 1.5rem 0; border-radius: 0 6px 6px 0; }
+    .warning-box { background: rgba(234, 179, 8, 0.1); border-left: 3px solid #eab308; padding: 1rem 1.2rem; margin: 1.5rem 0; border-radius: 0 6px 6px 0; }
+    table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.95rem; }
+    th, td { border: 1px solid var(--color-border); padding: 0.7rem; text-align: left; }
+    th { background: var(--color-bg-tertiary); font-weight: 600; }
+  </style>
+  <!-- Preconnect to Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500;600&display=swap" media="print" onload="this.media='all'">
+  <noscript>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500;600&display=swap">
+  </noscript>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../../index.html" class="nav-logo">loc<span>zb</span></a>
+      <button class="nav-toggle" aria-label="打开菜单"><span></span><span></span><span></span></button>
+      <div class="nav-overlay"></div>
+      <ul class="nav-links">
+        <li><a href="../../index.html" class="nav-link">首页</a></li>
+        <li><a href="../../projects/index.html" class="nav-link">项目</a></li>
+        <li><a href="../index.html" class="nav-link active">博客</a></li>
+        <li><a href="../../about/index.html" class="nav-link">关于</a></li>
+      </ul>
+      <button class="theme-toggle" aria-label="切换主题">
+        <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line></svg>
+        <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+      </button>
+    </div>
+  </nav>
+<div class="scroll-progress"></div>
+
+  <main>
+    <article class="post-content" style="padding: calc(64px + 4rem) 1rem 4rem;">
+      <a href="../index.html" style="display: inline-flex; align-items: center; gap: 0.5rem; color: var(--color-text-secondary); text-decoration: none; margin-bottom: 2rem;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        返回博客
+      </a>
+      
+      <h1>RAG 检索增强生成入门：从理念到落地</h1>
+      
+      <div class="post-meta">2026年6月27日 · 阅读时间 18 分钟</div>
+
+      <p>大语言模型（LLM）能力很强，但有两个硬伤：知识截止——训练数据有截止日期，无法回答训练之后的事；幻觉问题——不知道的也敢编，一本正经地胡说八道。RAG（Retrieval-Augmented Generation，检索增强生成）就是解决这两个问题的主流方案。</p>
+
+      <p>本文从 RAG 的核心理念出发，覆盖架构设计、分块策略、模型选型、向量数据库对比、高级检索技巧、框架实现、评估监控到未来演进，力求一篇讲透。</p>
+
+      <div class="tip-box">
+        <strong>适合谁</strong>：了解 LLM 基本概念，想系统学习 RAG 的开发者。不要求熟悉向量数据库或 LangChain，但有一定的 Python 基础会更容易跟上代码示例。
+      </div>
+
+      <h2>一、什么是 RAG：解决 LLM 的两个硬伤</h2>
+
+      <p>RAG 的核心思路极其简单：<strong>让 LLM 在回答问题之前，先去查资料</strong>。</p>
+
+      <p>类比人类：考试时闭卷答题 vs 开卷答题。RAG 就是给 LLM "开卷"——先从知识库中检索相关内容，再让 LLM 基于检索到的内容生成回答。</p>
+
+      <h3>LLM 的两大痛点</h3>
+
+      <table>
+        <tr>
+          <th>痛点</th>
+          <th>表现</th>
+          <th>RAG 如何解决</th>
+        </tr>
+        <tr>
+          <td>知识截止</td>
+          <td>GPT-4 的训练数据截止到 2024 年，问 2025 年的事就答不了</td>
+          <td>从实时更新的外部知识库检索最新信息</td>
+        </tr>
+        <tr>
+          <td>幻觉（Hallucination）</td>
+          <td>自信地编造不存在的事实、论文、链接</td>
+          <td>基于检索到的事实生成，答案有据可查</td>
+        </tr>
+      </table>
+
+      <h3>RAG vs 微调 vs 预训练</h3>
+
+      <table>
+        <tr>
+          <th>维度</th>
+          <th>RAG</th>
+          <th>微调（Fine-tuning）</th>
+          <th>预训练（Pre-training）</th>
+        </tr>
+        <tr>
+          <td>知识更新</td>
+          <td>实时（更新知识库即可）</td>
+          <td>需要重新训练</td>
+          <td>需要重新训练</td>
+        </tr>
+        <tr>
+          <td>成本</td>
+          <td>低（检索 + 推理）</td>
+          <td>中（训练成本）</td>
+          <td>极高（大规模算力）</td>
+        </tr>
+        <tr>
+          <td>可解释性</td>
+          <td>高（可追溯检索来源）</td>
+          <td>低（知识隐含在权重中）</td>
+          <td>低</td>
+        </tr>
+        <tr>
+          <td>适用场景</td>
+          <td>知识密集型问答</td>
+          <td>风格/格式适配</td>
+          <td>基础能力构建</td>
+        </tr>
+      </table>
+
+      <div class="tip-box">
+        <strong>最佳实践</strong>：RAG 和微调不互斥。RAG 解决"知道什么"，微调解决"怎么回答"。生产环境往往是 RAG + 微调的组合拳。
+      </div>
+
+      <h2>二、RAG 经典架构：两条 Pipeline</h2>
+
+      <p>RAG 系统由两条 Pipeline 组成：<strong>Indexing Pipeline</strong>（离线建索引）和 <strong>Retrieval Pipeline</strong>（在线检索生成）。</p>
+
+      <h3>Indexing Pipeline（离线）</h3>
+
+      <pre><code>原始文档
+  → 文档解析（PDF/HTML/Markdown → 纯文本）
+  → 文档分块（Chunking）
+  → 嵌入向量化（Embedding）
+  → 存入向量数据库</code></pre>
+
+      <p>这是数据准备的阶段，通常在用户查询之前完成。当知识库更新时，只需重新跑 Indexing Pipeline 即可。</p>
+
+      <h3>Retrieval Pipeline（在线）</h3>
+
+      <pre><code>用户查询（Query）
+  → Query Embedding
+  → 向量相似度搜索（从向量库检索 Top-K）
+  → 上下文组装（Query + 检索结果 → Prompt）
+  → LLM 生成回答</code></pre>
+
+      <p>这是用户实际交互的阶段，延迟是关键指标。</p>
+
+      <h3>整体架构图</h3>
+
+      <pre><code>┌─────────────────────────────────────────────────────┐
+│                Indexing Pipeline（离线）              │
+│                                                     │
+│  文档 ──→ 解析 ──→ 分块 ──→ Embedding ──→ 向量库    │
+│                                              │      │
+└──────────────────────────────────────────────┼──────┘
+                                               │
+                                               ▼
+┌─────────────────────────────────────────────────────┐
+│              Retrieval Pipeline（在线）               │
+│                                                     │
+│  Query ──→ Embedding ──→ 相似度搜索 ──→ LLM ──→ 回答│
+│                           ↑                         │
+│                     Top-K 文档块                     │
+└─────────────────────────────────────────────────────┘</code></pre>
+
+      <div class="warning-box">
+        <strong>常见误区</strong>：很多人把 RAG 等同于"向量搜索 + LLM"。实际上，Indexing Pipeline 的质量（文档解析、分块策略）决定了整个系统的上限。垃圾进，垃圾出。
+      </div>
+
+      <h2>三、文档分块策略</h2>
+
+      <p>文档分块是 RAG 系统中最被低估但影响最大的环节。分块太大，检索不精准（噪声多）；分块太小，上下文丢失（语义不完整）。</p>
+
+      <h3>1. 固定长度分块（Fixed-Size Chunking）</h3>
+
+      <p>最简单的策略：按字符数或 Token 数切割，可设置重叠（Overlap）以减少语义截断。</p>
+
+      <pre><code># LangChain 实现
+from langchain.text_splitter import CharacterTextSplitter
+
+splitter = CharacterTextSplitter(
+    chunk_size=500,      # 每块 500 字符
+    chunk_overlap=50,    # 相邻块重叠 50 字符
+    separator="\n"       # 优先在换行处切割
+)
+
+chunks = splitter.split_text(document_text)</code></pre>
+
+      <p>优点：实现简单、可预测。缺点：可能在句子中间截断，破坏语义完整性。</p>
+
+      <h3>2. 递归分块（Recursive Character Chunking）</h3>
+
+      <p>LangChain 的默认推荐策略。按优先级尝试多个分隔符（<code>\n\n</code> → <code>\n</code> → <code>。 </code> → <code> </code>），逐级降级。</p>
+
+      <pre><code>from langchain.text_splitter import RecursiveCharacterTextSplitter
+
+splitter = RecursiveCharacterTextSplitter(
+    chunk_size=500,
+    chunk_overlap=50,
+    separators=["\n\n", "\n", "。", "！", "？", " ", ""]
+)
+
+chunks = splitter.split_text(document_text)</code></pre>
+
+      <p>优点：尽量保持段落/句子完整性。缺点：分块大小不够均匀。</p>
+
+      <h3>3. 语义分块（Semantic Chunking）</h3>
+
+      <p>基于嵌入向量的语义相似度来决定分界点——当相邻句子的语义相似度低于阈值时，就在此处切割。</p>
+
+      <pre><code>from langchain_experimental.text_splitter import SemanticChunker
+from langchain_openai import OpenAIEmbeddings
+
+splitter = SemanticChunker(
+    OpenAIEmbeddings(),
+    breakpoint_threshold_type="percentile",  # 按百分位阈值
+    breakpoint_threshold_amount=75           # 75th 百分位
+)
+
+chunks = splitter.split_text(document_text)</code></pre>
+
+      <p>优点：语义边界最自然。缺点：计算成本高（需要先对每个句子做嵌入），分块大小不可控。</p>
+
+      <h3>三种分块策略对比</h3>
+
+      <table>
+        <tr>
+          <th>维度</th>
+          <th>固定长度</th>
+          <th>递归分块</th>
+          <th>语义分块</th>
+        </tr>
+        <tr>
+          <td>实现复杂度</td>
+          <td>⭐ 低</td>
+          <td>⭐⭐ 中</td>
+          <td>⭐⭐⭐ 高</td>
+        </tr>
+        <tr>
+          <td>分块大小均匀</td>
+          <td>✅ 均匀</td>
+          <td>⚠️ 较均匀</td>
+          <td>❌ 不均匀</td>
+        </tr>
+        <tr>
+          <td>语义完整性</td>
+          <td>❌ 可能截断</td>
+          <td>⚠️ 较好</td>
+          <td>✅ 最好</td>
+        </tr>
+        <tr>
+          <td>计算成本</td>
+          <td>低</td>
+          <td>低</td>
+          <td>高（需要嵌入）</td>
+        </tr>
+        <tr>
+          <td>推荐场景</td>
+          <td>快速原型 / 结构化文档</td>
+          <td>✅ 通用首选</td>
+          <td>高精度要求 / 非结构化文档</td>
+        </tr>
+      </table>
+
+      <div class="tip-box">
+        <strong>实操建议</strong>：起步用 RecursiveCharacterTextSplitter，chunk_size=500、chunk_overlap=50。根据检索效果调优：召回率低 → 加大 chunk_size；噪声多 → 减小 chunk_size。语义分块是锦上添花，不是必需品。
+      </div>
+
+      <h2>四、嵌入模型选型</h2>
+
+      <p>嵌入模型（Embedding Model）将文本转换为固定维度的向量，是检索质量的基石。选错模型，后面所有优化都是徒劳。</p>
+
+      <h3>主流嵌入模型对比</h3>
+
+      <table>
+        <tr>
+          <th>模型</th>
+          <th>维度</th>
+          <th>MTEB 均值</th>
+          <th>中文支持</th>
+          <th>开源</th>
+          <th>特点</th>
+        </tr>
+        <tr>
+          <td><strong>BGE-large-zh-v1.5</strong></td>
+          <td>1024</td>
+          <td>~64</td>
+          <td>✅ 优秀</td>
+          <td>✅</td>
+          <td>中文场景首选，智源出品</td>
+        </tr>
+        <tr>
+          <td><strong>BGE-M3</strong></td>
+          <td>1024</td>
+          <td>~67</td>
+          <td>✅ 多语言</td>
+          <td>✅</td>
+          <td>多语言多粒度多功能，一站式</td>
+        </tr>
+        <tr>
+          <td><strong>M3E-large</strong></td>
+          <td>1024</td>
+          <td>~62</td>
+          <td>✅ 优秀</td>
+          <td>✅</td>
+          <td>中文领域微调效果好</td>
+        </tr>
+        <tr>
+          <td><strong>text2vec-large-chinese</strong></td>
+          <td>1024</td>
+          <td>~58</td>
+          <td>✅</td>
+          <td>✅</td>
+          <td>轻量级，适合快速验证</td>
+        </tr>
+        <tr>
+          <td><strong>OpenAI text-embedding-3-large</strong></td>
+          <td>3072</td>
+          <td>~68</td>
+          <td>⚠️ 可用</td>
+          <td>❌</td>
+          <td>效果最好，但需 API 调用</td>
+        </tr>
+        <tr>
+          <td><strong>OpenAI text-embedding-3-small</strong></td>
+          <td>1536</td>
+          <td>~65</td>
+          <td>⚠️ 可用</td>
+          <td>❌</td>
+          <td>性价比高，英文为主</td>
+        </tr>
+      </table>
+
+      <h3>选型决策</h3>
+
+      <pre><code>主要语言是中文？
+├── 是 → 需要私有化部署？
+│   ├── 是 → BGE-large-zh-v1.5（中文首选）或 BGE-M3（多语言）
+│   └── 否 → OpenAI text-embedding-3-large（效果最好）
+└── 否 → 需要私有化部署？
+    ├── 是 → BGE-M3 或 sentence-transformers 系列
+    └── 否 → OpenAI text-embedding-3-small（性价比）或 large（效果）</code></pre>
+
+      <div class="warning-box">
+        <strong>避坑</strong>：不要混用不同模型的嵌入向量。查询向量和文档向量必须来自同一模型（或兼容模型），否则相似度计算无意义。BGE-M3 支持稠密+稀疏+多粒度三种检索模式，是当前多语言场景的综合最优选。
+      </div>
+
+      <h2>五、向量数据库对比</h2>
+
+      <p>向量数据库存储嵌入向量并支持高效相似度搜索，是 RAG 的基础设施。</p>
+
+      <h3>主流向量数据库对比</h3>
+
+      <table>
+        <tr>
+          <th>数据库</th>
+          <th>类型</th>
+          <th>开源</th>
+          <th>规模</th>
+          <th>混合检索</th>
+          <th>托管服务</th>
+          <th>适合场景</th>
+        </tr>
+        <tr>
+          <td><strong>Milvus</strong></td>
+          <td>专用向量库</td>
+          <td>✅</td>
+          <td>十亿级</td>
+          <td>✅（2.4+）</td>
+          <td>Zilliz Cloud</td>
+          <td>大规模生产环境</td>
+        </tr>
+        <tr>
+          <td><strong>Pinecone</strong></td>
+          <td>全托管服务</td>
+          <td>❌</td>
+          <td>十亿级</td>
+          <td>✅</td>
+          <td>本身就是</td>
+          <td>不想运维、快速上线</td>
+        </tr>
+        <tr>
+          <td><strong>Qdrant</strong></td>
+          <td>专用向量库</td>
+          <td>✅</td>
+          <td>亿级</td>
+          <td>✅</td>
+          <td>Qdrant Cloud</td>
+          <td>Rust 高性能、过滤友好</td>
+        </tr>
+        <tr>
+          <td><strong>Chroma</strong></td>
+          <td>轻量级向量库</td>
+          <td>✅</td>
+          <td>百万级</td>
+          <td>⚠️ 有限</td>
+          <td>❌</td>
+          <td>原型开发、小规模应用</td>
+        </tr>
+        <tr>
+          <td><strong>FAISS</strong></td>
+          <td>向量索引库</td>
+          <td>✅</td>
+          <td>十亿级</td>
+          <td>❌</td>
+          <td>❌</td>
+          <td>纯相似度搜索、不需 CRUD</td>
+        </tr>
+      </table>
+
+      <h3>选型建议</h3>
+
+      <pre><code>数据规模 & 使用场景：
+├── 学习 / 原型验证 → Chroma（最简单，pip install 即用）
+├── 中小规模生产（<1000 万向量）→ Qdrant（性能好、过滤强、易部署）
+├── 大规模生产（>1 亿向量）→ Milvus（分布式、水平扩展）
+├── 不想运维 → Pinecone（全托管，按量付费）
+└── 纯批处理 / 不需在线 CRUD → FAISS（Meta 出品，极致性能）</code></pre>
+
+      <div class="tip-box">
+        <strong>生产建议</strong>：开发阶段用 Chroma 或 FAISS 快速验证，上线前切换到 Milvus 或 Qdrant。确保代码通过 LangChain/LlamaIndex 的抽象层访问向量库，这样切换数据库只需要改配置，不用改代码。
+      </div>
+
+      <h2>六、检索增强策略</h2>
+
+      <p>有了基础的向量检索，下一步是提升检索质量。以下是四种从简单到高级的检索策略。</p>
+
+      <h3>1. 简单检索（Naive Retrieval）</h3>
+
+      <p>最基础的方案：Query → Embedding → Top-K 相似度搜索。简单但粗糙，问题在于用户提问的方式和文档表述的方式可能差异很大。</p>
+
+      <pre><code># LangChain 简单检索
+from langchain_openai import OpenAIEmbeddings
+from langchain_community.vectorstores import Chroma
+
+vectorstore = Chroma.from_documents(docs, OpenAIEmbeddings())
+retriever = vectorstore.as_retriever(search_kwargs={"k": 4})
+
+results = retriever.invoke("什么是 RAG？")</code></pre>
+
+      <h3>2. HyDE（Hypothetical Document Embedding）</h3>
+
+      <p>核心思想：先让 LLM 生成一个"假设性回答"，再用这个回答去检索。假设性回答的表述方式更接近文档，从而弥合 Query 与文档之间的语义鸿沟。</p>
+
+      <pre><code># HyDE 流程
+# 步骤1：LLM 生成假设性回答
+query = "如何优化 RAG 的检索精度？"
+hypothetical_answer = llm.invoke(
+    f"请回答以下问题，即使你不确定也给出详细回答：\n{query}"
+)
+
+# 步骤2：用假设性回答（而非原始 Query）去检索
+results = vectorstore.similarity_search(hypothetical_answer, k=4)
+
+# LangChain 内置实现
+from langchain.retrievers import HypotheticalDocumentEmbedder
+
+hyde_retriever = HypotheticalDocumentEmbedder.from_llm(
+    llm, vectorstore, "web_search"  # prompt_key
+)
+results = hyde_retriever.invoke(query)</code></pre>
+
+      <div class="tip-box">
+        <strong>HyDE 适用场景</strong>：用户提问比较简短或模糊时效果显著（如"怎么搞 RAG"→ 生成一篇详细的假设性文档 → 检索到相关长文档）。但查询已经很精确时，HyDE 反而可能引入噪声。
+      </div>
+
+      <h3>3. RAG-Fusion</h3>
+
+      <p>RAG-Fusion 的策略是：用 LLM 将原始查询改写为多个不同角度的查询，分别检索，再对结果做互惠排序融合（Reciprocal Rank Fusion, RRF）。</p>
+
+      <pre><code># RAG-Fusion 流程
+query = "RAG 的最佳实践"
+
+# 步骤1：生成多个查询变体
+query_variants = llm.invoke(f"""
+生成以下问题的 4 个不同表述方式：
+{query}
+""").split("\n")  # ["RAG 实践指南", "RAG 优化技巧", ...]
+
+# 步骤2：分别检索
+all_results = []
+for q in [query] + query_variants:
+    all_results.append(vectorstore.similarity_search(q, k=4))
+
+# 步骤3：互惠排序融合（RRF）
+def reciprocal_rank_fusion(lists_of_docs, k=60):
+    scores = {}
+    for doc_list in lists_of_docs:
+        for rank, doc in enumerate(doc_list):
+            key = doc.page_content
+            scores[key] = scores.get(key, 0) + 1 / (rank + k)
+    # 按融合分数排序
+    return sorted(scores.items(), key=lambda x: x[1], reverse=True)
+
+fused_results = reciprocal_rank_fusion(all_results)</code></pre>
+
+      <p>RAG-Fusion 的优势在于多角度覆盖——不同的查询表述可能命中不同文档，融合后召回率更高。</p>
+
+      <h3>4. Parent Document Retriever</h3>
+
+      <p>核心问题：小分块检索精准但上下文不足，大分块上下文完整但检索不精准。Parent Document Retriever 用小分块检索，但返回对应的大分块（父文档）。</p>
+
+      <pre><code>from langchain.retrievers import ParentDocumentRetriever
+from langchain.storage import InMemoryStore
+
+# 小分块用于检索（精准）
+child_splitter = RecursiveCharacterTextSplitter(chunk_size=200)
+
+# 大分块用于返回给 LLM（上下文完整）
+parent_splitter = RecursiveCharacterTextSplitter(chunk_size=1000)
+
+# 存储父子映射关系
+docstore = InMemoryStore()
+
+retriever = ParentDocumentRetriever(
+    vectorstore=vectorstore,          # 存小分块的向量
+    docstore=docstore,                # 存大分块的原文
+    child_splitter=child_splitter,
+    parent_splitter=parent_splitter,
+)
+
+retriever.add_documents(docs)
+results = retriever.invoke(query)  # 返回大分块</code></pre>
+
+      <h3>四种检索策略对比</h3>
+
+      <table>
+        <tr>
+          <th>策略</th>
+          <th>额外 LLM 调用</th>
+          <th>延迟</th>
+          <th>召回率</th>
+          <th>精度</th>
+          <th>适用场景</th>
+        </tr>
+        <tr>
+          <td>简单检索</td>
+          <td>0</td>
+          <td>低</td>
+          <td>低</td>
+          <td>中</td>
+          <td>基线 / 概念验证</td>
+        </tr>
+        <tr>
+          <td>HyDE</td>
+          <td>1</td>
+          <td>中</td>
+          <td>中高</td>
+          <td>中高</td>
+          <td>模糊/简短查询</td>
+        </tr>
+        <tr>
+          <td>RAG-Fusion</td>
+          <td>1</td>
+          <td>高</td>
+          <td>高</td>
+          <td>中高</td>
+          <td>需要广覆盖</td>
+        </tr>
+        <tr>
+          <td>Parent Document</td>
+          <td>0</td>
+          <td>低</td>
+          <td>中</td>
+          <td>高</td>
+          <td>需要上下文完整性</td>
+        </tr>
+      </table>
+
+      <h2>七、高级优化：Reranker、混合检索与查询改写</h2>
+
+      <h3>1. Reranker（重排序）</h3>
+
+      <p>向量检索基于嵌入相似度，是一种"粗排"。Reranker 是"精排"——用交叉编码器（Cross-Encoder）对 Query-Document 对做精细的相关性打分。</p>
+
+      <pre><code># Cohere Reranker（推荐，效果最好）
+from langchain.retrievers import ContextualCompressionRetriever
+from langchain_cohere import CohereRerank
+
+compressor = CohereRerank(top_n=4)
+compression_retriever = ContextualCompressionRetriever(
+    base_compressor=compressor,
+    base_retriever=vectorstore.as_retriever(search_kwargs={"k": 20})
+)
+
+# 先检索 20 个，Rerank 后返回 Top-4
+results = compression_retriever.invoke(query)</code></pre>
+
+      <pre><code># 本地 Reranker（无需 API Key）
+from langchain.retrievers.document_compressors import CrossEncoderReranker
+from langchain_community.cross_encoders import HuggingFaceCrossEncoder
+
+model = HuggingFaceCrossEncoder(model_name="BAAI/bge-reranker-v2-m3")
+compressor = CrossEncoderReranker(model=model, top_n=4)</code></pre>
+
+      <div class="tip-box">
+        <strong>Reranker 是性价比最高的优化</strong>：几乎不需要改架构，加上一层 Rerank 就能显著提升精度。推荐先用 Cohere Rerank（API 调用，效果稳定），需要私有化部署再用 BGE-Reranker。
+      </div>
+
+      <h3>2. 混合检索（Hybrid Search）</h3>
+
+      <p>向量检索擅长语义匹配，但可能漏掉精确关键词（如产品型号、人名、专有名词）。混合检索 = 向量检索 + 关键词检索（BM25），取长补短。</p>
+
+      <pre><code># LangChain EnsembleRetriever
+from langchain.retrievers import EnsembleRetriever
+from langchain_community.retrievers import BM25Retriever
+
+# 稀疏检索：BM25（关键词匹配）
+bm25_retriever = BM25Retriever.from_documents(docs, k=5)
+
+# 稠密检索：向量检索（语义匹配）
+vector_retriever = vectorstore.as_retriever(search_kwargs={"k": 5})
+
+# 混合检索：各占 50% 权重
+ensemble_retriever = EnsembleRetriever(
+    retrievers=[bm25_retriever, vector_retriever],
+    weights=[0.5, 0.5]
+)
+
+results = ensemble_retriever.invoke(query)</code></pre>
+
+      <p>Qdrant 和 Milvus 原生支持混合检索，不需要额外部署 BM25。</p>
+
+      <h3>3. Query Rewriting（查询改写）</h3>
+
+      <p>用户提问往往不够清晰，Query Rewriting 用 LLM 将原始查询改写为更适合检索的形式。</p>
+
+      <pre><code># 多查询改写（Multi-Query）
+from langchain.retrievers.multi_query import MultiQueryRetriever
+
+retriever = MultiQueryRetriever.from_llm(
+    retriever=vectorstore.as_retriever(search_kwargs={"k": 4}),
+    llm=llm
+)
+
+# 自动生成多个查询变体，分别检索，合并去重
+results = retriever.invoke(query)</code></pre>
+
+      <pre><code># Step-back Prompting（后退提问）
+# 让 LLM 生成一个更宽泛的"后退问题"
+step_back_prompt = """
+你是一个专家。针对以下具体问题，生成一个更宽泛、更一般化的问题，
+用于检索背景知识。
+
+原始问题：{question}
+后退问题：
+"""
+
+step_back_query = llm.invoke(step_back_prompt.format(question=query))
+# 同时用原始问题和后退问题检索
+original_results = vectorstore.similarity_search(query, k=3)
+background_results = vectorstore.similarity_search(step_back_query, k=3)</code></pre>
+
+      <h3>优化策略组合</h3>
+
+      <pre><code>推荐优化路径（按性价比排序）：
+
+1. 基线：简单向量检索                    → 建立基准
+2. +Reranker                            → 精度显著提升，改动最小
+3. +混合检索（向量 + BM25）             → 召回率提升，尤其对专有名词
+4. +Query Rewriting / Multi-Query       → 模糊查询场景改善
+5. +HyDE / RAG-Fusion                   → 进一步提升召回
+6. +Parent Document Retriever           → 解决上下文截断问题</code></pre>
+
+      <h2>八、LangChain / LlamaIndex 实现示例</h2>
+
+      <h3>LangChain 完整 RAG 示例</h3>
+
+      <pre><code>from langchain_openai import ChatOpenAI, OpenAIEmbeddings
+from langchain_community.document_loaders import PyPDFLoader
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_community.vectorstores import Chroma
+from langchain.chains import create_retrieval_chain
+from langchain.chains.combine_documents import create_stuff_documents_chain
+from langchain_core.prompts import ChatPromptTemplate
+
+# 1. 加载文档
+loader = PyPDFLoader("knowledge_base.pdf")
+docs = loader.load()
+
+# 2. 分块
+splitter = RecursiveCharacterTextSplitter(
+    chunk_size=500,
+    chunk_overlap=50
+)
+chunks = splitter.split_documents(docs)
+
+# 3. 创建向量库
+vectorstore = Chroma.from_documents(
+    chunks,
+    OpenAIEmbeddings(),
+    persist_directory="./chroma_db"
+)
+
+# 4. 创建检索器（带 Reranker）
+retriever = vectorstore.as_retriever(search_kwargs={"k": 10})
+
+# 5. 创建 LLM 和 Prompt
+llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
+
+system_prompt = """你是一个知识助手。使用以下检索到的上下文来回答用户的问题。
+如果你不知道答案，就说不知道，不要编造。
+上下文中的信息必须在答案中引用来源。
+
+上下文：
+{context}"""
+
+prompt = ChatPromptTemplate.from_messages([
+    ("system", system_prompt),
+    ("human", "{input}"),
+])
+
+# 6. 创建 RAG Chain
+question_answer_chain = create_stuff_documents_chain(llm, prompt)
+rag_chain = create_retrieval_chain(retriever, question_answer_chain)
+
+# 7. 查询
+response = rag_chain.invoke({"input": "什么是 RAG？"})
+print(response["answer"])</code></pre>
+
+      <h3>LlamaIndex 完整 RAG 示例</h3>
+
+      <pre><code>from llama_index.core import VectorStoreIndex, SimpleDirectoryReader, Settings
+from llama_index.core.node_parser import SentenceSplitter
+from llama_index.llms.openai import OpenAI
+from llama_index.embeddings.openai import OpenAIEmbedding
+
+# 1. 配置全局设置
+Settings.llm = OpenAI(model="gpt-4o-mini", temperature=0)
+Settings.embed_model = OpenAIEmbedding(model="text-embedding-3-small")
+
+# 2. 加载文档
+documents = SimpleDirectoryReader("./data").load_data()
+
+# 3. 分块
+splitter = SentenceSplitter(chunk_size=500, chunk_overlap=50)
+Settings.transformations = [splitter]
+
+# 4. 创建索引
+index = VectorStoreIndex.from_documents(documents)
+
+# 5. 创建查询引擎
+query_engine = index.as_query_engine(
+    similarity_top_k=5,
+    response_mode="tree_summarize"  # 或 "compact", "refine"
+)
+
+# 6. 查询
+response = query_engine.query("什么是 RAG？")
+print(response)
+
+# 7. 查看引用来源
+for source_node in response.source_nodes:
+    print(f"来源: {source_node.node.metadata}")
+    print(f"分数: {source_node.score:.4f}")
+    print(f"内容: {source_node.node.text[:100]}...")</code></pre>
+
+      <h3>LangChain vs LlamaIndex 对比</h3>
+
+      <table>
+        <tr>
+          <th>维度</th>
+          <th>LangChain</th>
+          <th>LlamaIndex</th>
+        </tr>
+        <tr>
+          <td>定位</td>
+          <td>通用 LLM 应用框架</td>
+          <td>专注 RAG / 数据索引</td>
+        </tr>
+        <tr>
+          <td>学习曲线</td>
+          <td>较陡（概念多）</td>
+          <td>较平（RAG 开箱即用）</td>
+        </tr>
+        <tr>
+          <td>灵活性</td>
+          <td>高（Chain、Agent、Tool 自由组合）</td>
+          <td>中（聚焦索引和查询）</td>
+        </tr>
+        <tr>
+          <td>RAG 开箱体验</td>
+          <td>需要手动组装</td>
+          <td>一行代码查询</td>
+        </tr>
+        <tr>
+          <td>推荐场景</td>
+          <td>复杂 Agent / 多工具调用</td>
+          <td>纯 RAG / 知识库问答</td>
+        </tr>
+      </table>
+
+      <div class="tip-box">
+        <strong>选择建议</strong>：如果只做 RAG，LlamaIndex 上手更快、开箱即用。如果 RAG 只是整个 Agent 系统的一部分（还需要工具调用、规划等），用 LangChain。
+      </div>
+
+      <h2>九、评估与监控：RAGAS 框架</h2>
+
+      <p>没有评估就无法优化。RAGAS（Retrieval Augmented Generation Assessment）是 RAG 系统的事实标准评估框架。</p>
+
+      <h3>RAGAS 核心指标</h3>
+
+      <h4>检索质量指标</h4>
+
+      <table>
+        <tr>
+          <th>指标</th>
+          <th>含义</th>
+          <th>计算方式</th>
+          <th>越高越好？</th>
+        </tr>
+        <tr>
+          <td><strong>Context Precision</strong></td>
+          <td>检索结果中相关文档的排名是否靠前</td>
+          <td>Top-K 中相关文档的精确率加权</td>
+          <td>✅</td>
+        </tr>
+        <tr>
+          <td><strong>Context Recall</strong></td>
+          <td>回答所需的信息是否都被检索到了</td>
+          <td>Ground Truth 中的声明在 Context 中出现的比例</td>
+          <td>✅</td>
+        </tr>
+      </table>
+
+      <h4>生成质量指标</h4>
+
+      <table>
+        <tr>
+          <th>指标</th>
+          <th>含义</th>
+          <th>计算方式</th>
+          <th>越高越好？</th>
+        </tr>
+        <tr>
+          <td><strong>Faithfulness</strong></td>
+          <td>回答是否忠于检索到的上下文（不编造）</td>
+          <td>回答中的声明在 Context 中有支撑的比例</td>
+          <td>✅</td>
+        </tr>
+        <tr>
+          <td><strong>Answer Relevancy</strong></td>
+          <td>回答是否切题</td>
+          <td>从回答反推问题的相似度</td>
+          <td>✅</td>
+        </tr>
+        <tr>
+          <td><strong>Answer Similarity</strong></td>
+          <td>回答与 Ground Truth 的语义相似度</td>
+          <td>嵌入向量的余弦相似度</td>
+          <td>✅</td>
+        </tr>
+      </table>
+
+      <h3>RAGAS 使用示例</h3>
+
+      <pre><code>from ragas import evaluate
+from ragas.metrics import (
+    context_precision,
+    context_recall,
+    faithfulness,
+    answer_relevancy,
+)
+from datasets import Dataset
+
+# 准备评估数据集
+data = {
+    "question": ["什么是 RAG？", "RAG 有哪些优化策略？"],
+    "answer": [
+        "RAG 是检索增强生成...",
+        "RAG 优化策略包括 HyDE、RAG-Fusion..."
+    ],
+    "contexts": [
+        ["RAG 是 Retrieval-Augmented Generation 的缩写..."],
+        ["HyDE 通过假设性文档嵌入...", "RAG-Fusion 使用多查询..."]
+    ],
+    "ground_truth": [
+        "RAG 是通过检索外部知识来增强 LLM 生成的技术",
+        "RAG 优化包括 HyDE、RAG-Fusion、Reranker、混合检索等"
+    ]
+}
+
+dataset = Dataset.from_dict(data)
+
+# 评估
+results = evaluate(
+    dataset,
+    metrics=[
+        context_precision,
+        context_recall,
+        faithfulness,
+        answer_relevancy,
+    ]
+)
+
+print(results)
+# {'context_precision': 0.85, 'context_recall': 0.90,
+#  'faithfulness': 0.88, 'answer_relevancy': 0.92}</code></pre>
+
+      <div class="warning-box">
+        <strong>评估数据集是关键</strong>：RAGAS 的指标依赖高质量的 Ground Truth。建议从真实用户查询中抽取 50-100 个代表性问题，人工标注标准答案和关联文档。不要只用模型生成的合成数据，会有偏差。
+      </div>
+
+      <h3>监控指标（生产环境）</h3>
+
+      <table>
+        <tr>
+          <th>指标类别</th>
+          <th>指标</th>
+          <th>目标值</th>
+        </tr>
+        <tr>
+          <td>延迟</td>
+          <td>P95 端到端延迟</td>
+          <td>&lt; 3s</td>
+        </tr>
+        <tr>
+          <td>检索质量</td>
+          <td>Top-5 检索相关率</td>
+          <td>&gt; 80%</td>
+        </tr>
+        <tr>
+          <td>生成质量</td>
+          <td>Faithfulness</td>
+          <td>&gt; 90%</td>
+        </tr>
+        <tr>
+          <td>用户满意度</td>
+          <td>👍/👎 比例</td>
+          <td>&gt; 85% 👍</td>
+        </tr>
+        <tr>
+          <td>成本</td>
+          <td>每次查询 Token 消耗</td>
+          <td>监控趋势</td>
+        </tr>
+      </table>
+
+      <h2>十、Agentic RAG 与未来演进</h2>
+
+      <h3>从 Naive RAG 到 Agentic RAG</h3>
+
+      <p>经典 RAG 是单轮检索-生成的固定管线。Agentic RAG 将 LLM 作为 Agent，让系统自主决定"何时检索、检索什么、是否需要再检索"。</p>
+
+      <pre><code># Agentic RAG 简化流程
+while not confident_enough:
+    1. Agent 判断是否需要检索
+    2. 如果需要 → 构造查询 → 检索 → 阅读
+    3. 判断信息是否充分
+    4. 如果不充分 → 改写查询 → 再检索
+    5. 如果充分 → 生成最终回答</code></pre>
+
+      <h3>Agentic RAG 的关键特征</h3>
+
+      <table>
+        <tr>
+          <th>特征</th>
+          <th>经典 RAG</th>
+          <th>Agentic RAG</th>
+        </tr>
+        <tr>
+          <td>检索决策</td>
+          <td>每次查询都检索</td>
+          <td>Agent 判断是否需要检索</td>
+        </tr>
+        <tr>
+          <td>查询构造</td>
+          <td>直接用用户原始查询</td>
+          <td>Agent 自主构造查询</td>
+        </tr>
+        <tr>
+          <td>迭代检索</td>
+          <td>单轮检索</td>
+          <td>可多轮检索，逐步聚焦</td>
+        </tr>
+        <tr>
+          <td>工具使用</td>
+          <td>仅检索</td>
+          <td>检索 + 计算 + API 调用等</td>
+        </tr>
+        <tr>
+          <td>自我反思</td>
+          <td>无</td>
+          <td>验证答案是否可靠</td>
+        </tr>
+      </table>
+
+      <h3>Agentic RAG 实现示例（LangChain）</h3>
+
+      <pre><code>from langchain.agents import create_tool_calling_agent, AgentExecutor
+from langchain_core.tools import tool
+
+@tool
+def search_knowledge_base(query: str) -> str:
+    """搜索内部知识库，返回相关文档内容"""
+    docs = vectorstore.similarity_search(query, k=3)
+    return "\n\n".join([d.page_content for d in docs])
+
+@tool
+def search_web(query: str) -> str:
+    """搜索互联网，获取最新信息"""
+    # 调用搜索 API
+    return web_search_api(query)
+
+tools = [search_knowledge_base, search_web]
+
+agent = create_tool_calling_agent(llm, tools, prompt)
+agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=True)
+
+# Agent 自主决定用哪个工具、检索几次
+result = agent_executor.invoke({
+    "input": "比较 Milvus 和 Qdrant 的最新性能基准测试结果"
+})</code></pre>
+
+      <h3>未来演进方向</h3>
+
+      <ul>
+        <li><strong>GraphRAG</strong>：基于知识图谱的 RAG，用实体关系图替代纯向量检索，擅长处理跨文档的复杂推理</li>
+        <li><strong>多模态 RAG</strong>：支持图片、表格、视频的检索和生成，不只限于文本</li>
+        <li><strong>自适应分块</strong>：根据查询类型动态调整分块策略和大小</li>
+        <li><strong>个性化 RAG</strong>：结合用户画像和历史对话，提供个性化的检索和生成</li>
+        <li><strong>端侧 RAG</strong>：在设备本地运行轻量级 RAG，降低延迟和成本</li>
+      </ul>
+
+      <h2>十一、速查表</h2>
+
+      <table>
+        <tr>
+          <th>环节</th>
+          <th>推荐方案</th>
+          <th>关键参数</th>
+        </tr>
+        <tr>
+          <td>文档分块</td>
+          <td>RecursiveCharacterTextSplitter</td>
+          <td>chunk_size=500, overlap=50</td>
+        </tr>
+        <tr>
+          <td>嵌入模型（中文）</td>
+          <td>BGE-large-zh-v1.5</td>
+          <td>dim=1024</td>
+        </tr>
+        <tr>
+          <td>嵌入模型（多语言）</td>
+          <td>BGE-M3</td>
+          <td>dim=1024, 稠密+稀疏</td>
+        </tr>
+        <tr>
+          <td>嵌入模型（API）</td>
+          <td>OpenAI text-embedding-3-large</td>
+          <td>dim=3072</td>
+        </tr>
+        <tr>
+          <td>向量库（开发）</td>
+          <td>Chroma</td>
+          <td>pip install 即用</td>
+        </tr>
+        <tr>
+          <td>向量库（生产）</td>
+          <td>Milvus / Qdrant</td>
+          <td>分布式 / 高性能</td>
+        </tr>
+        <tr>
+          <td>第一优化</td>
+          <td>+ Reranker</td>
+          <td>Cohere / BGE-Reranker</td>
+        </tr>
+        <tr>
+          <td>第二优化</td>
+          <td>+ 混合检索</td>
+          <td>向量 + BM25</td>
+        </tr>
+        <tr>
+          <td>模糊查询优化</td>
+          <td>HyDE / Multi-Query</td>
+          <td>LLM 改写查询</td>
+        </tr>
+        <tr>
+          <td>上下文截断</td>
+          <td>Parent Document Retriever</td>
+          <td>小分块检索，大分块返回</td>
+        </tr>
+        <tr>
+          <td>评估框架</td>
+          <td>RAGAS</td>
+          <td>Faithfulness + Context Recall</td>
+        </tr>
+        <tr>
+          <td>RAG 框架（纯 RAG）</td>
+          <td>LlamaIndex</td>
+          <td>开箱即用</td>
+        </tr>
+        <tr>
+          <td>RAG 框架（Agent）</td>
+          <td>LangChain</td>
+          <td>灵活组合</td>
+        </tr>
+      </table>
+
+      <div class="tip-box">
+        <strong>一句话总结</strong>：RAG 的核心是"先查资料再回答"。落地路径：分块选递归 → 嵌入选 BGE → 向量库选 Qdrant → 先加 Reranker → 再加混合检索 → 最后考虑 Agentic RAG。优化不是一步到位，而是逐层叠加。
+      </div>
+
+      <div class="post-tags">
+        <span>RAG</span>
+        <span>检索增强生成</span>
+        <span>LLM</span>
+        <span>向量数据库</span>
+        <span>Embedding</span>
+        <span>LangChain</span>
+        <span>AI</span>
+      </div>
+    </article>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <p>&copy; 2026 张小猛 - loczb</p>
+    </div>
+  </footer>
+
+  <script>
+    // Scroll progress
+    const scrollProgress = document.querySelector('.scroll-progress');
+    window.addEventListener('scroll', () => {
+      const scrollTop = document.documentElement.scrollTop;
+      const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = (scrollTop / scrollHeight) * 100;
+      scrollProgress.style.width = progress + '%';
+    });
+
+    // Theme toggle
+    const themeToggle = document.querySelector('.theme-toggle');
+    themeToggle?.addEventListener('click', () => {
+      const html = document.documentElement;
+      const current = html.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+    });
+
+    // Mobile nav
+    const navToggle = document.querySelector('.nav-toggle');
+    const navLinks = document.querySelector('.nav-links');
+    navToggle?.addEventListener('click', () => {
+      navLinks.classList.toggle('active');
+    });
+  </script>
+</body>
+</html>
