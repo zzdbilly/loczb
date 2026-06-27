@@ -474,6 +474,38 @@
             <div class="blog-list-meta">
               <span class="blog-date">2026-06-27</span>
               <span>·</span>
+              <span class="blog-read-time">20 min</span>
+            </div>
+            <h4 class="blog-list-title">
+              <a href="blog/posts/postgresql-index-optimization.html">PostgreSQL 索引优化实战：从 B-Tree 到执行计划</a>
+            </h4>
+            <div class="blog-list-tags">
+              <span class="tech-tag">PostgreSQL</span>
+              <span class="tech-tag">索引</span>
+              <span class="tech-tag">EXPLAIN</span>
+            </div>
+          </article>
+          
+          <article class="blog-list-item animate-on-scroll">
+            <div class="blog-list-meta">
+              <span class="blog-date">2026-06-27</span>
+              <span>·</span>
+              <span class="blog-read-time">18 min</span>
+            </div>
+            <h4 class="blog-list-title">
+              <a href="blog/posts/go-concurrency-patterns.html">Go 并发模式：Channel 与 Context</a>
+            </h4>
+            <div class="blog-list-tags">
+              <span class="tech-tag">Go</span>
+              <span class="tech-tag">并发</span>
+              <span class="tech-tag">Goroutine</span>
+            </div>
+          </article>
+          
+          <article class="blog-list-item animate-on-scroll">
+            <div class="blog-list-meta">
+              <span class="blog-date">2026-06-27</span>
+              <span>·</span>
               <span class="blog-read-time">16 min</span>
             </div>
             <h4 class="blog-list-title">
@@ -632,6 +664,24 @@
   <script>
     // 首页随机选择代表文章
     const posts = [
+      {
+        url: 'blog/posts/go-concurrency-patterns.html',
+        title: 'Go 并发模式：Channel 与 Context',
+        date: '2026-06-27',
+        readTime: '18 min',
+        category: '开发',
+        category2: 'Go',
+        desc: 'Goroutine 与 Channel 实战、GMP 调度模型、Context 包详解、Fan-Out/Fan-In 模式与并发测试最佳实践。'
+      },
+      {
+        url: 'blog/posts/postgresql-index-optimization.html',
+        title: 'PostgreSQL 索引优化实战：从 B-Tree 到执行计划',
+        date: '2026-06-27',
+        readTime: '20 min',
+        category: '数据库',
+        category2: 'PostgreSQL',
+        desc: 'B-Tree、GiST、GIN 索引类型对比，复合索引设计、EXPLAIN 执行计划分析与慢查询优化案例。'
+      },
       {
         url: 'blog/posts/android-16-notifications.html',
         title: 'Android 16 通知系统新 API 详解',

@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="PostgreSQL 索引优化实战：B-Tree、GiST、GIN 索引类型对比，复合索引、部分索引设计，EXPLAIN 执行计划分析与慢查询优化">
+  <meta name="keywords" content="PostgreSQL, 索引, B-Tree, GIN, GiST, EXPLAIN, 执行计划, 慢查询, 数据库优化">
+  <meta name="author" content="张小猛">
+  <meta name="publish-date" content="2026-06-27">
+  <title>PostgreSQL 索引优化实战 | 张小猛 - loczb</title>
+  <link rel="canonical" href="https://709527.xyz/blog/posts/postgresql-index-optimization.html">
+  <meta name="robots" content="index, follow">
+  
+  <!-- Open Graph -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://709527.xyz/blog/posts/postgresql-index-optimization.html">
+  <meta property="og:title" content="PostgreSQL 索引优化实战 | 张小猛 - loczb">
+  <meta property="og:description" content="PostgreSQL 索引优化实战：B-Tree、GiST、GIN 索引类型对比，复合索引、部分索引设计，EXPLAIN 执行计划分析与慢查询优化">
+  <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="article:author" content="张小猛">
+  <meta property="article:published_time" content="2026-06-27">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="PostgreSQL 索引优化实战 | 张小猛 - loczb">
+  <meta name="twitter:description" content="PostgreSQL 索引优化实战：B-Tree、GiST、GIN 索引类型对比，复合索引、部分索引设计，EXPLAIN 执行计划分析与慢查询优化">
+  <meta name="twitter:image" content="https://709527.xyz/assets/images/og-image.png">
+
+  <link rel="icon" type="image/x-icon" href="../../assets/images/favicon.ico">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
+  <link rel="icon" type="image/png" sizes="16x16" href="../../assets/images/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="../../assets/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="48x48" href="../../assets/images/favicon-48x48.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="../../assets/images/apple-touch-icon.png">
+  <link rel="manifest" href="../../site.webmanifest">
+  <meta name="theme-color" content="#3b82f6">
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <style>
+    .post-content { max-width: 760px; margin: 0 auto; line-height: 1.85; }
+    .post-content h1 { font-size: 2.4rem; margin: 2rem 0 1rem; }
+    .post-content h2 { font-size: 1.7rem; margin: 2.5rem 0 1rem; color: var(--color-accent-primary); border-bottom: 1px solid var(--color-border); padding-bottom: 0.5rem; }
+    .post-content h3 { font-size: 1.3rem; margin: 1.8rem 0 0.8rem; }
+    .post-content pre { background: var(--color-bg-tertiary); padding: 1.2rem; border-radius: 8px; overflow-x: auto; margin: 1.2rem 0; font-size: 0.9rem; }
+    .post-content code { background: var(--color-bg-tertiary); padding: 0.15rem 0.4rem; border-radius: 4px; font-family: monospace; font-size: 0.9em; }
+    .post-meta { color: var(--color-text-secondary); font-size: 0.9rem; margin-bottom: 2rem; }
+    .post-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 3rem; }
+    .post-tags span { background: var(--color-bg-tertiary); padding: 0.3rem 0.8rem; border-radius: 9999px; font-size: 0.85rem; color: var(--color-accent-primary); }
+    .tip-box { background: rgba(34, 197, 94, 0.1); border-left: 3px solid #22c55e; padding: 1rem 1.2rem; margin: 1.5rem 0; border-radius: 0 6px 6px 0; }
+    .warning-box { background: rgba(234, 179, 8, 0.1); border-left: 3px solid #eab308; padding: 1rem 1.2rem; margin: 1.5rem 0; border-radius: 0 6px 6px 0; }
+    table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.95rem; }
+    th, td { border: 1px solid var(--color-border); padding: 0.7rem; text-align: left; }
+    th { background: var(--color-bg-tertiary); font-weight: 600; }
+  </style>
+  <!-- Preconnect to Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500;600&display=swap" media="print" onload="this.media='all'">
+  <noscript>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500;600&display=swap">
+  </noscript>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../../index.html" class="nav-logo">loc<span>zb</span></a>
+      <button class="nav-toggle" aria-label="打开菜单"><span></span><span></span><span></span></button>
+      <div class="nav-overlay"></div>
+      <ul class="nav-links">
+        <li><a href="../../index.html" class="nav-link">首页</a></li>
+        <li><a href="../../projects/index.html" class="nav-link">项目</a></li>
+        <li><a href="../index.html" class="nav-link active">博客</a></li>
+        <li><a href="../../about/index.html" class="nav-link">关于</a></li>
+      </ul>
+      <button class="theme-toggle" aria-label="切换主题">
+        <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line></svg>
+        <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+      </button>
+    </div>
+  </nav>
+<div class="scroll-progress"></div>
+
+  <main>
+    <article class="post-content" style="padding: calc(64px + 4rem) 1rem 4rem;">
+      <a href="../index.html" style="display: inline-flex; align-items: center; gap: 0.5rem; color: var(--color-text-secondary); text-decoration: none; margin-bottom: 2rem;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        返回博客
+      </a>
+      
+      <h1>PostgreSQL 索引优化实战</h1>
+      
+      <div class="post-meta">2026年6月27日 · 阅读时间 20 分钟</div>
+
+      <p>数据库性能优化中，索引是最重要的手段——没有之一。PostgreSQL 提供了丰富的索引类型和灵活的索引策略，但用错了比不用更糟：不仅查询没变快，写入还变慢了，磁盘空间也白白浪费。</p>
+
+      <p>本文从索引类型对比开始，逐步深入复合索引设计、部分索引、覆盖索引、执行计划分析，最后通过真实慢查询案例串联全部知识。</p>
+
+      <div class="tip-box">
+        <strong>环境说明</strong>：本文所有示例基于 PostgreSQL 16，大部分内容同样适用于 13+ 版本。<code>EXPLAIN</code> 输出格式可能因版本略有差异。
+      </div>
+
+      <h2>一、PostgreSQL 索引基础：五大类型</h2>
+
+      <p>PostgreSQL 不是只有 B-Tree。它提供了 5 种内置索引类型，每种都有专属的使用场景：</p>
+
+      <table>
+        <tr>
+          <th>索引类型</th>
+          <th>适用场景</th>
+          <th>典型操作符</th>
+          <th>创建语法</th>
+        </tr>
+        <tr>
+          <td><strong>B-Tree</strong></td>
+          <td>等值、范围、排序、前缀匹配</td>
+          <td><code>=</code> <code>&lt;</code> <code>&gt;</code> <code>BETWEEN</code> <code>IN</code> <code>IS NULL</code></td>
+          <td><code>CREATE INDEX</code>（默认）</td>
+        </tr>
+        <tr>
+          <td><strong>Hash</strong></td>
+          <td>纯等值查询</td>
+          <td><code>=</code></td>
+          <td><code>CREATE INDEX ... USING HASH</code></td>
+        </tr>
+        <tr>
+          <td><strong>GiST</strong></td>
+          <td>几何、范围、全文搜索、自定义数据类型</td>
+          <td><code>@&gt;</code> <code>&lt;@</code> <code>&amp;&amp;</code> <code>&lt;&lt;</code> <code>&gt;&gt;</code></td>
+          <td><code>CREATE INDEX ... USING GIST</code></td>
+        </tr>
+        <tr>
+          <td><strong>GIN</strong></td>
+          <td>数组包含、JSONB、全文搜索、hstore</td>
+          <td><code>@&gt;</code> <code>&lt;@</code> <code>?</code> <code>?|</code> <code>?&amp;</code> <code>@@</code></td>
+          <td><code>CREATE INDEX ... USING GIN</code></td>
+        </tr>
+        <tr>
+          <td><strong>BRIN</strong></td>
+          <td>大表、自然排序（如时间序列）</td>
+          <td>同 B-Tree 操作符</td>
+          <td><code>CREATE INDEX ... USING BRIN</code></td>
+        </tr>
+      </table>
+
+      <h3>选型决策</h3>
+
+      <pre><code>查询类型是什么？
+├── 等值查询
+│   ├── 数据量大、重复值少 → B-Tree（首选）
+│   └── 纯等值、不排序 → Hash（不推荐，B-Tree 通常更好）
+├── 范围查询 / 排序 → B-Tree
+├── 数组包含 / JSONB → GIN
+├── 几何 / 空间查询 → GiST（或 PostGIS 的 SP-GiST/GiST）
+├── 全文搜索
+│   ├── 英文为主 → GIN（tsvector）
+│   └── 需要排序 → GiST
+└── 超大表 + 自然排序 → BRIN</code></pre>
+
+      <div class="warning-box">
+        <strong>关于 Hash 索引</strong>：PostgreSQL 10 之前 Hash 索引不记录 WAL，崩溃后无法恢复。10+ 已修复，但 B-Tree 在等值查询上同样高效且更通用，所以 Hash 索引几乎没有使用场景。除非你非常确定只做等值且需要极致写入性能，否则 <strong>用 B-Tree</strong>。
+      </div>
+
+      <h2>二、B-Tree 索引深度解析</h2>
+
+      <p>B-Tree 是 PostgreSQL 的默认索引类型，也是最常用的。理解它的内部结构有助于写出更高效的查询。</p>
+
+      <h3>结构特点</h3>
+
+      <ul>
+        <li><strong>平衡多路搜索树</strong>：所有叶子节点在同一深度，查询时间稳定 O(log N)</li>
+        <li><strong>按排序存储</strong>：<code>ORDER BY</code> 可以利用索引避免额外排序</li>
+        <li><strong>支持前缀匹配</strong>：<code>LIKE 'abc%'</code> 可以用索引，<code>LIKE '%abc'</code> 不行</li>
+        <li><strong>支持 IS NULL</strong>：NULL 值也存储在 B-Tree 索引中（与其他数据库不同）</li>
+      </ul>
+
+      <h3>B-Tree 的边界情况</h3>
+
+      <pre><code>-- ✅ 能用索引
+SELECT * FROM users WHERE name = 'Alice';
+SELECT * FROM users WHERE age &gt; 18 AND age &lt; 30;
+SELECT * FROM users WHERE name LIKE 'Ali%';
+SELECT * FROM users WHERE email IS NULL;
+SELECT * FROM users ORDER BY created_at DESC LIMIT 10;
+
+-- ❌ 不能用索引
+SELECT * FROM users WHERE name LIKE '%lice';    -- 前缀通配符
+SELECT * FROM users WHERE LOWER(name) = 'alice'; -- 函数包裹（需表达式索引）
+SELECT * FROM users WHERE age::text = '25';      -- 类型转换
+SELECT * FROM users WHERE abs(age) &lt; 5;          -- 函数包裹</code></pre>
+
+      <h3>排序与索引</h3>
+
+      <p>B-Tree 索引默认按 <code>ASC NULLS LAST</code> 排序。你可以显式指定排序方向：</p>
+
+      <pre><code>-- 按 created_at 降序创建索引，ORDER BY DESC 可直接使用
+CREATE INDEX idx_orders_created_desc ON orders (created_at DESC);
+
+-- 组合排序：先按 status 升序，再按 created_at 降序
+CREATE INDEX idx_orders_status_created ON orders (status, created_at DESC);
+
+-- 查询必须匹配索引排序才能避免额外排序步骤
+SELECT * FROM orders
+WHERE status = 'active'
+ORDER BY created_at DESC;  -- ✅ 匹配索引第二列排序方向</code></pre>
+
+      <h2>三、复合索引与列顺序</h2>
+
+      <p>复合索引（Composite Index）是在多个列上创建的索引。列的顺序决定了索引能否被特定查询使用——这是索引设计中最容易出错的点。</p>
+
+      <h3>最左前缀原则</h3>
+
+      <pre><code>-- 复合索引
+CREATE INDEX idx_user_status_created ON orders (user_id, status, created_at);
+
+-- ✅ 能用索引的查询
+WHERE user_id = 1
+WHERE user_id = 1 AND status = 'paid'
+WHERE user_id = 1 AND status = 'paid' AND created_at &gt; '2026-01-01'
+
+-- ⚠️ 部分能用（只用到 user_id 列）
+WHERE user_id = 1 AND created_at &gt; '2026-01-01'  -- status 缺失，created_at 无法用索引
+
+-- ❌ 完全不能用索引
+WHERE status = 'paid'                            -- 缺少 user_id
+WHERE status = 'paid' AND created_at &gt; '2026-01-01'  -- 缺少 user_id
+WHERE created_at &gt; '2026-01-01'                  -- 缺少 user_id</code></pre>
+
+      <h3>列顺序设计原则</h3>
+
+      <table>
+        <tr>
+          <th>原则</th>
+          <th>说明</th>
+          <th>示例</th>
+        </tr>
+        <tr>
+          <td>等值列在前</td>
+          <td>等值条件能精确跳到索引节点</td>
+          <td><code>(user_id, created_at)</code> 而非 <code>(created_at, user_id)</code></td>
+        </tr>
+        <tr>
+          <td>范围列在后</td>
+          <td>范围条件之后的列无法用索引</td>
+          <td><code>(status, created_at)</code> 中 <code>created_at</code> 范围查询后无法再过滤其他列</td>
+        </tr>
+        <tr>
+          <td>排序列在后</td>
+          <td>ORDER BY 匹配索引可避免 Sort 节点</td>
+          <td><code>(user_id, created_at DESC)</code></td>
+        </tr>
+        <tr>
+          <td>区分度高的列在前</td>
+          <td>选择性越高，索引越有效</td>
+          <td>user_id（唯一）比 status（3 个值）更适合放前面</td>
+        </tr>
+      </table>
+
+      <div class="tip-box">
+        <strong>等值列 vs 范围列</strong>：当等值列和范围列同时存在时，<strong>等值列一定放前面</strong>。这是因为等值条件能将索引搜索范围缩小到一条路径，而范围条件只能缩小到一段区间——区间之后的列就失效了。
+      </div>
+
+      <h3>冗余索引识别</h3>
+
+      <pre><code>-- 这两个索引同时存在时，前者是冗余的
+CREATE INDEX idx_a ON orders (user_id);              -- 冗余
+CREATE INDEX idx_ab ON orders (user_id, created_at); -- 包含前者
+
+-- 因为 (user_id, created_at) 的最左前缀就是 user_id，
+-- 所有只用 user_id 的查询都能用 idx_ab
+
+-- 删除冗余索引
+DROP INDEX idx_a;</code></pre>
+
+      <div class="warning-box">
+        <strong>例外</strong>：如果 <code>(user_id)</code> 的 Index-Only Scan 比 <code>(user_id, created_at)</code> 更常用，保留单独的索引可能更优——因为更小的索引意味着更少的 I/O。需要根据实际查询模式权衡。
+      </div>
+
+      <h2>四、部分索引与表达式索引</h2>
+
+      <h3>部分索引（Partial Index）</h3>
+
+      <p>部分索引只对满足条件的行建立索引，大幅减少索引体积和维护开销。</p>
+
+      <pre><code>-- 场景：订单表中 90% 是已完成状态，只查活跃订单
+-- 不需要为 completed 的行建索引
+CREATE INDEX idx_orders_active ON orders (user_id, created_at)
+WHERE status IN ('pending', 'processing', 'shipped');
+
+-- 查询匹配 WHERE 条件时才能用索引
+SELECT * FROM orders
+WHERE status = 'pending' AND user_id = 123;
+-- ✅ 用到 idx_orders_active
+
+SELECT * FROM orders
+WHERE status = 'completed' AND user_id = 123;
+-- ❌ 不用 idx_orders_active，走全表扫描或其他索引</code></pre>
+
+      <pre><code>-- 场景：只对非 NULL 值建索引
+CREATE INDEX idx_users_email ON users (email)
+WHERE email IS NOT NULL;
+
+-- 场景：只对未删除记录建索引（软删除）
+CREATE INDEX idx_articles_active ON articles (slug)
+WHERE deleted_at IS NULL;
+
+-- 场景：只对大额订单建索引
+CREATE INDEX idx_orders_large ON orders (user_id)
+WHERE total_amount &gt; 10000;</code></pre>
+
+      <div class="tip-box">
+        <strong>部分索引的核心价值</strong>：减少索引体积 = 减少磁盘占用 + 减少写入开销 + 提高缓存命中率。一张 1000 万行的表，活跃数据只有 10 万行，部分索引体积可能只有完整索引的 1%。
+      </div>
+
+      <h3>表达式索引（Expression Index）</h3>
+
+      <p>当查询条件包含函数或表达式时，普通索引无法使用。表达式索引对计算结果建索引。</p>
+
+      <pre><code>-- 问题：LOWER(name) 无法用普通索引
+SELECT * FROM users WHERE LOWER(name) = 'alice';
+-- → Seq Scan
+
+-- 解决：对表达式建索引
+CREATE INDEX idx_users_name_lower ON users (LOWER(name));
+
+SELECT * FROM users WHERE LOWER(name) = 'alice';
+-- → Index Scan using idx_users_name_lower</code></pre>
+
+      <pre><code>-- 场景：JSONB 字段查询
+CREATE INDEX idx_events_data_type ON events ((data-&gt;&gt;'type'));
+
+SELECT * FROM events WHERE data-&gt;&gt;'type' = 'click';
+-- → Index Scan
+
+-- 场景：日期提取
+CREATE INDEX idx_orders_month ON orders ((EXTRACT(MONTH FROM created_at)));
+
+-- 场景：数组长度
+CREATE INDEX idx_tags_count ON posts ((array_length(tags, 1)));
+
+-- ⚠️ 查询中的表达式必须与索引定义完全一致
+-- 这两个不会走索引：
+SELECT * FROM users WHERE lower(name) = 'alice';   -- 函数名大小写不同
+SELECT * FROM users WHERE LOWER(name::text) = 'alice'; -- 表达式不同</code></pre>
+
+      <div class="warning-box">
+        <strong>表达式索引的代价</strong>：每次 INSERT/UPDATE 时都要计算表达式值，写入开销比普通索引高。只在查询频率远高于写入频率时值得使用。
+      </div>
+
+      <h2>五、覆盖索引（Index-Only Scan）</h2>
+
+      <p>当查询需要的所有列都在索引中时，PostgreSQL 可以直接从索引返回数据，无需回表——这就是 <strong>Index-Only Scan</strong>。</p>
+
+      <pre><code>-- 需求：查用户的 name 和 email
+SELECT name, email FROM users WHERE user_id = 123;
+
+-- 普通索引：需要回表取 name 和 email
+CREATE INDEX idx_users_id ON users (user_id);
+-- → Index Scan + 回表
+
+-- 覆盖索引：索引包含所有查询列
+CREATE INDEX idx_users_id_covering ON users (user_id) INCLUDE (name, email);
+-- → Index-Only Scan（不回表）</code></pre>
+
+      <h3>INCLUDE 子句</h3>
+
+      <p>PostgreSQL 11+ 支持 <code>INCLUDE</code> 子句，将额外列存储在索引的叶子节点中，但不参与排序和搜索：</p>
+
+      <pre><code>-- INCLUDE 列不参与 B-Tree 排序，只存储在叶子节点
+-- 适合：查询需要这些列，但不会作为查询条件
+
+-- 场景：按 user_id 查订单，同时需要 order_no 和 total
+CREATE INDEX idx_orders_uid_cover ON orders (user_id)
+INCLUDE (order_no, total_amount);
+
+SELECT order_no, total_amount FROM orders WHERE user_id = 123;
+-- → Index-Only Scan</code></pre>
+
+      <h3>覆盖索引 vs 普通复合索引</h3>
+
+      <table>
+        <tr>
+          <th>特性</th>
+          <th><code>(a, b, c)</code> 复合索引</th>
+          <th><code>(a) INCLUDE (b, c)</code></th>
+        </tr>
+        <tr>
+          <td>b、c 参与排序</td>
+          <td>是</td>
+          <td>否</td>
+        </tr>
+        <tr>
+          <td>WHERE a = ? AND b = ? 能用索引</td>
+          <td>✅ 能（b 参与搜索）</td>
+          <td>❌ 不能（b 不参与搜索）</td>
+        </tr>
+        <tr>
+          <td>ORDER BY a, b 能用索引</td>
+          <td>✅ 能</td>
+          <td>❌ 不能</td>
+        </tr>
+        <tr>
+          <td>Index-Only Scan 覆盖 SELECT a, b, c</td>
+          <td>✅ 能</td>
+          <td>✅ 能</td>
+        </tr>
+        <tr>
+          <td>索引体积</td>
+          <td>稍大（b、c 参与排序需要额外结构）</td>
+          <td>稍小</td>
+        </tr>
+      </table>
+
+      <div class="tip-box">
+        <strong>何时用 INCLUDE</strong>：当额外列只用于 SELECT 返回，不用于 WHERE/ORDER BY 时，用 INCLUDE 更高效——索引体积更小，维护开销更低。
+      </div>
+
+      <h3>Visibility Map 与 Index-Only Scan</h3>
+
+      <p>Index-Only Scan 依赖 <strong>Visibility Map</strong> 判断索引元组是否对所有事务可见。如果页面的 all-visible 标志未设置，仍需回表检查可见性——退化成 Index Scan。</p>
+
+      <pre><code>-- 检查 Index-Only Scan 的回表率
+EXPLAIN (ANALYZE, BUFFERS)
+SELECT name, email FROM users WHERE user_id = 123;
+
+-- 输出中关注：
+-- Heap Fetches: 0    ← 完美，无需回表
+-- Heap Fetches: 150  ← 需要回表 150 次，Index-Only Scan 名不副实
+
+-- 解决：VACUUM 更新 Visibility Map
+VACUUM users;
+
+-- 自动清理配置（确保及时更新 Visibility Map）
+ALTER TABLE users SET (autovacuum_vacuum_scale_factor = 0.05);</code></pre>
+
+      <h2>六、索引扫描类型：Index Scan / Bitmap Scan / Sequential Scan</h2>
+
+      <p>PostgreSQL 有三种主要的数据扫描方式，理解它们的区别有助于判断索引是否真正有效。</p>
+
+      <h3>三种扫描对比</h3>
+
+      <table>
+        <tr>
+          <th>扫描类型</th>
+          <th>原理</th>
+          <th>适合场景</th>
+          <th>随机 I/O</th>
+        </tr>
+        <tr>
+          <td><strong>Index Scan</strong></td>
+          <td>逐条从索引取指针，回表取数据</td>
+          <td>返回少量行（&lt; 表的 5%）</td>
+          <td>多</td>
+        </tr>
+        <tr>
+          <td><strong>Bitmap Heap Scan</strong></td>
+          <td>先从索引收集所有行指针，按物理位置排序，批量回表</td>
+          <td>返回中等行数（5%~20%）</td>
+          <td>较少（排序后顺序读）</td>
+        </tr>
+        <tr>
+          <td><strong>Sequential Scan</strong></td>
+          <td>全表扫描</td>
+          <td>返回大量行（&gt; 20%）或无可用索引</td>
+          <td>最少（纯顺序读）</td>
+        </tr>
+      </table>
+
+      <h3>Index Scan</h3>
+
+      <pre><code>EXPLAIN SELECT * FROM users WHERE id = 1;
+
+-- Index Scan using users_pkey on users
+--   Index Cond: (id = 1)</code></pre>
+
+      <p>适合点查和返回极少行数的场景。每找到一行都要回表，行数多了随机 I/O 爆炸。</p>
+
+      <h3>Bitmap Scan</h3>
+
+      <pre><code>EXPLAIN SELECT * FROM orders WHERE user_id = 123;
+
+-- Bitmap Heap Scan on orders
+--   Recheck Cond: (user_id = 123)
+--   -&gt; Bitmap Index Scan on idx_orders_user_id
+--        Index Cond: (user_id = 123)</code></pre>
+
+      <p>Bitmap Scan 分两步：</p>
+      <ol>
+        <li><strong>Bitmap Index Scan</strong>：扫描索引，收集匹配行的物理位置，在 Bitmap 中标记</li>
+        <li><strong>Bitmap Heap Scan</strong>：按物理位置排序后访问堆表，减少随机 I/O</li>
+      </ol>
+
+      <div class="tip-box">
+        <strong>Bitmap Scan 的 Lossy 机制</strong>：当匹配行太多，Bitmap 放不下时，会从「行级 Bitmap」退化为「页级 Bitmap」（Lossy）。此时需要 Recheck Cond 重新检查每一行是否真正满足条件。如果 EXPLAIN 中看到 <code>Rows Removed by Recheck</code> 较多，说明 Bitmap 太小了。
+      </div>
+
+      <h3>Sequential Scan 不一定坏</h3>
+
+      <pre><code>-- 100 万行的表，查 30% 的行
+EXPLAIN SELECT * FROM orders WHERE status = 'completed';
+
+-- Seq Scan on orders
+--   Filter: (status = 'completed')</code></pre>
+
+      <p>全表扫描看似低效，但当返回行数占比大时，顺序读比随机读快得多。PostgreSQL 的优化器会自动选择成本最低的方案。</p>
+
+      <div class="warning-box">
+        <strong>不要强制使用索引</strong>：如果优化器选择了 Seq Scan，很可能它是正确的。强行 <code>SET enable_seqscan = off</code> 来「验证索引」只会得到误导性的结果。应该关注<strong>为什么优化器不用索引</strong>——通常是统计信息不准确或索引确实不划算。
+      </div>
+
+      <h2>七、EXPLAIN 分析执行计划</h2>
+
+      <p><code>EXPLAIN</code> 是 PostgreSQL 性能分析的基石。读懂它是诊断慢查询的必备技能。</p>
+
+      <h3>基础用法</h3>
+
+      <pre><code>-- 只看计划（不执行）
+EXPLAIN SELECT * FROM users WHERE email = 'test@example.com';
+
+-- 执行并看实际耗时（⚠️ 会在生产执行查询）
+EXPLAIN (ANALYZE, BUFFERS) SELECT * FROM users WHERE email = 'test@example.com';
+
+-- 更详细的信息
+EXPLAIN (ANALYZE, BUFFERS, VERBOSE, FORMAT TEXT)
+SELECT * FROM users WHERE email = 'test@example.com';</code></pre>
+
+      <h3>关键指标解读</h3>
+
+      <pre><code>EXPLAIN (ANALYZE, BUFFERS)
+SELECT * FROM orders WHERE user_id = 123 AND status = 'paid';
+
+-- 输出示例：
+-- Index Scan using idx_orders_user_status on orders  (cost=0.42..8.45 rows=1 width=72) (actual time=0.015..0.016 rows=2 loops=1)
+--   Index Cond: ((user_id = 123) AND (status = 'paid'))
+--   Buffers: shared hit=4</code></pre>
+
+      <table>
+        <tr>
+          <th>指标</th>
+          <th>含义</th>
+          <th>关注点</th>
+        </tr>
+        <tr>
+          <td><code>cost=0.42..8.45</code></td>
+          <td>启动成本..总成本（单位：任意单位）</td>
+          <td>两个值都越低越好</td>
+        </tr>
+        <tr>
+          <td><code>rows=1</code></td>
+          <td>预估返回行数</td>
+          <td>与 actual rows 差距大 = 统计信息不准</td>
+        </tr>
+        <tr>
+          <td><code>actual time=0.015..0.016</code></td>
+          <td>实际启动时间..实际总时间（ms）</td>
+          <td>这是真实耗时</td>
+        </tr>
+        <tr>
+          <td><code>actual rows=2</code></td>
+          <td>实际返回行数</td>
+          <td>与预估 rows 对比</td>
+        </tr>
+        <tr>
+          <td><code>loops=1</code></td>
+          <td>节点执行次数</td>
+          <td>loops &gt; 1 时 actual time 是单次</td>
+        </tr>
+        <tr>
+          <td><code>shared hit=4</code></td>
+          <td>从缓存读取的块数</td>
+          <td>hit 多 = 缓存友好</td>
+        </tr>
+        <tr>
+          <td><code>shared read=0</code></td>
+          <td>从磁盘读取的块数</td>
+          <td>read 多 = 磁盘 I/O 大</td>
+        </tr>
+      </table>
+
+      <h3>常见问题诊断</h3>
+
+      <h4>1. 预估行数严重偏差</h4>
+
+      <pre><code>-- 预估 1 行，实际 50000 行 → 统计信息过期
+-- Index Scan (cost=0.42..8.45 rows=1 width=72) (actual time=0.015..12.345 rows=50000 loops=1)
+
+-- 解决：更新统计信息
+ANALYZE orders;
+
+-- 或增加统计信息精度
+ALTER TABLE orders ALTER COLUMN status SET STATISTICS 500;
+ANALYZE orders;</code></pre>
+
+      <h4>2. 意外的 Seq Scan</h4>
+
+      <pre><code>-- 索引存在但优化器选择 Seq Scan
+-- 可能原因：
+-- 1. 统计信息不准 → ANALYZE
+-- 2. 返回行数太多 → 检查查询条件
+-- 3. 成本参数不合理 → 检查 random_page_cost
+
+-- 查看当前成本参数
+SHOW random_page_cost;  -- 默认 4.0（机械硬盘），SSD 建议 1.1
+SHOW seq_page_cost;     -- 默认 1.0
+
+-- SSD 环境调整（让优化器更倾向使用索引）
+ALTER SYSTEM SET random_page_cost = 1.1;
+SELECT pg_reload_conf();</code></pre>
+
+      <h4>3. Sort 节点消耗大量时间</h4>
+
+      <pre><code>-- Sort (cost=100000..105000 rows=50000 width=72) (actual time=500..600 rows=50000)
+--   Sort Key: created_at DESC
+--   Sort Method: external merge Disk: 5000kB
+
+-- 问题：排序用磁盘而非内存
+-- 解决 1：增加 work_mem
+SET work_mem = '64MB';  -- 临时生效
+ALTER SYSTEM SET work_mem = '64MB';  -- 永久生效
+
+-- 解决 2：让 ORDER BY 走索引
+CREATE INDEX idx_orders_created_desc ON orders (created_at DESC);</code></pre>
+
+      <h3>EXPLAIN 输出中的危险信号</h3>
+
+      <table>
+        <tr>
+          <th>信号</th>
+          <th>问题</th>
+          <th>解决</th>
+        </tr>
+        <tr>
+          <td><code>Seq Scan on large_table</code></td>
+          <td>缺少索引或索引未被使用</td>
+          <td>检查查询条件，添加合适索引</td>
+        </tr>
+        <tr>
+          <td><code>Sort Method: external merge</code></td>
+          <td>排序溢出到磁盘</td>
+          <td>增加 work_mem 或添加排序索引</td>
+        </tr>
+        <tr>
+          <td><code>Hash Join + Seq Scan</code></td>
+          <td>关联条件无索引</td>
+          <td>在关联列上建索引</td>
+        </tr>
+        <tr>
+          <td><code>Nested Loop + Seq Scan</code></td>
+          <td>内表无索引导致多次全表扫描</td>
+          <td>在内表关联列上建索引</td>
+        </tr>
+        <tr>
+          <td><code>Rows Removed by Filter: 999990</code></td>
+          <td>过滤掉大量行，索引选择性差</td>
+          <td>调整索引列顺序或使用部分索引</td>
+        </tr>
+        <tr>
+          <td>预估 rows 与 actual rows 差距 &gt; 10x</td>
+          <td>统计信息不准确</td>
+          <td><code>ANALYZE</code> + 提高 <code>STATISTICS</code></td>
+        </tr>
+      </table>
+
+      <h2>八、索引维护：膨胀、重建、bloat 检测</h2>
+
+      <p>索引不是建完就完事了。随着大量 UPDATE/DELETE，索引会产生<strong>膨胀（Bloat）</strong>——索引中存在大量空洞，物理体积远大于实际数据量。</p>
+
+      <h3>为什么会膨胀</h3>
+
+      <ul>
+        <li>PostgreSQL 的 MVCC 机制：UPDATE = DELETE + INSERT，旧版本仍占用空间</li>
+        <li>VACUUM 只标记空间可复用，不归还给操作系统</li>
+        <li>频繁 UPDATE 的表，膨胀可能达到实际数据的 2-5 倍</li>
+      </ul>
+
+      <h3>膨胀检测</h3>
+
+      <pre><code>-- 方法1：使用 pgstattuple 扩展
+CREATE EXTENSION IF NOT EXISTS pgstattuple;
+
+SELECT indexrelname,
+       pg_size_pretty(pg_relation_size(indexrelid)) AS index_size,
+       avg_leaf_density,
+       leaf_pages,
+       internal_pages
+FROM pgstatindex('idx_orders_user_id');
+
+-- avg_leaf_density &lt; 50% 说明膨胀严重（健康值 90%+）</code></pre>
+
+      <pre><code>-- 方法2：对比索引大小与表大小
+SELECT schemaname, relname,
+       pg_size_pretty(pg_relation_size(indexrelid)) AS index_size,
+       indexrelname
+FROM pg_stat_user_indexes
+ORDER BY pg_relation_size(indexrelid) DESC
+LIMIT 10;
+
+-- 如果索引比表还大，大概率膨胀或设计有问题</code></pre>
+
+      <pre><code>-- 方法3：估算膨胀比例（无需扩展）
+SELECT schemaname, tablename, indexname,
+       pg_size_pretty(pg_relation_size(i.indexrelid)) AS index_size,
+       ROUND(100 * pg_relation_size(i.indexrelid)::numeric /
+             NULLIF(pg_relation_size(c.oid), 0), 1) AS index_to_table_pct
+FROM pg_index i
+JOIN pg_class c ON c.oid = i.indrelid
+JOIN pg_stat_user_indexes USING (indexrelid)
+WHERE pg_relation_size(i.indexrelid) &gt; 100 * 1024 * 1024  -- &gt; 100MB
+ORDER BY pg_relation_size(i.indexrelid) DESC;</code></pre>
+
+      <h3>索引重建</h3>
+
+      <pre><code>-- 方法1：REINDEX（锁表，生产环境慎用）
+REINDEX INDEX idx_orders_user_id;
+REINDEX TABLE orders;  -- 重建表上所有索引
+
+-- 方法2：REINDEX CONCURRENTLY（PG 12+，不锁表）
+REINDEX INDEX CONCURRENTLY idx_orders_user_id;
+
+-- 方法3：先建新索引再删旧索引（兼容旧版本，不锁表）
+CREATE INDEX CONCURRENTLY idx_orders_user_id_new ON orders (user_id);
+DROP INDEX CONCURRENTLY idx_orders_user_id;
+ALTER INDEX idx_orders_user_id_new RENAME TO idx_orders_user_id;</code></pre>
+
+      <div class="warning-box">
+        <strong>REINDEX CONCURRENTLY 的注意点</strong>：
+        <ul>
+          <li>需要更多磁盘空间（同时存在新旧两个索引）</li>
+          <li>耗时比普通 REINDEX 更长</li>
+          <li>如果中途失败，会留下 <code>INVALID</code> 索引，需要手动 <code>DROP INDEX</code></li>
+          <li>可以在事务外执行，不会阻塞读写</li>
+        </ul>
+      </div>
+
+      <h3>自动维护建议</h3>
+
+      <pre><code>-- 配置自动清理更激进（针对高更新频率的表）
+ALTER TABLE orders SET (
+    autovacuum_vacuum_scale_factor = 0.05,  -- 5% 行变化后触发（默认 20%）
+    autovacuum_analyze_scale_factor = 0.02, -- 2% 行变化后分析
+    autovacuum_vacuum_cost_delay = 10       -- 降低清理速度，减少对业务影响
+);
+
+-- 监控最后清理时间
+SELECT relname, last_vacuum, last_autovacuum, last_analyze, last_autoanalyze
+FROM pg_stat_user_tables
+ORDER BY last_autovacuum DESC NULLS LAST;</code></pre>
+
+      <h2>九、常见索引设计错误</h2>
+
+      <h3>错误 1：过度索引</h3>
+
+      <pre><code>-- ❌ 为每个查询条件单独建索引
+CREATE INDEX idx1 ON orders (user_id);
+CREATE INDEX idx2 ON orders (status);
+CREATE INDEX idx3 ON orders (created_at);
+CREATE INDEX idx4 ON orders (total_amount);
+-- 4 个索引 = 4 倍写入开销 + 4 倍磁盘空间
+
+-- ✅ 用复合索引覆盖常见查询组合
+CREATE INDEX idx_orders_user_status ON orders (user_id, status);
+CREATE INDEX idx_orders_created ON orders (created_at);
+-- 2 个索引覆盖大部分查询，写入开销减半</code></pre>
+
+      <h3>错误 2：忽略查询模式建索引</h3>
+
+      <pre><code>-- ❌ 不看实际查询，凭直觉建索引
+CREATE INDEX idx_users_phone ON users (phone);  -- 从未按 phone 查询
+
+-- ✅ 根据实际慢查询建索引
+-- 先看 pg_stat_statements 找出慢查询
+SELECT query, calls, mean_exec_time, total_exec_time
+FROM pg_stat_statements
+ORDER BY mean_exec_time DESC
+LIMIT 10;</code></pre>
+
+      <h3>错误 3：低选择性列单独建索引</h3>
+
+      <pre><code>-- ❌ 性别列只有 2-3 个值，索引几乎无用
+CREATE INDEX idx_users_gender ON users (gender);
+
+-- ✅ 低选择性列与高选择性列组合
+CREATE INDEX idx_users_gender_city ON users (gender, city);  -- city 区分度高
+
+-- ✅ 或者用部分索引
+CREATE INDEX idx_users_rare_status ON users (status)
+WHERE status = 'vip';  -- 只有 1% 是 VIP</code></pre>
+
+      <h3>错误 4：忘记处理 NULL</h3>
+
+      <pre><code>-- ❌ 大量 NULL 值污染索引
+CREATE INDEX idx_users_middle_name ON users (middle_name);
+-- 80% 的用户没有 middle_name，索引 80% 是 NULL
+
+-- ✅ 排除 NULL
+CREATE INDEX idx_users_middle_name ON users (middle_name)
+WHERE middle_name IS NOT NULL;</code></pre>
+
+      <h3>错误 5：忽略数据类型不匹配</h3>
+
+      <pre><code>-- ❌ 类型不匹配导致隐式转换，索引失效
+-- phone 是 VARCHAR，但传入整数
+SELECT * FROM users WHERE phone = 13800138000;
+-- PostgreSQL 会将 phone 转为整数再比较 → 索引失效
+
+-- ✅ 保持类型一致
+SELECT * FROM users WHERE phone = '13800138000';
+
+-- ✅ 或建表达式索引
+CREATE INDEX idx_users_phone_int ON users ((phone::bigint));
+-- 但这会增加写入开销，不如统一类型</code></pre>
+
+      <h3>错误 6：CREATE INDEX 不加 CONCURRENTLY</h3>
+
+      <pre><code>-- ❌ 锁表！生产环境大表会导致服务不可用
+CREATE INDEX idx_orders_user ON orders (user_id);
+
+-- ✅ 不锁表，允许并发读写
+CREATE INDEX CONCURRENTLY idx_orders_user ON orders (user_id);
+
+-- ⚠️ CONCURRENTLY 不能在事务块中执行
+-- 也不能同时创建多个 CONCURRENTLY 索引</code></pre>
+
+      <h2>十、实战场景：慢查询优化案例</h2>
+
+      <h3>案例 1：订单列表分页查询</h3>
+
+      <p><strong>场景</strong>：电商后台订单列表，按用户 + 状态筛选，按创建时间倒序分页。</p>
+
+      <pre><code>-- 原始查询（慢：3.2s）
+SELECT id, order_no, total_amount, status, created_at
+FROM orders
+WHERE user_id = 12345
+  AND status IN ('paid', 'shipped', 'completed')
+ORDER BY created_at DESC
+LIMIT 20 OFFSET 0;
+
+-- EXPLAIN 结果
+-- Seq Scan on orders (cost=0.00..50000.00 rows=50 width=72) (actual time=50..3200 rows=48)
+--   Filter: (user_id = 12345 AND status = ANY(...))
+--   Rows Removed by Filter: 999952</code></pre>
+
+      <pre><code>-- 分析：缺少合适索引，全表扫描过滤 100 万行
+
+-- 优化步骤1：添加复合索引
+CREATE INDEX CONCURRENTLY idx_orders_user_status_created
+ON orders (user_id, status, created_at DESC);
+
+-- 优化步骤2：用覆盖索引避免回表
+CREATE INDEX CONCURRENTLY idx_orders_user_status_created_cover
+ON orders (user_id, status, created_at DESC)
+INCLUDE (order_no, total_amount);
+
+-- 删除旧索引
+DROP INDEX CONCURRENTLY idx_orders_user_status_created;
+
+-- 优化后 EXPLAIN
+-- Index Only Scan using idx_orders_user_status_created_cover
+--   (cost=0.42..12.50 rows=50 width=72) (actual time=0.02..0.05 rows=48)
+
+-- 结果：3.2s → 0.05ms，提升 64000 倍</code></pre>
+
+      <h3>案例 2：JSONB 字段查询</h3>
+
+      <p><strong>场景</strong>：事件追踪表，按 JSONB 中的 event_type 查询。</p>
+
+      <pre><code>-- 原始查询（慢：1.8s）
+SELECT id, user_id, data, created_at
+FROM events
+WHERE data-&gt;&gt;'event_type' = 'page_view'
+  AND created_at &gt; NOW() - INTERVAL '7 days'
+ORDER BY created_at DESC
+LIMIT 50;
+
+-- EXPLAIN 结果
+-- Seq Scan on events (cost=0.00..180000.00 rows=5000 width=200)
+--   Filter: ((data-&gt;&gt;'event_type' = 'page_view') AND (created_at &gt; ...))</code></pre>
+
+      <pre><code>-- 优化：表达式索引 + 复合索引
+-- 方案1：表达式 + B-Tree 复合索引
+CREATE INDEX CONCURRENTLY idx_events_type_created
+ON events ((data-&gt;&gt;'event_type'), created_at DESC);
+
+-- 方案2（推荐）：GIN 索引 + jsonb_path_ops（更高效）
+CREATE INDEX CONCURRENTLY idx_events_data_gin
+ON events USING GIN ((data-&gt;&gt;'event_type'));
+
+-- 方案3：如果查询模式固定，用部分索引
+CREATE INDEX CONCURRENTLY idx_events_page_view
+ON events (created_at DESC)
+WHERE data-&gt;&gt;'event_type' = 'page_view';
+
+-- 优化后（方案3）
+-- Index Scan using idx_events_page_view
+--   (cost=0.42..80.00 rows=5000 width=200) (actual time=0.01..2.50 rows=4987)
+
+-- 结果：1.8s → 2.5ms</code></pre>
+
+      <h3>案例 3：多条件筛选 + 全文搜索</h3>
+
+      <p><strong>场景</strong>：文章搜索，按分类 + 状态筛选，同时搜索标题。</p>
+
+      <pre><code>-- 原始查询（慢：5.6s）
+SELECT id, title, category, status, published_at
+FROM articles
+WHERE category_id = 5
+  AND status = 'published'
+  AND to_tsvector('simple', title) @@ to_tsquery('simple', 'postgresql &amp; index')
+ORDER BY published_at DESC
+LIMIT 20;
+
+-- 问题：to_tsvector 每行计算，无法用索引</code></pre>
+
+      <pre><code>-- 优化步骤1：预计算 tsvector 列
+ALTER TABLE articles ADD COLUMN title_tsvector tsvector
+    GENERATED ALWAYS AS (to_tsvector('simple', title)) STORED;
+
+-- 优化步骤2：创建 GIN 索引
+CREATE INDEX CONCURRENTLY idx_articles_title_gin
+ON articles USING GIN (title_tsvector);
+
+-- 优化步骤3：复合 B-Tree 索引
+CREATE INDEX CONCURRENTLY idx_articles_cat_status_published
+ON articles (category_id, status, published_at DESC)
+WHERE status = 'published';
+
+-- 优化后查询
+SELECT id, title, category, status, published_at
+FROM articles
+WHERE category_id = 5
+  AND status = 'published'
+  AND title_tsvector @@ to_tsquery('simple', 'postgresql &amp; index')
+ORDER BY published_at DESC
+LIMIT 20;
+
+-- 优化器可能选择 BitmapAnd：
+-- BitmapAnd
+--   -&gt; Bitmap Index Scan on idx_articles_cat_status_published
+--   -&gt; Bitmap Index Scan on idx_articles_title_gin
+
+-- 结果：5.6s → 8ms</code></pre>
+
+      <h3>案例 4：OFFSET 分页性能退化</h3>
+
+      <p><strong>场景</strong>：深分页查询，页码越大越慢。</p>
+
+      <pre><code>-- 第1页快（0.01ms）
+SELECT * FROM orders ORDER BY id LIMIT 20 OFFSET 0;
+
+-- 第50000页慢（12s）
+SELECT * FROM orders ORDER BY id LIMIT 20 OFFSET 999980;
+
+-- 原因：OFFSET 必须扫描并跳过前面所有行</code></pre>
+
+      <pre><code>-- 优化：Keyset Pagination（游标分页）
+-- 第1页
+SELECT * FROM orders ORDER BY id LIMIT 21;  -- 多取1行判断是否有下一页
+
+-- 第2页（基于上一页最后一条的 id）
+SELECT * FROM orders WHERE id &gt; 999980 ORDER BY id LIMIT 21;
+
+-- 结果：无论翻到第几页，都是 0.01ms</code></pre>
+
+      <div class="tip-box">
+        <strong>Keyset Pagination 的局限</strong>：不支持跳转到任意页码，只能「上一页/下一页」。如果你的业务确实需要跳页，考虑：<br>
+        1. 限制最大页码（如 Google 搜索最多翻到第 10 页）<br>
+        2. 使用 <code>WITH TIES</code> 或缓存策略<br>
+        3. 真正需要深分页的场景，用异步导出而非实时查询
+      </div>
+
+      <h2>十一、速查表</h2>
+
+      <h3>索引类型选择</h3>
+
+      <table>
+        <tr>
+          <th>查询模式</th>
+          <th>推荐索引类型</th>
+          <th>示例</th>
+        </tr>
+        <tr>
+          <td>等值 + 范围 + 排序</td>
+          <td>B-Tree</td>
+          <td><code>WHERE user_id = 1 AND created_at &gt; ...</code></td>
+        </tr>
+        <tr>
+          <td>数组包含</td>
+          <td>GIN</td>
+          <td><code>WHERE tags @&gt; ARRAY['python']</code></td>
+        </tr>
+        <tr>
+          <td>JSONB 查询</td>
+          <td>GIN + jsonb_path_ops</td>
+          <td><code>WHERE data @&gt; '{"type":"click"}'</code></td>
+        </tr>
+        <tr>
+          <td>全文搜索</td>
+          <td>GIN (tsvector)</td>
+          <td><code>WHERE tsv @@ to_tsquery('hello')</code></td>
+        </tr>
+        <tr>
+          <td>几何/空间</td>
+          <td>GiST (PostGIS)</td>
+          <td><code>WHERE ST_Contains(geom, point)</code></td>
+        </tr>
+        <tr>
+          <td>大表时间序列</td>
+          <td>BRIN</td>
+          <td><code>WHERE timestamp &gt; ...</code>（按时间自然排序）</td>
+        </tr>
+      </table>
+
+      <h3>索引设计原则</h3>
+
+      <table>
+        <tr>
+          <th>原则</th>
+          <th>说明</th>
+        </tr>
+        <tr>
+          <td>等值列在前，范围列在后</td>
+          <td><code>(user_id, created_at)</code> 而非 <code>(created_at, user_id)</code></td>
+        </tr>
+        <tr>
+          <td>高选择性列在前</td>
+          <td>区分度高的列过滤效果好</td>
+        </tr>
+        <tr>
+          <td>用 INCLUDE 实现覆盖索引</td>
+          <td>避免回表，减少 I/O</td>
+        </tr>
+        <tr>
+          <td>用部分索引减少体积</td>
+          <td>只为活跃数据建索引</td>
+        </tr>
+        <tr>
+          <td>消除冗余索引</td>
+          <td><code>(a)</code> 是 <code>(a, b)</code> 的前缀</td>
+        </tr>
+        <tr>
+          <td>生产建索引加 CONCURRENTLY</td>
+          <td>避免锁表</td>
+        </tr>
+      </table>
+
+      <h3>EXPLAIN 关键指标</h3>
+
+      <table>
+        <tr>
+          <th>指标</th>
+          <th>健康值</th>
+          <th>异常信号</th>
+        </tr>
+        <tr>
+          <td>预估 rows vs actual rows</td>
+          <td>差距 &lt; 2x</td>
+          <td>差距 &gt; 10x → ANALYZE</td>
+        </tr>
+        <tr>
+          <td>Heap Fetches（Index-Only Scan）</td>
+          <td>0 或极小</td>
+          <td>接近 actual rows → VACUUM</td>
+        </tr>
+        <tr>
+          <td>Sort Method</td>
+          <td>quickSort / top-N heapsort（内存）</td>
+          <td>external merge（磁盘）→ 增加 work_mem</td>
+        </tr>
+        <tr>
+          <td>shared read</td>
+          <td>0（全在缓存）</td>
+          <td>很大 → 缓存未命中，检查索引</td>
+        </tr>
+        <tr>
+          <td>avg_leaf_density</td>
+          <td>&gt; 90%</td>
+          <td>&lt; 50% → REINDEX</td>
+        </tr>
+      </table>
+
+      <h3>维护命令速查</h3>
+
+      <table>
+        <tr>
+          <th>操作</th>
+          <th>命令</th>
+          <th>锁表？</th>
+        </tr>
+        <tr>
+          <td>更新统计信息</td>
+          <td><code>ANALYZE tablename;</code></td>
+          <td>否（SHARE 锁，极短暂）</td>
+        </tr>
+        <tr>
+          <td>清理死元组</td>
+          <td><code>VACUUM tablename;</code></td>
+          <td>否</td>
+        </tr>
+        <tr>
+          <td>重建索引</td>
+          <td><code>REINDEX INDEX CONCURRENTLY idx_name;</code></td>
+          <td>否</td>
+        </tr>
+        <tr>
+          <td>创建索引</td>
+          <td><code>CREATE INDEX CONCURRENTLY idx ON tbl (col);</code></td>
+          <td>否</td>
+        </tr>
+        <tr>
+          <td>删除索引</td>
+          <td><code>DROP INDEX CONCURRENTLY idx_name;</code></td>
+          <td>否</td>
+        </tr>
+        <tr>
+          <td>查看索引大小</td>
+          <td><code>pg_size_pretty(pg_relation_size('idx_name'))</code></td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td>查看索引使用率</td>
+          <td><code>SELECT * FROM pg_stat_user_indexes;</code></td>
+          <td>—</td>
+        </tr>
+      </table>
+
+      <div class="tip-box">
+        <strong>一句话总结</strong>：索引设计 = 选对类型 + 排好列序 + 控好范围。B-Tree 是万金油但不是万能药；GIN 搞定 JSONB 和数组；部分索引省空间又省维护；覆盖索引免回表；EXPLAIN 是你的听诊器。建索引前先 EXPLAIN，建完后再 EXPLAIN 验证——永远不要猜。
+      </div>
+
+      <div class="post-tags">
+        <span>PostgreSQL</span>
+        <span>索引优化</span>
+        <span>B-Tree</span>
+        <span>GIN</span>
+        <span>EXPLAIN</span>
+        <span>慢查询</span>
+        <span>数据库</span>
+      </div>
+    </article>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <p>&copy; 2026 张小猛 - loczb</p>
+    </div>
+  </footer>
+
+  <script>
+    // Scroll progress
+    const scrollProgress = document.querySelector('.scroll-progress');
+    window.addEventListener('scroll', () => {
+      const scrollTop = document.documentElement.scrollTop;
+      const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = (scrollTop / scrollHeight) * 100;
+      scrollProgress.style.width = progress + '%';
+    });
+
+    // Theme toggle
+    const themeToggle = document.querySelector('.theme-toggle');
+    themeToggle?.addEventListener('click', () => {
+      const html = document.documentElement;
+      const current = html.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+    });
+
+    // Mobile nav
+    const navToggle = document.querySelector('.nav-toggle');
+    const navLinks = document.querySelector('.nav-links');
+    navToggle?.addEventListener('click', () => {
+      navLinks.classList.toggle('active');
+    });
+  </script>
+</body>
+</html>
