@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="WebAssembly 实战指南：从 C/Rust 编译到浏览器运行，WASM 与 JS 互操作、内存管理、性能优化与真实应用场景">
+  <meta name="keywords" content="WebAssembly, WASM, Rust, Emscripten, 浏览器性能, 前端性能, 计算密集型">
+  <meta name="author" content="张小猛">
+  <meta name="publish-date" content="2026-06-27">
+  <title>WebAssembly 实战：浏览器端高性能计算 | 张小猛 - loczb</title>
+  <link rel="canonical" href="https://709527.xyz/blog/posts/webassembly-in-practice.html">
+  <meta name="robots" content="index, follow">
+  
+  <!-- Open Graph -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://709527.xyz/blog/posts/webassembly-in-practice.html">
+  <meta property="og:title" content="WebAssembly 实战：浏览器端高性能计算 | 张小猛 - loczb">
+  <meta property="og:description" content="WebAssembly 实战指南：从 C/Rust 编译到浏览器运行，WASM 与 JS 互操作、内存管理、性能优化与真实应用场景">
+  <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="article:author" content="张小猛">
+  <meta property="article:published_time" content="2026-06-27">
+  
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="WebAssembly 实战：浏览器端高性能计算 | 张小猛 - loczb">
+  <meta name="twitter:description" content="WebAssembly 实战指南：从 C/Rust 编译到浏览器运行，WASM 与 JS 互操作、内存管理、性能优化与真实应用场景">
+  <meta name="twitter:image" content="https://709527.xyz/assets/images/og-image.png">
+
+  <link rel="icon" type="image/x-icon" href="../../assets/images/favicon.ico">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
+  <link rel="icon" type="image/png" sizes="16x16" href="../../assets/images/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="../../assets/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="48x48" href="../../assets/images/favicon-48x48.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="../../assets/images/apple-touch-icon.png">
+  <link rel="manifest" href="../../site.webmanifest">
+  <meta name="theme-color" content="#3b82f6">
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <style>
+    .post-content { max-width: 760px; margin: 0 auto; line-height: 1.85; }
+    .post-content h1 { font-size: 2.4rem; margin: 2rem 0 1rem; }
+    .post-content h2 { font-size: 1.7rem; margin: 2.5rem 0 1rem; color: var(--color-accent-primary); border-bottom: 1px solid var(--color-border); padding-bottom: 0.5rem; }
+    .post-content h3 { font-size: 1.3rem; margin: 1.8rem 0 0.8rem; }
+    .post-content pre { background: var(--color-bg-tertiary); padding: 1.2rem; border-radius: 8px; overflow-x: auto; margin: 1.2rem 0; font-size: 0.9rem; }
+    .post-content code { background: var(--color-bg-tertiary); padding: 0.15rem 0.4rem; border-radius: 4px; font-family: monospace; font-size: 0.9em; }
+    .post-meta { color: var(--color-text-secondary); font-size: 0.9rem; margin-bottom: 2rem; }
+    .post-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 3rem; }
+    .post-tags span { background: var(--color-bg-tertiary); padding: 0.3rem 0.8rem; border-radius: 9999px; font-size: 0.85rem; color: var(--color-accent-primary); }
+    .tip-box { background: rgba(34, 197, 94, 0.1); border-left: 3px solid #22c55e; padding: 1rem 1.2rem; margin: 1.5rem 0; border-radius: 0 6px 6px 0; }
+    .warning-box { background: rgba(234, 179, 8, 0.1); border-left: 3px solid #eab308; padding: 1rem 1.2rem; margin: 1.5rem 0; border-radius: 0 6px 6px 0; }
+    table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.95rem; }
+    th, td { border: 1px solid var(--color-border); padding: 0.7rem; text-align: left; }
+    th { background: var(--color-bg-tertiary); font-weight: 600; }
+  </style>
+  <!-- Preconnect to Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500;600&display=swap" media="print" onload="this.media='all'">
+  <noscript>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500;600&display=swap">
+  </noscript>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../../index.html" class="nav-logo">loc<span>zb</span></a>
+      <button class="nav-toggle" aria-label="打开菜单"><span></span><span></span><span></span></button>
+      <div class="nav-overlay"></div>
+      <ul class="nav-links">
+        <li><a href="../../index.html" class="nav-link">首页</a></li>
+        <li><a href="../../projects/index.html" class="nav-link">项目</a></li>
+        <li><a href="../index.html" class="nav-link active">博客</a></li>
+        <li><a href="../../about/index.html" class="nav-link">关于</a></li>
+      </ul>
+      <button class="theme-toggle" aria-label="切换主题">
+        <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line></svg>
+        <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+      </button>
+    </div>
+  </nav>
+<div class="scroll-progress"></div>
+
+  <main>
+    <article class="post-content" style="padding: calc(64px + 4rem) 1rem 4rem;">
+      <a href="../index.html" style="display: inline-flex; align-items: center; gap: 0.5rem; color: var(--color-text-secondary); text-decoration: none; margin-bottom: 2rem;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        返回博客
+      </a>
+      
+      <h1>WebAssembly 实战：浏览器端高性能计算</h1>
+      
+      <div class="post-meta">2026年6月27日 · 阅读时间 16 分钟</div>
+
+      <p>JavaScript 统治浏览器 20 多年，但在图像处理、音视频编解码、科学计算等场景下，它的性能始终有瓶颈。WebAssembly（WASM）的出现改变了一切——你可以用 C、C++、Rust 等编译型语言编写高性能逻辑，编译后在浏览器中以接近原生的速度运行。本文从实战角度出发，带你完成从编写到部署的全流程。</p>
+
+      <div class="tip-box">
+        <strong>适合谁读</strong>：前端开发者想突破 JS 性能瓶颈、后端/系统程序员想把能力搬到浏览器、对 WASM 感兴趣但不知如何下手的工程师。
+      </div>
+
+      <h2>一、WebAssembly 是什么</h2>
+
+      <p>WebAssembly 是一种低级的二进制指令格式，不是用来手写的，而是从高级语言编译而来。它运行在浏览器的虚拟机中，与 JavaScript 并肩工作。</p>
+
+      <table>
+        <tr>
+          <th>特性</th>
+          <th>JavaScript</th>
+          <th>WebAssembly</th>
+        </tr>
+        <tr>
+          <td>类型系统</td>
+          <td>动态类型</td>
+          <td>静态类型（i32/i64/f32/f64）</td>
+        </tr>
+        <tr>
+          <td>编译方式</td>
+          <td>JIT</td>
+          <td>AOT（编译为二进制）</td>
+        </tr>
+        <tr>
+          <td>内存模型</td>
+          <td>GC 管理</td>
+          <td>线性内存（手动管理）</td>
+        </tr>
+        <tr>
+          <td>执行速度</td>
+          <td>快（有峰值开销）</td>
+          <td>接近原生</td>
+        </tr>
+        <tr>
+          <td>调试体验</td>
+          <td>原生 DevTools</td>
+          <td>Source Map + DevTools</td>
+        </tr>
+        <tr>
+          <td>DOM 访问</td>
+          <td>直接</td>
+          <td>需通过 JS 桥接</td>
+        </tr>
+      </table>
+
+      <div class="warning-box">
+        <strong>误区澄清</strong>：WASM 不是要替代 JavaScript，而是补充。DOM 操作、UI 渲染仍然用 JS，计算密集型任务交给 WASM。
+      </div>
+
+      <h2>二、从 Rust 到 WASM：最顺畅的路径</h2>
+
+      <p>Rust 是目前编译到 WASM 体验最好的语言，官方工具链 <code>wasm-pack</code> 一行命令就能产出可发布的 npm 包。</p>
+
+      <h3>环境搭建</h3>
+
+      <pre><code># 安装 wasm-pack
+curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
+
+# 添加 wasm32 目标
+rustup target add wasm32-unknown-unknown
+
+# 创建项目
+cargo new --lib image-processor
+cd image-processor</code></pre>
+
+      <h3>编写 Rust 代码</h3>
+
+      <pre><code>// src/lib.rs
+use wasm_bindgen::prelude::*;
+
+#[wasm_bindgen]
+pub fn grayscale(data: &mut [u8]) {
+    // 每个像素 4 字节：R, G, B, A
+    for pixel in data.chunks_exact_mut(4) {
+        let r = pixel[0] as f32;
+        let g = pixel[1] as f32;
+        let b = pixel[2] as f32;
+        // 加权灰度公式（人眼对绿色更敏感）
+        let gray = (0.299 * r + 0.587 * g + 0.114 * b) as u8;
+        pixel[0] = gray;
+        pixel[1] = gray;
+        pixel[2] = gray;
+        // alpha 保持不变
+    }
+}
+
+#[wasm_bindgen]
+pub fn invert(data: &mut [u8]) {
+    for pixel in data.chunks_exact_mut(4) {
+        pixel[0] = 255 - pixel[0];
+        pixel[1] = 255 - pixel[1];
+        pixel[2] = 255 - pixel[2];
+    }
+}
+
+#[wasm_bindgen]
+pub fn blur(data: &[u8], width: u32, height: u32, radius: u32) -> Vec&lt;u8&gt; {
+    let mut output = data.to_vec();
+    let w = width as usize;
+    let h = height as usize;
+    let r = radius as usize;
+
+    for y in r..h-r {
+        for x in r..w-r {
+            let mut sum_r: f64 = 0.0;
+            let mut sum_g: f64 = 0.0;
+            let mut sum_b: f64 = 0.0;
+            let mut count: f64 = 0.0;
+
+            for dy in -r..=r {
+                for dx in -r..=r {
+                    let idx = ((y as isize + dy as isize) as usize * w + (x as isize + dx as isize) as usize) * 4;
+                    sum_r += data[idx] as f64;
+                    sum_g += data[idx + 1] as f64;
+                    sum_b += data[idx + 2] as f64;
+                    count += 1.0;
+                }
+            }
+
+            let out_idx = (y * w + x) * 4;
+            output[out_idx] = (sum_r / count) as u8;
+            output[out_idx + 1] = (sum_g / count) as u8;
+            output[out_idx + 2] = (sum_b / count) as u8;
+        }
+    }
+
+    output
+}</code></pre>
+
+      <h3>配置 Cargo.toml</h3>
+
+      <pre><code>[package]
+name = "image-processor"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+wasm-bindgen = "0.2"
+
+[profile.release]
+opt-level = 3
+lto = true</code></pre>
+
+      <h3>编译并打包</h3>
+
+      <pre><code># 编译为 web 目标（ES Module）
+wasm-pack build --target web --release
+
+# 产出目录 pkg/ 包含：
+# image_processor.js      - JS 胶水代码
+# image_processor_bg.wasm - WASM 二进制
+# image_processor.d.ts    - TypeScript 类型定义
+# package.json            - npm 包配置</code></pre>
+
+      <h2>三、浏览器端集成</h2>
+
+      <h3>HTML 中使用</h3>
+
+      <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+  &lt;title&gt;WASM 图片处理器&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;input type="file" id="fileInput" accept="image/*"&gt;
+  &lt;canvas id="canvas"&gt;&lt;/canvas&gt;
+  &lt;button id="grayscaleBtn"&gt;灰度&lt;/button&gt;
+  &lt;button id="blurBtn"&gt;模糊&lt;/button&gt;
+  &lt;button id="invertBtn"&gt;反色&lt;/button&gt;
+
+  &lt;script type="module"&gt;
+    import init, { grayscale, invert, blur, memory } from './pkg/image_processor.js';
+
+    let imageData;
+
+    async function run() {
+      await init();
+
+      const canvas = document.getElementById('canvas');
+      const ctx = canvas.getContext('2d');
+
+      document.getElementById('fileInput').addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        const img = new Image();
+        img.onload = () => {
+          canvas.width = img.width;
+          canvas.height = img.height;
+          ctx.drawImage(img, 0, 0);
+          imageData = ctx.getImageData(0, 0, img.width, img.height);
+        };
+        img.src = URL.createObjectURL(file);
+      });
+
+      document.getElementById('grayscaleBtn').addEventListener('click', () => {
+        if (!imageData) return;
+        const t0 = performance.now();
+        grayscale(imageData.data);
+        const t1 = performance.now();
+        console.log(`灰度耗时: ${(t1 - t0).toFixed(2)}ms`);
+        ctx.putImageData(imageData, 0, 0);
+      });
+
+      document.getElementById('blurBtn').addEventListener('click', () => {
+        if (!imageData) return;
+        const t0 = performance.now();
+        const result = blur(imageData.data, canvas.width, canvas.height, 3);
+        const t1 = performance.now();
+        console.log(`模糊耗时: ${(t1 - t0).toFixed(2)}ms`);
+        imageData.data.set(result);
+        ctx.putImageData(imageData, 0, 0);
+      });
+    }
+
+    run();
+  &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
+      <h2>四、内存管理：WASM 的核心挑战</h2>
+
+      <p>WASM 使用线性内存模型，所有数据在一段连续的 <code>ArrayBuffer</code> 中。JS 和 WASM 之间的数据传递有几种方式：</p>
+
+      <h3>1. 直接传递引用（最快）</h3>
+
+      <pre><code>// JS 端直接操作 WASM 内存
+const ptr = wasm_exports.alloc(size);
+const wasmMemory = new Uint8Array(memory.buffer, ptr, size);
+wasmMemory.set(jsData);  // 拷贝数据到 WASM 内存
+wasm_exports.process(ptr, size);  // 调用 WASM 函数
+wasm_exports.dealloc(ptr, size);  // 释放内存</code></pre>
+
+      <h3>2. wasm-bindgen 自动封送</h3>
+
+      <pre><code>// Rust 端
+#[wasm_bindgen]
+pub fn process_vec(data: Vec&lt;u8&gt;) -> Vec&lt;u8&gt; {
+    // wasm-bindgen 自动处理 JS ↔ Rust 的数据转换
+    data.iter().map(|&x| x.wrapping_add(1)).collect()
+}</code></pre>
+
+      <div class="warning-box">
+        <strong>性能陷阱</strong>：<code>Vec&lt;u8&gt;</code> 参数会导致数据从 JS 堆拷贝到 WASM 线性内存。大数组场景下，直接操作内存引用比自动封送快 3-10 倍。
+      </div>
+
+      <h3>3. 共享内存 + Web Workers</h3>
+
+      <pre><code>// 主线程
+const sharedBuffer = new SharedArrayBuffer(1024 * 1024);
+const sharedArray = new Uint8Array(sharedBuffer);
+
+// Worker 线程
+const worker = new Worker('worker.js');
+worker.postMessage({ buffer: sharedBuffer });
+
+// worker.js
+self.onmessage = async ({ data }) => {
+  const { init, process } = await import('./pkg/image_processor.js');
+  await init();
+  // 直接在共享内存上操作
+  const view = new Uint8Array(data.buffer);
+  process(view);
+  self.postMessage('done');
+};</code></pre>
+
+      <h2>五、性能对比：WASM vs JavaScript</h2>
+
+      <p>以 4096×4096 图片灰度处理为例：</p>
+
+      <table>
+        <tr>
+          <th>方案</th>
+          <th>耗时</th>
+          <th>备注</th>
+        </tr>
+        <tr>
+          <td>JavaScript 单线程</td>
+          <td>~85ms</td>
+          <td>基准线</td>
+        </tr>
+        <tr>
+          <td>WASM 单线程</td>
+          <td>~18ms</td>
+          <td>4.7x 提升</td>
+        </tr>
+        <tr>
+          <td>WASM + SIMD</td>
+          <td>~6ms</td>
+          <td>14x 提升</td>
+        </tr>
+        <tr>
+          <td>WASM + Workers(4)</td>
+          <td>~5ms</td>
+          <td>17x 提升</td>
+        </tr>
+      </table>
+
+      <h3>启用 SIMD 优化</h3>
+
+      <pre><code>// Rust 端使用 SIMD intrinsics
+#[wasm_bindgen]
+#[target_feature(enable = "simd128")]
+pub fn grayscale_simd(data: &mut [u8]) {
+    use std::arch::wasm32::*;
+
+    for pixel in data.chunks_exact_mut(16) {
+        let rgba1 = v128_load(pixel.as_ptr() as *const v128);
+        // SIMD 并行处理 4 个像素
+        // ... SIMD 指令处理 ...
+    }
+}</code></pre>
+
+      <div class="tip-box">
+        <strong>2026 年现状</strong>：所有主流浏览器已支持 WASM SIMD。Chrome 91+、Firefox 89+、Safari 16.4+ 均可使用，无需 feature detect。
+      </div>
+
+      <h2>六、真实应用场景</h2>
+
+      <h3>1. 图片/视频处理</h3>
+
+      <p>Photopea（在线 Photoshop 替代品）大量使用 WASM 处理 PSD 解析、滤镜运算。Figma 用 WASM 做 C++ 渲染引擎的浏览器端移植。</p>
+
+      <h3>2. 游戏引擎</h3>
+
+      <p>Unity 和 Unreal Engine 都支持 WASM 导出。3D 物理引擎、碰撞检测等计算密集模块天然适合 WASM。</p>
+
+      <h3>3. 数据库与数据分析</h3>
+
+      <p>DuckDB-WASM 让你在浏览器中直接运行 SQL 查询，处理 GB 级数据。Apache Arrow 也提供了 WASM 版本。</p>
+
+      <h3>4. 加密与压缩</h3>
+
+      <pre><code>// 使用 WASM 版 zlib 替代纯 JS 压缩
+import init, { deflate } from './pkg/zlib_wasm.js';
+
+await init();
+const compressed = deflate(rawData, 6); // 压缩级别 6
+// 比纯 JS 版 pako 快 2-3 倍</code></pre>
+
+      <h3>5. AI 推理</h3>
+
+      <p>ONNX Runtime Web、TensorFlow.js WASM backend 让浏览器端跑轻量模型成为可能。</p>
+
+      <h2>七、调试技巧</h2>
+
+      <h3>DevTools 调试 WASM</h3>
+
+      <pre><code># 编译时开启 debug 信息
+wasm-pack build --target web --dev
+
+# Chrome DevTools → Sources → wasm 模块
+# 可以设置断点、单步执行、查看变量</code></pre>
+
+      <h3>性能分析</h3>
+
+      <pre><code>// JS 端
+const t0 = performance.now();
+wasm_function(data);
+const t1 = performance.now();
+console.log(`WASM 耗时: ${(t1 - t0).toFixed(2)}ms`);
+
+// Chrome Performance 面板可以看到 WASM 函数调用栈
+// 配合 source map 可以映射回 Rust 源码</code></pre>
+
+      <h3>常见问题排查</h3>
+
+      <table>
+        <tr>
+          <th>问题</th>
+          <th>原因</th>
+          <th>解决</th>
+        </tr>
+        <tr>
+          <td>内存越界</td>
+          <td>线性内存不足</td>
+          <td>增大初始内存或动态增长</td>
+        </tr>
+        <tr>
+          <td>数据拷贝慢</td>
+          <td>频繁 JS↔WASM 传数据</td>
+          <td>复用内存、减少跨边界调用</td>
+        </tr>
+        <tr>
+          <td>编译慢</td>
+          <td>WASM 文件过大</td>
+          <td>开启 LTO、tree-shaking、代码分割</td>
+        </tr>
+        <tr>
+          <td>Stack Overflow</td>
+          <td>默认栈只有 1MB</td>
+          <td>避免递归、改用迭代</td>
+        </tr>
+      </table>
+
+      <h2>八、WASM 生态工具链</h2>
+
+      <table>
+        <tr>
+          <th>工具</th>
+          <th>用途</th>
+          <th>语言</th>
+        </tr>
+        <tr>
+          <td>wasm-pack</td>
+          <td>构建 + 打包 npm</td>
+          <td>Rust</td>
+        </tr>
+        <tr>
+          <td>Emscripten</td>
+          <td>C/C++ → WASM</td>
+          <td>C/C++</td>
+        </tr>
+        <tr>
+          <td>wasm2js</td>
+          <td>WASM → JS 降级</td>
+          <td>通用</td>
+        </tr>
+        <tr>
+          <td>wabt</td>
+          <td>WASM 反汇编/验证</td>
+          <td>通用</td>
+        </tr>
+        <tr>
+          <td>WASMI</td>
+          <td>WASM 解释器（测试用）</td>
+          <td>Rust</td>
+        </tr>
+        <tr>
+          <td>Trunk</td>
+          <td>Rust WASM 应用打包器</td>
+          <td>Rust</td>
+        </tr>
+      </table>
+
+      <h2>九、最佳实践总结</h2>
+
+      <ol>
+        <li><strong>选对场景</strong>：只有计算密集型任务才值得用 WASM，DOM 操作用 JS</li>
+        <li><strong>减少跨边界调用</strong>：JS↔WASM 每次调用有开销，批量传递数据</li>
+        <li><strong>复用内存</strong>：预分配 WASM 内存，避免频繁分配释放</li>
+        <li><strong>开启 SIMD</strong>：图像/矩阵运算场景提升显著</li>
+        <li><strong>Web Workers 并行</strong>：WASM 天然适合多线程</li>
+        <li><strong>渐进增强</strong>：WASM 加载失败时降级到 JS 方案</li>
+        <li><strong>监控体积</strong>：<code>wasm-opt -Oz</code> 压缩，关注首次加载时间</li>
+        <li><strong>Streaming 编译</strong>：<code>WebAssembly.instantiateStreaming()</code> 边下载边编译</li>
+      </ol>
+
+      <pre><code>// 流式编译（比 instantiate 快 20-30%）
+const { instance } = await WebAssembly.instantiateStreaming(
+  fetch('image_processor_bg.wasm'),
+  importObject
+);</code></pre>
+
+      <div class="tip-box">
+        <strong>一句话总结</strong>：WebAssembly 不是万能药，但在计算密集场景下它是浏览器性能的终极答案。Rust + wasm-bindgen 是当前最佳开发体验。
+      </div>
+
+      <div class="post-tags">
+        <span>WebAssembly</span>
+        <span>Rust</span>
+        <span>前端性能</span>
+        <span>WASM</span>
+        <span>浏览器</span>
+      </div>
+    </article>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <p>&copy; 2026 张小猛 - loczb</p>
+    </div>
+  </footer>
+
+  <script>
+    // Scroll progress
+    const scrollProgress = document.querySelector('.scroll-progress');
+    window.addEventListener('scroll', () => {
+      const scrollTop = document.documentElement.scrollTop;
+      const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = (scrollTop / scrollHeight) * 100;
+      scrollProgress.style.width = progress + '%';
+    });
+
+    // Theme toggle
+    const themeToggle = document.querySelector('.theme-toggle');
+    themeToggle?.addEventListener('click', () => {
+      const html = document.documentElement;
+      const current = html.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+    });
+
+    // Mobile nav
+    const navToggle = document.querySelector('.nav-toggle');
+    const navLinks = document.querySelector('.nav-links');
+    navToggle?.addEventListener('click', () => {
+      navLinks.classList.toggle('active');
+    });
+  </script>
+</body>
+</html>
