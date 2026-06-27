@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Linux eBPF 入门实战：内核可观测性新范式，从 BPF 程序编写到 bpftrace、BCC 工具链使用，覆盖网络、安全、性能分析场景">
+  <meta name="keywords" content="eBPF, BPF, Linux 内核, 可观测性, bpftrace, BCC, 性能分析, 网络监控, 云原生">
+  <meta name="author" content="张小猛">
+  <meta name="publish-date" content="2026-06-27">
+  <title>Linux eBPF 入门：内核可观测性新范式 | 张小猛 - loczb</title>
+  <link rel="canonical" href="https://709527.xyz/blog/posts/linux-ebpf-getting-started.html">
+  <meta name="robots" content="index, follow">
+  
+  <!-- Open Graph -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://709527.xyz/blog/posts/linux-ebpf-getting-started.html">
+  <meta property="og:title" content="Linux eBPF 入门：内核可观测性新范式 | 张小猛 - loczb">
+  <meta property="og:description" content="Linux eBPF 入门实战：内核可观测性新范式，从 BPF 程序编写到 bpftrace、BCC 工具链使用，覆盖网络、安全、性能分析场景">
+  <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="article:author" content="张小猛">
+  <meta property="article:published_time" content="2026-06-27">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Linux eBPF 入门：内核可观测性新范式 | 张小猛 - loczb">
+  <meta name="twitter:description" content="Linux eBPF 入门实战：内核可观测性新范式，从 BPF 程序编写到 bpftrace、BCC 工具链使用，覆盖网络、安全、性能分析场景">
+  <meta name="twitter:image" content="https://709527.xyz/assets/images/og-image.png">
+
+  <link rel="icon" type="image/x-icon" href="../../assets/images/favicon.ico">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
+  <link rel="icon" type="image/png" sizes="16x16" href="../../assets/images/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="../../assets/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="48x48" href="../../assets/images/favicon-48x48.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="../../assets/images/apple-touch-icon.png">
+  <link rel="manifest" href="../../site.webmanifest">
+  <meta name="theme-color" content="#3b82f6">
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <style>
+    .post-content { max-width: 760px; margin: 0 auto; line-height: 1.85; }
+    .post-content h1 { font-size: 2.4rem; margin: 2rem 0 1rem; }
+    .post-content h2 { font-size: 1.7rem; margin: 2.5rem 0 1rem; color: var(--color-accent-primary); border-bottom: 1px solid var(--color-border); padding-bottom: 0.5rem; }
+    .post-content h3 { font-size: 1.3rem; margin: 1.8rem 0 0.8rem; }
+    .post-content pre { background: var(--color-bg-tertiary); padding: 1.2rem; border-radius: 8px; overflow-x: auto; margin: 1.2rem 0; font-size: 0.9rem; }
+    .post-content code { background: var(--color-bg-tertiary); padding: 0.15rem 0.4rem; border-radius: 4px; font-family: monospace; font-size: 0.9em; }
+    .post-meta { color: var(--color-text-secondary); font-size: 0.9rem; margin-bottom: 2rem; }
+    .post-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 3rem; }
+    .post-tags span { background: var(--color-bg-tertiary); padding: 0.3rem 0.8rem; border-radius: 9999px; font-size: 0.85rem; color: var(--color-accent-primary); }
+    .tip-box { background: rgba(34, 197, 94, 0.1); border-left: 3px solid #22c55e; padding: 1rem 1.2rem; margin: 1.5rem 0; border-radius: 0 6px 6px 0; }
+    .warning-box { background: rgba(234, 179, 8, 0.1); border-left: 3px solid #eab308; padding: 1rem 1.2rem; margin: 1.5rem 0; border-radius: 0 6px 6px 0; }
+    table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.95rem; }
+    th, td { border: 1px solid var(--color-border); padding: 0.7rem; text-align: left; }
+    th { background: var(--color-bg-tertiary); font-weight: 600; }
+  </style>
+  <!-- Preconnect to Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500;600&display=swap" media="print" onload="this.media='all'">
+  <noscript>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500;600&display=swap">
+  </noscript>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../../index.html" class="nav-logo">loc<span>zb</span></a>
+      <button class="nav-toggle" aria-label="打开菜单"><span></span><span></span><span></span></button>
+      <div class="nav-overlay"></div>
+      <ul class="nav-links">
+        <li><a href="../../index.html" class="nav-link">首页</a></li>
+        <li><a href="../../projects/index.html" class="nav-link">项目</a></li>
+        <li><a href="../index.html" class="nav-link active">博客</a></li>
+        <li><a href="../../about/index.html" class="nav-link">关于</a></li>
+      </ul>
+      <button class="theme-toggle" aria-label="切换主题">
+        <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line></svg>
+        <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+      </button>
+    </div>
+  </nav>
+<div class="scroll-progress"></div>
+
+  <main>
+    <article class="post-content" style="padding: calc(64px + 4rem) 1rem 4rem;">
+      <a href="../index.html" style="display: inline-flex; align-items: center; gap: 0.5rem; color: var(--color-text-secondary); text-decoration: none; margin-bottom: 2rem;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        返回博客
+      </a>
+      
+      <h1>Linux eBPF 入门：内核可观测性新范式</h1>
+      
+      <div class="post-meta">2026年6月27日 · 阅读时间 18 分钟</div>
+
+      <p>传统的 Linux 内核观测手段——printf 调试、内核模块、ftrace——要么侵入性强，要么能力有限。eBPF（extended Berkeley Packet Filter）改变了这一切：你可以在不修改内核源码、不加载内核模块的情况下，安全地在内核态运行自定义逻辑。它已经成为云原生可观测性、网络和安全领域的基石技术。</p>
+
+      <div class="tip-box">
+        <strong>适合谁读</strong>：后端工程师想做性能分析、SRE 需要生产级可观测性、云原生开发者想理解 Cilium/Falco 底层原理、对 Linux 内核感兴趣但不想写内核模块的工程师。
+      </div>
+
+      <h2>一、eBPF 是什么</h2>
+
+      <p>eBPF 源自 BSD 包过滤器（BPF），最初用于 tcpdump 中的包过滤。2014 年 Linux 3.18 将其扩展为通用内核沙箱运行时——允许用户在内核事件触发时安全执行预编译的字节码。</p>
+
+      <p>核心思想：<strong>事件驱动</strong>。你把 BPF 程序挂载到内核钩子（hook）上，当特定事件发生时，内核自动执行你的程序。</p>
+
+      <h3>与传统方案对比</h3>
+
+      <table>
+        <tr>
+          <th>方案</th>
+          <th>侵入性</th>
+          <th>安全性</th>
+          <th>灵活性</th>
+          <th>性能开销</th>
+        </tr>
+        <tr>
+          <td>内核模块（LKM）</td>
+          <td>高</td>
+          <td>低（可 panic 内核）</td>
+          <td>高</td>
+          <td>低</td>
+        </tr>
+        <tr>
+          <td>ftrace / perf</td>
+          <td>低</td>
+          <td>高</td>
+          <td>低（固定探针）</td>
+          <td>中</td>
+        </tr>
+        <tr>
+          <td>ptrace / strace</td>
+          <td>中</td>
+          <td>高</td>
+          <td>低</td>
+          <td>高（2-10x 减速）</td>
+        </tr>
+        <tr>
+          <td><strong>eBPF</strong></td>
+          <td><strong>低</strong></td>
+          <td><strong>高（验证器保障）</strong></td>
+          <td><strong>高</strong></td>
+          <td><strong>极低</strong></td>
+        </tr>
+      </table>
+
+      <h3>eBPF 程序的生命周期</h3>
+
+      <pre><code>1. 编写 BPF 程序（C / BTF / bpftrace）
+2. 编译为 BPF 字节码（clang -target bpf）
+3. 加载到内核 → 验证器（Verifier）安全检查
+4. JIT 编译为本地机器码
+5. 挂载到内核钩子（kprobe / tracepoint / XDP 等）
+6. 事件触发时自动执行
+7. 通过 Map 与用户态通信
+8. 不需要时卸载</code></pre>
+
+      <div class="warning-box">
+        <strong>关键保障</strong>：验证器会在加载时静态分析 BPF 程序，确保：无无限循环、无越界内存访问、所有路径都有返回、不会 panic 内核。这是 eBPF 安全性的根基。
+      </div>
+
+      <h2>二、eBPF 程序类型与挂载点</h2>
+
+      <p>截至 Linux 6.x，eBPF 支持数十种程序类型，以下是最常用的几类：</p>
+
+      <table>
+        <tr>
+          <th>程序类型</th>
+          <th>挂载点</th>
+          <th>典型场景</th>
+        </tr>
+        <tr>
+          <td>kprobe / kretprobe</td>
+          <td>内核函数入口/返回</td>
+          <td>追踪内核行为</td>
+        </tr>
+        <tr>
+          <td>tracepoint</td>
+          <td>内核静态追踪点</td>
+          <td>稳定 API，推荐优先使用</td>
+        </tr>
+        <tr>
+          <td>uprobe / uretprobe</td>
+          <td>用户态函数入口/返回</td>
+          <td>追踪应用层行为</td>
+        </tr>
+        <tr>
+          <td>XDP</td>
+          <td>网卡驱动层</td>
+          <td>高性能包处理（DDoS 防御、LB）</td>
+        </tr>
+        <tr>
+          <td>tc</td>
+          <td>流量控制层</td>
+          <td>网络策略、NAT</td>
+        </tr>
+        <tr>
+          <td>cgroup_skb</td>
+          <td>cgroup 网络事件</td>
+          <td>容器网络策略</td>
+        </tr>
+        <tr>
+          <td>perf_event</td>
+          <td>性能计数器</td>
+          <td>CPU profiling、缓存分析</td>
+        </tr>
+        <tr>
+          <td>lsm</td>
+          <td>Linux 安全模块</td>
+          <td>运行时安全策略</td>
+        </tr>
+      </table>
+
+      <div class="tip-box">
+        <strong>选择建议</strong>：能用 <code>tracepoint</code> 就不用 <code>kprobe</code>。tracepoint 是内核稳定的 ABI，不会随版本变化而失效；kprobe 依赖内核函数名，版本升级可能失效。
+      </div>
+
+      <h2>三、第一个 eBPF 程序：用 bpftrace 一行命令</h2>
+
+      <p><code>bpftrace</code> 是 eBPF 的高级追踪语言，类似 awk 风格，一行命令就能完成复杂的内核追踪。不需要写 C、不需要编译。</p>
+
+      <h3>安装 bpftrace</h3>
+
+      <pre><code># Ubuntu / Debian
+sudo apt install bpftrace
+
+# CentOS / RHEL
+sudo yum install bpftrace
+
+# 从源码编译（获取最新版）
+git clone https://github.com/bpftrace/bpftrace
+cd bpftrace &amp;&amp; mkdir build &amp;&amp; cd build
+cmake -DCMAKE_BUILD_TYPE=Release ..
+make -j$(nproc) &amp;&amp; sudo make install</code></pre>
+
+      <h3>一行命令实战</h3>
+
+      <pre><code># 追踪所有 openat 系统调用，看看谁在打开文件
+sudo bpftrace -e 'tracepoint:syscalls:sys_enter_openat { printf("%s -> %s\n", comm, str(args->filename)); }'
+
+# 统计每个进程的系统调用次数
+sudo bpftrace -e 'tracepoint:raw_syscalls:sys_enter { @[comm] = count(); }'
+
+# 追踪 TCP 连接建立
+sudo bpftrace -e 'kprobe:tcp_connect { printf("PID %d (%s) connecting\n", pid, comm); }'
+
+# 统计内核函数调用耗时分布
+sudo bpftrace -e 'kprobe:vfs_read { @start[tid] = nsecs; } kretprobe:vfs_read /@start[tid]/ { @ns = hist(nsecs - @start[tid]); delete(@start, tid); }'
+
+# 实时监控 OOM Kill
+sudo bpftrace -e 'kprobe:oom_kill_process { printf("OOM killed PID %d\n", pid); }'</code></pre>
+
+      <p>输出示例：</p>
+
+      <pre><code>Attaching 5 probes...
+nginx -> /var/log/nginx/access.log
+python3 -> /tmp/data.csv
+mysqld -> /var/lib/mysql/ibdata1
+^C
+
+@ns: 
+[256, 512)         43 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@        |
+[512, 1K)          28 |@@@@@@@@@@@@@@@@@@@@@@@@                        |
+[1K, 2K)           12 |@@@@@@@@@@@@@@                                  |
+[2K, 4K)            3 |@@@                                             |</code></pre>
+
+      <h2>四、BCC 工具链：开箱即用的性能分析</h2>
+
+      <p>BCC（BPF Compiler Collection）提供了 70+ 个预构建的 eBPF 工具，覆盖 CPU、内存、网络、文件 I/O 等场景。大部分工具一行命令就能用。</p>
+
+      <h3>安装 BCC</h3>
+
+      <pre><code># Ubuntu 22.04+
+sudo apt install bpfcc-tools linux-headers-$(uname -r)
+
+# CentOS 8+
+sudo yum install bcc-tools</code></pre>
+
+      <h3>常用工具速查</h3>
+
+      <table>
+        <tr>
+          <th>工具</th>
+          <th>功能</th>
+          <th>示例</th>
+        </tr>
+        <tr>
+          <td>execsnoop</td>
+          <td>追踪新进程创建</td>
+          <td><code>execsnoop-bpfcc</code></td>
+        </tr>
+        <tr>
+          <td>opensnoop</td>
+          <td>追踪文件打开</td>
+          <td><code>opensnoop-bpfcc -n nginx</code></td>
+        </tr>
+        <tr>
+          <td>tcpconnect</td>
+          <td>追踪 TCP 主动连接</td>
+          <td><code>tcpconnect-bpfcc</code></td>
+        </tr>
+        <tr>
+          <td>tcpretrans</td>
+          <td>追踪 TCP 重传</td>
+          <td><code>tcpretrans-bpfcc</code></td>
+        </tr>
+        <tr>
+          <td>biolatency</td>
+          <td>块 I/O 延迟直方图</td>
+          <td><code>biolatency-bpfcc</code></td>
+        </tr>
+        <tr>
+          <td>biosnoop</td>
+          <td>追踪每次块 I/O</td>
+          <td><code>biosnoop-bpfcc</code></td>
+        </tr>
+        <tr>
+          <td>memleak</td>
+          <td>检测内存泄漏</td>
+          <td><code>memleak-bpfcc -p $(pidof myapp)</code></td>
+        </tr>
+        <tr>
+          <td>offcputime</td>
+          <td>off-CPU 时间分析</td>
+          <td><code>offcputime-bpfcc -p 1234</code></td>
+        </tr>
+        <tr>
+          <td>profile</td>
+          <td>CPU profiling（采样）</td>
+          <td><code>profile-bpfcc -F 99 -p 1234</code></td>
+        </tr>
+        <tr>
+          <td>slabratetop</td>
+          <td>内核 slab 分配速率</td>
+          <td><code>slabratetop-bpfcc</code></td>
+        </tr>
+      </table>
+
+      <h3>实战：定位慢请求根因</h3>
+
+      <pre><code># 1. 发现哪个进程在做大量 I/O
+sudo biotop-bpfcc
+
+# 2. 看 I/O 延迟分布
+sudo biolatency-bpfcc
+
+# 3. 追踪具体文件被谁打开
+sudo opensnoop-bpfcc -n mysqld
+
+# 4. 看进程 off-CPU 在等什么
+sudo offcputime-bpfcc -p $(pidof myapp) 5
+
+# 5. 检查是否有内存泄漏
+sudo memleak-bpfcc -p $(pidof myapp) -t</code></pre>
+
+      <h2>五、编写 C 语言 eBPF 程序</h2>
+
+      <p>bpftrace 适合快速追踪，但复杂场景需要写 C 语言 eBPF 程序。使用 libbpf 框架是当前推荐的方式。</p>
+
+      <h3>项目结构</h3>
+
+      <pre><code>hello-ebpf/
+├── src/
+│   ├── hello.bpf.c      # 内核态 BPF 程序
+│   └── hello.c           # 用户态加载器
+├── vmlinux.h             # 内核类型定义（BTF 生成）
+└── Makefile</code></pre>
+
+      <h3>内核态程序：hello.bpf.c</h3>
+
+      <pre><code>#include "vmlinux.h"
+#include &lt;bpf/bpf_helpers.h&gt;
+#include &lt;bpf/bpf_tracing.h&gt;
+#include &lt;bpf/bpf_core_read.h&gt;
+
+// 定义一个 Perf Event Array Map，用于向用户态发送事件
+struct {
+    __uint(type, BPF_MAP_TYPE_PERF_EVENT_ARRAY);
+    __uint(key_size, sizeof(u32));
+    __uint(value_size, sizeof(u32));
+} events SEC(".maps");
+
+// 事件结构体
+struct event {
+    u32 pid;
+    char comm[16];
+    char filename[256];
+};
+
+// 挂载到 openat 系统调用的 tracepoint
+SEC("tracepoint/syscalls/sys_enter_openat")
+int handle_openat(struct trace_event_raw_sys_enter *ctx)
+{
+    struct event e = {};
+    u64 id = bpf_get_current_pid_tgid();
+    e.pid = id &gt;&gt; 32;
+    bpf_get_current_comm(&amp;e.comm, sizeof(e.comm));
+
+    // 从 tracepoint 参数中读取文件名
+    const char *filename = (const char *)ctx->args[1];
+    bpf_probe_read_user_str(e.filename, sizeof(e.filename), filename);
+
+    // 发送事件到用户态
+    bpf_perf_event_output(ctx, &amp;events, BPF_F_CURRENT_CPU, &amp;e, sizeof(e));
+    return 0;
+}
+
+char LICENSE[] SEC("license") = "GPL";</code></pre>
+
+      <h3>用户态加载器：hello.c</h3>
+
+      <pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+#include &lt;errno.h&gt;
+#include &lt;unistd.h&gt;
+#include &lt;bpf/libbpf.h&gt;
+#include &lt;bpf/bpf.h&gt;
+
+struct event {
+    unsigned int pid;
+    char comm[16];
+    char filename[256];
+};
+
+static void perf_event_handler(void *ctx, int cpu, void *data, __u32 size)
+{
+    struct event *e = data;
+    printf("[%-6d] %-16s opened %s\n", e->pid, e->comm, e->filename);
+}
+
+int main(int argc, char **argv)
+{
+    struct bpf_object *obj;
+    struct bpf_program *prog;
+    struct perf_buffer *pb;
+    int err;
+
+    // 1. 打开并加载 BPF 程序
+    obj = bpf_object__open_file("hello.bpf.o", NULL);
+    if (libbpf_get_error(obj)) {
+        fprintf(stderr, "Failed to open BPF object\n");
+        return 1;
+    }
+
+    err = bpf_object__load(obj);
+    if (err) {
+        fprintf(stderr, "Failed to load BPF object: %d\n", err);
+        return 1;
+    }
+
+    // 2. 找到 BPF 程序并挂载
+    prog = bpf_object__find_program_by_name(obj, "handle_openat");
+    if (!prog) {
+        fprintf(stderr, "Failed to find BPF program\n");
+        return 1;
+    }
+
+    // libbpf 会自动根据 SEC() 声明挂载到对应 tracepoint
+
+    // 3. 设置 Perf Buffer 接收事件
+    struct bpf_map *events_map = bpf_object__find_map_by_name(obj, "events");
+    pb = perf_buffer__new(bpf_map__fd(events_map), 64,
+                          perf_event_handler, NULL, NULL, NULL);
+    if (!pb) {
+        fprintf(stderr, "Failed to create perf buffer\n");
+        return 1;
+    }
+
+    printf("Tracing openat() calls... Hit Ctrl-C to stop.\n");
+
+    // 4. 事件循环
+    while (1) {
+        err = perf_buffer__poll(pb, 100);
+        if (err &lt; 0 &amp;&amp; err != -EINTR) {
+            fprintf(stderr, "Error polling perf buffer: %d\n", err);
+            break;
+        }
+    }
+
+    perf_buffer__free(pb);
+    bpf_object__close(obj);
+    return 0;
+}</code></pre>
+
+      <h3>Makefile</h3>
+
+      <pre><code>CLANG ?= clang
+ARCH := $(shell uname -m | sed 's/x86_64/x86/' | sed 's/aarch64/arm64/')
+
+BPF_CFLAGS := -g -O2 -target bpf \
+  -D__TARGET_ARCH_$(ARCH) \
+  -I/usr/include/$(shell uname -m)-linux-gnu
+
+.PHONY: all clean
+
+all: hello.bpf.o hello
+
+hello.bpf.o: src/hello.bpf.c
+	$(CLANG) $(BPF_CFLAGS) -c $&lt; -o $@
+
+hello: src/hello.c
+	gcc -O2 -o $@ $&lt; -lbpf -lelf -lz
+
+clean:
+	rm -f hello hello.bpf.o</code></pre>
+
+      <h3>编译与运行</h3>
+
+      <pre><code># 生成 vmlinux.h（如果还没有）
+bpftool btf dump file /sys/kernel/btf/vmlinux format c > vmlinux.h
+
+# 编译
+make
+
+# 运行（需要 root 或 CAP_BPF）
+sudo ./hello
+
+# 输出示例：
+# [3245  ] bash             opened /etc/passwd
+# [1234  ] nginx            opened /var/www/html/index.html
+# [5678  ] python3          opened /tmp/data.json</code></pre>
+
+      <h2>六、BPF Map：内核态与用户态的桥梁</h2>
+
+      <p>BPF Map 是 eBPF 程序与用户态通信的核心机制。它本质上是内核中的一个键值存储。</p>
+
+      <table>
+        <tr>
+          <th>Map 类型</th>
+          <th>用途</th>
+          <th>典型场景</th>
+        </tr>
+        <tr>
+          <td>HASH</td>
+          <td>哈希表</td>
+          <td>统计计数、状态跟踪</td>
+        </tr>
+        <tr>
+          <td>ARRAY</td>
+          <td>数组</td>
+          <td>配置项、索引查找</td>
+        </tr>
+        <tr>
+          <td>PERF_EVENT_ARRAY</td>
+          <td>Per-CPU 事件流</td>
+          <td>向用户态发送事件</td>
+        </tr>
+        <tr>
+          <td>RINGBUF</td>
+          <td>环形缓冲区</td>
+          <td>替代 PERF_EVENT_ARRAY，性能更优</td>
+        </tr>
+        <tr>
+          <td>PERCPU_HASH</td>
+          <td>Per-CPU 哈希表</td>
+          <td>无锁高频更新</td>
+        </tr>
+        <tr>
+          <td>LRU_HASH</td>
+          <td>自动淘汰的哈希表</td>
+          <td>限制 Map 大小</td>
+        </tr>
+        <tr>
+          <td>STACK_TRACE</td>
+          <td>调用栈存储</td>
+          <td>火焰图数据</td>
+        </tr>
+      </table>
+
+      <h3>Map 操作示例</h3>
+
+      <pre><code>// 内核态
+struct {
+    __uint(type, BPF_MAP_TYPE_HASH);
+    __uint(max_entries, 10240);
+    __type(key, u32);           // PID
+    __type(value, u64);         // 计数
+} pid_count SEC(".maps");
+
+SEC("tracepoint/syscalls/sys_enter_read")
+int count_reads(void *ctx)
+{
+    u32 pid = bpf_get_current_pid_tgid() >> 32;
+    u64 *count = bpf_map_lookup_elem(&pid_count, &pid);
+    if (count) {
+        __sync_fetch_and_add(count, 1);  // 原子递增
+    } else {
+        u64 init = 1;
+        bpf_map_update_elem(&pid_count, &pid, &init, BPF_ANY);
+    }
+    return 0;
+}</code></pre>
+
+      <div class="warning-box">
+        <strong>Ringbuf vs Perf Event Array</strong>：新项目推荐使用 <code>BPF_MAP_TYPE_RINGBUF</code>。它支持变长记录、更少的内存拷贝、更好的数据保序。Perf Event Array 是旧方案，仍然可用但不再推荐。
+      </div>
+
+      <h2>七、实战场景：网络可观测性</h2>
+
+      <h3>1. TCP 连接延迟监控</h3>
+
+      <pre><code># bpftrace 追踪 TCP 握手延迟
+sudo bpftrace -e '
+kprobe:tcp_v4_connect { @start[tid] = nsecs; }
+kretprobe:tcp_v4_connect /@start[tid]/ {
+    $latency = nsecs - @start[tid];
+    printf("TCP connect PID %d latency: %d us\n", pid, $latency / 1000);
+    delete(@start, tid);
+}'</code></pre>
+
+      <h3>2. XDP 包过滤（高性能 DDoS 防御）</h3>
+
+      <pre><code>// xdp_drop.c - XDP 程序丢弃特定 IP 的包
+#include &lt;linux/bpf.h&gt;
+#include &lt;bpf/bpf_helpers.h&gt;
+
+struct {
+    __uint(type, BPF_MAP_TYPE_HASH);
+    __uint(max_entries, 10000);
+    __type(key, __u32);       // 攻击者 IP
+    __type(value, __u8);      // 占位
+} blocklist SEC(".maps");
+
+SEC("xdp")
+int xdp_drop_attackers(struct xdp_md *ctx)
+{
+    void *data_end = (void *)(long)ctx->data_end;
+    void *data     = (void *)(long)ctx->data;
+
+    struct ethhdr *eth = data;
+    if ((void *)(eth + 1) > data_end)
+        return XDP_PASS;
+
+    if (eth->h_proto != __constant_htons(ETH_P_IP))
+        return XDP_PASS;
+
+    struct iphdr *ip = (void *)(eth + 1);
+    if ((void *)(ip + 1) > data_end)
+        return XDP_PASS;
+
+    __u32 src_ip = ip->saddr;
+    if (bpf_map_lookup_elem(&blocklist, &src_ip))
+        return XDP_DROP;  // 在网卡驱动层直接丢弃
+
+    return XDP_PASS;
+}
+
+char LICENSE[] SEC("license") = "GPL";</code></pre>
+
+      <div class="tip-box">
+        <strong>XDP 性能</strong>：XDP 在网卡驱动层执行，比传统 iptables 快 5-10 倍。Cloudflare 用 XDP 处理 L3/L4 DDoS 防御，单核可达 10M+ pps。
+      </div>
+
+      <h3>3. HTTP 请求追踪（无侵入 APM）</h3>
+
+      <pre><code># 追踪 nginx 的 HTTP 请求处理时间
+sudo bpftrace -e '
+uprobe:/usr/sbin/nginx:ngx_http_process_request { @start[tid] = nsecs; }
+uretprobe:/usr/sbin/nginx:ngx_http_process_request /@start[tid]/ {
+    $latency = (nsecs - @start[tid]) / 1000000;
+    printf("HTTP request: %d ms\n", $latency);
+    delete(@start, tid);
+}'</code></pre>
+
+      <h2>八、实战场景：安全监控</h2>
+
+      <h3>1. 文件权限变更监控</h3>
+
+      <pre><code># 追踪 chmod/fchmod 调用
+sudo bpftrace -e '
+tracepoint:syscalls:sys_enter_fchmod {
+    printf("chmod by %s (PID %d): fd=%d mode=0%o\n",
+           comm, pid, args->fd, args->mode);
+}'</code></pre>
+
+      <h3>2. 敏感文件读取监控</h3>
+
+      <pre><code># 监控 /etc/shadow 被谁读取
+sudo bpftrace -e '
+tracepoint:syscalls:sys_enter_openat
+/str(args->filename) == "/etc/shadow"/ {
+    printf("ALERT: %s (PID %d) reading /etc/shadow\n", comm, pid);
+}'</code></pre>
+
+      <h3>3. 进程执行审计</h3>
+
+      <pre><code># 实时追踪所有命令执行
+sudo bpftrace -e '
+tracepoint:sched:sched_process_exec {
+    printf("EXEC: %s -> %s (UID %d)\n",
+           comm, str(args->filename), args->uid);
+}'</code></pre>
+
+      <h2>九、云原生 eBPF 生态</h2>
+
+      <p>以下是云原生场景中最常用的 eBPF 项目：</p>
+
+      <table>
+        <tr>
+          <th>项目</th>
+          <th>领域</th>
+          <th>说明</th>
+        </tr>
+        <tr>
+          <td><strong>Cilium</strong></td>
+          <td>网络 + 安全</td>
+          <td>K8s CNI，基于 eBPF 实现网络策略、可观测性、LB</td>
+        </tr>
+        <tr>
+          <td><strong>Falco</strong></td>
+          <td>运行时安全</td>
+          <td>检测异常行为，新版本默认 eBPF 驱动</td>
+        </tr>
+        <tr>
+          <td><strong>Hubble</strong></td>
+          <td>可观测性</td>
+          <td>Cilium 的网络可观测性组件，服务地图 + 流量指标</td>
+        </tr>
+        <tr>
+          <td><strong>Parca</strong></td>
+          <td>持续 Profiling</td>
+          <td>eBPF 驱动的全栈 CPU profiling</td>
+        </tr>
+        <tr>
+          <td><strong>Pyroscope</strong></td>
+          <td>持续 Profiling</td>
+          <td>Grafana 旗下，eBPF 采集 + 火焰图展示</td>
+        </tr>
+        <tr>
+          <td><strong>Tetragon</strong></td>
+          <td>安全可观测性</td>
+          <td>Cilium 团队出品，实时安全事件追踪</td>
+        </tr>
+        <tr>
+          <td><strong>Katran</strong></td>
+          <td>负载均衡</td>
+          <td>Meta 开源，基于 XDP 的 L4 LB</td>
+        </tr>
+        <tr>
+          <td><strong>Bumblebee</strong></td>
+          <td>eBPF 打包分发</td>
+          <td>将 eBPF 程序打包为 OCI 镜像</td>
+        </tr>
+      </table>
+
+      <div class="tip-box">
+        <strong>2026 年趋势</strong>：eBPF 已成为云原生基础设施的标配。Cilium 是 Kubernetes 最流行的 CNI 之一，Falco + Tetragon 构成运行时安全双引擎，持续 Profiling 正在替代传统的采样式 APM。
+      </div>
+
+      <h2>十、CO-RE 与 BTF：一次编译，到处运行</h2>
+
+      <p>传统 eBPF 程序需要针对每个内核版本单独编译，因为内核数据结构布局不同。CO-RE（Compile Once – Run Everywhere）解决了这个问题：</p>
+
+      <ol>
+        <li>内核开启 <code>CONFIG_DEBUG_INFO_BTF</code>，在 <code>/sys/kernel/btf/vmlinux</code> 暴露 BTF（BPF Type Format）类型信息</li>
+        <li>编译时嵌入 BTF 重定位信息</li>
+        <li>加载时 libbpf 根据当前内核的 BTF 自动重定位字段偏移</li>
+      </ol>
+
+      <pre><code># 检查内核是否支持 BTF
+ls /sys/kernel/btf/vmlinux
+
+# 生成 vmlinux.h
+bpftool btf dump file /sys/kernel/btf/vmlinux format c > vmlinux.h
+
+# 编译 CO-RE 程序（关键标志）
+clang -g -O2 -target bpf \
+  -D__TARGET_ARCH_x86 \
+  -c hello.bpf.c -o hello.bpf.o</code></pre>
+
+      <div class="warning-box">
+        <strong>内核版本要求</strong>：BTF 从 Linux 5.2 开始支持，5.4+ 默认启用。如果你的生产环境内核低于 5.4，需要手动开启 <code>CONFIG_DEBUG_INFO_BTF=y</code>。
+      </div>
+
+      <h2>十一、调试与排错</h2>
+
+      <h3>常用调试命令</h3>
+
+      <pre><code># 查看已加载的 BPF 程序
+sudo bpftool prog list
+
+# 查看程序详情（含字节码）
+sudo bpftool prog show id 42
+
+# 查看 BPF Map
+sudo bpftool map list
+sudo bpftool map dump id 10
+
+# 查看挂载点
+sudo bpftool perf list
+
+# 查看内核支持的 tracepoint
+sudo bpftool prog profile
+
+# 验证器日志（加载失败时）
+sudo cat /sys/kernel/debug/tracing/trace_pipe</code></pre>
+
+      <h3>常见错误排查</h3>
+
+      <table>
+        <tr>
+          <th>错误</th>
+          <th>原因</th>
+          <th>解决</th>
+        </tr>
+        <tr>
+          <td>Invalid mem access</td>
+          <td>越界读内存</td>
+          <td>加边界检查、用 <code>bpf_probe_read</code></td>
+        </tr>
+        <tr>
+          <td>Unreachable instruction</td>
+          <td>验证器无法证明程序会终止</td>
+          <td>消除无限循环、限制循环次数</td>
+        </tr>
+        <tr>
+          <td>Map value size mismatch</td>
+          <td>Map 定义与使用不一致</td>
+          <td>检查 key/value 类型大小</td>
+        </tr>
+        <tr>
+          <td>Cannot mount bpffs</td>
+          <td>Pinning Map 需要 bpffs</td>
+          <td><code>mount bpffs /sys/fs/bpf -t bpf</code></td>
+        </tr>
+        <tr>
+          <td>Operation not permitted</td>
+          <td>权限不足</td>
+          <td>使用 root 或 CAP_BPF + CAP_PERFMON</td>
+        </tr>
+      </table>
+
+      <h2>十二、最佳实践总结</h2>
+
+      <ol>
+        <li><strong>优先使用 tracepoint</strong>：比 kprobe 更稳定，不会随内核版本变化</li>
+        <li><strong>从 bpftrace 开始</strong>：快速验证假设，再决定是否写 C 程序</li>
+        <li><strong>使用 libbpf + CO-RE</strong>：一次编译到处运行，不再为内核版本头疼</li>
+        <li><strong>善用 BCC 工具</strong>：70+ 开箱即用工具，不要重复造轮子</li>
+        <li><strong>注意验证器限制</strong>：指令数上限（100 万）、栈大小（512 字节）、循环次数</li>
+        <li><strong>Map 选择</strong>：高频更新用 PERCPU_HASH，事件传递用 RINGBUF</li>
+        <li><strong>生产环境最小权限</strong>：CAP_BPF + CAP_PERFMON 替代 root</li>
+        <li><strong>关注内核版本</strong>：5.4+ 是当前推荐的最低版本，5.10+ 支持更完整</li>
+      </ol>
+
+      <pre><code># 检查内核 eBPF 特性支持
+sudo bpftool feature probe
+
+# 一键查看当前内核支持的 BPF 能力
+sudo bpftool feature probe | grep "bpf_"</code></pre>
+
+      <div class="tip-box">
+        <strong>一句话总结</strong>：eBPF 是 Linux 内核的可编程层，用安全、低开销的方式把可观测性、网络和安全能力从内核模块迁移到了沙箱运行时。掌握 bpftrace + BCC + libbpf 三件套，足以覆盖 90% 的生产场景。
+      </div>
+
+      <div class="post-tags">
+        <span>eBPF</span>
+        <span>Linux 内核</span>
+        <span>可观测性</span>
+        <span>bpftrace</span>
+        <span>云原生</span>
+      </div>
+    </article>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <p>&copy; 2026 张小猛 - loczb</p>
+    </div>
+  </footer>
+
+  <script>
+    // Scroll progress
+    const scrollProgress = document.querySelector('.scroll-progress');
+    window.addEventListener('scroll', () => {
+      const scrollTop = document.documentElement.scrollTop;
+      const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = (scrollTop / scrollHeight) * 100;
+      scrollProgress.style.width = progress + '%';
+    });
+
+    // Theme toggle
+    const themeToggle = document.querySelector('.theme-toggle');
+    themeToggle?.addEventListener('click', () => {
+      const html = document.documentElement;
+      const current = html.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+    });
+
+    // Mobile nav
+    const navToggle = document.querySelector('.nav-toggle');
+    const navLinks = document.querySelector('.nav-links');
+    navToggle?.addEventListener('click', () => {
+      navLinks.classList.toggle('active');
+    });
+  </script>
+</body>
+</html>
