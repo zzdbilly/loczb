@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="HTTPS 与 TLS 1.3 深度解析：握手协议、密码套件、部署优化、性能对比，从原理到生产环境的完整指南">
+  <meta name="keywords" content="HTTPS, TLS 1.3, SSL, 加密, 安全, 握手协议, 证书, 密码套件, 网络安全">
+  <meta name="author" content="张小猛">
+  <meta name="publish-date" content="2026-06-27">
+  <title>HTTPS 与 TLS 1.3 深度解析：从握手到部署 | 张小猛 - loczb</title>
+  <link rel="canonical" href="https://709527.xyz/blog/posts/https-tls13-deep-dive.html">
+  <meta name="robots" content="index, follow">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://709527.xyz/blog/posts/https-tls13-deep-dive.html">
+  <meta property="og:title" content="HTTPS 与 TLS 1.3 深度解析：从握手到部署 | 张小猛 - loczb">
+  <meta property="og:description" content="HTTPS 与 TLS 1.3 深度解析：握手协议、密码套件、部署优化、性能对比，从原理到生产环境的完整指南">
+  <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="article:author" content="张小猛">
+  <meta property="article:published_time" content="2026-06-27">
+  
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="HTTPS 与 TLS 1.3 深度解析：从握手到部署 | 张小猛 - loczb">
+  <meta name="twitter:description" content="HTTPS 与 TLS 1.3 深度解析：握手协议、密码套件、部署优化、性能对比，从原理到生产环境的完整指南">
+  <meta name="twitter:image" content="https://709527.xyz/assets/images/og-image.png">
+
+  <link rel="icon" type="image/x-icon" href="../../assets/images/favicon.ico">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
+  <link rel="icon" type="image/png" sizes="16x16" href="../../assets/images/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="../../assets/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="48x48" href="../../assets/images/favicon-48x48.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="../../assets/images/apple-touch-icon.png">
+  <link rel="manifest" href="../../site.webmanifest">
+  <meta name="theme-color" content="#3b82f6">
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <style>
+    .post-content { max-width: 760px; margin: 0 auto; line-height: 1.85; }
+    .post-content h1 { font-size: 2.4rem; margin: 2rem 0 1rem; }
+    .post-content h2 { font-size: 1.7rem; margin: 2.5rem 0 1rem; color: var(--color-accent-primary); border-bottom: 1px solid var(--color-border); padding-bottom: 0.5rem; }
+    .post-content h3 { font-size: 1.3rem; margin: 1.8rem 0 0.8rem; }
+    .post-content pre { background: var(--color-bg-tertiary); padding: 1.2rem; border-radius: 8px; overflow-x: auto; margin: 1.2rem 0; font-size: 0.9rem; }
+    .post-content code { background: var(--color-bg-tertiary); padding: 0.15rem 0.4rem; border-radius: 4px; font-family: monospace; font-size: 0.9em; }
+    .post-meta { color: var(--color-text-secondary); font-size: 0.9rem; margin-bottom: 2rem; }
+    .post-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 3rem; }
+    .post-tags span { background: var(--color-bg-tertiary); padding: 0.3rem 0.8rem; border-radius: 9999px; font-size: 0.85rem; color: var(--color-accent-primary); }
+    .tip-box { background: rgba(34, 197, 94, 0.1); border-left: 3px solid #22c55e; padding: 1rem 1.2rem; margin: 1.5rem 0; border-radius: 0 6px 6px 0; }
+    .warning-box { background: rgba(234, 179, 8, 0.1); border-left: 3px solid #eab308; padding: 1rem 1.2rem; margin: 1.5rem 0; border-radius: 0 6px 6px 0; }
+    table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.95rem; }
+    th, td { border: 1px solid var(--color-border); padding: 0.7rem; text-align: left; }
+    th { background: var(--color-bg-tertiary); font-weight: 600; }
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500;600&display=swap" media="print" onload="this.media='all'">
+  <noscript>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500;600&display=swap">
+  </noscript>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../../index.html" class="nav-logo">loc<span>zb</span></a>
+      <button class="nav-toggle" aria-label="打开菜单"><span></span><span></span><span></span></button>
+      <div class="nav-overlay"></div>
+      <ul class="nav-links">
+        <li><a href="../../index.html" class="nav-link">首页</a></li>
+        <li><a href="../../projects/index.html" class="nav-link">项目</a></li>
+        <li><a href="../index.html" class="nav-link active">博客</a></li>
+        <li><a href="../../about/index.html" class="nav-link">关于</a></li>
+      </ul>
+      <button class="theme-toggle" aria-label="切换主题">
+        <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line></svg>
+        <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+      </button>
+    </div>
+  </nav>
+<div class="scroll-progress"></div>
+
+  <main>
+    <article class="post-content" style="padding: calc(64px + 4rem) 1rem 4rem;">
+      <a href="../index.html" style="display: inline-flex; align-items: center; gap: 0.5rem; color: var(--color-text-secondary); text-decoration: none; margin-bottom: 2rem;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        返回博客
+      </a>
+      
+      <h1>HTTPS 与 TLS 1.3 深度解析：从握手到部署</h1>
+      
+      <div class="post-meta">2026年6月27日 · 阅读时间 16 分��</div>
+
+      <p>每次你访问 HTTPS 网站，浏览器和服务器之间都会发生一场精密的密码学舞蹈。TLS 1.3 作为当前最新标准，在安全性和性能上都比前代有巨大提升。本文深入握手协议的每一个步骤，并给出生产环境的最佳配置。</p>
+
+      <div class="tip-box">
+        <strong>先决知识</strong>：理解基本的对称加密、非对称加密、哈希函数。不需要密码学博士学位，但最好对公钥/私钥有概念。
+      </div>
+
+      <h2>一、从 HTTP 到 HTTPS：为什么需要 TLS</h2>
+
+      <p>HTTP 明文传输存在三个致命问题：</p>
+      <ul>
+        <li><strong>窃听</strong>：任何人都可以抓包看到请求内容</li>
+        <li><strong>篡改</strong>：中间人（MITM）可以修改传输中的数据</li>
+        <li><strong>冒充</strong>：你访问的网站可能根本不是你想访问的那个</li>
+      </ul>
+
+      <p>TLS 通过三把锁解决这些问题：</p>
+      <ul>
+        <li><strong>加密</strong>（防窃听）→ 对称加密 + 密钥协商</li>
+        <li><strong>完整性</strong>（防篡改）→ HMAC / AEAD</li>
+        <li><strong>认证</strong>（防冒充）→ 数字证书 + 签名验证</li>
+      </ul>
+
+      <h2>二、TLS 1.2 vs TLS 1.3：关键区别</h2>
+
+      <table>
+        <tr>
+          <th>特性</th>
+          <th>TLS 1.2</th>
+          <th>TLS 1.3</th>
+        </tr>
+        <tr>
+          <td>握手轮次</td>
+          <td>2-RTT（完整握手）</td>
+          <td>1-RTT（完整握手），0-RTT（恢复）</td>
+        </tr>
+        <tr>
+          <td>支持的密码套件</td>
+          <td>37+ 种</td>
+          <td>5 种（精简安全）</td>
+        </tr>
+        <tr>
+          <td>密钥交换</td>
+          <td>RSA 或 (EC)DHE</td>
+          <td>仅 (EC)DHE（前向安全必须）</td>
+        </tr>
+        <tr>
+          <td>签名算法</td>
+          <td>SHA-1, SHA-256, SHA-384</td>
+          <td>仅 SHA-256, SHA-384</td>
+        </tr>
+        <tr>
+          <td>压缩/重协商</td>
+          <td>支持（有漏洞）</td>
+          <td>移除</td>
+        </tr>
+        <tr>
+          <td>0-RTT</td>
+          <td>不支持</td>
+          <td>支持（有重放攻击风险）</td>
+        </tr>
+      </table>
+
+      <div class="tip-box">
+        <strong>2026 年现状</strong>：TLS 1.3 占比已超过 80%。TLS 1.0/1.1 已被所有主流浏览器标记为不安全。如果你的服务还在用 TLS 1.2 以下，赶紧升级。
+      </div>
+
+      <h2>三、TLS 1.3 握手详解</h2>
+
+      <h3>完整握手（1-RTT）</h3>
+
+      <pre><code>ClientHello  ────────────────────────────&gt;   Server
+  (支持的密码套件 + key_share + 随机数)
+
+                                           ServerHello
+  &lt;────────────────────────────────────  (选定的密码套件 + key_share + 随机数)
+                                           EncryptedExtensions
+                                           Certificate
+                                           CertificateVerify
+                                           Finished
+
+Finished     ────────────────────────────&gt;
+(握手完成，开始加密通信)
+
+客户端 → 服务端：应用数据（加密）
+服务端 → 客户端：应用数据（加密）</code></pre>
+
+      <h3>每一步在做什么</h3>
+
+      <p><strong>第1步：ClientHello</strong>——客户端告诉服务器自己支持哪些 TLS 版本、密码套件，同时带上自己的密钥分享（key_share）。</p>
+
+      <p><strong>第2步：ServerHello</strong>——服务器选择双方都支持的最高版本和密码套件，回传自己的密钥分享。此时双方已经可以计算出共享密钥。</p>
+
+      <p><strong>第3步：加密扩展 + 证书验证</strong>——服务器发送证书链（从服务器证书到根 CA），附带对握手消息的数字签名（CertificateVerify）。客户端验证证书链和签名。</p>
+
+      <p><strong>第4步：握手完成</strong>——双方确认握手参数，开始加密通信。</p>
+
+      <div class="tip-box">
+        <strong>关键改进</strong>：TLS 1.3 的秘密就在于 key_share 提前发送。TLS 1.2 需要先协商密码套件，再交换密钥，多了一轮往返。
+      </div>
+
+      <h3>0-RTT 快速恢复</h3>
+
+      <pre><code># 如果之前连接过，客户端可以缓存会话票据（session ticket）
+# 下次连接时客户端直接在 ClientHello 中发送加密数据
+
+ClientHello  ────────────────────────────&gt;   Server
+  + 0-RTT ���据（已经加密的 HTTP 请求！）
+
+                                            ServerHello + 处理请求
+  &lt;──────────────────────────────────��──  + 响应数据
+
+# 优势：零额外延迟
+# 风险：重放攻击（攻击者重复发送 0-RTT 数据）</code></pre>
+
+      <div class="warning-box">
+        <strong>0-RTT 安全警告</strong>：不要在 0-RTT 中发送涉及幂等性假设的关键操作（如支付、下单）。0-RTT 数据可能被重放。建议只用于 GET 请求或幂等操作。
+      </div>
+
+      <h2>四、密码套件详解</h2>
+
+      <p>TLS 1.3 只保留了 5 个密码套件：</p>
+
+      <table>
+        <tr>
+          <th>套件名称</th>
+          <th>密钥交换</th>
+          <th>认证</th>
+          <th>对称加密</th>
+          <th>HKDF</th>
+        </tr>
+        <tr>
+          <td>TLS_AES_128_GCM_SHA256</td>
+          <td>ECDHE</td>
+          <td>证书签名</td>
+          <td>AES-128-GCM</td>
+          <td>SHA-256</td>
+        </tr>
+        <tr>
+          <td>TLS_AES_256_GCM_SHA384</td>
+          <td>ECDHE</td>
+          <td>证书签名</td>
+          <td>AES-256-GCM</td>
+          <td>SHA-384</td>
+        </tr>
+        <tr>
+          <td>TLS_CHACHA20_POLY1305_SHA256</td>
+          <td>ECDHE</td>
+          <td>证书签名</td>
+          <td>ChaCha20-Poly1305</td>
+          <td>SHA-256</td>
+        </tr>
+        <tr>
+          <td>TLS_AES_128_CCM_SHA256</td>
+          <td>ECDHE</td>
+          <td>证书签名</td>
+          <td>AES-128-CCM</td>
+          <td>SHA-256</td>
+        </tr>
+        <tr>
+          <td>TLS_AES_128_CCM_8_SHA256</td>
+          <td>ECDHE</td>
+          <td>证书签名</td>
+          <td>AES-128-CCM-8</td>
+          <td>SHA-256</td>
+        </tr>
+      </table>
+
+      <div class="tip-box">
+        <strong>推荐配置</strong>：优先使用 <code>TLS_AES_128_GCM_SHA256</code>（硬件加速支持好），或者 <code>TLS_CHACHA20_POLLY1305_SHA256</code>（移动端 ARM 优化）。
+      </div>
+
+      <h2>五、证书链验证</h2>
+
+      <p>证书链验证是 HTTPS 安全的基石：</p>
+
+      <pre><code>客户端验证过程：
+1. 检查证书有效期
+2. 检查证书是否被吊销（CRL/OCSP）
+3. 验证证书签名（父 CA 的公钥验证子证书签名）
+4. 回溯到信任锚（根 CA，浏览器内置）
+5. 检查域名是否匹配（CN/SAN）
+
+证书链示例：
+  Root CA (自签名，浏览器内置)
+  └── Intermediate CA (由 Root CA 签发)
+      └── 服务器证书 (由 Intermediate CA 签发)
+          └── *.example.com</code></pre>
+
+      <h3>证书类型对比</h3>
+
+      <table>
+        <tr>
+          <th>类型</th>
+          <th>验证方式</th>
+          <th>适用场景</th>
+          <th>成本</th>
+        </tr>
+        <tr>
+          <td>DV（域名验证）</td>
+          <td>验证域名控制权</td>
+          <td>个人网站、博客</td>
+          <td>免费（Let's Encrypt）</td>
+        </tr>
+        <tr>
+          <td>OV（组织验证）</td>
+          <td>验证企业身份</td>
+          <td>企业官网</td>
+          <td>中等</td>
+        </tr>
+        <tr>
+          <td>EV（扩展验证）</td>
+          <td>严格身份验证</td>
+          <td>银行、金融</td>
+          <td>高</td>
+        </tr>
+      </table>
+
+      <h2>六、Nginx 生产配置</h2>
+
+      <pre><code># /etc/nginx/nginx.conf - TLS 配置（基于 Mozilla 现代配置）
+
+server {
+    listen 443 ssl http2;
+    
+    # 证书配置（推荐 Let's Encrypt + ACME 自动续期）
+    ssl_certificate     /etc/letsencrypt/live/example.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/example.com/privkey.pem;
+
+    # TLS 1.3 和 1.2（向下兼容）
+    ssl_protocols TLSv1.2 TLSv1.3;
+    
+    # 密码套件（现代配置）
+    ssl_ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-CHACHA20-POLY1305;
+
+    # 优先使用服务器端顺序
+    ssl_prefer_server_ciphers on;
+    
+    # 会话缓存（减少重复握手）
+    ssl_session_cache shared:SSL:10m;
+    ssl_session_timeout 1h;
+    ssl_session_tickets off;
+    
+    # OCSP Stapling
+    ssl_stapling on;
+    ssl_stapling_verify on;
+    resolver 1.1.1.1 8.8.8.8 valid=300s;
+    resolver_timeout 5s;
+    
+    # HSTS（强制使用 HTTPS）
+    add_header Strict-Transport-Security "max-age=63072000" always;
+    
+    # 其他安全头
+    add_header X-Content-Type-Options nosniff;
+    add_header X-Frame-Options DENY;
+}</code></pre>
+
+      <h2>七、性能优化</h2>
+
+      <table>
+        <tr>
+          <th>优化项</th>
+          <th>效果</th>
+          <th>配置建议</th>
+        </tr>
+        <tr>
+          <td>TLS 1.3</td>
+          <td>减少 1 个 RTT</td>
+          <td>默认启用</td>
+        </tr>
+        <tr>
+          <td>OCSP Stapling</td>
+          <td>减少证书验证延迟</td>
+          <td>必须配置</td>
+        </tr>
+        <tr>
+          <td>Session Resumption</td>
+          <td>0-RTT 复用</td>
+          <td>启用 session cache/tickets</td>
+        </tr>
+        <tr>
+          <td>False Start</td>
+          <td>握手完成前发送数据</td>
+          <td>TLS 1.3 默认</td>
+        </tr>
+        <tr>
+          <td>ALPN</td>
+          <td>减少协议协商 RTT</td>
+          <td>默认启用 h2,http/1.1</td>
+        </tr>
+        <tr>
+          <td>ECDSA 证书</td>
+          <td>签名验证快约 3x</td>
+          <td>使用 ECDSA 而非 RSA 证书</td>
+        </tr>
+      </table>
+
+      <div class="tip-box">
+        <strong>真实数据</strong>：从 TLS 1.2 升级到 TLS 1.3，首次连接延迟从 ~120ms 降到 ~70ms（国内网络环境）。复用连接从 ~100ms 降到 ~5ms（0-RTT）。
+      </div>
+
+      <h2>八、常见攻击与防御</h2>
+
+      <table>
+        <tr>
+          <th>攻击类型</th>
+          <th>原理</th>
+          <th>TLS 1.3 防护</th>
+        </tr>
+        <tr>
+          <td>POODLE</td>
+          <td>利用 SSL 3.0 填充漏洞</td>
+          <td>已移除 SSL 3.0</td>
+        </tr>
+        <tr>
+          <td>BEAST</td>
+          <td>CBC 模式 IV 预测</td>
+          <td>仅使用 AEAD 模式</td>
+        </tr>
+        <tr>
+          <td>CRIME</td>
+          <td>利用压缩泄露信息</td>
+          <td>已移除压缩</td>
+        </tr>
+        <tr>
+          <td>Lucky 13</td>
+          <td>CBC-MAC 时序攻击</td>
+          <td>仅使用 AEAD 模式</td>
+        </tr>
+        <tr>
+          <td>Downgrade</td>
+          <td>伪造 ClientHello 降级协议</td>
+          <td>支持降级保护标记</td>
+        </tr>
+      </table>
+
+      <div class="tip-box">
+        <strong>总结</strong>：TLS 1.3 不是简单的版本迭代，而是对协议安全性的一次根本性重构。2026 年的今天，任何面向公网的服务都应当运行在以 TLS 1.3 为基础的 HTTPS 上，配合 Let's Encrypt 自动证书管理和 HSTS，实现零成本的 HTTPS 全面覆盖。
+      </div>
+
+      <div class="post-tags">
+        <span>HTTPS</span>
+        <span>TLS 1.3</span>
+        <span>安全</span>
+        <span>加密</span>
+        <span>Nginx</span>
+        <span>SSL</span>
+      </div>
+    </article>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <p>&copy; 2026 张小猛 - loczb</p>
+    </div>
+  </footer>
+
+  <script>
+    const scrollProgress = document.querySelector('.scroll-progress');
+    window.addEventListener('scroll', () => {
+      const scrollTop = document.documentElement.scrollTop;
+      const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = (scrollTop / scrollHeight) * 100;
+      scrollProgress.style.width = progress + '%';
+    });
+    const themeToggle = document.querySelector('.theme-toggle');
+    themeToggle?.addEventListener('click', () => {
+      const html = document.documentElement;
+      const current = html.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+    });
+    const navToggle = document.querySelector('.nav-toggle');
+    const navLinks = document.querySelector('.nav-links');
+    navToggle?.addEventListener('click', () => {
+      navLinks.classList.toggle('active');
+    });
+  </script>
+</body>
+</html>
