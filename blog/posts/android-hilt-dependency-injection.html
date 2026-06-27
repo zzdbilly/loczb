@@ -1,0 +1,1378 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Android Hilt 依赖注入完整指南：核心注解、ViewModel 注入、多模块架构、作用域管理、第三方库集成与测试最佳实践">
+  <meta name="keywords" content="Hilt, 依赖注入, Android, Dagger, ViewModel, DI, 模块化, 单元测试">
+  <meta name="author" content="张小猛">
+  <meta name="publish-date" content="2026-06-27">
+  <title>Android Hilt 依赖注入最佳实践：从入门到架构 | 张小猛 - loczb</title>
+  <link rel="canonical" href="https://709527.xyz/blog/posts/android-hilt-dependency-injection.html">
+  <meta name="robots" content="index, follow">
+  
+  <!-- Open Graph -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://709527.xyz/blog/posts/android-hilt-dependency-injection.html">
+  <meta property="og:title" content="Android Hilt 依赖注入最佳实践：从入门到架构 | 张小猛 - loczb">
+  <meta property="og:description" content="Android Hilt 依赖注入完整指南：核心注解、ViewModel 注入、多模块架构、作用域管理、第三方库集成与测试最佳实践">
+  <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="article:author" content="张小猛">
+  <meta property="article:published_time" content="2026-06-27">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Android Hilt 依赖注入最佳实践：从入门到架构 | 张小猛 - loczb">
+  <meta name="twitter:description" content="Android Hilt 依赖注入完整指南：核心注解、ViewModel 注入、多模块架构、作用域管理、第三方库集成与测试最佳实践">
+  <meta name="twitter:image" content="https://709527.xyz/assets/images/og-image.png">
+
+  <link rel="icon" type="image/x-icon" href="../../assets/images/favicon.ico">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
+  <link rel="icon" type="image/png" sizes="16x16" href="../../assets/images/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="../../assets/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="48x48" href="../../assets/images/favicon-48x48.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="../../assets/images/apple-touch-icon.png">
+  <link rel="manifest" href="../../site.webmanifest">
+  <meta name="theme-color" content="#3b82f6">
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <style>
+    .post-content { max-width: 760px; margin: 0 auto; line-height: 1.85; }
+    .post-content h1 { font-size: 2.4rem; margin: 2rem 0 1rem; }
+    .post-content h2 { font-size: 1.7rem; margin: 2.5rem 0 1rem; color: var(--color-accent-primary); border-bottom: 1px solid var(--color-border); padding-bottom: 0.5rem; }
+    .post-content h3 { font-size: 1.3rem; margin: 1.8rem 0 0.8rem; }
+    .post-content h4 { font-size: 1.1rem; margin: 1.4rem 0 0.6rem; }
+    .post-content pre { background: var(--color-bg-tertiary); padding: 1.2rem; border-radius: 8px; overflow-x: auto; margin: 1.2rem 0; font-size: 0.9rem; }
+    .post-content code { background: var(--color-bg-tertiary); padding: 0.15rem 0.4rem; border-radius: 4px; font-family: monospace; font-size: 0.9em; }
+    .post-meta { color: var(--color-text-secondary); font-size: 0.9rem; margin-bottom: 2rem; }
+    .post-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 3rem; }
+    .post-tags span { background: var(--color-bg-tertiary); padding: 0.3rem 0.8rem; border-radius: 9999px; font-size: 0.85rem; color: var(--color-accent-primary); }
+    .tip-box { background: rgba(34, 197, 94, 0.1); border-left: 3px solid #22c55e; padding: 1rem 1.2rem; margin: 1.5rem 0; border-radius: 0 6px 6px 0; }
+    .warning-box { background: rgba(234, 179, 8, 0.1); border-left: 3px solid #eab308; padding: 1rem 1.2rem; margin: 1.5rem 0; border-radius: 0 6px 6px 0; }
+    .danger-box { background: rgba(239, 68, 68, 0.1); border-left: 3px solid #ef4444; padding: 1rem 1.2rem; margin: 1.5rem 0; border-radius: 0 6px 6px 0; }
+    table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.95rem; }
+    th, td { border: 1px solid var(--color-border); padding: 0.7rem; text-align: left; }
+    th { background: var(--color-bg-tertiary); font-weight: 600; }
+    .toc { background: var(--color-bg-tertiary); border-radius: 8px; padding: 1.2rem 1.5rem; margin: 2rem 0; }
+    .toc h3 { margin: 0 0 0.8rem; font-size: 1.1rem; }
+    .toc ol { margin: 0; padding-left: 1.5rem; }
+    .toc li { margin: 0.3rem 0; font-size: 0.95rem; }
+    .toc a { color: var(--color-accent-primary); text-decoration: none; }
+    .toc a:hover { text-decoration: underline; }
+  </style>
+  <!-- Preconnect to Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500;600&display=swap" media="print" onload="this.media='all'">
+  <noscript>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500;600&display=swap">
+  </noscript>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../../index.html" class="nav-logo">loc<span>zb</span></a>
+      <button class="nav-toggle" aria-label="打开菜单"><span></span><span></span><span></span></button>
+      <div class="nav-overlay"></div>
+      <ul class="nav-links">
+        <li><a href="../../index.html" class="nav-link">首页</a></li>
+        <li><a href="../../projects/index.html" class="nav-link">项目</a></li>
+        <li><a href="../index.html" class="nav-link active">博客</a></li>
+        <li><a href="../../about/index.html" class="nav-link">关于</a></li>
+      </ul>
+      <button class="theme-toggle" aria-label="切换主题">
+        <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line></svg>
+        <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+      </button>
+    </div>
+  </nav>
+<div class="scroll-progress"></div>
+
+  <main>
+    <article class="post-content" style="padding: calc(64px + 4rem) 1rem 4rem;">
+      <a href="../index.html" style="display: inline-flex; align-items: center; gap: 0.5rem; color: var(--color-text-secondary); text-decoration: none; margin-bottom: 2rem;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        返回博客
+      </a>
+      
+      <h1>Android Hilt 依赖注入最佳实践：从入门到架构</h1>
+      
+      <div class="post-meta">2026年6月27日 · 阅读时间 18 分钟</div>
+
+      <p>依赖注入（Dependency Injection）是现代 Android 架构的基石。从手写工厂到 Dagger 2 的编译期注入，再到 Hilt 的简化封装——这条路的终点是让开发者用最少的样板代码获得最可靠的依赖管理。Hilt 不是 Dagger 的替代品，而是站在 Dagger 肩膀上的「标准答案」，它把 Android 团队多年积累的最佳实践固化成了注解和约定。</p>
+
+      <p>本文从 DI 基础概念出发，逐步深入 Hilt 的每个核心机制，最终覆盖多模块架构、作用域管理、第三方库集成和测试策略。</p>
+
+      <div class="toc">
+        <h3>目录</h3>
+        <ol>
+          <li><a href="#di-basics">依赖注入基础与 Hilt 架构</a></li>
+          <li><a href="#core-annotations">核心注解速览</a></li>
+          <li><a href="#binds-provides-qualifier">@Binds / @Provides / @Qualifier</a></li>
+          <li><a href="#viewmodel-injection">ViewModel 注入</a></li>
+          <li><a href="#navigation-integration">Hilt 与 Navigation 集成</a></li>
+          <li><a href="#multi-module">多模块项目中的 Hilt</a></li>
+          <li><a href="#scope-management">作用域管理</a></li>
+          <li><a href="#third-party-integration">第三方库集成</a></li>
+          <li><a href="#testing">测试最佳实践</a></li>
+          <li><a href="#pitfalls-cheatsheet">常见陷阱与速查表</a></li>
+        </ol>
+      </div>
+
+      <!-- 一、依赖注入基础与 Hilt 架构 -->
+      <h2 id="di-basics">一、依赖注入基础与 Hilt 架构</h2>
+
+      <h3>什么是依赖注入</h3>
+
+      <p>一个类需要另一个类来完成工作，这种关系就是「依赖」。如果类 A 自己创建类 B 的实例，A 就和B的具体实现耦合了。依赖注入的核心思想是：<strong>不要自己创建依赖，让外部提供</strong>。</p>
+
+      <pre><code>// ❌ 没有 DI：直接创建依赖，紧耦合
+class OrderViewModel {
+    private val repository = OrderRepository(ApiService())  // 硬编码
+}
+
+// ✅ 有 DI：依赖通过构造函数注入
+class OrderViewModel(
+    private val repository: OrderRepository  // 外部提供
+)</code></pre>
+
+      <h3>DI 的三种形式</h3>
+
+      <table>
+        <tr>
+          <th>形式</th>
+          <th>方式</th>
+          <th>Hilt 是否使用</th>
+        </tr>
+        <tr>
+          <td>构造函数注入</td>
+          <td>通过构造函数参数传入依赖</td>
+          <td>✅ 主要方式</td>
+        </tr>
+        <tr>
+          <td>字段注入</td>
+          <td>通过 <code>@Inject</code> 标注字段，框架自动赋值</td>
+          <td>✅ Android 入口点专用</td>
+        </tr>
+        <tr>
+          <td>方法注入</td>
+          <td>通过方法参数传入依赖</td>
+          <td>❌ 极少使用</td>
+        </tr>
+      </table>
+
+      <h3>Hilt 组件层级树</h3>
+
+      <p>Hilt 预定义了一组与 Android 生命周期对应的组件（Component），它们形成一棵层级树——子组件可以访问父组件的依赖：</p>
+
+      <pre><code>SingletonComponent（Application 级别）
+├── ActivityRetainedComponent（跨配置切换的 Activity 级别）
+│   └── ViewModelComponent（ViewModel 级别）
+├── ServiceComponent（Service 级别）
+└── ActivityComponent（Activity 级别）
+    └── FragmentComponent（Fragment 级别）
+        └── ViewComponent（View 级别）
+    └── ViewWithFragmentComponent（带 Fragment 的 View）</code></pre>
+
+      <div class="tip-box">
+        <strong>核心规则</strong>：子组件可以访问父组件中绑定的依赖，反之不行。例如 Fragment 可以访问 Activity 作用域的依赖，但 Activity 不能访问 Fragment 作用域的依赖。
+      </div>
+
+      <!-- 二、核心注解速览 -->
+      <h2 id="core-annotations">二、核心注解速览</h2>
+
+      <h3>@HiltAndroidApp</h3>
+
+      <p>标注 Application 子类，触发 Hilt 代码生成。这是 Hilt 的入口，<strong>每个项目必须且只能有一个</strong>。</p>
+
+      <pre><code>@HiltAndroidApp
+class MyApplication : Application() {
+    // Hilt 会自动生成 SingletonComponent
+    // 所有 @Singleton 作用域的依赖都在这里初始化
+}</code></pre>
+
+      <div class="warning-box">
+        <strong>别忘了在 AndroidManifest.xml 中注册</strong>：
+        <pre><code>&lt;application
+    android:name=".MyApplication"
+    ...&gt;</code></pre>
+      </div>
+
+      <h3>@AndroidEntryPoint</h3>
+
+      <p>标注支持注入的 Android 类。Hilt 会为这些类生成注入代码。</p>
+
+      <pre><code>@AndroidEntryPoint
+class MainActivity : AppCompatActivity() {
+
+    @Inject lateinit var repository: UserRepository  // 字段注入
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        // 此时 repository 已经被注入，可直接使用
+        val user = repository.getCurrentUser()
+    }
+}</code></pre>
+
+      <p>支持的 Android 类：</p>
+
+      <table>
+        <tr>
+          <th>Android 类</th>
+          <th>对应组件</th>
+          <th>注入方式</th>
+        </tr>
+        <tr>
+          <td>Activity</td>
+          <td>ActivityComponent</td>
+          <td>字段注入</td>
+        </tr>
+        <tr>
+          <td>Fragment</td>
+          <td>FragmentComponent</td>
+          <td>字段注入</td>
+        </tr>
+        <tr>
+          <td>View</td>
+          <td>ViewComponent</td>
+          <td>字段注入</td>
+        </tr>
+        <tr>
+          <td>Service</td>
+          <td>ServiceComponent</td>
+          <td>字段注入</td>
+        </tr>
+        <tr>
+          <td>BroadcastReceiver</td>
+          <td>ActivityComponent</td>
+          <td>字段注入</td>
+        </tr>
+      </table>
+
+      <h3>@Inject</h3>
+
+      <p>两种用法：</p>
+
+      <pre><code>// 1. 构造函数注入：告诉 Hilt 如何创建这个类的实例
+class UserRepository @Inject constructor(
+    private val apiService: ApiService,
+    private val dao: UserDao
+) {
+    // Hilt 会自动解析 ApiService 和 UserDao 的依赖
+}
+
+// 2. 字段注入：在 @AndroidEntryPoint 标注的类中使用
+@AndroidEntryPoint
+class MainActivity : AppCompatActivity() {
+    @Inject lateinit var repository: UserRepository
+}</code></pre>
+
+      <div class="warning-box">
+        <strong>字段注入的限制</strong>：<code>@Inject</code> 标注的字段必须是 <code>lateinit var</code>，不能是 <code>private</code>。Hilt 需要直接赋值。
+      </div>
+
+      <h3>@Module 和 @InstallIn</h3>
+
+      <p>当类的构造函数不由你控制（第三方库、接口、抽象类），就需要用 Module 告诉 Hilt 如何提供实例。</p>
+
+      <pre><code>@Module
+@InstallIn(SingletonComponent::class)  // 安装到 Application 级别
+object NetworkModule {
+
+    @Provides
+    @Singleton
+    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl("https://api.example.com")
+            .client(okHttpClient)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+    }
+}</code></pre>
+
+      <p><code>@InstallIn</code> 决定了 Module 的生命周期和可见范围：</p>
+
+      <table>
+        <tr>
+          <th>@InstallIn 参数</th>
+          <th>生命周期</th>
+          <th>典型用途</th>
+        </tr>
+        <tr>
+          <td><code>SingletonComponent::class</code></td>
+          <td>Application 存活期间</td>
+          <td>Retrofit、Room、OkHttpClient</td>
+        </tr>
+        <tr>
+          <td><code>ActivityRetainedComponent::class</code></td>
+          <td>Activity 跨配置切换</td>
+          <td>跨旋转保持的数据</td>
+        </tr>
+        <tr>
+          <td><code>ViewModelComponent::class</code></td>
+          <td>ViewModel 存活期间</td>
+          <td>ViewModel 专属依赖</td>
+        </tr>
+        <tr>
+          <td><code>ActivityComponent::class</code></td>
+          <td>Activity 存活期间</td>
+          <td>Activity 级别的 Presenter</td>
+        </tr>
+        <tr>
+          <td><code>FragmentComponent::class</code></td>
+          <td>Fragment 存活期间</td>
+          <td>Fragment 级别的 Adapter</td>
+        </tr>
+        <tr>
+          <td><code>ViewComponent::class</code></td>
+          <td>View 存活期间</td>
+          <td>自定义 View 的依赖</td>
+        </tr>
+        <tr>
+          <td><code>ServiceComponent::class</code></td>
+          <td>Service 存活期间</td>
+          <td>Service 的 Worker</td>
+        </tr>
+      </table>
+
+      <!-- 三、@Binds vs @Provides / @Qualifier -->
+      <h2 id="binds-provides-qualifier">三、@Binds vs @Provides、@Qualifier 自定义限定符</h2>
+
+      <h3>@Binds：接口绑定到实现</h3>
+
+      <p>当你有一个接口和多个实现时，用 <code>@Binds</code> 告诉 Hilt 绑定哪一个。</p>
+
+      <pre><code>interface Logger {
+    fun log(message: String)
+}
+
+class FileLogger @Inject constructor(
+    private val fileWriter: FileWriter
+) : Logger {
+    override fun log(message: String) { fileWriter.write(message) }
+}
+
+@Module
+@InstallIn(SingletonComponent::class)
+abstract class LoggerModule {
+
+    @Binds
+    @Singleton
+    abstract fun bindLogger(impl: FileLogger): Logger
+    // 注意：@Binds 方法必须是 abstract，参数是实现类，返回值是接口
+}</code></pre>
+
+      <h3>@Provides：手动提供实例</h3>
+
+      <p>当你需要构造逻辑（Builder 模式、工厂方法、第三方库对象）时，用 <code>@Provides</code>。</p>
+
+      <pre><code>@Module
+@InstallIn(SingletonComponent::class)
+object DatabaseModule {
+
+    @Provides
+    @Singleton
+    fun provideRoomDatabase(@ApplicationContext context: Context): AppDatabase {
+        return Room.databaseBuilder(
+            context,
+            AppDatabase::class.java,
+            "app-database"
+        ).build()
+    }
+
+    @Provides
+    fun provideUserDao(db: AppDatabase): UserDao = db.userDao()
+}</code></pre>
+
+      <h3>@Binds vs @Provides 对比</h3>
+
+      <table>
+        <tr>
+          <th>特性</th>
+          <th>@Binds</th>
+          <th>@Provides</th>
+        </tr>
+        <tr>
+          <td>方法类型</td>
+          <td><code>abstract</code></td>
+          <td><code>concrete</code>（可写在 object class）</td>
+        </tr>
+        <tr>
+          <td>Module 类型</td>
+          <td><code>abstract class</code></td>
+          <td><code>object</code> 或 <code>class</code></td>
+        </tr>
+        <tr>
+          <td>适用场景</td>
+          <td>接口 → 实现绑定</td>
+          <td>需要构造逻辑的对象</td>
+        </tr>
+        <tr>
+          <td>性能</td>
+          <td>略优（编译期直接映射）</td>
+          <td>运行时调用方法</td>
+        </tr>
+        <tr>
+          <td>能否访问其他依赖</td>
+          <td>❌ 不能</td>
+          <td>✅ 可以通过参数注入</td>
+        </tr>
+      </table>
+
+      <div class="tip-box">
+        <strong>混合使用</strong>：一个 Module 可以同时包含 <code>@Binds</code> 和 <code>@Provides</code>，只需将 Module 声明为 <code>abstract class</code>，<code>@Provides</code> 方法用伴生对象标注：
+        <pre><code>@Module
+@InstallIn(SingletonComponent::class)
+abstract class AppModule {
+
+    @Binds
+    abstract fun bindRepository(impl: DefaultRepository): Repository
+
+    companion object {
+        @Provides
+        fun provideApiKey(): String = BuildConfig.API_KEY
+    }
+}</code></pre>
+      </div>
+
+      <h3>@Qualifier：同一类型多个绑定</h3>
+
+      <p>当同一类型需要提供不同实例时（比如两个不同的 <code>Retrofit</code>、两个不同的 <code>String</code>），用 <code>@Qualifier</code> 区分。</p>
+
+      <pre><code>// 1. 定义限定符注解
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class AuthRetrofit
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class ApiRetrofit
+
+// 2. 在 @Provides 中标注
+@Module
+@InstallIn(SingletonComponent::class)
+object NetworkModule {
+
+    @AuthRetrofit
+    @Provides
+    @Singleton
+    fun provideAuthRetrofit(): Retrofit = Retrofit.Builder()
+        .baseUrl("https://auth.example.com")
+        .build()
+
+    @ApiRetrofit
+    @Provides
+    @Singleton
+    fun provideApiRetrofit(): Retrofit = Retrofit.Builder()
+        .baseUrl("https://api.example.com")
+        .build()
+}
+
+// 3. 注入时指定限定符
+class AuthRepository @Inject constructor(
+    @AuthRetrofit private val retrofit: Retrofit
+)</code></pre>
+
+      <div class="warning-box">
+        <strong>预定义限定符</strong>：Hilt 提供了 <code>@ApplicationContext</code> 和 <code>@ActivityContext</code> 来区分两种 Context，不需要自己定义：
+        <pre><code>@Module
+@InstallIn(SingletonComponent::class)
+object AppModule {
+
+    @Provides
+    fun provideCacheDir(@ApplicationContext context: Context): File {
+        return context.cacheDir
+    }
+}</code></pre>
+      </div>
+
+      <!-- 四、ViewModel 注入 -->
+      <h2 id="viewmodel-injection">四、ViewModel 注入</h2>
+
+      <h3>@HiltViewModel 基本用法</h3>
+
+      <p>Hilt 通过 <code>@HiltViewModel</code> 让 ViewModel 的构造函数注入变得极为简洁：</p>
+
+      <pre><code>@HiltViewModel
+class UserViewModel @Inject constructor(
+    private val repository: UserRepository,
+    private val savedStateHandle: SavedStateHandle
+) : ViewModel() {
+
+    val userId: String? = savedStateHandle["userId"]
+
+    val userInfo: StateFlow&lt;UiState&lt;User&gt;&gt; = repository.getUser(userId)
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), UiState.Loading)
+}</code></pre>
+
+      <pre><code>// Activity / Fragment 中获取
+@AndroidEntryPoint
+class UserActivity : AppCompatActivity() {
+
+    private val viewModel: UserViewModel by viewModels()
+    // Hilt 自动处理 ViewModelProvider.Factory
+}</code></pre>
+
+      <h3>SavedStateHandle 的用途</h3>
+
+      <p><code>SavedStateHandle</code> 是 ViewModel 的「安全箱」，用于保存进程被系统回收后需要恢复的数据：</p>
+
+      <pre><code>@HiltViewModel
+class DetailViewModel @Inject constructor(
+    private val repository: ItemRepository,
+    savedStateHandle: SavedStateHandle
+) : ViewModel() {
+
+    // 从 Navigation 参数中获取 itemId
+    private val itemId: String = savedStateHandle["itemId"]!!
+
+    // 保存临时编辑状态
+    fun saveDraft(draft: String) {
+        savedStateHandle["draft"] = draft
+    }
+
+    fun getDraft(): String? {
+        return savedStateHandle["draft"]
+    }
+}</code></pre>
+
+      <h3>Fragment 中共享 ViewModel</h3>
+
+      <pre><code>@AndroidEntryPoint
+class ListFragment : Fragment() {
+
+    // 各 Fragment 独立的 ViewModel
+    private val viewModel: ListViewModel by viewModels()
+
+    // 与 Activity 共享的 ViewModel
+    private val sharedViewModel: SharedViewModel by activityViewModels()
+}
+
+@AndroidEntryPoint
+class DetailFragment : Fragment() {
+
+    // 同一 Activity 下的 Fragment 共享同一个 SharedViewModel
+    private val sharedViewModel: SharedViewModel by activityViewModels()
+}</code></pre>
+
+      <div class="tip-box">
+        <strong>HiltViewModel 的优势</strong>：不需要手动创建 <code>ViewModelProvider.Factory</code>，构造函数中的所有依赖 Hilt 自动解析。<code>SavedStateHandle</code> 也由 Hilt 自动注入，不需要额外配置。
+      </div>
+
+      <!-- 五、Hilt 与 Navigation 集成 -->
+      <h2 id="navigation-integration">五、Hilt 与 Navigation 集成</h2>
+
+      <h3>@HiltNavGraphViewModel：Navigation 场景下的 ViewModel</h3>
+
+      <p>在 Navigation Graph 中，ViewModel 的作用域默认是 NavGraph 级别的。Hilt 提供了 <code>@HiltNavGraphViewModel</code> 来配合 Navigation 场景：</p>
+
+      <pre><code>// 1. 在 NavGraph 中定义目标
+@HiltNavGraphViewModel
+class OrderViewModel @Inject constructor(
+    private val orderRepository: OrderRepository,
+    savedStateHandle: SavedStateHandle
+) : ViewModel() {
+    private val orderId: String? = savedStateHandle["orderId"]
+    // ...
+}</code></pre>
+
+      <h3>Navigation 参数传递</h3>
+
+      <pre><code>// 1. 定义 NavGraph 路由（带参数）
+composable(
+    route = "detail/{itemId}",
+    arguments = listOf(navArgument("itemId") { type = NavType.StringType })
+) { backStackEntry ->
+    val itemId = backStackEntry.arguments?.getString("itemId")
+    // itemId 会自动通过 SavedStateHandle 注入到 ViewModel
+}
+
+// 2. ViewModel 中通过 SavedStateHandle 获取
+@HiltViewModel
+class DetailViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle
+) : ViewModel() {
+    val itemId: String = savedStateHandle["itemId"] ?: ""
+}
+
+// 3. 导航时传参
+navController.navigate("detail/${item.id}")</code></pre>
+
+      <h3>NavGraph 作用域的 ViewModel</h3>
+
+      <pre><code>// 在 Navigation Graph 范围内共享 ViewModel
+// 适合多页面共享状态的场景（如多步注册流程）
+@HiltViewModel
+class CheckoutViewModel @Inject constructor(
+    private val cartRepository: CartRepository,
+    savedStateHandle: SavedStateHandle
+) : ViewModel() {
+    // 购物车状态在 checkout 子图中共享
+}
+
+// Fragment 中获取 NavGraph 作用域的 ViewModel
+val checkoutViewModel: CheckoutViewModel by hiltNavGraphViewModels(R.id.checkout_nav_graph)</code></pre>
+
+      <div class="tip-box">
+        <strong>ViewModel 作用域选择</strong>：
+        <ul>
+          <li><code>by viewModels()</code> — 当前 Fragment 独享</li>
+          <li><code>by activityViewModels()</code> — 同一 Activity 下所有 Fragment 共享</li>
+          <li><code>by hiltNavGraphViewModels(R.id.nav_graph)</code> — 同一 NavGraph 下共享</li>
+        </ul>
+      </div>
+
+      <!-- 六、多模块项目中的 Hilt -->
+      <h2 id="multi-module">六、多模块项目中的 Hilt</h2>
+
+      <h3>模块划分原则</h3>
+
+      <pre><code>app/
+├── app/                    # 主模块（Application 入口）
+├── core/                   # 核心模块（网络、数据库、工具类）
+│   ├── core-network/
+│   ├── core-database/
+│   └── core-common/
+└── feature/                # 功能模块
+    ├── feature-auth/
+    ├── feature-home/
+    └── feature-profile/</code></pre>
+
+      <h3>各模块的 Module 安装策略</h3>
+
+      <pre><code>// core-network 模块
+@Module
+@InstallIn(SingletonComponent::class)
+object NetworkModule {
+    @Provides @Singleton
+    fun provideOkHttpClient(): OkHttpClient = OkHttpClient.Builder().build()
+
+    @Provides @Singleton
+    fun provideRetrofit(client: OkHttpClient): Retrofit = /* ... */
+}
+
+// core-database 模块
+@Module
+@InstallIn(SingletonComponent::class)
+object DatabaseModule {
+    @Provides @Singleton
+    fun provideAppDatabase(@ApplicationContext ctx: Context): AppDatabase = /* ... */
+}
+
+// feature-auth 模块
+@Module
+@InstallIn(ViewModelComponent::class)
+object AuthModule {
+    @Provides
+    fun provideAuthRepository(api: AuthApi): AuthRepository = /* ... */
+}</code></pre>
+
+      <h3>@EntryPoint：在非 Hilt 管理的类中获取依赖</h3>
+
+      <p>有时候你需要在 Hilt 不直接管理的类（如 ContentProvider、WorkManager Worker、第三方回调）中获取依赖。<code>@EntryPoint</code> 就是你的后门。</p>
+
+      <pre><code>// 1. 定义 EntryPoint 接口
+@EntryPoint
+@InstallIn(SingletonComponent::class)
+interface UserRepositoryEntryPoint {
+    fun userRepository(): UserRepository
+}
+
+// 2. 在非 Hilt 管理的类中使用
+class SyncWorker(
+    context: Context,
+    params: WorkerParameters
+) : CoroutineWorker(context, params) {
+
+    override suspend fun doWork(): Result {
+        // 通过 EntryPoint 获取依赖
+        val entryPoint = EntryPointAccessors.fromApplication(
+            applicationContext,
+            UserRepositoryEntryPoint::class.java
+        )
+        val repository = entryPoint.userRepository()
+
+        repository.syncData()
+        return Result.success()
+    }
+}</code></pre>
+
+      <h3>Feature 模块隔离</h3>
+
+      <div class="tip-box">
+        <strong>最佳实践</strong>：Feature 模块只暴露接口，实现类在模块内部。主 app 模块通过 <code>@Binds</code> 将接口绑定到具体实现。这样 feature 模块之间互不依赖，只依赖 core 模块的接口。
+      </div>
+
+      <pre><code>// feature-auth 模块暴露接口
+interface AuthRepository {
+    suspend fun login(email: String, password: String): Result&lt;User&gt;
+}
+
+// feature-auth 模块内部实现
+class AuthRepositoryImpl @Inject constructor(
+    private val authApi: AuthApi
+) : AuthRepository {
+    override suspend fun login(email: String, password: String) = /* ... */
+}
+
+// feature-auth 模块内部 Module
+@Module
+@InstallIn(SingletonComponent::class)
+abstract class AuthModule {
+    @Binds @Singleton
+    abstract fun bindAuthRepository(impl: AuthRepositoryImpl): AuthRepository
+}</code></pre>
+
+      <!-- 七、作用域管理 -->
+      <h2 id="scope-management">七、作用域管理</h2>
+
+      <h3>作用域注解与组件对应关系</h3>
+
+      <table>
+        <tr>
+          <th>作用域注解</th>
+          <th>对应组件</th>
+          <th>生命周期</th>
+          <th>典型用途</th>
+        </tr>
+        <tr>
+          <td><code>@Singleton</code></td>
+          <td>SingletonComponent</td>
+          <td>Application 全生命周期</td>
+          <td>Retrofit、Room、OkHttpClient</td>
+        </tr>
+        <tr>
+          <td><code>@ActivityRetainedScoped</code></td>
+          <td>ActivityRetainedComponent</td>
+          <td>Activity 跨配置切换</td>
+          <td>跨旋转保持的数据管理器</td>
+        </tr>
+        <tr>
+          <td><code>@ViewModelScoped</code></td>
+          <td>ViewModelComponent</td>
+          <td>ViewModel 存活期间</td>
+          <td>ViewModel 专属的 UseCase</td>
+        </tr>
+        <tr>
+          <td><code>@ActivityScoped</code></td>
+          <td>ActivityComponent</td>
+          <td>Activity 一次生命周期</td>
+          <td>Activity 级别的 Presenter</td>
+        </tr>
+        <tr>
+          <td><code>@FragmentScoped</code></td>
+          <td>FragmentComponent</td>
+          <td>Fragment 存活期间</td>
+          <td>Fragment 专属 Adapter</td>
+        </tr>
+        <tr>
+          <td><code>@ViewScoped</code></td>
+          <td>ViewComponent</td>
+          <td>View 存活期间</td>
+          <td>自定义 View 的依赖</td>
+        </tr>
+        <tr>
+          <td><code>@ServiceScoped</code></td>
+          <td>ServiceComponent</td>
+          <td>Service 存活期间</td>
+          <td>Service 的 Worker</td>
+        </tr>
+      </table>
+
+      <h3>作用域的本质</h3>
+
+      <p>作用域注解的作用只有一个：<strong>同一组件实例内，标注了相同作用域的依赖只创建一次</strong>。</p>
+
+      <pre><code>@Module
+@InstallIn(SingletonComponent::class)
+object AppModule {
+
+    @Singleton  // ✅ 整个 App 只创建一次
+    @Provides
+    fun provideOkHttpClient(): OkHttpClient = OkHttpClient.Builder().build()
+
+    // ❌ 没有 @Singleton，每次注入都创建新实例
+    @Provides
+    fun provideGson(): Gson = Gson()
+}</code></pre>
+
+      <div class="warning-box">
+        <strong>常见误解</strong>：<code>@Singleton</code> 不等于全局单例！它的含义是「在 SingletonComponent 的生命周期内单例」。如果 <code>@Module</code> 安装在 <code>ActivityComponent</code> 中，<code>@Singleton</code> 不会生效（编译会报错）。作用域注解必须与 <code>@InstallIn</code> 的组件匹配。
+      </div>
+
+      <h3>作用域不匹配的编译错误</h3>
+
+      <pre><code>// ❌ 编译错误：@Singleton 只能用于 SingletonComponent
+@Module
+@InstallIn(ActivityComponent::class)
+object BadModule {
+    @Singleton  // 错误！应该用 @ActivityScoped
+    @Provides
+    fun providePresenter(): Presenter = Presenter()
+}
+
+// ✅ 正确：作用域与组件匹配
+@Module
+@InstallIn(ActivityComponent::class)
+object GoodModule {
+    @ActivityScoped
+    @Provides
+    fun providePresenter(): Presenter = Presenter()
+}</code></pre>
+
+      <h3>无作用域 vs 有作用域</h3>
+
+      <pre><code>// 无作用域：每次请求都创建新实例
+@Provides
+fun provideFormatter(): DateFormatter = DateFormatter()
+
+// 有作用域：同一组件内复用实例
+@Singleton
+@Provides
+fun provideDatabase(@ApplicationContext ctx: Context): AppDatabase = /* ... */</code></pre>
+
+      <div class="tip-box">
+        <strong>什么时候该加作用域？</strong>
+        <ul>
+          <li>创建成本高的对象（网络客户端、数据库）→ <code>@Singleton</code></li>
+          <li>需要保持状态的对象（缓存、计数器）→ 对应组件作用域</li>
+          <li>无状态工具类（Gson、DateFormatter）→ 通常不需要作用域</li>
+        </ul>
+      </div>
+
+      <!-- 八、第三方库集成 -->
+      <h2 id="third-party-integration">八、第三方库集成</h2>
+
+      <h3>Retrofit</h3>
+
+      <pre><code>@Module
+@InstallIn(SingletonComponent::class)
+object NetworkModule {
+
+    @Singleton
+    @Provides
+    fun provideOkHttpClient(
+        @ApplicationContext context: Context,
+        loggingInterceptor: HttpLoggingInterceptor
+    ): OkHttpClient = OkHttpClient.Builder()
+        .addInterceptor(loggingInterceptor)
+        .cache(Cache(context.cacheDir, 10 * 1024 * 1024))  // 10MB 缓存
+        .connectTimeout(30, TimeUnit.SECONDS)
+        .build()
+
+    @Singleton
+    @Provides
+    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
+        .baseUrl("https://api.example.com")
+        .client(okHttpClient)
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+
+    @Provides
+    @Singleton
+    fun provideApiService(retrofit: Retrofit): ApiService =
+        retrofit.create(ApiService::class.java)
+}</code></pre>
+
+      <h3>Room</h3>
+
+      <pre><code>@Module
+@InstallIn(SingletonComponent::class)
+object DatabaseModule {
+
+    @Singleton
+    @Provides
+    fun provideDatabase(@ApplicationContext context: Context): AppDatabase =
+        Room.databaseBuilder(context, AppDatabase::class.java, "app.db")
+            .addMigrations(MIGRATIONS)
+            .build()
+
+    @Provides
+    fun provideUserDao(db: AppDatabase): UserDao = db.userDao()
+
+    @Provides
+    fun provideOrderDao(db: AppDatabase): OrderDao = db.orderDao()
+}</code></pre>
+
+      <h3>DataStore</h3>
+
+      <pre><code>@Module
+@InstallIn(SingletonComponent::class)
+object DataStoreModule {
+
+    @Singleton
+    @Provides
+    fun providePreferencesDataStore(
+        @ApplicationContext context: Context
+    ): DataStore&lt;Preferences&gt; = PreferenceDataStoreFactory.create(
+        storageFile = { context.preferencesDataStoreFile("settings") }
+    )
+
+    // 如果使用 Proto DataStore
+    @Singleton
+    @Provides
+    fun provideProtoDataStore(
+        @ApplicationContext context: Context
+    ): DataStore&lt;UserPreferences&gt; = DataStoreFactory.create(
+        serializer = UserPreferencesSerializer,
+        produceFile = { context.dataStoreFile("user_prefs.pb") }
+    )
+}</code></pre>
+
+      <h3>OkHttp @Interceptor 注入</h3>
+
+      <p>拦截器有时需要访问依赖（如 Token 刷新），需要单独提供：</p>
+
+      <pre><code>// 1. 定义拦截器（构造函数注入）
+class AuthInterceptor @Inject constructor(
+    private val tokenManager: TokenManager
+) : Interceptor {
+    override fun intercept(chain: Interceptor.Chain): Response {
+        val request = chain.request().newBuilder()
+            .addHeader("Authorization", "Bearer ${tokenManager.getToken()}")
+            .build()
+        return chain.proceed(request)
+    }
+}
+
+// 2. 在 Module 中提供 OkHttpClient
+@Module
+@InstallIn(SingletonComponent::class)
+object NetworkModule {
+
+    @Singleton
+    @Provides
+    fun provideOkHttpClient(
+        authInterceptor: AuthInterceptor,
+        loggingInterceptor: HttpLoggingInterceptor
+    ): OkHttpClient = OkHttpClient.Builder()
+        .addInterceptor(authInterceptor)         // 应用拦截器
+        .addNetworkInterceptor(loggingInterceptor) // 网络拦截器
+        .build()
+}</code></pre>
+
+      <div class="warning-box">
+        <strong>拦截器顺序很重要</strong>：<code>addInterceptor</code> 添加应用拦截器（先执行），<code>addNetworkInterceptor</code> 添加网络拦截器（后执行）。Auth 拦截器通常放在应用拦截器层，Logging 放在网络拦截器层。
+      </div>
+
+      <h3>集成模板汇总</h3>
+
+      <table>
+        <tr>
+          <th>库</th>
+          <th>@InstallIn</th>
+          <th>作用域</th>
+          <th>提供方式</th>
+        </tr>
+        <tr>
+          <td>Retrofit</td>
+          <td>SingletonComponent</td>
+          <td>@Singleton</td>
+          <td>@Provides</td>
+        </tr>
+        <tr>
+          <td>OkHttpClient</td>
+          <td>SingletonComponent</td>
+          <td>@Singleton</td>
+          <td>@Provides</td>
+        </tr>
+        <tr>
+          <td>Room Database</td>
+          <td>SingletonComponent</td>
+          <td>@Singleton</td>
+          <td>@Provides</td>
+        </tr>
+        <tr>
+          <td>Room DAO</td>
+          <td>SingletonComponent</td>
+          <td>无作用域</td>
+          <td>@Provides</td>
+        </tr>
+        <tr>
+          <td>DataStore</td>
+          <td>SingletonComponent</td>
+          <td>@Singleton</td>
+          <td>@Provides</td>
+        </tr>
+        <tr>
+          <td>Gson / Moshi</td>
+          <td>SingletonComponent</td>
+          <td>可选 @Singleton</td>
+          <td>@Provides</td>
+        </tr>
+        <tr>
+          <td>CoroutineScope</td>
+          <td>SingletonComponent</td>
+          <td>@Singleton</td>
+          <td>@Provides</td>
+        </tr>
+      </table>
+
+      <!-- 九、测试最佳实践 -->
+      <h2 id="testing">九、测试最佳实践</h2>
+
+      <h3>替换模块：@TestInstallIn</h3>
+
+      <p>测试时，你需要用假实现替换真实依赖（如把 Retrofit API 替换为内存实现）。<code>@TestInstallIn</code> 是官方推荐方式：</p>
+
+      <pre><code>// 生产代码中的 Module
+@Module
+@InstallIn(SingletonComponent::class)
+object RepositoryModule {
+    @Provides @Singleton
+    fun provideUserRepository(api: UserApi): UserRepository =
+        RealUserRepository(api)
+}
+
+// 测试中替换为假实现
+@Module
+@TestInstallIn(
+    components = [SingletonComponent::class],
+    replaces = [RepositoryModule::class]  // 替换目标
+)
+object TestRepositoryModule {
+    @Provides @Singleton
+    fun provideUserRepository(): UserRepository =
+        FakeUserRepository()  // 不依赖网络
+}</code></pre>
+
+      <h3>单元测试：不启动 Hilt</h3>
+
+      <p>纯单元测试不需要 Hilt。直接构造被测类，手动传入依赖：</p>
+
+      <pre><code>@Test
+fun `load user returns success`() = runTest {
+    // 手动构造假依赖
+    val fakeRepository = FakeUserRepository()
+    fakeRepository.addUser(User(id = "1", name = "Test"))
+
+    // 直接创建 ViewModel，不走 Hilt
+    val viewModel = UserViewModel(fakeRepository, SavedStateHandle())
+
+    // 验证
+    val state = viewModel.userInfo.first()
+    assertTrue(state is UiState.Success)
+    assertEquals("Test", (state as UiState.Success).data.name)
+}</code></pre>
+
+      <div class="tip-box">
+        <strong>原则</strong>：单元测试尽量不用 Hilt——直接构造对象更快、更可控。Hilt 测试适合集成测试和 UI 测试。
+      </div>
+
+      <h3>Hilt Android 测试</h3>
+
+      <pre><code>@HiltAndroidTest  // 启用 Hilt 测试
+@RunWith(AndroidJUnit4::class)
+class UserActivityTest {
+
+    @get:Rule
+    var hiltRule = HiltAndroidRule(this)  // 必须添加
+
+    @Inject
+    lateinit var repository: UserRepository  // 注入依赖
+
+    @Before
+    fun init() {
+        hiltRule.inject()  // 触发注入
+    }
+
+    @Test
+    fun displaysUserName() {
+        // 先通过注入的 repository 设置数据
+        (repository as FakeUserRepository).addUser(
+            User(id = "1", name = "Alice")
+        )
+
+        // 启动 Activity
+        val scenario = ActivityScenario.launch(UserActivity::class.java)
+
+        // 验证 UI
+        onView(withText("Alice")).check(matches(isDisplayed()))
+    }
+}</code></pre>
+
+      <h3>@UninstallModules：临时卸载模块</h3>
+
+      <pre><code>@HiltAndroidTest
+@UninstallModules(NetworkModule::class)  // 临时卸载网络模块
+class OfflineTest {
+
+    @Module
+    @InstallIn(SingletonComponent::class)
+    object TestNetworkModule {
+        @Provides @Singleton
+        fun provideRetrofit(): Retrofit = throw RuntimeException("不应访问网络")
+    }
+
+    // 测试离线场景
+}</code></pre>
+
+      <h3>测试策略对比</h3>
+
+      <table>
+        <tr>
+          <th>测试类型</th>
+          <th>使用 Hilt？</th>
+          <th>替换策略</th>
+          <th>速度</th>
+        </tr>
+        <tr>
+          <td>纯单元测试</td>
+          <td>❌ 不使用</td>
+          <td>手动构造假依赖</td>
+          <td>⚡ 快</td>
+        </tr>
+        <tr>
+          <td>Hilt 集成测试</td>
+          <td>✅ <code>@HiltAndroidTest</code></td>
+          <td><code>@TestInstallIn</code></td>
+          <td>🐢 较慢</td>
+        </tr>
+        <tr>
+          <td>临时替换单个模块</td>
+          <td>✅ <code>@UninstallModules</code></td>
+          <td>在测试类内定义替代 Module</td>
+          <td>🐢 较慢</td>
+        </tr>
+        <tr>
+          <td>端到端测试</td>
+          <td>✅ 完整 Hilt</td>
+          <td>只替换外部服务</td>
+          <td>🐌 最慢</td>
+        </tr>
+      </table>
+
+      <!-- 十、常见陷阱与速查表 -->
+      <h2 id="pitfalls-cheatsheet">十、常见陷阱与速查表</h2>
+
+      <h3>陷阱 1：忘记 @HiltAndroidApp</h3>
+
+      <pre><code>// ❌ 编译通过但运行时崩溃
+class MyApplication : Application() {  // 缺少 @HiltAndroidApp
+}
+
+// ✅ 必须标注
+@HiltAndroidApp
+class MyApplication : Application() {
+}</code></pre>
+
+      <h3>陷阱 2：在 @AndroidEntryPoint 类的父类中注入</h3>
+
+      <pre><code>// ❌ Hilt 不支持在父类中字段注入
+open class BaseActivity : AppCompatActivity() {
+    @Inject lateinit var repository: Repository  // 不会被注入！
+}
+
+@AndroidEntryPoint
+class MainActivity : BaseActivity() {
+    // repository 是 null
+}
+
+// ✅ 在 @AndroidEntryPoint 标注的类中注入
+@AndroidEntryPoint
+class MainActivity : AppCompatActivity() {
+    @Inject lateinit var repository: Repository  // ✅ 正常注入
+}</code></pre>
+
+      <div class="warning-box">
+        <strong>注意</strong>：如果父类也标注了 <code>@AndroidEntryPoint</code>，则父类的字段注入也是有效的。关键是 <code>@AndroidEntryPoint</code> 必须出现在字段注入所在的类或其父类上。
+      </div>
+
+      <h3>陷阱 3：作用域与 @InstallIn 不匹配</h3>
+
+      <pre><code>// ❌ 编译错误
+@Module
+@InstallIn(ActivityComponent::class)
+object BadModule {
+    @Singleton  // 错误！Singleton 只能用于 SingletonComponent
+    @Provides fun provideX(): X = X()
+}
+
+// ✅ 作用域与组件匹配
+@Module
+@InstallIn(ActivityComponent::class)
+object GoodModule {
+    @ActivityScoped
+    @Provides fun provideX(): X = X()
+}</code></pre>
+
+      <h3>陷阱 4：接口没有 @Binds 却期望自动注入</h3>
+
+      <pre><code>// ❌ Hilt 不知道要绑定哪个实现
+interface Repository { fun getData(): String }
+class RealRepository @Inject constructor() : Repository { /* ... */ }
+
+// 注入 Repository 会报错：没有绑定
+
+// ✅ 使用 @Binds 告诉 Hilt
+@Module
+@InstallIn(SingletonComponent::class)
+abstract class RepoModule {
+    @Binds @Singleton
+    abstract fun bindRepository(impl: RealRepository): Repository
+}</code></pre>
+
+      <h3>陷阱 5：在 object class 中使用 @Binds</h3>
+
+      <pre><code>// ❌ @Binds 不能在 object class 中
+@Module
+@InstallIn(SingletonComponent::class)
+object BadModule {
+    @Binds  // 编译错误！@Binds 必须在 abstract 方法中
+    fun bindRepo(impl: RealRepo): Repository = impl
+}
+
+// ✅ @Binds 在 abstract class 中
+@Module
+@InstallIn(SingletonComponent::class)
+abstract class GoodModule {
+    @Binds @Singleton
+    abstract fun bindRepo(impl: RealRepo): Repository
+}</code></pre>
+
+      <h3>陷阱 6：多模块中 Module 重复绑定</h3>
+
+      <p>如果 <code>core-network</code> 和 <code>feature-auth</code> 都绑定了 <code>ApiService</code>，编译会报重复绑定。解决方案：</p>
+
+      <pre><code>// 方案1：只在 core 模块绑定，feature 模块直接使用
+// core-network 模块
+@Module
+@InstallIn(SingletonComponent::class)
+object CoreNetworkModule {
+    @Provides @Singleton
+    fun provideApiService(retrofit: Retrofit): ApiService = retrofit.create()
+}
+
+// 方案2：用 @Qualifier 区分不同的 ApiService
+@Qualifier
+annotation class AuthApi
+
+@Qualifier
+annotation class MainApi
+
+@Module
+@InstallIn(SingletonComponent::class)
+object NetworkModule {
+    @AuthApi @Provides @Singleton
+    fun provideAuthApi(retrofit: Retrofit): ApiService = retrofit.create()
+
+    @MainApi @Provides @Singleton
+    fun provideMainApi(retrofit: Retrofit): ApiService = retrofit.create()
+}</code></pre>
+
+      <h3>速查表</h3>
+
+      <table>
+        <tr>
+          <th>场景</th>
+          <th>做法</th>
+          <th>关键注解</th>
+        </tr>
+        <tr>
+          <td>Application 级别单例</td>
+          <td><code>@InstallIn(SingletonComponent::class)</code> + <code>@Singleton</code></td>
+          <td><code>@HiltAndroidApp</code></td>
+        </tr>
+        <tr>
+          <td>Activity 中注入依赖</td>
+          <td><code>@AndroidEntryPoint</code> + <code>@Inject lateinit</code></td>
+          <td>字段不能 private</td>
+        </tr>
+        <tr>
+          <td>接口绑定实现</td>
+          <td><code>@Module</code> + <code>@Binds</code></td>
+          <td>abstract class</td>
+        </tr>
+        <tr>
+          <td>第三方对象提供</td>
+          <td><code>@Module</code> + <code>@Provides</code></td>
+          <td>object class</td>
+        </tr>
+        <tr>
+          <td>同一类型多个实例</td>
+          <td>自定义 <code>@Qualifier</code></td>
+          <td><code>@Qualifier</code> + <code>@Retention</code></td>
+        </tr>
+        <tr>
+          <td>ViewModel 注入</td>
+          <td><code>@HiltViewModel</code> + <code>@Inject constructor</code></td>
+          <td><code>by viewModels()</code></td>
+        </tr>
+        <tr>
+          <td>非 Hilt 类获取依赖</td>
+          <td><code>@EntryPoint</code> 接口</td>
+          <td><code>EntryPointAccessors</code></td>
+        </tr>
+        <tr>
+          <td>测试替换模块</td>
+          <td><code>@TestInstallIn(replaces = [...])</code></td>
+          <td><code>@HiltAndroidTest</code></td>
+        </tr>
+        <tr>
+          <td>单元测试</td>
+          <td>不用 Hilt，手动构造</td>
+          <td>直接传参</td>
+        </tr>
+        <tr>
+          <td>区分两种 Context</td>
+          <td><code>@ApplicationContext</code> / <code>@ActivityContext</code></td>
+          <td>预定义限定符</td>
+        </tr>
+        <tr>
+          <td>Navigation 参数传递</td>
+          <td><code>SavedStateHandle</code> 自动注入</td>
+          <td><code>@HiltViewModel</code></td>
+        </tr>
+      </table>
+
+      <div class="tip-box">
+        <strong>一句话总结</strong>：Hilt 的核心公式 = <code>@HiltAndroidApp</code>（入口）+ <code>@AndroidEntryPoint</code>（注入点）+ <code>@Module/@InstallIn</code>（绑定规则）+ <code>@Scope</code>（生命周期）。记住这条链路，其他都是衍生。
+      </div>
+
+      <div class="post-tags">
+        <span>Hilt</span>
+        <span>依赖注入</span>
+        <span>Android</span>
+        <span>Dagger</span>
+        <span>ViewModel</span>
+        <span>模块化</span>
+      </div>
+    </article>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <p>&copy; 2026 张小猛 - loczb</p>
+    </div>
+  </footer>
+
+  <script>
+    // Scroll progress
+    const scrollProgress = document.querySelector('.scroll-progress');
+    window.addEventListener('scroll', () => {
+      const scrollTop = document.documentElement.scrollTop;
+      const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = (scrollTop / scrollHeight) * 100;
+      scrollProgress.style.width = progress + '%';
+    });
+
+    // Theme toggle
+    const themeToggle = document.querySelector('.theme-toggle');
+    themeToggle?.addEventListener('click', () => {
+      const html = document.documentElement;
+      const current = html.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+    });
+
+    // Mobile nav
+    const navToggle = document.querySelector('.nav-toggle');
+    const navLinks = document.querySelector('.nav-links');
+    navToggle?.addEventListener('click', () => {
+      navLinks.classList.toggle('active');
+    });
+  </script>
+</body>
+</html>
