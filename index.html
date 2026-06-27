@@ -453,23 +453,39 @@
             <div class="blog-card-meta">
               <span class="blog-date">2026-06-27</span>
               <span>·</span>
-              <span class="blog-read-time">16 min</span>
+              <span class="blog-read-time">18 min</span>
             </div>
-            <span class="blog-list-tag">前端</span>
+            <span class="blog-list-tag">DevOps</span>
           </div>
           <h3 class="blog-card-title">
-            <a href="blog/posts/webassembly-in-practice.html">WebAssembly 实战：浏览器端高性能计算</a>
+            <a href="blog/posts/linux-ebpf-getting-started.html">Linux eBPF 入门：内核可观测性新范式</a>
           </h3>
-          <p class="blog-card-excerpt">从 Rust 编译到浏览器运行，WASM 与 JS 互操作、内存管理、SIMD 优化与真实应用场景全流程实战。</p>
+          <p class="blog-card-excerpt">从 BPF 程序编写到 bpftrace、BCC 工具链使用，覆盖网络、安全、性能分析场景的系统性入门指南。</p>
           <div class="blog-card-tags">
-            <span class="tech-tag">WebAssembly</span>
-            <span class="tech-tag">Rust</span>
-            <span class="tech-tag">前端性能</span>
+            <span class="tech-tag">eBPF</span>
+            <span class="tech-tag">Linux</span>
+            <span class="tech-tag">可观测性</span>
           </div>
         </article>
         
         <!-- 最新文章列表 -->
         <div class="blog-list">
+          <article class="blog-list-item animate-on-scroll">
+            <div class="blog-list-meta">
+              <span class="blog-date">2026-06-27</span>
+              <span>·</span>
+              <span class="blog-read-time">16 min</span>
+            </div>
+            <h4 class="blog-list-title">
+              <a href="blog/posts/kotlin-flow-advanced.html">Kotlin Flow 进阶：背压策略与共享流</a>
+            </h4>
+            <div class="blog-list-tags">
+              <span class="tech-tag">Kotlin Flow</span>
+              <span class="tech-tag">背压</span>
+              <span class="tech-tag">SharedFlow</span>
+            </div>
+          </article>
+          
           <article class="blog-list-item animate-on-scroll">
             <div class="blog-list-meta">
               <span class="blog-date">2026-06-27</span>
@@ -483,22 +499,6 @@
               <span class="tech-tag">WASM</span>
               <span class="tech-tag">Rust</span>
               <span class="tech-tag">前端性能</span>
-            </div>
-          </article>
-          
-          <article class="blog-list-item animate-on-scroll">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-06-24</span>
-              <span>·</span>
-              <span class="blog-read-time">22 min</span>
-            </div>
-            <h4 class="blog-list-title">
-              <a href="blog/posts/kotlin-multiplatform-practice.html">Kotlin Multiplatform 实战：共享业务逻辑到 iOS</a>
-            </h4>
-            <div class="blog-list-tags">
-              <span class="tech-tag">KMP</span>
-              <span class="tech-tag">Ktor</span>
-              <span class="tech-tag">跨平台</span>
             </div>
           </article>
           
@@ -600,6 +600,24 @@
   <script>
     // 首页随机选择代表文章
     const posts = [
+      {
+        url: 'blog/posts/kotlin-flow-advanced.html',
+        title: 'Kotlin Flow 进阶：背压策略与共享流',
+        date: '2026-06-27',
+        readTime: '16 min',
+        category: 'Android',
+        category2: 'Kotlin',
+        desc: '背压策略（conflate/buffer/collectLatest）与共享流（shareIn/stateIn）深度解析，附 Android MVVM 实战最佳实践。'
+      },
+      {
+        url: 'blog/posts/linux-ebpf-getting-started.html',
+        title: 'Linux eBPF 入门：内核可观测性新范式',
+        date: '2026-06-27',
+        readTime: '18 min',
+        category: 'DevOps',
+        category2: 'eBPF',
+        desc: '从 BPF 程序编写到 bpftrace、BCC 工具链使用，覆盖网络、安全、性能分析场景的系统性入门指南。'
+      },
       {
         url: 'blog/posts/webassembly-in-practice.html',
         title: 'WebAssembly 实战：浏览器端高性能计算',

@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Kotlin Flow 进阶实战：背压策略（conflate/buffer/collectLatest）与共享流（shareIn/stateIn）深度解析，附 Android 实际场景">
+  <meta name="keywords" content="Kotlin Flow, 背压, Backpressure, shareIn, stateIn, SharedFlow, StateFlow, 协程, Coroutines, Android">
+  <meta name="author" content="张小猛">
+  <meta name="publish-date" content="2026-06-27">
+  <title>Kotlin Flow 进阶：背压策略与共享流 | 张小猛 - loczb</title>
+  <link rel="canonical" href="https://709527.xyz/blog/posts/kotlin-flow-advanced.html">
+  <meta name="robots" content="index, follow">
+  
+  <!-- Open Graph -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://709527.xyz/blog/posts/kotlin-flow-advanced.html">
+  <meta property="og:title" content="Kotlin Flow 进阶：背压策略与共享流 | 张小猛 - loczb">
+  <meta property="og:description" content="Kotlin Flow 进阶实战：背压策略（conflate/buffer/collectLatest）与共享流（shareIn/stateIn）深度解析，附 Android 实际场景">
+  <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="article:author" content="张小猛">
+  <meta property="article:published_time" content="2026-06-27">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Kotlin Flow 进阶：背压策略与共享流 | 张小猛 - loczb">
+  <meta name="twitter:description" content="Kotlin Flow 进阶实战：背压策略（conflate/buffer/collectLatest）与共享流（shareIn/stateIn）深度解析，附 Android 实际场景">
+  <meta name="twitter:image" content="https://709527.xyz/assets/images/og-image.png">
+
+  <link rel="icon" type="image/x-icon" href="../../assets/images/favicon.ico">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
+  <link rel="icon" type="image/png" sizes="16x16" href="../../assets/images/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="../../assets/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="48x48" href="../../assets/images/favicon-48x48.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="../../assets/images/apple-touch-icon.png">
+  <link rel="manifest" href="../../site.webmanifest">
+  <meta name="theme-color" content="#3b82f6">
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <style>
+    .post-content { max-width: 760px; margin: 0 auto; line-height: 1.85; }
+    .post-content h1 { font-size: 2.4rem; margin: 2rem 0 1rem; }
+    .post-content h2 { font-size: 1.7rem; margin: 2.5rem 0 1rem; color: var(--color-accent-primary); border-bottom: 1px solid var(--color-border); padding-bottom: 0.5rem; }
+    .post-content h3 { font-size: 1.3rem; margin: 1.8rem 0 0.8rem; }
+    .post-content pre { background: var(--color-bg-tertiary); padding: 1.2rem; border-radius: 8px; overflow-x: auto; margin: 1.2rem 0; font-size: 0.9rem; }
+    .post-content code { background: var(--color-bg-tertiary); padding: 0.15rem 0.4rem; border-radius: 4px; font-family: monospace; font-size: 0.9em; }
+    .post-meta { color: var(--color-text-secondary); font-size: 0.9rem; margin-bottom: 2rem; }
+    .post-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 3rem; }
+    .post-tags span { background: var(--color-bg-tertiary); padding: 0.3rem 0.8rem; border-radius: 9999px; font-size: 0.85rem; color: var(--color-accent-primary); }
+    .tip-box { background: rgba(34, 197, 94, 0.1); border-left: 3px solid #22c55e; padding: 1rem 1.2rem; margin: 1.5rem 0; border-radius: 0 6px 6px 0; }
+    .warning-box { background: rgba(234, 179, 8, 0.1); border-left: 3px solid #eab308; padding: 1rem 1.2rem; margin: 1.5rem 0; border-radius: 0 6px 6px 0; }
+    table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.95rem; }
+    th, td { border: 1px solid var(--color-border); padding: 0.7rem; text-align: left; }
+    th { background: var(--color-bg-tertiary); font-weight: 600; }
+  </style>
+  <!-- Preconnect to Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500;600&display=swap" media="print" onload="this.media='all'">
+  <noscript>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500;600&display=swap">
+  </noscript>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../../index.html" class="nav-logo">loc<span>zb</span></a>
+      <button class="nav-toggle" aria-label="打开菜单"><span></span><span></span><span></span></button>
+      <div class="nav-overlay"></div>
+      <ul class="nav-links">
+        <li><a href="../../index.html" class="nav-link">首页</a></li>
+        <li><a href="../../projects/index.html" class="nav-link">项目</a></li>
+        <li><a href="../index.html" class="nav-link active">博客</a></li>
+        <li><a href="../../about/index.html" class="nav-link">关于</a></li>
+      </ul>
+      <button class="theme-toggle" aria-label="切换主题">
+        <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line></svg>
+        <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+      </button>
+    </div>
+  </nav>
+<div class="scroll-progress"></div>
+
+  <main>
+    <article class="post-content" style="padding: calc(64px + 4rem) 1rem 4rem;">
+      <a href="../index.html" style="display: inline-flex; align-items: center; gap: 0.5rem; color: var(--color-text-secondary); text-decoration: none; margin-bottom: 2rem;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        返回博客
+      </a>
+      
+      <h1>Kotlin Flow 进阶：背压策略与共享流</h1>
+      
+      <div class="post-meta">2026年6月27日 · 阅读时间 16 分钟</div>
+
+      <p>用 Kotlin Flow 替换 LiveData 之后，很多人止步于 <code>flow { }</code> + <code>collect { }</code> 的基本用法。但当生产者发射速度超过消费者处理速度时，问题就来了——背压（Backpressure）。当你想让多个订阅者共享同一个数据源时，冷流的热化——共享流（SharedFlow / StateFlow）就是必修课。</p>
+
+      <p>本文是 Kotlin Flow 进阶篇，聚焦两个实战核心：背压策略与共享流机制。</p>
+
+      <div class="tip-box">
+        <strong>前置知识</strong>：本文假设你已经了解 Flow 基本概念（冷流、collect、操作符），如果还没有，建议先看官方文档 <a href="https://kotlinlang.org/docs/flow.html" style="color: var(--color-accent-primary);">Flow Guide</a>。
+      </div>
+
+      <h2>一、冷流与热流：本质区别</h2>
+
+      <p>在讨论背压和共享流之前，先搞清楚冷流和热流的核心差异：</p>
+
+      <table>
+        <tr>
+          <th>特性</th>
+          <th>冷流（Cold Flow）</th>
+          <th>热流（Hot Flow）</th>
+        </tr>
+        <tr>
+          <td>数据生产时机</td>
+          <td>被 collect 时才生产</td>
+          <td>独立于订阅者持续生产</td>
+        </tr>
+        <tr>
+          <td>多个订阅者</td>
+          <td>各自独立生产数据</td>
+          <td>共享同一数据源</td>
+        </tr>
+        <tr>
+          <td>类比</td>
+          <td>Netflix（点播）</td>
+          <td>电视直播（广播）</td>
+        </tr>
+        <tr>
+          <td>典型代表</td>
+          <td><code>flow { }</code></td>
+          <td><code>SharedFlow</code>、<code>StateFlow</code></td>
+        </tr>
+        <tr>
+          <td>背压问题</td>
+          <td>有（生产者可能比消费者快）</td>
+          <td>无（订阅者跟不上就丢弃或缓冲）</td>
+        </tr>
+      </table>
+
+      <pre><code>// 冷流：每次 collect 都独立执行
+val coldFlow = flow {
+    println("开始生产")  // 每个 collector 都会触发
+    for (i in 1..3) {
+        emit(i)
+    }
+}
+
+// 两个 collector 独立执行
+coldFlow.collect { println("A: $it") }  // 输出：开始生产, A:1, A:2, A:3
+coldFlow.collect { println("B: $it") }  // 输出：开始生产, B:1, B:2, B:3</code></pre>
+
+      <h2>二、背压问题：生产者太快怎么办</h2>
+
+      <p>Flow 是顺序执行的——生产者 emit 一个值后，必须等消费者 collect 完成才能 emit 下一个。如果生产者每秒 emit 100 个值，消费者每秒只能处理 10 个，积压就出现了。</p>
+
+      <pre><code>// 模拟背压场景
+fun fastProducer(): Flow&lt;Int&gt; = flow {
+    for (i in 1..100) {
+        emit(i)                    // 每 10ms 发射一个
+        delay(10)
+    }
+}
+
+// 默认行为：collect 多慢，整体就多慢
+// collect 耗时 100ms → 整体耗时 100 * 100ms = 10 秒
+fastProducer().collect { value ->
+    delay(100)                     // 模拟慢消费者
+    println("处理: $value")
+}</code></pre>
+
+      <p>默认的背压策略是 <strong>挂起等待</strong>——生产者等消费者处理完再发下一个。这是最安全的方式，但不是最高效的。</p>
+
+      <h2>三、三种背压策略</h2>
+
+      <h3>1. buffer：并发缓冲</h3>
+
+      <p><code>buffer()</code> 让生产者和消费者在不同协程中运行，中间加一个缓冲区。生产者不用等消费者，先往缓冲区里塞。</p>
+
+      <pre><code>fastProducer()
+    .buffer(capacity = 50)  // 缓冲区容量 50
+    .collect { value ->
+        delay(100)
+        println("处理: $value")
+    }</code></pre>
+
+      <p>执行流程：</p>
+      <pre><code>无 buffer:  produce → wait → consume → produce → wait → consume ...
+有 buffer:  produce → produce → produce ... (并发)
+            consume → consume → consume ... (并发)
+
+时间对比：
+  无 buffer: ~10 秒
+  buffer(50): ~6 秒（生产者先跑满，消费者从缓冲区取）</code></pre>
+
+      <div class="warning-box">
+        <strong>注意</strong>：buffer 不是万能的。如果消费者持续比生产者慢，缓冲区终究会满，最终还是退化为挂起等待。buffer 适用于「短暂突发」的场景。
+      </div>
+
+      <h4>buffer 容量选择</h4>
+
+      <table>
+        <tr>
+          <th>容量</th>
+          <th>行为</th>
+          <th>适用场景</th>
+        </tr>
+        <tr>
+          <td><code>0</code>（默认）</td>
+          <td>无缓冲，生产者等消费者</td>
+          <td>需要严格顺序</td>
+        </tr>
+        <tr>
+          <td><code>1</code></td>
+          <td>缓冲 1 个值</td>
+          <td>最小并发</td>
+        </tr>
+        <tr>
+          <td><code>64</code> / <code>Channel.BUFFERED</code></td>
+          <td>缓冲 64 个值（默认常量）</td>
+          <td>一般场景</td>
+        </tr>
+        <tr>
+          <td><code>Channel.UNLIMITED</code></td>
+          <td>无限缓冲</td>
+          <td>⚠️ 谨慎使用，可能 OOM</td>
+        </tr>
+        <tr>
+          <td><code>Channel.CONFLATED</code></td>
+          <td>只保留最新值</td>
+          <td>同 conflate()</td>
+        </tr>
+      </table>
+
+      <h3>2. conflate：只保留最新值</h3>
+
+      <p><code>conflate()</code> 的策略是：消费者忙的时候，生产者继续发，但中间的值会被丢弃，只保留最新的。</p>
+
+      <pre><code>fastProducer()
+    .conflate()              // 跳过中间值
+    .collect { value ->
+        delay(100)
+        println("处理: $value")
+    }
+
+// 输出示例：
+// 处理: 1    （消费者处理 1 期间，2-10 被跳过）
+// 处理: 10   （消费者处理 10 期间，11-20 被跳过）
+// 处理: 20
+// ...
+// 总共只处理约 10 个值，而非 100 个</code></pre>
+
+      <div class="tip-box">
+        <strong>最佳场景</strong>：UI 刷新、实时数据展示。用户只关心最新状态，中间过渡值不重要。比如：进度条更新、传感器数据、股价显示。
+      </div>
+
+      <h3>3. collectLatest：取消旧处理</h3>
+
+      <p><code>collectLatest</code> 和 <code>conflate</code> 类似，但它不只是跳过旧值——它会<strong>取消正在进行的旧 collect 块</strong>，让新的 collect 块立刻执行。</p>
+
+      <pre><code>fastProducer()
+    .collectLatest { value ->      // 新值到来时取消旧的处理
+        println("开始处理: $value")
+        delay(100)                  // 模拟耗时操作
+        println("完成处理: $value")  // 很可能看不到这行
+    }
+
+// 输出示例：
+// 开始处理: 1
+// 开始处理: 2   （1 被取消，"完成处理: 1" 不会输出）
+// 开始处理: 3   （2 被取消）
+// ...
+// 开始处理: 100
+// 完成处理: 100  （最后一个值没有被打断，能完成）</code></pre>
+
+      <h4>conflate vs collectLatest 对比</h4>
+
+      <table>
+        <tr>
+          <th>特性</th>
+          <th>conflate</th>
+          <th>collectLatest</th>
+        </tr>
+        <tr>
+          <td>处理旧值</td>
+          <td>跳过不处理</td>
+          <td>取消正在进行的处理</td>
+        </tr>
+        <tr>
+          <td>新值到达时</td>
+          <td>消费者继续处理当前值</td>
+          <td>中断当前处理，开始新处理</td>
+        </tr>
+        <tr>
+          <td>适用场景</td>
+          <td>处理必须完成，旧值可以跳过</td>
+          <td>处理可以中断，只关心最新结果</td>
+        </tr>
+        <tr>
+          <td>典型例子</td>
+          <td>日志打印、数据持久化</td>
+          <td>搜索建议、图片加载</td>
+        </tr>
+      </table>
+
+      <h3>三种策略选择决策树</h3>
+
+      <pre><code>生产者比消费者快？
+├── 否 → 不需要处理，默认挂起等待即可
+└── 是 → 消费者能否跳过中间值？
+    ├── 能 → 中间值的处理必须完成吗？
+    │   ├── 是 → conflate()
+    │   └── 否 → collectLatest()
+    └── 不能 → buffer() （缓冲突发，但注意容量）</code></pre>
+
+      <h2>四、SharedFlow：冷流变热流</h2>
+
+      <p>冷流最大的局限是：每个 collector 独立生产数据。如果你有 3 个 UI 组件同时监听同一个数据源，冷流会生产 3 份数据——浪费资源且无法共享状态。</p>
+
+      <p><code>SharedFlow</code> 是热流，多个订阅者共享同一数据源。</p>
+
+      <h3>基本用法</h3>
+
+      <pre><code>// 方式1：直接创建
+val sharedFlow = MutableSharedFlow&lt;String&gt;()
+
+// 发射数据
+scope.launch {
+    sharedFlow.emit("Hello")
+    sharedFlow.emit("World")
+}
+
+// 多个订阅者共享同一数据
+sharedFlow.collect { println("A: $it") }  // A: Hello, A: World
+sharedFlow.collect { println("B: $it") }  // B: Hello, B: World</code></pre>
+
+      <h3>shareIn：将冷流转换为 SharedFlow</h3>
+
+      <pre><code>// 冷流 → 热流
+val locationFlow = flow {
+    while (true) {
+        emit(getLocation())  // 模拟位置更新
+        delay(1000)
+    }
+}
+
+// 用 shareIn 转为热流，多个订阅者共享
+val sharedLocation = locationFlow.shareIn(
+    scope = viewModelScope,
+    started = SharingStarted.WhileSubscribed(5000),  // 停止策略
+    replay = 1  // 新订阅者收到最近 1 个值
+)</code></pre>
+
+      <h3>关键参数解析</h3>
+
+      <h4>1. started：何时开始共享</h4>
+
+      <table>
+        <tr>
+          <th>策略</th>
+          <th>行为</th>
+          <th>适用场景</th>
+        </tr>
+        <tr>
+          <td><code>Eagerly</code></td>
+          <td>立即开始，永不停止</td>
+          <td>全局常驻数据（时钟、配置）</td>
+        </tr>
+        <tr>
+          <td><code>Lazily</code></td>
+          <td>第一个订阅者到来时开始，永不停止</td>
+          <td>懒初始化场景</td>
+        </tr>
+        <tr>
+          <td><code>WhileSubscribed(stopTimeout)</code></td>
+          <td>有订阅者时运行，无订阅者时延迟停止</td>
+          <td>⚠️ <strong>Android 最常用</strong></td>
+        </tr>
+      </table>
+
+      <div class="tip-box">
+        <strong>Android 推荐</strong>：使用 <code>SharingStarted.WhileSubscribed(5000)</code>。当 UI 退到后台时，5 秒后自动停止上游数据生产，回到前台时自动恢复。这比 <code>Eagerly</code> 省电省流量。<br><br>
+        <code>stopTimeout</code> 设为多少？<strong>5000ms</strong> 是官方推荐的默认值——既避免配置切换时频繁重启上游，又不至于浪费太多资源。
+      </div>
+
+      <h4>2. replay：重放缓存</h4>
+
+      <pre><code>// replay = 0：新订阅者只收到订阅后发射的值
+val noReplay = flow.shareIn(scope, SharingStarted.Eagerly, replay = 0)
+
+// replay = 1：新订阅者立即收到最近 1 个值（类似 LiveData）
+val withReplay = flow.shareIn(scope, SharingStarted.Eagerly, replay = 1)
+
+// replay = 3：新订阅者收到最近 3 个值
+val moreReplay = flow.shareIn(scope, SharingStarted.Eagerly, replay = 3)</code></pre>
+
+      <div class="warning-box">
+        <strong>replay 的内存开销</strong>：每个 replay 的值都会缓存在内存中。replay 越大，内存占用越高。对于大对象（如 Bitmap、List），慎用高 replay 值。Android UI 场景通常 <code>replay = 1</code> 足够。
+      </div>
+
+      <h2>五、StateFlow：专为状态设计</h2>
+
+      <p><code>StateFlow</code> 是 <code>SharedFlow</code> 的特化版本，专为「状态持有」设计：</p>
+
+      <ul>
+        <li>必须有初始值</li>
+        <li><code>replay = 1</code>（固定，新订阅者总是拿到最新状态）</li>
+        <li>值相同时不发射（去重）</li>
+        <li>通过 <code>.value</code> 属性同步读取当前值</li>
+      </ul>
+
+      <h3>StateFlow vs SharedFlow 对比</h3>
+
+      <table>
+        <tr>
+          <th>特性</th>
+          <th>StateFlow</th>
+          <th>SharedFlow</th>
+        </tr>
+        <tr>
+          <td>初始值</td>
+          <td>必须提供</td>
+          <td>不需要</td>
+        </tr>
+        <tr>
+          <td>replay</td>
+          <td>固定为 1</td>
+          <td>可自定义</td>
+        </tr>
+        <tr>
+          <td>去重</td>
+          <td>自动（相同值不发射）</td>
+          <td>不自动去重</td>
+        </tr>
+        <td>同步读取</td>
+          <td><code>.value</code></td>
+          <td>不支持</td>
+        </tr>
+        <tr>
+          <td>典型场景</td>
+          <td>UI 状态持有</td>
+          <td>事件广播</td>
+        </tr>
+      </table>
+
+      <h3>stateIn：将冷流转为 StateFlow</h3>
+
+      <pre><code>val uiState = repository.getDataFlow()
+    .stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = UiState.Loading  // 必须提供初始值
+    )</code></pre>
+
+      <h2>六、Android 实战：MVVM 中的 Flow 最佳实践</h2>
+
+      <h3>1. ViewModel 暴露状态</h3>
+
+      <pre><code>class MyViewModel(private val repository: Repository) : ViewModel() {
+
+    // ✅ 推荐：stateIn 暴露 UI 状态
+    val uiState: StateFlow&lt;UiState&gt; = repository.observeData()
+        .map { data -> UiState.Success(data) }
+        .onStart { emit(UiState.Loading) }
+        .catch { emit(UiState.Error(it.message)) }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = UiState.Loading
+        )
+
+    // ❌ 反面教材：Eagerly 导致后台持续运行
+    val badState = repository.observeData()
+        .stateIn(viewModelScope, SharingStarted.Eagerly, UiState.Loading)
+}</code></pre>
+
+      <h3>2. 一次性事件：SharedFlow 而非 StateFlow</h3>
+
+      <p>导航事件、Snackbar、Toast 等一次性事件不应该用 StateFlow——因为 StateFlow 会去重，且配置切换时会重放，导致事件重复消费。</p>
+
+      <pre><code>class MyViewModel : ViewModel() {
+
+    // ✅ 一次性事件用 SharedFlow（replay = 0）
+    private val _navigationEvent = MutableSharedFlow&lt;NavDestination&gt;()
+    val navigationEvent: SharedFlow&lt;NavDestination&gt; = _navigationEvent.asSharedFlow()
+
+    // ✅ Snackbar 事件
+    private val _snackbarEvent = MutableSharedFlow&lt;String&gt;()
+    val snackbarEvent: SharedFlow&lt;String&gt; = _snackbarEvent.asSharedFlow()
+
+    fun onButtonClick() {
+        viewModelScope.launch {
+            _navigationEvent.emit(NavDestination.Detail)
+        }
+    }
+}
+
+// Activity/Fragment 中收集
+lifecycleScope.launch {
+    repeatOnLifecycle(Lifecycle.State.STARTED) {
+        viewModel.navigationEvent.collect { destination ->
+            navController.navigate(destination)
+        }
+    }
+}</code></pre>
+
+      <div class="warning-box">
+        <strong>为什么不用 StateFlow 表示事件？</strong>因为配置切换（如旋转屏幕）时，StateFlow 会重放最新值，导致导航事件重复触发。SharedFlow replay=0 不会重放，是更安全的事件通道。
+      </div>
+
+      <h3>3. 搜索建议：collectLatest 典型场景</h3>
+
+      <pre><code>class SearchViewModel : ViewModel() {
+
+    private val _query = MutableStateFlow("")
+
+    val searchResults = _query
+        .debounce(300)              // 防抖 300ms
+        .filter { it.isNotBlank() }
+        .distinctUntilChanged()     // 相同查询不重复搜索
+        .flatMapLatest { query ->   // 新查询取消旧搜索
+            repository.search(query)
+                .catch { emit(emptyList()) }
+        }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = emptyList()
+        )
+
+    fun onQueryChanged(query: String) {
+        _query.value = query
+    }
+}</code></pre>
+
+      <div class="tip-box">
+        <strong>flatMapLatest vs collectLatest</strong>：<code>flatMapLatest</code> 在上游值变化时取消下游 Flow 的收集，相当于对 Flow 本身做 <code>collectLatest</code>。搜索场景推荐 <code>flatMapLatest</code>，因为它在 Flow 操作符层面取消，比在 collect 层面更高效。
+      </div>
+
+      <h3>4. 传感器数据：conflate 典型场景</h3>
+
+      <pre><code>class SensorViewModel : ViewModel() {
+
+    // 传感器数据每秒可能更新 100+ 次，UI 只需要最新值
+    val accelerometerData = sensorManager.observeAccelerometer()
+        .conflate()                  // 丢弃中间值，只处理最新
+        .map { it.toUiModel() }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = AccelerometerUiModel()
+        )
+}</code></pre>
+
+      <h3>5. 列表 + 详情：多订阅者共享</h3>
+
+      <pre><code>class ListViewModel(private val repository: Repository) : ViewModel() {
+
+    // 多个 Fragment 共享同一数据源
+    val items = repository.observeItems()
+        .shareIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            replay = 1
+        )
+}
+
+// Fragment A: 列表页
+viewLifecycleOwner.lifecycleScope.launch {
+    viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+        viewModel.items.collect { items ->
+            listAdapter.submitList(items)
+        }
+    }
+}
+
+// Fragment B: 详情页（同一 ViewModel）
+viewLifecycleOwner.lifecycleScope.launch {
+    viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+        viewModel.items.collect { items ->
+            // 只更新当前详情项
+            val currentItem = items.find { it.id == currentId }
+            updateUI(currentItem)
+        }
+    }
+}</code></pre>
+
+      <h2>七、repeatOnLifecycle：Android 生命周期感知</h2>
+
+      <p>Flow 的 <code>collect</code> 是挂起函数，如果在 <code>lifecycleScope</code> 中直接调用，配置切换时可能重复收集或在不安全的生命周期状态收集。</p>
+
+      <pre><code>// ❌ 错误：配置切换时重复收集
+lifecycleScope.launch {
+    viewModel.uiState.collect { state ->
+        updateUI(state)  // 旋转屏幕会再次触发
+    }
+}
+
+// ❌ 错误：在 onCreate 中收集，onStop 后仍在处理
+lifecycleScope.launch {
+    viewModel.uiState.collect { ... }
+}
+
+// ✅ 正确：只在 STARTED 状态收集
+lifecycleScope.launch {
+    repeatOnLifecycle(Lifecycle.State.STARTED) {
+        viewModel.uiState.collect { state ->
+            updateUI(state)
+        }
+    }
+}</code></pre>
+
+      <div class="tip-box">
+        <strong>Jetpack Compose 中不需要 repeatOnLifecycle</strong>——<code>collectAsStateWithLifecycle()</code> 已经封装了这个逻辑：
+        <pre><code>@Composable
+fun MyScreen(viewModel: MyViewModel) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    // 自动在 STARTED 时收集、STOPPED 时停止
+}</code></pre>
+      </div>
+
+      <h2>八、常见坑与最佳实践</h2>
+
+      <h3>坑 1：WhileSubscribed 的 stopTimeout 设为 0</h3>
+
+      <pre><code>// ❌ 配置切换时上游会立即停止再重启
+SharingStarted.WhileSubscribed(0)
+
+// ✅ 给 5 秒缓冲，避免配置切换时重启上游
+SharingStarted.WhileSubscribed(5000)</code></pre>
+
+      <h3>坑 2：SharedFlow replay 太大</h3>
+
+      <pre><code>// ❌ 新订阅者收到 100 个历史值，内存和性能都有问题
+MutableSharedFlow&lt;Event&gt;(replay = 100)
+
+// ✅ 状态用 StateFlow（replay=1），事件用 SharedFlow（replay=0）
+MutableSharedFlow&lt;Event&gt;(replay = 0)</code></pre>
+
+      <h3>坑 3：在 collect 中做耗时操作不加 buffer</h3>
+
+      <pre><code>// ❌ 耗时操作阻塞上游
+flow { emit(1) }
+    .collect { value ->
+        Thread.sleep(1000)  // 阻塞！
+    }
+
+// ✅ 用 buffer 让生产者消费者并发
+flow { emit(1) }
+    .buffer()
+    .collect { value ->
+        delay(1000)  // 不阻塞上游
+    }</code></pre>
+
+      <h3>坑 4：混淆 StateFlow 和 SharedFlow 的用途</h3>
+
+      <pre><code>// ❌ 用 StateFlow 表示导航事件
+val navigateEvent = MutableStateFlow&lt;Screen?&gt;(null)
+// 问题：配置切换时 null → Screen 不会触发（去重），Screen → Screen 也不会触发
+
+// ✅ 事件用 SharedFlow，状态用 StateFlow
+val uiState = MutableStateFlow&lt;UiState&gt;(UiState.Loading)    // 状态
+val navigateEvent = MutableSharedFlow&lt;Screen&gt;()             // 事件</code></pre>
+
+      <h2>九、速查表</h2>
+
+      <table>
+        <tr>
+          <th>场景</th>
+          <th>推荐方案</th>
+          <th>关键操作符</th>
+        </tr>
+        <tr>
+          <td>ViewModel 暴露 UI 状态</td>
+          <td><code>stateIn</code></td>
+          <td><code>WhileSubscribed(5000)</code></td>
+        </tr>
+        <tr>
+          <td>一次性事件（导航/Toast）</td>
+          <td><code>MutableSharedFlow(replay=0)</code></td>
+          <td><code>asSharedFlow()</code></td>
+        </tr>
+        <tr>
+          <td>搜索建议</td>
+          <td><code>flatMapLatest + debounce</code></td>
+          <td><code>distinctUntilChanged</code></td>
+        </tr>
+        <tr>
+          <td>传感器/高频数据</td>
+          <td><code>conflate()</code></td>
+          <td><code>stateIn</code></td>
+        </tr>
+        <tr>
+          <td>多 Fragment 共享数据</td>
+          <td><code>shareIn(replay=1)</code></td>
+          <td><code>WhileSubscribed</code></td>
+        </tr>
+        <tr>
+          <td>生产者短暂突发</td>
+          <td><code>buffer()</code></td>
+          <td><code>capacity = BUFFERED</code></td>
+        </tr>
+        <tr>
+          <td>Compose 收集</td>
+          <td><code>collectAsStateWithLifecycle()</code></td>
+          <td>自动生命周期感知</td>
+        </tr>
+        <tr>
+          <td>View 体系收集</td>
+          <td><code>repeatOnLifecycle(STARTED)</code></td>
+          <td><code>lifecycleScope.launch</code></td>
+        </tr>
+      </table>
+
+      <div class="tip-box">
+        <strong>一句话总结</strong>：背压三剑客——<code>buffer</code> 并发缓冲、<code>conflate</code> 保留最新、<code>collectLatest</code> 取消旧处理。共享流双雄——<code>StateFlow</code> 持有状态、<code>SharedFlow</code> 广播事件。Android 上 <code>WhileSubscribed(5000)</code> 是黄金搭档。
+      </div>
+
+      <div class="post-tags">
+        <span>Kotlin Flow</span>
+        <span>背压策略</span>
+        <span>SharedFlow</span>
+        <span>StateFlow</span>
+        <span>Android</span>
+      </div>
+    </article>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <p>&copy; 2026 张小猛 - loczb</p>
+    </div>
+  </footer>
+
+  <script>
+    // Scroll progress
+    const scrollProgress = document.querySelector('.scroll-progress');
+    window.addEventListener('scroll', () => {
+      const scrollTop = document.documentElement.scrollTop;
+      const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = (scrollTop / scrollHeight) * 100;
+      scrollProgress.style.width = progress + '%';
+    });
+
+    // Theme toggle
+    const themeToggle = document.querySelector('.theme-toggle');
+    themeToggle?.addEventListener('click', () => {
+      const html = document.documentElement;
+      const current = html.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+    });
+
+    // Mobile nav
+    const navToggle = document.querySelector('.nav-toggle');
+    const navLinks = document.querySelector('.nav-links');
+    navToggle?.addEventListener('click', () => {
+      navLinks.classList.toggle('active');
+    });
+  </script>
+</body>
+</html>
