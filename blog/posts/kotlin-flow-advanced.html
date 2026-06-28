@@ -107,15 +107,19 @@
       
       <h1>Kotlin Flow 进阶：背压策略与共享流</h1>
       
-      <div class="post-meta">2026年6月27日 · 阅读时间 16 分钟</div>
+      <div class="post-meta">
+          <span>📅 2026-06-27</span>
+          <span>⏱️ 16 min read</span>
+          <span>👤 张小猛</span>
+        </div>
 
         <div class="post-tags">
-        <span>Kotlin Flow</span>
-        <span>背压策略</span>
-        <span>SharedFlow</span>
-        <span>StateFlow</span>
-        <span>Android</span>
-      </div>
+          <span class="tag">Kotlin Flow</span>
+          <span class="tag">背压策略</span>
+          <span class="tag">SharedFlow</span>
+          <span class="tag">StateFlow</span>
+          <span class="tag">Android</span>
+        </div>
 
       <p>用 Kotlin Flow 替换 LiveData 之后，很多人止步于 <code>flow { }</code> + <code>collect { }</code> 的基本用法。但当生产者发射速度超过消费者处理速度时，问题就来了——背压（Backpressure）。当你想让多个订阅者共享同一个数据源时，冷流的热化——共享流（SharedFlow / StateFlow）就是必修课。</p>
 

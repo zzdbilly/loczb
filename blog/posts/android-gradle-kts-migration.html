@@ -111,15 +111,19 @@
       
       <h1>Android Gradle 迁移到 KTS 完整指南：从 Groovy 到 Kotlin DSL</h1>
       
-      <div class="post-meta">2026年6月24日 · 阅读时间 18 分钟</div>
+      <div class="post-meta">
+          <span>📅 2026-06-24</span>
+          <span>⏱️ 18 min read</span>
+          <span>👤 张小猛</span>
+        </div>
 
         <div class="post-tags">
-        <span>Android</span>
-        <span>Gradle</span>
-        <span>KTS</span>
-        <span>Kotlin DSL</span>
-        <span>构建优化</span>
-      </div>
+          <span class="tag">Android</span>
+          <span class="tag">Gradle</span>
+          <span class="tag">KTS</span>
+          <span class="tag">Kotlin DSL</span>
+          <span class="tag">构建优化</span>
+        </div>
 
       <p>Android 项目的 Gradle 构建脚本，长期以来都是用 Groovy 写的（<code>.gradle</code> 文件）。但自从 Gradle 引入 Kotlin DSL 后，越来越多的项目开始迁移到 <code>.gradle.kts</code>。Google 官方也在 Android Studio 的新项目模板中默认使用 KTS。</p>
 
@@ -197,7 +201,7 @@
     }
 }</code></pre>
         </div>
-      </div>
+        </div>
 
       <p>关键区别：<strong>KTS 中属性赋值必须用 <code>=</code></strong>，Groovy 可以省略。</p>
 
@@ -222,7 +226,7 @@ implementation("androidx.core:core-ktx:1.13.0")
 val ver = "1.13.0"
 implementation("androidx.core:core-ktx:$ver")</code></pre>
         </div>
-      </div>
+        </div>
 
       <p>关键区别：<strong>依赖声明必须用函数调用形式 <code>implementation("...")</code></strong>，Groovy 可以省略括号。</p>
 
@@ -250,7 +254,7 @@ extra["composeBom"] = "2026.04.00"
 val kotlinVersion: String by extra
 implementation("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")</code></pre>
         </div>
-      </div>
+        </div>
 
       <p>关键区别：<strong>KTS 中 <code>ext</code> 变成 <code>extra</code></strong>，读的时候需要声明类型。</p>
 
@@ -281,7 +285,7 @@ implementation("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")</code></pre>
     }
 }</code></pre>
         </div>
-      </div>
+        </div>
 
       <p>关键区别：<strong>布尔属性前缀加 <code>is</code></strong>（<code>minifyEnabled</code> → <code>isMinifyEnabled</code>），函数调用加括号。</p>
 
@@ -304,7 +308,7 @@ implementation("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")</code></pre>
     id("kotlin-parcelize")
 }</code></pre>
         </div>
-      </div>
+        </div>
 
       <p>简单粗暴：所有 <code>id 'xxx'</code> → <code>id("xxx")</code>。</p>
 
@@ -363,7 +367,7 @@ include(":app")
 include(":core")
 include(":feature:home")</code></pre>
         </div>
-      </div>
+        </div>
 
       <p>变化点：<code>include ':app'</code> → <code>include(":app")</code>。仅此而已。</p>
 
@@ -624,7 +628,7 @@ buildConfigField "boolean", "DEBUG_MODE", "true"</code></pre>
     "\"your-api-key\"")
 buildConfigField("boolean", "DEBUG_MODE", "true")</code></pre>
         </div>
-      </div>
+        </div>
 
       <p>注意字符串值的引号嵌套：KTS 里外层用 <code>"</code>，内层 Java 值需要 <code>\"</code> 转义。</p>
 
@@ -653,7 +657,7 @@ buildConfigField("boolean", "DEBUG_MODE", "true")</code></pre>
     }
 }</code></pre>
         </div>
-      </div>
+        </div>
 
       <p>关键：<code>main</code> / <code>test</code> 在 KTS 中用 <code>getByName("...")</code> 访问。</p>
 
