@@ -4,6 +4,8 @@
 
 // Article index with tags
 const ARTICLE_INDEX = [
+  { slug: "使用新模板创建博客测试", tags: ["测试", "模板"], title: "使用新模板创建博客测试" },
+  { slug: "测试博客用新模板创建的文章", tags: ["测试", "模板", "博客"], title: "测试博客：用新模板创建的文章" },
   { slug: "ai-agent-skill-development", tags: ["AI", "Agent", "\u5f00\u53d1\u6280\u5de7", "OpenClaw"], title: "AI Agent 技能开发实战" },
   { slug: "ai-coding-tools-comparison", tags: ["AI 工具", "Cursor", "Claude Code", "GitHub Copilot", "编程效率"], title: "主流 AI 编程工具深度对比" },
   { slug: "ai-coding-workflow-optimization", tags: ["AI", "工作流", "Prompt设计", "效率提升"], title: "AI 编程工作流优化" },
