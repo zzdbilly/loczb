@@ -32,6 +32,7 @@ import json
 from datetime import date
 
 TEMPLATE = 'templates/blog-post-template.html'
+INLINE_STYLES = 'templates/inline-styles.css'
 POSTS_DIR = 'blog/posts'
 RELATED_JS = 'assets/js/related-posts.js'
 BLOG_INDEX = 'blog/index.html'
@@ -50,6 +51,12 @@ def slugify(title):
 def load_template():
     with open(TEMPLATE, 'r', encoding='utf-8') as f:
         return f.read()
+
+def load_default_styles():
+    if os.path.exists(INLINE_STYLES):
+        with open(INLINE_STYLES, 'r', encoding='utf-8') as f:
+            return f.read()
+    return ''
 
 
 def generate_article(title, description, article_date, read_time, tags, content_html, category):
@@ -72,7 +79,7 @@ def generate_article(title, description, article_date, read_time, tags, content_
     html = html.replace('{{DESCRIPTION}}', description)
     html = html.replace('{{OG_URL}}', og_url)
     html = html.replace('{{JSON_LD}}', '')
-    html = html.replace('{{INLINE_STYLES}}', '')
+    html = html.replace('{{INLINE_STYLES}}', load_default_styles())
     html = html.replace('{{ARTICLE_TITLE}}', title)
     html = html.replace('{{ARTICLE_DATE}}', article_date)
     html = html.replace('{{ARTICLE_READ_TIME}}', f"{read_time} min read")
