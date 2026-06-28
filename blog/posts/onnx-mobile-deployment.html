@@ -206,8 +206,16 @@
 <div class="scroll-progress"></div>
 
   <!-- Main Content -->
-  <main id="main-content">
-    <article class="post-content" style="padding: calc(64px + var(--space-3xl)) var(--space-lg) var(--space-3xl);">
+  <main class="section" style="padding-bottom: 0;">
+    <div class="container container-narrow">
+    <a href="../index.html" class="back-link">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        返回博客列表
+      </a>
+
+      <article class="post-content">
       
       <h1>ONNX 移动端侧模型实践：从转换到部署</h1>
       
@@ -522,6 +530,7 @@ class ONNXModel(private val context: Context) {
       </div>
       
     </article>
+  </div>
   </main>
 
   <!-- Footer -->
