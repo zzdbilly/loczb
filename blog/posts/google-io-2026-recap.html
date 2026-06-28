@@ -355,7 +355,7 @@
             if (activeLink) {
               activeLink.classList.add('active');
               // 自动滚动目录使高亮项可见
-              activeLink.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+              // 自动滚动已禁用，避免遮挡标题
             }
           }
         });
