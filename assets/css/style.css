@@ -1199,8 +1199,8 @@ a:hover {
 
 /* Blog Page */
 .blog-hero {
-  padding-top: 120px;
-  padding-bottom: var(--space-2xl);
+  padding-top: 40px;
+  padding-bottom: var(--space-xl);
 }
 
 .blog-filters {
