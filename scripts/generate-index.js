@@ -42,7 +42,7 @@ const posts = files.map(file => {
   const title = titleMatch ? titleMatch[1].replace(/ \| 张小猛 - loczb$/, '') : '';
   
   // Extract date from <span>📅 YYYY-MM-DD</span>
-  const dateMatch = content.match(/<span>📅 (\d{4}-\d{2}-\d{2})<\/span>/);
+  const dateMatch = content.match(/<span>📅 (\d{4}-\d{1,2}-\d{1,2})<\/span>/);
   const date = dateMatch ? dateMatch[1] : '';
   
   // Extract description/excerpt
