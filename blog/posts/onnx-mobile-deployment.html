@@ -1,41 +1,23 @@
 <!DOCTYPE html>
 <html lang="zh-CN" data-theme="dark">
 <head>
-  <script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="ONNX 移动端侧模型实践：从模型转换到端侧部署的完整指南，涵盖模型优化、量化压缩、多框架推理对比">
-  <meta name="keywords" content="ONNX, 移动端AI, 端侧推理, 模型量化, ONNX Runtime, NCNN, MNN, TFLite, Android AI">
-  <meta name="author" content="张小猛">
-  <meta name="publish-date" content="2026-03-30">
-  
-  <!-- Open Graph -->
-  <meta property="og:title" content="ONNX 移动端侧模型实践：从转换到部署">
-  <meta property="og:description" content="深入探讨 ONNX 模型在移动端的部署实践，包括模型优化、量化策略、推理框架选型与性能对比">
-  <meta property="og:type" content="article">
-  <meta property="og:url" content="https://709527.xyz/blog/posts/onnx-mobile-deployment.html">
-  <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
-  
-  <!-- Twitter Card -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="ONNX 移动端侧模型实践：从转换到部署">
-  <meta name="twitter:description" content="深入探讨 ONNX 模型在移动端的部署实践，包括模型优化、量化策略、推理框架选型与性能对比">
-  <meta name="twitter:image" content="https://709527.xyz/assets/images/og-image.png">
-  
-  <title>ONNX 移动端侧模型实践：从转换到部署 | 张小猛 - loczb</title>
-  <link rel="canonical" href="https://709527.xyz/blog/posts/onnx-mobile-deployment.html">
-  
-  <!-- Favicon -->
-  <link rel="icon" type="image/x-icon" href="../../assets/images/favicon.ico">
-  <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
-  <link rel="icon" type="image/png" sizes="16x16" href="../../assets/images/favicon-16x16.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="../../assets/images/favicon-32x32.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="../../assets/images/apple-touch-icon.png">
-  <link rel="manifest" href="../../site.webmanifest">
-  <meta name="theme-color" content="#3b82f6">
-  <link rel="stylesheet" href="../../assets/css/style.css">
-  <style>
-    .post-content { max-width: 760px; margin: 0 auto; line-height: 1.85; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ONNX 移动端侧模型实践：从转换到部署 | 张小猛 - loczb</title>
+    <meta name="description" content="ONNX 移动端侧模型实践：从模型转换到端侧部署的完整指南，涵盖模型优化、量化压缩、多框架推理对比">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="ONNX 移动端侧模型实践：从转换到部署 | 张小猛 - loczb">
+    <meta property="og:description" content="ONNX 移动端侧模型实践：从模型转换到端侧部署的完整指南，涵盖模型优化、量化压缩、多框架推理对比">
+    <meta property="og:url" content="https://709527.xyz/blog/posts/onnx-mobile-deployment.html">
+    <meta property="og:type" content="article">
+    <meta property="og:image" content="../../assets/images/og-default.webp">
+    <meta property="og:site_name" content="loczb">
+    
+    
+    
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <style>.post-content { max-width: 760px; margin: 0 auto; line-height: 1.85; }
     .post-content h1 { font-size: 2.4rem; margin: 2rem 0 1rem; }
     .post-content h2 { font-size: 1.7rem; margin: 2.5rem 0 1rem; color: var(--color-accent-primary); border-bottom: 1px solid var(--color-border); padding-bottom: 0.5rem; }
     .post-content h3 { font-size: 1.3rem; margin: 1.8rem 0 0.8rem; }
@@ -64,108 +46,15 @@
     .post-toc-list a.active { color: var(--color-accent-primary); background: var(--color-bg-tertiary); border-left-color: var(--color-accent-primary); }
     .post-toc-list .toc-h3 { padding-left: 1rem; font-size: 0.72rem; }
     .post-toc-list .toc-h2 { font-weight: 600; font-size: 0.8rem; }</style>
-
-  
-  <style>
-    .post-content {
-      max-width: 720px;
-      margin: 0 auto;
-      line-height: 1.8;
-    }
-    .post-content h1 { font-size: 2.5rem; margin: 2rem 0 1rem; }
-    .post-content h2 { font-size: 1.8rem; margin: 2rem 0 1rem; color: var(--color-accent-primary); }
-    .post-content h3 { font-size: 1.4rem; margin: 1.5rem 0 0.8rem; }
-    .post-content p { margin: 1rem 0; }
-    .post-content ul, .post-content ol { margin: 1rem 0; padding-left: 2rem; }
-    .post-content li { margin: 0.5rem 0; }
-    .post-content code { 
-      background: var(--color-bg-tertiary); 
-      padding: 0.2rem 0.4rem; 
-      border-radius: 4px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.9em;
-    }
-    .post-content pre {
-      background: var(--color-bg-tertiary);
-      padding: 1.5rem;
-      border-radius: 8px;
-      overflow-x: auto;
-      margin: 1.5rem 0;
-    }
-    .post-content pre code {
-      background: none;
-      padding: 0;
-    }
-    .post-content blockquote {
-      border-left: 4px solid var(--color-accent-primary);
-      padding-left: 1.5rem;
-      margin: 1.5rem 0;
-      color: var(--color-text-secondary);
-    }
-    .post-content table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 1.5rem 0;
-    }
-    .post-content th, .post-content td {
-      border: 1px solid var(--color-border);
-      padding: 0.75rem;
-      text-align: left;
-    }
-    .post-content th {
-      background: var(--color-bg-tertiary);
-    }
-    .post-meta {
-      color: var(--color-text-secondary);
-      font-size: 0.9rem;
-      margin-bottom: 2rem;
-    }
-    .post-tags {
-      display: flex;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-      margin-top: 3rem;
-    }
-    .post-tags span {
-      background: var(--color-bg-tertiary);
-      padding: 0.25rem 0.75rem;
-      border-radius: 9999px;
-      font-size: 0.85rem;
-      color: var(--color-accent-primary);
-    }
-    .highlight-box {
-      background: var(--color-bg-tertiary);
-      border-left: 4px solid var(--color-accent-primary);
-      padding: 1rem 1.5rem;
-      margin: 1.5rem 0;
-      border-radius: 0 8px 8px 0;
-    }
-    .comparison-table {
-      overflow-x: auto;
-    }
-  
-    .post-toc-container { position: fixed; right: 2rem; top: 180px; width: 220px; max-height: calc(100vh - 220px); border-radius: 16px; overflow: hidden; display: none; }
-    @media (min-width: 1200px) { .post-toc-container { display: block; } }
-    .post-toc { background: var(--color-bg-secondary); border: 1px solid var(--color-border); border-radius: 16px; padding: 1rem; max-height: calc(100vh - 240px); overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--color-border) transparent; }
-    .post-toc::-webkit-scrollbar { width: 4px; }
-    .post-toc::-webkit-scrollbar-track { background: transparent; }
-    .post-toc::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 4px; }
-    .post-toc-title { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted); margin-bottom: 0.75rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--color-border); position: sticky; top: 0; background: var(--color-bg-secondary); z-index: 1; }
-    .post-toc-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.25rem; }
-    .post-toc-list a { display: block; color: var(--color-text-secondary); text-decoration: none; font-size: 0.78rem; padding: 0.3rem 0.5rem; border-radius: 6px; border-left: 2px solid transparent; transition: all 0.2s ease; line-height: 1.4; }
-    .post-toc-list a:hover { color: var(--color-accent-primary); background: var(--color-bg-tertiary); }
-    .post-toc-list a.active { color: var(--color-accent-primary); background: var(--color-bg-tertiary); border-left-color: var(--color-accent-primary); }
-    .post-toc-list .toc-h3 { padding-left: 1rem; font-size: 0.72rem; }
-    .post-toc-list .toc-h2 { font-weight: 600; font-size: 0.8rem; }</style>
-  <!-- Preconnect to Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500;600&display=swap" media="print" onload="this.media='all'">
-  <noscript>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500;600&display=swap">
-  </noscript>
+    <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+    <link rel="alternate icon" href="../../favicon.ico">
 </head>
-<body class="dark">
+<body>
+  <!-- Loading -->
+  <div class="loading">
+    <div class="loading-spinner"></div>
+  </div>
+
   <!-- Navigation -->
   <nav class="nav">
     <div class="nav-inner">
@@ -184,31 +73,14 @@
         <li><a href="../index.html" class="nav-link active">博客</a></li>
         <li><a href="../../about/index.html" class="nav-link">关于</a></li>
       </ul>
-
-      <button class="theme-toggle" aria-label="切换主题" title="切换亮/暗模式">
-        <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="12" cy="12" r="5"></circle>
-          <line x1="12" y1="1" x2="12" y2="3"></line>
-          <line x1="12" y1="21" x2="12" y2="23"></line>
-          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-          <line x1="1" y1="12" x2="3" y2="12"></line>
-          <line x1="21" y1="12" x2="23" y2="12"></line>
-          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-        </svg>
-        <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-        </svg>
-      </button>
     </div>
   </nav>
-<div class="scroll-progress"></div>
 
-  <!-- Main Content -->
+  <div class="scroll-progress"></div>
+
   <main class="section" style="padding-bottom: 0;">
     <div class="container container-narrow">
-    <a href="../index.html" class="back-link">
+      <a href="../index.html" class="back-link">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M19 12H5M12 19l-7-7 7-7"/>
         </svg>
@@ -216,8 +88,7 @@
       </a>
 
       <article class="post-content">
-      
-      <h1>ONNX 移动端侧模型实践：从转换到部署</h1>
+        <h1>ONNX 移动端侧模型实践：从转换到部署</h1>
       
       <div class="post-meta">
         <span>📅 2026-03-30</span>
@@ -528,23 +399,37 @@ class ONNXModel(private val context: Context) {
       </ol>
       
       <p>随着 NPU 的普及，端侧 AI 的潜力才刚刚开始释放。希望这篇实践总结能帮助你在移动端 AI 落地之路上少走弯路。</p>
-
-      
       </article>
-  </div>
+    </div>
   </main>
+
+  <!-- Related Posts / Navigation -->
+  <section class="section" style="padding-top: 0;">
+    <div class="container container-narrow">
+      <hr style="border: none; border-top: 1px solid var(--color-border); margin: var(--space-3xl) 0;">
+      
+      <div class="blog-topics" style="margin-bottom: var(--space-xl);">
+        <span class="topic-label">读完之后：</span>
+        <a href="../index.html" class="topic-tag">返回博客列表</a>
+      </div>
+    </div>
+  </section>
 
   <!-- Footer -->
   <footer class="footer">
     <div class="footer-inner">
-      <p>&copy; 2026 张小猛. All rights reserved.</p>
+      <p class="footer-signature">写代码，做产品，也认真生活。</p>
       <div class="footer-links">
-        <a href="https://github.com/zzdbilly" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://github.com/zzdbilly" class="footer-link" target="_blank" rel="noopener">GitHub</a>
+        <a href="../../projects/index.html" class="footer-link">项目</a>
+        <a href="../../about/index.html" class="footer-link">关于</a>
       </div>
+      <p class="footer-copyright">
+        &copy; 2026 张小猛
+      </p>
     </div>
   </footer>
 
-  <!-- Scripts -->
   
   <script src="../../assets/js/related-posts.js"></script>
   <script src="../../assets/js/share.js"></script>
@@ -581,12 +466,12 @@ class ONNXModel(private val context: Context) {
       window.scrollTo({ top: 0, behavior: "smooth" });
     });
 
+    // Keyboard shortcuts
     document.addEventListener("keydown", (e) => {
-      if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") return;
       if (e.key === "j") window.scrollBy({ top: 200, behavior: "smooth" });
       else if (e.key === "k") window.scrollBy({ top: -200, behavior: "smooth" });
-      else if (e.key === "/") { e.preventDefault(); document.getElementById("blog-search-input")?.focus(); }
       else if (e.key === "Escape") document.getElementById("blog-search-results")?.classList.remove("active");
+      else if (e.altKey && e.key === "b") window.location.href = "../index.html";
     });
   </script>
 
@@ -594,41 +479,40 @@ class ONNXModel(private val context: Context) {
   <div class="post-toc-container" id="postToc">
     <nav class="post-toc">
       <div class="post-toc-title">目录</div>
-      <ul class="post-toc-list" id="tocList"></ul>
+      <ul class="post-toc-list" id="tocList">
+      </ul>
     </nav>
   </div>
 
   <script>
     (function() {
-      const content = document.querySelector('.post-content');
-      if (!content) return;
-      
-      const headings = content.querySelectorAll('h2, h3');
-      if (headings.length < 3) return;
-      
       const tocList = document.getElementById('tocList');
       const tocContainer = document.getElementById('postToc');
+      if (!tocList || !tocContainer) return;
+      
+      const headings = document.querySelectorAll('.post-content h2, .post-content h3');
+      if (headings.length === 0) { tocContainer.style.display = 'none'; return; }
       
       headings.forEach((h, i) => {
         const id = 'toc-' + i;
-        h.id = id;
+        h.id = h.id || id;
         
         const li = document.createElement('li');
         const a = document.createElement('a');
-        a.href = '#' + id;
-        a.textContent = h.textContent;
+        a.href = '#' + h.id;
+        a.textContent = h.textContent.replace(/^\d+[.、]\s*/, '');
         a.className = h.tagName === 'H3' ? 'toc-h3' : 'toc-h2';
         
         a.addEventListener('click', (e) => {
           e.preventDefault();
-          document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+          document.getElementById(h.id).scrollIntoView({ behavior: 'smooth' });
+          history.pushState(null, '', '#' + h.id);
         });
         
         li.appendChild(a);
         tocList.appendChild(li);
       });
       
-      // 滚动高亮
       const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
@@ -637,7 +521,6 @@ class ONNXModel(private val context: Context) {
             const activeLink = tocList.querySelector('a[href="#' + id + '"]');
             if (activeLink) {
               activeLink.classList.add('active');
-              // 自动滚动目录使高亮项可见
               activeLink.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
           }
