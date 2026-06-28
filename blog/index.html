@@ -1175,6 +1175,82 @@
         }
       });
     });
+
+    // 归档功能
+    let archiveData = null;
+    
+    async function loadArchive() {
+      try {
+        const response = await fetch('../blog/articles-index.json');
+        const data = await response.json();
+        
+        // 生成归档数据
+        const archives = {};
+        data.posts.forEach(post => {
+          const month = post.date.substring(0, 7);
+          if (!archives[month]) archives[month] = [];
+          archives[month].push({
+            title: post.title,
+            date: post.date,
+            url: post.url,
+            category: post.category
+          });
+        });
+        
+        archiveData = Object.entries(archives)
+          .map(([month, items]) => ({
+            month,
+            count: items.length,
+            posts: items.sort((a, b) => b.date.localeCompare(a.date))
+          }))
+          .sort((a, b) => b.month.localeCompare(a.month));
+      } catch (e) {
+        console.error('加载归档失败:', e);
+      }
+    }
+    
+    function renderArchive() {
+      const container = document.getElementById('archive-view');
+      if (!container || !archiveData) return;
+      
+      container.innerHTML = archiveData.map(m => `
+        <div class="archive-month">
+          <div class="archive-month-header">
+            ${m.month} <span class="archive-count">${m.count} 篇</span>
+          </div>
+          ${m.posts.map(p => `
+            <div class="archive-post">
+              <span class="archive-post-date">${p.date}</span>
+              <span class="archive-post-title">
+                <a href="${p.url}">${p.title}</a>
+              </span>
+              <span class="archive-post-cat">${p.category || ''}</span>
+            </div>
+          `).join('')}
+        </div>
+      `).join('');
+    }
+    
+    function toggleBlogView(view) {
+      const listContainer = document.querySelector('.blog-list-container');
+      const archiveView = document.getElementById('archive-view');
+      const listBtn = document.querySelector('[data-view="list"]');
+      const archiveBtn = document.querySelector('[data-view="archive"]');
+      
+      if (view === 'archive') {
+        listContainer.classList.add('hidden');
+        archiveView.classList.add('active');
+        listBtn.classList.remove('active');
+        archiveBtn.classList.add('active');
+        if (!archiveData) loadArchive().then(renderArchive);
+      } else {
+        listContainer.classList.remove('hidden');
+        archiveView.classList.remove('active');
+        listBtn.classList.add('active');
+        archiveBtn.classList.remove('active');
+      }
+    }
+
   </script>
   <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.js"></script>
   <script src="../assets/js/search.js"></script>
