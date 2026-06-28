@@ -750,7 +750,7 @@ a:hover {
 }
 
 .section-header {
-  margin-bottom: var(--space-3xl);
+  margin-bottom: var(--space-lg);
 }
 
 .section-label {
@@ -1175,7 +1175,7 @@ a:hover {
 .about-stats {
   display: flex;
   gap: var(--space-2xl);
-  margin-bottom: var(--space-2xl);
+  margin-bottom: var(--space-lg);
 }
 
 .stat {
@@ -1199,8 +1199,8 @@ a:hover {
 
 /* Blog Page */
 .blog-hero {
-  padding-top: 40px;
-  padding-bottom: var(--space-xl);
+  padding-top: 20px;
+  padding-bottom: var(--space-lg);
 }
 
 .blog-filters {
@@ -1929,7 +1929,7 @@ pre code {
   display: grid;
   grid-template-columns: 1.2fr 1fr;
   gap: var(--space-xl);
-  margin-bottom: var(--space-2xl);
+  margin-bottom: var(--space-lg);
 }
 
 .blog-card-featured {
@@ -2049,7 +2049,7 @@ pre code {
   padding: var(--space-lg);
   background: var(--color-bg-secondary);
   border-radius: var(--radius-xl);
-  margin-bottom: var(--space-2xl);
+  margin-bottom: var(--space-lg);
 }
 
 .topic-label {
