@@ -750,7 +750,7 @@ a:hover {
 }
 
 .section-header {
-  margin-bottom: var(--space-lg);
+  margin-bottom: var(--space-md);
 }
 
 .section-label {
@@ -799,7 +799,7 @@ a:hover {
 }
 
 .card-header {
-  margin-bottom: var(--space-lg);
+  margin-bottom: var(--space-md);
 }
 
 .card-title {
@@ -814,7 +814,7 @@ a:hover {
 }
 
 .card-body {
-  margin-bottom: var(--space-lg);
+  margin-bottom: var(--space-md);
 }
 
 .card-footer {
@@ -1175,7 +1175,7 @@ a:hover {
 .about-stats {
   display: flex;
   gap: var(--space-2xl);
-  margin-bottom: var(--space-lg);
+  margin-bottom: var(--space-md);
 }
 
 .stat {
@@ -1199,8 +1199,8 @@ a:hover {
 
 /* Blog Page */
 .blog-hero {
-  padding-top: 20px;
-  padding-bottom: var(--space-lg);
+  padding-top: 10px;
+  padding-bottom: var(--space-md);
 }
 
 .blog-filters {
@@ -1262,7 +1262,7 @@ a:hover {
 
 .blog-post-excerpt {
   color: var(--color-text-secondary);
-  margin-bottom: var(--space-lg);
+  margin-bottom: var(--space-md);
 }
 
 /* Projects Page */
@@ -1329,7 +1329,7 @@ pre {
   border-radius: var(--radius-lg);
   padding: var(--space-lg);
   overflow-x: auto;
-  margin-bottom: var(--space-lg);
+  margin-bottom: var(--space-md);
 }
 
 pre code {
@@ -1929,7 +1929,7 @@ pre code {
   display: grid;
   grid-template-columns: 1.2fr 1fr;
   gap: var(--space-xl);
-  margin-bottom: var(--space-lg);
+  margin-bottom: var(--space-md);
 }
 
 .blog-card-featured {
@@ -1977,7 +1977,7 @@ pre code {
   font-size: var(--text-base);
   color: var(--color-text-secondary);
   line-height: 1.7;
-  margin-bottom: var(--space-lg);
+  margin-bottom: var(--space-md);
 }
 
 .blog-card-featured-footer {
@@ -2049,7 +2049,7 @@ pre code {
   padding: var(--space-lg);
   background: var(--color-bg-secondary);
   border-radius: var(--radius-xl);
-  margin-bottom: var(--space-lg);
+  margin-bottom: var(--space-md);
 }
 
 .topic-label {
@@ -2093,7 +2093,7 @@ pre code {
   font-size: var(--text-lg);
   color: var(--color-text-secondary);
   line-height: 1.8;
-  margin-bottom: var(--space-lg);
+  margin-bottom: var(--space-md);
 }
 
 .about-text:last-child {
@@ -2148,7 +2148,7 @@ pre code {
   font-size: var(--text-base);
   color: var(--color-text-secondary);
   line-height: 1.7;
-  margin-bottom: var(--space-lg);
+  margin-bottom: var(--space-md);
 }
 
 .blog-card-featured-footer {
@@ -2274,7 +2274,7 @@ pre code {
   font-size: var(--text-lg);
   color: var(--color-text-secondary);
   font-style: italic;
-  margin-bottom: var(--space-lg);
+  margin-bottom: var(--space-md);
 }
 
 /* ===================================
