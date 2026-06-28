@@ -3267,3 +3267,22 @@ pre code {
   border-color: var(--color-accent-primary);
   box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
 }
+
+/* ===================================
+   修复目录滚动不超出标题
+   =================================== */
+.post-toc {
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 240px);
+}
+
+.post-toc-title {
+  flex-shrink: 0;
+}
+
+.post-toc-list {
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
+}
