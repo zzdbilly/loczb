@@ -109,6 +109,14 @@
       
       <div class="post-meta">2026年6月27日 · 阅读时间 16 分钟</div>
 
+        <div class="post-tags">
+        <span>Kotlin Flow</span>
+        <span>背压策略</span>
+        <span>SharedFlow</span>
+        <span>StateFlow</span>
+        <span>Android</span>
+      </div>
+
       <p>用 Kotlin Flow 替换 LiveData 之后，很多人止步于 <code>flow { }</code> + <code>collect { }</code> 的基本用法。但当生产者发射速度超过消费者处理速度时，问题就来了——背压（Backpressure）。当你想让多个订阅者共享同一个数据源时，冷流的热化——共享流（SharedFlow / StateFlow）就是必修课。</p>
 
       <p>本文是 Kotlin Flow 进阶篇，聚焦两个实战核心：背压策略与共享流机制。</p>
@@ -732,14 +740,8 @@ val navigateEvent = MutableSharedFlow&lt;Screen&gt;()             // 事件</cod
         <strong>一句话总结</strong>：背压三剑客——<code>buffer</code> 并发缓冲、<code>conflate</code> 保留最新、<code>collectLatest</code> 取消旧处理。共享流双雄——<code>StateFlow</code> 持有状态、<code>SharedFlow</code> 广播事件。Android 上 <code>WhileSubscribed(5000)</code> 是黄金搭档。
       </div>
 
-      <div class="post-tags">
-        <span>Kotlin Flow</span>
-        <span>背压策略</span>
-        <span>SharedFlow</span>
-        <span>StateFlow</span>
-        <span>Android</span>
-      </div>
-    </article>
+      
+      </article>
   </main>
 
   <footer class="footer">

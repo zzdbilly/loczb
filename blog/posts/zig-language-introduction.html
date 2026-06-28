@@ -109,6 +109,16 @@
       
       <div class="post-meta">2026年6月27日 · 阅读时间 16 分钟</div>
 
+        <div class="post-tags">
+        <span>Zig</span>
+        <span>系统编程</span>
+        <span>comptime</span>
+        <span>Allocator</span>
+        <span>交叉编译</span>
+        <span>build.zig</span>
+        <span>C 互操作</span>
+      </div>
+
       <p>如果你写 C 写了十年，厌倦了空指针崩溃、隐式转换陷阱和手动内存管理的刀尖跳舞；如果你觉得 Rust 的借用检查器和生命周期标注太过繁重，学习曲线陡峭到让人望而却步——那么 Zig 可能是你一直在找的那个平衡点。</p>
 
       <p>Zig 是一门现代化的系统编程语言，目标是成为「更好的 C」。它没有运行时、没有隐式控制流、没有垃圾回收，却通过编译期计算、显式内存分配和类型安全的错误处理，提供了远超 C 的安全保障——同时保持与 C 的完美互操作性。</p>
@@ -950,16 +960,8 @@ fn delay(cycles: u32) void {
         <strong>一句话总结</strong>：Zig 是 C 的精神继任者——它保留了 C 的简洁和直接，用 <code>comptime</code> 替代宏，用 <code>?T/!T</code> 替代空指针和错误码，用 Allocator 替代裸 malloc/free，用 build.zig 替代 Makefile。如果你觉得 C 太危险、Rust 太复杂，Zig 正是中间那个甜点。
       </div>
 
-      <div class="post-tags">
-        <span>Zig</span>
-        <span>系统编程</span>
-        <span>comptime</span>
-        <span>Allocator</span>
-        <span>交叉编译</span>
-        <span>build.zig</span>
-        <span>C 互操作</span>
-      </div>
-    </article>
+      
+      </article>
   </main>
 
   <footer class="footer">
