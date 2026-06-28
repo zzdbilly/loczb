@@ -1,35 +1,6 @@
 {
   "posts": [
     {
-      "slug": "ai-agent-skill-development",
-      "title": "AI Agent 技能开发实战：从需求到上线的完整流程",
-      "date": "2026-03-14",
-      "category": "AI Agent",
-      "tags": [
-        "AI Agent",
-        "OpenClaw",
-        "Skill",
-        "JavaScript"
-      ],
-      "excerpt": "AI Agent 技能开发实战：从需求到上线的完整流程 - 张小猛的技术博客",
-      "url": "blog/posts/ai-agent-skill-development.html"
-    },
-    {
-      "slug": "ai-coding-tools-comparison",
-      "title": "主流 AI 编程工具深度对比：Cursor、Claude Code、OpenCode、GitHub Copilot",
-      "date": "",
-      "category": "AI",
-      "tags": [
-        "AI 工具",
-        "Cursor",
-        "Claude Code",
-        "GitHub Copilot",
-        "编程效率"
-      ],
-      "excerpt": "主流 AI 编程工具深度对比：Cursor、Claude Code、OpenCode、GitHub Copilot 选型指南",
-      "url": "blog/posts/ai-coding-tools-comparison.html"
-    },
-    {
       "slug": "git-worktree-高效多分支开发指南",
       "title": "Git Worktree 高效多分支开发指南",
       "date": "2026-06-28",
@@ -414,6 +385,21 @@
       "url": "blog/posts/mcp-android-integration.html"
     },
     {
+      "slug": "compose-april-2026-update",
+      "title": "Jetpack Compose April 2026 Update 深度解读",
+      "date": "2026-6-19",
+      "category": "Android",
+      "tags": [
+        "Jetpack Compose",
+        "Android",
+        "Compose Multiplatform",
+        "UI",
+        "Kotlin"
+      ],
+      "excerpt": "Jetpack Compose April 2026 Update 完整解读 — BOM 2026.04.01、Compose 1.11、共享元素过渡调试工具、触控板事件、Testing v2 默认启用、Navigation3 1.1.1 等全解析",
+      "url": "blog/posts/compose-april-2026-update.html"
+    },
+    {
       "slug": "ai-coding-workflow-optimization",
       "title": "AI 编程工作流优化：从 Prompt 设计到上下文管理",
       "date": "2026-05-08",
@@ -441,64 +427,6 @@
       ],
       "excerpt": "Android 端侧 AI 实战：Gemini Nano 集成指南 - 深入解析 AICore 架构与 ML Kit GenAI API 实战",
       "url": "blog/posts/android-gemini-nano-integration.html"
-    },
-    {
-      "slug": "react-server-components",
-      "title": "React Server Components 深入解析",
-      "date": "2026-04-26",
-      "category": "前端",
-      "tags": [
-        "React",
-        "Server Components",
-        "Next.js",
-        "前端架构"
-      ],
-      "excerpt": "React Server Components 深入解析：理解服务端组件的工作原理、数据获取方式、与客户端组件的交互，以及最佳实践",
-      "url": "blog/posts/react-server-components.html"
-    },
-    {
-      "slug": "rust-getting-started",
-      "title": "Rust 入门：从零到生产",
-      "date": "2026-04-26",
-      "category": "系统编程",
-      "tags": [
-        "Rust",
-        "系统编程",
-        "所有权",
-        "内存安全"
-      ],
-      "excerpt": "Rust 入门指南：从零开始学习 Rust，掌握所有权、借用、生命周期等核心概念，构建高性能安全程序",
-      "url": "blog/posts/rust-getting-started.html"
-    },
-    {
-      "slug": "android-offline-speech-input",
-      "title": "Android 离线语音输入实现方案",
-      "date": "2026-04-03",
-      "category": "Android",
-      "tags": [
-        "Android",
-        "离线语音识别",
-        "Sherpa ONNX",
-        "Whisper",
-        "端侧AI"
-      ],
-      "excerpt": "Android 离线语音输入实现方案：Sherpa ONNX、Whisper、Vosk 三大主流方案深度对比",
-      "url": "blog/posts/android-offline-speech-input.html"
-    },
-    {
-      "slug": "compose-april-2026-update",
-      "title": "Jetpack Compose April 2026 Update 深度解读",
-      "date": "",
-      "category": "Android",
-      "tags": [
-        "Jetpack Compose",
-        "Android",
-        "Compose Multiplatform",
-        "UI",
-        "Kotlin"
-      ],
-      "excerpt": "Jetpack Compose April 2026 Update 完整解读 — BOM 2026.04.01、Compose 1.11、共享元素过渡调试工具、触控板事件、Testing v2 默认启用、Navigation3 1.1.1 等全解析",
-      "url": "blog/posts/compose-april-2026-update.html"
     },
     {
       "slug": "css-container-queries",
@@ -529,20 +457,32 @@
       "url": "blog/posts/docker-compose-best-practices.html"
     },
     {
-      "slug": "gemini-notebooklm-integration",
-      "title": "Gemini Notebooks 深度体验：与 NotebookLM 无缝整合后的全新 AI 工作流",
-      "date": "",
-      "category": "AI",
+      "slug": "react-server-components",
+      "title": "React Server Components 深入解析",
+      "date": "2026-04-26",
+      "category": "前端",
       "tags": [
-        "AI 工具",
-        "Gemini",
-        "NotebookLM",
-        "Notebooks",
-        "生产力",
-        "Google AI"
+        "React",
+        "Server Components",
+        "Next.js",
+        "前端架构"
       ],
-      "excerpt": "Gemini Notebooks 深度体验：与 NotebookLM 无缝整合后的全新 AI 工作流",
-      "url": "blog/posts/gemini-notebooklm-integration.html"
+      "excerpt": "React Server Components 深入解析：理解服务端组件的工作原理、数据获取方式、与客户端组件的交互，以及最佳实践",
+      "url": "blog/posts/react-server-components.html"
+    },
+    {
+      "slug": "rust-getting-started",
+      "title": "Rust 入门：从零到生产",
+      "date": "2026-04-26",
+      "category": "系统编程",
+      "tags": [
+        "Rust",
+        "系统编程",
+        "所有权",
+        "内存安全"
+      ],
+      "excerpt": "Rust 入门指南：从零开始学习 Rust，掌握所有权、借用、生命周期等核心概念，构建高性能安全程序",
+      "url": "blog/posts/rust-getting-started.html"
     },
     {
       "slug": "sqlite-wal-performance",
@@ -600,6 +540,52 @@
       ],
       "excerpt": "TypeScript 类型体操指南：从基础到高级，掌握条件类型、映射类型、模板字面量类型等核心技巧",
       "url": "blog/posts/typescript-type-gymnastics.html"
+    },
+    {
+      "slug": "nextjs-16-tutorial",
+      "title": "Next.js 16 实战：App Router + Server Actions + Turbopack",
+      "date": "2026-4-20",
+      "category": "前端",
+      "tags": [
+        "Next.js",
+        "React",
+        "全栈开发",
+        "App Router",
+        "Server Actions"
+      ],
+      "excerpt": "Next.js 16 实战指南：App Router、Server Actions、Turbopack 完整教程与最佳实践",
+      "url": "blog/posts/nextjs-16-tutorial.html"
+    },
+    {
+      "slug": "ai-coding-tools-comparison",
+      "title": "主流 AI 编程工具深度对比：Cursor、Claude Code、OpenCode、GitHub Copilot",
+      "date": "2026-4-19",
+      "category": "AI",
+      "tags": [
+        "AI 工具",
+        "Cursor",
+        "Claude Code",
+        "GitHub Copilot",
+        "编程效率"
+      ],
+      "excerpt": "主流 AI 编程工具深度对比：Cursor、Claude Code、OpenCode、GitHub Copilot 选型指南",
+      "url": "blog/posts/ai-coding-tools-comparison.html"
+    },
+    {
+      "slug": "gemini-notebooklm-integration",
+      "title": "Gemini Notebooks 深度体验：与 NotebookLM 无缝整合后的全新 AI 工作流",
+      "date": "2026-4-11",
+      "category": "AI",
+      "tags": [
+        "AI 工具",
+        "Gemini",
+        "NotebookLM",
+        "Notebooks",
+        "生产力",
+        "Google AI"
+      ],
+      "excerpt": "Gemini Notebooks 深度体验：与 NotebookLM 无缝整合后的全新 AI 工作流",
+      "url": "blog/posts/gemini-notebooklm-integration.html"
     },
     {
       "slug": "gemini-notebooklm-workflow",
@@ -660,6 +646,21 @@
       ],
       "excerpt": "RAG 本地实践：用 Ollama + Embedding 搭建私有知识库，实现完全离线的智能问答",
       "url": "blog/posts/local-rag-ollama.html"
+    },
+    {
+      "slug": "android-offline-speech-input",
+      "title": "Android 离线语音输入实现方案",
+      "date": "2026-04-03",
+      "category": "Android",
+      "tags": [
+        "Android",
+        "离线语音识别",
+        "Sherpa ONNX",
+        "Whisper",
+        "端侧AI"
+      ],
+      "excerpt": "Android 离线语音输入实现方案：Sherpa ONNX、Whisper、Vosk 三大主流方案深度对比",
+      "url": "blog/posts/android-offline-speech-input.html"
     },
     {
       "slug": "onnx-mobile-deployment",
@@ -733,6 +734,20 @@
       "url": "blog/posts/vscode-port-forward.html"
     },
     {
+      "slug": "ai-agent-skill-development",
+      "title": "AI Agent 技能开发实战：从需求到上线的完整流程",
+      "date": "2026-03-14",
+      "category": "AI Agent",
+      "tags": [
+        "AI Agent",
+        "OpenClaw",
+        "Skill",
+        "JavaScript"
+      ],
+      "excerpt": "AI Agent 技能开发实战：从需求到上线的完整流程 - 张小猛的技术博客",
+      "url": "blog/posts/ai-agent-skill-development.html"
+    },
+    {
       "slug": "openclaw-guide",
       "title": "OpenClaw 深度使用指南：从 0 到 1 构建个人 AI Agent",
       "date": "2026-03-13",
@@ -760,21 +775,6 @@
       ],
       "excerpt": "Mobile-GS：让 3D 高斯泼溅在移动端实时渲染 - 论文解读，ICLR 2026，移动端 3D 渲染新突破",
       "url": "blog/posts/mobile-gs-paper-review.html"
-    },
-    {
-      "slug": "nextjs-16-tutorial",
-      "title": "Next.js 16 实战：App Router + Server Actions + Turbopack",
-      "date": "",
-      "category": "前端",
-      "tags": [
-        "Next.js",
-        "React",
-        "全栈开发",
-        "App Router",
-        "Server Actions"
-      ],
-      "excerpt": "Next.js 16 实战指南：App Router、Server Actions、Turbopack 完整教程与最佳实践",
-      "url": "blog/posts/nextjs-16-tutorial.html"
     }
   ],
   "tagCloud": [
@@ -793,10 +793,6 @@
     {
       "tag": "Kotlin",
       "count": 6
-    },
-    {
-      "tag": "AI 工具",
-      "count": 3
     },
     {
       "tag": "Android 16",
@@ -823,8 +819,8 @@
       "count": 3
     },
     {
-      "tag": "OpenClaw",
-      "count": 2
+      "tag": "AI 工具",
+      "count": 3
     },
     {
       "tag": "Git",
@@ -887,6 +883,10 @@
       "count": 2
     },
     {
+      "tag": "UI",
+      "count": 2
+    },
+    {
       "tag": "端侧AI",
       "count": 2
     },
@@ -896,10 +896,6 @@
     },
     {
       "tag": "Next.js",
-      "count": 2
-    },
-    {
-      "tag": "UI",
       "count": 2
     },
     {
@@ -919,32 +915,8 @@
       "count": 2
     },
     {
-      "tag": "AI Agent",
-      "count": 1
-    },
-    {
-      "tag": "Skill",
-      "count": 1
-    },
-    {
-      "tag": "JavaScript",
-      "count": 1
-    },
-    {
-      "tag": "Cursor",
-      "count": 1
-    },
-    {
-      "tag": "Claude Code",
-      "count": 1
-    },
-    {
-      "tag": "GitHub Copilot",
-      "count": 1
-    },
-    {
-      "tag": "编程效率",
-      "count": 1
+      "tag": "OpenClaw",
+      "count": 2
     },
     {
       "tag": "效率工具",
@@ -1319,34 +1291,6 @@
       "count": 1
     },
     {
-      "tag": "Server Components",
-      "count": 1
-    },
-    {
-      "tag": "前端架构",
-      "count": 1
-    },
-    {
-      "tag": "所有权",
-      "count": 1
-    },
-    {
-      "tag": "内存安全",
-      "count": 1
-    },
-    {
-      "tag": "离线语音识别",
-      "count": 1
-    },
-    {
-      "tag": "Sherpa ONNX",
-      "count": 1
-    },
-    {
-      "tag": "Whisper",
-      "count": 1
-    },
-    {
       "tag": "Container Queries",
       "count": 1
     },
@@ -1371,11 +1315,19 @@
       "count": 1
     },
     {
-      "tag": "Notebooks",
+      "tag": "Server Components",
       "count": 1
     },
     {
-      "tag": "Google AI",
+      "tag": "前端架构",
+      "count": 1
+    },
+    {
+      "tag": "所有权",
+      "count": 1
+    },
+    {
+      "tag": "内存安全",
       "count": 1
     },
     {
@@ -1408,6 +1360,42 @@
     },
     {
       "tag": "类型安全",
+      "count": 1
+    },
+    {
+      "tag": "全栈开发",
+      "count": 1
+    },
+    {
+      "tag": "App Router",
+      "count": 1
+    },
+    {
+      "tag": "Server Actions",
+      "count": 1
+    },
+    {
+      "tag": "Cursor",
+      "count": 1
+    },
+    {
+      "tag": "Claude Code",
+      "count": 1
+    },
+    {
+      "tag": "GitHub Copilot",
+      "count": 1
+    },
+    {
+      "tag": "编程效率",
+      "count": 1
+    },
+    {
+      "tag": "Notebooks",
+      "count": 1
+    },
+    {
+      "tag": "Google AI",
       "count": 1
     },
     {
@@ -1448,6 +1436,18 @@
     },
     {
       "tag": "本地部署",
+      "count": 1
+    },
+    {
+      "tag": "离线语音识别",
+      "count": 1
+    },
+    {
+      "tag": "Sherpa ONNX",
+      "count": 1
+    },
+    {
+      "tag": "Whisper",
       "count": 1
     },
     {
@@ -1495,6 +1495,18 @@
       "count": 1
     },
     {
+      "tag": "AI Agent",
+      "count": 1
+    },
+    {
+      "tag": "Skill",
+      "count": 1
+    },
+    {
+      "tag": "JavaScript",
+      "count": 1
+    },
+    {
       "tag": "计算机视觉",
       "count": 1
     },
@@ -1509,21 +1521,41 @@
     {
       "tag": "论文解读",
       "count": 1
-    },
-    {
-      "tag": "全栈开发",
-      "count": 1
-    },
-    {
-      "tag": "App Router",
-      "count": 1
-    },
-    {
-      "tag": "Server Actions",
-      "count": 1
     }
   ],
   "archives": [
+    {
+      "month": "2026-6-",
+      "count": 1,
+      "posts": [
+        {
+          "title": "Jetpack Compose April 2026 Update 深度解读",
+          "date": "2026-6-19",
+          "url": "blog/posts/compose-april-2026-update.html"
+        }
+      ]
+    },
+    {
+      "month": "2026-4-",
+      "count": 3,
+      "posts": [
+        {
+          "title": "Next.js 16 实战：App Router + Server Actions + Turbopack",
+          "date": "2026-4-20",
+          "url": "blog/posts/nextjs-16-tutorial.html"
+        },
+        {
+          "title": "主流 AI 编程工具深度对比：Cursor、Claude Code、OpenCode、GitHub Copilot",
+          "date": "2026-4-19",
+          "url": "blog/posts/ai-coding-tools-comparison.html"
+        },
+        {
+          "title": "Gemini Notebooks 深度体验：与 NotebookLM 无缝整合后的全新 AI 工作流",
+          "date": "2026-4-11",
+          "url": "blog/posts/gemini-notebooklm-integration.html"
+        }
+      ]
+    },
     {
       "month": "2026-06",
       "count": 25,
@@ -1676,16 +1708,6 @@
       "count": 13,
       "posts": [
         {
-          "title": "React Server Components 深入解析",
-          "date": "2026-04-26",
-          "url": "blog/posts/react-server-components.html"
-        },
-        {
-          "title": "Rust 入门：从零到生产",
-          "date": "2026-04-26",
-          "url": "blog/posts/rust-getting-started.html"
-        },
-        {
           "title": "CSS Container Queries 实战",
           "date": "2026-04-26",
           "url": "blog/posts/css-container-queries.html"
@@ -1694,6 +1716,16 @@
           "title": "Docker Compose 最佳实践",
           "date": "2026-04-26",
           "url": "blog/posts/docker-compose-best-practices.html"
+        },
+        {
+          "title": "React Server Components 深入解析",
+          "date": "2026-04-26",
+          "url": "blog/posts/react-server-components.html"
+        },
+        {
+          "title": "Rust 入门：从零到生产",
+          "date": "2026-04-26",
+          "url": "blog/posts/rust-getting-started.html"
         },
         {
           "title": "SQLite 进阶：WAL 模式与性能优化",
@@ -1793,50 +1825,24 @@
           "url": "blog/posts/mobile-gs-paper-review.html"
         }
       ]
-    },
-    {
-      "month": "",
-      "count": 4,
-      "posts": [
-        {
-          "title": "主流 AI 编程工具深度对比：Cursor、Claude Code、OpenCode、GitHub Copilot",
-          "date": "",
-          "url": "blog/posts/ai-coding-tools-comparison.html"
-        },
-        {
-          "title": "Jetpack Compose April 2026 Update 深度解读",
-          "date": "",
-          "url": "blog/posts/compose-april-2026-update.html"
-        },
-        {
-          "title": "Gemini Notebooks 深度体验：与 NotebookLM 无缝整合后的全新 AI 工作流",
-          "date": "",
-          "url": "blog/posts/gemini-notebooklm-integration.html"
-        },
-        {
-          "title": "Next.js 16 实战：App Router + Server Actions + Turbopack",
-          "date": "",
-          "url": "blog/posts/nextjs-16-tutorial.html"
-        }
-      ]
     }
   ],
   "categories": [
-    "AI Agent",
-    "AI",
     "开发",
     "Android",
     "前端",
     "DevOps",
     "安全",
     "数据库",
+    "AI",
     "系统编程",
-    "Kotlin"
+    "Kotlin",
+    "AI Agent"
   ],
   "stats": {
     "totalPosts": 52,
     "totalTags": 186,
-    "latestDate": "2026-03-14",
-    "oldestDate": ""
+    "latestDate": "2026-06-28",
+    "oldestDate": "2026-02-15"
   }
 }
