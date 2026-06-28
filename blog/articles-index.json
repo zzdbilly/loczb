@@ -1,6 +1,19 @@
 {
   "posts": [
     {
+      "slug": "ai-代码编辑器深度横评cursor-vs-windsurf-vs-copilot",
+      "title": "AI 代码编辑器深度横评：Cursor vs Windsurf vs Copilot",
+      "date": "2026-06-28",
+      "category": "前端",
+      "tags": [
+        "AI",
+        "AI 工具",
+        "开发技巧"
+      ],
+      "excerpt": "三大主流 AI 代码编辑器全方位对比",
+      "url": "blog/posts/ai-代码编辑器深度横评cursor-vs-windsurf-vs-copilot.html"
+    },
+    {
       "slug": "git-worktree-高效多分支开发指南",
       "title": "Git Worktree 高效多分支开发指南",
       "date": "2026-06-28",
