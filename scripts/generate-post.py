@@ -231,7 +231,11 @@ def parse_args(args):
             if key in ('date', 'read-time', 'tags', 'category', 'content', 'text'):
                 i += 1
                 if i < len(args):
-                    mapped_key = key.replace('-', '_')
+                    # content 映射到 content_file
+                    if key == 'content':
+                        mapped_key = 'content_file'
+                    else:
+                        mapped_key = key.replace('-', '_')
                     params[mapped_key] = args[i]
             else:
                 print(f"❌ 未知参数: --{key}")
