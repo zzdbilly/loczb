@@ -570,5 +570,59 @@ dependencies {
       else if (e.key === "Escape") document.getElementById("blog-search-results")?.classList.remove("active");
     });
   </script>
+
+  <!-- Post TOC -->
+  <div class="post-toc-container" id="postToc">
+    <nav class="post-toc">
+      <div class="post-toc-title">目录</div>
+      <ul class="post-toc-list" id="tocList"></ul>
+    </nav>
+  </div>
+
+  <script>
+    (function() {
+      const content = document.querySelector('.post-content');
+      if (!content) return;
+      
+      const headings = content.querySelectorAll('h2, h3');
+      if (headings.length < 3) return;
+      
+      const tocList = document.getElementById('tocList');
+      const tocContainer = document.getElementById('postToc');
+      
+      headings.forEach((h, i) => {
+        const id = 'toc-' + i;
+        h.id = id;
+        
+        const li = document.createElement('li');
+        const a = document.createElement('a');
+        a.href = '#' + id;
+        a.textContent = h.textContent;
+        a.className = h.tagName === 'H3' ? 'toc-h3' : 'toc-h2';
+        
+        a.addEventListener('click', (e) => {
+          e.preventDefault();
+          document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+        });
+        
+        li.appendChild(a);
+        tocList.appendChild(li);
+      });
+      
+      // 滚动高亮
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            tocList.querySelectorAll('a').forEach(a => a.classList.remove('active'));
+            const id = entry.target.id;
+            const activeLink = tocList.querySelector('a[href="#' + id + '"]');
+            if (activeLink) activeLink.classList.add('active');
+          }
+        });
+      }, { rootMargin: '-20% 0px -60% 0px' });
+      
+      headings.forEach(h => observer.observe(h));
+    })();
+  </script>
 </body>
 </html>
