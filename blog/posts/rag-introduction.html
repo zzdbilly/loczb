@@ -109,6 +109,16 @@
       
       <div class="post-meta">2026年6月27日 · 阅读时间 18 分钟</div>
 
+        <div class="post-tags">
+        <span>RAG</span>
+        <span>检索增强生成</span>
+        <span>LLM</span>
+        <span>向量数据库</span>
+        <span>Embedding</span>
+        <span>LangChain</span>
+        <span>AI</span>
+      </div>
+
       <p>大语言模型（LLM）能力很强，但有两个硬伤：知识截止——训练数据有截止日期，无法回答训练之后的事；幻觉问题——不知道的也敢编，一本正经地胡说八道。RAG（Retrieval-Augmented Generation，检索增强生成）就是解决这两个问题的主流方案。</p>
 
       <p>本文从 RAG 的核心理念出发，覆盖架构设计、分块策略、模型选型、向量数据库对比、高级检索技巧、框架实现、评估监控到未来演进，力求一篇讲透。</p>
@@ -1162,16 +1172,8 @@ result = agent_executor.invoke({
         <strong>一句话总结</strong>：RAG 的核心是"先查资料再回答"。落地路径：分块选递归 → 嵌入选 BGE → 向量库选 Qdrant → 先加 Reranker → 再加混合检索 → 最后考虑 Agentic RAG。优化不是一步到位，而是逐层叠加。
       </div>
 
-      <div class="post-tags">
-        <span>RAG</span>
-        <span>检索增强生成</span>
-        <span>LLM</span>
-        <span>向量数据库</span>
-        <span>Embedding</span>
-        <span>LangChain</span>
-        <span>AI</span>
-      </div>
-    </article>
+      
+      </article>
   </main>
 
   <footer class="footer">

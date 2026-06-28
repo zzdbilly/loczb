@@ -109,6 +109,15 @@
       
       <div class="post-meta">2026年6月27日 · 阅读时间 18 分钟</div>
 
+        <div class="post-tags">
+        <span>Nginx</span>
+        <span>反向代理</span>
+        <span>性能调优</span>
+        <span>SSL</span>
+        <span>负载均衡</span>
+        <span>DevOps</span>
+      </div>
+
       <p>Nginx 作为反向代理几乎是现代 Web 架构的标配。但很多人止步于 <code>proxy_pass</code> 的基本配置，默认参数跑起来能工作，一上量就出问题——502 频发、SSL 握手拖慢首字节、缓存没命中反而多了一跳、限流太粗暴误杀正常用户。</p>
 
       <p>本文从反向代理基础概念出发，逐层深入到 worker 调优、负载均衡、SSL 加速、缓存策略、压缩传输、限流安全和监控体系，最后给出一份可直接用于生产环境的检查清单。</p>
@@ -968,15 +977,8 @@ scrape_configs:
         <strong>一句话总结</strong>：Nginx 反向代理调优的核心公式——<code>worker 调度最大化</code> + <code>连接复用（keepalive）</code> + <code>SSL 会话复用</code> + <code>缓存防击穿</code> + <code>压缩减带宽</code> + <code>限流保后端</code> + <code>监控看全局</code>。每一层省 10%，整体就是数量级的提升。
       </div>
 
-      <div class="post-tags">
-        <span>Nginx</span>
-        <span>反向代理</span>
-        <span>性能调优</span>
-        <span>SSL</span>
-        <span>负载均衡</span>
-        <span>DevOps</span>
-      </div>
-    </article>
+      
+      </article>
   </main>
 
   <footer class="footer">

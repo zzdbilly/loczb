@@ -110,6 +110,15 @@
       
       <div class="post-meta">2026年6月27日 · 阅读时间 18 分钟</div>
 
+        <div class="post-tags">
+        <span>Hilt</span>
+        <span>依赖注入</span>
+        <span>Android</span>
+        <span>Dagger</span>
+        <span>ViewModel</span>
+        <span>模块化</span>
+      </div>
+
       <p>依赖注入（Dependency Injection）是现代 Android 架构的基石。从手写工厂到 Dagger 2 的编译期注入，再到 Hilt 的简化封装——这条路的终点是让开发者用最少的样板代码获得最可靠的依赖管理。Hilt 不是 Dagger 的替代品，而是站在 Dagger 肩膀上的「标准答案」，它把 Android 团队多年积累的最佳实践固化成了注解和约定。</p>
 
       <p>本文从 DI 基础概念出发，逐步深入 Hilt 的每个核心机制，最终覆盖多模块架构、作用域管理、第三方库集成和测试策略。</p><!-- 一、依赖注入基础与 Hilt 架构 -->
@@ -1322,15 +1331,8 @@ object NetworkModule {
         <strong>一句话总结</strong>：Hilt 的核心公式 = <code>@HiltAndroidApp</code>（入口）+ <code>@AndroidEntryPoint</code>（注入点）+ <code>@Module/@InstallIn</code>（绑定规则）+ <code>@Scope</code>（生命周期）。记住这条链路，其他都是衍生。
       </div>
 
-      <div class="post-tags">
-        <span>Hilt</span>
-        <span>依赖注入</span>
-        <span>Android</span>
-        <span>Dagger</span>
-        <span>ViewModel</span>
-        <span>模块化</span>
-      </div>
-    </article>
+      
+      </article>
   </main>
 
   <footer class="footer">
