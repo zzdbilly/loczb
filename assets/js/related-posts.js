@@ -61,17 +61,28 @@ const ARTICLE_INDEX = [
 ];
 
 function initRelatedPosts() {
+  console.log('🚀 initRelatedPosts 开始执行');
   const postContent = document.querySelector('.post-content');
   const postTags = document.querySelector('.post-tags');
-  if (!postContent || !postTags) return;
+  console.log('postContent:', !!postContent, 'postTags:', !!postTags);
+  if (!postContent || !postTags) {
+    console.log('❌ 未找到 postContent 或 postTags');
+    return;
+  }
   
   // Identify current article from URL
   const currentPath = window.location.pathname;
   const currentSlug = currentPath.split('/').pop().replace('.html', '');
+  console.log('currentSlug:', currentSlug);
   const currentArticle = ARTICLE_INDEX.find(a => a.slug === currentSlug);
-  if (!currentArticle) return;
+  console.log('currentArticle:', currentArticle);
+  if (!currentArticle) {
+    console.log('❌ 未找到当前文章在索引中');
+    return;
+  }
   
   // Find related articles by tag overlap
+  console.log('当前文章标签:', currentArticle.tags);
   const scored = ARTICLE_INDEX
     .filter(a => a.slug !== currentSlug)
     .map(a => {
@@ -82,7 +93,11 @@ function initRelatedPosts() {
     .sort((a, b) => b.score - a.score)
     .slice(0, 3);
   
-  if (scored.length === 0) return;
+  console.log('匹配到的相关文章:', scored);
+  if (scored.length === 0) {
+    console.log('❌ 没有匹配的文章');
+    return;
+  }
   
   // Build HTML
   const section = document.createElement('div');
@@ -122,6 +137,7 @@ function initRelatedPosts() {
   
   section.appendChild(list);
   postTags.parentNode.insertBefore(section, postTags.nextSibling);
+  console.log('✅ 相关文章已添加到页面');
 }
 
 document.addEventListener('DOMContentLoaded', initRelatedPosts);
