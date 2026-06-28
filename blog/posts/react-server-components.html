@@ -507,7 +507,7 @@ function ClientButton() {
             if (activeLink) {
               activeLink.classList.add('active');
               // 自动滚动目录使高亮项可见
-              // 自动滚动已禁用，避免遮挡标题
+              activeLink.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
           }
         });
