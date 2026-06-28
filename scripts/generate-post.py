@@ -175,62 +175,33 @@ def update_homepage(slug, title, description, article_date, read_time, tags, cat
           </div>
         </article>'''
     
-    # 2. 最新列表��（第2、3篇保留原来的，将原第1篇移为第2篇）
-    list_item = f'''          <article class="blog-list-item animate-on-scroll">
-            <div class="blog-list-meta">
-              <span class="blog-date">{article_date}</span>
-              <span>·</span>
-              <span class="blog-read-time">{read_time} min</span>
-            </div>
-            <h4 class="blog-list-title">
-              <a href="blog/posts/{slug}.html">{title}</a>
-            </h4>
-            <div class="blog-list-tags">
-              {tags_html}
-            </div>
-          </article>'''
+    # 2. 最新列表只需要保留原来的第1、2篇
+    # 因为大卡已经展示了最新文章，列表不需要重复
     
     with open(HOME_INDEX, 'r', encoding='utf-8') as f:
         content = f.read()
     
-    # 找大卡替换：id="home-featured-post" 的 article
+    # 1. 更新大卡
     featured_match = re.search(
         r'<article class="blog-card-featured animate-on-scroll" id="home-featured-post".*?</article>',
         content,
         re.DOTALL
     )
     if featured_match:
-        # 把大卡内容替换成新文章
         old_featured = featured_match.group(0)
         content = content.replace(old_featured, featured)
         
-        # 在最新文章列表顶部插入新文章的列表项
-        # 找到第一个 blog-list-item
-        list_match = re.search(
-            r'(<article class="blog-list-item animate-on-scroll">)',
-            content
-        )
-        if list_match:
-            # 插入在第一个列表项之前（新文章会占据第一个位置）
-            # 但需要保持总共3篇最新文章：新文章 + 原来第1、2篇
-            # 删除最后1个列表项（原来第3篇），在前面插入新文章
-            # 找到所有列表项
-            all_items = list(re.finditer(
-                r'<article class="blog-list-item animate-on-scroll">.*?</article>',
-                content,
-                re.DOTALL
-            ))
-            if len(all_items) >= 2:
-                # 删除最后一项（第3篇）
-                last_item = all_items[-1]
-                content_before = content[:last_item.start()]
-                content_after = content[last_item.end():]
-                # 在第一个列表项（原第1篇）前插入新文章
-                first_item = all_items[0]
-                content = (content_before[:first_item.start()] + 
-                          list_item + '\n' +
-                          content_before[first_item.start():] + 
-                          content_after)
+        # 2. 删除列表中的第一篇（因为它现在在大卡里展示了，重复）
+        # 找到所有 blog-list-item
+        all_items = list(re.finditer(
+            r'<article class="blog-list-item animate-on-scroll">.*?</article>',
+            content,
+            re.DOTALL
+        ))
+        if len(all_items) >= 1:
+            # 删除第一个（它是重复的，因为和大卡同一篇）
+            first_item = all_items[0]
+            content = content[:first_item.start()] + content[first_item.end():]
         
         with open(HOME_INDEX, 'w', encoding='utf-8') as f:
             f.write(content)
