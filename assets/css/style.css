@@ -3319,3 +3319,66 @@ pre code {
   text-align: center;
   color: var(--color-text-secondary);
 }
+
+/* ===================================
+   Post TOC - 修复滚动和圆角
+   =================================== */
+.post-toc-container {
+  position: fixed;
+  right: 2rem;
+  top: 180px;
+  width: 220px;
+  max-height: calc(100vh - 220px);
+  /* 父容器完整圆角 + 内部滚动 */
+  border-radius: 16px;
+  overflow: hidden;
+  display: none;
+}
+
+@media (min-width: 1200px) {
+  .post-toc-container {
+    display: block;
+  }
+}
+
+.post-toc {
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  padding: 1rem;
+  /* 内部滚动 */
+  max-height: calc(100vh - 240px);
+  overflow-y: auto;
+  /* 隐藏滚动条但保持滚动功能 */
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border) transparent;
+}
+
+.post-toc::-webkit-scrollbar {
+  width: 4px;
+}
+
+.post-toc::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.post-toc::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 4px;
+}
+
+.post-toc-title {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-muted);
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--color-border);
+  /* 标题固定不随滚动 */
+  position: sticky;
+  top: 0;
+  background: var(--color-bg-secondary);
+  z-index: 1;
+}
