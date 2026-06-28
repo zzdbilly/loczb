@@ -69,6 +69,10 @@
   function searchByTag(tag) {
     if (!fuse) return;
     
+    // 先删除旧的返回按钮
+    const existingBackBtn = document.getElementById('tag-search-back');
+    if (existingBackBtn) existingBackBtn.remove();
+    
     // 激活标签样式
     document.querySelectorAll('.tag-cloud-item').forEach(b => {
       b.classList.toggle('active', b.dataset.tag === tag);
