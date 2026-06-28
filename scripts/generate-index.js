@@ -4,6 +4,10 @@
  * 
  * Reads from blog/posts/*.html for tags/excerpt
  * Reads from blog/index.html for categories (data-category)
+ * 
+ * 支持的格式:
+ * - 日期: <span>📅 2026-06-28</span>
+ * - 标签: <span class="tag">Android</span>
  */
 
 const fs = require('fs');
@@ -37,25 +41,25 @@ const posts = files.map(file => {
   const titleMatch = content.match(/<title>([^<]+)<\/title>/);
   const title = titleMatch ? titleMatch[1].replace(/ \| 张小猛 - loczb$/, '') : '';
   
-  // Extract date
-  const dateMatch = content.match(/content="(\d{4}-\d{2}-\d{2})"/);
+  // Extract date from <span>📅 YYYY-MM-DD</span>
+  const dateMatch = content.match(/<span>📅 (\d{4}-\d{2}-\d{2})<\/span>/);
   const date = dateMatch ? dateMatch[1] : '';
   
   // Extract description/excerpt
   const descMatch = content.match(/<meta name="description" content="([^"]+)"/);
   const excerpt = descMatch ? descMatch[1] : '';
   
-  // Extract tags from meta keywords (primary source)
-  const keywordsMatch = content.match(/<meta name="keywords" content="([^"]+)"/);
+  // Extract tags from <span class="tag"> format
+  const tagMatches = content.match(/<span class="tag">([^<]+)<\/span>/g);
   let tags = [];
-  if (keywordsMatch) {
-    tags = keywordsMatch[1].split(',').map(k => k.trim()).filter(Boolean);
+  if (tagMatches) {
+    tags = tagMatches.map(t => t.replace(/<[^>]*>/g, ''));
   }
   
-  // Fallback: extract from tech-tag spans
+  // Fallback: extract from tech-tag spans (old format)
   if (tags.length === 0) {
-    const tagsMatch = content.match(/<span class="tech-tag"[^>]*>([^<]+)<\/span>/g);
-    tags = tagsMatch ? tagsMatch.map(t => t.replace(/<[^>]*>/g, '')) : [];
+    const oldTags = content.match(/<span class="tech-tag"[^>]*>([^<]+)<\/span>/g);
+    tags = oldTags ? oldTags.map(t => t.replace(/<[^>]*>/g, '')) : [];
   }
   
   // Get category from index.html mapping, fallback to '技术'
