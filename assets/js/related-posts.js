@@ -4,6 +4,7 @@
 
 // Article index with tags
 const ARTICLE_INDEX = [
+  { slug: "git-worktree-高效多分支开发指南", tags: ["Git", "开发技巧", "效率工具"], title: "Git Worktree 高效多分支开发指南" },
   { slug: "使用-kotlin-symbol-processing-提升编译效率", tags: ["Kotlin", "KSP", "编译优化", "Android"], title: "使用 Kotlin Symbol Processing 提升编译效率" },
   { slug: "使用新模板创建博客测试", tags: ["测试", "模板"], title: "使用新模板创建博客测试" },
   { slug: "测试博客用新模板创建的文章", tags: ["测试", "模板", "博客"], title: "测试博客：用新模板创建的文章" },
