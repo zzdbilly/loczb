@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>使用新模板创建博客测试 | 张小猛 - loczb</title>
-    <meta name="description" content="这是一篇使用新模板生成的测试文章，用于验证模板功能是否正常。">
+    <title>使用 Kotlin Symbol Processing 提升编译效率 | 张小猛 - loczb</title>
+    <meta name="description" content="KSP 是 Kotlin 官方推出的编译插件替代方案，比 KAPT 快 2-10 倍。本文介绍 KSP 的基本用法和迁移步骤。">
     
     <!-- Open Graph -->
-    <meta property="og:title" content="使用新模板创建博客测试 | 张小猛 - loczb">
-    <meta property="og:description" content="这是一篇使用新模板生成的测试文章，用于验证模板功能是否正常。">
-    <meta property="og:url" content="https://709527.xyz/blog/posts/使用新模板创建博客测试.html">
+    <meta property="og:title" content="使用 Kotlin Symbol Processing 提升编译效率 | 张小猛 - loczb">
+    <meta property="og:description" content="KSP 是 Kotlin 官方推出的编译插件替代方案，比 KAPT 快 2-10 倍。本文介绍 KSP 的基本用法和迁移步骤。">
+    <meta property="og:url" content="https://709527.xyz/blog/posts/使用-kotlin-symbol-processing-提升编译效率.html">
     <meta property="og:type" content="article">
     <meta property="og:image" content="../../assets/images/og-default.webp">
     <meta property="og:site_name" content="loczb">
@@ -60,20 +60,67 @@
       </a>
 
       <article class="post-content">
-        <h1>使用新模板创建博客测试</h1>
+        <h1>使用 Kotlin Symbol Processing 提升编译效率</h1>
         
         <div class="post-meta">
           <span>📅 2026-06-28</span>
-          <span>⏱️ 3 min read</span>
+          <span>⏱️ 8 min read</span>
           <span>👤 张小猛</span>
         </div>
         
         <div class="post-tags">
-          <span class="tag">测试</span>
-          <span class="tag">模板</span>
+          <span class="tag">Kotlin</span>
+          <span class="tag">KSP</span>
+          <span class="tag">编译优化</span>
+          <span class="tag">Android</span>
         </div>
         
-        <p>在这里写文章内容...</p>
+        <p>Kotlin Symbol Processing（KSP）是 Kotlin 官方推出的全新编译时注解处理方案，旨在替代传统的 KAPT（Kotlin Annotation Processing Tool）。相比 KAPT，KSP 在编译速度上有 2-10 倍的显著提升。</p>
+
+<h2 id="intro">为什么需要 KSP？</h2>
+
+<p>KAPT 虽好，但它有几个固有问题：</p>
+
+<ul>
+  <li><strong>性能问题</strong>：KAPT 需要将 Kotlin 代码转换为 Java 代理类，这一步骤耗时较长</li>
+  <li><strong>信息丢失</strong>：KAPT 只保留最少的 Kotlin 语言特性，很多运行时信息被丢弃</li>
+  <li><strong>增量编译不完善</strong>：增量编译支持有限</li>
+</ul>
+
+<h2 id="migrate">从 KAPT 迁移到 KSP</h2>
+
+<h3>1. 添加 KSP 插件</h3>
+
+<pre><code class="language-kotlin">plugins {
+    id("com.google.devtools.ksp") version "1.9.22-1.0.17"
+}</code></pre>
+
+<h3>2. 替换依赖配置</h3>
+
+<pre><code class="language-kotlin">// 之前 (KAPT)
+implementation("com.squareup.moshi:moshi-kotlin:1.15.0")
+kapt("com.squareup.moshi:moshi-kotlin-codegen:1.15.0")
+
+// 现在 (KSP)
+implementation("com.squareup.moshi:moshi-kotlin:1.15.0")
+ksp("com.squareup.moshi:moshi-kotlin-codegen:1.15.0")</code></pre>
+
+<h2 id="support">支持的库</h2>
+
+<p>主流 Kotlin 库都已支持 KSP：</p>
+
+<ul>
+  <li>Room</li>
+  <li>Moshi</li>
+  <li>Hilt（新版）</li>
+  <li>SQLDelight</li>
+  <li>Kotlin Serialization</li>
+  <li>Google Auto Service</li>
+</ul>
+
+<h2 id="conclusion">总结</h2>
+
+<p>KSP 是 Kotlin 生态的重要进步，推荐在新项目中直接使用。对于现有项目，建议逐步迁移到 KSP 以获得更好的编译体验。</p>
       </article>
     </div>
   </main>
