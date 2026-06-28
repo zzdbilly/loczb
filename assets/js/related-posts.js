@@ -62,13 +62,19 @@ const ARTICLE_INDEX = [
 
 function initRelatedPosts() {
   console.log('🚀 initRelatedPosts 开始执行');
-  const postContent = document.querySelector('.post-content');
-  const postTags = document.querySelector('.post-tags');
-  console.log('postContent:', !!postContent, 'postTags:', !!postTags);
-  if (!postContent || !postTags) {
-    console.log('❌ 未找到 postContent 或 postTags');
+  // 使用 querySelectorAll 获取所有匹配元素，检查第一个
+  const postTagsElements = document.querySelectorAll('.post-tags');
+  if (postTagsElements.length === 0) {
+    console.log('❌ 未找到 .post-tags 元素');
     return;
   }
+  const postTags = postTagsElements[0];
+  const postContent = document.querySelector('.post-content');
+  if (!postContent || !postTags) {
+    console.log('❌ 元素缺失');
+    return;
+  }
+  console.log('✅ 找到 post-tags 元素');
   
   // Identify current article from URL
   const currentPath = window.location.pathname;
