@@ -43,7 +43,14 @@ const posts = files.map(file => {
   
   // Extract date from <span>📅 YYYY-MM-DD</span>
   const dateMatch = content.match(/<span>📅 (\d{4}-\d{1,2}-\d{1,2})<\/span>/);
-  const date = dateMatch ? dateMatch[1] : '';
+  // 标准化日期格式，补齐前导零
+  let date = dateMatch ? dateMatch[1] : '';
+  if (date) {
+    const parts = date.split('-');
+    if (parts.length === 3) {
+      date = `${parts[0]}-${parts[1].padStart(2, '0')}-${parts[2].padStart(2, '0')}`;
+    }
+  }
   
   // Extract description/excerpt
   const descMatch = content.match(/<meta name="description" content="([^"]+)"/);

@@ -338,6 +338,21 @@
       "url": "blog/posts/android-app-security-hardening.html"
     },
     {
+      "slug": "compose-april-2026-update",
+      "title": "Jetpack Compose April 2026 Update 深度解读",
+      "date": "2026-06-19",
+      "category": "Android",
+      "tags": [
+        "Jetpack Compose",
+        "Android",
+        "Compose Multiplatform",
+        "UI",
+        "Kotlin"
+      ],
+      "excerpt": "Jetpack Compose April 2026 Update 完整解读 — BOM 2026.04.01、Compose 1.11、共享元素过渡调试工具、触控板事件、Testing v2 默认启用、Navigation3 1.1.1 等全解析",
+      "url": "blog/posts/compose-april-2026-update.html"
+    },
+    {
       "slug": "google-io-2026-recap",
       "title": "Google I/O 2026 完整回顾：AI 重塑一切",
       "date": "2026-06-19",
@@ -383,21 +398,6 @@
       ],
       "excerpt": "MCP (Model Context Protocol) 协议在 Android 端的集成实战 - 从概念到手写实现，构建 AI 驱动的 Android 应用",
       "url": "blog/posts/mcp-android-integration.html"
-    },
-    {
-      "slug": "compose-april-2026-update",
-      "title": "Jetpack Compose April 2026 Update 深度解读",
-      "date": "2026-6-19",
-      "category": "Android",
-      "tags": [
-        "Jetpack Compose",
-        "Android",
-        "Compose Multiplatform",
-        "UI",
-        "Kotlin"
-      ],
-      "excerpt": "Jetpack Compose April 2026 Update 完整解读 — BOM 2026.04.01、Compose 1.11、共享元素过渡调试工具、触控板事件、Testing v2 默认启用、Navigation3 1.1.1 等全解析",
-      "url": "blog/posts/compose-april-2026-update.html"
     },
     {
       "slug": "ai-coding-workflow-optimization",
@@ -544,7 +544,7 @@
     {
       "slug": "nextjs-16-tutorial",
       "title": "Next.js 16 实战：App Router + Server Actions + Turbopack",
-      "date": "2026-4-20",
+      "date": "2026-04-20",
       "category": "前端",
       "tags": [
         "Next.js",
@@ -559,7 +559,7 @@
     {
       "slug": "ai-coding-tools-comparison",
       "title": "主流 AI 编程工具深度对比：Cursor、Claude Code、OpenCode、GitHub Copilot",
-      "date": "2026-4-19",
+      "date": "2026-04-19",
       "category": "AI",
       "tags": [
         "AI 工具",
@@ -574,7 +574,7 @@
     {
       "slug": "gemini-notebooklm-integration",
       "title": "Gemini Notebooks 深度体验：与 NotebookLM 无缝整合后的全新 AI 工作流",
-      "date": "2026-4-11",
+      "date": "2026-04-11",
       "category": "AI",
       "tags": [
         "AI 工具",
@@ -1525,40 +1525,8 @@
   ],
   "archives": [
     {
-      "month": "2026-6-",
-      "count": 1,
-      "posts": [
-        {
-          "title": "Jetpack Compose April 2026 Update 深度解读",
-          "date": "2026-6-19",
-          "url": "blog/posts/compose-april-2026-update.html"
-        }
-      ]
-    },
-    {
-      "month": "2026-4-",
-      "count": 3,
-      "posts": [
-        {
-          "title": "Next.js 16 实战：App Router + Server Actions + Turbopack",
-          "date": "2026-4-20",
-          "url": "blog/posts/nextjs-16-tutorial.html"
-        },
-        {
-          "title": "主流 AI 编程工具深度对比：Cursor、Claude Code、OpenCode、GitHub Copilot",
-          "date": "2026-4-19",
-          "url": "blog/posts/ai-coding-tools-comparison.html"
-        },
-        {
-          "title": "Gemini Notebooks 深度体验：与 NotebookLM 无缝整合后的全新 AI 工作流",
-          "date": "2026-4-11",
-          "url": "blog/posts/gemini-notebooklm-integration.html"
-        }
-      ]
-    },
-    {
       "month": "2026-06",
-      "count": 25,
+      "count": 26,
       "posts": [
         {
           "title": "Git Worktree 高效多分支开发指南",
@@ -1671,6 +1639,11 @@
           "url": "blog/posts/android-app-security-hardening.html"
         },
         {
+          "title": "Jetpack Compose April 2026 Update 深度解读",
+          "date": "2026-06-19",
+          "url": "blog/posts/compose-april-2026-update.html"
+        },
+        {
           "title": "Google I/O 2026 完整回顾：AI 重塑一切",
           "date": "2026-06-19",
           "url": "blog/posts/google-io-2026-recap.html"
@@ -1705,7 +1678,7 @@
     },
     {
       "month": "2026-04",
-      "count": 13,
+      "count": 16,
       "posts": [
         {
           "title": "CSS Container Queries 实战",
@@ -1746,6 +1719,21 @@
           "title": "TypeScript 类型体操指南",
           "date": "2026-04-25",
           "url": "blog/posts/typescript-type-gymnastics.html"
+        },
+        {
+          "title": "Next.js 16 实战：App Router + Server Actions + Turbopack",
+          "date": "2026-04-20",
+          "url": "blog/posts/nextjs-16-tutorial.html"
+        },
+        {
+          "title": "主流 AI 编程工具深度对比：Cursor、Claude Code、OpenCode、GitHub Copilot",
+          "date": "2026-04-19",
+          "url": "blog/posts/ai-coding-tools-comparison.html"
+        },
+        {
+          "title": "Gemini Notebooks 深度体验：与 NotebookLM 无缝整合后的全新 AI 工作流",
+          "date": "2026-04-11",
+          "url": "blog/posts/gemini-notebooklm-integration.html"
         },
         {
           "title": "Gemini + NotebookLM 结合使用指南",
