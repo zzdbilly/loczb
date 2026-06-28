@@ -2541,11 +2541,6 @@ pre code {
   background: var(--color-bg-tertiary);
 }
 
-.search-results {
-  max-height: 60vh;
-  overflow-y: auto;
-}
-
 .search-results-list {
   padding: 0.5rem;
 }
