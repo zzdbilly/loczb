@@ -109,6 +109,15 @@
       
       <div class="post-meta">2026年6月27日 · 阅读时间 18 分钟</div>
 
+        <div class="post-tags">
+        <span>Go</span>
+        <span>Golang</span>
+        <span>并发</span>
+        <span>Goroutine</span>
+        <span>Channel</span>
+        <span>Context</span>
+      </div>
+
       <p>Go 语言从诞生之初就以并发编程为核心设计理念。"Don't communicate by sharing memory; share memory by communicating"——这句话不是口号，而是 Go 并发哲学的全部。Goroutine 让并发变得廉价，Channel 让通信变得安全，Context 让取消变得优雅。</p>
 
       <p>本文从底层调度模型到上层并发模式，系统梳理 Go 并发编程的核心知识。</p>
@@ -949,15 +958,8 @@ func TestNoLeak(t *testing.T) {
         <strong>一句话总结</strong>：Go 并发三件套——<code>Goroutine</code> 轻量并发、<code>Channel</code> 安全通信、<code>Context</code> 优雅取消。四类模式——Fan-Out/Fan-In 扇分扇合、Pipeline 流水线、Worker Pool 工作池、Select 多路复用。测试必加 <code>-race</code>，始终 <code>defer cancel()</code>，闭包传参不传变量。
       </div>
 
-      <div class="post-tags">
-        <span>Go</span>
-        <span>Golang</span>
-        <span>并发</span>
-        <span>Goroutine</span>
-        <span>Channel</span>
-        <span>Context</span>
-      </div>
-    </article>
+      
+      </article>
   </main>
 
   <footer class="footer">

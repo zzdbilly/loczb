@@ -109,6 +109,14 @@
       
       <div class="post-meta">2026年6月27日 · 阅读时间 16 分钟</div>
 
+        <div class="post-tags">
+        <span>DevOps</span>
+        <span>GitHub Actions</span>
+        <span>CI/CD</span>
+        <span>OIDC</span>
+        <span>自动化</span>
+      </div>
+
       <p>GitHub Actions 早已不只是 <code>on: push → run: npm test</code> 那么简单。矩阵构建、可复用工作流、OIDC 免密钥认证、自定义 Action 开发——当你需要构建企业级 CI/CD 管道时，这些高级特性才是生产力倍增器。</p>
 
       <p>本文从核心概念出发，逐步深入到生产环境中的最佳实践，帮你写出既安全又高效的 GitHub Actions 工作流。</p>
@@ -1003,14 +1011,8 @@ tar xzf actions-runner-linux-x64-2.321.0.tar.gz
         <strong>一句话总结</strong>：矩阵构建解决多维度测试，可复用工作流消除重复，OIDC 消除密钥风险，最小权限 + SHA Pin 消除供应链攻击，并发控制 + 缓存消除等待时间。把这五件事做好，你的 CI/CD 管道就超过了 90% 的项目。
       </div>
 
-      <div class="post-tags">
-        <span>DevOps</span>
-        <span>GitHub Actions</span>
-        <span>CI/CD</span>
-        <span>OIDC</span>
-        <span>自动化</span>
-      </div>
-    </article>
+      
+      </article>
   </main>
 
   <footer class="footer">

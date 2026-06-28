@@ -109,6 +109,16 @@
       
       <div class="post-meta">2026年6月27日 · 阅读时间 20 分钟</div>
 
+        <div class="post-tags">
+        <span>PostgreSQL</span>
+        <span>索引优化</span>
+        <span>B-Tree</span>
+        <span>GIN</span>
+        <span>EXPLAIN</span>
+        <span>慢查询</span>
+        <span>数据库</span>
+      </div>
+
       <p>数据库性能优化中，索引是最重要的手段——没有之一。PostgreSQL 提供了丰富的索引类型和灵活的索引策略，但用错了比不用更糟：不仅查询没变快，写入还变慢了，磁盘空间也白白浪费。</p>
 
       <p>本文从索引类型对比开始，逐步深入复合索引设计、部分索引、覆盖索引、执行计划分析，最后通过真实慢查询案例串联全部知识。</p>
@@ -1144,16 +1154,8 @@ SELECT * FROM orders WHERE id &gt; 999980 ORDER BY id LIMIT 21;
         <strong>一句话总结</strong>：索引设计 = 选对类型 + 排好列序 + 控好范围。B-Tree 是万金油但不是万能药；GIN 搞定 JSONB 和数组；部分索引省空间又省维护；覆盖索引免回表；EXPLAIN 是你的听诊器。建索引前先 EXPLAIN，建完后再 EXPLAIN 验证——永远不要猜。
       </div>
 
-      <div class="post-tags">
-        <span>PostgreSQL</span>
-        <span>索引优化</span>
-        <span>B-Tree</span>
-        <span>GIN</span>
-        <span>EXPLAIN</span>
-        <span>慢查询</span>
-        <span>数据库</span>
-      </div>
-    </article>
+      
+      </article>
   </main>
 
   <footer class="footer">

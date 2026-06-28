@@ -110,6 +110,14 @@
       
       <div class="post-meta">2026年6月27日 · 阅读时间 16 分钟</div>
 
+        <div class="post-tags">
+        <span>Android 16</span>
+        <span>后台任务</span>
+        <span>WorkManager</span>
+        <span>前台服务</span>
+        <span>电池优化</span>
+      </div>
+
       <p>如果你从 Android Oreo 时代就开始做 Android 开发，一定对"后台限制"这个词不陌生——每隔一个大版本，Google 都在收紧后台任务的生存空间。Android 16 也不例外，而且这次力度空前：JobScheduler 执行时间被进一步压缩，前台服务新增 short-lived 类型和硬性超时，后台定位访问更加严格。</p>
 
       <p>如果你的 App 还在用 <code>Service</code>、<code>AlarmManager</code> 甚至 <code>BroadcastReceiver</code> 做后台工作，这篇文章就是你的迁移路线图。</p>
@@ -895,14 +903,8 @@ adb shell dumpsys deviceidle whitelist</code></pre>
         <strong>一句话总结</strong>：Android 16 后台任务的核心思路是"能延迟就延迟，不能延迟就用 WorkManager，实在需要即时就用带类型的 FGS"。Short-lived FGS 是新的短时利器，但 3 分钟的硬限制意味着你必须认真评估任务的执行时间。FCM + WorkManager 的推拉组合是数据同步的黄金方案。
       </div>
 
-      <div class="post-tags">
-        <span>Android 16</span>
-        <span>后台任务</span>
-        <span>WorkManager</span>
-        <span>前台服务</span>
-        <span>电池优化</span>
-      </div>
-    </article>
+      
+      </article>
   </main>
 
   <footer class="footer">
