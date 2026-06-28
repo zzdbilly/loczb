@@ -603,7 +603,11 @@
             tocList.querySelectorAll('a').forEach(a => a.classList.remove('active'));
             const id = entry.target.id;
             const activeLink = tocList.querySelector('a[href="#' + id + '"]');
-            if (activeLink) activeLink.classList.add('active');
+            if (activeLink) {
+              activeLink.classList.add('active');
+              // 自动滚动目录使高亮项可见
+              activeLink.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
           }
         });
       }, { rootMargin: '-20% 0px -60% 0px' });
