@@ -4,6 +4,7 @@
 
 // Article index with tags
 const ARTICLE_INDEX = [
+  { slug: "ai-代码编辑器深度横评cursor-vs-windsurf-vs-copilot", tags: ["AI", "AI 工具", "开发技巧"], title: "AI 代码编辑器深度横评：Cursor vs Windsurf vs Copilot" },
   { slug: "git-worktree-高效多分支开发指南", tags: ["Git", "开发技巧", "效率工具"], title: "Git Worktree 高效多分支开发指南" },
   { slug: "使用新模板创建博客测试", tags: ["测试", "模板"], title: "使用新模板创建博客测试" },
   { slug: "测试博客用新模板创建的文章", tags: ["测试", "模板", "博客"], title: "测试博客：用新模板创建的文章" },
