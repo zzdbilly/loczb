@@ -995,5 +995,45 @@ scrape_configs:
       navLinks.classList.toggle('active');
     });
   </script>
+
+  <!-- Back to Top & Reading Progress -->
+  <button class="back-to-top" id="backToTop" aria-label="回到顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
+  <div class="reading-progress" id="readingProgress"></div>
+
+  <script>
+    const backToTop = document.getElementById("backToTop");
+    
+    window.addEventListener("scroll", () => {
+      if (window.scrollY > 300) {
+        backToTop.classList.add("visible");
+      } else {
+        backToTop.classList.remove("visible");
+      }
+      
+      const progressBar = document.getElementById("readingProgress");
+      if (progressBar && document.querySelector(".post-content")) {
+        const scrollTop = window.scrollY;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const progress = (scrollTop / docHeight) * 100;
+        progressBar.style.width = progress + "%";
+      }
+    });
+    
+    backToTop.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") return;
+      if (e.key === "j") window.scrollBy({ top: 200, behavior: "smooth" });
+      else if (e.key === "k") window.scrollBy({ top: -200, behavior: "smooth" });
+      else if (e.key === "/") { e.preventDefault(); document.getElementById("blog-search-input")?.focus(); }
+      else if (e.key === "Escape") document.getElementById("blog-search-results")?.classList.remove("active");
+    });
+  </script>
 </body>
 </html>
