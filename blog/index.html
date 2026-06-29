@@ -1197,7 +1197,14 @@
     
     function renderArchive() {
       const container = document.getElementById('archive-view');
-      if (!container || !archiveData) return;
+      if (!container || !archiveData) {
+        // 直接在页面上显示调试信息
+        container.innerHTML = '<div style="padding:20px;text-align:center;">加载中...</div>';
+        return;
+      }
+      // 在归档里显示6-28文章数量用于调试
+      const june28Count = archiveData.find(m => m.month === '2026-06')?.posts.filter(p => p.date.startsWith('2026-06-28')).length || 0;
+      console.log('6月28日文章数:', june28Count);
       
       container.innerHTML = archiveData.map(m => `
         <div class="archive-month">
