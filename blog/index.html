@@ -1197,11 +1197,7 @@
     
     function renderArchive() {
       const container = document.getElementById('archive-view');
-      if (!container || !archiveData) {
-        console.log('renderArchive: container=', !!container, 'archiveData=', archiveData);
-        return;
-      }
-      console.log('archiveData:', archiveData);
+      if (!container || !archiveData) return;
       
       container.innerHTML = archiveData.map(m => `
         <div class="archive-month">
