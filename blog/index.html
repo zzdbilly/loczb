@@ -177,35 +177,7 @@
       
       <div class="blog-list-container">
         <!-- Post List -->
-        <article class="blog-list-item animate-on-scroll" data-category="前端" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-06-28</span>
-              <span>·</span>
-              <span class="blog-read-time">12 min</span>
-            </div>
-            <span class="blog-list-tag">前端</span>
-          </div>
-          <h3 class="blog-list-title">
-            <a href="posts/ai-代码编辑器深度横评cursor-vs-windsurf-vs-copilot.html">AI 代码编辑器深度横评：Cursor vs Windsurf vs Copilot</a>
-          </h3>
-          <p class="blog-list-excerpt">三大主流 AI 代码编辑器全方位对比</p>
-        </article>
 
-        <article class="blog-list-item animate-on-scroll" data-category="前端" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-06-28</span>
-              <span>·</span>
-              <span class="blog-read-time">12 min</span>
-            </div>
-            <span class="blog-list-tag">前端</span>
-          </div>
-          <h3 class="blog-list-title">
-            <a href="posts/ai-代码编辑器深度横评cursor-vs-windsurf-vs-copilot.html">AI 代码编辑器深度横评：Cursor vs Windsurf vs Copilot</a>
-          </h3>
-          <p class="blog-list-excerpt">三大主流 AI 代码编辑器全方位对比</p>
-        </article>
 
         <article class="blog-list-item animate-on-scroll" data-category="前端" data-page="1">
           <div class="blog-list-header">
@@ -1176,37 +1148,51 @@
       });
     });
 
-    // 归档功能
+    // 归档功能 - 从当前页面文章列表提取，确保与文章列表显示一致
     let archiveData = null;
     
-    async function loadArchive() {
-      try {
-        const response = await fetch('../blog/articles-index.json');
-        const data = await response.json();
-        
-        // 生成归档数据
-        const archives = {};
-        data.posts.forEach(post => {
-          const month = post.date.substring(0, 7);
-          if (!archives[month]) archives[month] = [];
-          archives[month].push({
-            title: post.title,
-            date: post.date,
-            url: post.url,
-            category: post.category
+    function loadArchive() {
+      // 从当前页面的文章列表提取
+      const posts = [];
+      document.querySelectorAll('.blog-list-item').forEach(item => {
+        const dateEl = item.querySelector('.blog-date');
+        const linkEl = item.querySelector('.blog-list-title a');
+        const catEl = item.querySelector('.blog-list-tag');
+        if (dateEl && linkEl) {
+          posts.push({
+            date: dateEl.textContent.trim(),
+            title: linkEl.textContent.trim(),
+            url: linkEl.getAttribute('href'),
+            category: catEl ? catEl.textContent.trim() : ''
           });
-        });
-        
-        archiveData = Object.entries(archives)
-          .map(([month, items]) => ({
-            month,
-            count: items.length,
-            posts: items.sort((a, b) => b.date.localeCompare(a.date))
-          }))
-          .sort((a, b) => b.month.localeCompare(a.month));
-      } catch (e) {
-        console.error('加载归档失败:', e);
-      }
+        }
+      });
+      
+      // 去重
+      const seen = new Set();
+      const uniquePosts = [];
+      posts.forEach(p => {
+        if (!seen.has(p.url)) {
+          seen.add(p.url);
+          uniquePosts.push(p);
+        }
+      });
+      
+      // 生成归档数据
+      const archives = {};
+      uniquePosts.forEach(post => {
+        const month = post.date.substring(0, 7);
+        if (!archives[month]) archives[month] = [];
+        archives[month].push(post);
+      });
+      
+      archiveData = Object.entries(archives)
+        .map(([month, items]) => ({
+          month,
+          count: items.length,
+          posts: items.sort((a, b) => b.date.localeCompare(a.date))
+        }))
+        .sort((a, b) => b.month.localeCompare(a.month));
     }
     
     function renderArchive() {
