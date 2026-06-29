@@ -4,14 +4,12 @@
   <script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
   <!-- SEO Basic -->
   <meta name="description" content="张小猛的技术博客 - Android、Kotlin、AI、全栈开发。分享技术文章、学习笔记与思考。">
   <meta name="keywords" content="技术博客, Android, Kotlin, AI, 前端, DevOps, 张小猛">
   <meta name="author" content="张小猛">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://709527.xyz/blog/">
-  
   <!-- Open Graph -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://709527.xyz/blog/">
@@ -19,15 +17,12 @@
   <meta property="og:description" content="张小猛的技术博客 - Android、Kotlin、AI、全栈开发。分享技术文章、学习笔记与思考。">
   <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
   <meta property="og:locale" content="zh_CN">
-  
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="博客 | 张小猛 - loczb">
   <meta name="twitter:description" content="张小猛的技术博客 - Android、Kotlin、AI、全栈开发。">
   <meta name="twitter:image" content="https://709527.xyz/assets/images/og-image.png">
-  
   <title>博客 | 张小猛 - loczb</title>
-  
   <!-- Favicon -->
   <link rel="icon" type="image/x-icon" href="../assets/images/favicon.ico">
   <link rel="icon" type="image/svg+xml" href="../assets/images/favicon.svg">
@@ -45,14 +40,12 @@
     .pagination-btn:hover { background: var(--color-bg-tertiary); border-color: var(--color-border-hover); color: var(--color-text-primary); }
     .pagination-btn.disabled { opacity: 0.5; pointer-events: none; }
     .pagination-info { color: var(--color-text-secondary); font-size: 0.85rem; margin: 0 1rem; }
-
     /* Blog Search Bar */
     .blog-search-bar { position: relative; max-width: 600px; margin: 1.5rem auto 0; }
     .blog-search-bar input { width: 100%; padding: 0.75rem 1rem; border-radius: var(--radius-full); border: 1px solid var(--color-border); background: var(--color-bg-secondary); color: var(--color-text-primary); font-size: var(--text-sm); outline: none; transition: border-color 0.2s; }
     .blog-search-bar input::placeholder { color: var(--color-text-muted); }
     .blog-search-bar input:focus { border-color: var(--color-accent-primary); }
     .blog-search-bar svg, .blog-search-bar .search-clear { display: none; }
-
     /* Search Results Overlay */
     .blog-search-results { display: none; margin-top: 0.5rem; background: var(--color-bg-secondary); border: 1px solid var(--color-border); border-radius: var(--radius-xl); padding: 0.5rem; max-height: 60vh; overflow-y: auto; width: 100%; left: 0; right: 0; }
     .blog-search-results.active { display: block; }
@@ -65,20 +58,17 @@
     .blog-search-results .sr-meta { font-size: 0.8rem; color: var(--color-text-muted); display: flex; gap: 0.75rem; align-items: center; }
     .blog-search-results .sr-meta .category { color: var(--color-accent-primary); font-weight: 600; }
     .blog-search-results .sr-empty { text-align: center; padding: 2rem; color: var(--color-text-muted); font-size: var(--text-sm); }
-
     /* Tag Cloud */
     .tag-cloud { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; margin-top: 1.5rem; }
     .tag-cloud-item { display: inline-flex; align-items: center; padding: 0.3rem 0.8rem; border-radius: var(--radius-full); font-size: var(--text-xs); background: var(--color-bg-tertiary); border: 1px solid var(--color-border); color: var(--color-text-secondary); cursor: pointer; transition: all 0.2s; text-decoration: none; }
     .tag-cloud-item:hover, .tag-cloud-item.active { border-color: var(--color-accent-primary); color: var(--color-accent-primary); background: var(--color-accent-subtle); }
     .tag-cloud-item .tag-count { margin-left: 0.35rem; font-size: 0.7rem; color: var(--color-text-muted); }
     .tag-cloud-item.active .tag-count { color: var(--color-accent-primary); }
-
     /* View Toggle */
     .blog-view-toggle { display: flex; justify-content: flex-end; gap: 0.5rem; margin-bottom: 1.5rem; }
     .view-toggle-btn { padding: 0.4rem 0.9rem; border-radius: var(--radius-full); border: 1px solid var(--color-border); background: transparent; color: var(--color-text-secondary); font-size: var(--text-xs); cursor: pointer; transition: all 0.2s; }
     .view-toggle-btn:hover { border-color: var(--color-border-hover); color: var(--color-text-primary); }
     .view-toggle-btn.active { background: var(--color-accent-primary); border-color: var(--color-accent-primary); color: #fff; }
-
     /* Archive View */
     .archive-view { display: none; }
     .archive-view.active { display: block; }
@@ -90,7 +80,6 @@
     .archive-post-title a { color: var(--color-text-primary); text-decoration: none; font-size: var(--text-sm); transition: color 0.15s; }
     .archive-post-title a:hover { color: var(--color-accent-primary); }
     .archive-post-cat { font-size: 0.7rem; padding: 0.15rem 0.5rem; border-radius: var(--radius-full); background: var(--color-bg-tertiary); color: var(--color-text-muted); white-space: nowrap; }
-
     /* Hide list view when archive active */
     .blog-list-container.hidden { display: none; }
     .pagination.hidden { display: none; }
@@ -108,7 +97,6 @@
   <div class="loading">
     <div class="loading-spinner"></div>
   </div>
-
   <!-- Navigation -->
   <nav class="nav">
     <div class="nav-inner">
@@ -129,7 +117,6 @@
       </button>
     </div>
   </nav>
-
   <!-- Hero -->
   <main id="main-content">
   <section class="blog-hero">
@@ -139,7 +126,6 @@
         <h1 class="section-title">技术博客</h1>
         <p class="section-desc">我的技术文章、学习笔记与思考</p>
       </div>
-      
       <!-- Filters + Search -->
       <div class="blog-filters" role="tablist" aria-label="博客分类筛选">
         <button class="filter-btn filter-btn-active" data-filter="all" role="tab" aria-selected="true">全部</button>
@@ -151,7 +137,6 @@
         <button class="filter-btn" data-filter="系统编程" role="tab" aria-selected="false">系统编程</button>
         <button class="filter-btn" data-filter="安全" role="tab" aria-selected="false">安全</button>
       </div>
-
       <!-- Search Bar -->
       <div class="blog-search-bar">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
@@ -159,10 +144,8 @@
         <button class="search-clear" aria-label="清除搜索">&times;</button>
         <div id="blog-search-results" class="blog-search-results"></div>
       </div>
-
     </div>
   </section>
-
   <!-- Blog Posts List -->
   <section class="section section-narrow">
     <div class="container">
@@ -174,7 +157,6 @@
           <button class="view-toggle-btn" data-view="archive" onclick="toggleBlogView('archive')">归档</button>
         </div>
       </div>
-      
       <div class="blog-list-container">
         <!-- Post List -->
         <article class="blog-list-item animate-on-scroll" data-category="前端" data-page="1">
@@ -191,7 +173,6 @@
           </h3>
           <p class="blog-list-excerpt">三大主流 AI 代码编辑器全方位对比</p>
         </article>
-
         <article class="blog-list-item animate-on-scroll" data-category="前端" data-page="1">
           <div class="blog-list-header">
             <div class="blog-list-meta">
@@ -200,44 +181,12 @@
               <span class="blog-read-time">12 min</span>
             </div>
             <span class="blog-list-tag">前端</span>
-          </div>
-          <h3 class="blog-list-title">
-            <a href="posts/ai-代码编辑器深度横评cursor-vs-windsurf-vs-copilot.html">AI 代码编辑器深度横评：Cursor vs Windsurf vs Copilot</a>
-          </h3>
-          <p class="blog-list-excerpt">三大主流 AI 代码编辑器全方位对比</p>
-        </article>
-
-        <article class="blog-list-item animate-on-scroll" data-category="前端" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-06-28</span>
-              <span>·</span>
-              <span class="blog-read-time">12 min</span>
-            </div>
-            <span class="blog-list-tag">前端</span>
-          </div>
-          <h3 class="blog-list-title">
-            <a href="posts/ai-代码编辑器深度横评cursor-vs-windsurf-vs-copilot.html">AI 代码编辑器深度横评：Cursor vs Windsurf vs Copilot</a>
-          </h3>
-          <p class="blog-list-excerpt">三大主流 AI 代码编辑器全方位对比，帮你找到最适合的工具</p>
-        </article>
-
-        <article class="blog-list-item animate-on-scroll" data-category="开发" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-06-28</span>
-              <span>·</span>
-              <span class="blog-read-time">12 min</span>
-            </div>
-            <span class="blog-list-tag">开发</span>
           </div>
           <h3 class="blog-list-title">
             <a href="posts/git-worktree-高效多分支开发指南.html">Git Worktree 高效多分支开发指南</a>
           </h3>
           <p class="blog-list-excerpt">Git Worktree 让你同时检出多个分支，切换零成本，告别 stash 和冲突的烦恼。本文详解 worktree 的使用场景和最佳实践。</p>
         </article>
-
-
         <article class="blog-list-item animate-on-scroll" data-category="Android" data-page="1">
           <div class="blog-list-header">
             <div class="blog-list-meta">
@@ -252,7 +201,6 @@
           </h3>
           <p class="blog-list-excerpt">JobScheduler 强化、前台服务严格限制、WorkManager 迁移策略与兼容性适配完整指南。</p>
         </article>
-
         <article class="blog-list-item animate-on-scroll" data-category="Android" data-page="1">
           <div class="blog-list-header">
             <div class="blog-list-meta">
@@ -267,7 +215,6 @@
           </h3>
           <p class="blog-list-excerpt">Live Updates、Rich Ongoing、Bubble API 增强、IMPORTANCE_CRITICAL 新增级别与通知迁移最佳实践。</p>
         </article>
-
         <article class="blog-list-item animate-on-scroll" data-category="Android" data-page="1">
           <div class="blog-list-header">
             <div class="blog-list-meta">
@@ -282,7 +229,6 @@
           </h3>
           <p class="blog-list-excerpt">核心注解、ViewModel 注入、多模块架构、作用域管理、第三方库集成与测试最佳实践完整指南。</p>
         </article>
-
         <article class="blog-list-item animate-on-scroll" data-category="前端" data-page="1">
           <div class="blog-list-header">
             <div class="blog-list-meta">
@@ -297,7 +243,6 @@
           </h3>
           <p class="blog-list-excerpt">document.startViewTransition() 详解、伪元素树、自定义动画、跨页面导航过渡、SPA 集成与列表动画完整指南。</p>
         </article>
-
         <article class="blog-list-item animate-on-scroll" data-category="DevOps" data-page="1">
           <div class="blog-list-header">
             <div class="blog-list-meta">
@@ -312,7 +257,6 @@
           </h3>
           <p class="blog-list-excerpt">矩阵构建、可复用工作流、自定义 Action、OIDC 集成、安全审计与性能优化完整指南。</p>
         </article>
-
         <article class="blog-list-item animate-on-scroll" data-category="开发" data-page="1">
           <div class="blog-list-header">
             <div class="blog-list-meta">
@@ -327,7 +271,6 @@
           </h3>
           <p class="blog-list-excerpt">Goroutine 与 Channel 实战、GMP 调度模型、Context 包详解、Fan-Out/Fan-In 模式与并发测试最佳实践。</p>
         </article>
-
         <article class="blog-list-item animate-on-scroll" data-category="安全" data-page="1">
           <div class="blog-list-header">
             <div class="blog-list-meta">
@@ -342,7 +285,6 @@
           </h3>
           <p class="blog-list-excerpt">TLS 1.3 握手协议深入拆解、密码套件对比、Nginx 生产配置与性能优化完整指南。</p>
         </article>
-
         <article class="blog-list-item animate-on-scroll" data-category="Android" data-page="1">
           <div class="blog-list-header">
             <div class="blog-list-meta">
@@ -357,7 +299,6 @@
           </h3>
           <p class="blog-list-excerpt">背压策略（conflate/buffer/collectLatest）与共享流（shareIn/stateIn）深度解析，附 Android MVVM 实战最佳实践。</p>
         </article>
-
         <article class="blog-list-item animate-on-scroll" data-category="DevOps" data-page="1">
           <div class="blog-list-header">
             <div class="blog-list-meta">
@@ -372,7 +313,6 @@
           </h3>
           <p class="blog-list-excerpt">从 BPF 程序编写到 bpftrace、BCC 工具链使用，覆盖网络、安全、性能分析场景的系统性入门指南。</p>
         </article>
-
         <article class="blog-list-item animate-on-scroll" data-category="DevOps" data-page="1">
           <div class="blog-list-header">
             <div class="blog-list-meta">
@@ -387,7 +327,6 @@
           </h3>
           <p class="blog-list-excerpt">worker 配置、SSL 优化、缓存策略、负载均衡、限流与监控完整实践指南。</p>
         </article>
-
         <article class="blog-list-item animate-on-scroll" data-category="数据库" data-page="2">
           <div class="blog-list-header">
             <div class="blog-list-meta">
@@ -402,7 +341,6 @@
           </h3>
           <p class="blog-list-excerpt">B-Tree、GiST、GIN 索引类型对比，复合索引设计、EXPLAIN 执行计划分析与慢查询优化案例。</p>
         </article>
-
         <article class="blog-list-item animate-on-scroll" data-category="AI" data-page="2">
           <div class="blog-list-header">
             <div class="blog-list-meta">
@@ -417,7 +355,6 @@
           </h3>
           <p class="blog-list-excerpt">COSTAR 框架、结构化思维链、提示词版本管理、Few-shot 设计、Agent 提示词契约与自动化评测体系。</p>
         </article>
-
         <article class="blog-list-item animate-on-scroll" data-category="AI" data-page="2">
           <div class="blog-list-header">
             <div class="blog-list-meta">
@@ -432,7 +369,6 @@
           </h3>
           <p class="blog-list-excerpt">文档分块策略、嵌入模型选型、向量数据库对比、LangChain 实现、HyDE/RAG-Fusion 高级优化与 RAGAS 评估框架。</p>
         </article>
-
         <article class="blog-list-item animate-on-scroll" data-category="前端" data-page="2">
           <div class="blog-list-header">
             <div class="blog-list-meta">
@@ -447,7 +383,6 @@
           </h3>
           <p class="blog-list-excerpt">从 Rust 编译到浏览器运行，WASM 与 JS 互操作、内存管理、SIMD 优化与真实应用场景全流程实战。</p>
         </article>
-
         <article class="blog-list-item animate-on-scroll" data-category="系统编程" data-page="2">
           <div class="blog-list-header">
             <div class="blog-list-meta">
@@ -462,7 +397,6 @@
           </h3>
           <p class="blog-list-excerpt">comptime 编译期计算、Allocator 模式、错误处理、C 互操作、交叉编译与构建系统深度解析。</p>
         </article>
-
         <article class="blog-list-item animate-on-scroll" data-category="Android" data-page="2">
           <div class="blog-list-header">
             <div class="blog-list-meta">
@@ -491,7 +425,6 @@
           </h3>
           <p class="blog-list-excerpt">从架构设计到代码实现，完整演示如何用 KMP 将 Android 业务逻辑共享到 iOS，涵盖 expect/actual、Ktor、DataStore 等核心内容。</p>
         </article>
-
         <article class="blog-list-item animate-on-scroll" data-category="Android" data-page="2">
           <div class="blog-list-header">
             <div class="blog-list-meta">
@@ -506,7 +439,6 @@
           </h3>
           <p class="blog-list-excerpt">启动优化、内存管理、渲染调优、工具链与持续监控——Android 性能优化综合实战指南。</p>
         </article>
-
         <article class="blog-list-item animate-on-scroll" data-category="Android" data-page="2">
           <div class="blog-list-header">
             <div class="blog-list-meta">
@@ -521,7 +453,6 @@
           </h3>
           <p class="blog-list-excerpt">类型安全导航、路由设计、DeepLink、动画过渡、多模块解耦——Compose Navigation 完整进阶实战。</p>
         </article>
-
         <article class="blog-list-item animate-on-scroll" data-category="Android" data-page="2">
           <div class="blog-list-header">
             <div class="blog-list-meta">
@@ -536,7 +467,6 @@
           </h3>
           <p class="blog-list-excerpt">Live Updates、大屏强制适配、AICore 增强、APV 编码支持等开发者必知的 Android 16 新特性。</p>
         </article>
-
         <article class="blog-list-item animate-on-scroll" data-category="安全" data-page="3">
           <div class="blog-list-header">
             <div class="blog-list-meta">
@@ -551,7 +481,6 @@
           </h3>
           <p class="blog-list-excerpt">Android 应用签名与安全加固完整指南，覆盖签名机制、混淆、完整性校验、Play Integrity API 等。</p>
         </article>
-
         <article class="blog-list-item animate-on-scroll" data-category="Android" data-page="3">
           <div class="blog-list-header">
             <div class="blog-list-meta">
@@ -566,7 +495,6 @@
           </h3>
           <p class="blog-list-excerpt">BOM 2026.04.01 来了：Compose 1.11、共享元素过渡调试、触控板事件、Testing v2 默认、Navigation3 补丁——全方位解读。</p>
         </article>
-
         <article class="blog-list-item animate-on-scroll" data-category="AI" data-page="3">
           <div class="blog-list-header">
             <div class="blog-list-meta">
@@ -581,7 +509,6 @@
           </h3>
           <p class="blog-list-excerpt">100 项发布，从 Gemini 3.5 Flash 到 Android XR 眼镜，Google I/O 2026 全面回顾。</p>
         </article>
-
         <article class="blog-list-item animate-on-scroll" data-category="Kotlin" data-page="3">
           <div class="blog-list-header">
             <div class="blog-list-meta">
@@ -596,7 +523,6 @@
           </h3>
           <p class="blog-list-excerpt">Context Parameters 正式稳定、Name-based Destructuring、Lombok 编译器插件 Alpha、Compose Multiplatform 1.11 等全部新特性详解。</p>
         </article>
-
         <article class="blog-list-item animate-on-scroll" data-category="Android" data-page="3">
           <div class="blog-list-header">
             <div class="blog-list-meta">
@@ -611,7 +537,6 @@
           </h3>
           <p class="blog-list-excerpt">MCP 协议在 Android 端的集成实战，从概念到代码实现，构建 AI 驱动的 Android 应用。</p>
         </article>
-
         <article class="blog-list-item animate-on-scroll" data-category="AI" data-page="3">
           <div class="blog-list-header">
             <div class="blog-list-meta">
@@ -626,7 +551,6 @@
           </h3>
           <p class="blog-list-excerpt">从 Prompt 设计到上下文管理的实战指南，掌握高效 AI 辅助编程的核心方法论。</p>
         </article>
-
         <article class="blog-list-item animate-on-scroll" data-category="Android" data-page="3">
           <div class="blog-list-header">
             <div class="blog-list-meta">
@@ -641,7 +565,6 @@
           </h3>
           <p class="blog-list-excerpt">深入解析 AICore 架构与 ML Kit GenAI API，提供完整集成代码与性能优化建议。</p>
         </article>
-
         <article class="blog-list-item animate-on-scroll" data-category="前端" data-page="3">
           <div class="blog-list-header">
             <div class="blog-list-meta">
@@ -656,7 +579,6 @@
           </h3>
           <p class="blog-list-excerpt">基于容器尺寸的响应式设计，比媒体查询更灵活的组件级响应式方案。</p>
         </article>
-
         <article class="blog-list-item animate-on-scroll" data-category="DevOps" data-page="3">
           <div class="blog-list-header">
             <div class="blog-list-meta">
@@ -671,7 +593,6 @@
           </h3>
           <p class="blog-list-excerpt">多容器编排、网络配置、数据持久化、环境变量管理、健康检查等实战技巧。</p>
         </article>
-
         <article class="blog-list-item animate-on-scroll" data-category="前端" data-page="3">
           <div class="blog-list-header">
             <div class="blog-list-meta">
@@ -686,7 +607,6 @@
           </h3>
           <p class="blog-list-excerpt">理解服务端组件的工作原理、数据获取方式、与客户端组件的交互及最佳实践。</p>
         </article>
-
         <article class="blog-list-item animate-on-scroll" data-category="系统编程" data-page="4">
           <div class="blog-list-header">
             <div class="blog-list-meta">
@@ -701,7 +621,6 @@
           </h3>
           <p class="blog-list-excerpt">从零开始学习 Rust，掌握所有权、借用、生命周期等核心概念。</p>
         </article>
-
         <article class="blog-list-item animate-on-scroll" data-category="数据库" data-page="4">
           <div class="blog-list-header">
             <div class="blog-list-meta">
@@ -716,7 +635,6 @@
           </h3>
           <p class="blog-list-excerpt">深入 SQLite 的 WAL 模式原理、并发处理、索引策略、PRAGMA 配置等性能优化技巧。</p>
         </article>
-
         <article class="blog-list-item animate-on-scroll" data-category="开发" data-page="4">
           <div class="blog-list-header">
             <div class="blog-list-meta">
@@ -731,7 +649,6 @@
           </h3>
           <p class="blog-list-excerpt">掌握 git rebase -i、cherry-pick、add -p 等进阶操作，提升代码管理效率。</p>
         </article>
-
         <article class="blog-list-item animate-on-scroll" data-category="Android" data-page="4">
           <div class="blog-list-header">
             <div class="blog-list-meta">
@@ -746,7 +663,6 @@
           </h3>
           <p class="blog-list-excerpt">掌握声明式 UI 动画的核心技巧，打造流畅的用户体验。</p>
         </article>
-
         <article class="blog-list-item animate-on-scroll" data-category="前端" data-page="4">
           <div class="blog-list-header">
             <div class="blog-list-meta">
@@ -761,7 +677,6 @@
           </h3>
           <p class="blog-list-excerpt">从基础到高级，掌握条件类型、映射类型、模板字面量类型等核心技巧。</p>
         </article>
-
         <article class="blog-list-item animate-on-scroll" data-category="前端" data-page="4">
           <div class="blog-list-header">
             <div class="blog-list-meta">
@@ -776,7 +691,6 @@
           </h3>
           <p class="blog-list-excerpt">通过完整博客系统示例，掌握 Next.js 16 核心特性与最佳实践。</p>
         </article>
-
         <article class="blog-list-item animate-on-scroll" data-category="AI" data-page="4">
           <div class="blog-list-header">
             <div class="blog-list-meta">
@@ -791,7 +705,6 @@
           </h3>
           <p class="blog-list-excerpt">三个月深度使用后的真实对比评测，帮你选择最适合的 AI 编程助手。</p>
         </article>
-
         <article class="blog-list-item animate-on-scroll" data-category="AI" data-page="4">
           <div class="blog-list-header">
             <div class="blog-list-meta">
@@ -806,7 +719,6 @@
           </h3>
           <p class="blog-list-excerpt">2026-04-09 Google 宣布深度整合后，第一时间深度体验。一个界面搞定文档分析和创意生成。</p>
         </article>
-
         <article class="blog-list-item animate-on-scroll" data-category="AI" data-page="4">
           <div class="blog-list-header">
             <div class="blog-list-meta">
@@ -821,7 +733,6 @@
           </h3>
           <p class="blog-list-excerpt">Google 两大 AI 工具协同工作：NotebookLM 理解私有文档，Gemini 创意生成，打造高效知识工作流。</p>
         </article>
-
         <article class="blog-list-item animate-on-scroll" data-category="DevOps" data-page="4">
           <div class="blog-list-header">
             <div class="blog-list-meta">
@@ -836,7 +747,6 @@
           </h3>
           <p class="blog-list-excerpt">GitHub Pages + 自定义域名 + GitHub Actions 自动化部署完整指南，零成本搭建高性能博客。</p>
         </article>
-
         <article class="blog-list-item animate-on-scroll" data-category="Kotlin" data-page="5">
           <div class="blog-list-header">
             <div class="blog-list-meta">
@@ -851,7 +761,6 @@
           </h3>
           <p class="blog-list-excerpt">从入门到精通，掌握 Kotlin 协程的核心技巧与常见陷阱，写出更优雅的异步代码。</p>
         </article>
-
         <article class="blog-list-item animate-on-scroll" data-category="AI" data-page="5">
           <div class="blog-list-header">
             <div class="blog-list-meta">
@@ -866,7 +775,6 @@
           </h3>
           <p class="blog-list-excerpt">完全本地化搭建 RAG 系统，数据不出本机，实现接近 GPT-4 的智能问答体验。</p>
         </article>
-
         <article class="blog-list-item animate-on-scroll" data-category="Android" data-page="5">
           <div class="blog-list-header">
             <div class="blog-list-meta">
@@ -881,7 +789,6 @@
           </h3>
           <p class="blog-list-excerpt">深度对比 Sherpa ONNX、Whisper、Vosk 三大离线语音识别方案，提供核心集成代码与性能优化建议。</p>
         </article>
-
         <article class="blog-list-item animate-on-scroll" data-category="AI" data-page="5">
           <div class="blog-list-header">
             <div class="blog-list-meta">
@@ -896,7 +803,6 @@
           </h3>
           <p class="blog-list-excerpt">深入探讨 ONNX 模型在移动端的部署实践，包括模型优化、量化策略、推理框架选型与性能对比。</p>
         </article>
-
         <article class="blog-list-item animate-on-scroll" data-category="前端" data-page="5">
           <div class="blog-list-header">
             <div class="blog-list-meta">
@@ -911,7 +817,6 @@
           </h3>
           <p class="blog-list-excerpt">深入解析 Service Worker 缓存策略、manifest.json 配置、推送通知实现，让你的 Web 应用像原生 App 一样运行。</p>
         </article>
-
         <article class="blog-list-item animate-on-scroll" data-category="安全" data-page="5">
           <div class="blog-list-header">
             <div class="blog-list-meta">
@@ -926,7 +831,6 @@
           </h3>
           <p class="blog-list-excerpt">从端口修改到密钥认证，全方位提升 Linux VPS 安全性。适用于 AWS、阿里云、腾讯云等主流云服务商。</p>
         </article>
-
         <article class="blog-list-item animate-on-scroll" data-category="DevOps" data-page="5">
           <div class="blog-list-header">
             <div class="blog-list-meta">
@@ -941,7 +845,6 @@
           </h3>
           <p class="blog-list-excerpt">从原理到实战，手把手教你搭建私有 DERP 服务器。解决官方 DERP 延迟高、隐私顾虑问题。</p>
         </article>
-
         <article class="blog-list-item animate-on-scroll" data-category="DevOps" data-page="5">
           <div class="blog-list-header">
             <div class="blog-list-meta">
@@ -956,7 +859,6 @@
           </h3>
           <p class="blog-list-excerpt">深入解析 VS Code 端口转发背后的 SSH 隧道原理，对比 Tailscale、Nginx 反向代理方案。</p>
         </article>
-
         <article class="blog-list-item animate-on-scroll" data-category="AI" data-page="5">
           <div class="blog-list-header">
             <div class="blog-list-meta">
@@ -971,7 +873,6 @@
           </h3>
           <p class="blog-list-excerpt">论文解读：Mobile-GS 第一次让 3DGS 在移动端实现实时渲染。骁龙 8 Gen 3 上 116 FPS，模型仅 4.8MB。</p>
         </article>
-
         <article class="blog-list-item animate-on-scroll" data-category="AI Agent" data-page="5">
           <div class="blog-list-header">
             <div class="blog-list-meta">
@@ -986,7 +887,6 @@
           </h3>
           <p class="blog-list-excerpt">手把手教你开发一个 GitHub 项目分析技能。从需求分析、技术选型、核心开发到集成测试。</p>
         </article>
-
         <article class="blog-list-item animate-on-scroll" data-category="AI" data-page="6">
           <div class="blog-list-header">
             <div class="blog-list-meta">
@@ -1002,16 +902,13 @@
           <p class="blog-list-excerpt">全面介绍 OpenClaw 的安装配置、核心功能、高级技巧和踩坑记录。</p>
         </article>
       </div>
-
       <!-- 分页 -->
       <div class="pagination" id="pagination"></div>
-
       <!-- Archive View -->
       <div id="archive-view" class="archive-view"></div>
     </div>
   </section>
   </main>
-
   <!-- Footer -->
   <footer class="footer" role="contentinfo">
     <div class="footer-inner">
@@ -1024,7 +921,6 @@
       <p class="footer-copyright">© 2026 张小猛</p>
     </div>
   </footer>
-
   <script src="../assets/js/main.js"></script>
   <script>
     // 博客列表分页 + 筛选 - 稳定方案
@@ -1034,40 +930,33 @@
     var totalPages = 1;
     var currentPage = 1;
     var currentFilter = 'all';
-
     // 计算总页数
     function calcTotalPages() {
       return Math.max(1, Math.ceil(filteredPosts.length / POSTS_PER_PAGE));
     }
-
     // 从 URL 读取参数
     function initFromURL() {
       var params = new URLSearchParams(window.location.search);
       var pageParam = params.get('page');
       var filterParam = params.get('filter');
-      
       if (filterParam) currentFilter = filterParam;
       if (pageParam && !isNaN(pageParam)) {
         currentPage = Math.max(1, parseInt(pageParam));
       }
     }
-
     // 应用筛选
     function applyFilter(filter) {
       currentFilter = filter;
       currentPage = 1; // 筛选后重置到第一页
-      
       // 更新筛选按钮
       document.querySelectorAll('.filter-btn').forEach(btn => {
         btn.classList.toggle('filter-btn-active', btn.dataset.filter === filter);
         btn.setAttribute('aria-selected', btn.dataset.filter === filter);
       });
-      
       // 筛选文章
       filteredPosts = filter === 'all' 
         ? Array.from(allPosts)
         : Array.from(allPosts).filter(post => post.dataset.category === filter);
-      
       // 更新标题显示
       var titleEl = document.getElementById('blog-filter-title');
       if (titleEl) {
@@ -1077,10 +966,8 @@
           titleEl.textContent = filter + ' 文章 · ' + filteredPosts.length + ' 篇';
         }
       }
-      
       totalPages = calcTotalPages();
       showPage(1);
-      
       // 更新 URL
       var params = new URLSearchParams();
       if (filter !== 'all') params.set('filter', filter);
@@ -1088,56 +975,44 @@
       var newUrl = params.toString() ? '?' + params.toString() : window.location.pathname;
       window.history.pushState({ page: currentPage, filter: filter }, '', newUrl);
     }
-
     // 显示指定页
     window.showPage = function(page) {
       if (page < 1 || page > totalPages) return;
-      
       // 先隐藏所有文章
       allPosts.forEach(post => post.style.display = 'none');
-      
       // 显示当前页的筛选文章
       var start = (page - 1) * POSTS_PER_PAGE;
       var end = start + POSTS_PER_PAGE;
       filteredPosts.slice(start, end).forEach(post => post.style.display = '');
-      
       currentPage = page;
       updatePagination(page);
-      
       // 更新 URL
       var params = new URLSearchParams();
       if (currentFilter !== 'all') params.set('filter', currentFilter);
       if (page > 1) params.set('page', page);
       var newUrl = params.toString() ? '?' + params.toString() : window.location.pathname;
       window.history.pushState({ page: page, filter: currentFilter }, '', newUrl);
-      
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
-
     // 更新分页按钮
     function updatePagination(page) {
       var container = document.getElementById('pagination');
       if (!container) return;
-      
       if (totalPages <= 1) {
         container.innerHTML = '';
         return;
       }
-
       var prevDisabled = page === 1 ? 'disabled' : '';
       var nextDisabled = page === totalPages ? 'disabled' : '';
-
       container.innerHTML = [
         '<a href="#" class="pagination-btn ' + prevDisabled + '" onclick="event.preventDefault(); showPage(' + (page - 1) + ')">← 上一页</a>',
         '<span class="pagination-info">第 ' + page + ' / ' + totalPages + ' 页（共 ' + filteredPosts.length + ' 篇）</span>',
         '<a href="#" class="pagination-btn ' + nextDisabled + '" onclick="event.preventDefault(); showPage(' + (page + 1) + ')">下一页 →</a>'
       ].join('');
     }
-
     // 初始化
     window.addEventListener('DOMContentLoaded', function() {
       initFromURL();
-      
       // 设置初始筛选状态
       if (currentFilter !== 'all') {
         applyFilter(currentFilter);
@@ -1145,7 +1020,6 @@
         totalPages = calcTotalPages();
         showPage(currentPage);
       }
-      
       // 绑定筛选按钮
       document.querySelectorAll('.filter-btn').forEach(btn => {
         btn.addEventListener('click', function(e) {
@@ -1153,7 +1027,6 @@
           applyFilter(this.dataset.filter);
         });
       });
-      
       // 处理浏览器后退
       window.addEventListener('popstate', function(e) {
         if (e.state) {
@@ -1163,27 +1036,22 @@
             ? Array.from(allPosts)
             : Array.from(allPosts).filter(post => post.dataset.category === currentFilter);
           totalPages = calcTotalPages();
-          
           // 更新筛选按钮
           document.querySelectorAll('.filter-btn').forEach(btn => {
             btn.classList.toggle('filter-btn-active', btn.dataset.filter === currentFilter);
           });
-          
           showPage(currentPage);
         } else {
           applyFilter('all');
         }
       });
     });
-
     // 归档功能
     let archiveData = null;
-    
     async function loadArchive() {
       try {
         const response = await fetch('../blog/articles-index.json?t=202606292100');
         const data = await response.json();
-        
         // 生成归档数据
         const archives = {};
         data.posts.forEach(post => {
@@ -1196,7 +1064,6 @@
             category: post.category
           });
         });
-        
         archiveData = Object.entries(archives)
           .map(([month, items]) => ({
             month,
@@ -1208,11 +1075,9 @@
         console.error('加载归档失败:', e);
       }
     }
-    
     function renderArchive() {
       const container = document.getElementById('archive-view');
       if (!container || !archiveData) return;
-      
       container.innerHTML = archiveData.map(m => `
         <div class="archive-month">
           <div class="archive-month-header">
@@ -1230,13 +1095,11 @@
         </div>
       `).join('');
     }
-    
     function toggleBlogView(view) {
       const listContainer = document.querySelector('.blog-list-container');
       const archiveView = document.getElementById('archive-view');
       const listBtn = document.querySelector('[data-view="list"]');
       const archiveBtn = document.querySelector('[data-view="archive"]');
-      
       if (view === 'archive') {
         listContainer.classList.add('hidden');
         archiveView.classList.add('active');
@@ -1250,11 +1113,9 @@
         archiveBtn.classList.remove('active');
       }
     }
-
   </script>
   <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.js"></script>
   <script src="../assets/js/search.js"></script>
-
   <!-- Back to Top & Reading Progress -->
   <button class="back-to-top" id="backToTop" aria-label="回到顶部">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1262,18 +1123,15 @@
     </svg>
   </button>
   <div class="reading-progress" id="readingProgress"></div>
-
   <script>
     // Back to Top button
     const backToTop = document.getElementById("backToTop");
-    
     window.addEventListener("scroll", () => {
       if (window.scrollY > 300) {
         backToTop.classList.add("visible");
       } else {
         backToTop.classList.remove("visible");
       }
-      
       // Reading progress for blog posts
       const progressBar = document.getElementById("readingProgress");
       if (progressBar && document.querySelector(".post-content")) {
@@ -1283,11 +1141,9 @@
         progressBar.style.width = progress + "%";
       }
     });
-    
     backToTop.addEventListener("click", () => {
       window.scrollTo({ top: 0, behavior: "smooth" });
     });
-
     // Keyboard shortcuts
     document.addEventListener("keydown", (e) => {
       if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") return;
