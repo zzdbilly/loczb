@@ -1162,9 +1162,9 @@
       while ((match = articleRegex.exec(html)) !== null) {
         posts.push({
           date: match[1].trim(),
-          url: match[2].trim(),
-          title: match[3].trim(),
-          category: match[4].trim()
+          category: match[2].trim(),
+          url: match[3].trim(),
+          title: match[4].trim()
         });
       }
       
