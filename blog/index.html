@@ -1228,7 +1228,7 @@
         archiveView.classList.add('active');
         listBtn.classList.remove('active');
         archiveBtn.classList.add('active');
-        if (!archiveData) loadArchive().then(renderArchive);
+        if (!archiveData) { loadArchive(); renderArchive(); }
       } else {
         listContainer.classList.remove('hidden');
         archiveView.classList.remove('active');
