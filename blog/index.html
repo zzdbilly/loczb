@@ -1152,31 +1152,21 @@
     let archiveData = null;
     
     function loadArchive() {
-      // 先显示所有文章（分页会隐藏非当前页），读取完恢复
-      const allItems = document.querySelectorAll('.blog-list-item');
-      const hiddenItems = [];
-      allItems.forEach(item => {
-        if (item.style.display === 'none') {
-          hiddenItems.push(item);
-          item.style.display = '';
-        }
-      });
-      
-      // 从当前页面的文章列表提取
+      // 从 HTML 源码提取所有文章（不管分页隐藏状态）
+      const html = document.documentElement.outerHTML;
       const posts = [];
-      document.querySelectorAll('.blog-list-item').forEach(item => {
-        const dateEl = item.querySelector('.blog-date');
-        const linkEl = item.querySelector('.blog-list-title a');
-        const catEl = item.querySelector('.blog-list-tag');
-        if (dateEl && linkEl) {
-          posts.push({
-            date: dateEl.textContent.trim(),
-            title: linkEl.textContent.trim(),
-            url: linkEl.getAttribute('href'),
-            category: catEl ? catEl.textContent.trim() : ''
-          });
-        }
-      });
+      
+      // 使用正则从 HTML 源码提取所有文章（顺序: date -> tag -> link）
+      const articleRegex = /<article class="blog-list-item[^"]*"[^>]*>.*?<span class="blog-date">([^<]+)<\/span>.*?<span class="blog-list-tag">([^<]+)<\/span>.*?<a href="([^"]+)">([^<]+)<\/a>/g;
+      let match;
+      while ((match = articleRegex.exec(html)) !== null) {
+        posts.push({
+          date: match[1].trim(),
+          url: match[2].trim(),
+          title: match[3].trim(),
+          category: match[4].trim()
+        });
+      }
       
       // 去重
       const seen = new Set();
