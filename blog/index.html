@@ -3,9 +3,6 @@
 <head>
   <script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
   <meta charset="UTF-8">
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-  <meta http-equiv="Pragma" content="no-cache">
-  <meta http-equiv="Expires" content="0">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <!-- SEO Basic -->
@@ -180,7 +177,35 @@
       
       <div class="blog-list-container">
         <!-- Post List -->
+        <article class="blog-list-item animate-on-scroll" data-category="前端" data-page="1">
+          <div class="blog-list-header">
+            <div class="blog-list-meta">
+              <span class="blog-date">2026-06-28</span>
+              <span>·</span>
+              <span class="blog-read-time">12 min</span>
+            </div>
+            <span class="blog-list-tag">前端</span>
+          </div>
+          <h3 class="blog-list-title">
+            <a href="posts/ai-代码编辑器深度横评cursor-vs-windsurf-vs-copilot.html">AI 代码编辑器深度横评：Cursor vs Windsurf vs Copilot</a>
+          </h3>
+          <p class="blog-list-excerpt">三大主流 AI 代码编辑器全方位对比</p>
+        </article>
 
+        <article class="blog-list-item animate-on-scroll" data-category="前端" data-page="1">
+          <div class="blog-list-header">
+            <div class="blog-list-meta">
+              <span class="blog-date">2026-06-28</span>
+              <span>·</span>
+              <span class="blog-read-time">12 min</span>
+            </div>
+            <span class="blog-list-tag">前端</span>
+          </div>
+          <h3 class="blog-list-title">
+            <a href="posts/ai-代码编辑器深度横评cursor-vs-windsurf-vs-copilot.html">AI 代码编辑器深度横评：Cursor vs Windsurf vs Copilot</a>
+          </h3>
+          <p class="blog-list-excerpt">三大主流 AI 代码编辑器全方位对比</p>
+        </article>
 
         <article class="blog-list-item animate-on-scroll" data-category="前端" data-page="1">
           <div class="blog-list-header">
@@ -1151,365 +1176,42 @@
       });
     });
 
-    // 归档功能 - 从当前页面文章列表提取，确保与文章列表显示一致
+    // 归档功能
     let archiveData = null;
     
-    // 归档数据硬编码，直接使用
-    const archiveData = [
-  {
-    "month": "2026-06",
-    "count": 27,
-    "posts": [
-      {
-        "date": "2026-06-28",
-        "category": "前端",
-        "url": "posts/ai-代码编辑器深度横评cursor-vs-windsurf-vs-copilot.html",
-        "title": "AI 代码编辑器深度横评：Cursor vs Windsurf vs Copilot"
-      },
-      {
-        "date": "2026-06-28",
-        "category": "开发",
-        "url": "posts/git-worktree-高效多分支开发指南.html",
-        "title": "Git Worktree 高效多分支开发指南"
-      },
-      {
-        "date": "2026-06-27",
-        "category": "Android",
-        "url": "posts/android-16-background-tasks.html",
-        "title": "Android 16 后台任务新限制：开发者迁移指南"
-      },
-      {
-        "date": "2026-06-27",
-        "category": "Android",
-        "url": "posts/android-16-notifications.html",
-        "title": "Android 16 通知系统新 API 详解"
-      },
-      {
-        "date": "2026-06-27",
-        "category": "Android",
-        "url": "posts/android-hilt-dependency-injection.html",
-        "title": "Android Hilt 依赖注入最佳实践：从入门到架构"
-      },
-      {
-        "date": "2026-06-27",
-        "category": "前端",
-        "url": "posts/css-view-transitions.html",
-        "title": "CSS View Transitions API 实战：页面过渡动画新范式"
-      },
-      {
-        "date": "2026-06-27",
-        "category": "DevOps",
-        "url": "posts/github-actions-advanced.html",
-        "title": "GitHub Actions 高级工作流：CI/CD 最佳实践"
-      },
-      {
-        "date": "2026-06-27",
-        "category": "开发",
-        "url": "posts/go-concurrency-patterns.html",
-        "title": "Go 并发模式：Channel 与 Context"
-      },
-      {
-        "date": "2026-06-27",
-        "category": "安全",
-        "url": "posts/https-tls13-deep-dive.html",
-        "title": "HTTPS 与 TLS 1.3 深度解析：从握手到部署"
-      },
-      {
-        "date": "2026-06-27",
-        "category": "Android",
-        "url": "posts/kotlin-flow-advanced.html",
-        "title": "Kotlin Flow 进阶：背压策略与共享流"
-      },
-      {
-        "date": "2026-06-27",
-        "category": "DevOps",
-        "url": "posts/linux-ebpf-getting-started.html",
-        "title": "Linux eBPF 入门：内核可观测性新范式"
-      },
-      {
-        "date": "2026-06-27",
-        "category": "DevOps",
-        "url": "posts/nginx-reverse-proxy-tuning.html",
-        "title": "Nginx 反向代理性能调优：从入门到生产"
-      },
-      {
-        "date": "2026-06-27",
-        "category": "数据库",
-        "url": "posts/postgresql-index-optimization.html",
-        "title": "PostgreSQL 索引优化实战：从 B-Tree 到执行计划"
-      },
-      {
-        "date": "2026-06-27",
-        "category": "AI",
-        "url": "posts/prompt-engineering-systematic.html",
-        "title": "Prompt Engineering 系统化方法论"
-      },
-      {
-        "date": "2026-06-27",
-        "category": "AI",
-        "url": "posts/rag-introduction.html",
-        "title": "RAG 检索增强生成入门：从理念到落地"
-      },
-      {
-        "date": "2026-06-27",
-        "category": "前端",
-        "url": "posts/webassembly-in-practice.html",
-        "title": "WebAssembly 实战：浏览器端高性能计算"
-      },
-      {
-        "date": "2026-06-27",
-        "category": "系统编程",
-        "url": "posts/zig-language-introduction.html",
-        "title": "Zig 语言入门：比 C 更安全的系统编程"
-      },
-      {
-        "date": "2026-06-24",
-        "category": "Android",
-        "url": "posts/android-gradle-kts-migration.html",
-        "title": "Android Gradle 迁移到 KTS 完整指南：从 Groovy 到 Kotlin DSL"
-      },
-      {
-        "date": "2026-06-24",
-        "category": "Kotlin",
-        "url": "posts/kotlin-multiplatform-practice.html",
-        "title": "Kotlin Multiplatform 实战：共享业务逻辑到 iOS"
-      },
-      {
-        "date": "2026-06-22",
-        "category": "Android",
-        "url": "posts/android-performance-optimization.html",
-        "title": "Android 性能优化完整实战：从启动到渲染"
-      },
-      {
-        "date": "2026-06-22",
-        "category": "Android",
-        "url": "posts/compose-navigation-guide.html",
-        "title": "Jetpack Compose Navigation 进阶指南：从路由设计到深层链接"
-      },
-      {
-        "date": "2026-06-19",
-        "category": "Android",
-        "url": "posts/android-16-features.html",
-        "title": "Android 16 新特性详解：开发者需要知道的 8 件事"
-      },
-      {
-        "date": "2026-06-19",
-        "category": "安全",
-        "url": "posts/android-app-security-hardening.html",
-        "title": "Android 应用签名与安全加固完整指南"
-      },
-      {
-        "date": "2026-06-19",
-        "category": "Android",
-        "url": "posts/compose-april-2026-update.html",
-        "title": "Jetpack Compose April 2026 Update 深度解读"
-      },
-      {
-        "date": "2026-06-19",
-        "category": "AI",
-        "url": "posts/google-io-2026-recap.html",
-        "title": "Google I/O 2026 完整回顾：AI 重塑一切"
-      },
-      {
-        "date": "2026-06-19",
-        "category": "Kotlin",
-        "url": "posts/kotlin-240-features.html",
-        "title": "Kotlin 2.4.0 重磅发布：Context Parameters 稳定、Destructuring 升级、Lombok 插件进入 Alpha"
-      },
-      {
-        "date": "2026-06-19",
-        "category": "Android",
-        "url": "posts/mcp-android-integration.html",
-        "title": "MCP 协议在 Android 端的应用：AI 工具调用新范式"
+    async function loadArchive() {
+      try {
+        const response = await fetch('../blog/articles-index.json?t=202606292100');
+        const data = await response.json();
+        
+        // 生成归档数据
+        const archives = {};
+        data.posts.forEach(post => {
+          const month = post.date.substring(0, 7);
+          if (!archives[month]) archives[month] = [];
+          archives[month].push({
+            title: post.title,
+            date: post.date,
+            url: post.url,
+            category: post.category
+          });
+        });
+        
+        archiveData = Object.entries(archives)
+          .map(([month, items]) => ({
+            month,
+            count: items.length,
+            posts: items.sort((a, b) => b.date.localeCompare(a.date))
+          }))
+          .sort((a, b) => b.month.localeCompare(a.month));
+      } catch (e) {
+        console.error('加载归档失败:', e);
       }
-    ]
-  },
-  {
-    "month": "2026-05",
-    "count": 2,
-    "posts": [
-      {
-        "date": "2026-05-08",
-        "category": "AI",
-        "url": "posts/ai-coding-workflow-optimization.html",
-        "title": "AI 编程工作流优化：从 Prompt 设计到上下文管理"
-      },
-      {
-        "date": "2026-05-07",
-        "category": "Android",
-        "url": "posts/android-gemini-nano-integration.html",
-        "title": "Android 端侧 AI 实战：Gemini Nano 集成指南"
-      }
-    ]
-  },
-  {
-    "month": "2026-04",
-    "count": 16,
-    "posts": [
-      {
-        "date": "2026-04-26",
-        "category": "前端",
-        "url": "posts/css-container-queries.html",
-        "title": "CSS Container Queries 实战"
-      },
-      {
-        "date": "2026-04-26",
-        "category": "DevOps",
-        "url": "posts/docker-compose-best-practices.html",
-        "title": "Docker Compose 最佳实践"
-      },
-      {
-        "date": "2026-04-26",
-        "category": "前端",
-        "url": "posts/react-server-components.html",
-        "title": "React Server Components 深入解析"
-      },
-      {
-        "date": "2026-04-26",
-        "category": "系统编程",
-        "url": "posts/rust-getting-started.html",
-        "title": "Rust 入门：从零到生产"
-      },
-      {
-        "date": "2026-04-26",
-        "category": "数据库",
-        "url": "posts/sqlite-wal-performance.html",
-        "title": "SQLite 进阶：WAL 模式与性能优化"
-      },
-      {
-        "date": "2026-04-25",
-        "category": "开发",
-        "url": "posts/git-advanced-techniques.html",
-        "title": "Git 高级技巧：变基、挑拣和交互式暂存"
-      },
-      {
-        "date": "2026-04-25",
-        "category": "Android",
-        "url": "posts/jetpack-compose-animation.html",
-        "title": "Jetpack Compose 动画实战"
-      },
-      {
-        "date": "2026-04-25",
-        "category": "前端",
-        "url": "posts/typescript-type-gymnastics.html",
-        "title": "TypeScript 类型体操指南"
-      },
-      {
-        "date": "2026-04-20",
-        "category": "前端",
-        "url": "posts/nextjs-16-tutorial.html",
-        "title": "Next.js 16 实战：App Router + Server Actions + Turbopack"
-      },
-      {
-        "date": "2026-04-19",
-        "category": "AI",
-        "url": "posts/ai-coding-tools-comparison.html",
-        "title": "主流 AI 编程工具深度对比：Cursor、Claude Code、OpenCode、GitHub Copilot"
-      },
-      {
-        "date": "2026-04-11",
-        "category": "AI",
-        "url": "posts/gemini-notebooklm-integration.html",
-        "title": "Gemini Notebooks 深度体验：与 NotebookLM 无缝整合后的全新 AI 工作流"
-      },
-      {
-        "date": "2026-04-10",
-        "category": "AI",
-        "url": "posts/gemini-notebooklm-workflow.html",
-        "title": "Gemini + NotebookLM 结合使用指南"
-      },
-      {
-        "date": "2026-04-09",
-        "category": "DevOps",
-        "url": "posts/github-pages-blog-setup.html",
-        "title": "从零搭建个人博客系统（GitHub Pages + 自定义域名 + 自动化部署）"
-      },
-      {
-        "date": "2026-04-08",
-        "category": "Kotlin",
-        "url": "posts/kotlin-coroutines-best-practices.html",
-        "title": "Kotlin Coroutines 最佳实践"
-      },
-      {
-        "date": "2026-04-07",
-        "category": "AI",
-        "url": "posts/local-rag-ollama.html",
-        "title": "RAG 本地实践：用 Ollama + Embedding 搭建私有知识库"
-      },
-      {
-        "date": "2026-04-03",
-        "category": "Android",
-        "url": "posts/android-offline-speech-input.html",
-        "title": "Android 离线语音输入实现方案"
-      }
-    ]
-  },
-  {
-    "month": "2026-03",
-    "count": 8,
-    "posts": [
-      {
-        "date": "2026-03-30",
-        "category": "AI",
-        "url": "posts/onnx-mobile-deployment.html",
-        "title": "ONNX 移动端侧模型实践：从转换到部署"
-      },
-      {
-        "date": "2026-03-22",
-        "category": "前端",
-        "url": "posts/pwa-offline-web-app.html",
-        "title": "PWA 实战：从零打造离线可用的 Web 应用"
-      },
-      {
-        "date": "2026-03-18",
-        "category": "安全",
-        "url": "posts/ssh-security-hardening.html",
-        "title": "云服务器 SSH 安全加固完整指南"
-      },
-      {
-        "date": "2026-03-17",
-        "category": "DevOps",
-        "url": "posts/tailscale-derp-server.html",
-        "title": "自建 Tailscale DERP 中继服务器完整指南"
-      },
-      {
-        "date": "2026-03-17",
-        "category": "DevOps",
-        "url": "posts/vscode-port-forward.html",
-        "title": "VS Code 端口转发原理详解：SSH 隧道工作机制"
-      },
-      {
-        "date": "2026-03-16",
-        "category": "AI",
-        "url": "posts/mobile-gs-paper-review.html",
-        "title": "Mobile-GS：让 3D 高斯泼溅在移动端实时渲染"
-      },
-      {
-        "date": "2026-03-15",
-        "category": "AI Agent",
-        "url": "posts/ai-agent-skill-development.html",
-        "title": "AI Agent 技能开发实战：从需求到上线的完整流程"
-      },
-      {
-        "date": "2026-03-14",
-        "category": "AI",
-        "url": "posts/openclaw-guide.html",
-        "title": "OpenClaw 深度使用指南：从 0 到 1 构建个人 AI Agent"
-      }
-    ]
-  }
-];
+    }
     
     function renderArchive() {
       const container = document.getElementById('archive-view');
-      if (!container || !archiveData) {
-        // 直接在页面上显示调试信息
-        container.innerHTML = '<div style="padding:20px;text-align:center;">加载中...</div>';
-        return;
-      }
-      // 在归档里显示6-28文章数量用于调试
-      const june28Count = archiveData.find(m => m.month === '2026-06')?.posts.filter(p => p.date.startsWith('2026-06-28')).length || 0;
-      console.log('6月28日文章数:', june28Count);
+      if (!container || !archiveData) return;
       
       container.innerHTML = archiveData.map(m => `
         <div class="archive-month">
@@ -1540,7 +1242,7 @@
         archiveView.classList.add('active');
         listBtn.classList.remove('active');
         archiveBtn.classList.add('active');
-        if (!archiveData) { loadArchive(); renderArchive(); }
+        if (!archiveData) loadArchive().then(renderArchive).catch(e => console.error(e));
       } else {
         listContainer.classList.remove('hidden');
         archiveView.classList.remove('active');
