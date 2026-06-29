@@ -1152,6 +1152,16 @@
     let archiveData = null;
     
     function loadArchive() {
+      // 先显示所有文章（分页会隐藏非当前页），读取完恢复
+      const allItems = document.querySelectorAll('.blog-list-item');
+      const hiddenItems = [];
+      allItems.forEach(item => {
+        if (item.style.display === 'none') {
+          hiddenItems.push(item);
+          item.style.display = '';
+        }
+      });
+      
       // 从当前页面的文章列表提取
       const posts = [];
       document.querySelectorAll('.blog-list-item').forEach(item => {
