@@ -75,10 +75,13 @@ const posts = files.map(file => {
   // Generate slug from filename
   const slug = file.replace('.html', '');
   
+  // Use existing timestamp if available, otherwise use extracted date
+  const finalDate = existingTimestamps[slug] || date;
+  
   return {
     slug,
     title,
-    date,
+    date: finalDate,
     category,
     tags,
     excerpt,
@@ -88,6 +91,24 @@ const posts = files.map(file => {
 
 // Sort by date descending
 posts.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+// Load existing JSON to preserve timestamps if they exist
+let existingData = {};
+try {
+  if (fs.existsSync(OUTPUT_FILE)) {
+    existingData = JSON.parse(fs.readFileSync(OUTPUT_FILE, 'utf-8'));
+  }
+} catch (e) {}
+
+// Create a map of slug -> existing timestamp
+const existingTimestamps = {};
+if (existingData.posts) {
+  existingData.posts.forEach(p => {
+    if (p.date && p.date.includes(':')) {
+      existingTimestamps[p.slug] = p.date;
+    }
+  });
+}
 
 // Generate tag cloud with counts
 const tagCounts = {};
