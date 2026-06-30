@@ -438,7 +438,7 @@ def update_homepage_js_array():
     
     posts_js = "[\n"
     for a in articles:
-        html = a.group(1)
+        html = a.group(0)
         url_match = re.search(r'href="([^"]+\.html)"', html)
         url = url_match.group(1) if url_match else ""
         title_match = re.search(r'blog-list-title">[^<]*<a[^>]*>([^<]+)</a>', html)
@@ -449,8 +449,9 @@ def update_homepage_js_array():
         read_time = read_time_match.group(1) if read_time_match else "5"
         cat1_match = re.search(r'blog-list-tag">([^<]+)', html)
         cat1 = cat1_match.group(1) if cat1_match else ""
-        tags = re.findall(r'<span class="tech-tag">([^<]+)</span>', html)
-        cat2 = tags[0] if tags else cat1
+        # 博客列表中没有 individual tags，只有 category
+        # category2 使用与 category 相同的值（前端会处理显示）
+        cat2 = cat1
         desc_match = re.search(r'blog-list-excerpt">([^<]+)', html)
         desc = desc_match.group(1) if desc_match else ""
         
