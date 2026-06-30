@@ -1,6 +1,20 @@
 {
   "posts": [
     {
+      "slug": "mcp-server-deep-dive",
+      "title": "MCP 协议深入实战：从入门到编写自定义 MCP Server",
+      "date": "2026-06-30",
+      "category": "AI",
+      "tags": [
+        "AI",
+        "MCP",
+        "工具调用",
+        "协议"
+      ],
+      "excerpt": "3000字完整教程，从零搭建 MCP Server，涵盖协议核心、SDK 使用、调试技巧和生产部署最佳实践",
+      "url": "blog/posts/mcp-server-deep-dive.html"
+    },
+    {
       "slug": "ai-代码编辑器深度横评cursor-vs-windsurf-vs-copilot",
       "title": "AI 代码编辑器深度横评：Cursor vs Windsurf vs Copilot",
       "date": "2026-06-28",
@@ -797,7 +811,7 @@
     },
     {
       "tag": "AI",
-      "count": 9
+      "count": 10
     },
     {
       "tag": "DevOps",
@@ -838,6 +852,10 @@
     {
       "tag": "Agent",
       "count": 3
+    },
+    {
+      "tag": "MCP",
+      "count": 2
     },
     {
       "tag": "Git",
@@ -930,6 +948,14 @@
     {
       "tag": "OpenClaw",
       "count": 2
+    },
+    {
+      "tag": "工具调用",
+      "count": 1
+    },
+    {
+      "tag": "协议",
+      "count": 1
     },
     {
       "tag": "效率工具",
@@ -1280,10 +1306,6 @@
       "count": 1
     },
     {
-      "tag": "MCP",
-      "count": 1
-    },
-    {
       "tag": "工作流",
       "count": 1
     },
@@ -1539,8 +1561,13 @@
   "archives": [
     {
       "month": "2026-06",
-      "count": 27,
+      "count": 28,
       "posts": [
+        {
+          "title": "MCP 协议深入实战：从入门到编写自定义 MCP Server",
+          "date": "2026-06-30",
+          "url": "blog/posts/mcp-server-deep-dive.html"
+        },
         {
           "title": "AI 代码编辑器深度横评：Cursor vs Windsurf vs Copilot",
           "date": "2026-06-28",
@@ -1834,21 +1861,21 @@
     }
   ],
   "categories": [
-    "前端",
-    "Android",
-    "DevOps",
     "开发",
-    "安全",
+    "AI Agent",
+    "前端",
+    "DevOps",
+    "Android",
     "数据库",
     "AI",
-    "系统编程",
+    "安全",
     "Kotlin",
-    "AI Agent"
+    "系统编程"
   ],
   "stats": {
-    "totalPosts": 53,
-    "totalTags": 186,
-    "latestDate": "2026-06-28",
+    "totalPosts": 54,
+    "totalTags": 188,
+    "latestDate": "2026-06-30",
     "oldestDate": "2026-02-15"
   }
 }
