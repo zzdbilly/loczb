@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCP 协议深入实战：从入门到编写自定义 MCP Server | 张小猛 - loczb</title>
+    <meta name="description" content="3000字完整教程，从零搭建 MCP Server，涵盖协议核心、SDK 使用、调试技巧和生产部署最佳实践">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="MCP 协议深入实战：从入门到编写自定义 MCP Server | 张小猛 - loczb">
+    <meta property="og:description" content="3000字完整教程，从零搭建 MCP Server，涵盖协议核心、SDK 使用、调试技巧和生产部署最佳实践">
+    <meta property="og:url" content="https://709527.xyz/blog/posts/mcp-server-deep-dive.html">
+    <meta property="og:type" content="article">
+        <meta property="og:image" content="../../assets/images/og-default.webp">
+    <meta property="og:site_name" content="loczb">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="MCP 协议深入实战：从入门到编写自定义 MCP Server | 张小猛 - loczb">
+    <meta name="twitter:description" content="3000字完整教程，从零搭建 MCP Server，涵盖协议核心、SDK 使用、调试技巧和生产部署最佳实践">
+
+    
+    
+    
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <style>.post-content { max-width: 760px; margin: 0 auto; line-height: 1.85; }
+    .post-content h1 { font-size: 2.4rem; margin: 2rem 0 1rem; }
+    .post-content h2 { font-size: 1.7rem; margin: 2.5rem 0 1rem; color: var(--color-accent-primary); border-bottom: 1px solid var(--color-border); padding-bottom: 0.5rem; }
+    .post-content h3 { font-size: 1.3rem; margin: 1.8rem 0 0.8rem; }
+    .post-content pre { background: var(--color-bg-tertiary); padding: 1.2rem; border-radius: 8px; overflow-x: auto; margin: 1.2rem 0; font-size: 0.9rem; }
+    .post-content code { background: var(--color-bg-tertiary); padding: 0.15rem 0.4rem; border-radius: 4px; font-family: monospace; font-size: 0.9em; }
+    .post-meta { color: var(--color-text-secondary); font-size: 0.9rem; margin-bottom: 2rem; }
+    .post-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 3rem; }
+    .post-tags span { background: var(--color-bg-tertiary); padding: 0.3rem 0.8rem; border-radius: 9999px; font-size: 0.85rem; color: var(--color-accent-primary); }
+    .tip-box { background: rgba(34, 197, 94, 0.1); border-left: 3px solid #22c55e; padding: 1rem 1.2rem; margin: 1.5rem 0; border-radius: 0 6px 6px 0; }
+    .warning-box { background: rgba(234, 179, 8, 0.1); border-left: 3px solid #eab308; padding: 1rem 1.2rem; margin: 1.5rem 0; border-radius: 0 6px 6px 0; }
+    .danger-box { background: rgba(239, 68, 68, 0.1); border-left: 3px solid #ef4444; padding: 1rem 1.2rem; margin: 1.5rem 0; border-radius: 0 6px 6px 0; }
+    table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.95rem; }
+    th, td { border: 1px solid var(--color-border); padding: 0.7rem; text-align: left; }
+    th { background: var(--color-bg-tertiary); font-weight: 600; }
+  
+    .post-toc-container { position: fixed; right: 2rem; top: 180px; width: 220px; max-height: calc(100vh - 220px); border-radius: 16px; overflow: hidden; display: none; }
+    @media (min-width: 1200px) { .post-toc-container { display: block; } }
+    .post-toc { background: var(--color-bg-secondary); border: 1px solid var(--color-border); border-radius: 16px; padding: 1rem; max-height: calc(100vh - 240px); overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--color-border) transparent; }
+    .post-toc::-webkit-scrollbar { width: 4px; }
+    .post-toc::-webkit-scrollbar-track { background: transparent; }
+    .post-toc::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 4px; }
+    .post-toc-title { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted); margin-bottom: 0.75rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--color-border); position: sticky; top: 0; background: var(--color-bg-secondary); z-index: 1; }
+    .post-toc-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.25rem; }
+    .post-toc-list a { display: block; color: var(--color-text-secondary); text-decoration: none; font-size: 0.78rem; padding: 0.3rem 0.5rem; border-radius: 6px; border-left: 2px solid transparent; transition: all 0.2s ease; line-height: 1.4; }
+    .post-toc-list a:hover { color: var(--color-accent-primary); background: var(--color-bg-tertiary); }
+    .post-toc-list a.active { color: var(--color-accent-primary); background: var(--color-bg-tertiary); border-left-color: var(--color-accent-primary); }
+    .post-toc-list .toc-h3 { padding-left: 1rem; font-size: 0.72rem; }
+    .post-toc-list .toc-h2 { font-weight: 600; font-size: 0.8rem; }</style>
+    <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
+    <link rel="alternate icon" href="../../assets/images/favicon.ico">
+</head>
+<body>
+  <!-- Loading -->
+  <div class="loading">
+    <div class="loading-spinner"></div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../../index.html" class="nav-logo">
+        loc<span>zb</span>
+      </a>
+      <button class="nav-toggle" aria-label="打开菜单" aria-expanded="false" aria-controls="nav-links-menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <div class="nav-overlay"></div>
+      <ul class="nav-links" id="nav-links-menu">
+        <li><a href="../../index.html" class="nav-link">首页</a></li>
+        <li><a href="../../projects/index.html" class="nav-link">项目</a></li>
+        <li><a href="../index.html" class="nav-link active">博客</a></li>
+        <li><a href="../../about/index.html" class="nav-link">关于</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="scroll-progress"></div>
+
+  <main class="section" style="padding-bottom: 0;">
+    <div class="container container-narrow">
+      <a href="../index.html" class="back-link">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        返回博客列表
+      </a>
+
+      <article class="post-content">
+        <h1>MCP 协议深入实战：从入门到编写自定义 MCP Server</h1>
+        
+        <div class="post-meta">
+          <span>📅 2026-06-30</span>
+          <span>⏱️ 14 min read</span>
+          <span>👤 张小猛</span>
+        </div>
+        
+        <div class="post-tags">
+          <span class="tag">AI</span>
+          <span class="tag">MCP</span>
+          <span class="tag">工具调用</span>
+          <span class="tag">协议</span>
+        </div>
+        
+        <section>
+<h2>引言</h2>
+<p>2024 年底，Anthropic 开源的 <strong>Model Context Protocol (MCP)</strong> 迅速成为 AI 开发社区的热门话题。它定义了 AI 客户端与大模型之间标准化的工具调用和上下文交换协议，被业界称为"AI 领域的 USB-C 接口"。</p>
+<p>截至 2026 年中期，MCP 已经发展到了 <strong>v1.2</strong> 版本，获得了 OpenAI、Google、JetBrains 等主流厂商的官方支持。VS Code、Cursor、Windsurf、JetBrains IDE 等开发工具都已原生集成 MCP 协议。</p>
+<p>本文将带你从零开始构建一个完整的 MCP Server，涵盖协议核心概念、SDK 使用、调试技巧和生产部署的最佳实践。</p>
+</section>
+
+<section>
+<h2>MCP 协议核心概念</h2>
+
+<h3>协议架构</h3>
+<p>MCP 采用客户端-服务端架构，通信基于 JSON-RPC 2.0 协议：</p>
+<pre><code>┌─────────────────┐          JSON-RPC 2.0         ┌─────────────────┐
+│                 │  ════════════════════════       │                 │
+│  AI 客户端        │  ← request/response →         │  MCP Server     │
+│  (Cursor/IDE)    │  ← notification/event →        │  (自定义工具)     │
+│                 │                                │                 │
+└─────────────────┘                                └─────────────────┘</code></pre>
+
+<h3>核心概念</h3>
+<table>
+<thead><tr><th>概念</th><th>说明</th></tr></thead>
+<tbody>
+<tr><td><strong>Tool</strong></td><td>可被 LLM 调用的函数，类似 Function Calling</td></tr>
+<tr><td><strong>Resource</strong></td><td>可被读取的数据源（文件、API、数据库）</td></tr>
+<tr><td><strong>Prompt</strong></td><td>预定义的可复用提示词模板</td></tr>
+<tr><td><strong>Transport</strong></td><td>传输层，支持 stdio（本地）和 SSE（远程）</td></tr>
+<tr><td><strong>Session</strong></td><td>客户端与服务端之间的连接会话</td></tr>
+</tbody>
+</table>
+</section>
+
+<section>
+<h2>环境准备</h2>
+
+<h3>安装 MCP SDK</h3>
+<p>MCP 官方 SDK 支持 TypeScript 和 Python。我们以 TypeScript 为例：</p>
+<pre><code class="language-bash"># 创建项目
+mkdir my-mcp-server && cd my-mcp-server
+npm init -y
+npm install @modelcontextprotocol/sdk zod
+
+# 也可以使用 pnpm
+pnpm add @modelcontextprotocol/sdk zod</code></pre>
+
+<h3>项目结构</h3>
+<pre><code>my-mcp-server/
+├── src/
+│   ├── index.ts          # 入口
+│   ├── tools/            # 工具实现
+│   │   ├── git.ts
+│   │   ├── weather.ts
+│   │   └── search.ts
+│   └── utils.ts          # 工具函数
+├── package.json
+├── tsconfig.json
+└── README.md</code></pre>
+</section>
+
+<section>
+<h2>编写第一个 MCP Server</h2>
+
+<h3>1. 基础骨架</h3>
+<pre><code class="language-typescript">import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+import { z } from "zod";
+
+// 创建 MCP Server 实例
+const server = new McpServer({
+  name: "my-tools",
+  version: "1.0.0",
+  description: "我的第一个 MCP 工具服务",
+});
+
+// 启动服务
+async function main() {
+  const transport = new StdioServerTransport();
+  await server.connect(transport);
+  console.error("MCP Server 已启动");
+}
+
+main().catch((error) => {
+  console.error("Fatal error:", error);
+  process.exit(1);
+});</code></pre>
+
+<h3>2. 注册工具（Tool）</h3>
+<p>Tool 是最核心的功能。让我们注册一个代码审查工具：</p>
+<pre><code class="language-typescript">server.tool(
+  "code-review",
+  "对指定代码进行自动化代码审查",
+  {
+    code: z.string().describe("待审查的代码"),
+    language: z.string().describe("编程语言，如 typescript, python, rust"),
+    severity: z.enum(["all", "error", "warning"]).default("all").describe("审查级别"),
+  },
+  async ({ code, language, severity }) => {
+    // 模拟代码审查逻辑
+    const issues = [];
+
+    if (code.includes("var ")) {
+      issues.push({ line: "N/A", type: "warning", message: `使用 let/const 替代 var` });
+    }
+    if (code.length > 500) {
+      issues.push({ line: "N/A", type: "warning", message: "函数过长，建议拆分为多个小函数" });
+    }
+    if (code.includes("console.log")) {
+      issues.push({ line: "N/A", type: "info", message: "生产环境建议移除 console.log" });
+    }
+    if (code.includes("any") && language === "typescript") {
+      issues.push({ line: "N/A", type: "error", message: "避免使用 any 类型，改用具体类型" });
+    }
+
+    return {
+      content: [
+        {
+          type: "text",
+          text: JSON.stringify({
+            language,
+            totalIssues: issues.length,
+            issues: severity === "all" ? issues : issues.filter(i => i.type === severity),
+            score: Math.max(0, 100 - issues.length * 15),
+          }, null, 2),
+        },
+      ],
+    };
+  }
+);</code></pre>
+
+<h3>3. 添加 Resource（资源）</h3>
+<p>Resource 让 LLM 可以直接读取数据，类似可读的文件系统：</p>
+<pre><code class="language-typescript">server.resource(
+  "project-config",
+  "project://config",
+  {
+    description: "项目配置文件",
+    mimeType: "application/json",
+  },
+  async (uri) => ({
+    contents: [
+      {
+        uri: uri.href,
+        mimeType: "application/json",
+        text: JSON.stringify({
+          name: "my-project",
+          version: "2.0.0",
+          engines: { node: ">=18" },
+          scripts: {
+            dev: "vite",
+            build: "tsc && vite build",
+            test: "vitest",
+          },
+        }, null, 2),
+      },
+    ],
+  })
+);</code></pre>
+
+<h3>4. 注册 Prompt 模板</h3>
+<p>Prompt 可以让用户一键生成高质量的上下文：</p>
+<pre><code class="language-typescript">server.prompt(
+  "commit-message",
+  "生成符合 Conventional Commits 规范的提交信息",
+  {
+    type: z.enum(["feat", "fix", "chore", "docs", "refactor", "test"]).describe("提交类型"),
+    scope: z.string().optional().describe("影响范围"),
+    description: z.string().describe("变更描述"),
+  },
+  ({ type, scope, description }) => ({
+    messages: [
+      {
+        role: "user",
+        content: {
+          type: "text",
+          text: `生成一个 Conventional Commits 提交信息:\n类型: ${type}\n范围: ${scope || "无"}\n描述: ${description}\n\n格式: <type>(<scope>): <description>`,
+        },
+      },
+    ],
+  })
+);</code></pre>
+</section>
+
+<section>
+<h2>本地调试与测试</h2>
+
+<h3>方案一：MCP Inspector（官方调试工具）</h3>
+<pre><code class="language-bash"># 全局安装 MCP Inspector
+npx @modelcontextprotocol/inspector \
+  node dist/index.js
+
+# 或指定 Node 参数
+npx @modelcontextprotocol/inspector \
+  --env NODE_OPTIONS="--loader ts-node/esm" \
+  node src/index.ts</code></pre>
+<p>Inspector 提供 Web 界面，可以：</p>
+<ul>
+<li>列出所有注册的 Tool / Resource / Prompt</li>
+<li>手动调用工具并查看返回结果</li>
+<li>查看 JSON-RPC 通信日志</li>
+<li>模拟客户端连接行为</li>
+</ul>
+
+<h3>方案二：使用 curl 测试（自建 HTTP 服务）</h3>
+<p>如果使用 SSE Transport，可以直接用 curl 测试：</p>
+<pre><code class="language-bash"># 发送工具调用请求
+curl -X POST http://localhost:3000/mcp \
+  -H "Content-Type: application/json" \
+  -d '{
+    "jsonrpc": "2.0",
+    "id": 1,
+    "method": "tools/call",
+    "params": {
+      "name": "code-review",
+      "arguments": {
+        "code": "var x = 1",
+        "language": "typescript"
+      }
+    }
+  }'</code></pre>
+</section>
+
+<section>
+<h2>集成到 AI 客户端</h2>
+
+<h3>Cursor 配置</h3>
+<pre><code class="language-json">// .cursor/mcp.json
+{
+  "mcpServers": {
+    "my-tools": {
+      "command": "node",
+      "args": ["dist/index.js"],
+      "env": {
+        "NODE_ENV": "production"
+      }
+    }
+  }
+}</code></pre>
+
+<h3>VS Code 配置</h3>
+<pre><code class="language-json">// .vscode/mcp.json
+{
+  "servers": {
+    "my-tools": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["dist/index.js"]
+    }
+  }
+}</code></pre>
+
+<h3>Claude Desktop 配置</h3>
+<pre><code class="language-json">// claude_desktop_config.json
+{
+  "mcpServers": {
+    "my-tools": {
+      "command": "node",
+      "args": ["-e", "require('./dist/index.js')"],
+      "env": {}
+    }
+  }
+}</code></pre>
+</section>
+
+<section>
+<h2>高级模式：SSE Transport</h2>
+<p>本地开发常用 stdio，但生产环境需要远程调用。SSE（Server-Sent Events）Transport 支持远程连接：</p>
+
+<pre><code class="language-typescript">import express from "express";
+import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js";
+import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+
+const app = express();
+const server = new McpServer({
+  name: "remote-tools",
+  version: "1.0.0",
+});
+
+// SSE 端点
+app.get("/sse", async (req, res) => {
+  const transport = new SSEServerTransport("/messages", res);
+  await server.connect(transport);
+});
+
+// 消息端点
+app.post("/messages", async (req, res) => {
+  // 处理传入的 JSON-RPC 消息
+  res.json({ ok: true });
+});
+
+app.listen(3000);
+console.log("MCP Server (SSE) running on port 3000");</code></pre>
+</section>
+
+<section>
+<h2>生产部署最佳实践</h2>
+
+<h3>1. 日志与监控</h3>
+<ul>
+<li>所有 stderr 输出自动被客户端捕获，利用这个特性做日志</li>
+<li>推荐使用 <code>pino</code> 等结构化日志库</li>
+<li>监控调用次数、延迟、错误率</li>
+</ul>
+
+<h3>2. 输入验证</h3>
+<ul>
+<li>使用 Zod 进行严格的输入校验</li>
+<li>不要信任 LLM 传入的参数</li>
+<li>设置合理的超时和限流</li>
+</ul>
+
+<h3>3. 错误处理</h3>
+<pre><code class="language-typescript">server.tool(
+  "fetch-url",
+  "获取 URL 内容",
+  { url: z.string().url() },
+  async ({ url }) => {
+    try {
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+      const text = await response.text();
+      return { content: [{ type: "text", text }] };
+    } catch (error) {
+      return {
+        isError: true,
+        content: [{ type: "text", text: `错误: ${error.message}` }],
+      };
+    }
+  }
+);</code></pre>
+
+<h3>4. 安全审计</h3>
+<ul>
+<li>最小权限原则：只暴露必要的能力</li>
+<li>对文件系统操作添加路径白名单</li>
+<li>对网络请求限制 IP 和域名范围</li>
+<li>敏感操作添加二次确认（通过 Prompt）</li>
+</ul>
+
+<pre><code class="language-typescript">const ALLOWED_PATHS = ["/home/user/projects", "/tmp"];
+const ALLOWED_DOMAINS = ["api.github.com", "registry.npmjs.org"];
+
+server.tool(
+  "read-file",
+  "安全的文件读取",
+  {
+    path: z.string().refine(p => ALLOWED_PATHS.some(a => p.startsWith(a)), {
+      message: "路径不在白名单中",
+    }),
+  },
+  async ({ path }) => {
+    // 安全读取
+  }
+);</code></pre>
+</section>
+
+<section>
+<h2>实战案例：Git 工作流工具</h2>
+<p>让我们实现一个实用的 Git MCP Server：</p>
+
+<pre><code class="language-typescript">import { execSync } from "child_process";
+
+server.tool(
+  "git-log",
+  "查看最近 Git 提交记录",
+  {
+    count: z.number().min(1).max(50).default(10),
+    branch: z.string().optional(),
+  },
+  async ({ count, branch }) => {
+    const branchOpt = branch ? ` ${branch}` : "";
+    const output = execSync(`git log --oneline --max-count=${count}${branchOpt}`, {
+      encoding: "utf-8",
+    });
+    return {
+      content: [{ type: "text", text: output }],
+    };
+  }
+);
+
+server.tool(
+  "git-diff",
+  "查看文件变更差异",
+  {
+    file: z.string().optional(),
+    staged: z.boolean().default(false),
+  },
+  async ({ file, staged }) => {
+    const stagedOpt = staged ? "--staged" : "";
+    const fileOpt = file ? ` -- "${file}"` : "";
+    const output = execSync(`git diff ${stagedOpt}${fileOpt}`, {
+      encoding: "utf-8",
+    });
+    return {
+      content: [{ type: "text", text: output }],
+    };
+  }
+);</code></pre>
+</section>
+
+<section>
+<h2>常见问题与调试</h2>
+
+<table>
+<thead><tr><th>问题</th><th>原因</th><th>解决</th></tr></thead>
+<tbody>
+<tr>
+<td>Tool 返回空结果</td>
+<td>参数校验失败导致异常被吞</td>
+<td>检查 Zod schema 是否正确</td>
+</tr>
+<tr>
+<td>Client 连接后无响应</td>
+<td>Transport 未正确初始化</td>
+<td>确认走 stdio 还是 SSE，检查端口占用</td>
+</tr>
+<tr>
+<td>Tool 调用超时</td>
+<td>异步操作时间过长</td>
+<td>设置合理超时，或者将耗时操作拆分为多步</td>
+</tr>
+<tr>
+<td>类型错误</td>
+<td>参数类型与 Zod 定义不匹配</td>
+<td>LLM 可能生成错误类型，用 zod 做兜底解析</td>
+</tr>
+<tr>
+<td>SSE 连接断开</td>
+<td>HTTP 连接超时或代理问题</td>
+<td>开启 keep-alive，审查反向代理配置</td>
+</tr>
+</tbody>
+</table>
+</section>
+
+<section>
+<h2>总结</h2>
+<p>MCP 协议正在成为 AI 工具调用的标准协议，掌握 MCP Server 开发能力意味着能够：</p>
+<ul>
+<li>将任意业务逻辑暴露给 AI 客户端调用</li>
+<li>构建自定义的代码分析、CI/CD、运维工具链</li>
+<li>将私有数据源安全地接入 AI 工作流</li>
+</ul>
+<p>随着更多厂商接入 MCP 协议，它的生态系统会越来越丰富。现在开始编写自己的 MCP Server，就是为 AI 时代的工具生态做好准备。</p>
+
+<p><strong>相关阅读：</strong></p>
+<ul>
+<li><a href="https://modelcontextprotocol.io">MCP 官方文档</a></li>
+<li><a href="https://github.com/modelcontextprotocol">MCP GitHub 仓库</a></li>
+<li>《MCP 协议在 Android 端的应用：AI 工具调用新范式》</li>
+</ul>
+</section>
+
+      </article>
+    </div>
+  </main>
+
+  <!-- Related Posts / Navigation -->
+  <section class="section" style="padding-top: 0;">
+    <div class="container container-narrow">
+      <hr style="border: none; border-top: 1px solid var(--color-border); margin: var(--space-3xl) 0;">
+      
+      <div class="blog-topics" style="margin-bottom: var(--space-xl);">
+        <span class="topic-label">读完之后：</span>
+        <a href="../index.html" class="topic-tag">返回博客列表</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <p class="footer-signature">写代码，做产品，也认真生活。</p>
+      <div class="footer-links">
+        <a href="https://github.com/zzdbilly" class="footer-link" target="_blank" rel="noopener">GitHub</a>
+        <a href="../../projects/index.html" class="footer-link">项目</a>
+        <a href="../../about/index.html" class="footer-link">关于</a>
+      </div>
+      <p class="footer-copyright">
+        &copy; 2026 张小猛
+      </p>
+    </div>
+  </footer>
+
+  
+  <script src="../../assets/js/related-posts.js"></script>
+  <script src="../../assets/js/share.js"></script>
+  <script src="../../assets/js/main.js"></script>
+
+  <!-- Back to Top & Reading Progress -->
+  <button class="back-to-top" id="backToTop" aria-label="回到顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
+  <div class="reading-progress" id="readingProgress"></div>
+
+  <script>
+    const backToTop = document.getElementById("backToTop");
+    
+    window.addEventListener("scroll", () => {
+      if (window.scrollY > 300) {
+        backToTop.classList.add("visible");
+      } else {
+        backToTop.classList.remove("visible");
+      }
+      
+      const progressBar = document.getElementById("readingProgress");
+      if (progressBar && document.querySelector(".post-content")) {
+        const scrollTop = window.scrollY;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const progress = (scrollTop / docHeight) * 100;
+        progressBar.style.width = progress + "%";
+      }
+    });
+    
+    backToTop.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    // Keyboard shortcuts
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "j") window.scrollBy({ top: 200, behavior: "smooth" });
+      else if (e.key === "k") window.scrollBy({ top: -200, behavior: "smooth" });
+      else if (e.key === "Escape") document.getElementById("blog-search-results")?.classList.remove("active");
+      else if (e.altKey && e.key === "b") window.location.href = "../index.html";
+    });
+  </script>
+
+  <!-- Post TOC -->
+  <div class="post-toc-container" id="postToc">
+    <nav class="post-toc">
+      <div class="post-toc-title">目录</div>
+      <ul class="post-toc-list" id="tocList">
+      </ul>
+    </nav>
+  </div>
+
+  <script>
+    (function() {
+      const tocList = document.getElementById('tocList');
+      const tocContainer = document.getElementById('postToc');
+      if (!tocList || !tocContainer) return;
+      
+      const headings = document.querySelectorAll('.post-content h2, .post-content h3');
+      if (headings.length === 0) { tocContainer.style.display = 'none'; return; }
+      
+      headings.forEach((h, i) => {
+        const id = 'toc-' + i;
+        h.id = h.id || id;
+        
+        const li = document.createElement('li');
+        const a = document.createElement('a');
+        a.href = '#' + h.id;
+        a.textContent = h.textContent.replace(/^\d+[.、]\s*/, '');
+        a.className = h.tagName === 'H3' ? 'toc-h3' : 'toc-h2';
+        
+        a.addEventListener('click', (e) => {
+          e.preventDefault();
+          document.getElementById(h.id).scrollIntoView({ behavior: 'smooth' });
+          history.pushState(null, '', '#' + h.id);
+        });
+        
+        li.appendChild(a);
+        tocList.appendChild(li);
+      });
+      
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            tocList.querySelectorAll('a').forEach(a => a.classList.remove('active'));
+            const id = entry.target.id;
+            const activeLink = tocList.querySelector('a[href="#' + id + '"]');
+            if (activeLink) {
+              activeLink.classList.add('active');
+              activeLink.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+          }
+        });
+      }, { rootMargin: '-20% 0px -60% 0px' });
+      
+      headings.forEach(h => observer.observe(h));
+    })();
+  </script>
+  <script src="../../assets/js/og-generator.js"></script>
+</body>
+</html>
