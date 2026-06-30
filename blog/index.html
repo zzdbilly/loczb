@@ -1087,7 +1087,7 @@
             <div class="archive-post">
               <span class="archive-post-date">${p.date}</span>
               <span class="archive-post-title">
-                <a href="${p.url}">${p.title}</a>
+                <a href="posts/${p.url.replace('blog/posts/', '')}">${p.title}</a>
               </span>
               <span class="archive-post-cat">${p.category || ''}</span>
             </div>
