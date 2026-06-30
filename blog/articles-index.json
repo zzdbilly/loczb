@@ -1,6 +1,20 @@
 {
   "posts": [
     {
+      "slug": "android-16-foreground-service-constraints",
+      "title": "Android 16 前台服务类型全新限制：类型强制匹配与迁移指南",
+      "date": "2026-06-30",
+      "category": "Android",
+      "tags": [
+        "Android 16",
+        "前台服务",
+        "后台任务",
+        "WorkManager"
+      ],
+      "excerpt": "Android 16 前台服务类型强制约束详解，涵盖 shortService、specialUse、类型匹配规则和迁移适配方案",
+      "url": "blog/posts/android-16-foreground-service-constraints.html"
+    },
+    {
       "slug": "cursor-rules-guide",
       "title": "Cursor Rules 实战：自定义 AI 代码助手的进阶指南",
       "date": "2026-06-30",
@@ -836,15 +850,15 @@
       "count": 6
     },
     {
+      "tag": "Android 16",
+      "count": 4
+    },
+    {
       "tag": "AI 工具",
       "count": 4
     },
     {
       "tag": "开发技巧",
-      "count": 3
-    },
-    {
-      "tag": "Android 16",
       "count": 3
     },
     {
@@ -866,6 +880,18 @@
     {
       "tag": "Agent",
       "count": 3
+    },
+    {
+      "tag": "前台服务",
+      "count": 2
+    },
+    {
+      "tag": "后台任务",
+      "count": 2
+    },
+    {
+      "tag": "WorkManager",
+      "count": 2
     },
     {
       "tag": "Cursor",
@@ -985,18 +1011,6 @@
     },
     {
       "tag": "协议",
-      "count": 1
-    },
-    {
-      "tag": "后台任务",
-      "count": 1
-    },
-    {
-      "tag": "WorkManager",
-      "count": 1
-    },
-    {
-      "tag": "前台服务",
       "count": 1
     },
     {
@@ -1583,8 +1597,13 @@
   "archives": [
     {
       "month": "2026-06",
-      "count": 29,
+      "count": 30,
       "posts": [
+        {
+          "title": "Android 16 前台服务类型全新限制：类型强制匹配与迁移指南",
+          "date": "2026-06-30",
+          "url": "blog/posts/android-16-foreground-service-constraints.html"
+        },
         {
           "title": "Cursor Rules 实战：自定义 AI 代码助手的进阶指南",
           "date": "2026-06-30",
@@ -1888,9 +1907,9 @@
     }
   ],
   "categories": [
+    "Android",
     "AI",
     "前端",
-    "Android",
     "DevOps",
     "开发",
     "安全",
@@ -1900,7 +1919,7 @@
     "AI Agent"
   ],
   "stats": {
-    "totalPosts": 55,
+    "totalPosts": 56,
     "totalTags": 190,
     "latestDate": "2026-06-30",
     "oldestDate": "2026-02-15"
