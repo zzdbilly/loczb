@@ -17,7 +17,7 @@
       "slug": "git-worktree-高效多分支开发指南",
       "title": "Git Worktree 高效多分支开发指南",
       "date": "2026-06-28",
-      "category": "开发",
+      "category": "前端",
       "tags": [
         "Git",
         "开发技巧",
@@ -797,7 +797,7 @@
     },
     {
       "tag": "AI",
-      "count": 8
+      "count": 9
     },
     {
       "tag": "DevOps",
@@ -806,6 +806,14 @@
     {
       "tag": "Kotlin",
       "count": 6
+    },
+    {
+      "tag": "AI 工具",
+      "count": 4
+    },
+    {
+      "tag": "开发技巧",
+      "count": 3
     },
     {
       "tag": "Android 16",
@@ -832,15 +840,7 @@
       "count": 3
     },
     {
-      "tag": "AI 工具",
-      "count": 3
-    },
-    {
       "tag": "Git",
-      "count": 2
-    },
-    {
-      "tag": "开发技巧",
       "count": 2
     },
     {
@@ -1539,8 +1539,13 @@
   "archives": [
     {
       "month": "2026-06",
-      "count": 26,
+      "count": 27,
       "posts": [
+        {
+          "title": "AI 代码编辑器深度横评：Cursor vs Windsurf vs Copilot",
+          "date": "2026-06-28",
+          "url": "blog/posts/ai-代码编辑器深度横评cursor-vs-windsurf-vs-copilot.html"
+        },
         {
           "title": "Git Worktree 高效多分支开发指南",
           "date": "2026-06-28",
@@ -1829,10 +1834,10 @@
     }
   ],
   "categories": [
-    "开发",
-    "Android",
     "前端",
+    "Android",
     "DevOps",
+    "开发",
     "安全",
     "数据库",
     "AI",
@@ -1841,7 +1846,7 @@
     "AI Agent"
   ],
   "stats": {
-    "totalPosts": 52,
+    "totalPosts": 53,
     "totalTags": 186,
     "latestDate": "2026-06-28",
     "oldestDate": "2026-02-15"
