@@ -51,6 +51,38 @@ loczb/
 | `{{ARTICLE_TAGS}}` | 标签 HTML（`<a>` 链接） | 自动生成 |
 | `{{ARTICLE_CONTENT}}` | 文章正文（HTML） | `--content` 或 `--text` |
 
+### 2.2 文章代码块样式（重要！）
+
+发布新文章时，代码块 CSS 必须包含以下修复，防止首行比其他行多缩进一个字符：
+
+```css
+.post-content pre {
+  background: var(--color-bg-tertiary);
+  padding: 1.2rem 1.2rem 1.2rem 1.5rem;
+  border-radius: 8px;
+  overflow-x: auto;
+  margin: 0;
+  font-size: 0.9rem;
+  white-space: pre;
+  text-indent: 0;
+  line-height: 1.5;
+  font-family: Consolas, "Courier New", monospace;
+  -webkit-padding-start: 1.5rem;
+  -moz-padding-start: 1.5rem;
+  padding-left: 1.5rem;
+}
+.post-content pre code {
+  line-height: 1.5;
+  display: block;
+}
+```
+
+**关键点**：
+- `-webkit-padding-start: 1.5rem` 是核心修复，防止首行额外缩进
+- `padding-left: 1.5rem` 提供整体右缩进（2字符）
+- `margin: 0` 移除默认外边距
+- 模板 `templates/inline-styles.css` 已包含此样式
+
 ### 2.2 首页 `index.html`
 
 三层展示：
