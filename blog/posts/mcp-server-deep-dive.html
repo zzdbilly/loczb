@@ -25,7 +25,7 @@
     .post-content h1 { font-size: 2.4rem; margin: 2rem 0 1rem; }
     .post-content h2 { font-size: 1.7rem; margin: 2.5rem 0 1rem; color: var(--color-accent-primary); border-bottom: 1px solid var(--color-border); padding-bottom: 0.5rem; }
     .post-content h3 { font-size: 1.3rem; margin: 1.8rem 0 0.8rem; }
-    .post-content pre { background: var(--color-bg-tertiary); padding: 1.2rem; border-radius: 8px; overflow-x: auto; margin: 0; font-size: 0.9rem; white-space: pre; text-indent: 0; line-height: 1.5; font-family: Consolas, Monaco, 'Andale Mono', monospace; text-rendering: geometricPrecision; letter-spacing: 0; word-spacing: 0; tab-size: 0; unicode-bidi: plaintext; font-feature-settings: "liga" 0, "calt" 0; }
+    .post-content pre { background: var(--color-bg-tertiary); padding: 1.2rem; border-radius: 8px; overflow-x: auto; margin: 0; font-size: 0.9rem; white-space: pre !important; text-indent: 0 !important; line-height: 1.5 !important; font-family: Consolas, Monaco, "Courier New", monospace !important; }
     .post-content code { background: var(--color-bg-tertiary); padding: 0.15rem 0.4rem; border-radius: 4px; font-family: monospace; font-size: 0.9em; }
     .post-meta { color: var(--color-text-secondary); font-size: 0.9rem; margin-bottom: 2rem; }
     .post-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 3rem; }
@@ -50,6 +50,10 @@
     .post-toc-list a.active { color: var(--color-accent-primary); background: var(--color-bg-tertiary); border-left-color: var(--color-accent-primary); }
     .post-toc-list .toc-h3 { padding-left: 1rem; font-size: 0.72rem; }
     .post-toc-list .toc-h2 { font-weight: 600; font-size: 0.8rem; }</style>
+    <style>
+    .code-block-wrapper pre { margin: 0 !important; padding: 1.2rem !important; }
+    .code-block-wrapper { margin: 1.2rem 0 !important; }
+    </style>
     <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
     <link rel="alternate icon" href="../../assets/images/favicon.ico">
 </head>
@@ -694,4 +698,11 @@ server.tool(
   </script>
   <script src="../../assets/js/og-generator.js"></script>
 </body>
-</html>
+</html><style>
+.code-block-wrapper pre { margin: 0 !important; padding: 1.2rem !important; }
+.code-block-wrapper { margin: 1.2rem 0 !important; }
+</style>
+    <style>
+    .code-block-wrapper pre { margin: 0 !important; padding: 1.2rem !important; }
+    .code-block-wrapper { margin: 1.2rem 0 !important; }
+    </style>
