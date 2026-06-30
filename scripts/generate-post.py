@@ -176,13 +176,22 @@ def update_homepage(slug, title, description, article_date, read_time, tags, cat
           </div>
         </article>'''
     
-    # 2. 最新列表只需要保留原来的第1、2篇
-    # 因为大卡已经展示了最新文章，列表不需要重复
+    # 2. 从博客列表页读取最新文章，填充首页列表
+    # 首页展示：大卡(第1新) + 列表(第2、3新)
+    with open(BLOG_INDEX, 'r', encoding='utf-8') as f:
+        blog_content = f.read()
+    
+    # 提取博客列表中的前N篇文章
+    article_pattern = r'<article class="blog-list-item[^>]*>(.*?)</article>'
+    articles = list(re.finditer(article_pattern, blog_content, re.DOTALL))
+    
+    # 取第2-3篇（索引1和2）填入首页列表
+    list_articles = articles[1:3] if len(articles) >= 3 else articles[1:]
     
     with open(HOME_INDEX, 'r', encoding='utf-8') as f:
         content = f.read()
     
-    # 1. 更新大卡
+    # 更新大卡
     featured_match = re.search(
         r'<article class="blog-card-featured animate-on-scroll" id="home-featured-post".*?</article>',
         content,
@@ -192,17 +201,23 @@ def update_homepage(slug, title, description, article_date, read_time, tags, cat
         old_featured = featured_match.group(0)
         content = content.replace(old_featured, featured)
         
-        # 2. 删除列表中的第一篇（因为它现在在大卡里展示了，重复）
-        # 找到所有 blog-list-item
-        all_items = list(re.finditer(
-            r'<article class="blog-list-item animate-on-scroll">.*?</article>',
+        # 替换首页的最新文章列表区域
+        list_match = re.search(
+            r'(<!-- 最新文章列表 -->[\s\S]*?<div class="blog-list">).*?(</div>[\s\S]*?<!-- /最新文章列表 -->)',
             content,
             re.DOTALL
-        ))
-        if len(all_items) >= 1:
-            # 删除第一个（它是重复的，因为和大卡同一篇）
-            first_item = all_items[0]
-            content = content[:first_item.start()] + content[first_item.end():]
+        )
+        
+        if list_match and list_articles:
+            # 构建新的列表内容
+            new_list = list_match.group(1)
+            for article in list_articles:
+                new_list += article.group(0)
+            new_list += '</div>'
+            
+            # 替换
+            old_list = list_match.group(0)
+            content = content.replace(old_list, new_list)
         
         with open(HOME_INDEX, 'w', encoding='utf-8') as f:
             f.write(content)
