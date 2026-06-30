@@ -1114,6 +1114,7 @@
         const data = await response.json();
         // 生成归档数据
         const archives = {};
+        console.log('Processing posts:', data.posts.length);
         data.posts.forEach(post => {
           const month = post.date.substring(0, 7);
           if (!archives[month]) archives[month] = [];
@@ -1129,7 +1130,11 @@
         archiveData = months.map(month => ({
           month,
           count: archives[month].length,
-          posts: archives[month].sort((a, b) => b.date.localeCompare(a.date))
+          posts: (() => {
+            const sorted = archives[month].sort((a, b) => b.date.localeCompare(a.date));
+            console.log('Month', month, 'sorted first post:', sorted[0]?.title);
+            return sorted;
+          })()
         }));
       } catch (e) {
         console.error('加载归档失败:', e);
