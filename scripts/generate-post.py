@@ -271,7 +271,7 @@ def update_articles_index(slug, title, description, article_date, read_time, tag
         data['posts'].append(new_post)
     
     # 重新计算统计数据
-    data['posts'].sort(key=lambda p: p['date'], reverse=True)
+    data['posts'].sort(key=lambda p: (p['date'], p['title']), reverse=True)
     data['stats']['totalPosts'] = len(data['posts'])
     
     # 重新计算 tag cloud
