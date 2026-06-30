@@ -423,12 +423,68 @@ def main():
     update_blog_list(slug, title, description, article_date, read_time, tags, category)
     
     # 更新博客索引（articles-index.json）
-    update_articles_index(slug, title, description, article_date, read_time, tags, category)
+
+def update_homepage_js_array():
+    """更新首页的 JavaScript posts 数组，使用博客列表的最新文章"""
+    import re
     
-    # 更新首页
-    update_homepage(slug, title, description, article_date, read_time, tags, category)
+    # 从博客列表读取最新文章
+    with open(BLOG_INDEX, 'r', encoding='utf-8') as f:
+        blog_html = f.read()
     
-    print(f"\n🎉 全部完成！访问: https://709527.xyz/blog/posts/{slug}.html")
+    # 提取前10篇文章
+    article_pattern = r'<article class="blog-list-item[^>]*>(.*?)</article>'
+    articles = list(re.finditer(article_pattern, blog_html, re.DOTALL))[:10]
+    
+    posts_js = "[\n"
+    for a in articles:
+        html = a.group(1)
+        url_match = re.search(r'href="([^"]+\.html)"', html)
+        url = url_match.group(1) if url_match else ""
+        title_match = re.search(r'blog-list-title">[^<]*<a[^>]*>([^<]+)</a>', html)
+        title = title_match.group(1) if title_match else ""
+        date_match = re.search(r'blog-date">([^<]+)', html)
+        date = date_match.group(1) if date_match else ""
+        read_time_match = re.search(r'(\d+)\s*min', html)
+        read_time = read_time_match.group(1) if read_time_match else "5"
+        cat1_match = re.search(r'blog-list-tag">([^<]+)', html)
+        cat1 = cat1_match.group(1) if cat1_match else ""
+        tags = re.findall(r'<span class="tech-tag">([^<]+)</span>', html)
+        cat2 = tags[0] if tags else cat1
+        desc_match = re.search(r'blog-list-excerpt">([^<]+)', html)
+        desc = desc_match.group(1) if desc_match else ""
+        
+        # 确保 URL 有 blog/ 前缀
+        if url and not url.startswith('blog/'):
+            url = 'blog/' + url
+        
+        posts_js += f'''      {{
+        url: '{url}',
+        title: '{title}',
+        date: '{date}',
+        readTime: '{read_time} min',
+        category: '{cat1}',
+        category2: '{cat2}',
+        desc: '{desc}'
+      }},
+'''
+    
+    posts_js += "    ];"
+    
+    # 读取首页
+    with open(HOME_INDEX, 'r', encoding='utf-8') as f:
+        home_html = f.read()
+    
+    # 替换 posts 数组
+    old_pattern = r'const posts = \[[\s\S]*?\];'
+    new_html = re.sub(old_pattern, 'const posts = ' + posts_js, home_html)
+    
+    # 写入首页
+    with open(HOME_INDEX, 'w', encoding='utf-8') as f:
+        f.write(new_html)
+    
+    print(f"  ✅ 已更新首页 JS posts 数组 ({len(articles)} 篇文章)")
+
 
 
 if __name__ == '__main__':
