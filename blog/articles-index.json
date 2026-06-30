@@ -3,7 +3,7 @@
     {
       "slug": "why-i-started-blogging",
       "title": "为什么我开始写博客：从潜水到发声",
-      "date": "2026-06-30",
+      "date": "2026-06-30 19:38:26",
       "category": "思考",
       "tags": [
         "思考",
@@ -15,51 +15,9 @@
       "url": "blog/posts/why-i-started-blogging.html"
     },
     {
-      "slug": "mcp-server-deep-dive",
-      "title": "MCP 协议深入实战：从入门到编写自定义 MCP Server",
-      "date": "2026-06-30",
-      "category": "AI",
-      "tags": [
-        "AI",
-        "MCP",
-        "工具调用",
-        "协议"
-      ],
-      "excerpt": "3000字完整教程，从零搭建 MCP Server，涵盖协议核心、SDK 使用、调试技巧和生产部署最佳实践",
-      "url": "blog/posts/mcp-server-deep-dive.html"
-    },
-    {
-      "slug": "cursor-rules-guide",
-      "title": "Cursor Rules 实战：自定义 AI 代码助手的进阶指南",
-      "date": "2026-06-30",
-      "category": "AI",
-      "tags": [
-        "Cursor",
-        "AI编程",
-        "效率工具",
-        "开发规范"
-      ],
-      "excerpt": "从零搭建 Cursor Rules 体系，涵盖规则语法、分层架构、真实 Android 项目案例和最佳实践",
-      "url": "blog/posts/cursor-rules-guide.html"
-    },
-    {
-      "slug": "android-16-foreground-service-constraints",
-      "title": "Android 16 前台服务类型全新限制：类型强制匹配与迁移指南",
-      "date": "2026-06-30",
-      "category": "Android",
-      "tags": [
-        "Android 16",
-        "前台服务",
-        "后台任务",
-        "WorkManager"
-      ],
-      "excerpt": "Android 16 前台服务类型强制约束详解，涵盖 shortService、specialUse、类型匹配规则和迁移适配方案",
-      "url": "blog/posts/android-16-foreground-service-constraints.html"
-    },
-    {
       "slug": "git-worktree-高效多分支开发指南",
       "title": "Git Worktree 高效多分支开发指南",
-      "date": "2026-06-28",
+      "date": "2026-06-30 19:38:24",
       "category": "前端",
       "tags": [
         "Git",
@@ -70,22 +28,9 @@
       "url": "blog/posts/git-worktree-高效多分支开发指南.html"
     },
     {
-      "slug": "ai-代码编辑器深度横评cursor-vs-windsurf-vs-copilot",
-      "title": "AI 代码编辑器深度横评：Cursor vs Windsurf vs Copilot",
-      "date": "2026-06-28",
-      "category": "前端",
-      "tags": [
-        "AI",
-        "AI 工具",
-        "开发技巧"
-      ],
-      "excerpt": "三大主流 AI 代码编辑器全方位对比",
-      "url": "blog/posts/ai-代码编辑器深度横评cursor-vs-windsurf-vs-copilot.html"
-    },
-    {
       "slug": "zig-language-introduction",
       "title": "Zig 语言入门：比 C 更安全的系统编程",
-      "date": "2026-06-27",
+      "date": "2026-06-30 19:38:22",
       "category": "系统编程",
       "tags": [
         "Zig",
@@ -100,225 +45,9 @@
       "url": "blog/posts/zig-language-introduction.html"
     },
     {
-      "slug": "webassembly-in-practice",
-      "title": "WebAssembly 实战：浏览器端高性能计算",
-      "date": "2026-06-27",
-      "category": "前端",
-      "tags": [
-        "WebAssembly",
-        "Rust",
-        "前端性能",
-        "WASM",
-        "浏览器"
-      ],
-      "excerpt": "WebAssembly 实战指南：从 C/Rust 编译到浏览器运行，WASM 与 JS 互操作、内存管理、性能优化与真实应用场景",
-      "url": "blog/posts/webassembly-in-practice.html"
-    },
-    {
-      "slug": "rag-introduction",
-      "title": "RAG 检索增强生成入门：从理念到落地",
-      "date": "2026-06-27",
-      "category": "AI",
-      "tags": [
-        "RAG",
-        "检索增强生成",
-        "LLM",
-        "向量数据库",
-        "Embedding",
-        "LangChain",
-        "AI"
-      ],
-      "excerpt": "RAG 检索增强生成完整入门指南：文档分块策略、嵌入模型选型、向量数据库对比、LangChain 实现、HyDE/RAG-Fusion 高级优化与 RAGAS 评估框架",
-      "url": "blog/posts/rag-introduction.html"
-    },
-    {
-      "slug": "prompt-engineering-systematic",
-      "title": "Prompt Engineering 系统化方法论",
-      "date": "2026-06-27",
-      "category": "AI",
-      "tags": [
-        "Prompt Engineering",
-        "CRISPE",
-        "Chain-of-Thought",
-        "Function Calling",
-        "AI"
-      ],
-      "excerpt": "Prompt Engineering 系统化方法论：从 CRISPE 框架到思维链、自一致性、Function Calling，覆盖评估与迭代的系统性指南",
-      "url": "blog/posts/prompt-engineering-systematic.html"
-    },
-    {
-      "slug": "postgresql-index-optimization",
-      "title": "PostgreSQL 索引优化实战",
-      "date": "2026-06-27",
-      "category": "数据库",
-      "tags": [
-        "PostgreSQL",
-        "索引优化",
-        "B-Tree",
-        "GIN",
-        "EXPLAIN",
-        "慢查询",
-        "数据库"
-      ],
-      "excerpt": "PostgreSQL 索引优化实战：B-Tree、GiST、GIN 索引类型对比，复合索引、部分索引设计，EXPLAIN 执行计划分析与慢查询优化",
-      "url": "blog/posts/postgresql-index-optimization.html"
-    },
-    {
-      "slug": "nginx-reverse-proxy-tuning",
-      "title": "Nginx 反向代理性能调优：从入门到生产",
-      "date": "2026-06-27",
-      "category": "DevOps",
-      "tags": [
-        "Nginx",
-        "反向代理",
-        "性能调优",
-        "SSL",
-        "负载均衡",
-        "DevOps"
-      ],
-      "excerpt": "Nginx 反向代理生产级调优指南：worker 配置、SSL 优化、缓存策略、负载均衡、限流与监控完整实践",
-      "url": "blog/posts/nginx-reverse-proxy-tuning.html"
-    },
-    {
-      "slug": "linux-ebpf-getting-started",
-      "title": "Linux eBPF 入门：内核可观测性新范式",
-      "date": "2026-06-27",
-      "category": "DevOps",
-      "tags": [
-        "eBPF",
-        "Linux 内核",
-        "可观测性",
-        "bpftrace",
-        "云原生"
-      ],
-      "excerpt": "Linux eBPF 入门实战：内核可观测性新范式，从 BPF 程序编写到 bpftrace、BCC 工具链使用，覆盖网络、安全、性能分析场景",
-      "url": "blog/posts/linux-ebpf-getting-started.html"
-    },
-    {
-      "slug": "kotlin-flow-advanced",
-      "title": "Kotlin Flow 进阶：背压策略与共享流",
-      "date": "2026-06-27",
-      "category": "Android",
-      "tags": [
-        "Kotlin Flow",
-        "背压策略",
-        "SharedFlow",
-        "StateFlow",
-        "Android"
-      ],
-      "excerpt": "Kotlin Flow 进阶实战：背压策略（conflate/buffer/collectLatest）与共享流（shareIn/stateIn）深度解析，附 Android 实际场景",
-      "url": "blog/posts/kotlin-flow-advanced.html"
-    },
-    {
-      "slug": "https-tls13-deep-dive",
-      "title": "HTTPS 与 TLS 1.3 深度解析",
-      "date": "2026-06-27",
-      "category": "安全",
-      "tags": [
-        "安全",
-        "HTTPS",
-        "TLS 1.3",
-        "Nginx"
-      ],
-      "excerpt": "HTTPS 与 TLS 1.3 深度解析：握手流程、ECDHE 密钥交换、证书体系、性能优化与 Nginx 配置最佳实践",
-      "url": "blog/posts/https-tls13-deep-dive.html"
-    },
-    {
-      "slug": "go-concurrency-patterns",
-      "title": "Go 并发模式：Channel 与 Context",
-      "date": "2026-06-27",
-      "category": "开发",
-      "tags": [
-        "Go",
-        "Golang",
-        "并发",
-        "Goroutine",
-        "Channel",
-        "Context"
-      ],
-      "excerpt": "Go 并发模式深度解析：Goroutine 与 Channel 实战、GMP 调度模型、Context 包详解、Fan-Out/Fan-In 模式、并发测试最佳实践",
-      "url": "blog/posts/go-concurrency-patterns.html"
-    },
-    {
-      "slug": "github-actions-advanced",
-      "title": "GitHub Actions 高级工作流：CI/CD 最佳实践",
-      "date": "2026-06-27",
-      "category": "DevOps",
-      "tags": [
-        "DevOps",
-        "GitHub Actions",
-        "CI/CD",
-        "OIDC",
-        "自动化"
-      ],
-      "excerpt": "GitHub Actions 高级工作流实战：矩阵构建、可复用工作流、自定义 Action、OIDC 集成、安全审计与性能优化完整指南",
-      "url": "blog/posts/github-actions-advanced.html"
-    },
-    {
-      "slug": "css-view-transitions",
-      "title": "CSS View Transitions API 实战：页面过渡动画新范式",
-      "date": "2026-06-27",
-      "category": "前端",
-      "tags": [
-        "前端",
-        "CSS",
-        "View Transitions",
-        "页面过渡",
-        "SPA"
-      ],
-      "excerpt": "CSS View Transitions API 实战：从 document.startViewTransition 到跨页面导航过渡、SPA 集成、列表动画完整指南",
-      "url": "blog/posts/css-view-transitions.html"
-    },
-    {
-      "slug": "android-hilt-dependency-injection",
-      "title": "Android Hilt 依赖注入最佳实践：从入门到架构",
-      "date": "2026-06-27",
-      "category": "Android",
-      "tags": [
-        "Hilt",
-        "依赖注入",
-        "Android",
-        "Dagger",
-        "ViewModel",
-        "模块化"
-      ],
-      "excerpt": "Android Hilt 依赖注入完整指南：核心注解、ViewModel 注入、多模块架构、作用域管理、第三方库集成与测试最佳实践",
-      "url": "blog/posts/android-hilt-dependency-injection.html"
-    },
-    {
-      "slug": "android-16-notifications",
-      "title": "Android 16 通知系统新 API 详解",
-      "date": "2026-06-27",
-      "category": "Android",
-      "tags": [
-        "Android 16",
-        "通知系统",
-        "Live Updates",
-        "Notifications",
-        "Android 开发"
-      ],
-      "excerpt": "Android 16 通知系统新 API 详解：Live Updates、Rich Ongoing、Bubble API 增强、通知优先级改革与迁移指南",
-      "url": "blog/posts/android-16-notifications.html"
-    },
-    {
-      "slug": "android-16-background-tasks",
-      "title": "Android 16 后台任务新限制：开发者迁移指南",
-      "date": "2026-06-27",
-      "category": "Android",
-      "tags": [
-        "Android 16",
-        "后台任务",
-        "WorkManager",
-        "前台服务",
-        "电池优化"
-      ],
-      "excerpt": "Android 16 后台任务新限制完整解读：JobScheduler 强化、前台服务严格限制、WorkManager 迁移策略与兼容性适配指南",
-      "url": "blog/posts/android-16-background-tasks.html"
-    },
-    {
       "slug": "kotlin-multiplatform-practice",
       "title": "Kotlin Multiplatform 实战：共享业务逻辑到 iOS",
-      "date": "2026-06-24",
+      "date": "2026-06-30 19:38:20",
       "category": "Kotlin",
       "tags": [
         "Kotlin Multiplatform",
@@ -332,24 +61,9 @@
       "url": "blog/posts/kotlin-multiplatform-practice.html"
     },
     {
-      "slug": "android-gradle-kts-migration",
-      "title": "Android Gradle 迁移到 KTS 完整指南：从 Groovy 到 Kotlin DSL",
-      "date": "2026-06-24",
-      "category": "Android",
-      "tags": [
-        "Android",
-        "Gradle",
-        "KTS",
-        "Kotlin DSL",
-        "构建优化"
-      ],
-      "excerpt": "Android Gradle 从 Groovy 迁移到 Kotlin DSL (KTS) 完整指南 - 语法对比、迁移步骤、踩坑记录与最佳实践",
-      "url": "blog/posts/android-gradle-kts-migration.html"
-    },
-    {
       "slug": "compose-navigation-guide",
       "title": "Jetpack Compose Navigation 进阶指南：从路由设计到深层链接",
-      "date": "2026-06-22",
+      "date": "2026-06-30 19:38:18",
       "category": "Android",
       "tags": [
         "Jetpack Compose",
@@ -362,24 +76,9 @@
       "url": "blog/posts/compose-navigation-guide.html"
     },
     {
-      "slug": "android-performance-optimization",
-      "title": "Android 性能优化完整实战：从启动到渲染",
-      "date": "2026-06-22",
-      "category": "Android",
-      "tags": [
-        "Android",
-        "性能优化",
-        "启动优化",
-        "内存优化",
-        "渲染优化"
-      ],
-      "excerpt": "Android 性能优化完整实战指南 - 从启动优化、内存管理到渲染调优，涵盖 Baseline Profiles、R8、App Startup、LeakCanary 等工具和最佳实践",
-      "url": "blog/posts/android-performance-optimization.html"
-    },
-    {
       "slug": "mcp-android-integration",
       "title": "MCP 协议在 Android 端的应用：AI 工具调用新范式",
-      "date": "2026-06-19",
+      "date": "2026-06-30 19:38:16",
       "category": "Android",
       "tags": [
         "Android",
@@ -392,86 +91,9 @@
       "url": "blog/posts/mcp-android-integration.html"
     },
     {
-      "slug": "kotlin-240-features",
-      "title": "Kotlin 2.4.0 重磅发布：Context Parameters 稳定、Destructuring 升级、Lombok 插件进入 Alpha",
-      "date": "2026-06-19",
-      "category": "Kotlin",
-      "tags": [
-        "Kotlin",
-        "编程语言",
-        "JetBrains",
-        "JVM",
-        "Kotlin 2.4.0",
-        "Context Parameters",
-        "Compose Multiplatform"
-      ],
-      "excerpt": "Kotlin 2.4.0 正式发布——Context Parameters 稳定、Name-based Destructuring、Lombok 编译器插件 Alpha、Compose Multiplatform 1.11 等重磅特性详解",
-      "url": "blog/posts/kotlin-240-features.html"
-    },
-    {
-      "slug": "compose-april-2026-update",
-      "title": "Jetpack Compose April 2026 Update 深度解读",
-      "date": "2026-06-19",
-      "category": "Android",
-      "tags": [
-        "Jetpack Compose",
-        "Android",
-        "Compose Multiplatform",
-        "UI",
-        "Kotlin"
-      ],
-      "excerpt": "Jetpack Compose April 2026 Update 完整解读 — BOM 2026.04.01、Compose 1.11、共享元素过渡调试工具、触控板事件、Testing v2 默认启用、Navigation3 1.1.1 等全解析",
-      "url": "blog/posts/compose-april-2026-update.html"
-    },
-    {
-      "slug": "google-io-2026-recap",
-      "title": "Google I/O 2026 完整回顾：AI 重塑一切",
-      "date": "2026-06-19",
-      "category": "AI",
-      "tags": [
-        "AI",
-        "Android",
-        "Google I/O",
-        "Gemini",
-        "Agent"
-      ],
-      "excerpt": "Google I/O 2026 完整回顾 - Gemini 3.5 Flash、Android 17、Android XR、Managed Agents 等重大发布全解析",
-      "url": "blog/posts/google-io-2026-recap.html"
-    },
-    {
-      "slug": "android-app-security-hardening",
-      "title": "Android 应用签名与安全加固完整指南",
-      "date": "2026-06-19",
-      "category": "安全",
-      "tags": [
-        "Android",
-        "安全",
-        "签名",
-        "混淆",
-        "Play Integrity"
-      ],
-      "excerpt": "Android 应用签名与安全加固完整指南 - 签名机制、加固方案、完整性校验、混淆策略等",
-      "url": "blog/posts/android-app-security-hardening.html"
-    },
-    {
-      "slug": "android-16-features",
-      "title": "Android 16 新特性详解：开发者需要知道的 8 件事",
-      "date": "2026-06-19",
-      "category": "Android",
-      "tags": [
-        "Android",
-        "Android 16",
-        "Live Updates",
-        "AICore",
-        "大屏适配"
-      ],
-      "excerpt": "Android 16 新特性详解 - Live Updates、大屏强制适配、AICore 增强、APV 编码支持等开发者必知内容",
-      "url": "blog/posts/android-16-features.html"
-    },
-    {
       "slug": "ai-coding-workflow-optimization",
       "title": "AI 编程工作流优化：从 Prompt 设计到上下文管理",
-      "date": "2026-05-08",
+      "date": "2026-06-30 19:38:14",
       "category": "AI",
       "tags": [
         "AI",
@@ -485,7 +107,7 @@
     {
       "slug": "android-gemini-nano-integration",
       "title": "Android 端侧 AI 实战：Gemini Nano 集成指南",
-      "date": "2026-05-07",
+      "date": "2026-06-30 19:38:12",
       "category": "Android",
       "tags": [
         "Android",
@@ -500,7 +122,7 @@
     {
       "slug": "sqlite-wal-performance",
       "title": "SQLite 进阶：WAL 模式与性能优化",
-      "date": "2026-04-26",
+      "date": "2026-06-30 19:38:10",
       "category": "数据库",
       "tags": [
         "SQLite",
@@ -512,65 +134,9 @@
       "url": "blog/posts/sqlite-wal-performance.html"
     },
     {
-      "slug": "rust-getting-started",
-      "title": "Rust 入门：从零到生产",
-      "date": "2026-04-26",
-      "category": "系统编程",
-      "tags": [
-        "Rust",
-        "系统编程",
-        "所有权",
-        "内存安全"
-      ],
-      "excerpt": "Rust 入门指南：从零开始学习 Rust，掌握所有权、借用、生命周期等核心概念，构建高性能安全程序",
-      "url": "blog/posts/rust-getting-started.html"
-    },
-    {
-      "slug": "react-server-components",
-      "title": "React Server Components 深入解析",
-      "date": "2026-04-26",
-      "category": "前端",
-      "tags": [
-        "React",
-        "Server Components",
-        "Next.js",
-        "前端架构"
-      ],
-      "excerpt": "React Server Components 深入解析：理解服务端组件的工作原理、数据获取方式、与客户端组件的交互，以及最佳实践",
-      "url": "blog/posts/react-server-components.html"
-    },
-    {
-      "slug": "docker-compose-best-practices",
-      "title": "Docker Compose 最佳实践",
-      "date": "2026-04-26",
-      "category": "DevOps",
-      "tags": [
-        "Docker",
-        "Docker Compose",
-        "容器化",
-        "DevOps"
-      ],
-      "excerpt": "Docker Compose 最佳实践：多容器编排、网络配置、数据持久化、环境变量管理、健康检查等实战技巧",
-      "url": "blog/posts/docker-compose-best-practices.html"
-    },
-    {
-      "slug": "css-container-queries",
-      "title": "CSS Container Queries 实战",
-      "date": "2026-04-26",
-      "category": "前端",
-      "tags": [
-        "CSS",
-        "Container Queries",
-        "响应式设计",
-        "前端开发"
-      ],
-      "excerpt": "CSS Container Queries 实战：基于容器尺寸的响应式设计，比媒体查询更灵活的组件级响应式方案",
-      "url": "blog/posts/css-container-queries.html"
-    },
-    {
       "slug": "typescript-type-gymnastics",
       "title": "TypeScript 类型体操指南",
-      "date": "2026-04-25",
+      "date": "2026-06-30 19:38:08",
       "category": "前端",
       "tags": [
         "TypeScript",
@@ -582,38 +148,9 @@
       "url": "blog/posts/typescript-type-gymnastics.html"
     },
     {
-      "slug": "jetpack-compose-animation",
-      "title": "Jetpack Compose 动画实战",
-      "date": "2026-04-25",
-      "category": "Android",
-      "tags": [
-        "Jetpack Compose",
-        "Android",
-        "动画",
-        "Kotlin",
-        "UI"
-      ],
-      "excerpt": "Jetpack Compose 动画实战：掌握声明式 UI 动画的核心技巧，打造流畅的用户体验",
-      "url": "blog/posts/jetpack-compose-animation.html"
-    },
-    {
-      "slug": "git-advanced-techniques",
-      "title": "Git 高级技巧：变基、挑拣和交互式暂存",
-      "date": "2026-04-25",
-      "category": "开发",
-      "tags": [
-        "Git",
-        "版本控制",
-        "开发技巧",
-        "团队协作"
-      ],
-      "excerpt": "Git 高级技巧：掌握变基、挑拣、交互式暂存等进阶操作，提升代码管理效率",
-      "url": "blog/posts/git-advanced-techniques.html"
-    },
-    {
       "slug": "nextjs-16-tutorial",
       "title": "Next.js 16 实战：App Router + Server Actions + Turbopack",
-      "date": "2026-04-20",
+      "date": "2026-06-30 19:38:06",
       "category": "前端",
       "tags": [
         "Next.js",
@@ -628,7 +165,7 @@
     {
       "slug": "ai-coding-tools-comparison",
       "title": "主流 AI 编程工具深度对比：Cursor、Claude Code、OpenCode、GitHub Copilot",
-      "date": "2026-04-19",
+      "date": "2026-06-30 19:38:04",
       "category": "AI",
       "tags": [
         "AI 工具",
@@ -643,7 +180,7 @@
     {
       "slug": "gemini-notebooklm-integration",
       "title": "Gemini Notebooks 深度体验：与 NotebookLM 无缝整合后的全新 AI 工作流",
-      "date": "2026-04-11",
+      "date": "2026-06-30 19:38:02",
       "category": "AI",
       "tags": [
         "AI 工具",
@@ -659,7 +196,7 @@
     {
       "slug": "gemini-notebooklm-workflow",
       "title": "Gemini + NotebookLM 结合使用指南",
-      "date": "2026-04-10",
+      "date": "2026-06-30 19:38:00",
       "category": "AI",
       "tags": [
         "AI 工具",
@@ -674,7 +211,7 @@
     {
       "slug": "github-pages-blog-setup",
       "title": "从零搭建个人博客系统（GitHub Pages + 自定义域名 + 自动化部署）",
-      "date": "2026-04-09",
+      "date": "2026-06-30 19:37:58",
       "category": "DevOps",
       "tags": [
         "GitHub Pages",
@@ -689,7 +226,7 @@
     {
       "slug": "kotlin-coroutines-best-practices",
       "title": "Kotlin Coroutines 最佳实践",
-      "date": "2026-04-08",
+      "date": "2026-06-30 19:37:56",
       "category": "Kotlin",
       "tags": [
         "Kotlin",
@@ -704,7 +241,7 @@
     {
       "slug": "local-rag-ollama",
       "title": "RAG 本地实践：用 Ollama + Embedding 搭建私有知识库",
-      "date": "2026-04-07",
+      "date": "2026-06-30 19:37:54",
       "category": "AI",
       "tags": [
         "RAG",
@@ -719,7 +256,7 @@
     {
       "slug": "android-offline-speech-input",
       "title": "Android 离线语音输入实现方案",
-      "date": "2026-04-03",
+      "date": "2026-06-30 19:37:52",
       "category": "Android",
       "tags": [
         "Android",
@@ -734,7 +271,7 @@
     {
       "slug": "onnx-mobile-deployment",
       "title": "ONNX 移动端侧模型实践：从转换到部署",
-      "date": "2026-03-30",
+      "date": "2026-06-30 19:37:50",
       "category": "AI",
       "tags": [
         "ONNX",
@@ -749,7 +286,7 @@
     {
       "slug": "pwa-offline-web-app",
       "title": "PWA 实战：从零打造离线可用 Web 应用",
-      "date": "2026-03-22",
+      "date": "2026-06-30 19:37:48",
       "category": "前端",
       "tags": [
         "PWA",
@@ -763,7 +300,7 @@
     {
       "slug": "ssh-security-hardening",
       "title": "云服务器 SSH 安全加固完整指南",
-      "date": "2026-03-18",
+      "date": "2026-06-30 19:37:46",
       "category": "安全",
       "tags": [
         "DevOps",
@@ -777,7 +314,7 @@
     {
       "slug": "tailscale-derp-server",
       "title": "自建 Tailscale DERP 中继服务器完整指南",
-      "date": "2026-03-17",
+      "date": "2026-06-30 19:37:44",
       "category": "DevOps",
       "tags": [
         "DevOps",
@@ -789,23 +326,9 @@
       "url": "blog/posts/tailscale-derp-server.html"
     },
     {
-      "slug": "vscode-port-forward",
-      "title": "VS Code 端口转发原理详解",
-      "date": "2026-03-17",
-      "category": "DevOps",
-      "tags": [
-        "DevOps",
-        "SSH",
-        "VS Code",
-        "网络"
-      ],
-      "excerpt": "VS Code 端口转发原理详解：SSH 隧道工作机制与实战应用 - 张小猛的技术博客",
-      "url": "blog/posts/vscode-port-forward.html"
-    },
-    {
       "slug": "ai-agent-skill-development",
       "title": "AI Agent 技能开发实战：从需求到上线的完整流程",
-      "date": "2026-03-14",
+      "date": "2026-06-30 19:37:42",
       "category": "AI Agent",
       "tags": [
         "AI Agent",
@@ -819,7 +342,7 @@
     {
       "slug": "openclaw-guide",
       "title": "OpenClaw 深度使用指南：从 0 到 1 构建个人 AI Agent",
-      "date": "2026-03-13",
+      "date": "2026-06-30 19:37:40",
       "category": "AI",
       "tags": [
         "AI",
@@ -833,7 +356,7 @@
     {
       "slug": "mobile-gs-paper-review",
       "title": "Mobile-GS：让 3D 高斯泼溅在移动端实时渲染",
-      "date": "2026-02-15",
+      "date": "2026-06-30 19:37:38",
       "category": "AI",
       "tags": [
         "计算机视觉",
@@ -844,6 +367,483 @@
       ],
       "excerpt": "Mobile-GS：让 3D 高斯泼溅在移动端实时渲染 - 论文解读，ICLR 2026，移动端 3D 渲染新突破",
       "url": "blog/posts/mobile-gs-paper-review.html"
+    },
+    {
+      "slug": "mcp-server-deep-dive",
+      "title": "MCP 协议深入实战：从入门到编写自定义 MCP Server",
+      "date": "2026-06-30 19:37:36",
+      "category": "AI",
+      "tags": [
+        "AI",
+        "MCP",
+        "工具调用",
+        "协议"
+      ],
+      "excerpt": "3000字完整教程，从零搭建 MCP Server，涵盖协议核心、SDK 使用、调试技巧和生产部署最佳实践",
+      "url": "blog/posts/mcp-server-deep-dive.html"
+    },
+    {
+      "slug": "ai-代码编辑器深度横评cursor-vs-windsurf-vs-copilot",
+      "title": "AI 代码编辑器深度横评：Cursor vs Windsurf vs Copilot",
+      "date": "2026-06-30 19:37:34",
+      "category": "前端",
+      "tags": [
+        "AI",
+        "AI 工具",
+        "开发技巧"
+      ],
+      "excerpt": "三大主流 AI 代码编辑器全方位对比",
+      "url": "blog/posts/ai-代码编辑器深度横评cursor-vs-windsurf-vs-copilot.html"
+    },
+    {
+      "slug": "webassembly-in-practice",
+      "title": "WebAssembly 实战：浏览器端高性能计算",
+      "date": "2026-06-30 19:37:32",
+      "category": "前端",
+      "tags": [
+        "WebAssembly",
+        "Rust",
+        "前端性能",
+        "WASM",
+        "浏览器"
+      ],
+      "excerpt": "WebAssembly 实战指南：从 C/Rust 编译到浏览器运行，WASM 与 JS 互操作、内存管理、性能优化与真实应用场景",
+      "url": "blog/posts/webassembly-in-practice.html"
+    },
+    {
+      "slug": "android-gradle-kts-migration",
+      "title": "Android Gradle 迁移到 KTS 完整指南：从 Groovy 到 Kotlin DSL",
+      "date": "2026-06-30 19:37:30",
+      "category": "Android",
+      "tags": [
+        "Android",
+        "Gradle",
+        "KTS",
+        "Kotlin DSL",
+        "构建优化"
+      ],
+      "excerpt": "Android Gradle 从 Groovy 迁移到 Kotlin DSL (KTS) 完整指南 - 语法对比、迁移步骤、踩坑记录与最佳实践",
+      "url": "blog/posts/android-gradle-kts-migration.html"
+    },
+    {
+      "slug": "android-performance-optimization",
+      "title": "Android 性能优化完整实战：从启动到渲染",
+      "date": "2026-06-30 19:37:28",
+      "category": "Android",
+      "tags": [
+        "Android",
+        "性能优化",
+        "启动优化",
+        "内存优化",
+        "渲染优化"
+      ],
+      "excerpt": "Android 性能优化完整实战指南 - 从启动优化、内存管理到渲染调优，涵盖 Baseline Profiles、R8、App Startup、LeakCanary 等工具和最佳实践",
+      "url": "blog/posts/android-performance-optimization.html"
+    },
+    {
+      "slug": "kotlin-240-features",
+      "title": "Kotlin 2.4.0 重磅发布：Context Parameters 稳定、Destructuring 升级、Lombok 插件进入 Alpha",
+      "date": "2026-06-30 19:37:26",
+      "category": "Kotlin",
+      "tags": [
+        "Kotlin",
+        "编程语言",
+        "JetBrains",
+        "JVM",
+        "Kotlin 2.4.0",
+        "Context Parameters",
+        "Compose Multiplatform"
+      ],
+      "excerpt": "Kotlin 2.4.0 正式发布——Context Parameters 稳定、Name-based Destructuring、Lombok 编译器插件 Alpha、Compose Multiplatform 1.11 等重磅特性详解",
+      "url": "blog/posts/kotlin-240-features.html"
+    },
+    {
+      "slug": "rust-getting-started",
+      "title": "Rust 入门：从零到生产",
+      "date": "2026-06-30 19:37:24",
+      "category": "系统编程",
+      "tags": [
+        "Rust",
+        "系统编程",
+        "所有权",
+        "内存安全"
+      ],
+      "excerpt": "Rust 入门指南：从零开始学习 Rust，掌握所有权、借用、生命周期等核心概念，构建高性能安全程序",
+      "url": "blog/posts/rust-getting-started.html"
+    },
+    {
+      "slug": "jetpack-compose-animation",
+      "title": "Jetpack Compose 动画实战",
+      "date": "2026-06-30 19:37:22",
+      "category": "Android",
+      "tags": [
+        "Jetpack Compose",
+        "Android",
+        "动画",
+        "Kotlin",
+        "UI"
+      ],
+      "excerpt": "Jetpack Compose 动画实战：掌握声明式 UI 动画的核心技巧，打造流畅的用户体验",
+      "url": "blog/posts/jetpack-compose-animation.html"
+    },
+    {
+      "slug": "vscode-port-forward",
+      "title": "VS Code 端口转发原理详解",
+      "date": "2026-06-30 19:37:20",
+      "category": "DevOps",
+      "tags": [
+        "DevOps",
+        "SSH",
+        "VS Code",
+        "网络"
+      ],
+      "excerpt": "VS Code 端口转发原理详解：SSH 隧道工作机制与实战应用 - 张小猛的技术博客",
+      "url": "blog/posts/vscode-port-forward.html"
+    },
+    {
+      "slug": "cursor-rules-guide",
+      "title": "Cursor Rules 实战：自定义 AI 代码助手的进阶指南",
+      "date": "2026-06-30 19:37:18",
+      "category": "AI",
+      "tags": [
+        "Cursor",
+        "AI编程",
+        "效率工具",
+        "开发规范"
+      ],
+      "excerpt": "从零搭建 Cursor Rules 体系，涵盖规则语法、分层架构、真实 Android 项目案例和最佳实践",
+      "url": "blog/posts/cursor-rules-guide.html"
+    },
+    {
+      "slug": "rag-introduction",
+      "title": "RAG 检索增强生成入门：从理念到落地",
+      "date": "2026-06-30 19:37:16",
+      "category": "AI",
+      "tags": [
+        "RAG",
+        "检索增强生成",
+        "LLM",
+        "向量数据库",
+        "Embedding",
+        "LangChain",
+        "AI"
+      ],
+      "excerpt": "RAG 检索增强生成完整入门指南：文档分块策略、嵌入模型选型、向量数据库对比、LangChain 实现、HyDE/RAG-Fusion 高级优化与 RAGAS 评估框架",
+      "url": "blog/posts/rag-introduction.html"
+    },
+    {
+      "slug": "compose-april-2026-update",
+      "title": "Jetpack Compose April 2026 Update 深度解读",
+      "date": "2026-06-30 19:37:14",
+      "category": "Android",
+      "tags": [
+        "Jetpack Compose",
+        "Android",
+        "Compose Multiplatform",
+        "UI",
+        "Kotlin"
+      ],
+      "excerpt": "Jetpack Compose April 2026 Update 完整解读 — BOM 2026.04.01、Compose 1.11、共享元素过渡调试工具、触控板事件、Testing v2 默认启用、Navigation3 1.1.1 等全解析",
+      "url": "blog/posts/compose-april-2026-update.html"
+    },
+    {
+      "slug": "react-server-components",
+      "title": "React Server Components 深入解析",
+      "date": "2026-06-30 19:37:12",
+      "category": "前端",
+      "tags": [
+        "React",
+        "Server Components",
+        "Next.js",
+        "前端架构"
+      ],
+      "excerpt": "React Server Components 深入解析：理解服务端组件的工作原理、数据获取方式、与客户端组件的交互，以及最佳实践",
+      "url": "blog/posts/react-server-components.html"
+    },
+    {
+      "slug": "git-advanced-techniques",
+      "title": "Git 高级技巧：变基、挑拣和交互式暂存",
+      "date": "2026-06-30 19:37:10",
+      "category": "开发",
+      "tags": [
+        "Git",
+        "版本控制",
+        "开发技巧",
+        "团队协作"
+      ],
+      "excerpt": "Git 高级技巧：掌握变基、挑拣、交互式暂存等进阶操作，提升代码管理效率",
+      "url": "blog/posts/git-advanced-techniques.html"
+    },
+    {
+      "slug": "android-16-foreground-service-constraints",
+      "title": "Android 16 前台服务类型全新限制：类型强制匹配与迁移指南",
+      "date": "2026-06-30 19:37:08",
+      "category": "Android",
+      "tags": [
+        "Android 16",
+        "前台服务",
+        "后台任务",
+        "WorkManager"
+      ],
+      "excerpt": "Android 16 前台服务类型强制约束详解，涵盖 shortService、specialUse、类型匹配规则和迁移适配方案",
+      "url": "blog/posts/android-16-foreground-service-constraints.html"
+    },
+    {
+      "slug": "prompt-engineering-systematic",
+      "title": "Prompt Engineering 系统化方法论",
+      "date": "2026-06-30 19:37:06",
+      "category": "AI",
+      "tags": [
+        "Prompt Engineering",
+        "CRISPE",
+        "Chain-of-Thought",
+        "Function Calling",
+        "AI"
+      ],
+      "excerpt": "Prompt Engineering 系统化方法论：从 CRISPE 框架到思维链、自一致性、Function Calling，覆盖评估与迭代的系统性指南",
+      "url": "blog/posts/prompt-engineering-systematic.html"
+    },
+    {
+      "slug": "google-io-2026-recap",
+      "title": "Google I/O 2026 完整回顾：AI 重塑一切",
+      "date": "2026-06-30 19:37:04",
+      "category": "AI",
+      "tags": [
+        "AI",
+        "Android",
+        "Google I/O",
+        "Gemini",
+        "Agent"
+      ],
+      "excerpt": "Google I/O 2026 完整回顾 - Gemini 3.5 Flash、Android 17、Android XR、Managed Agents 等重大发布全解析",
+      "url": "blog/posts/google-io-2026-recap.html"
+    },
+    {
+      "slug": "docker-compose-best-practices",
+      "title": "Docker Compose 最佳实践",
+      "date": "2026-06-30 19:37:02",
+      "category": "DevOps",
+      "tags": [
+        "Docker",
+        "Docker Compose",
+        "容器化",
+        "DevOps"
+      ],
+      "excerpt": "Docker Compose 最佳实践：多容器编排、网络配置、数据持久化、环境变量管理、健康检查等实战技巧",
+      "url": "blog/posts/docker-compose-best-practices.html"
+    },
+    {
+      "slug": "postgresql-index-optimization",
+      "title": "PostgreSQL 索引优化实战",
+      "date": "2026-06-30 19:37:00",
+      "category": "数据库",
+      "tags": [
+        "PostgreSQL",
+        "索引优化",
+        "B-Tree",
+        "GIN",
+        "EXPLAIN",
+        "慢查询",
+        "数据库"
+      ],
+      "excerpt": "PostgreSQL 索引优化实战：B-Tree、GiST、GIN 索引类型对比，复合索引、部分索引设计，EXPLAIN 执行计划分析与慢查询优化",
+      "url": "blog/posts/postgresql-index-optimization.html"
+    },
+    {
+      "slug": "android-app-security-hardening",
+      "title": "Android 应用签名与安全加固完整指南",
+      "date": "2026-06-30 19:36:58",
+      "category": "安全",
+      "tags": [
+        "Android",
+        "安全",
+        "签名",
+        "混淆",
+        "Play Integrity"
+      ],
+      "excerpt": "Android 应用签名与安全加固完整指南 - 签名机制、加固方案、完整性校验、混淆策略等",
+      "url": "blog/posts/android-app-security-hardening.html"
+    },
+    {
+      "slug": "css-container-queries",
+      "title": "CSS Container Queries 实战",
+      "date": "2026-06-30 19:36:56",
+      "category": "前端",
+      "tags": [
+        "CSS",
+        "Container Queries",
+        "响应式设计",
+        "前端开发"
+      ],
+      "excerpt": "CSS Container Queries 实战：基于容器尺寸的响应式设计，比媒体查询更灵活的组件级响应式方案",
+      "url": "blog/posts/css-container-queries.html"
+    },
+    {
+      "slug": "nginx-reverse-proxy-tuning",
+      "title": "Nginx 反向代理性能调优：从入门到生产",
+      "date": "2026-06-30 19:36:54",
+      "category": "DevOps",
+      "tags": [
+        "Nginx",
+        "反向代理",
+        "性能调优",
+        "SSL",
+        "负载均衡",
+        "DevOps"
+      ],
+      "excerpt": "Nginx 反向代理生产级调优指南：worker 配置、SSL 优化、缓存策略、负载均衡、限流与监控完整实践",
+      "url": "blog/posts/nginx-reverse-proxy-tuning.html"
+    },
+    {
+      "slug": "android-16-features",
+      "title": "Android 16 新特性详解：开发者需要知道的 8 件事",
+      "date": "2026-06-30 19:36:52",
+      "category": "Android",
+      "tags": [
+        "Android",
+        "Android 16",
+        "Live Updates",
+        "AICore",
+        "大屏适配"
+      ],
+      "excerpt": "Android 16 新特性详解 - Live Updates、大屏强制适配、AICore 增强、APV 编码支持等开发者必知内容",
+      "url": "blog/posts/android-16-features.html"
+    },
+    {
+      "slug": "linux-ebpf-getting-started",
+      "title": "Linux eBPF 入门：内核可观测性新范式",
+      "date": "2026-06-30 19:36:50",
+      "category": "DevOps",
+      "tags": [
+        "eBPF",
+        "Linux 内核",
+        "可观测性",
+        "bpftrace",
+        "云原生"
+      ],
+      "excerpt": "Linux eBPF 入门实战：内核可观测性新范式，从 BPF 程序编写到 bpftrace、BCC 工具链使用，覆盖网络、安全、性能分析场景",
+      "url": "blog/posts/linux-ebpf-getting-started.html"
+    },
+    {
+      "slug": "kotlin-flow-advanced",
+      "title": "Kotlin Flow 进阶：背压策略与共享流",
+      "date": "2026-06-30 19:36:48",
+      "category": "Android",
+      "tags": [
+        "Kotlin Flow",
+        "背压策略",
+        "SharedFlow",
+        "StateFlow",
+        "Android"
+      ],
+      "excerpt": "Kotlin Flow 进阶实战：背压策略（conflate/buffer/collectLatest）与共享流（shareIn/stateIn）深度解析，附 Android 实际场景",
+      "url": "blog/posts/kotlin-flow-advanced.html"
+    },
+    {
+      "slug": "https-tls13-deep-dive",
+      "title": "HTTPS 与 TLS 1.3 深度解析",
+      "date": "2026-06-30 19:36:46",
+      "category": "安全",
+      "tags": [
+        "安全",
+        "HTTPS",
+        "TLS 1.3",
+        "Nginx"
+      ],
+      "excerpt": "HTTPS 与 TLS 1.3 深度解析：握手流程、ECDHE 密钥交换、证书体系、性能优化与 Nginx 配置最佳实践",
+      "url": "blog/posts/https-tls13-deep-dive.html"
+    },
+    {
+      "slug": "go-concurrency-patterns",
+      "title": "Go 并发模式：Channel 与 Context",
+      "date": "2026-06-30 19:36:44",
+      "category": "开发",
+      "tags": [
+        "Go",
+        "Golang",
+        "并发",
+        "Goroutine",
+        "Channel",
+        "Context"
+      ],
+      "excerpt": "Go 并发模式深度解析：Goroutine 与 Channel 实战、GMP 调度模型、Context 包详解、Fan-Out/Fan-In 模式、并发测试最佳实践",
+      "url": "blog/posts/go-concurrency-patterns.html"
+    },
+    {
+      "slug": "github-actions-advanced",
+      "title": "GitHub Actions 高级工作流：CI/CD 最佳实践",
+      "date": "2026-06-30 19:36:42",
+      "category": "DevOps",
+      "tags": [
+        "DevOps",
+        "GitHub Actions",
+        "CI/CD",
+        "OIDC",
+        "自动化"
+      ],
+      "excerpt": "GitHub Actions 高级工作流实战：矩阵构建、可复用工作流、自定义 Action、OIDC 集成、安全审计与性能优化完整指南",
+      "url": "blog/posts/github-actions-advanced.html"
+    },
+    {
+      "slug": "css-view-transitions",
+      "title": "CSS View Transitions API 实战：页面过渡动画新范式",
+      "date": "2026-06-30 19:36:40",
+      "category": "前端",
+      "tags": [
+        "前端",
+        "CSS",
+        "View Transitions",
+        "页面过渡",
+        "SPA"
+      ],
+      "excerpt": "CSS View Transitions API 实战：从 document.startViewTransition 到跨页面导航过渡、SPA 集成、列表动画完整指南",
+      "url": "blog/posts/css-view-transitions.html"
+    },
+    {
+      "slug": "android-hilt-dependency-injection",
+      "title": "Android Hilt 依赖注入最佳实践：从入门到架构",
+      "date": "2026-06-30 19:36:38",
+      "category": "Android",
+      "tags": [
+        "Hilt",
+        "依赖注入",
+        "Android",
+        "Dagger",
+        "ViewModel",
+        "模块化"
+      ],
+      "excerpt": "Android Hilt 依赖注入完整指南：核心注解、ViewModel 注入、多模块架构、作用域管理、第三方库集成与测试最佳实践",
+      "url": "blog/posts/android-hilt-dependency-injection.html"
+    },
+    {
+      "slug": "android-16-notifications",
+      "title": "Android 16 通知系统新 API 详解",
+      "date": "2026-06-30 19:36:36",
+      "category": "Android",
+      "tags": [
+        "Android 16",
+        "通知系统",
+        "Live Updates",
+        "Notifications",
+        "Android 开发"
+      ],
+      "excerpt": "Android 16 通知系统新 API 详解：Live Updates、Rich Ongoing、Bubble API 增强、通知优先级改革与迁移指南",
+      "url": "blog/posts/android-16-notifications.html"
+    },
+    {
+      "slug": "android-16-background-tasks",
+      "title": "Android 16 后台任务新限制：开发者迁移指南",
+      "date": "2026-06-30 19:36:34",
+      "category": "Android",
+      "tags": [
+        "Android 16",
+        "后台任务",
+        "WorkManager",
+        "前台服务",
+        "电池优化"
+      ],
+      "excerpt": "Android 16 后台任务新限制完整解读：JobScheduler 强化、前台服务严格限制、WorkManager 迁移策略与兼容性适配指南",
+      "url": "blog/posts/android-16-background-tasks.html"
     }
   ],
   "tagCloud": [
