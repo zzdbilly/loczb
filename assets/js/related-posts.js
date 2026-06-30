@@ -4,6 +4,7 @@
 
 // Article index with tags
 const ARTICLE_INDEX = [
+  { slug: "android-16-foreground-service-constraints", tags: ["Android 16", "前台服务", "后台任务", "WorkManager"], title: "Android 16 前台服务类型全新限制：类型强制匹配与迁移指南" },
   { slug: "cursor-rules-guide", tags: ["Cursor", "AI编程", "效率工具", "开发规范"], title: "Cursor Rules 实战：自定义 AI 代码助手的进阶指南" },
   { slug: "mcp-server-deep-dive", tags: ["AI", "MCP", "工具调用", "协议"], title: "MCP 协议深入实战：从入门到编写自定义 MCP Server" },
   { slug: "ai-代码编辑器深度横评cursor-vs-windsurf-vs-copilot", tags: ["AI", "AI 工具", "开发技巧"], title: "AI 代码编辑器深度横评：Cursor vs Windsurf vs Copilot" },
