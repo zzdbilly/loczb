@@ -41,7 +41,7 @@
     .pagination-btn.disabled { opacity: 0.5; pointer-events: none; }
     .pagination-info { color: var(--color-text-secondary); font-size: 0.85rem; margin: 0 1rem; }
     /* Blog Search Bar */
-    .blog-search-bar { position: relative; max-width: 600px; margin: 1.5rem auto 0; }
+    .blog-search-bar { position: relative; max-width: 600px; margin: 0.5rem auto 0; }
     .blog-search-bar input { width: 100%; padding: 0.75rem 1rem; border-radius: var(--radius-full); border: 1px solid var(--color-border); background: var(--color-bg-secondary); color: var(--color-text-primary); font-size: var(--text-sm); outline: none; transition: border-color 0.2s; }
     .blog-search-bar input::placeholder { color: var(--color-text-muted); }
     .blog-search-bar input:focus { border-color: var(--color-accent-primary); }
@@ -119,9 +119,9 @@
   </nav>
   <!-- Hero -->
   <main id="main-content">
-  <section class="blog-hero">
+  <section class="blog-hero" style="padding: 1.5rem 0 1rem;">
     <div class="container">
-      <div class="section-header">
+      <div class="section-header" style="margin-bottom: 0.5rem;">
         <div class="section-label">Blog</div>
         <h1 class="section-title">技术博客</h1>
         <p class="section-desc">我的技术文章、学习笔记与思考</p>
@@ -147,9 +147,9 @@
     </div>
   </section>
   <!-- Blog Posts List -->
-  <section class="section section-narrow">
+  <section class="section section-narrow" style="padding-top: 0.5rem;">
     <div class="container">
-      <div class="section-header">
+      <div class="section-header" style="margin-bottom: 0.5rem;">
         <div class="section-label">Archive</div>
         <h2 class="section-title" id="blog-filter-title">全部文章</h2>
         <div class="blog-view-toggle">
