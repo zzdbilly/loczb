@@ -1129,7 +1129,7 @@
         archiveData = months.map(month => ({
           month,
           count: archives[month].length,
-          posts: archives[month].sort((a, b) => b.date.localeCompare(a.date))
+          posts: archives[month].sort((a, b) => a.date < b.date ? 1 : -1)
         }));
       } catch (e) {
         console.error('加载归档失败:', e);
