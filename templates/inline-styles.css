@@ -29,3 +29,6 @@
     .post-toc-list .toc-h3 { padding-left: 1rem; font-size: 0.72rem; }
     .post-toc-list .toc-h2 { font-weight: 600; font-size: 0.8rem; }
 /* Code block first-line fix */
+    .back-link { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--color-text-secondary); font-size: 0.9rem; text-decoration: none; margin-bottom: 1rem; transition: color 0.2s; }
+    .back-link:hover { color: var(--color-accent-primary); }
+    .back-link svg { width: 16px; height: 16px; }
