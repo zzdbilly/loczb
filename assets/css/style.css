@@ -1134,7 +1134,7 @@ a:hover {
 
 /* About Page */
 .about-hero {
-  padding-top: 60px;
+  padding-top: 100px;
   padding-bottom: var(--space-3xl);
 }
 
@@ -1199,7 +1199,7 @@ a:hover {
 
 /* Blog Page */
 .blog-hero {
-  padding-top: 20px;
+  padding-top: 80px;
   padding-bottom: var(--space-sm);
 }
 
@@ -1267,7 +1267,7 @@ a:hover {
 
 /* Projects Page */
 .projects-hero {
-  padding-top: 60px;
+  padding-top: 100px;
   padding-bottom: var(--space-2xl);
 }
 
