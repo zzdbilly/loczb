@@ -1,6 +1,20 @@
 {
   "posts": [
     {
+      "slug": "cursor-rules-guide",
+      "title": "Cursor Rules 实战：自定义 AI 代码助手的进阶指南",
+      "date": "2026-06-30",
+      "category": "AI",
+      "tags": [
+        "Cursor",
+        "AI编程",
+        "效率工具",
+        "开发规范"
+      ],
+      "excerpt": "从零搭建 Cursor Rules 体系，涵盖规则语法、分层架构、真实 Android 项目案例和最佳实践",
+      "url": "blog/posts/cursor-rules-guide.html"
+    },
+    {
       "slug": "mcp-server-deep-dive",
       "title": "MCP 协议深入实战：从入门到编写自定义 MCP Server",
       "date": "2026-06-30",
@@ -854,6 +868,14 @@
       "count": 3
     },
     {
+      "tag": "Cursor",
+      "count": 2
+    },
+    {
+      "tag": "效率工具",
+      "count": 2
+    },
+    {
       "tag": "MCP",
       "count": 2
     },
@@ -950,15 +972,19 @@
       "count": 2
     },
     {
+      "tag": "AI编程",
+      "count": 1
+    },
+    {
+      "tag": "开发规范",
+      "count": 1
+    },
+    {
       "tag": "工具调用",
       "count": 1
     },
     {
       "tag": "协议",
-      "count": 1
-    },
-    {
-      "tag": "效率工具",
       "count": 1
     },
     {
@@ -1410,10 +1436,6 @@
       "count": 1
     },
     {
-      "tag": "Cursor",
-      "count": 1
-    },
-    {
       "tag": "Claude Code",
       "count": 1
     },
@@ -1561,8 +1583,13 @@
   "archives": [
     {
       "month": "2026-06",
-      "count": 28,
+      "count": 29,
       "posts": [
+        {
+          "title": "Cursor Rules 实战：自定义 AI 代码助手的进阶指南",
+          "date": "2026-06-30",
+          "url": "blog/posts/cursor-rules-guide.html"
+        },
         {
           "title": "MCP 协议深入实战：从入门到编写自定义 MCP Server",
           "date": "2026-06-30",
@@ -1873,8 +1900,8 @@
     "AI Agent"
   ],
   "stats": {
-    "totalPosts": 54,
-    "totalTags": 188,
+    "totalPosts": 55,
+    "totalTags": 190,
     "latestDate": "2026-06-30",
     "oldestDate": "2026-02-15"
   }
