@@ -1861,16 +1861,16 @@
     }
   ],
   "categories": [
-    "开发",
-    "AI Agent",
-    "前端",
-    "DevOps",
-    "Android",
-    "数据库",
     "AI",
+    "前端",
+    "Android",
+    "DevOps",
+    "开发",
     "安全",
+    "数据库",
+    "系统编程",
     "Kotlin",
-    "系统编程"
+    "AI Agent"
   ],
   "stats": {
     "totalPosts": 54,
