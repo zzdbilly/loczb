@@ -1124,13 +1124,13 @@
             category: post.category
           });
         });
-        archiveData = Object.entries(archives)
-          .map(([month, items]) => ({
-            month,
-            count: items.length,
-            posts: items.sort((a, b) => b.date.localeCompare(a.date))
-          }))
-          .sort((a, b) => b.month.localeCompare(a.month));
+        // Convert to array and sort properly
+        const months = Object.keys(archives).sort().reverse();
+        archiveData = months.map(month => ({
+          month,
+          count: archives[month].length,
+          posts: archives[month].sort((a, b) => b.date.localeCompare(a.date))
+        }));
       } catch (e) {
         console.error('加载归档失败:', e);
       }
