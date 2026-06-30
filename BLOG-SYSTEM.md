@@ -10,7 +10,6 @@ loczb/
 ├── blog/
 │   ├── index.html                # 博客列表页 - 筛选/分页/搜索/标签云/归档
 │   ├── articles-index.json       # 文章索引（搜索用，关联推荐用）
-│   ├── articles.json             # （旧文件，已不再维护）
 │   └── posts/                    # 所有文章 HTML（54 篇）
 ├── templates/
 │   ├── blog-post-template.html   # 文章骨架模板
@@ -27,12 +26,8 @@ loczb/
 │   └── images/                   # 图片资源
 ├── .github/workflows/
 │   └── update-index.yml          # CI: 自动更新 articles-index.json
-└── scripts/ (旧, 不再使用)
-    ├── add_seo_to_posts.py
-    ├── add-seo-to-posts.sh
-    ├── generate-articles.js
-    ├── md-to-html.js
-    └── setup-ai-assistant.js
+├── BLOG-SYSTEM.md                # 博客系统完整规范（本文件）
+└── README.md                      # （已删除，整合到 BLOG-SYSTEM.md）
 ```
 
 ---
@@ -219,13 +214,7 @@ git push
 - `update_homepage_js_array()` 必须最后调用，因为它依赖 `blog/index.html` 已更新
 - `update_homepage()` 依赖 `BLOG_INDEX` 已更新
 
-### 旧脚本不再使用
-以下脚本已经弃用，不要使用：
-- `scripts/add_seo_to_posts.py`
-- `scripts/add-seo-to-posts.sh`
-- `scripts/generate-articles.js`
-- `scripts/md-to-html.js`
-- `scripts/setup-ai-assistant.js`
+
 
 ---
 
