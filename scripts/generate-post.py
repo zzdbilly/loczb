@@ -29,7 +29,7 @@ import re
 import os
 import sys
 import json
-from datetime import date
+from datetime import datetime
 
 TEMPLATE = 'templates/blog-post-template.html'
 INLINE_STYLES = 'templates/inline-styles.css'
@@ -124,7 +124,7 @@ def update_blog_list(slug, title, description, article_date, read_time, tags, ca
         <article class="blog-list-item animate-on-scroll" data-category="{category}" data-page="1">
           <div class="blog-list-header">
             <div class="blog-list-meta">
-              <span class="blog-date">{article_date}</span>
+              <span class="blog-date">{article_date[:10]}</span>
               <span>·</span>
               <span class="blog-read-time">{read_time} min</span>
             </div>
@@ -161,7 +161,7 @@ def update_homepage(slug, title, description, article_date, read_time, tags, cat
     featured = f'''        <article class="blog-card-featured animate-on-scroll" id="home-featured-post" style="display: block;">
           <div class="blog-card-header">
             <div class="blog-card-meta">
-              <span class="blog-date">{article_date}</span>
+              <span class="blog-date">{article_date[:10]}</span>
               <span>·</span>
               <span class="blog-read-time">{read_time} min</span>
             </div>
@@ -271,7 +271,7 @@ def update_articles_index(slug, title, description, article_date, read_time, tag
         data['posts'].append(new_post)
     
     # 重新计算统计数据
-    data['posts'].sort(key=lambda p: (p['date'], p['title']), reverse=True)
+    data['posts'].sort(key=lambda p: p['date'], reverse=True)
     data['stats']['totalPosts'] = len(data['posts'])
     
     # 重新计算 tag cloud
@@ -326,7 +326,7 @@ def parse_args(args):
     params = {
         'title': None,
         'description': '',
-        'article_date': date.today().strftime('%Y-%m-%d'),
+        'article_date': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
         'read_time': 5,
         'tags': None,
         'category': '博客',
