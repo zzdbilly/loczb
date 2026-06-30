@@ -37,6 +37,7 @@ POSTS_DIR = 'blog/posts'
 RELATED_JS = 'assets/js/related-posts.js'
 BLOG_INDEX = 'blog/index.html'
 HOME_INDEX = 'index.html'
+ARTICLES_JSON = 'blog/articles-index.json'
 
 
 def slugify(title):
@@ -209,6 +210,100 @@ def update_homepage(slug, title, description, article_date, read_time, tags, cat
         print(f"  ✅ 已更新首页")
     else:
         print(f"  ⚠️ 首页大卡未找到，请检查 index.html 结构")
+
+
+def update_articles_index(slug, title, description, article_date, read_time, tags, category):
+    """更新 blog/articles-index.json - 添加新文章到索引"""
+    tag_list = [t.strip() for t in tags.split(',')]
+    
+    # 读取现有索引
+    if os.path.exists(ARTICLES_JSON):
+        with open(ARTICLES_JSON, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+    else:
+        # 如果文件不存在，创建一个新结构
+        data = {
+            'posts': [],
+            'tagCloud': [],
+            'archives': [],
+            'categories': [],
+            'stats': {'totalPosts': 0, 'totalTags': 0, 'latestDate': '', 'oldestDate': ''}
+        }
+    
+    # 添加新文章
+    new_post = {
+        'slug': slug,
+        'title': title,
+        'date': article_date,
+        'category': category,
+        'tags': tag_list,
+        'excerpt': description,
+        'url': f'blog/posts/{slug}.html'
+    }
+    
+    # 检查是否已存在（避免重复）
+    existing_index = -1
+    for i, p in enumerate(data['posts']):
+        if p['slug'] == slug:
+            existing_index = i
+            break
+    
+    if existing_index >= 0:
+        # 更新已存在的文章
+        data['posts'][existing_index] = new_post
+    else:
+        # 添加新文章
+        data['posts'].append(new_post)
+    
+    # 重新计算统计数据
+    data['posts'].sort(key=lambda p: p['date'], reverse=True)
+    data['stats']['totalPosts'] = len(data['posts'])
+    
+    # 重新计算 tag cloud
+    tag_counts = {}
+    for post in data['posts']:
+        for tag in post.get('tags', []):
+            tag_counts[tag] = tag_counts.get(tag, 0) + 1
+    data['tagCloud'] = [{'tag': t, 'count': c} for t, c in tag_counts.items()]
+    data['tagCloud'].sort(key=lambda x: x['count'], reverse=True)
+    data['stats']['totalTags'] = len(tag_counts)
+    
+    # 重新计算归档
+    archives = {}
+    for post in data['posts']:
+        month = post['date'][:7]  # YYYY-MM
+        if month not in archives:
+            archives[month] = []
+        archives[month].append({
+            'title': post['title'],
+            'date': post['date'],
+            'url': post['url']
+        })
+    
+    data['archives'] = [
+        {
+            'month': m,
+            'count': len(items),
+            'posts': sorted(items, key=lambda x: x['date'], reverse=True)
+        }
+        for m, items in archives.items()
+    ]
+    data['archives'].sort(key=lambda x: x['month'], reverse=True)
+    
+    # 更新日期统计
+    if data['posts']:
+        dates = [p['date'] for p in data['posts']]
+        data['stats']['latestDate'] = max(dates)
+        data['stats']['oldestDate'] = min(dates)
+    
+    # 提取所有分类
+    data['categories'] = list(set(p['category'] for p in data['posts']))
+    
+    # 写回文件
+    with open(ARTICLES_JSON, 'w', encoding='utf-8') as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
+    
+    print(f"  ✅ 已更新 articles-index.json")
 
 
 def parse_args(args):
