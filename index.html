@@ -545,40 +545,31 @@
     // 首页随机选择代表文章
     const posts = [
       {
-        url: 'blog/posts/android-hilt-dependency-injection.html',
-        title: 'Android Hilt 依赖注入最佳实践：从入门到架构',
-        date: '2026-06-27',
-        readTime: '18 min',
-        category: 'Android',
-        category2: 'Hilt',
-        desc: '核心注解、ViewModel 注入、多模块架构、作用域管理、第三方库集成与测试最佳实践完整指南。'
-      },
-      {
-        url: 'blog/posts/nginx-reverse-proxy-tuning.html',
-        title: 'Nginx 反向代理性能调优：从入门到生产',
-        date: '2026-06-27',
-        readTime: '18 min',
-        category: 'DevOps',
-        category2: 'Nginx',
-        desc: 'worker 配置、SSL 优化、缓存策略、负载均衡、限流与监控完整实践指南。'
-      },
-      {
-        url: 'blog/posts/zig-language-introduction.html',
-        title: 'Zig 语言入门：比 C 更安全的系统编程',
-        date: '2026-06-27',
-        readTime: '16 min',
-        category: '系统编程',
-        category2: 'Zig',
-        desc: 'comptime 编译期计算、Allocator 模式、错误处理、C 互操作、交叉编译与构建系统深度解析。'
-      },
-      {
-        url: 'blog/posts/rag-introduction.html',
-        title: 'RAG 检索增强生成入门：从理念到落地',
-        date: '2026-06-27',
-        readTime: '18 min',
+        url: 'blog/posts/mcp-server-deep-dive.html',
+        title: 'MCP 协议深入实战：从入门到编写自定义 MCP Server',
+        date: '2026-06-30',
+        readTime: '14 min',
         category: 'AI',
-        category2: 'RAG',
-        desc: '文档分块策略、嵌入模型选型、向量数据库对比、LangChain 实现、HyDE/RAG-Fusion 高级优化与 RAGAS 评估框架。'
+        category2: 'AI',
+        desc: '3000字完整教程，从零搭建 MCP Server，涵盖协议核心、SDK 使用、调试技巧和生产部署最佳实践'
+      },
+      {
+        url: 'blog/posts/ai-代码编辑器深度横评cursor-vs-windsurf-vs-copilot.html',
+        title: 'AI 代码编辑器深度横评：Cursor vs Windsurf vs Copilot',
+        date: '2026-06-28',
+        readTime: '12 min',
+        category: '前端',
+        category2: '前端',
+        desc: '三大主流 AI 代码编辑器全方位对比'
+      },
+      {
+        url: 'blog/posts/git-worktree-高效多分支开发指南.html',
+        title: 'Git Worktree 高效多分支开发指南',
+        date: '2026-06-28',
+        readTime: '12 min',
+        category: '前端',
+        category2: '前端',
+        desc: 'Git Worktree 让你同时检出多个分支，切换零成本，告别 stash 和冲突的烦恼。本文详解 worktree 的使用场景和最佳实践。'
       },
       {
         url: 'blog/posts/android-16-background-tasks.html',
@@ -586,44 +577,8 @@
         date: '2026-06-27',
         readTime: '16 min',
         category: 'Android',
-        category2: '后台任务',
+        category2: 'Android',
         desc: 'JobScheduler 强化、前台服务严格限制、WorkManager 迁移策略与兼容性适配完整指南。'
-      },
-      {
-        url: 'blog/posts/github-actions-advanced.html',
-        title: 'GitHub Actions 高级工作流：CI/CD 最佳实践',
-        date: '2026-06-27',
-        readTime: '16 min',
-        category: 'DevOps',
-        category2: 'CI/CD',
-        desc: '矩阵构建、可复用工作流、自定义 Action、OIDC 集成、安全审计与性能优化完整指南。'
-      },
-      {
-        url: 'blog/posts/css-view-transitions.html',
-        title: 'CSS View Transitions API 实战：页面过渡动画新范式',
-        date: '2026-06-27',
-        readTime: '14 min',
-        category: '前端',
-        category2: 'CSS',
-        desc: 'document.startViewTransition() 详解、伪元素树、自定义动画、跨页面导航过渡、SPA 集成与列表动画完整指南。'
-      },
-      {
-        url: 'blog/posts/go-concurrency-patterns.html',
-        title: 'Go 并发模式：Channel 与 Context',
-        date: '2026-06-27',
-        readTime: '18 min',
-        category: '开发',
-        category2: 'Go',
-        desc: 'Goroutine 与 Channel 实战、GMP 调度模型、Context 包详解、Fan-Out/Fan-In 模式与并发测试最佳实践。'
-      },
-      {
-        url: 'blog/posts/postgresql-index-optimization.html',
-        title: 'PostgreSQL 索引优化实战：从 B-Tree 到执行计划',
-        date: '2026-06-27',
-        readTime: '20 min',
-        category: '数据库',
-        category2: 'PostgreSQL',
-        desc: 'B-Tree、GiST、GIN 索引类型对比，复合索引设计、EXPLAIN 执行计划分析与慢查询优化案例。'
       },
       {
         url: 'blog/posts/android-16-notifications.html',
@@ -631,8 +586,44 @@
         date: '2026-06-27',
         readTime: '16 min',
         category: 'Android',
-        category2: '通知系统',
+        category2: 'Android',
         desc: 'Live Updates、Rich Ongoing、Bubble API 增强、IMPORTANCE_CRITICAL 新增级别与通知迁移最佳实践。'
+      },
+      {
+        url: 'blog/posts/android-hilt-dependency-injection.html',
+        title: 'Android Hilt 依赖注入最佳实践：从入门到架构',
+        date: '2026-06-27',
+        readTime: '18 min',
+        category: 'Android',
+        category2: 'Android',
+        desc: '核心注解、ViewModel 注入、多模块架构、作用域管理、第三方库集成与测试最佳实践完整指南。'
+      },
+      {
+        url: 'blog/posts/css-view-transitions.html',
+        title: 'CSS View Transitions API 实战：页面过渡动画新范式',
+        date: '2026-06-27',
+        readTime: '14 min',
+        category: '前端',
+        category2: '前端',
+        desc: 'document.startViewTransition() 详解、伪元素树、自定义动画、跨页面导航过渡、SPA 集成与列表动画完整指南。'
+      },
+      {
+        url: 'blog/posts/github-actions-advanced.html',
+        title: 'GitHub Actions 高级工作流：CI/CD 最佳实践',
+        date: '2026-06-27',
+        readTime: '16 min',
+        category: 'DevOps',
+        category2: 'DevOps',
+        desc: '矩阵构建、可复用工作流、自定义 Action、OIDC 集成、安全审计与性能优化完整指南。'
+      },
+      {
+        url: 'blog/posts/go-concurrency-patterns.html',
+        title: 'Go 并发模式：Channel 与 Context',
+        date: '2026-06-27',
+        readTime: '18 min',
+        category: '开发',
+        category2: '开发',
+        desc: 'Goroutine 与 Channel 实战、GMP 调度模型、Context 包详解、Fan-Out/Fan-In 模式与并发测试最佳实践。'
       },
       {
         url: 'blog/posts/https-tls13-deep-dive.html',
@@ -640,102 +631,12 @@
         date: '2026-06-27',
         readTime: '16 min',
         category: '安全',
-        category2: 'TLS',
+        category2: '安全',
         desc: 'TLS 1.3 握手协议深入拆解、密码套件对比、Nginx 生产配置与性能优化完整指南。'
       },
-      {
-        url: 'blog/posts/prompt-engineering-systematic.html',
-        title: 'Prompt Engineering 系统化方法论',
-        date: '2026-06-27',
-        readTime: '18 min',
-        category: 'AI',
-        category2: '提示词工程',
-        desc: 'COSTAR 框架、结构化思维链、提示词版本管理、Few-shot 设计、Agent 提示词契约与自动化评测体系。'
-      },
-      {
-        url: 'blog/posts/kotlin-flow-advanced.html',
-        title: 'Kotlin Flow 进阶：背压策略与共享流',
-        date: '2026-06-27',
-        readTime: '16 min',
-        category: 'Android',
-        category2: 'Kotlin',
-        desc: '背压策略（conflate/buffer/collectLatest）与共享流（shareIn/stateIn）深度解析，附 Android MVVM 实战最佳实践。'
-      },
-      {
-        url: 'blog/posts/linux-ebpf-getting-started.html',
-        title: 'Linux eBPF 入门：内核可观测性新范式',
-        date: '2026-06-27',
-        readTime: '18 min',
-        category: 'DevOps',
-        category2: 'eBPF',
-        desc: '从 BPF 程序编写到 bpftrace、BCC 工具链使用，覆盖网络、安全、性能分析场景的系统性入门指南。'
-      },
-      {
-        url: 'blog/posts/webassembly-in-practice.html',
-        title: 'WebAssembly 实战：浏览器端高性能计算',
-        date: '2026-06-27',
-        readTime: '16 min',
-        category: '前端',
-        category2: 'WASM',
-        desc: '从 Rust 编译到浏览器运行，WASM 与 JS 互操作、内存管理、SIMD 优化与真实应用场景全流程实战。'
-      },
-      {
-        url: 'blog/posts/pwa-offline-web-app.html',
-        title: 'PWA 实战：从零打造离线可用的 Web 应用',
-        date: '2026-03-22',
-        readTime: '10 min',
-        category: '前端',
-        category2: 'PWA',
-        desc: '深入解析 Service Worker 缓存策略、manifest.json 配置、推送通知实现，让你的 Web 应用像原生 App 一样运行。'
-      },
-      {
-        url: 'blog/posts/ssh-security-hardening.html',
-        title: '云服务器 SSH 安全加固完整指南',
-        date: '2026-03-18',
-        readTime: '15 min',
-        category: '安全',
-        category2: '运维',
-        desc: '从禁用密码登录到配置 Fail2ban，一份完整的 SSH 安全加固指南，让你的服务器远离暴力破解。'
-      },
-      {
-        url: 'blog/posts/tailscale-derp-server.html',
-        title: '自建 Tailscale DERP 中继服务器完整指南',
-        date: '2026-03-17',
-        readTime: '12 min',
-        category: 'DevOps',
-        category2: '网络',
-        desc: '详解 Tailscale DERP 中继原理，手把手教你自建高性能 DERP 服务器，实现全球低延迟连接。'
-      },
-      {
-        url: 'blog/posts/vscode-port-forward.html',
-        title: 'VS Code 端口转发原理详解',
-        date: '2026-03-17',
-        readTime: '10 min',
-        category: 'DevOps',
-        category2: '工具',
-        desc: '深入解析 VS Code 端口转发的 SSH 隧道原理，对比 Tailscale、Nginx 方案。'
-      },
-      {
-        url: 'blog/posts/ai-agent-skill-development.html',
-        title: 'AI Agent 技能开发实战',
-        date: '2026-03-15',
-        readTime: '20 min',
-        category: 'AI Agent',
-        category2: '开发',
-        desc: '手把手教你开发一个 GitHub 项目分析技能。从需求分析、技术选型到集成测试。'
-      },
-      {
-        url: 'blog/posts/openclaw-guide.html',
-        title: 'OpenClaw 深度使用指南',
-        date: '2026-03-14',
-        readTime: '12 min',
-        category: 'AI',
-        category2: '工具',
-        desc: '全面介绍 OpenClaw 的安装配置、核心功能、高级技巧和踩坑记录。'
-      }
     ];
     
-    const randomPost = posts[Math.floor(Math.random() * posts.length)];
+    const randomPost = posts[0]; // Always use latest post
     
     document.getElementById('home-featured-post').innerHTML = `
       <div class="blog-card-featured-header">
