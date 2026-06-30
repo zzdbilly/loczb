@@ -660,7 +660,7 @@
       <div class="blog-card-featured-footer">
         <div class="blog-tags">
           <span class="tech-tag tag-accent">${randomPost.category}</span>
-          <span class="tech-tag">${randomPost.category2}</span>
+          ${randomPost.category !== randomPost.category2 ? `<span class="tech-tag">${randomPost.category2}</span>` : ""}
         </div>
         <a href="${randomPost.url}" class="btn btn-ghost">
           阅读全文
