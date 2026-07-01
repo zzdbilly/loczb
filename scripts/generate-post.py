@@ -329,6 +329,48 @@ def update_articles_index(slug, title, description, article_date, read_time, tag
     print(f"  ✅ 已更新 articles-index.json")
 
 
+def update_filter_buttons():
+    """更新 blog/index.html 的分类筛选按钮 - 从 articles-index.json 读取分类"""
+    if not os.path.exists(ARTICLES_JSON):
+        return
+    
+    with open(ARTICLES_JSON, 'r', encoding='utf-8') as f:
+        data = json.load(f)
+    
+    categories = data.get('categories', [])
+    if not categories:
+        return
+    
+    # 按固定顺序排列分类（优先显示的排前面）
+    priority_order = ['AI', 'Android', 'Kotlin', '前端', '思考', 'DevOps', '数据库', '系统编程', '安全', '开发']
+    sorted_cats = sorted(categories, key=lambda x: (priority_order.index(x) if x in priority_order else 999, x))
+    
+    with open(BLOG_INDEX, 'r', encoding='utf-8') as f:
+        content = f.read()
+    
+    # 构建新的筛选按钮 HTML
+    buttons_html = '''
+        <button class="filter-btn filter-btn-active" data-filter="all" role="tab" aria-selected="true">全部</button>'''
+    
+    for cat in sorted_cats:
+        buttons_html += f'''
+        <button class="filter-btn" data-filter="{cat}" role="tab" aria-selected="false">{cat}</button>'''
+    
+    # 替换旧的筛选按钮区域
+    import re
+    pattern = r'(<div class="blog-filters"[^>]*>)[\s\S]*?(<!-- Search Bar -->)'
+    replacement = r'\1' + buttons_html + r'\2'
+    
+    new_content = re.sub(pattern, replacement, content)
+    
+    if new_content != content:
+        with open(BLOG_INDEX, 'w', encoding='utf-8') as f:
+            f.write(new_content)
+        print(f"  ✅ 已更新分类筛选按钮 ({len(sorted_cats)} 个分类)")
+    else:
+        print(f"  ⚠️ 分类筛选按钮更新失败")
+
+
 def parse_args(args):
     """解析命令行参数"""
     params = {
@@ -442,6 +484,9 @@ def main():
     
     # 更新博客索引（articles-index.json）
     update_articles_index(slug, title, description, article_date, read_time, tags, category)
+    
+    # 更新博客列表的分类筛选按钮
+    update_filter_buttons()
     
     # 更新首页的 JavaScript posts 数组
     update_homepage_js_array()
