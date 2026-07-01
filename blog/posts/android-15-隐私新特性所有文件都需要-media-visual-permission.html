@@ -5,18 +5,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Android 15 隐私新特性：所有文件都需要 MEDIA_VISUAL_PERMISSION | 张小猛 - loczb</title>
-    <meta name="description" content="详解 Android 15 引入的 MEDIA_VISUAL_PERMISSION 强制要求，以及旧版适配方案和最佳实践">
+    <meta name="description" content="详解 Android 15 引入的媒体权限重大变更，以及从 MediaStore 迁移到 Photo Picker 的完整指南">
     
     <!-- Open Graph -->
     <meta property="og:title" content="Android 15 隐私新特性：所有文件都需要 MEDIA_VISUAL_PERMISSION | 张小猛 - loczb">
-    <meta property="og:description" content="详解 Android 15 引入的 MEDIA_VISUAL_PERMISSION 强制要求，以及旧版适配方案和最佳实践">
+    <meta property="og:description" content="详解 Android 15 引入的媒体权限重大变更，以及从 MediaStore 迁移到 Photo Picker 的完整指南">
     <meta property="og:url" content="https://709527.xyz/blog/posts/android-15-隐私新特性所有文件都需要-media-visual-permission.html">
     <meta property="og:type" content="article">
         <meta property="og:image" content="../../assets/images/og-default.webp">
     <meta property="og:site_name" content="loczb">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Android 15 隐私新特性：所有文件都需要 MEDIA_VISUAL_PERMISSION | 张小猛 - loczb">
-    <meta name="twitter:description" content="详解 Android 15 引入的 MEDIA_VISUAL_PERMISSION 强制要求，以及旧版适配方案和最佳实践">
+    <meta name="twitter:description" content="详解 Android 15 引入的媒体权限重大变更，以及从 MediaStore 迁移到 Photo Picker 的完整指南">
 
     
     
@@ -103,7 +103,7 @@
         
         <div class="post-meta">
           <span>📅 2026-07-01</span>
-          <span>⏱️ 6 min read</span>
+          <span>⏱️ 20 min read</span>
           <span>👤 张小猛</span>
         </div>
         
@@ -113,9 +113,577 @@
           <span class="tag">Android 15</span>
           <span class="tag">权限</span>
           <span class="tag">适配</span>
+          <span class="tag">Photo Picker</span>
+          <span class="tag">迁移</span>
         </div>
         
-        <p>Android 15 引入了一个重大变化：所有访问用户媒体文件的操作都必须申请新的 <code>MEDIA_VISUAL_PERMISSION</code> 权限。这不是简单的权限名称变更，而是 Android 隐私模型的重大升级。</p><h2>变化了什么</h2><p>在 Android 14 及以前，应用只需要 <code>READ_MEDIA_IMAGES</code> 和 <code>READ_MEDIA_VIDEO</code> 权限就能访问相册和视频。但 Android 15 开始，系统要求必须额外声明 <code>READ_MEDIA_VISUAL_SELECTOR</code> 权限，并且需要通过全新的 <code>Photo Picker</code> 系统选择器来获取文件。</p><h2>为什么这么改</h2><p>Google 的目标是彻底切断应用直接扫描用户相册的能力。以前应用可以调用 <code>MediaStore</code> API 遍历所有图片视频，用户完全无感知。新的机制下，应用只能通过系统选择器让用户主动选择文件，全程可追溯、可撤销。</p><h2>适配方案</h2><p>对于需要兼容多版本的应用，推荐方案是：</p><ul><li><strong>Android 15+</strong>：使用 Photo Picker API，用户选择后获得临时 URI 访问权限</li><li><strong>Android 14 及以下</strong>：使用传统 READ_MEDIA_* 权限</li></ul><p>判断版本的代码示例：</p><pre><code>if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {\n    // 使用 Photo Picker\n} else {\n    // 使用传统权限\n}</code></pre><h2>总结</h2><p>这次改动短期内会给开发者带来适配成本，但长期来看是好事——用户隐私得到更好保护，应用权限行为更加透明。建议尽快测试你的应用在 Android 15 上的表现。</p>
+        <p>Android 15 引入了一个影响深远的隐私变更：<strong>所有访问用户媒体文件的操作都必须通过新的权限模型和系统选择器</strong>。这不仅仅是增加了一个权限声明那么简单，而是从根本上改变了应用访问媒体文件的方式——从「应用主动扫描」变成了「用户主动选择」。</p>
+
+<p>如果你的应用涉及相册、文件选择、图片上传等功能，这个变更将直接影响你。本文从原理到实战，完整拆解这次变更的来龙去脉和适配方案。</p>
+
+<h2 id="background">一、背景：Android 媒体权限的演进</h2>
+
+<p>要理解 Android 15 的变更，先回顾一下媒体权限的演进史：</p>
+
+<h3>Android 12 及以前：宽泛的存储权限</h3>
+
+<p>早期 Android 提供两个粗粒度存储权限：</p>
+<ul>
+<li><code>READ_EXTERNAL_STORAGE</code> — 读取外部存储的所有文件</li>
+<li><code>WRITE_EXTERNAL_STORAGE</code> — 写入外部存储的所有文件</li>
+</ul>
+
+<p>应用只要声明了这两个权限，就能遍历用户手机上的所有图片、视频、音频和文档。用户在授权时只能选择「全部允许」或「全部拒绝」，没有任何中间态。</p>
+
+<h3>Android 13：细分媒体权限</h3>
+
+<p>Android 13（API 33）将存储权限拆分为更细粒度的媒体权限：</p>
+<ul>
+<li><code>READ_MEDIA_IMAGES</code> — 读取图片</li>
+<li><code>READ_MEDIA_VIDEO</code> — 读取视频</li>
+<li><code>READ_MEDIA_AUDIO</code> — 读取音频</li>
+</ul>
+
+<p>这看起来进步了，但问题依然存在：只要用户授权了 <code>READ_MEDIA_IMAGES</code>，应用仍然可以通过 <code>MediaStore</code> API 扫描用户相册中的<strong>所有图片</strong>，用户完全不知道应用读了哪些照片。</p>
+
+<div class="tip-box">
+<strong>💡 核心矛盾</strong>：无论权限怎么细分，只要应用拿到了媒体权限，就能批量扫描用户相册。这违背了「最小必要」原则。
+</div>
+
+<h3>Android 14：Photo Picker 试水</h3>
+
+<p>Android 14 引入了系统级 Photo Picker（照片选择器），让用户可以选择特定照片授权给应用，而不是授权整个相册。但此时 Photo Picker 是<strong>可选的</strong>，应用仍然可以使用传统权限 + MediaStore 方案。</p>
+
+<h2 id="what-changed">二、Android 15 到底变了什么</h2>
+
+<p>Android 15 的核心变更可以用一句话概括：<strong>READ_MEDIA_IMAGES 和 READ_MEDIA_VIDEO 权限不再授予访问全部媒体文件的能力</strong>。</p>
+
+<p>具体来说：</p>
+
+<h3>1. 新增 READ_MEDIA_VISUAL_USER_SELECTED 权限</h3>
+
+<p>Android 15 新增了 <code>READ_MEDIA_VISUAL_USER_SELECTED</code> 权限。这个权限的含义是：<strong>用户主动选择</strong>授权给应用的图片和视频。</p>
+
+<p>权限组合效果如下：</p>
+
+<table>
+<tr><th>权限组合</th><th>效果</th></tr>
+<tr><td>仅 READ_MEDIA_VISUAL_USER_SELECTED</td><td>只能访问用户通过 Photo Picker 选择的媒体</td></tr>
+<tr><td>READ_MEDIA_IMAGES + READ_MEDIA_VISUAL_USER_SELECTED</td><td>可以访问所有图片 + 用户选择的媒体</td></tr>
+<tr><td>READ_MEDIA_VIDEO + READ_MEDIA_VISUAL_USER_SELECTED</td><td>可以访问所有视频 + 用户选择的媒体</td></tr>
+</table>
+
+<h3>2. 权限授权行为改变</h3>
+
+<p>在 Android 15 上，当你请求 <code>READ_MEDIA_IMAGES</code> 或 <code>READ_MEDIA_VIDEO</code> 时：</p>
+<ul>
+<li>系统<strong>不会</strong>弹出传统的权限授权对话框</li>
+<li>而是直接弹出 <strong>Photo Picker</strong>，让用户选择要授权的照片/视频</li>
+<li>用户选择后，应用获得的是 <code>READ_MEDIA_VISUAL_USER_SELECTED</code> 权限，而非完整的 <code>READ_MEDIA_IMAGES</code></li>
+</ul>
+
+<p>这意味着即使你在 Manifest 中声明了 <code>READ_MEDIA_IMAGES</code>，在 Android 15 上也<strong>拿不到完整相册访问权限</strong>，除非用户在系统设置中手动将权限升级为「允许所有」。</p>
+
+<h3>3. MediaStore 查询受限</h3>
+
+<p>这是最关键的影响点。在 Android 15 上：</p>
+<ul>
+<li>只有用户通过 Photo Picker 选择的媒体才会出现在 <code>MediaStore.Images</code> 和 <code>MediaStore.Video</code> 的查询结果中</li>
+<li>调用 <code>ContentResolver.query()</code> 查询 MediaStore 时，只能查到用户授权的文件</li>
+<li>尝试访问未授权的媒体文件会抛出 <code>SecurityException</code> 或返回空结果</li>
+</ul>
+
+<div class="warning-box">
+<strong>⚠️ 重要</strong>：即使应用声明了 <code>READ_MEDIA_IMAGES</code> 权限并且用户「授权」了，如果用户只通过 Photo Picker 选了 3 张照片，MediaStore 查询也只会返回这 3 张照片。
+</div>
+
+<h2 id="impact">三、对你的应用有什么影响</h2>
+
+<p>不同类型的应用受到的影响程度不同：</p>
+
+<h3>影响最大：需要全量扫描相册的应用</h3>
+
+<p>以下场景会受到严重影响：</p>
+<ul>
+<li>相册管理应用（需要展示所有照片）</li>
+<li>照片备份应用（需要扫描全部图片上传）</li>
+<li>图片编辑应用（需要浏览相册选择照片）</li>
+<li>社交媒体应用（需要展示相册网格供用户选择）</li>
+</ul>
+
+<p>这些应用如果继续使用 <code>MediaStore.query()</code> 方案，在 Android 15 上将只能看到用户手动选择的少量照片。</p>
+
+<h3>影响较小：只需用户选择单张/几张照片的应用</h3>
+
+<p>如果应用只需要让用户选一张照片作为头像、或者选一张图片插入文档，影响较小，直接接入 Photo Picker 即可。</p>
+
+<h3>不受影响：不访问媒体文件的应用</h3>
+
+<p>如果你的应用不涉及媒体文件访问，自然不受影响。</p>
+
+<h2 id="solution">四、适配方案详解</h2>
+
+<p>根据不同场景，适配策略也不同。</p>
+
+<h3>方案一：接入 Photo Picker（推荐大多数应用）</h3>
+
+<p>如果你的应用只需要让用户选择照片/视频，Photo Picker 是最简单的方案。</p>
+
+<h4>基本用法</h4>
+
+<p>使用 AndroidX Activity Result API 启动 Photo Picker：</p>
+
+<pre><code>// build.gradle.kts
+dependencies {
+    implementation("androidx.activity:activity-ktx:1.9.0")
+    implementation("androidx.activity:activity-compose:1.9.0")
+}</code></pre>
+
+<pre><code>// 启动 Photo Picker - 选择单张图片
+val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri -&gt;
+    uri?.let {
+        // 使用 uri 加载图片
+        binding.imageView.setImageURI(it)
+        // 注意：uri 是临时授权，需要尽快使用或持久化
+        contentResolver.takePersistableUriPermission(
+            it,
+            Intent.FLAG_GRANT_READ_URI_PERMISSION
+        )
+    }
+}
+
+// 触发选择
+pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))</code></pre>
+
+<h4>多选模式</h4>
+
+<p>Photo Picker 支持多选，设置最大选择数量即可：</p>
+
+<pre><code>// 多选模式 - 最多选 5 张
+val pickMultipleMedia = registerForActivityResult(
+    ActivityResultContracts.PickMultipleVisualMedia(5)
+) { uris -&gt;
+    uris.forEach { uri -&gt;
+        // 处理每个 uri
+        contentResolver.takePersistableUriPermission(
+            uri,
+            Intent.FLAG_GRANT_READ_URI_PERMISSION
+        )
+    }
+}
+
+pickMultipleMedia.launch(
+    PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo)
+)</code></pre>
+
+<h4>指定媒体类型</h4>
+
+<p>你可以限制用户只能选择图片、视频，或两者皆可：</p>
+
+<pre><code>// 只选图片
+PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+
+// 只选视频
+PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.VideoOnly)
+
+// 图片和视频
+PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo)
+
+// 根据 MIME 类型过滤
+PickVisualMediaRequest.Builder()
+    .setMediaType(ActivityResultContracts.PickVisualMedia.ImageAndVideo)
+    .build()</code></pre>
+
+<div class="tip-box">
+<strong>💡 兼容性</strong>：Photo Picker 通过 AndroidX 库向后兼容到 Android 4.4（API 19）。在不支持系统 Photo Picker 的设备上，会自动降级为文件选择器（ACTION_OPEN_DOCUMENT）。
+</div>
+
+<h3>方案二：请求部分访问权限 + Photo Picker</h3>
+
+<p>对于需要「记住用户之前选择的照片」的应用，需要同时请求部分访问权限：</p>
+
+<pre><code>// 检查是否已经有部分访问权限
+fun hasPartialAccess(): Boolean {
+    return if (Build.VERSION.SDK_INT &gt;= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+        checkSelfPermission(READ_MEDIA_VISUAL_USER_SELECTED) == PackageManager.PERMISSION_GRANTED
+    } else false
+}
+
+// 请求权限 - Android 15+ 会弹出 Photo Picker
+fun requestMediaPermission() {
+    when {
+        Build.VERSION.SDK_INT &gt;= 35 -&gt; {
+            // Android 15+：请求部分访问权限
+            requestPermissions(
+                arrayOf(
+                    READ_MEDIA_VISUAL_USER_SELECTED,
+                    READ_MEDIA_IMAGES,
+                    READ_MEDIA_VIDEO
+                ),
+                REQUEST_CODE_MEDIA
+            )
+        }
+        Build.VERSION.SDK_INT &gt;= Build.VERSION_CODES.TIRAMISU -&gt; {
+            // Android 13-14：请求细分媒体权限
+            requestPermissions(
+                arrayOf(READ_MEDIA_IMAGES, READ_MEDIA_VIDEO),
+                REQUEST_CODE_MEDIA
+            )
+        }
+        else -&gt; {
+            // Android 12 及以下：请求传统存储权限
+            requestPermissions(
+                arrayOf(READ_EXTERNAL_STORAGE),
+                REQUEST_CODE_MEDIA
+            )
+        }
+    }
+}</code></pre>
+
+<p>权限回调处理：</p>
+
+<pre><code>override fun onRequestPermissionsResult(
+    requestCode: Int,
+    permissions: Array&lt;String&gt;,
+    grantResults: IntArray
+) {
+    super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+    if (requestCode == REQUEST_CODE_MEDIA) {
+        if (Build.VERSION.SDK_INT &gt;= 35) {
+            // Android 15+：检查用户是否授予了完整访问权限
+            val hasFullAccess = checkSelfPermission(READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED
+            val hasPartialAccess = checkSelfPermission(READ_MEDIA_VISUAL_USER_SELECTED) == PackageManager.PERMISSION_GRANTED
+
+            when {
+                hasFullAccess -&gt; {
+                    // 用户在设置中授权了完整相册访问
+                    loadAllMedia()
+                }
+                hasPartialAccess -&gt; {
+                    // 用户只授权了部分照片
+                    loadSelectedMedia()
+                    // 提示用户可以在设置中升级为完整访问
+                    showUpgradePermissionHint()
+                }
+                else -&gt; {
+                    // 用户拒绝
+                    showPermissionDeniedUI()
+                }
+            }
+        }
+    }
+}</code></pre>
+
+<h3>方案三：引导用户授权完整访问（特殊场景）</h3>
+
+<p>某些应用（如相册管理、备份应用）确实需要访问完整相册。对于这些场景，需要引导用户到系统设置中手动授权：</p>
+
+<pre><code>fun requestFullAccess() {
+    if (Build.VERSION.SDK_INT &gt;= 35) {
+        // 先请求部分权限（触发 Photo Picker）
+        // 然后引导用户去设置页面升级为完整访问
+        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+            data = Uri.fromParts("package", packageName, null)
+        }
+        startActivity(intent)
+    }
+}
+
+// 在设置页面返回后检查权限
+override fun onResume() {
+    super.onResume()
+    if (Build.VERSION.SDK_INT &gt;= 35) {
+        val hasFullAccess = checkSelfPermission(READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED
+        if (hasFullAccess) {
+            loadAllMedia()
+        }
+    }
+}</code></pre>
+
+<div class="warning-box">
+<strong>⚠️ 注意</strong>：Google Play 对「请求完整相册访问」有严格审核。只有在合理场景下（如相册管理、照片备份）才允许引导用户授权完整访问。如果你的应用只需要选择照片，必须使用 Photo Picker。
+</div>
+
+<h2 id="permission-matrix">五、全版本权限适配对照表</h2>
+
+<p>以下是完整的版本适配矩阵：</p>
+
+<table>
+<tr><th>Android 版本</th><th>所需权限</th><th>访问方式</th></tr>
+<tr><td>12 及以下 (API ≤ 32)</td><td>READ_EXTERNAL_STORAGE</td><td>MediaStore 全量查询</td></tr>
+<tr><td>13-14 (API 33-34)</td><td>READ_MEDIA_IMAGES / READ_MEDIA_VIDEO</td><td>MediaStore 全量查询 + Photo Picker 可选</td></tr>
+<tr><td>15+ (API 35+)</td><td>READ_MEDIA_VISUAL_USER_SELECTED</td><td>Photo Picker 为主，MediaStore 仅返回用户选择的媒体</td></tr>
+</table>
+
+<p>Manifest 声明最佳实践——按版本区分：</p>
+
+<pre><code>&lt;!-- Android 15+ --&gt;
+&lt;uses-permission android:name="android.permission.READ_MEDIA_VISUAL_USER_SELECTED" /&gt;
+
+&lt;!-- Android 13-14 --&gt;
+&lt;uses-permission android:name="android.permission.READ_MEDIA_IMAGES"
+    android:maxSdkVersion="34" /&gt;
+&lt;uses-permission android:name="android.permission.READ_MEDIA_VIDEO"
+    android:maxSdkVersion="34" /&gt;
+
+&lt;!-- Android 12 及以下 --&gt;
+&lt;uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+    android:maxSdkVersion="32" /&gt;</code></pre>
+
+<h2 id="migration">六、从 MediaStore 迁移实战</h2>
+
+<p>下面是一个完整的从 MediaStore 迁移到 Photo Picker 的实战案例。</p>
+
+<h3>旧代码：直接查询 MediaStore</h3>
+
+<pre><code>// ❌ 旧方案：直接查询 MediaStore 获取全部图片
+fun loadAllImages(): List&lt;Uri&gt; {
+    val images = mutableListOf&lt;Uri&gt;()
+    val projection = arrayOf(
+        MediaStore.Images.Media._ID,
+        MediaStore.Images.Media.DISPLAY_NAME,
+        MediaStore.Images.Media.DATE_ADDED
+    )
+    val sortOrder = "${MediaStore.Images.Media.DATE_ADDED} DESC"
+
+    contentResolver.query(
+        MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+        projection,
+        null,
+        null,
+        sortOrder
+    )?.use { cursor -&gt;
+        val idColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media._ID)
+        while (cursor.moveToNext()) {
+            val id = cursor.getLong(idColumn)
+            val uri = ContentUris.withAppendedId(
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id
+            )
+            images.add(uri)
+        }
+    }
+    return images
+}</code></pre>
+
+<h3>新代码：条件分支适配</h3>
+
+<pre><code>// ✅ 新方案：根据 Android 版本选择不同的访问方式
+fun loadImages() {
+    when {
+        Build.VERSION.SDK_INT &gt;= 35 -&gt; {
+            // Android 15+：检查权限级别
+            val hasFullAccess = checkSelfPermission(READ_MEDIA_IMAGES) == PERMISSION_GRANTED
+            val hasPartialAccess = checkSelfPermission(READ_MEDIA_VISUAL_USER_SELECTED) == PERMISSION_GRANTED
+
+            when {
+                hasFullAccess -&gt; loadAllImagesViaMediaStore()  // 完整访问
+                hasPartialAccess -&gt; loadSelectedImagesViaMediaStore()  // 部分访问
+                else -&gt; launchPhotoPicker()  // 无权限，弹出 Photo Picker
+            }
+        }
+        Build.VERSION.SDK_INT &gt;= 33 -&gt; {
+            // Android 13-14：使用 MediaStore + 可选 Photo Picker
+            if (checkSelfPermission(READ_MEDIA_IMAGES) == PERMISSION_GRANTED) {
+                loadAllImagesViaMediaStore()
+            } else {
+                launchPhotoPicker()
+            }
+        }
+        else -&gt; {
+            // Android 12 及以下
+            if (checkSelfPermission(READ_EXTERNAL_STORAGE) == PERMISSION_GRANTED) {
+                loadAllImagesViaMediaStore()
+            } else {
+                requestPermissions(arrayOf(READ_EXTERNAL_STORAGE), RC_STORAGE)
+            }
+        }
+    }
+}
+
+private fun launchPhotoPicker() {
+    pickMedia.launch(PickVisualMediaRequest(
+        ActivityResultContracts.PickVisualMedia.ImageOnly
+    ))
+}
+
+// Android 15+ 部分访问时，MediaStore 只返回用户选择的图片
+private fun loadSelectedImagesViaMediaStore(): List&lt;Uri&gt; {
+    // 查询逻辑与 loadAllImagesViaMediaStore 相同
+    // 但在 Android 15+ 部分访问模式下，MediaStore 自动只返回授权的图片
+    return loadAllImagesViaMediaStore()
+}</code></pre>
+
+<h2 id="uri-persistence">七、URI 持久化与生命周期</h2>
+
+<p>Photo Picker 返回的 URI 是<strong>临时授权</strong>的，需要注意生命周期管理。</p>
+
+<h3>URI 授权时效</h3>
+
+<ul>
+<li>Photo Picker 返回的 URI 默认授权到<strong>设备重启</strong></li>
+<li>重启后 URI 失效，需要重新获取</li>
+<li>通过 <code>takePersistableUriPermission()</code> 可以获得持久授权</li>
+</ul>
+
+<pre><code>// 持久化 URI 授权
+private fun persistUri(uri: Uri) {
+    try {
+        contentResolver.takePersistableUriPermission(
+            uri,
+            Intent.FLAG_GRANT_READ_URI_PERMISSION
+        )
+    } catch (e: SecurityException) {
+        // 某些 URI 不支持持久化，需要保存内容到应用私有目录
+        saveToPrivateStorage(uri)
+    }
+}
+
+// 保存文件到应用私有目录（更可靠的方式）
+private fun saveToPrivateStorage(sourceUri: Uri): Uri? {
+    val fileName = "media_${System.currentTimeMillis()}.jpg"
+    val outputFile = File(filesDir, "selected_media").apply { mkdirs() }
+    val destFile = File(outputFile, fileName)
+
+    contentResolver.openInputStream(sourceUri)?.use { input -&gt;
+        FileOutputStream(destFile).use { output -&gt;
+            input.copyTo(output)
+        }
+    }
+
+    return Uri.fromFile(destFile)
+}</code></pre>
+
+<h3>检查持久化 URI 是否仍然有效</h3>
+
+<pre><code>fun isUriValid(uri: Uri): Boolean {
+    return try {
+        contentResolver.openInputStream(uri)?.close()
+        true
+    } catch (e: Exception) {
+        false
+    }
+}
+
+// 使用前检查
+fun displayImage(uri: Uri) {
+    if (isUriValid(uri)) {
+        binding.imageView.setImageURI(uri)
+    } else {
+        // URI 失效，重新获取
+        launchPhotoPicker()
+    }
+}</code></pre>
+
+<h2 id="testing">八、测试与验证</h2>
+
+<p>适配完成后，需要在多个场景下测试：</p>
+
+<h3>测试矩阵</h3>
+
+<table>
+<tr><th>测试场景</th><th>预期行为</th></tr>
+<tr><td>Android 15 首次请求权限</td><td>弹出 Photo Picker，不弹出传统权限对话框</td></tr>
+<tr><td>用户选择部分照片后查询 MediaStore</td><td>只返回用户选择的照片</td></tr>
+<tr><td>用户在设置中升级为完整访问</td><td>MediaStore 返回全部照片</td></tr>
+<tr><td>用户撤销部分访问权限</td><td>MediaStore 返回空结果，应用应引导重新授权</td></tr>
+<tr><td>设备重启后访问持久化 URI</td><td>持久化的 URI 仍可访问，未持久化的失效</td></tr>
+<tr><td>Android 13-14 向后兼容</td><td>使用 READ_MEDIA_* 权限 + 可选 Photo Picker</td></tr>
+<tr><td>Android 12 及以下向后兼容</td><td>使用 READ_EXTERNAL_STORAGE</td></tr>
+</table>
+
+<h3>使用 ADB 模拟权限状态</h3>
+
+<pre><code># 授予部分访问权限
+adb shell pm grant com.example.app android.permission.READ_MEDIA_VISUAL_USER_SELECTED
+
+# 授予完整访问权限
+adb shell pm grant com.example.app android.permission.READ_MEDIA_IMAGES
+
+# 撤销所有媒体权限
+adb shell pm revoke com.example.app android.permission.READ_MEDIA_IMAGES
+adb shell pm revoke com.example.app android.permission.READ_MEDIA_VIDEO
+adb shell pm revoke com.example.app android.permission.READ_MEDIA_VISUAL_USER_SELECTED</code></pre>
+
+<h2 id="best-practices">九、最佳实践总结</h2>
+
+<h3>1. 能用 Photo Picker 就用 Photo Picker</h3>
+
+<p>如果你的应用只是需要用户选择照片/视频（头像、上传、分享等），直接使用 Photo Picker，不需要申请任何运行时权限。这是最简单、最安全、用户体验最好的方案。</p>
+
+<h3>2. 避免主动请求 READ_MEDIA_IMAGES</h3>
+
+<p>在 Android 15 上，请求 <code>READ_MEDIA_IMAGES</code> 会触发系统弹窗引导用户选择照片，而不是传统的权限授权对话框。这可能会让用户困惑。更好的做法是先使用 Photo Picker，只在必要时才请求完整访问。</p>
+
+<h3>3. 做好降级处理</h3>
+
+<p>用户可能随时撤销之前授权的照片。应用需要处理 <code>SecurityException</code> 和空查询结果，不要假设之前能访问的 URI 永远可用。</p>
+
+<pre><code>fun queryMediaSafely(): List&lt;Uri&gt; {
+    return try {
+        loadAllImagesViaMediaStore()
+    } catch (e: SecurityException) {
+        // 权限被撤销，降级到 Photo Picker
+        Log.w(TAG, "Media access revoked, falling back to Photo Picker")
+        emptyList()
+    }
+}</code></pre>
+
+<h3>4. 适配 Compose</h3>
+
+<p>如果你使用 Jetpack Compose，推荐用 <code>rememberLauncherForActivityResult</code>：</p>
+
+<pre><code>@Composable
+fun PhotoPickerScreen() {
+    var selectedImageUri by remember { mutableStateOf&lt;Uri?&gt;(null) }
+
+    val pickMedia = rememberLauncherForActivityResult(
+        ActivityResultContracts.PickVisualMedia()
+    ) { uri -&gt;
+        selectedImageUri = uri
+        uri?.let {
+            // 持久化 URI
+            context.contentResolver.takePersistableUriPermission(
+                it, Intent.FLAG_GRANT_READ_URI_PERMISSION
+            )
+        }
+    }
+
+    Column {
+        Button(onClick = {
+            pickMedia.launch(
+                PickVisualMediaRequest(
+                    ActivityResultContracts.PickVisualMedia.ImageOnly
+                )
+            )
+        }) {
+            Text("选择照片")
+        }
+
+        selectedImageUri?.let { uri -&gt;
+            AsyncImage(
+                model = uri,
+                contentDescription = "Selected photo",
+                modifier = Modifier.size(200.dp)
+            )
+        }
+    }
+}</code></pre>
+
+<h2 id="summary">十、总结</h2>
+
+<p>Android 15 的媒体权限变更是 Android 隐私演进的必然结果。核心思路是：<strong>把选择权交给用户</strong>。</p>
+
+<p>适配要点：</p>
+<ul>
+<li><strong>首选 Photo Picker</strong>：大多数应用只需要用户选择照片，直接用 Photo Picker 即可，零权限</li>
+<li><strong>权限适配分层</strong>：Android 15 用 <code>READ_MEDIA_VISUAL_USER_SELECTED</code>，13-14 用 <code>READ_MEDIA_*</code>，12 及以下用 <code>READ_EXTERNAL_STORAGE</code></li>
+<li><strong>MediaStore 查询受限</strong>：Android 15 上只返回用户授权的媒体，不要假设能查到全部</li>
+<li><strong>URI 生命周期管理</strong>：Photo Picker 返回的 URI 是临时的，重要数据要持久化或保存到私有目录</li>
+<li><strong>做好降级处理</strong>：权限随时可能被撤销，所有媒体访问都要 try-catch</li>
+</ul>
+
+<p>这次变更短期内确实增加了适配成本，但从用户隐私角度看是巨大的进步。越早适配，你的应用在 Android 15 上就越稳定。</p>
       </article>
     </div>
   </main>

@@ -10,9 +10,11 @@
         "隐私",
         "Android 15",
         "权限",
-        "适配"
+        "适配",
+        "Photo Picker",
+        "迁移"
       ],
-      "excerpt": "详解 Android 15 引入的 MEDIA_VISUAL_PERMISSION 强制要求，以及旧版适配方案和最佳实践",
+      "excerpt": "详解 Android 15 引入的媒体权限重大变更，以及从 MediaStore 迁移到 Photo Picker 的完整指南",
       "url": "blog/posts/android-15-隐私新特性所有文件都需要-media-visual-permission.html"
     },
     {
@@ -1077,6 +1079,14 @@
       "count": 1
     },
     {
+      "tag": "Photo Picker",
+      "count": 1
+    },
+    {
+      "tag": "迁移",
+      "count": 1
+    },
+    {
       "tag": "软技能",
       "count": 1
     },
@@ -2056,21 +2066,21 @@
     }
   ],
   "categories": [
-    "Android",
-    "思考",
     "AI",
-    "前端",
+    "AI Agent",
+    "系统编程",
+    "数据库",
+    "思考",
     "DevOps",
+    "Kotlin",
+    "Android",
     "开发",
     "安全",
-    "数据库",
-    "系统编程",
-    "Kotlin",
-    "AI Agent"
+    "前端"
   ],
   "stats": {
     "totalPosts": 60,
-    "totalTags": 206,
+    "totalTags": 208,
     "latestDate": "2026-07-01",
     "oldestDate": "2026-02-15"
   }
