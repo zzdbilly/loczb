@@ -448,21 +448,21 @@
       
       <div class="blog-grid">
         <!-- 代表文章大卡 -->
-                                                                                                                        <article class="blog-card-featured animate-on-scroll" id="home-featured-post" style="display: block;">
+                                                                                                                                        <article class="blog-card-featured animate-on-scroll" id="home-featured-post" style="display: block;">
           <div class="blog-card-header">
             <div class="blog-card-meta">
               <span class="blog-date">2026-07-01</span>
               <span>·</span>
-              <span class="blog-read-time">20 min</span>
+              <span class="blog-read-time">25 min</span>
             </div>
-            <span class="blog-list-tag">Android</span>
+            <span class="blog-list-tag">Kotlin</span>
           </div>
           <h3 class="blog-card-title">
-            <a href="blog/posts/android-15-隐私新特性所有文件都需要-media-visual-permission.html">Android 15 隐私新特性：所有文件都需要 MEDIA_VISUAL_PERMISSION</a>
+            <a href="blog/posts/kotlin-coroutine-异常处理机制全面解析.html">Kotlin Coroutine 异常处理机制全面解析</a>
           </h3>
-          <p class="blog-card-excerpt">详解 Android 15 引入的媒体权限重大变更，以及从 MediaStore 迁移到 Photo Picker 的完整指南...</p>
+          <p class="blog-card-excerpt">全面解析 Kotlin 协程异常处理机制，涵盖 launch/async 异常传播差异、SupervisorJob、结构化并发、CoroutineExceptionHandler、Android 最佳实践等核心内容...</p>
           <div class="blog-card-tags">
-            <span class="tech-tag">Android</span><span class="tech-tag">隐私</span><span class="tech-tag">Android 15</span><span class="tech-tag">权限</span><span class="tech-tag">适配</span><span class="tech-tag">Photo Picker</span><span class="tech-tag">迁移</span>
+            <span class="tech-tag">Kotlin</span><span class="tech-tag">协程</span><span class="tech-tag">Coroutine</span><span class="tech-tag">异常处理</span><span class="tech-tag">Android</span><span class="tech-tag">Kotlin进阶</span>
           </div>
         </article>
         
@@ -546,6 +546,15 @@
     // 首页随机选择代表文章
     const posts = [
       {
+        url: 'blog/posts/kotlin-coroutine-异常处理机制全面解析.html',
+        title: 'Kotlin Coroutine 异常处理机制全面解析',
+        date: '2026-07-01',
+        readTime: '25 min',
+        category: 'Kotlin',
+        category2: 'Kotlin',
+        desc: '全面解析 Kotlin 协程异常处理机制，涵盖 launch/async 异常传播差异、SupervisorJob、结构化并发、CoroutineExceptionHandler、Android 最佳实践等核心内容'
+      },
+      {
         url: 'blog/posts/android-15-隐私新特性所有文件都需要-media-visual-permission.html',
         title: 'Android 15 隐私新特性：所有文件都需要 MEDIA_VISUAL_PERMISSION',
         date: '2026-07-01',
@@ -625,15 +634,6 @@
         category: '前端',
         category2: '前端',
         desc: 'Git Worktree 让你同时检出多个分支，切换零成本，告别 stash 和冲突的烦恼。本文详解 worktree 的使用场景和最佳实践。'
-      },
-      {
-        url: 'blog/posts/android-16-background-tasks.html',
-        title: 'Android 16 后台任务新限制：开发者迁移指南',
-        date: '2026-06-27',
-        readTime: '16 min',
-        category: 'Android',
-        category2: 'Android',
-        desc: 'JobScheduler 强化、前台服务严格限制、WorkManager 迁移策略与兼容性适配完整指南。'
       },
     ];
     
