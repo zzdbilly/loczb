@@ -1207,7 +1207,7 @@ a:hover {
   display: flex;
   gap: var(--space-sm);
   flex-wrap: wrap;
-  margin-bottom: var(--space-2xl);
+  margin-bottom: var(--space-lg);
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
