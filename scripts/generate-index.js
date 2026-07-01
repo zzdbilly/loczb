@@ -87,8 +87,25 @@ const posts = files.map(file => {
   };
 });
 
-// Sort by date descending
-posts.sort((a, b) => new Date(b.date) - new Date(a.date));
+// Build position map from blog/index.html for same-date ordering
+const linkRegex = /href="posts\/([^"']+\.html)"/g;
+const htmlOrder = {};
+let orderIdx = 0;
+let linkMatch;
+while ((linkMatch = linkRegex.exec(indexContent)) !== null) {
+  if (!(linkMatch[1] in htmlOrder)) {
+    htmlOrder[linkMatch[1]] = orderIdx++;
+  }
+}
+
+// Sort by date descending; same-date articles follow HTML list order
+posts.sort((a, b) => {
+  const dateDiff = new Date(b.date) - new Date(a.date);
+  if (dateDiff !== 0) return dateDiff;
+  const aOrder = htmlOrder[a.url.replace('blog/posts/', '')] ?? 9999;
+  const bOrder = htmlOrder[b.url.replace('blog/posts/', '')] ?? 9999;
+  return aOrder - bOrder;
+});
 
 // Generate tag cloud with counts
 const tagCounts = {};
@@ -120,7 +137,7 @@ const archiveList = Object.entries(archives)
   .map(([month, items]) => ({
     month,
     count: items.length,
-    posts: items.sort((a, b) => b.date.localeCompare(a.date))
+    posts: items  // already in correct order from posts array
   }))
   .sort((a, b) => b.month.localeCompare(a.month));
 
