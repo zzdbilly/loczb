@@ -4,6 +4,7 @@
 
 // Article index with tags
 const ARTICLE_INDEX = [
+  { slug: "技术人如何高效学习新技术", tags: ["学习方法", "个人成长", "技术人", "效率", "知识管理"], title: "技术人如何高效学习新技术" },
   { slug: "技术人为什么要写作", tags: ["思考", "写作", "个人成长", "技术人", "学习方法", "个人品牌"], title: "技术人为什么要写作" },
   { slug: "kotlin-coroutine-异常处理机制全面解析", tags: ["Kotlin", "协程", "Coroutine", "异常处理", "Android", "Kotlin进阶"], title: "Kotlin Coroutine 异常处理机制全面解析" },
   { slug: "android-15-隐私新特性所有文件都需要-media-visual-permission", tags: ["Android", "隐私", "Android 15", "权限", "适配"], title: "Android 15 隐私新特性：所有文件都需要 MEDIA_VISUAL_PERMISSION" },
