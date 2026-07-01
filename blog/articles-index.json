@@ -64,6 +64,22 @@
       "url": "blog/posts/kotlin-coroutine-异常处理机制全面解析.html"
     },
     {
+      "slug": "技术人为什么要写作",
+      "title": "技术人为什么要写作",
+      "date": "2026-07-01",
+      "category": "思考",
+      "tags": [
+        "思考",
+        "写作",
+        "个人成长",
+        "技术人",
+        "学习方法",
+        "个人品牌"
+      ],
+      "excerpt": "写作不仅是最强的学习方式，更能帮助技术人建立个人品牌、打破信息茧房、留下成长痕迹。本文分享我开始写作以来的思考和收获",
+      "url": "blog/posts/技术人为什么要写作.html"
+    },
+    {
       "slug": "why-i-started-blogging",
       "title": "为什么我开始写博客：从潜水到发声",
       "date": "2026-06-30",
@@ -927,16 +943,16 @@
       "count": 6
     },
     {
+      "tag": "思考",
+      "count": 4
+    },
+    {
       "tag": "Android 16",
       "count": 4
     },
     {
       "tag": "AI 工具",
       "count": 4
-    },
-    {
-      "tag": "思考",
-      "count": 3
     },
     {
       "tag": "开发技巧",
@@ -961,6 +977,10 @@
     {
       "tag": "Agent",
       "count": 3
+    },
+    {
+      "tag": "个人成长",
+      "count": 2
     },
     {
       "tag": "前台服务",
@@ -1151,11 +1171,23 @@
       "count": 1
     },
     {
-      "tag": "学习",
+      "tag": "写作",
       "count": 1
     },
     {
-      "tag": "个人成长",
+      "tag": "技术人",
+      "count": 1
+    },
+    {
+      "tag": "学习方法",
+      "count": 1
+    },
+    {
+      "tag": "个人品牌",
+      "count": 1
+    },
+    {
+      "tag": "学习",
       "count": 1
     },
     {
@@ -1762,7 +1794,7 @@
   "archives": [
     {
       "month": "2026-07",
-      "count": 4,
+      "count": 5,
       "posts": [
         {
           "title": "Android 15 隐私新特性：所有文件都需要 MEDIA_VISUAL_PERMISSION",
@@ -1783,6 +1815,11 @@
           "title": "Kotlin Coroutine 异常处理机制全面解析",
           "date": "2026-07-01",
           "url": "blog/posts/kotlin-coroutine-异常处理机制全面解析.html"
+        },
+        {
+          "title": "技术人为什么要写作",
+          "date": "2026-07-01",
+          "url": "blog/posts/技术人为什么要写作.html"
         }
       ]
     },
@@ -2103,21 +2140,21 @@
     }
   ],
   "categories": [
-    "安全",
-    "Kotlin",
-    "数据库",
-    "思考",
-    "AI Agent",
-    "开发",
-    "前端",
-    "AI",
     "Android",
     "系统编程",
+    "AI",
+    "开发",
+    "Kotlin",
+    "数据库",
+    "AI Agent",
+    "思考",
+    "安全",
+    "前端",
     "DevOps"
   ],
   "stats": {
-    "totalPosts": 61,
-    "totalTags": 212,
+    "totalPosts": 62,
+    "totalTags": 216,
     "latestDate": "2026-07-01",
     "oldestDate": "2026-02-15"
   }
