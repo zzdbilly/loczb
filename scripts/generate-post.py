@@ -116,6 +116,14 @@ def add_to_index(slug, title, tag_list):
 
 def update_blog_list(slug, title, description, article_date, read_time, tags, category):
     """更新 blog/index.html 列表"""
+    # 检查文章是否已存在
+    with open(BLOG_INDEX, 'r', encoding='utf-8') as f:
+        content = f.read()
+    
+    if f'href="posts/{slug}.html"' in content:
+        print(f"  ⚠️ 已在博客列表中，跳过")
+        return False
+    
     tag_list = [t.strip() for t in tags.split(',')]
     first_tag = tag_list[0] if tag_list else "博客"
     
