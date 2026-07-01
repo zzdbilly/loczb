@@ -2066,17 +2066,17 @@
     }
   ],
   "categories": [
-    "Android",
-    "思考",
-    "AI",
-    "前端",
-    "DevOps",
-    "开发",
     "安全",
-    "数据库",
+    "思考",
+    "AI Agent",
     "系统编程",
+    "DevOps",
+    "AI",
+    "数据库",
     "Kotlin",
-    "AI Agent"
+    "Android",
+    "前端",
+    "开发"
   ],
   "stats": {
     "totalPosts": 60,
