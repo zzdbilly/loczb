@@ -422,7 +422,11 @@ def main():
     # 更新博客列表页
     update_blog_list(slug, title, description, article_date, read_time, tags, category)
     
+    # 更新首页
+    update_homepage(slug, title, description, article_date, read_time, tags, category)
+    
     # 更新博客索引（articles-index.json）
+    update_articles_index(slug, title, description, article_date, read_time, tags, category)
 
 def update_homepage_js_array():
     """更新首页的 JavaScript posts 数组，使用博客列表的最新文章"""
