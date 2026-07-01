@@ -1,0 +1,10 @@
+# URL Redirects for GitHub Pages
+# Syntax: old_path new_path [status_code]
+# status_code: 301 (permanent), 302 (temporary)
+
+# 根路径重定向
+/index.html / 301
+
+# 博客路径统一
+/blog.html /blog/ 301
+/blog/index.html /blog/ 301
