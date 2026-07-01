@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+  <script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>技术人为什么要写作 | 张小猛 - loczb</title>
+    <meta name="description" content="写作不仅是最强的学习方式，更能帮助技术人建立个人品牌、打破信息茧房、留下成长痕迹。本文分享我开始写作以来的思考和收获">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="技术人为什么要写作 | 张小猛 - loczb">
+    <meta property="og:description" content="写作不仅是最强的学习方式，更能帮助技术人建立个人品牌、打破信息茧房、留下成长痕迹。本文分享我开始写作以来的思考和收获">
+    <meta property="og:url" content="https://709527.xyz/blog/posts/技术人为什么要写作.html">
+    <meta property="og:type" content="article">
+        <meta property="og:image" content="../../assets/images/og-default.webp">
+    <meta property="og:site_name" content="loczb">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="技术人为什么要写作 | 张小猛 - loczb">
+    <meta name="twitter:description" content="写作不仅是最强的学习方式，更能帮助技术人建立个人品牌、打破信息茧房、留下成长痕迹。本文分享我开始写作以来的思考和收获">
+
+    
+    
+    
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <style>.post-content { max-width: 760px; margin: 0 auto; line-height: 1.85; }
+    .post-content h1 { font-size: 2.4rem; margin: 2rem 0 1rem; }
+    .post-content h2 { font-size: 1.7rem; margin: 2.5rem 0 1rem; color: var(--color-accent-primary); border-bottom: 1px solid var(--color-border); padding-bottom: 0.5rem; }
+    .post-content h3 { font-size: 1.3rem; margin: 1.8rem 0 0.8rem; }
+    .post-content pre { background: var(--color-bg-tertiary); padding: 1.2rem 1.2rem 1.2rem 1.5rem; border-radius: 8px; overflow-x: auto; margin: 0; font-size: 0.9rem; white-space: pre; text-indent: 0; line-height: 1.5; font-family: Consolas, "Courier New", monospace; -webkit-padding-start: 1.5rem; -moz-padding-start: 1.5rem; padding-left: 1.5rem; }
+    .post-content pre code { line-height: 1.5; display: block; }
+    .post-content code { background: var(--color-bg-tertiary); padding: 0.15rem 0.4rem; border-radius: 4px; font-family: monospace; font-size: 0.9em;}
+    .post-meta { color: var(--color-text-secondary); font-size: 0.9rem; margin-bottom: 2rem; }
+    .post-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 3rem; }
+    .post-tags span { background: var(--color-bg-tertiary); padding: 0.3rem 0.8rem; border-radius: 9999px; font-size: 0.85rem; color: var(--color-accent-primary); }
+    .tip-box { background: rgba(34, 197, 94, 0.1); border-left: 3px solid #22c55e; padding: 1rem 1.2rem; margin: 1.5rem 0; border-radius: 0 6px 6px 0; }
+    .warning-box { background: rgba(234, 179, 8, 0.1); border-left: 3px solid #eab308; padding: 1rem 1.2rem; margin: 1.5rem 0; border-radius: 0 6px 6px 0; }
+    .danger-box { background: rgba(239, 68, 68, 0.1); border-left: 3px solid #ef4444; padding: 1rem 1.2rem; margin: 1.5rem 0; border-radius: 0 6px 6px 0; }
+    table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.95rem; }
+    th, td { border: 1px solid var(--color-border); padding: 0.7rem; text-align: left; }
+    th { background: var(--color-bg-tertiary); font-weight: 600; }
+  
+    .post-toc-container { position: fixed; right: 2rem; top: 180px; width: 220px; max-height: calc(100vh - 220px); border-radius: 16px; overflow: hidden; display: none; }
+    @media (min-width: 1200px) { .post-toc-container { display: block; } }
+    .post-toc { background: var(--color-bg-secondary); border: 1px solid var(--color-border); border-radius: 16px; padding: 1rem; max-height: calc(100vh - 240px); overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--color-border) transparent; }
+    .post-toc::-webkit-scrollbar { width: 4px; }
+    .post-toc::-webkit-scrollbar-track { background: transparent; }
+    .post-toc::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 4px; }
+    .post-toc-title { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted); margin-bottom: 0.75rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--color-border); position: sticky; top: 0; background: var(--color-bg-secondary); z-index: 1; }
+    .post-toc-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.25rem; }
+    .post-toc-list a { display: block; color: var(--color-text-secondary); text-decoration: none; font-size: 0.78rem; padding: 0.3rem 0.5rem; border-radius: 6px; border-left: 2px solid transparent; transition: all 0.2s ease; line-height: 1.4; }
+    .post-toc-list a:hover { color: var(--color-accent-primary); background: var(--color-bg-tertiary); }
+    .post-toc-list a.active { color: var(--color-accent-primary); background: var(--color-bg-tertiary); border-left-color: var(--color-accent-primary); }
+    .post-toc-list .toc-h3 { padding-left: 1rem; font-size: 0.72rem; }
+    .post-toc-list .toc-h2 { font-weight: 600; font-size: 0.8rem; }
+/* Code block first-line fix */
+    .back-link { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--color-text-secondary); font-size: 0.9rem; text-decoration: none; margin-bottom: 1rem; transition: color 0.2s; }
+    .back-link:hover { color: var(--color-accent-primary); }
+    .back-link svg { width: 16px; height: 16px; }
+</style>
+    <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
+    <link rel="alternate icon" href="../../assets/images/favicon.ico">
+</head>
+<body>
+  <!-- Loading -->
+  <div class="loading">
+    <div class="loading-spinner"></div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../../index.html" class="nav-logo">
+        loc<span>zb</span>
+      </a>
+      <button class="nav-toggle" aria-label="打开菜单" aria-expanded="false" aria-controls="nav-links-menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <div class="nav-overlay"></div>
+      <ul class="nav-links" id="nav-links-menu">
+        <li><a href="../../index.html" class="nav-link">首页</a></li>
+        <li><a href="../../projects/index.html" class="nav-link">项目</a></li>
+        <li><a href="../index.html" class="nav-link active">博客</a></li>
+        <li><a href="../../about/index.html" class="nav-link">关于</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="scroll-progress"></div>
+
+  <main class="section" style="padding-bottom: 0;">
+    <div class="container container-narrow">
+      <a href="../index.html" class="back-link">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        返回博客列表
+      </a>
+
+      <article class="post-content">
+        <h1>技术人为什么要写作</h1>
+        
+        <div class="post-meta">
+          <span>📅 2026-07-01</span>
+          <span>⏱️ 8 min read</span>
+          <span>👤 张小猛</span>
+        </div>
+        
+        <div class="post-tags">
+          <span class="tag">思考</span>
+          <span class="tag">写作</span>
+          <span class="tag">个人成长</span>
+          <span class="tag">技术人</span>
+          <span class="tag">学习方法</span>
+          <span class="tag">个人品牌</span>
+        </div>
+        
+        <h1>技术人为什么要写作</h1>
+<h2>引言</h2>
+<p>很多技术人（包括曾经的我）认为，写作是文案、产品、运营的事情，和写代码的人没什么关系。代码才是硬技能，写作不过是"写文档"或者"写README"——一种不得不做的辅助工作。</p>
+<p>但当我真正开始持续写作之后，我发现了一个完全不同的世界。写作不仅仅是一种表达方式，更是一种思维工具，它能够帮助你深度思考、建立个人品牌、甚至改变职业轨迹。</p>
+<p>本文不是要说服你成为职业作家，而是想分享：为什么技术人应该写作，以及写作能为你带来什么。</p>
+<h2>写作是最强的学习方式</h2>
+<h3>输入 vs 输出</h3>
+<p>我们每天都在"学习"：刷技术博客、看教程视频、阅读开源项目文档。但这种学习往往是"被动输入"——眼睛看到了，信息就进入了大脑，然后...就没有然后了。</p>
+<p>研究表明，被动学习的留存率只有 10%-30%，而���动输出的留存率可以达到 90%以上。写作恰恰是一种强制的主动输出：</p>
+<ul>
+<li>当你试图把一个概念写清楚时，你才会发现自己的理解有多少盲区</li>
+<li>当你尝试用通俗的语言解释一个技术概念时，你才会意识到它到底有多复杂</li>
+<li>当你把学习心得写成文章后，这个知识点会在你的记忆中保存很久</li>
+</ul>
+<p>这不是我说的，这是"费曼学习法"的核心思想——用输出倒逼输入。</p>
+<h3>写作迫使你深度思考</h3>
+<p>写代码时，我们常常是"先干为敬"——拿到需求就开始写，边写边想，遇到问题再改。这种方式在处理简单任务时效率很高，但在理解复杂系统时往往会留下很多"夹生饭"。</p>
+<p>写作则完全不同。当你决定写一篇关于"Android 架构演进"的文章时，你需要：</p>
+<ol>
+<li><strong>梳理知识体系</strong> - 从 MVC 到 MVP 到 MVVM 到 Clean Architecture，它们的区别和联系是什么？</li>
+<li><strong>查找资料验证</strong> - 那些我"以为"正确的观点，真的经得起推敲吗？</li>
+<li><strong>组织表达逻辑</strong> - 如何让一个完全不懂的人也能理解这个概念？</li>
+<li><strong>回答潜在问题</strong> - 读者可能会问什么质疑什么？</li>
+</ol>
+<p>这个过程会让你的认知从"我觉得我懂"变成"我真的懂了"。</p>
+<p>我写第一篇技术博客的时候，本以为自己对 Kotlin Coroutines 已经掌握得很好了。结果写着写着，我发现很多地方"知其然不知其所以然"——比如为什么 launch 的异常会立即传播，而 async 要等 await() 才传播？网上很多文章都是直接给结论没人解释原理。写那篇文章的过程迫使我去阅读源码、去调试、去真正理解底层机制。</p>
+<p>最终那篇文章帮助了很多人，也彻底巩固了我自己的理解。</p>
+<h2>写作是个人品牌的基石</h2>
+<h3>技术人的"酒香也怕巷子深"</h3>
+<p>你是否见过这样的场景：</p>
+<ul>
+<li>某位同事技术能力很强，但升职加薪总是轮不到他</li>
+<li>技术博客写得很好的人，跳槽时薪资涨幅往往更高</li>
+<li>同样工作五年，有些人可以拿到大厂offer，有些人只能在小公司打转</li>
+</ul>
+<p>这里的核心差异是<strong>可见度</strong>。</p>
+<p>在职场中，不是看你"做了什么"，而是看别人知道你"做了什么"。这不是不公平，这是现实。一个技术能力强但从不展示的人，和一个技术能力稍弱但持续输出内容的人，后者往往更容易获得机会。</p>
+<p>写作是建立个人品牌最有效的方式之一。它是可持续、可累积、可持续见的：</p>
+<ul>
+<li>一篇优质文章可以持续为你带来流量和关注</li>
+<li>写作能力本身就是一个差异化竞争点</li>
+<li>内容积累到一定程度后，会形成"赢家通吃"效应</li>
+</ul>
+<h3>写作带来的意外机会</h3>
+<p>从我开始写博客之后，遇到了很多"意外收获"：</p>
+<ul>
+<li>有猎头主动联系，推荐大厂岗位（因为我博客里的深度文章）</li>
+<li>有创业公司邀请担任技术顾问（因为看到我对某个领域的系统性思考）</li>
+<li>有读者成为朋友，后来在项目中有了合作</li>
+<li>甚至有公司HR说"我们看了你的博客，觉得你很适合这个岗位"</li>
+</ul>
+<p>这些机会不是"写文章"这个动作直接带来的，而是写作带来的<strong>认知深度</strong>、<strong>表达能力</strong>、<strong>个人影响力</strong>综合作用的结果。</p>
+<h2>写作是最好的社交货币</h2>
+<h3>技术圈子的"硬通货"</h3>
+<p>在技术圈子里，什么样的人最受尊重？是那些能够把复杂问题讲清楚的人。</p>
+<p>当你能够用通俗易懂的语言解释一个技术概念时，你收获的不只是"写得不错"的评价，而是真正的技术认可。因为<strong>能把事情讲清楚，本身就是技术实力的体现</strong>。</p>
+<p>而且，写作是一种"一对多"的社交方式。一篇文章可以同时被几百、几千个人看到，这种效率是线下社交无法比拟的。</p>
+<h3>打破信息茧房</h3>
+<p>很多技术人有一个特点：圈子很小。主要接触的就是公司同事、几个技术群里的网友。信息来源也很单一：技术博客、知乎、Twitter。</p>
+<p>写作可以有效地打破这个信息茧房。当你开始输出内容后，你会收到各种不同背景读者的反馈：有人从另一个角度补充了你不知道的知识，有人指出了你文章中的错误，有人分享了他们踩过的坑。</p>
+<p>这些反馈让你的认知更加立体，也让你接触到更多元的信息源。</p>
+<h2>写作是一种生活方式</h2>
+<h3>对抗碎片化</h3>
+<p>现代人的注意力被严重碎片化。刷短视频、刷微博、刷知乎...每一件事都在把我们的时间切成碎片。我们的深度思考能力正在退化。</p>
+<p>写作，尤其是写长文，是一种"反碎片化"的行为。它要求你：</p>
+<ul>
+<li>连续专注 1-2 小时</li>
+<li>深入思考一个主题</li>
+<li>把零散的灵感组织成系统的内容</li>
+</ul>
+<p>这种深度思考的习惯一旦养成，会迁移到你的工作和生活中。你会发现自己在开会时更能抓住重点，在code review时更能发现问题的本质，在学习新技术时更能快速抓住核心。</p>
+<h3>留下时间的痕迹</h3>
+<p>你是否有过这样的感觉：两三年前学的技术，现在差不多忘光了。那些曾经花费大量时间学习的东西就这样消失在记忆里。</p>
+<p>写作可以帮你"对抗遗忘"。当你把学习心得写成文章后，即使将来忘记了具体细��，只需要翻看一下自己的文章就能快速捡起来。</p>
+<p>更重要的是，写作是你成长的"时间胶囊"。五年后、十年后，当你看到自己早期写的文章，你会惊讶于自己当时的思考方式，也会感慨于自己的成长轨迹。</p>
+<h2>如何开始写作</h2>
+<h3>从"写不出来"说起</h3>
+<p>很多人想写作，但总是"写不出来"。常见的障碍包括：</p>
+<ul>
+<li><strong>完美主义</strong> - 觉得自己写得不够好，怕被人笑话</li>
+<li><strong>没有时间</strong> - 工作太忙，哪有时间写东西</li>
+<li><strong>不知道写什么</strong> - 感觉没什么好写的</li>
+<li><strong>写得太慢</strong> - 写一篇文章要很长时间</li>
+</ul>
+<p>对于这些障碍，我的建议是：</p>
+<p><strong>关于完美主义</strong>：开始写比写得好更重要。第一篇文章写得再烂，也比不写强一百倍。而且，你会发现随着写作量的增加，你的文字表达能力会快速提升。</p>
+<p><strong>关于时间</strong>：不需要每天写，每周写一篇就已经很好了。一篇 2000-3000 字的文章，利用周末的碎片时间完全可以完成。</p>
+<p><strong>关于选题</strong>：就从你工作中遇到的问题开始。你踩过的坑、解决的问题、学到的新知识，都可以写成文章。不用担心没有读者——写作首先是为了自己。</p>
+<p><strong>关于效率</strong>：初期的确会写得���，但这是正常的。坚持写下去，你会发现自己的写作速度会越来越快，因为你的思维已经习惯了这种输出方式。</p>
+<h3>找到一个主题</h3>
+<p>如果你不知道写什么，可以从以下方向尝试：</p>
+<ol>
+<li><strong>工作中的技术总结</strong> - 解决了一个棘手的 bug，学到了一个新框架，都可以记录下来</li>
+<li><strong>学习笔记</strong> - 学习新技术时，边学边记，最后整理成文章</li>
+<li><strong>踩坑记录</strong> - 把自己踩过的坑整理成"避坑指南"，这类文章很受欢迎</li>
+<li><strong>源码分析</strong> - 阅读优秀的开源项目，把分析过程写成文章</li>
+<li><strong>经验复盘</strong> - 项目结束后，把学到的经验教训写成文章</li>
+</ol>
+<p>关键是<strong>开始写</strong>，而不是等到"准备好"再写。</p>
+<h2>写作带来的长期价值</h2>
+<h3>复利效应</h3>
+<p>写作是一件有<strong>复利效应</strong>的事情。</p>
+<p>你今天写的一篇文章，十年后仍然可以被人搜索到、阅读到、从中受益。它不需要你投入额外的时间去维护，它就在那里，持续产生价值。</p>
+<p>而且，随着你写作量的增加，你的写作能力、思考深度、个人影响力都会持续累积。这种累积不是线性的，而是指数级的。</p>
+<h3>成为"有故事"的人</h3>
+<p>最后我想说的是，写作让你成为"有故事"的人。</p>
+<p>当你写了三五十篇技术文章后，你对自己领域的理解已经达到了一定的深度。当你写了上百篇后，你已经成为了别人眼中的"专家"。当你写了几年后，你已经建立起了自己的个人品牌，拥有了选择的自由。</p>
+<p>而这一切，都源于你决定开始写作的那一刻。</p>
+<hr />
+<p>所以，技术人为什么要写作？</p>
+<p>因为写作是最强的学习方式，是建立个人品牌的基石，是打破信息茧房的武器，是一种对抗碎片化的生活方式，更是一份给自己的人生礼物。</p>
+<p>现在，是时候开始写了。</p>
+      </article>
+    </div>
+  </main>
+
+  <!-- Related Posts / Navigation -->
+  <section class="section" style="padding-top: 0;">
+    <div class="container container-narrow">
+      <hr style="border: none; border-top: 1px solid var(--color-border); margin: var(--space-3xl) 0;">
+      
+      <div class="blog-topics" style="margin-bottom: var(--space-xl);">
+        <span class="topic-label">读完之后：</span>
+        <a href="../index.html" class="topic-tag">返回博客列表</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <p class="footer-signature">写代码，做产品，也认真生活。</p>
+      <div class="footer-links">
+        <a href="https://github.com/zzdbilly" class="footer-link" target="_blank" rel="noopener">GitHub</a>
+        <a href="../../projects/index.html" class="footer-link">项目</a>
+        <a href="../../about/index.html" class="footer-link">关于</a>
+      </div>
+      <p class="footer-copyright">
+        &copy; 2026 张小猛
+      </p>
+    </div>
+  </footer>
+
+  
+  <script src="../../assets/js/related-posts.js"></script>
+  <script src="../../assets/js/share.js"></script>
+  <script src="../../assets/js/main.js"></script>
+
+  <!-- Back to Top & Reading Progress -->
+  <button class="back-to-top" id="backToTop" aria-label="回到顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
+  <div class="reading-progress" id="readingProgress"></div>
+
+  <script>
+    const backToTop = document.getElementById("backToTop");
+    
+    window.addEventListener("scroll", () => {
+      if (window.scrollY > 300) {
+        backToTop.classList.add("visible");
+      } else {
+        backToTop.classList.remove("visible");
+      }
+      
+      const progressBar = document.getElementById("readingProgress");
+      if (progressBar && document.querySelector(".post-content")) {
+        const scrollTop = window.scrollY;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const progress = (scrollTop / docHeight) * 100;
+        progressBar.style.width = progress + "%";
+      }
+    });
+    
+    backToTop.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    // Keyboard shortcuts
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "j") window.scrollBy({ top: 200, behavior: "smooth" });
+      else if (e.key === "k") window.scrollBy({ top: -200, behavior: "smooth" });
+      else if (e.key === "Escape") document.getElementById("blog-search-results")?.classList.remove("active");
+      else if (e.altKey && e.key === "b") window.location.href = "../index.html";
+    });
+  </script>
+
+  <!-- Post TOC -->
+  <div class="post-toc-container" id="postToc">
+    <nav class="post-toc">
+      <div class="post-toc-title">目录</div>
+      <ul class="post-toc-list" id="tocList">
+      </ul>
+    </nav>
+  </div>
+
+  <script>
+    (function() {
+      const tocList = document.getElementById('tocList');
+      const tocContainer = document.getElementById('postToc');
+      if (!tocList || !tocContainer) return;
+      
+      const headings = document.querySelectorAll('.post-content h2, .post-content h3');
+      if (headings.length === 0) { tocContainer.style.display = 'none'; return; }
+      
+      headings.forEach((h, i) => {
+        const id = 'toc-' + i;
+        h.id = h.id || id;
+        
+        const li = document.createElement('li');
+        const a = document.createElement('a');
+        a.href = '#' + h.id;
+        a.textContent = h.textContent.replace(/^\d+[.、]\s*/, '');
+        a.className = h.tagName === 'H3' ? 'toc-h3' : 'toc-h2';
+        
+        a.addEventListener('click', (e) => {
+          e.preventDefault();
+          document.getElementById(h.id).scrollIntoView({ behavior: 'smooth' });
+          history.pushState(null, '', '#' + h.id);
+        });
+        
+        li.appendChild(a);
+        tocList.appendChild(li);
+      });
+      
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            tocList.querySelectorAll('a').forEach(a => a.classList.remove('active'));
+            const id = entry.target.id;
+            const activeLink = tocList.querySelector('a[href="#' + id + '"]');
+            if (activeLink) {
+              activeLink.classList.add('active');
+              activeLink.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+          }
+        });
+      }, { rootMargin: '-20% 0px -60% 0px' });
+      
+      headings.forEach(h => observer.observe(h));
+    })();
+  </script>
+  <script src="../../assets/js/og-generator.js"></script>
+</body>
+</html>
