@@ -128,18 +128,18 @@
       </div>
       <!-- Filters + Search -->
       <div class="blog-filters" role="tablist" aria-label="博客分类筛选">
-        <button class="filter-btn filter-btn-active" data-filter="all" role="tab" aria-selected="true">全部</button>
-        <button class="filter-btn" data-filter="AI" role="tab" aria-selected="false">AI</button>
-        <button class="filter-btn" data-filter="Android" role="tab" aria-selected="false">Android</button>
-        <button class="filter-btn" data-filter="Kotlin" role="tab" aria-selected="false">Kotlin</button>
-        <button class="filter-btn" data-filter="前端" role="tab" aria-selected="false">前端</button>
-        <button class="filter-btn" data-filter="思考" role="tab" aria-selected="false">思考</button>
-        <button class="filter-btn" data-filter="DevOps" role="tab" aria-selected="false">DevOps</button>
-        <button class="filter-btn" data-filter="数据库" role="tab" aria-selected="false">数据库</button>
-        <button class="filter-btn" data-filter="系统编程" role="tab" aria-selected="false">系统编程</button>
-        <button class="filter-btn" data-filter="安全" role="tab" aria-selected="false">安全</button>
-        <button class="filter-btn" data-filter="开发" role="tab" aria-selected="false">开发</button>
-        <button class="filter-btn" data-filter="AI Agent" role="tab" aria-selected="false">AI Agent</button><!-- Search Bar -->
+        <button class="filter-btn filter-btn-active" data-filter="all" role="tab" aria-selected="true" aria-controls="blog-list">全部</button>
+        <button class="filter-btn" data-filter="AI" role="tab" aria-selected="false" aria-controls="blog-list">AI</button>
+        <button class="filter-btn" data-filter="Android" role="tab" aria-selected="false" aria-controls="blog-list">Android</button>
+        <button class="filter-btn" data-filter="Kotlin" role="tab" aria-selected="false" aria-controls="blog-list">Kotlin</button>
+        <button class="filter-btn" data-filter="前端" role="tab" aria-selected="false" aria-controls="blog-list">前端</button>
+        <button class="filter-btn" data-filter="思考" role="tab" aria-selected="false" aria-controls="blog-list">思考</button>
+        <button class="filter-btn" data-filter="DevOps" role="tab" aria-selected="false" aria-controls="blog-list">DevOps</button>
+        <button class="filter-btn" data-filter="数据库" role="tab" aria-selected="false" aria-controls="blog-list">数据库</button>
+        <button class="filter-btn" data-filter="系统编程" role="tab" aria-selected="false" aria-controls="blog-list">系统编程</button>
+        <button class="filter-btn" data-filter="安全" role="tab" aria-selected="false" aria-controls="blog-list">安全</button>
+        <button class="filter-btn" data-filter="开发" role="tab" aria-selected="false" aria-controls="blog-list">开发</button>
+        <button class="filter-btn" data-filter="AI Agent" role="tab" aria-selected="false" aria-controls="blog-list">AI Agent</button><!-- Search Bar -->
       <div class="blog-search-bar">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
         <input type="text" id="blog-search-input" placeholder="搜索文章标题、标签..." autocomplete="off">
@@ -159,7 +159,7 @@
           <button class="view-toggle-btn" data-view="archive" onclick="toggleBlogView('archive')">归档</button>
         </div>
       </div>
-      <div class="blog-list-container">
+      <div class="blog-list-container" id="blog-list">
         <!-- Post List -->
         <article class="blog-list-item animate-on-scroll" data-category="思考" data-page="1">
           <div class="blog-list-header">
@@ -299,7 +299,7 @@
         <article class="blog-list-item animate-on-scroll" data-category="前端" data-page="1">
           <div class="blog-list-header">
             <div class="blog-list-meta">
-              <span class="blog-date">2026-06-28</span></span>
+              <span class="blog-date">2026-06-28</span>
               <span>·</span>
               <span class="blog-read-time">12 min</span>
             </div>
@@ -313,7 +313,7 @@
         <article class="blog-list-item animate-on-scroll" data-category="前端" data-page="1">
           <div class="blog-list-header">
             <div class="blog-list-meta">
-              <span class="blog-date">2026-06-28</span></span>
+              <span class="blog-date">2026-06-28</span>
               <span>·</span>
               <span class="blog-read-time">12 min</span>
             </div>
@@ -327,7 +327,7 @@
         <article class="blog-list-item animate-on-scroll" data-category="Android" data-page="1">
           <div class="blog-list-header">
             <div class="blog-list-meta">
-              <span class="blog-date">2026-06-27</span></span>
+              <span class="blog-date">2026-06-27</span>
               <span>·</span>
               <span class="blog-read-time">16 min</span>
             </div>
@@ -341,7 +341,7 @@
         <article class="blog-list-item animate-on-scroll" data-category="Android" data-page="1">
           <div class="blog-list-header">
             <div class="blog-list-meta">
-              <span class="blog-date">2026-06-27</span></span>
+              <span class="blog-date">2026-06-27</span>
               <span>·</span>
               <span class="blog-read-time">16 min</span>
             </div>
@@ -355,7 +355,7 @@
         <article class="blog-list-item animate-on-scroll" data-category="Android" data-page="1">
           <div class="blog-list-header">
             <div class="blog-list-meta">
-              <span class="blog-date">2026-06-27</span></span>
+              <span class="blog-date">2026-06-27</span>
               <span>·</span>
               <span class="blog-read-time">18 min</span>
             </div>
@@ -369,7 +369,7 @@
         <article class="blog-list-item animate-on-scroll" data-category="前端" data-page="1">
           <div class="blog-list-header">
             <div class="blog-list-meta">
-              <span class="blog-date">2026-06-27</span></span>
+              <span class="blog-date">2026-06-27</span>
               <span>·</span>
               <span class="blog-read-time">14 min</span>
             </div>
@@ -383,7 +383,7 @@
         <article class="blog-list-item animate-on-scroll" data-category="DevOps" data-page="1">
           <div class="blog-list-header">
             <div class="blog-list-meta">
-              <span class="blog-date">2026-06-27</span></span>
+              <span class="blog-date">2026-06-27</span>
               <span>·</span>
               <span class="blog-read-time">16 min</span>
             </div>
@@ -397,7 +397,7 @@
         <article class="blog-list-item animate-on-scroll" data-category="开发" data-page="1">
           <div class="blog-list-header">
             <div class="blog-list-meta">
-              <span class="blog-date">2026-06-27</span></span>
+              <span class="blog-date">2026-06-27</span>
               <span>·</span>
               <span class="blog-read-time">18 min</span>
             </div>
@@ -411,7 +411,7 @@
         <article class="blog-list-item animate-on-scroll" data-category="安全" data-page="1">
           <div class="blog-list-header">
             <div class="blog-list-meta">
-              <span class="blog-date">2026-06-27</span></span>
+              <span class="blog-date">2026-06-27</span>
               <span>·</span>
               <span class="blog-read-time">16 min</span>
             </div>
@@ -425,7 +425,7 @@
         <article class="blog-list-item animate-on-scroll" data-category="Android" data-page="1">
           <div class="blog-list-header">
             <div class="blog-list-meta">
-              <span class="blog-date">2026-06-27</span></span>
+              <span class="blog-date">2026-06-27</span>
               <span>·</span>
               <span class="blog-read-time">16 min</span>
             </div>
@@ -439,7 +439,7 @@
         <article class="blog-list-item animate-on-scroll" data-category="DevOps" data-page="1">
           <div class="blog-list-header">
             <div class="blog-list-meta">
-              <span class="blog-date">2026-06-27</span></span>
+              <span class="blog-date">2026-06-27</span>
               <span>·</span>
               <span class="blog-read-time">18 min</span>
             </div>
@@ -453,7 +453,7 @@
         <article class="blog-list-item animate-on-scroll" data-category="DevOps" data-page="1">
           <div class="blog-list-header">
             <div class="blog-list-meta">
-              <span class="blog-date">2026-06-27</span></span>
+              <span class="blog-date">2026-06-27</span>
               <span>·</span>
               <span class="blog-read-time">18 min</span>
             </div>
@@ -467,7 +467,7 @@
         <article class="blog-list-item animate-on-scroll" data-category="数据库" data-page="2">
           <div class="blog-list-header">
             <div class="blog-list-meta">
-              <span class="blog-date">2026-06-27</span></span>
+              <span class="blog-date">2026-06-27</span>
               <span>·</span>
               <span class="blog-read-time">20 min</span>
             </div>
@@ -481,7 +481,7 @@
         <article class="blog-list-item animate-on-scroll" data-category="AI" data-page="2">
           <div class="blog-list-header">
             <div class="blog-list-meta">
-              <span class="blog-date">2026-06-27</span></span>
+              <span class="blog-date">2026-06-27</span>
               <span>·</span>
               <span class="blog-read-time">18 min</span>
             </div>
@@ -495,7 +495,7 @@
         <article class="blog-list-item animate-on-scroll" data-category="AI" data-page="2">
           <div class="blog-list-header">
             <div class="blog-list-meta">
-              <span class="blog-date">2026-06-27</span></span>
+              <span class="blog-date">2026-06-27</span>
               <span>·</span>
               <span class="blog-read-time">18 min</span>
             </div>
@@ -509,7 +509,7 @@
         <article class="blog-list-item animate-on-scroll" data-category="前端" data-page="2">
           <div class="blog-list-header">
             <div class="blog-list-meta">
-              <span class="blog-date">2026-06-27</span></span>
+              <span class="blog-date">2026-06-27</span>
               <span>·</span>
               <span class="blog-read-time">16 min</span>
             </div>
@@ -523,7 +523,7 @@
         <article class="blog-list-item animate-on-scroll" data-category="系统编程" data-page="2">
           <div class="blog-list-header">
             <div class="blog-list-meta">
-              <span class="blog-date">2026-06-27</span></span>
+              <span class="blog-date">2026-06-27</span>
               <span>·</span>
               <span class="blog-read-time">16 min</span>
             </div>
