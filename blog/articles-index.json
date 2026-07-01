@@ -1,6 +1,21 @@
 {
   "posts": [
     {
+      "slug": "android-15-隐私新特性所有文件都需要-media-visual-permission",
+      "title": "Android 15 隐私新特性：所有文件都需要 MEDIA_VISUAL_PERMISSION",
+      "date": "2026-07-01",
+      "category": "Android",
+      "tags": [
+        "Android",
+        "隐私",
+        "Android 15",
+        "权限",
+        "适配"
+      ],
+      "excerpt": "详解 Android 15 引入的 MEDIA_VISUAL_PERMISSION 强制要求，以及旧版适配方案和最佳实践",
+      "url": "blog/posts/android-15-隐私新特性所有文件都需要-media-visual-permission.html"
+    },
+    {
       "slug": "代码之外的竞争力技术人最容易忽视的软技能",
       "title": "代码之外的竞争力：技术人最容易忽视的软技能",
       "date": "2026-07-01",
@@ -879,7 +894,7 @@
   "tagCloud": [
     {
       "tag": "Android",
-      "count": 16
+      "count": 17
     },
     {
       "tag": "AI",
@@ -1044,6 +1059,22 @@
     {
       "tag": "OpenClaw",
       "count": 2
+    },
+    {
+      "tag": "隐私",
+      "count": 1
+    },
+    {
+      "tag": "Android 15",
+      "count": 1
+    },
+    {
+      "tag": "权限",
+      "count": 1
+    },
+    {
+      "tag": "适配",
+      "count": 1
     },
     {
       "tag": "软技能",
@@ -1689,8 +1720,13 @@
   "archives": [
     {
       "month": "2026-07",
-      "count": 2,
+      "count": 3,
       "posts": [
+        {
+          "title": "Android 15 隐私新特性：所有文件都需要 MEDIA_VISUAL_PERMISSION",
+          "date": "2026-07-01",
+          "url": "blog/posts/android-15-隐私新特性所有文件都需要-media-visual-permission.html"
+        },
         {
           "title": "代码之外的竞争力：技术人最容易忽视的软技能",
           "date": "2026-07-01",
@@ -2020,8 +2056,8 @@
     }
   ],
   "categories": [
-    "思考",
     "Android",
+    "思考",
     "AI",
     "前端",
     "DevOps",
@@ -2033,8 +2069,8 @@
     "AI Agent"
   ],
   "stats": {
-    "totalPosts": 59,
-    "totalTags": 202,
+    "totalPosts": 60,
+    "totalTags": 206,
     "latestDate": "2026-07-01",
     "oldestDate": "2026-02-15"
   }
