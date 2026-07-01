@@ -83,8 +83,11 @@ function initRelatedPosts() {
   console.log('✅ 找到 post-tags 元素');
   
   // Identify current article from URL
+  // 注意：URL 中的中文是编码的（如 %E9%9A%90），需要解码
   const currentPath = window.location.pathname;
-  const currentSlug = currentPath.split('/').pop().replace('.html', '');
+  let currentSlug = currentPath.split('/').pop().replace('.html', '');
+  // 解码 URL 编码的中文字符
+  try { currentSlug = decodeURIComponent(currentSlug); } catch (e) {}
   console.log('currentSlug:', currentSlug);
   const currentArticle = ARTICLE_INDEX.find(a => a.slug === currentSlug);
   console.log('currentArticle:', currentArticle);
