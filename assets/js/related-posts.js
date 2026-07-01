@@ -4,6 +4,7 @@
 
 // Article index with tags
 const ARTICLE_INDEX = [
+  { slug: "android-15-隐私新特性所有文件都需要-media-visual-permission", tags: ["Android", "隐私", "Android 15", "权限", "适配"], title: "Android 15 隐私新特性：所有文件都需要 MEDIA_VISUAL_PERMISSION" },
   { slug: "代码之外的竞争力技术人最容易忽视的软技能", tags: ["思考", "软技能", "职业发展", "技术人成长", "沟通"], title: "代码之外的竞争力：技术人最容易忽视的软技能" },
   { slug: "少即是多信息过载时代的专注力修炼", tags: ["思考", "专注力", "深度工作", "信息管理", "自我管理"], title: "少即是多：信息过载时代的专注力修炼" },
   { slug: "why-i-started-blogging", tags: ["思考", "学习", "个人成长", "博客"], title: "为什么我开始写博客：从潜水到发声" },
