@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+  <script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>技术人如何高效学习新技术 | 张小猛 - loczb</title>
+    <meta name="description" content="从被动输入到主动输出，80/20 法则选技术，知识体系建立，实践驱动学习，构建记忆宫殿，善用 AI 与社群">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="技术人如何高效学习新技术 | 张小猛 - loczb">
+    <meta property="og:description" content="从被动输入到主动输出，80/20 法则选技术，知识体系建立，实践驱动学习，构建记忆宫殿，善用 AI 与社群">
+    <meta property="og:url" content="https://709527.xyz/blog/posts/技术人如何高效学习新技术.html">
+    <meta property="og:type" content="article">
+        <meta property="og:image" content="../../assets/images/og-default.webp">
+    <meta property="og:site_name" content="loczb">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="技术人如何高效学习新技术 | 张小猛 - loczb">
+    <meta name="twitter:description" content="从被动输入到主动输出，80/20 法则选技术，知识体系建立，实践驱动学习，构建记忆宫殿，善用 AI 与社群">
+
+    
+    
+    
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <style>.post-content { max-width: 760px; margin: 0 auto; line-height: 1.85; }
+    .post-content h1 { font-size: 2.4rem; margin: 2rem 0 1rem; }
+    .post-content h2 { font-size: 1.7rem; margin: 2.5rem 0 1rem; color: var(--color-accent-primary); border-bottom: 1px solid var(--color-border); padding-bottom: 0.5rem; }
+    .post-content h3 { font-size: 1.3rem; margin: 1.8rem 0 0.8rem; }
+    .post-content pre { background: var(--color-bg-tertiary); padding: 1.2rem 1.2rem 1.2rem 1.5rem; border-radius: 8px; overflow-x: auto; margin: 0; font-size: 0.9rem; white-space: pre; text-indent: 0; line-height: 1.5; font-family: Consolas, "Courier New", monospace; -webkit-padding-start: 1.5rem; -moz-padding-start: 1.5rem; padding-left: 1.5rem; }
+    .post-content pre code { line-height: 1.5; display: block; }
+    .post-content code { background: var(--color-bg-tertiary); padding: 0.15rem 0.4rem; border-radius: 4px; font-family: monospace; font-size: 0.9em;}
+    .post-meta { color: var(--color-text-secondary); font-size: 0.9rem; margin-bottom: 2rem; }
+    .post-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 3rem; }
+    .post-tags span { background: var(--color-bg-tertiary); padding: 0.3rem 0.8rem; border-radius: 9999px; font-size: 0.85rem; color: var(--color-accent-primary); }
+    .tip-box { background: rgba(34, 197, 94, 0.1); border-left: 3px solid #22c55e; padding: 1rem 1.2rem; margin: 1.5rem 0; border-radius: 0 6px 6px 0; }
+    .warning-box { background: rgba(234, 179, 8, 0.1); border-left: 3px solid #eab308; padding: 1rem 1.2rem; margin: 1.5rem 0; border-radius: 0 6px 6px 0; }
+    .danger-box { background: rgba(239, 68, 68, 0.1); border-left: 3px solid #ef4444; padding: 1rem 1.2rem; margin: 1.5rem 0; border-radius: 0 6px 6px 0; }
+    table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.95rem; }
+    th, td { border: 1px solid var(--color-border); padding: 0.7rem; text-align: left; }
+    th { background: var(--color-bg-tertiary); font-weight: 600; }
+  
+    .post-toc-container { position: fixed; right: 2rem; top: 180px; width: 220px; max-height: calc(100vh - 220px); border-radius: 16px; overflow: hidden; display: none; }
+    @media (min-width: 1200px) { .post-toc-container { display: block; } }
+    .post-toc { background: var(--color-bg-secondary); border: 1px solid var(--color-border); border-radius: 16px; padding: 1rem; max-height: calc(100vh - 240px); overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--color-border) transparent; }
+    .post-toc::-webkit-scrollbar { width: 4px; }
+    .post-toc::-webkit-scrollbar-track { background: transparent; }
+    .post-toc::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 4px; }
+    .post-toc-title { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted); margin-bottom: 0.75rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--color-border); position: sticky; top: 0; background: var(--color-bg-secondary); z-index: 1; }
+    .post-toc-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.25rem; }
+    .post-toc-list a { display: block; color: var(--color-text-secondary); text-decoration: none; font-size: 0.78rem; padding: 0.3rem 0.5rem; border-radius: 6px; border-left: 2px solid transparent; transition: all 0.2s ease; line-height: 1.4; }
+    .post-toc-list a:hover { color: var(--color-accent-primary); background: var(--color-bg-tertiary); }
+    .post-toc-list a.active { color: var(--color-accent-primary); background: var(--color-bg-tertiary); border-left-color: var(--color-accent-primary); }
+    .post-toc-list .toc-h3 { padding-left: 1rem; font-size: 0.72rem; }
+    .post-toc-list .toc-h2 { font-weight: 600; font-size: 0.8rem; }
+/* Code block first-line fix */
+    .back-link { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--color-text-secondary); font-size: 0.9rem; text-decoration: none; margin-bottom: 1rem; transition: color 0.2s; }
+    .back-link:hover { color: var(--color-accent-primary); }
+    .back-link svg { width: 16px; height: 16px; }
+</style>
+    <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
+    <link rel="alternate icon" href="../../assets/images/favicon.ico">
+</head>
+<body>
+  <!-- Loading -->
+  <div class="loading">
+    <div class="loading-spinner"></div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../../index.html" class="nav-logo">
+        loc<span>zb</span>
+      </a>
+      <button class="nav-toggle" aria-label="打开菜单" aria-expanded="false" aria-controls="nav-links-menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <div class="nav-overlay"></div>
+      <ul class="nav-links" id="nav-links-menu">
+        <li><a href="../../index.html" class="nav-link">首页</a></li>
+        <li><a href="../../projects/index.html" class="nav-link">项目</a></li>
+        <li><a href="../index.html" class="nav-link active">博客</a></li>
+        <li><a href="../../about/index.html" class="nav-link">关于</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="scroll-progress"></div>
+
+  <main class="section" style="padding-bottom: 0;">
+    <div class="container container-narrow">
+      <a href="../index.html" class="back-link">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        返回博客列表
+      </a>
+
+      <article class="post-content">
+        <h1>技术人如何高效学习新技术</h1>
+        
+        <div class="post-meta">
+          <span>📅 2026-07-01</span>
+          <span>⏱️ 8 min read</span>
+          <span>👤 张小猛</span>
+        </div>
+        
+        <div class="post-tags">
+          <span class="tag">学习方法</span>
+          <span class="tag">个人成长</span>
+          <span class="tag">技术人</span>
+          <span class="tag">效率</span>
+          <span class="tag">知识管理</span>
+        </div>
+        
+        <h1>技术人如何高效学习新技术</h1>
+<h2>引言</h2>
+<p>作为技术人，我们似乎永远在学习的路上。新框架、新语言、新工具层出不穷，稍有懈怠就会被时代甩下。</p>
+<p>但你有没有这种感觉：学了很多东西，但真正用到的没多少？花时间学的技术，过段时间就忘了？别人学一遍就会的东西，自己学好几遍还是半懂不懂？</p>
+<p>这篇文章想分享我的学习方法和思考，不一定对每个人都适用，但希望能够给你一些启发。</p>
+<h2>学习的本质：不是输入，而是输出</h2>
+<p>很多人学习新技术的方式是这样的：</p>
+<ol>
+<li>找一篇教程或视频</li>
+<li>跟着一步步做</li>
+<li>似懂非懂地看完</li>
+<li>收藏起来，"以后有用"</li>
+</ol>
+<p>这种方式的问题在于：你只是在<strong>被动输入</strong>，没有<strong>主动输出</strong>。研究表明，被动学习的知识留存率只有 10%-30%，而主动输出的知识留存率可以达到 90%以上。</p>
+<p>所以，高效学习的第一步是：<strong>把学习变成输出</strong>。</p>
+<p>具体怎么做？
+- 学完一个概念，立刻动手实践
+- 写一篇博客记录学习过程
+- 给同事或朋友讲一遍
+- 在项目中实际应用</p>
+<p>我学习 Kotlin Coroutines 的时候就是这样。网上文章看了一堆，觉得"懂了"。但真正写博客的时候才发现，很多细节经不起深挖。于是又去读源码、调试、验证。这个过程虽然耗时，但让我的理解深度提升了好几个层次。</p>
+<h2>挑选要学的技术：80/20 法则</h2>
+<p>我们的时间是有限的，不可能所有新技术都学。</p>
+<p>我的原则是：<strong>只学那些"一定会用到"的技术</strong>。</p>
+<p>具体判断标准：</p>
+<ol>
+<li><strong>当前工作需要</strong> - 正在做的项目要用到的技术，优先级最高</li>
+<li><strong>未来趋势所在</strong> - 市场上大多数岗位都在要求的技術，值得投入</li>
+<li><strong>能够解决实际问题</strong> - 能解决你工作中真实痛点的技术</li>
+</ol>
+<p>而那些"看起来很酷"、"以后可能有用"的技术，大概率永远都不会用。我曾经收藏了无数"以后学习"的技术栈，现在回头看，90%都没有再打开过。</p>
+<p>另一个判断方法是：<strong>这门技术能否在 6 个月内为你的工作或职业带来可见的回报？</strong> 如果不能，优先级就低很多。</p>
+<h2>建立知识体系：先地图，后景点</h2>
+<p>学习新技术最忌讳的行为是：<strong>一上来就钻细节</strong>。</p>
+<p>比如想学 React，上来就问"React 的虚拟 DOM 是怎么实现的"、"Fiber 架构的原理是什么"。这些问题的答案当然重要，但不是初学者该关心的。</p>
+<p>更好的方式是：<strong>先建立宏观认知，再逐步深入</strong>。</p>
+<p>我的学习路径一般是：</p>
+<ol>
+<li><strong>what - 它是什么</strong> - 用一句话概括这个技术解决的问题</li>
+<li><strong>why - 为什么要用</strong> - 它的核心优势是什么，解决了什么痛点</li>
+<li><strong>how - 怎么用</strong> - 基础用法是什么，能做什么</li>
+<li><strong>why-works - 底层原理</strong> - 它是怎么实现的，为什么这样设计</li>
+<li><strong>best-practice - 最佳实践</strong> - 有什么坑，有什么最佳实践</li>
+</ol>
+<p>这个顺序不能乱。前几个阶段是"会用"，后面才是"理解"。很多人卡在第四阶段卡很久，但其实对于大多数技术来说，"会用"已经足够解决 90% 的问题了。</p>
+<h2>带着问题学：不要为了学而学</h2>
+<p>学习新技术最好的方式是：<strong>带着具体的问题去学</strong>。</p>
+<p>比如，不是"我要学习 React"，而是"我要做一个列表页面，React 怎么做更简单"。</p>
+<p>这种方式的好处是：</p>
+<ol>
+<li>目标明确，不容易迷失</li>
+<li>学的知识立刻能用上，记得更牢</li>
+<li>有真实场景驱动，理解更深</li>
+</ol>
+<p>我学习任何新技术，都会先问自己一个问题：<strong>我想用它来解决什么问题？</strong></p>
+<p>这个问题必须有具体答案，不能是"以后可能会有用"。必须有明确的场景，这样才能判断学到什么程度就算"够用了"。</p>
+<h2>实践，实践，再实践</h2>
+<p>技术类知识和骑自行车一样，不动手永远学不会。</p>
+<p>我的经验是：<strong>只看书不动手，等于没学</strong>。</p>
+<p>具体实践建议：</p>
+<ol>
+<li><strong>小项目驱动</strong> - 学一门新技术，最好的方式是做一个小型项目。比如想学 TypeScript，就用 TypeScript 重写一个自己的小工具。</li>
+<li><strong>在真实项目中应用</strong> - 如果工作中有合适的场景，立刻用上。真实项目的压力和反馈比任何教程都有效。</li>
+<li><strong>代码复盘</strong> - 定期回顾自己写的代码，想想有没有更好的实现方式。</li>
+</ol>
+<p>还有一个习惯很有帮助：<strong>每周造一个轮子</strong>。</p>
+<p>不用是什么复杂的项目，可能是：
+- 一个简单的 CLI 工具
+- 一个小的前端组件
+- 一个数据处理脚本</p>
+<p>重点是<strong>保持动手的习惯</strong>，让学习成为一种常态。</p>
+<h2>构建记忆宫殿：记录与回顾</h2>
+<p>学过就忘是每个人的痛。</p>
+<p>我的解决方案是：<strong>强制输出 + 定期回顾</strong>。</p>
+<p>强制输出：
+- 写技术博客
+- 做学习笔记
+- 代码Code Review</p>
+<p>定期回顾：
+- 每周翻看上周的学习笔记
+- 每月回顾本月学到的技术
+- 每季度做一次知识整理</p>
+<p>这个过程不需要很长时间，但效果显著。我现在还能记得一年前学的很多技术细节，很大程度上归功于这个习惯。</p>
+<h2>善用搜索引擎和 AI</h2>
+<p>很多初学者遇到问题就闷头研究，半天搞不定。其实<strong>善用搜索是核心技术能力之一</strong>。</p>
+<p>我的搜索习惯是：</p>
+<ol>
+<li><strong>先搜官方文档</strong> - 官方文档永远是最准确的来源</li>
+<li><strong>Stack Overflow 是好朋友</strong> - 常见问题上面都有答案</li>
+<li><strong>GitHub Issues</strong> - 遇到奇怪的 bug，搜 GitHub Issues 经常有意想不到的收获</li>
+<li><strong>善用 AI</strong> - 现在的 AI 助手可以帮你快速理解概念、Debug、给代码提建议</li>
+</ol>
+<p>尤其推荐最后一点。AI 就像一个 24 小时待命的导师，可以随时回答你的问题。我现在学新技术的时候，几乎一半的时间是在和 AI 对话，让它解释概念、审查代码、给建议。</p>
+<h2>找到学习社群</h2>
+<p>一个人学习很容易懈怠，找到志同道合的学习伙伴会大大提升学习效率。</p>
+<p>具体方式：
+- ���入技术社群（微信群、Slack、Discord 等）
+- 参加线下或线上技术活动
+- 关注一些技术博主，了解行业动态
+- 在 GitHub 上参与开源项目</p>
+<p>社群的作用是<strong>信息共享</strong>和<strong>互相督促</strong>。别人在学的技术、踩过的坑、总结的经验，都是宝贵的学习资源。</p>
+<p>而且，当你学有所成之后，分享出来帮助别人，也是一种很好的学习方式——教学相长，说的就是这个道理。</p>
+<h2>写在最后</h2>
+<p>学习新技术不是为了"掌握更多技能"，而是为了<strong>解决实际问题，创造实际价值</strong>。</p>
+<p>不要为了学习而学习。每学一样东西，都要想清楚：
+- 我要用它来解决什么问题？
+- 学到什么程度算够用？
+- 怎么验证我学会了？</p>
+<p>带着问题学，带着输出学，你会发现学习效率比想象中要高得多。</p>
+<p>技术的世界变化很快，但学习方法的核心逻辑是不变的：<strong>明确目标、动手实践、持续输出、定期回顾</strong>。</p>
+<p>愿每一份学习都有收获，每一份付出都有回报。</p>
+      </article>
+    </div>
+  </main>
+
+  <!-- Related Posts / Navigation -->
+  <section class="section" style="padding-top: 0;">
+    <div class="container container-narrow">
+      <hr style="border: none; border-top: 1px solid var(--color-border); margin: var(--space-3xl) 0;">
+      
+      <div class="blog-topics" style="margin-bottom: var(--space-xl);">
+        <span class="topic-label">读完之后：</span>
+        <a href="../index.html" class="topic-tag">返回博客列表</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <p class="footer-signature">写代码，做产品，也认真生活。</p>
+      <div class="footer-links">
+        <a href="https://github.com/zzdbilly" class="footer-link" target="_blank" rel="noopener">GitHub</a>
+        <a href="../../projects/index.html" class="footer-link">项目</a>
+        <a href="../../about/index.html" class="footer-link">关于</a>
+      </div>
+      <p class="footer-copyright">
+        &copy; 2026 张小猛
+      </p>
+    </div>
+  </footer>
+
+  
+  <script src="../../assets/js/related-posts.js"></script>
+  <script src="../../assets/js/share.js"></script>
+  <script src="../../assets/js/main.js"></script>
+
+  <!-- Back to Top & Reading Progress -->
+  <button class="back-to-top" id="backToTop" aria-label="回到顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
+  <div class="reading-progress" id="readingProgress"></div>
+
+  <script>
+    const backToTop = document.getElementById("backToTop");
+    
+    window.addEventListener("scroll", () => {
+      if (window.scrollY > 300) {
+        backToTop.classList.add("visible");
+      } else {
+        backToTop.classList.remove("visible");
+      }
+      
+      const progressBar = document.getElementById("readingProgress");
+      if (progressBar && document.querySelector(".post-content")) {
+        const scrollTop = window.scrollY;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const progress = (scrollTop / docHeight) * 100;
+        progressBar.style.width = progress + "%";
+      }
+    });
+    
+    backToTop.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    // Keyboard shortcuts
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "j") window.scrollBy({ top: 200, behavior: "smooth" });
+      else if (e.key === "k") window.scrollBy({ top: -200, behavior: "smooth" });
+      else if (e.key === "Escape") document.getElementById("blog-search-results")?.classList.remove("active");
+      else if (e.altKey && e.key === "b") window.location.href = "../index.html";
+    });
+  </script>
+
+  <!-- Post TOC -->
+  <div class="post-toc-container" id="postToc">
+    <nav class="post-toc">
+      <div class="post-toc-title">目录</div>
+      <ul class="post-toc-list" id="tocList">
+      </ul>
+    </nav>
+  </div>
+
+  <script>
+    (function() {
+      const tocList = document.getElementById('tocList');
+      const tocContainer = document.getElementById('postToc');
+      if (!tocList || !tocContainer) return;
+      
+      const headings = document.querySelectorAll('.post-content h2, .post-content h3');
+      if (headings.length === 0) { tocContainer.style.display = 'none'; return; }
+      
+      headings.forEach((h, i) => {
+        const id = 'toc-' + i;
+        h.id = h.id || id;
+        
+        const li = document.createElement('li');
+        const a = document.createElement('a');
+        a.href = '#' + h.id;
+        a.textContent = h.textContent.replace(/^\d+[.、]\s*/, '');
+        a.className = h.tagName === 'H3' ? 'toc-h3' : 'toc-h2';
+        
+        a.addEventListener('click', (e) => {
+          e.preventDefault();
+          document.getElementById(h.id).scrollIntoView({ behavior: 'smooth' });
+          history.pushState(null, '', '#' + h.id);
+        });
+        
+        li.appendChild(a);
+        tocList.appendChild(li);
+      });
+      
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            tocList.querySelectorAll('a').forEach(a => a.classList.remove('active'));
+            const id = entry.target.id;
+            const activeLink = tocList.querySelector('a[href="#' + id + '"]');
+            if (activeLink) {
+              activeLink.classList.add('active');
+              activeLink.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+          }
+        });
+      }, { rootMargin: '-20% 0px -60% 0px' });
+      
+      headings.forEach(h => observer.observe(h));
+    })();
+  </script>
+  <script src="../../assets/js/og-generator.js"></script>
+</body>
+</html>
