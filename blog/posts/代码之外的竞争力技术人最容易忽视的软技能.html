@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+  <script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>代码之外的竞争力：技术人最容易忽视的软技能 | 张小猛 - loczb</title>
+    <meta name="description" content="技术能力决定了你能走多快，但软技能决定了你能走多远。本文聊聊沟通、表达、影响力等容易被技术人忽视的能力。">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="代码之外的竞争力：技术人最容易忽视的软技能 | 张小猛 - loczb">
+    <meta property="og:description" content="技术能力决定了你能走多快，但软技能决定了你能走多远。本文聊聊沟通、表达、影响力等容易被技术人忽视的能力。">
+    <meta property="og:url" content="https://709527.xyz/blog/posts/代码之外的竞争力技术人最容易忽视的软技能.html">
+    <meta property="og:type" content="article">
+        <meta property="og:image" content="../../assets/images/og-default.webp">
+    <meta property="og:site_name" content="loczb">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="代码之外的竞争力：技术人最容易忽视的软技能 | 张小猛 - loczb">
+    <meta name="twitter:description" content="技术能力决定了你能走多快，但软技能决定了你能走多远。本文聊聊沟通、表达、影响力等容易被技术人忽视的能力。">
+
+    
+    
+    
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <style>.post-content { max-width: 760px; margin: 0 auto; line-height: 1.85; }
+    .post-content h1 { font-size: 2.4rem; margin: 2rem 0 1rem; }
+    .post-content h2 { font-size: 1.7rem; margin: 2.5rem 0 1rem; color: var(--color-accent-primary); border-bottom: 1px solid var(--color-border); padding-bottom: 0.5rem; }
+    .post-content h3 { font-size: 1.3rem; margin: 1.8rem 0 0.8rem; }
+    .post-content pre { background: var(--color-bg-tertiary); padding: 1.2rem 1.2rem 1.2rem 1.5rem; border-radius: 8px; overflow-x: auto; margin: 0; font-size: 0.9rem; white-space: pre; text-indent: 0; line-height: 1.5; font-family: Consolas, "Courier New", monospace; -webkit-padding-start: 1.5rem; -moz-padding-start: 1.5rem; padding-left: 1.5rem; }
+    .post-content pre code { line-height: 1.5; display: block; }
+    .post-content code { background: var(--color-bg-tertiary); padding: 0.15rem 0.4rem; border-radius: 4px; font-family: monospace; font-size: 0.9em;}
+    .post-meta { color: var(--color-text-secondary); font-size: 0.9rem; margin-bottom: 2rem; }
+    .post-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 3rem; }
+    .post-tags span { background: var(--color-bg-tertiary); padding: 0.3rem 0.8rem; border-radius: 9999px; font-size: 0.85rem; color: var(--color-accent-primary); }
+    .tip-box { background: rgba(34, 197, 94, 0.1); border-left: 3px solid #22c55e; padding: 1rem 1.2rem; margin: 1.5rem 0; border-radius: 0 6px 6px 0; }
+    .warning-box { background: rgba(234, 179, 8, 0.1); border-left: 3px solid #eab308; padding: 1rem 1.2rem; margin: 1.5rem 0; border-radius: 0 6px 6px 0; }
+    .danger-box { background: rgba(239, 68, 68, 0.1); border-left: 3px solid #ef4444; padding: 1rem 1.2rem; margin: 1.5rem 0; border-radius: 0 6px 6px 0; }
+    table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.95rem; }
+    th, td { border: 1px solid var(--color-border); padding: 0.7rem; text-align: left; }
+    th { background: var(--color-bg-tertiary); font-weight: 600; }
+  
+    .post-toc-container { position: fixed; right: 2rem; top: 180px; width: 220px; max-height: calc(100vh - 220px); border-radius: 16px; overflow: hidden; display: none; }
+    @media (min-width: 1200px) { .post-toc-container { display: block; } }
+    .post-toc { background: var(--color-bg-secondary); border: 1px solid var(--color-border); border-radius: 16px; padding: 1rem; max-height: calc(100vh - 240px); overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--color-border) transparent; }
+    .post-toc::-webkit-scrollbar { width: 4px; }
+    .post-toc::-webkit-scrollbar-track { background: transparent; }
+    .post-toc::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 4px; }
+    .post-toc-title { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted); margin-bottom: 0.75rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--color-border); position: sticky; top: 0; background: var(--color-bg-secondary); z-index: 1; }
+    .post-toc-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.25rem; }
+    .post-toc-list a { display: block; color: var(--color-text-secondary); text-decoration: none; font-size: 0.78rem; padding: 0.3rem 0.5rem; border-radius: 6px; border-left: 2px solid transparent; transition: all 0.2s ease; line-height: 1.4; }
+    .post-toc-list a:hover { color: var(--color-accent-primary); background: var(--color-bg-tertiary); }
+    .post-toc-list a.active { color: var(--color-accent-primary); background: var(--color-bg-tertiary); border-left-color: var(--color-accent-primary); }
+    .post-toc-list .toc-h3 { padding-left: 1rem; font-size: 0.72rem; }
+    .post-toc-list .toc-h2 { font-weight: 600; font-size: 0.8rem; }
+/* Code block first-line fix */
+    .back-link { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--color-text-secondary); font-size: 0.9rem; text-decoration: none; margin-bottom: 1rem; transition: color 0.2s; }
+    .back-link:hover { color: var(--color-accent-primary); }
+    .back-link svg { width: 16px; height: 16px; }
+</style>
+    <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
+    <link rel="alternate icon" href="../../assets/images/favicon.ico">
+</head>
+<body>
+  <!-- Loading -->
+  <div class="loading">
+    <div class="loading-spinner"></div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../../index.html" class="nav-logo">
+        loc<span>zb</span>
+      </a>
+      <button class="nav-toggle" aria-label="打开菜单" aria-expanded="false" aria-controls="nav-links-menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <div class="nav-overlay"></div>
+      <ul class="nav-links" id="nav-links-menu">
+        <li><a href="../../index.html" class="nav-link">首页</a></li>
+        <li><a href="../../projects/index.html" class="nav-link">项目</a></li>
+        <li><a href="../index.html" class="nav-link active">博客</a></li>
+        <li><a href="../../about/index.html" class="nav-link">关于</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="scroll-progress"></div>
+
+  <main class="section" style="padding-bottom: 0;">
+    <div class="container container-narrow">
+      <a href="../index.html" class="back-link">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        返回博客列表
+      </a>
+
+      <article class="post-content">
+        <h1>代码之外的竞争力：技术人最容易忽视的软技能</h1>
+        
+        <div class="post-meta">
+          <span>📅 2026-07-01 09:44:17</span>
+          <span>⏱️ 5 min read</span>
+          <span>👤 张小猛</span>
+        </div>
+        
+        <div class="post-tags">
+          <span class="tag">思考</span>
+          <span class="tag">软技能</span>
+          <span class="tag">职业发展</span>
+          <span class="tag">技术人成长</span>
+          <span class="tag">沟通</span>
+        </div>
+        
+        <p>文章内容...</p>
+      </article>
+
+      <div class="post-body">
+        <h2 id="toc-0">技术好就够了？</h2>
+        <p>大多数技术人的职业路径是这样的：疯狂学技术 -> 疯狂写代码 -> 疯狂加班 -> 瓶颈。</p>
+        <p>不是因为技术不够，而是因为<strong>技术只是入场券，不是竞争力核心</strong>。我见过太多技术能力强但晋升受阻的人，也见过技术一般但步步高升的人。差异往往不在代码里。</p>
+        <p>这不是"技术无用论"——技术是基础，没它不行。但很多人忽视了：技术决定了你能否进入这个游戏，而软技能决定了你能玩多久、能玩多大。</p>
+
+        <h2 id="toc-1">沟通：把想法变成共识</h2>
+        <p>技术人最大的误解是："我做好了，别人自然会看到。" 残酷的事实是：不会。</p>
+        <p>好的沟通分三层：</p>
+        <ul>
+          <li><strong>说人话</strong>：能把技术概念翻译成业务价值。跟产品讲微服务架构之前，先告诉对方"这个改动能让页面加载快一倍"。</li>
+          <li><strong>听懂需求</strong>：技术人最容易犯的错是"解决不存在的问题"。多问一句"为什么"，可能节省几天工作量。</li>
+          <li><strong>影响决策</strong>：不是"技术上都对"就够了，而是要让人愿意采纳你的方案。这需要理清利益关系、预判反对意见、找到共同目标。</li>
+        </ul>
+        <p>沟通的本质不是说话，而是<strong>让信息流动，让共识形成</strong>。</p>
+
+        <h2 id="toc-2">表达：从做了什么到证明了什么</h2>
+        <p>中国人讲究"酒香不怕巷子深"，但在职场这个游戏里，<strong>不会展示 = 没做</strong>。这不是教你邀功，而是让你的贡献被正确评估。</p>
+        <p>好的表达有几个原则：</p>
+        <ul>
+          <li><strong>用结果说话</strong>：不是"我重构了支付模块"，而是"支付模块响应时间从 800ms 降到 200ms，转化率提升 15%"。</li>
+          <li><strong>讲完整故事</strong>：背景 -> 行动 -> 结果 -> 学到的教训。没有背景的结果像在炫耀，没有教训的复盘没有价值。</li>
+          <li><strong>选对场合</strong>：日常工作中多分享，晋升答辩中讲故事，周报里写重点。不同时机用不同颗粒度。</li>
+        </ul>
+        <p>表达不是显摆，而是让努力被看见、让价值被认可的基本能力。</p>
+
+        <h2 id="toc-3">影响力：不靠职位靠能力</h2>
+        <p>很多人以为影响力等于"职位高"，但真正的影响力来自三个维度：</p>
+        <ul>
+          <li><strong>专业影响力</strong>：你是某领域的"公认的专家"，别人遇到相关问题会来问你。这是靠技术实力一步步积累的。</li>
+          <li><strong>项目影响力</strong>：你主导的项目成功了，团队的人自然认可你的能力。</li>
+          <li><strong>文化影响力</strong>：你推动了团队的一些正向变化，比如代码review文化、文档规范、技术分享。这些不靠职位，靠主动。</li>
+        </ul>
+        <p>影响力是"做了正确的事，让别人看到了"的累积结果。</p>
+
+        <h2 id="toc-4">协作：成就他人也是成就自己</h2>
+        <p>技术人另一个常见问题是"solo型"——觉得自己搞定就行，不喜欢带人，不愿意配合。</p>
+        <p>但职场的真相是：<strong>一个人的价值，往往体现在他帮助了多少人、解决了多少别人的问题</strong>。当你开始带人、分享知识、主动补位，你的影响力和不可替代性就在悄悄增长。</p>
+        <p>协作不是"帮别人做事"，而是"让整个团队更强"。</p>
+
+        <h2 id="toc-5">写在最后</h2>
+        <p>技术是硬实力，软技能是放大器。硬实力决定下限，软技能决定上限。</p>
+        <p>不是让你放下技术去学"人情世故"，而是在技术之外，多花一点时间练习那些"看起来不紧急但很重要"的能力。</p>
+        <p>毕竟，代码写得再好，也需要有人愿意读、愿意用、愿意买单。</p>
+
+        <hr style="border: none; border-top: 1px solid var(--color-border); margin: var(--space-3xl) 0;">
+        <p style="color: var(--color-text-muted); font-size: 0.9rem;">本文发布于 2026-07-01，分类：<a href="../index.html?category=思考" style="color: var(--color-accent-primary);">思考</a></p>
+      </div>
+    </div>
+  </main>
+
+  <!-- Related Posts / Navigation -->
+  <section class="section" style="padding-top: 0;">
+    <div class="container container-narrow">
+      <hr style="border: none; border-top: 1px solid var(--color-border); margin: var(--space-3xl) 0;">
+      
+      <div class="blog-topics" style="margin-bottom: var(--space-xl);">
+        <span class="topic-label">读完之后：</span>
+        <a href="../index.html" class="topic-tag">返回博客列表</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <p class="footer-signature">写代码，做产品，也认真生活。</p>
+      <div class="footer-links">
+        <a href="https://github.com/zzdbilly" class="footer-link" target="_blank" rel="noopener">GitHub</a>
+        <a href="../../projects/index.html" class="footer-link">项目</a>
+        <a href="../../about/index.html" class="footer-link">关于</a>
+      </div>
+      <p class="footer-copyright">
+        &copy; 2026 张小猛
+      </p>
+    </div>
+  </footer>
+
+  
+  <script src="../../assets/js/related-posts.js"></script>
+  <script src="../../assets/js/share.js"></script>
+  <script src="../../assets/js/main.js"></script>
+
+  <!-- Back to Top & Reading Progress -->
+  <button class="back-to-top" id="backToTop" aria-label="回到顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
+  <div class="reading-progress" id="readingProgress"></div>
+
+  <script>
+    const backToTop = document.getElementById("backToTop");
+    
+    window.addEventListener("scroll", () => {
+      if (window.scrollY > 300) {
+        backToTop.classList.add("visible");
+      } else {
+        backToTop.classList.remove("visible");
+      }
+      
+      const progressBar = document.getElementById("readingProgress");
+      if (progressBar && document.querySelector(".post-content")) {
+        const scrollTop = window.scrollY;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const progress = (scrollTop / docHeight) * 100;
+        progressBar.style.width = progress + "%";
+      }
+    });
+    
+    backToTop.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    // Keyboard shortcuts
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "j") window.scrollBy({ top: 200, behavior: "smooth" });
+      else if (e.key === "k") window.scrollBy({ top: -200, behavior: "smooth" });
+      else if (e.key === "Escape") document.getElementById("blog-search-results")?.classList.remove("active");
+      else if (e.altKey && e.key === "b") window.location.href = "../index.html";
+    });
+  </script>
+
+  <!-- Post TOC -->
+  <div class="post-toc-container" id="postToc">
+    <nav class="post-toc">
+      <div class="post-toc-title">目录</div>
+      <ul class="post-toc-list" id="tocList">
+      </ul>
+    </nav>
+  </div>
+
+  <script>
+    (function() {
+      const tocList = document.getElementById('tocList');
+      const tocContainer = document.getElementById('postToc');
+      if (!tocList || !tocContainer) return;
+      
+      const headings = document.querySelectorAll('.post-content h2, .post-content h3');
+      if (headings.length === 0) { tocContainer.style.display = 'none'; return; }
+      
+      headings.forEach((h, i) => {
+        const id = 'toc-' + i;
+        h.id = h.id || id;
+        
+        const li = document.createElement('li');
+        const a = document.createElement('a');
+        a.href = '#' + h.id;
+        a.textContent = h.textContent.replace(/^\d+[.、]\s*/, '');
+        a.className = h.tagName === 'H3' ? 'toc-h3' : 'toc-h2';
+        
+        a.addEventListener('click', (e) => {
+          e.preventDefault();
+          document.getElementById(h.id).scrollIntoView({ behavior: 'smooth' });
+          history.pushState(null, '', '#' + h.id);
+        });
+        
+        li.appendChild(a);
+        tocList.appendChild(li);
+      });
+      
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            tocList.querySelectorAll('a').forEach(a => a.classList.remove('active'));
+            const id = entry.target.id;
+            const activeLink = tocList.querySelector('a[href="#' + id + '"]');
+            if (activeLink) {
+              activeLink.classList.add('active');
+              activeLink.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+          }
+        });
+      }, { rootMargin: '-20% 0px -60% 0px' });
+      
+      headings.forEach(h => observer.observe(h));
+    })();
+  </script>
+  <script src="../../assets/js/og-generator.js"></script>
+</body>
+</html>
