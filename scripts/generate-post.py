@@ -326,7 +326,7 @@ def parse_args(args):
     params = {
         'title': None,
         'description': '',
-        'article_date': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+        'article_date': datetime.now().strftime('%Y-%m-%d'),
         'read_time': 5,
         'tags': None,
         'category': '博客',
