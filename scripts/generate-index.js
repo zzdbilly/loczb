@@ -41,8 +41,8 @@ const posts = files.map(file => {
   const titleMatch = content.match(/<title>([^<]+)<\/title>/);
   const title = titleMatch ? titleMatch[1].replace(/ \| 张小猛 - loczb$/, '') : '';
   
-  // Extract date from <span>📅 YYYY-MM-DD</span>
-  const dateMatch = content.match(/<span>📅 (\d{4}-\d{1,2}-\d{1,2})<\/span>/);
+  // Extract date from <span>📅 YYYY-MM-DD</span> or <span>📅 YYYY-MM-DD HH:MM:SS</span>
+  const dateMatch = content.match(/<span>📅 (\d{4}-\d{1,2}-\d{1,2})(?:\s+\d{1,2}:\d{1,2}:\d{1,2})?<\/span>/);
   // 标准化日期格式，补齐前导零
   let date = dateMatch ? dateMatch[1] : '';
   if (date) {
