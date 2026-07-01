@@ -48,6 +48,22 @@
       "url": "blog/posts/少即是多信息过载时代的专注力修炼.html"
     },
     {
+      "slug": "kotlin-coroutine-异常处理机制全面解析",
+      "title": "Kotlin Coroutine 异常处理机制全面解析",
+      "date": "2026-07-01",
+      "category": "Kotlin",
+      "tags": [
+        "Kotlin",
+        "协程",
+        "Coroutine",
+        "异常处理",
+        "Android",
+        "Kotlin进阶"
+      ],
+      "excerpt": "全面解析 Kotlin 协程异常处理机制，涵盖 launch/async 异常传播差异、SupervisorJob、结构化并发、CoroutineExceptionHandler、Android 最佳实践等核心内容",
+      "url": "blog/posts/kotlin-coroutine-异常处理机制全面解析.html"
+    },
+    {
       "slug": "why-i-started-blogging",
       "title": "为什么我开始写博客：从潜水到发声",
       "date": "2026-06-30",
@@ -896,18 +912,18 @@
   "tagCloud": [
     {
       "tag": "Android",
-      "count": 17
+      "count": 18
     },
     {
       "tag": "AI",
       "count": 10
     },
     {
-      "tag": "DevOps",
-      "count": 6
+      "tag": "Kotlin",
+      "count": 7
     },
     {
-      "tag": "Kotlin",
+      "tag": "DevOps",
       "count": 6
     },
     {
@@ -1116,6 +1132,22 @@
     },
     {
       "tag": "自我管理",
+      "count": 1
+    },
+    {
+      "tag": "协程",
+      "count": 1
+    },
+    {
+      "tag": "Coroutine",
+      "count": 1
+    },
+    {
+      "tag": "异常处理",
+      "count": 1
+    },
+    {
+      "tag": "Kotlin进阶",
       "count": 1
     },
     {
@@ -1730,7 +1762,7 @@
   "archives": [
     {
       "month": "2026-07",
-      "count": 3,
+      "count": 4,
       "posts": [
         {
           "title": "Android 15 隐私新特性：所有文件都需要 MEDIA_VISUAL_PERMISSION",
@@ -1746,6 +1778,11 @@
           "title": "少即是多：信息过载时代的专注力修炼",
           "date": "2026-07-01",
           "url": "blog/posts/少即是多信息过载时代的专注力修炼.html"
+        },
+        {
+          "title": "Kotlin Coroutine 异常处理机制全面解析",
+          "date": "2026-07-01",
+          "url": "blog/posts/kotlin-coroutine-异常处理机制全面解析.html"
         }
       ]
     },
@@ -2067,20 +2104,20 @@
   ],
   "categories": [
     "安全",
+    "Kotlin",
+    "数据库",
     "思考",
     "AI Agent",
-    "系统编程",
-    "DevOps",
-    "AI",
-    "数据库",
-    "Kotlin",
-    "Android",
+    "开发",
     "前端",
-    "开发"
+    "AI",
+    "Android",
+    "系统编程",
+    "DevOps"
   ],
   "stats": {
-    "totalPosts": 60,
-    "totalTags": 208,
+    "totalPosts": 61,
+    "totalTags": 212,
     "latestDate": "2026-07-01",
     "oldestDate": "2026-02-15"
   }
