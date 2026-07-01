@@ -4,6 +4,8 @@
 
 // Article index with tags
 const ARTICLE_INDEX = [
+  { slug: "代码之外的竞争力技术人最容易忽视的软技能", tags: ["思考", "软技能", "职业发展", "技术人成长", "沟通"], title: "代码之外的竞争力：技术人最容易忽视的软技能" },
+  { slug: "少即是多信息过载时代的专注力修炼", tags: ["思考", "专注力", "深度工作", "信息管理", "自我管理"], title: "少即是多：信息过载时代的专注力修炼" },
   { slug: "why-i-started-blogging", tags: ["思考", "学习", "个人成长", "博客"], title: "为什么我开始写博客：从潜水到发声" },
   { slug: "android-16-foreground-service-constraints", tags: ["Android 16", "前台服务", "后台任务", "WorkManager"], title: "Android 16 前台服务类型全新限制：类型强制匹配与迁移指南" },
   { slug: "cursor-rules-guide", tags: ["Cursor", "AI编程", "效率工具", "开发规范"], title: "Cursor Rules 实战：自定义 AI 代码助手的进阶指南" },
