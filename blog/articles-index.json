@@ -1,6 +1,22 @@
 {
   "posts": [
     {
+      "slug": "kotlin-coroutine-异常处理机制全面解析",
+      "title": "Kotlin Coroutine 异常处理机制全面解析",
+      "date": "2026-07-01",
+      "category": "Kotlin",
+      "tags": [
+        "Kotlin",
+        "协程",
+        "Coroutine",
+        "异常处理",
+        "Android",
+        "Kotlin进阶"
+      ],
+      "excerpt": "全面解析 Kotlin 协程异常处理机制，涵盖 launch/async 异常传播差异、SupervisorJob、结构化并发、CoroutineExceptionHandler、Android 最佳实践等核心内容",
+      "url": "blog/posts/kotlin-coroutine-异常处理机制全面解析.html"
+    },
+    {
       "slug": "android-15-隐私新特性所有文件都需要-media-visual-permission",
       "title": "Android 15 隐私新特性：所有文件都需要 MEDIA_VISUAL_PERMISSION",
       "date": "2026-07-01",
@@ -46,22 +62,6 @@
       ],
       "excerpt": "信息爆炸不是问题，问题是我们在海量输入中丧失了深度思考的能力。本文分享我在信息筛选、注意力管理和深度工作方面的实践经验与反思。",
       "url": "blog/posts/少即是多信息过载时代的专注力修炼.html"
-    },
-    {
-      "slug": "kotlin-coroutine-异常处理机制全面解析",
-      "title": "Kotlin Coroutine 异常处理机制全面解析",
-      "date": "2026-07-01",
-      "category": "Kotlin",
-      "tags": [
-        "Kotlin",
-        "协程",
-        "Coroutine",
-        "异常处理",
-        "Android",
-        "Kotlin进阶"
-      ],
-      "excerpt": "全面解析 Kotlin 协程异常处理机制，涵盖 launch/async 异常传播差异、SupervisorJob、结构化并发、CoroutineExceptionHandler、Android 最佳实践等核心内容",
-      "url": "blog/posts/kotlin-coroutine-异常处理机制全面解析.html"
     },
     {
       "slug": "why-i-started-blogging",
@@ -1079,6 +1079,22 @@
       "count": 2
     },
     {
+      "tag": "协程",
+      "count": 1
+    },
+    {
+      "tag": "Coroutine",
+      "count": 1
+    },
+    {
+      "tag": "异常处理",
+      "count": 1
+    },
+    {
+      "tag": "Kotlin进阶",
+      "count": 1
+    },
+    {
       "tag": "隐私",
       "count": 1
     },
@@ -1132,22 +1148,6 @@
     },
     {
       "tag": "自我管理",
-      "count": 1
-    },
-    {
-      "tag": "协程",
-      "count": 1
-    },
-    {
-      "tag": "Coroutine",
-      "count": 1
-    },
-    {
-      "tag": "异常处理",
-      "count": 1
-    },
-    {
-      "tag": "Kotlin进阶",
       "count": 1
     },
     {
@@ -1765,6 +1765,11 @@
       "count": 4,
       "posts": [
         {
+          "title": "Kotlin Coroutine 异常处理机制全面解析",
+          "date": "2026-07-01",
+          "url": "blog/posts/kotlin-coroutine-异常处理机制全面解析.html"
+        },
+        {
           "title": "Android 15 隐私新特性：所有文件都需要 MEDIA_VISUAL_PERMISSION",
           "date": "2026-07-01",
           "url": "blog/posts/android-15-隐私新特性所有文件都需要-media-visual-permission.html"
@@ -1778,11 +1783,6 @@
           "title": "少即是多：信息过载时代的专注力修炼",
           "date": "2026-07-01",
           "url": "blog/posts/少即是多信息过载时代的专注力修炼.html"
-        },
-        {
-          "title": "Kotlin Coroutine 异常处理机制全面解析",
-          "date": "2026-07-01",
-          "url": "blog/posts/kotlin-coroutine-异常处理机制全面解析.html"
         }
       ]
     },
@@ -2103,17 +2103,17 @@
     }
   ],
   "categories": [
-    "安全",
     "Kotlin",
-    "数据库",
-    "思考",
-    "AI Agent",
-    "开发",
-    "前端",
-    "AI",
     "Android",
+    "思考",
+    "AI",
+    "前端",
+    "DevOps",
+    "开发",
+    "安全",
+    "数据库",
     "系统编程",
-    "DevOps"
+    "AI Agent"
   ],
   "stats": {
     "totalPosts": 61,
