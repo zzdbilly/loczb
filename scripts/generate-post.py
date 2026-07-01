@@ -393,8 +393,15 @@ def main():
     if params['content_file']:
         if os.path.exists(params['content_file']):
             with open(params['content_file'], 'r', encoding='utf-8') as f:
-                content_html = f.read()
-            print(f"  📖 从文件读取内容 ({len(content_html)} chars)")
+                content_raw = f.read()
+            # 如果是 markdown 文件，转换为 HTML
+            if params['content_file'].endswith('.md'):
+                import markdown as md_lib
+                content_html = md_lib.markdown(content_raw, extensions=['fenced_code', 'codehilite', 'tables', 'sane_lists'])
+                print(f"  📖 从 markdown 文件读取并转换 ({len(content_raw)} chars -> {len(content_html)} chars)")
+            else:
+                content_html = content_raw
+                print(f"  📖 从文件读取内容 ({len(content_html)} chars)")
         else:
             print(f"❌ 文件不存在: {params['content_file']}")
             sys.exit(1)
