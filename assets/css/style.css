@@ -747,6 +747,8 @@ a:hover {
    =================================== */
 .section {
   padding: var(--space-4xl) var(--space-lg);
+  position: relative;
+  z-index: 1;
 }
 
 .section-header {
