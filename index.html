@@ -101,6 +101,9 @@
     </div>
   </nav>
 
+  <!-- Particle Canvas Background -->
+  <canvas id="particle-canvas" class="particle-canvas"></canvas>
+
   <!-- Main Content -->
   <main id="main-content">
   <!-- Hero Section - 双栏布局 -->
@@ -162,6 +165,9 @@
               <div class="stat-label">代码提交</div>
             </div>
           </div>
+          
+          <!-- 时光进度条 -->
+          <div class="time-progress-container"></div>
         </div>
         
         <!-- 右侧 Now 面板 -->
@@ -542,6 +548,8 @@
 
   <!-- Scripts -->
   <script src="assets/js/main.js"></script>
+  <script src="assets/js/particles.js"></script>
+  <script src="assets/js/time-progress.js"></script>
   <script>
     // 首页随机选择代表文章
     const posts = [

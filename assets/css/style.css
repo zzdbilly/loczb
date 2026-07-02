@@ -3266,3 +3266,121 @@ pre code {
   overflow-y: auto;
   min-height: 0;
 }
+
+/* ===================================
+   Particle Constellation Canvas
+   =================================== */
+.particle-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.hero {
+  position: relative;
+  z-index: 1;
+}
+
+/* ===================================
+   Time Progress Bar - 时光进度条
+   =================================== */
+.time-progress-container {
+  margin-top: 24px;
+  padding: 16px;
+  background: var(--card-bg, rgba(255, 255, 255, 0.05));
+  border: 1px solid var(--border-color, rgba(255, 255, 255, 0.1));
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+}
+
+.time-progress-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.time-progress-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.time-progress-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+}
+
+.time-progress-icon {
+  font-size: 14px;
+}
+
+.time-progress-label {
+  color: var(--text-secondary, #94a3b8);
+  flex: 1;
+}
+
+.time-progress-value {
+  font-weight: 600;
+  color: var(--accent-color, #3b82f6);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.time-progress-bar {
+  height: 6px;
+  background: var(--bg-secondary, rgba(255, 255, 255, 0.1));
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.time-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent-color, #3b82f6), #60a5fa);
+  border-radius: 3px;
+  transition: width 0.5s ease;
+}
+
+.time-progress-fill.month {
+  background: linear-gradient(90deg, #f59e0b, #fbbf24);
+}
+
+.time-progress-fill.week {
+  background: linear-gradient(90deg, #10b981, #34d399);
+}
+
+.time-progress-detail {
+  font-size: 11px;
+  color: var(--text-tertiary, #64748b);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .time-progress-container {
+    padding: 12px;
+    margin-top: 16px;
+  }
+  
+  .time-progress-header {
+    font-size: 12px;
+  }
+  
+  .time-progress-detail {
+    font-size: 10px;
+  }
+}
+
+/* Dark mode adjustments */
+[data-theme="dark"] .time-progress-container {
+  background: rgba(30, 30, 40, 0.6);
+}
+
+[data-theme="light"] .time-progress-container {
+  background: rgba(255, 255, 255, 0.8);
+  border-color: rgba(0, 0, 0, 0.1);
+}
