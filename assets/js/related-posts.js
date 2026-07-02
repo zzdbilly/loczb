@@ -4,6 +4,7 @@
 
 // Article index with tags
 const ARTICLE_INDEX = [
+  { slug: "软件工程师能从制造业学到什么精益思维重塑开发流程", tags: ["精益", "DevOps", "敏捷开发", "持续交付", "流程优化", "跨行业", "思考"], title: "软件工程师能从制造业学到什么：精益思维重塑开发流程" },
   { slug: "技术人如何高效学习新技术", tags: ["学习方法", "个人成长", "技术人", "效率", "知识管理"], title: "技术人如何高效学习新技术" },
   { slug: "技术人为什么要写作", tags: ["思考", "写作", "个人成长", "技术人", "学习方法", "个人品牌"], title: "技术人为什么要写作" },
   { slug: "kotlin-coroutine-异常处理机制全面解析", tags: ["Kotlin", "协程", "Coroutine", "异常处理", "Android", "Kotlin进阶"], title: "Kotlin Coroutine 异常处理机制全面解析" },
