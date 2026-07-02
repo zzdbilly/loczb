@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+  <script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gradle 构建加速全攻略：从 5 分钟到 30 秒 | 张小猛 - loczb</title>
+    <meta name="description" content="系统梳理 Gradle 构建加速的完整方法论——配置调优、KAPT迁移KSP、增量编译、模块化拆分、远程缓存、CI优化，附真实项目优化案例，构建时间减少85%">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Gradle 构建加速全攻略：从 5 分钟到 30 秒 | 张小猛 - loczb">
+    <meta property="og:description" content="系统梳理 Gradle 构建加速的完整方法论——配置调优、KAPT迁移KSP、增量编译、模块化拆分、远程缓存、CI优化，附真实项目优化案例，构建时间减少85%">
+    <meta property="og:url" content="https://709527.xyz/blog/posts/gradle-构建加速全攻略从-5-分钟到-30-秒.html">
+    <meta property="og:type" content="article">
+        <meta property="og:image" content="../../assets/images/og-default.webp">
+    <meta property="og:site_name" content="loczb">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Gradle 构建加速全攻略：从 5 分钟到 30 秒 | 张小猛 - loczb">
+    <meta name="twitter:description" content="系统梳理 Gradle 构建加速的完整方法论——配置调优、KAPT迁移KSP、增量编译、模块化拆分、远程缓存、CI优化，附真实项目优化案例，构建时间减少85%">
+
+    
+    
+    
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <style>.post-content { max-width: 760px; margin: 0 auto; line-height: 1.85; }
+    .post-content h1 { font-size: 2.4rem; margin: 2rem 0 1rem; }
+    .post-content h2 { font-size: 1.7rem; margin: 2.5rem 0 1rem; color: var(--color-accent-primary); border-bottom: 1px solid var(--color-border); padding-bottom: 0.5rem; }
+    .post-content h3 { font-size: 1.3rem; margin: 1.8rem 0 0.8rem; }
+    .post-content pre { background: var(--color-bg-tertiary); padding: 1.2rem 1.2rem 1.2rem 1.5rem; border-radius: 8px; overflow-x: auto; margin: 0; font-size: 0.9rem; white-space: pre; text-indent: 0; line-height: 1.5; font-family: Consolas, "Courier New", monospace; -webkit-padding-start: 1.5rem; -moz-padding-start: 1.5rem; padding-left: 1.5rem; }
+    .post-content pre code { line-height: 1.5; display: block; }
+    .post-content code { background: var(--color-bg-tertiary); padding: 0.15rem 0.4rem; border-radius: 4px; font-family: monospace; font-size: 0.9em;}
+    .post-meta { color: var(--color-text-secondary); font-size: 0.9rem; margin-bottom: 2rem; }
+    .post-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 3rem; }
+    .post-tags span { background: var(--color-bg-tertiary); padding: 0.3rem 0.8rem; border-radius: 9999px; font-size: 0.85rem; color: var(--color-accent-primary); }
+    .tip-box { background: rgba(34, 197, 94, 0.1); border-left: 3px solid #22c55e; padding: 1rem 1.2rem; margin: 1.5rem 0; border-radius: 0 6px 6px 0; }
+    .warning-box { background: rgba(234, 179, 8, 0.1); border-left: 3px solid #eab308; padding: 1rem 1.2rem; margin: 1.5rem 0; border-radius: 0 6px 6px 0; }
+    .danger-box { background: rgba(239, 68, 68, 0.1); border-left: 3px solid #ef4444; padding: 1rem 1.2rem; margin: 1.5rem 0; border-radius: 0 6px 6px 0; }
+    table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.95rem; }
+    th, td { border: 1px solid var(--color-border); padding: 0.7rem; text-align: left; }
+    th { background: var(--color-bg-tertiary); font-weight: 600; }
+  
+    .post-toc-container { position: fixed; right: 2rem; top: 180px; width: 220px; max-height: calc(100vh - 220px); border-radius: 16px; overflow: hidden; display: none; }
+    @media (min-width: 1200px) { .post-toc-container { display: block; } }
+    .post-toc { background: var(--color-bg-secondary); border: 1px solid var(--color-border); border-radius: 16px; padding: 1rem; max-height: calc(100vh - 240px); overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--color-border) transparent; }
+    .post-toc::-webkit-scrollbar { width: 4px; }
+    .post-toc::-webkit-scrollbar-track { background: transparent; }
+    .post-toc::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 4px; }
+    .post-toc-title { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted); margin-bottom: 0.75rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--color-border); position: sticky; top: 0; background: var(--color-bg-secondary); z-index: 1; }
+    .post-toc-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.25rem; }
+    .post-toc-list a { display: block; color: var(--color-text-secondary); text-decoration: none; font-size: 0.78rem; padding: 0.3rem 0.5rem; border-radius: 6px; border-left: 2px solid transparent; transition: all 0.2s ease; line-height: 1.4; }
+    .post-toc-list a:hover { color: var(--color-accent-primary); background: var(--color-bg-tertiary); }
+    .post-toc-list a.active { color: var(--color-accent-primary); background: var(--color-bg-tertiary); border-left-color: var(--color-accent-primary); }
+    .post-toc-list .toc-h3 { padding-left: 1rem; font-size: 0.72rem; }
+    .post-toc-list .toc-h2 { font-weight: 600; font-size: 0.8rem; }
+/* Code block first-line fix */
+    .back-link { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--color-text-secondary); font-size: 0.9rem; text-decoration: none; margin-bottom: 1rem; transition: color 0.2s; }
+    .back-link:hover { color: var(--color-accent-primary); }
+    .back-link svg { width: 16px; height: 16px; }
+</style>
+    <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
+    <link rel="alternate icon" href="../../assets/images/favicon.ico">
+</head>
+<body>
+  <!-- Loading -->
+  <div class="loading">
+    <div class="loading-spinner"></div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../../index.html" class="nav-logo">
+        loc<span>zb</span>
+      </a>
+      <button class="nav-toggle" aria-label="打开菜单" aria-expanded="false" aria-controls="nav-links-menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <div class="nav-overlay"></div>
+      <ul class="nav-links" id="nav-links-menu">
+        <li><a href="../../index.html" class="nav-link">首页</a></li>
+        <li><a href="../../projects/index.html" class="nav-link">项目</a></li>
+        <li><a href="../index.html" class="nav-link active">博客</a></li>
+        <li><a href="../../about/index.html" class="nav-link">关于</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="scroll-progress"></div>
+
+  <main class="section" style="padding-bottom: 0;">
+    <div class="container container-narrow">
+      <a href="../index.html" class="back-link">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        返回博客列表
+      </a>
+
+      <article class="post-content">
+        <h1>Gradle 构建加速全攻略：从 5 分钟到 30 秒</h1>
+        
+        <div class="post-meta">
+          <span>📅 2026-07-02</span>
+          <span>⏱️ 5 min read</span>
+          <span>👤 张小猛</span>
+        </div>
+        
+        <div class="post-tags">
+          <span class="tag">Gradle</span>
+          <span class="tag">Android</span>
+          <span class="tag">构建优化</span>
+          <span class="tag">KSP</span>
+          <span class="tag">模块化</span>
+          <span class="tag">CI</span>
+          <span class="tag">DevOps</span>
+        </div>
+        
+        <h1>Gradle 构建加速全攻略：从 5 分钟到 30 秒</h1>
+<blockquote>
+<p>"等构建"是 Android 开发者最浪费时间的事情之一。一个中型项目，冷构建动辄 3-5 分钟，热构建也要 30 秒以上，一天下来光等构建就消耗半小时。本文系统梳理 Gradle 构建加速的完整方法论——从配置调优到架构改造，从本地缓存到远程缓存，手把手带你把构建时间压缩到极致。</p>
+</blockquote>
+<hr />
+<h2>先诊断，再优化</h2>
+<p>盲目加配置不会让构建变快，反而可能引入新问题。优化第一步：<strong>搞清楚时间花在哪了</strong>。</p>
+<h3>开启 Build Scan</h3>
+<p>Gradle 官方的 Build Scan 是最权威的诊断工具：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1">// settings.gradle.kts</span>
+<span class="n">plugins</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">id</span><span class="p">(</span><span class="s">&quot;com.gradle.enterprise&quot;</span><span class="p">)</span><span class="w"> </span><span class="n">version</span><span class="w"> </span><span class="s">&quot;3.18&quot;</span>
+<span class="p">}</span>
+
+<span class="n">gradleEnterprise</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">buildScan</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">termsOfServiceUrl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;https://gradle.com/terms-of-service&quot;</span>
+<span class="w">        </span><span class="n">termsOfServiceAgree</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;yes&quot;</span>
+<span class="w">        </span><span class="n">publishAlways</span><span class="p">()</span><span class="w">  </span><span class="c1">// 每次构建都生成 scan</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>构建后会在终端输出一个链接，打开后可以看到：</p>
+<ul>
+<li>每个任务的执行时间</li>
+<li>任务依赖关系图</li>
+<li>临界路径（Critical Path）</li>
+<li>哪些任务可以并行但没有并行</li>
+</ul>
+<h3>使用 --profile 本地分析</h3>
+<p>不想上传数据到 Gradle 服务器？用本地 profile：</p>
+<div class="codehilite"><pre><span></span><code>./gradlew<span class="w"> </span>assembleDebug<span class="w"> </span>--profile
+</code></pre></div>
+
+<p>构建结束后在 <code>build/reports/profile/</code> 下生成 HTML 报告，包含：</p>
+<ul>
+<li>任务执行时间排序</li>
+<li>依赖解析耗时</li>
+<li>配置阶段耗时</li>
+</ul>
+<h3>用 --scan 定位慢任务</h3>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 精确定位哪个任务慢</span>
+./gradlew<span class="w"> </span>assembleDebug<span class="w"> </span>--scan
+
+<span class="c1"># 只看特定模块的构建时间</span>
+./gradlew<span class="w"> </span>:app:assembleDebug<span class="w"> </span>--profile
+</code></pre></div>
+
+<h3>典型的时间分布</h3>
+<p>一个中型 Android 项目的构建时间通常这样分布：</p>
+<div class="codehilite"><pre><span></span><code>配置阶段 (Configuration):    15-20%  → 解析所有 build.gradle
+依赖解析 (Resolution):       10-15%  → 下载和解析依赖
+注解处理 (Annotation Proc):  20-30%  → KSP/KAPT、Room、Hilt 等
+编译 (Compilation):          25-35%  → Kotlin/Java 编译
+Dex/R8:                     10-15%  → 字节码转换和优化
+其他 (Resources/Assets):      5-10%  → 资源处理、打包
+</code></pre></div>
+
+<p>优化策略要针对最大头下手。下面按收益从高到低排列。</p>
+<hr />
+<h2>基础配置优化：零成本提速</h2>
+<p>这些改动不需要改代码，不需要改架构，只需要调整 Gradle 配置。但效果可能出乎意料。</p>
+<h3>开启 Gradle 配置缓存</h3>
+<p>配置缓存（Configuration Cache）是 Gradle 7.x 引入的重磅特性：<strong>缓存配置阶段的结果，下次构建直接复用，跳过整个配置阶段。</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="c1">// gradle.properties</span>
+<span class="n">org</span><span class="p">.</span><span class="na">gradle</span><span class="p">.</span><span class="na">configuration</span><span class="o">-</span><span class="n">cache</span><span class="o">=</span><span class="kc">true</span>
+<span class="n">org</span><span class="p">.</span><span class="na">gradle</span><span class="p">.</span><span class="na">configuration</span><span class="o">-</span><span class="n">cache</span><span class="p">.</span><span class="na">problems</span><span class="o">=</span><span class="n">warn</span><span class="w">  </span><span class="c1">// 先 warn，确保兼容后再改 fail</span>
+</code></pre></div>
+
+<p>效果：<strong>冷构建配置阶段从 10-15 秒降到 1 秒以内</strong>。</p>
+<p>但有一个前提：你的构建脚本必须是配置缓存兼容的。常见不兼容的情况：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1">// ❌ 不兼容：在配置阶段访问 Project 实例</span>
+<span class="n">tasks</span><span class="p">.</span><span class="na">register</span><span class="p">(</span><span class="s">&quot;myTask&quot;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">project</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">project</span><span class="w">  </span><span class="c1">// 配置缓存不允许</span>
+<span class="w">    </span><span class="n">doLast</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">println</span><span class="p">(</span><span class="n">project</span><span class="p">.</span><span class="na">name</span><span class="p">)</span><span class="w"> </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// ✅ 兼容：通过 Provider 传递</span>
+<span class="n">tasks</span><span class="p">.</span><span class="na">register</span><span class="p">(</span><span class="s">&quot;myTask&quot;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">projectName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">providers</span><span class="p">.</span><span class="na">gradleProperty</span><span class="p">(</span><span class="s">&quot;projectName&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="n">doLast</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">println</span><span class="p">(</span><span class="n">projectName</span><span class="p">.</span><span class="na">get</span><span class="p">())</span><span class="w"> </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h3>开启并行构建</h3>
+<div class="codehilite"><pre><span></span><code><span class="c1"># gradle.properties</span>
+<span class="na">org.gradle.parallel</span><span class="o">=</span><span class="s">true        # 允许不同子项目并行构建</span>
+<span class="na">org.gradle.workers.max</span><span class="o">=</span><span class="s">8        # 最大工作线程数（通常设为 CPU 核心数）</span>
+</code></pre></div>
+
+<p>默认情况下 Gradle 是串行构建子项目的。开启并行后，没有依赖关系的模块可以同时编译。</p>
+<p>效果：<strong>多模块项目构建时间减少 20-40%</strong>。</p>
+<h3>增大 Gradle 堆内存</h3>
+<div class="codehilite"><pre><span></span><code><span class="c1"># gradle.properties</span>
+<span class="na">org.gradle.jvmargs</span><span class="o">=</span><span class="s">-Xmx4g -XX:+UseParallelGC -XX:+HeapDumpOnOutOfMemoryError</span>
+</code></pre></div>
+
+<p>关键参数：</p>
+<ul>
+<li><code>-Xmx4g</code>：给 Gradle daemon 分配 4GB 堆内存（根据机器内存调整，建议不低于 2GB）</li>
+<li><code>-XX:+UseParallelGC</code>：使用并行 GC，降低 GC 暂停</li>
+<li><code>-XX:+HeapDumpOnOutOfMemoryError</code>：OOM 时 dump，方便排查</li>
+</ul>
+<h3>开启构建缓存</h3>
+<div class="codehilite"><pre><span></span><code><span class="c1"># gradle.properties</span>
+<span class="na">org.gradle.caching</span><span class="o">=</span><span class="s">true</span>
+</code></pre></div>
+
+<p>或在命令行：</p>
+<div class="codehilite"><pre><span></span><code>./gradlew<span class="w"> </span>assembleDebug<span class="w"> </span>--build-cache
+</code></pre></div>
+
+<p>构建缓存会复用之前相同输入的 task 输出。切换分支后再构建时，没改动的模块直接从缓存取结果。</p>
+<h3>完整的 gradle.properties 优化模板</h3>
+<div class="codehilite"><pre><span></span><code><span class="c1"># === JVM 配置 ===</span>
+<span class="na">org.gradle.jvmargs</span><span class="o">=</span><span class="s">-Xmx4g -XX:+UseParallelGC -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8</span>
+
+<span class="c1"># === 并行与缓存 ===</span>
+<span class="na">org.gradle.parallel</span><span class="o">=</span><span class="s">true</span>
+<span class="na">org.gradle.caching</span><span class="o">=</span><span class="s">true</span>
+<span class="na">org.gradle.configuration-cache</span><span class="o">=</span><span class="s">true</span>
+<span class="na">org.gradle.configuration-cache.problems</span><span class="o">=</span><span class="s">warn</span>
+
+<span class="c1"># === Daemon ===</span>
+<span class="na">org.gradle.daemon</span><span class="o">=</span><span class="s">true          # 确保 daemon 开启（默认就是 true）</span>
+
+<span class="c1"># === Android 特定 ===</span>
+<span class="na">android.useAndroidX</span><span class="o">=</span><span class="s">true</span>
+<span class="na">android.nonTransitiveRClass</span><span class="o">=</span><span class="s">true   # 非传递 R 类，减少 R 类体积</span>
+
+<span class="c1"># === Kotlin ===</span>
+<span class="na">kotlin.incremental</span><span class="o">=</span><span class="s">true            # Kotlin 增量编译（默认 true）</span>
+<span class="na">kotlin.incremental.java</span><span class="o">=</span><span class="s">true       # Java 变更也触发增量编译</span>
+<span class="na">kotlin.caching.enabled</span><span class="o">=</span><span class="s">true</span>
+
+<span class="c1"># === 调试 ===</span>
+<span class="c1"># org.gradle.debug=true           # 只在需要调试时开启</span>
+<span class="c1"># org.gradle.logging.level=debug  # 太多日志反而慢</span>
+</code></pre></div>
+
+<hr />
+<h2>依赖优化：砍掉看不见的拖累</h2>
+<h3>检测未使用的依赖</h3>
+<p>依赖越多，解析越慢，编译也越慢（传递依赖会参与编译 classpath）。</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 使用 gradle-dependency-analyze 插件</span>
+./gradlew<span class="w"> </span>:app:analyzeDependencies
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="c1">// build.gradle.kts</span>
+<span class="n">plugins</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">id</span><span class="p">(</span><span class="s">&quot;ca.neitsch.dependencyanalyze&quot;</span><span class="p">)</span><span class="w"> </span><span class="n">version</span><span class="w"> </span><span class="s">&quot;1.7.0&quot;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>手动排查：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 查看依赖树，找出异常大的传递依赖</span>
+./gradlew<span class="w"> </span>:app:dependencies<span class="w"> </span>--configuration<span class="w"> </span>debugRuntimeClasspath<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s2">&quot;→&quot;</span>
+
+<span class="c1"># 查看编译期依赖（这个最影响构建速度）</span>
+./gradlew<span class="w"> </span>:app:dependencies<span class="w"> </span>--configuration<span class="w"> </span>debugCompileClasspath
+</code></pre></div>
+
+<h3>排除不必要的传递依赖</h3>
+<div class="codehilite"><pre><span></span><code><span class="c1">// ❌ 引入了一堆不需要的传递依赖</span>
+<span class="n">implementation</span><span class="p">(</span><span class="s">&quot;com.squareup.retrofit2:retrofit:2.11.0&quot;</span><span class="p">)</span>
+
+<span class="c1">// ✅ 精确控制</span>
+<span class="n">implementation</span><span class="p">(</span><span class="s">&quot;com.squareup.retrofit2:retrofit:2.11.0&quot;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// 排除不需要的模块</span>
+<span class="w">    </span><span class="n">exclude</span><span class="p">(</span><span class="n">group</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;com.squareup.okhttp3&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">module</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;okhttp&quot;</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="c1">// 单独引入需要的版本</span>
+<span class="n">implementation</span><span class="p">(</span><span class="s">&quot;com.squareup.okhttp3:okhttp:4.12.0&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<h3>使用 compileOnly 替代 implementation</h3>
+<p>如果一个依赖只在编译期使用（运行时由其他途径提供），用 <code>compileOnly</code>：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1">// Lombok 只在编译期用</span>
+<span class="n">compileOnly</span><span class="p">(</span><span class="s">&quot;org.projectlombok:lombok:1.18.34&quot;</span><span class="p">)</span>
+<span class="n">annotationProcessor</span><span class="p">(</span><span class="s">&quot;org.projectlombok:lombok:1.18.34&quot;</span><span class="p">)</span>
+
+<span class="c1">// 注解只在编译期用</span>
+<span class="n">compileOnly</span><span class="p">(</span><span class="s">&quot;javax.annotation:javax.annotation-api:1.3.2&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<p><code>compileOnly</code> 的依赖不会进入运行时 classpath，减少 dex 工作量。</p>
+<h3>统一依赖版本，避免冲突解析</h3>
+<p>版本冲突会让 Gradle 花大量时间解析该用哪个版本：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1">// versionCatalog 统一管理（推荐）</span>
+<span class="c1">// gradle/libs.versions.toml</span>
+<span class="o">[</span><span class="n">versions</span><span class="o">]</span>
+<span class="n">kotlin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;2.0.21&quot;</span>
+<span class="n">compose</span><span class="o">-</span><span class="n">bom</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;2024.12.01&quot;</span>
+
+<span class="o">[</span><span class="n">libraries</span><span class="o">]</span>
+<span class="n">kotlin</span><span class="o">-</span><span class="n">stdlib</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">module</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;org.jetbrains.kotlin:kotlin-stdlib&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">version</span><span class="p">.</span><span class="na">ref</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;kotlin&quot;</span><span class="w"> </span><span class="p">}</span>
+<span class="n">compose</span><span class="o">-</span><span class="n">bom</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">module</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;androidx.compose:compose-bom&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">version</span><span class="p">.</span><span class="na">ref</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;compose-bom&quot;</span><span class="w"> </span><span class="p">}</span>
+
+<span class="err">#</span><span class="w"> </span><span class="err">使用</span>
+<span class="n">dependencies</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">implementation</span><span class="p">(</span><span class="n">libs</span><span class="p">.</span><span class="na">kotlin</span><span class="p">.</span><span class="na">stdlib</span><span class="p">)</span>
+<span class="w">    </span><span class="n">implementation</span><span class="p">(</span><span class="n">platform</span><span class="p">(</span><span class="n">libs</span><span class="p">.</span><span class="na">compose</span><span class="p">.</span><span class="na">bom</span><span class="p">))</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<hr />
+<h2>KAPT → KSP：注解处理的质变</h2>
+<h3>KAPT 为什么慢</h3>
+<p>KAPT（Kotlin Annotation Processing Tool）的工作流程：</p>
+<div class="codehilite"><pre><span></span><code>Kotlin 源码 → 生成 Java 存根（Stub）→ Java 注解处理器处理 → 生成代码 → Kotlin 编译器编译
+                 ↑ 这是瓶颈！
+</code></pre></div>
+
+<p>KAPT 必须先把 Kotlin 代码转成 Java 存根，才能让基于 Java 的注解处理器工作。这个"翻译"过程非常慢，而且不支持增量编译。</p>
+<h3>KSP 的优势</h3>
+<p>KSP（Kotlin Symbol Processing）直接在 Kotlin 编译器上运行：</p>
+<div class="codehilite"><pre><span></span><code>Kotlin 源码 → KSP 直接解析 Kotlin AST → 生成代码 → Kotlin 编译器编译
+</code></pre></div>
+
+<ul>
+<li><strong>不需要生成 Java 存根</strong></li>
+<li><strong>支持增量处理</strong></li>
+<li><strong>速度通常是 KAPT 的 2 倍以上</strong></li>
+</ul>
+<h3>迁移步骤</h3>
+<div class="codehilite"><pre><span></span><code><span class="c1">// 1. 替换插件</span>
+<span class="c1">// 旧：kotlin(&quot;kapt&quot;)</span>
+<span class="c1">// 新：</span>
+<span class="n">plugins</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">id</span><span class="p">(</span><span class="s">&quot;com.google.devtools.ksp&quot;</span><span class="p">)</span><span class="w"> </span><span class="n">version</span><span class="w"> </span><span class="s">&quot;2.0.21-1.0.28&quot;</span>
+<span class="p">}</span>
+
+<span class="c1">// 2. 替换依赖声明</span>
+<span class="c1">// 旧：kapt(&quot;com.google.dagger:hilt-compiler:2.51.1&quot;)</span>
+<span class="c1">// 新：</span>
+<span class="n">ksp</span><span class="p">(</span><span class="s">&quot;com.google.dagger:hilt-compiler:2.51.1&quot;</span><span class="p">)</span>
+
+<span class="c1">// 3. 移除 kapt 配置</span>
+<span class="c1">// 删除 kapt { ... } 块</span>
+</code></pre></div>
+
+<h3>已支持 KSP 的主流库</h3>
+<table>
+<thead>
+<tr>
+<th>库</th>
+<th>KSP 支持</th>
+<th>迁移难度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Room</td>
+<td>✅ 2.4+</td>
+<td>简单</td>
+</tr>
+<tr>
+<td>Hilt/Dagger</td>
+<td>✅ 2.48+</td>
+<td>简单</td>
+</tr>
+<tr>
+<td>Moshi</td>
+<td>✅ 简单</td>
+<td>简单</td>
+</tr>
+<tr>
+<td>Epoxy</td>
+<td>✅ 5.0+</td>
+<td>中等</td>
+</tr>
+<tr>
+<td>Glide</td>
+<td>✅ 4.16+</td>
+<td>简单</td>
+</tr>
+<tr>
+<td>Lombok</td>
+<td>❌ 不支持</td>
+<td>无法迁移（换掉 Lombok）</td>
+</tr>
+</tbody>
+</table>
+<h3>实测效果</h3>
+<div class="codehilite"><pre><span></span><code>项目：~50 个模块，Room + Hilt + Moshi
+
+KAPT 冷构建：3 分 12 秒
+KSP  冷构建：1 分 48 秒  (-44%)
+
+KAPT 增量：42 秒
+KSP  增量：18 秒  (-57%)
+</code></pre></div>
+
+<p><strong>如果只能做一件事，就从 KAPT 迁移到 KSP。</strong></p>
+<hr />
+<h2>增量编译：只编译改动的部分</h2>
+<h3>Kotlin 增量编译</h3>
+<p>Kotlin 增量编译默认开启，但有些操作会触发全量编译：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># gradle.properties（确认开启）</span>
+<span class="na">kotlin.incremental</span><span class="o">=</span><span class="s">true</span>
+<span class="na">kotlin.incremental.java</span><span class="o">=</span><span class="s">true</span>
+<span class="na">kotlin.incremental.js</span><span class="o">=</span><span class="s">true       # KMP 项目</span>
+</code></pre></div>
+
+<p><strong>会破坏增量编译的操作</strong>：</p>
+<ol>
+<li>修改 build.gradle.kts 中的编译选项</li>
+<li>修改依赖版本</li>
+<li>修改 Kotlin 编译器插件配置</li>
+<li>修改注解处理器的输入/输出</li>
+</ol>
+<h3>Kotlin 增量编译的"classpath snapshot"</h3>
+<p>Gradle 8.x + Kotlin 2.x 使用新的增量编译机制：</p>
+<div class="codehilite"><pre><span></span><code>旧机制：比较源文件的修改时间
+新机制：比较编译产物的 ABI（Application Binary Interface）
+
+好处：改了内部实现但没改 ABI → 下游模块不需要重新编译
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="c1">// build.gradle.kts</span>
+<span class="n">tasks</span><span class="p">.</span><span class="na">withType</span><span class="o">&lt;</span><span class="n">org</span><span class="p">.</span><span class="na">jetbrains</span><span class="p">.</span><span class="na">kotlin</span><span class="p">.</span><span class="na">gradle</span><span class="p">.</span><span class="na">tasks</span><span class="p">.</span><span class="na">KotlinCompile</span><span class="o">&gt;</span><span class="p">().</span><span class="na">configureEach</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">compilerOptions</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// 开启 ABI 增量（Gradle 8.2+ 默认开启）</span>
+<span class="w">        </span><span class="n">freeCompilerArgs</span><span class="p">.</span><span class="na">add</span><span class="p">(</span><span class="s">&quot;-Xabi-gen&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h3>资源增量编译</h3>
+<p>Android 资源处理也有增量支持：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1">// build.gradle.kts (app)</span>
+<span class="n">android</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">buildFeatures</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// 减少资源合并时间</span>
+<span class="w">        </span><span class="n">renderScript</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="w">    </span><span class="c1">// 不用就关掉</span>
+<span class="w">        </span><span class="n">aidl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="w">            </span><span class="c1">// 不用就关掉</span>
+<span class="w">        </span><span class="n">buildConfig</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="w">      </span><span class="c1">// 需要就保留</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<hr />
+<h2>模块化：构建加速的架构级方案</h2>
+<h3>为什么模块化能加速构建</h3>
+<p>单模块项目：改一行代码，整个项目重新编译。</p>
+<p>多模块项目：改一个模块的代码，只重新编译该模块 + 依赖它的模块。</p>
+<div class="codehilite"><pre><span></span><code>单模块：
+app (2000 文件) → 改 1 个文件 → 编译 2000 文件
+
+多模块：
+:core    (200 文件)
+:feature-a (300 文件)  ← 改了这里
+:feature-b (300 文件)  ← 不需要重新编译
+:app      (200 文件)   ← 只重新编译 :feature-a 和 :app
+</code></pre></div>
+
+<h3>模块化的正确姿势</h3>
+<p><strong>按功能拆分，不要按层拆分</strong>：</p>
+<div class="codehilite"><pre><span></span><code>❌ 按层拆分（变化时多模块同时改）：
+:data
+:domain
+:presentation
+
+✅ 按功能拆分（变化时只改一个模块）：
+:feature:login
+:feature:home
+:feature:profile
+:core:network
+:core:database
+</code></pre></div>
+
+<h3>避免循环依赖</h3>
+<p>循环依赖会导致 Gradle 无法确定构建顺序，丧失并行构建的优势：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1">// ❌ 循环依赖</span>
+<span class="p">:</span><span class="n">feature</span><span class="o">-</span><span class="n">a</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="p">:</span><span class="n">feature</span><span class="o">-</span><span class="n">b</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="p">:</span><span class="n">feature</span><span class="o">-</span><span class="n">a</span>
+
+<span class="c1">// ✅ 提取公共模块</span>
+<span class="p">:</span><span class="n">feature</span><span class="o">-</span><span class="n">a</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="p">:</span><span class="n">core</span><span class="p">:</span><span class="n">common</span><span class="w"> </span><span class="err">←</span><span class="w"> </span><span class="p">:</span><span class="n">feature</span><span class="o">-</span><span class="n">b</span>
+</code></pre></div>
+
+<p>检测循环依赖：</p>
+<div class="codehilite"><pre><span></span><code>./gradlew<span class="w"> </span>:app:dependencies<span class="w"> </span>--configuration<span class="w"> </span>debugRuntimeClasspath<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s2">&quot;↳&quot;</span>
+</code></pre></div>
+
+<h3>API 模块 vs Implementation 模块</h3>
+<div class="codehilite"><pre><span></span><code><span class="c1">// :core:network 对外暴露的接口</span>
+<span class="c1">// :core:network-api 模块（只有接口，没有实现）</span>
+<span class="n">dependencies</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">api</span><span class="p">(</span><span class="n">project</span><span class="p">(</span><span class="s">&quot;:core:network-api&quot;</span><span class="p">))</span><span class="w">      </span><span class="c1">// 对外暴露</span>
+<span class="w">    </span><span class="n">implementation</span><span class="p">(</span><span class="n">project</span><span class="p">(</span><span class="s">&quot;:core:network-impl&quot;</span><span class="p">))</span><span class="w">  </span><span class="c1">// 内部实现</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>这样依赖 :core:network-api 的模块不需要因为网络实现变了而重新编译。</p>
+<hr />
+<h2>远程构建缓存：团队级加速</h2>
+<h3>搭建远程缓存</h3>
+<p>远程缓存让整个团队共享构建产物——你构建过的模块，同事直接下载，不用重新编译。</p>
+<h4>方案一：Gradle Build Cache Node</h4>
+<div class="codehilite"><pre><span></span><code><span class="c1">// settings.gradle.kts</span>
+<span class="n">buildCache</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">local</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">directory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">File</span><span class="p">(</span><span class="n">rootDir</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;.gradle/build-cache&quot;</span><span class="p">)</span>
+<span class="w">        </span><span class="n">removeUnusedEntriesAfterDays</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">30</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">remote</span><span class="o">&lt;</span><span class="n">HttpBuildCache</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">uri</span><span class="p">(</span><span class="s">&quot;https://cache.example.com/cache/&quot;</span><span class="p">)</span>
+<span class="w">        </span><span class="n">push</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">System</span><span class="p">.</span><span class="na">getenv</span><span class="p">(</span><span class="s">&quot;CI&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">&quot;true&quot;</span><span class="w">  </span><span class="c1">// CI 推送，开发者只拉取</span>
+<span class="w">        </span><span class="n">credentials</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">username</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">System</span><span class="p">.</span><span class="na">getenv</span><span class="p">(</span><span class="s">&quot;CACHE_USER&quot;</span><span class="p">)</span>
+<span class="w">            </span><span class="n">password</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">System</span><span class="p">.</span><span class="na">getenv</span><span class="p">(</span><span class="s">&quot;CACHE_PASSWORD&quot;</span><span class="p">)</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h4>方案二：S3 作为缓存后端</h4>
+<div class="codehilite"><pre><span></span><code><span class="n">remote</span><span class="o">&lt;</span><span class="n">HttpBuildCache</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">uri</span><span class="p">(</span><span class="s">&quot;https://your-bucket.s3.amazonaws.com/cache/&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="n">push</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">System</span><span class="p">.</span><span class="na">getenv</span><span class="p">(</span><span class="s">&quot;CI&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">&quot;true&quot;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h4>方案三：自建 Gradle Enterprise</h4>
+<p>企业级方案，包含 Build Scan + 远程缓存 + 预测性测试选择：</p>
+<div class="codehilite"><pre><span></span><code>Gradle Enterprise
+├── Build Cache (远程缓存)
+├── Build Scan (构建分析)
+├── Test Distribution (测试分发)
+└── Predictive Test Selection (智能测试选择)
+</code></pre></div>
+
+<h3>缓存命中率优化</h3>
+<p>远程缓存只有命中才有用。影响命中率的因素：</p>
+<table>
+<thead>
+<tr>
+<th>因素</th>
+<th>说明</th>
+<th>优化</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>任务输入不稳定</td>
+<td>包含时间戳、随机数的输入</td>
+<td>固定输入，排除不稳定字段</td>
+</tr>
+<tr>
+<td>绝对路径</td>
+<td>不同机器路径不同</td>
+<td>使用相对路径</td>
+</tr>
+<tr>
+<td>环境变量</td>
+<td>不同机器环境不同</td>
+<td>用 <code>@Input</code> 声明关键环境变量</td>
+</tr>
+<tr>
+<td>原生代码</td>
+<td>不同 CPU 架构产物不同</td>
+<td>分架构缓存</td>
+</tr>
+</tbody>
+</table>
+<div class="codehilite"><pre><span></span><code><span class="c1">// 自定义 Task 的缓存键</span>
+<span class="kd">abstract</span><span class="w"> </span><span class="kd">class</span><span class="w"> </span><span class="nc">GenerateProtoTask</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">DefaultTask</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nd">@get</span><span class="p">:</span><span class="n">InputFile</span>
+<span class="w">    </span><span class="nd">@get</span><span class="p">:</span><span class="n">PathSensitive</span><span class="p">(</span><span class="n">PathSensitivity</span><span class="p">.</span><span class="na">RELATIVE</span><span class="p">)</span><span class="w">  </span><span class="c1">// 用相对路径</span>
+<span class="w">    </span><span class="kd">abstract</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">protoFile</span><span class="p">:</span><span class="w"> </span><span class="n">RegularFileProperty</span>
+
+<span class="w">    </span><span class="nd">@get</span><span class="p">:</span><span class="n">Input</span>
+<span class="w">    </span><span class="kd">abstract</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">version</span><span class="p">:</span><span class="w"> </span><span class="n">Property</span><span class="o">&lt;</span><span class="kt">String</span><span class="o">&gt;</span><span class="w">  </span><span class="c1">// 声明版本为输入</span>
+
+<span class="w">    </span><span class="nd">@get</span><span class="p">:</span><span class="n">OutputDirectory</span>
+<span class="w">    </span><span class="kd">abstract</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">outputDir</span><span class="p">:</span><span class="w"> </span><span class="n">DirectoryProperty</span>
+
+<span class="w">    </span><span class="nd">@TaskAction</span>
+<span class="w">    </span><span class="kd">fun</span><span class="w"> </span><span class="nf">generate</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// ...</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<hr />
+<h2>CI 构建优化</h2>
+<p>CI 环境的构建优化和本地不同——CI 每次都是干净的，没有增量编译的优势。</p>
+<h3>分阶段构建</h3>
+<div class="codehilite"><pre><span></span><code><span class="c1"># GitHub Actions 示例</span>
+<span class="nt">jobs</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">build</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">steps</span><span class="p">:</span>
+<span class="w">      </span><span class="c1"># 1. 只编译，不打包 APK</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Compile</span>
+<span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./gradlew compileDebugKotlin --build-cache</span>
+
+<span class="w">      </span><span class="c1"># 2. 单元测试（可以和编译并行）</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Unit Test</span>
+<span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./gradlew testDebugUnitTest --build-cache</span>
+
+<span class="w">      </span><span class="c1"># 3. 打包 APK（只在需要时执行）</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Assemble</span>
+<span class="w">        </span><span class="nt">if</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">github.ref == &#39;refs/heads/main&#39;</span>
+<span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./gradlew assembleDebug --build-cache</span>
+</code></pre></div>
+
+<h3>缓存 Gradle 依赖和构建缓存</h3>
+<div class="codehilite"><pre><span></span><code><span class="c1"># GitHub Actions</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/cache@v4</span>
+<span class="w">  </span><span class="nt">with</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">      </span><span class="no">~/.gradle/caches</span>
+<span class="w">      </span><span class="no">~/.gradle/wrapper</span>
+<span class="w">      </span><span class="no">.gradle/build-cache</span>
+<span class="w">    </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gradle-${{ hashFiles(&#39;**/*.gradle.kts&#39;, &#39;gradle/libs.versions.toml&#39;) }}</span>
+<span class="w">    </span><span class="nt">restore-keys</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">      </span><span class="no">gradle-</span>
+</code></pre></div>
+
+<h3>只构建变更的模块</h3>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 只构建变更影响的模块</span>
+<span class="nv">CHANGED_MODULES</span><span class="o">=</span><span class="k">$(</span>git<span class="w"> </span>diff<span class="w"> </span>--name-only<span class="w"> </span>origin/main...HEAD<span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>grep<span class="w"> </span>-oP<span class="w"> </span><span class="s1">&#39;^\K[^/]+&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sort<span class="w"> </span>-u<span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>awk<span class="w"> </span><span class="s1">&#39;{print &quot;:&quot;$1&quot;:compileDebugKotlin&quot;}&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>tr<span class="w"> </span><span class="s1">&#39;\n&#39;</span><span class="w"> </span><span class="s1">&#39; &#39;</span><span class="k">)</span>
+
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>-n<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$CHANGED_MODULES</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">  </span>./gradlew<span class="w"> </span><span class="nv">$CHANGED_MODULES</span>
+<span class="k">fi</span>
+</code></pre></div>
+
+<h3>分布式测试执行</h3>
+<div class="codehilite"><pre><span></span><code><span class="c1">// Gradle Enterprise 的预测性测试选择</span>
+<span class="n">gradleEnterprise</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">buildCache</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">local</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">isEnabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="p">}</span>
+<span class="w">        </span><span class="n">remote</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">uri</span><span class="p">(</span><span class="s">&quot;https://cache.example.com/&quot;</span><span class="p">)</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">predictions</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// 只运行可能受影响的测试</span>
+<span class="w">        </span><span class="n">enabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<hr />
+<h2>高级优化：深入编译器</h2>
+<h3>Kotlin 编译器选项调优</h3>
+<div class="codehilite"><pre><span></span><code><span class="c1">// build.gradle.kts</span>
+<span class="n">tasks</span><span class="p">.</span><span class="na">withType</span><span class="o">&lt;</span><span class="n">org</span><span class="p">.</span><span class="na">jetbrains</span><span class="p">.</span><span class="na">kotlin</span><span class="p">.</span><span class="na">gradle</span><span class="p">.</span><span class="na">tasks</span><span class="p">.</span><span class="na">KotlinCompile</span><span class="o">&gt;</span><span class="p">().</span><span class="na">configureEach</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">compilerOptions</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">jvmTarget</span><span class="p">.</span><span class="na">set</span><span class="p">(</span><span class="n">JvmTarget</span><span class="p">.</span><span class="na">JVM_17</span><span class="p">)</span>
+
+<span class="w">        </span><span class="n">freeCompilerArgs</span><span class="p">.</span><span class="na">addAll</span><span class="p">(</span>
+<span class="w">            </span><span class="s">&quot;-Xjvm-default=all&quot;</span><span class="p">,</span><span class="w">           </span><span class="c1">// 生成默认方法（减少生成类数量）</span>
+<span class="w">            </span><span class="s">&quot;-Xno-optimized-callable-references&quot;</span><span class="p">,</span><span class="w"> </span><span class="c1">// 跳过 callable reference 优化</span>
+<span class="w">            </span><span class="s">&quot;-Xsam-conversions=class&quot;</span><span class="p">,</span><span class="w">      </span><span class="c1">// SAM 转换策略</span>
+<span class="w">        </span><span class="p">)</span>
+
+<span class="w">        </span><span class="c1">// 增量编译优化</span>
+<span class="w">        </span><span class="n">incremental</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h3>R8 全模式优化</h3>
+<div class="codehilite"><pre><span></span><code><span class="c1">// build.gradle.kts (app)</span>
+<span class="n">android</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">buildTypes</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">release</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">isMinifyEnabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="w">       </span><span class="c1">// 开启 R8</span>
+<span class="w">            </span><span class="n">isShrinkResources</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="w">     </span><span class="c1">// 资源压缩</span>
+<span class="w">            </span><span class="n">proguardFiles</span><span class="p">(</span>
+<span class="w">                </span><span class="n">getDefaultProguardFile</span><span class="p">(</span><span class="s">&quot;proguard-android-optimize.txt&quot;</span><span class="p">),</span>
+<span class="w">                </span><span class="s">&quot;proguard-rules.pro&quot;</span>
+<span class="w">            </span><span class="p">)</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>R8 在 release 构建中减少 dex 数量，间接减少下次构建的 dex 时间。</p>
+<h3>DexBuilder 增量处理</h3>
+<div class="codehilite"><pre><span></span><code><span class="c1"># gradle.properties</span>
+<span class="na">android.enableDexingArtifactTransform.desugaring</span><span class="o">=</span><span class="s">true</span>
+<span class="na">android.enableParallelDex</span><span class="o">=</span><span class="s">true  # 并行 dex（AGP 8.x+ 默认开启）</span>
+</code></pre></div>
+
+<hr />
+<h2>Android Gradle Plugin 优化</h2>
+<h3>AGP 配置优化</h3>
+<div class="codehilite"><pre><span></span><code><span class="c1">// build.gradle.kts (app)</span>
+<span class="n">android</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// 关闭不需要的构建变体</span>
+<span class="w">    </span><span class="n">variantFilter</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">name</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="s">&quot;debug&quot;</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="s">&quot;release&quot;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">ignore</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// 减少打包内容</span>
+<span class="w">    </span><span class="n">packaging</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">resources</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">excludes</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">setOf</span><span class="p">(</span>
+<span class="w">                </span><span class="s">&quot;META-INF/DEPENDENCIES&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="s">&quot;META-INF/LICENSE&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="s">&quot;META-INF/LICENSE.txt&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="s">&quot;META-INF/license.txt&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="s">&quot;META-INF/NOTICE&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="s">&quot;META-INF/NOTICE.txt&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="s">&quot;META-INF/notice.txt&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="s">&quot;META-INF/ASL2.0&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="s">&quot;META-INF/*.kotlin_module&quot;</span>
+<span class="w">            </span><span class="p">)</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// 关闭不需要的 feature</span>
+<span class="w">    </span><span class="n">buildFeatures</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">buildConfig</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<span class="w">        </span><span class="n">viewBinding</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<span class="w">        </span><span class="n">dataBinding</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="w">   </span><span class="c1">// 不用就关</span>
+<span class="w">        </span><span class="n">compose</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<span class="w">        </span><span class="n">resValues</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="w">     </span><span class="err">#</span><span class="w"> </span><span class="err">不需要动态资源</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h3>非传递 R 类</h3>
+<div class="codehilite"><pre><span></span><code><span class="c1"># gradle.properties</span>
+<span class="na">android.nonTransitiveRClass</span><span class="o">=</span><span class="s">true</span>
+</code></pre></div>
+
+<p>这个配置让每个模块只包含自己声明的资源 ID，不包含依赖模块的资源 ID。效果：</p>
+<ul>
+<li>减少每个模块 R 类的大小</li>
+<li>减少资源合并时间</li>
+<li>资源变更不会导致所有模块重新编译</li>
+</ul>
+<h3>按 namespace 分离资源</h3>
+<div class="codehilite"><pre><span></span><code><span class="c1">// build.gradle.kts (library module)</span>
+<span class="n">android</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">namespace</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;com.example.core.network&quot;</span><span class="w">  </span><span class="c1">// 明确声明 namespace</span>
+
+<span class="w">    </span><span class="n">resourcePrefix</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;network_&quot;</span><span class="w">  </span><span class="c1">// 资源前缀，避免冲突</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<hr />
+<h2>实战案例：一个真实项目的优化历程</h2>
+<h3>项目概况</h3>
+<ul>
+<li>35 个模块（5 个 core + 20 个 feature + 10 个 legacy）</li>
+<li>Room + Hilt + Moshi + KAPT</li>
+<li>冷构建 4 分 50 秒，增量构建 55 秒</li>
+</ul>
+<h3>优化步骤与效果</h3>
+<div class="codehilite"><pre><span></span><code>第一阶段：零成本配置优化
+├── 开启 configuration-cache          → 冷构建 -18 秒
+├── 开启 parallel + 调大 JVM          → 冷构建 -25 秒
+├── 开启 build-cache                  → 增量 -12 秒
+└── android.nonTransitiveRClass=true  → 增量 -5 秒
+                                   小计：冷 3 分 47 秒，增量 38 秒
+
+第二阶段：KAPT → KSP 迁移
+├── Room KSP 迁移                     → 冷构建 -45 秒
+├── Hilt KSP 迁移                     → 冷构建 -30 秒
+└── Moshi KSP 迁移                    → 冷构建 -15 秒
+                                   小计：冷 2 分 17 秒，增量 18 秒
+
+第三阶段：依赖清理 + 模块拆分
+├── 移除 12 个未使用的依赖             → 冷构建 -10 秒
+├── 拆分 3 个巨型 feature 模块         → 增量 -6 秒
+└── API/Implementation 分离           → 增量 -4 秒
+                                   小计：冷 2 分 07 秒，增量 8 秒
+
+第四阶段：远程缓存 + CI 优化
+├── 搭建远程缓存                      → CI 冷构建 -60%
+├── CI 分阶段构建                     → PR 检查时间 -40%
+└── 预测性测试选择                    → 测试时间 -50%
+</code></pre></div>
+
+<h3>最终结果</h3>
+<div class="codehilite"><pre><span></span><code>                 优化前          优化后         提升
+冷构建          4 分 50 秒      2 分 07 秒     -56%
+增量构建        55 秒           8 秒           -85%
+CI PR 检查      12 分钟         4 分 30 秒     -63%
+</code></pre></div>
+
+<hr />
+<h2>构建优化检查清单</h2>
+<h3>立即可做（10 分钟内）</h3>
+<ul>
+<li>[ ] 确认 <code>gradle.properties</code> 中的 JVM 参数（<code>-Xmx4g -XX:+UseParallelGC</code>）</li>
+<li>[ ] 开启 <code>org.gradle.parallel=true</code></li>
+<li>[ ] 开启 <code>org.gradle.caching=true</code></li>
+<li>[ ] 开启 <code>android.nonTransitiveRClass=true</code></li>
+<li>[ ] 运行一次 <code>--profile</code>，了解当前基线</li>
+</ul>
+<h3>本周可做</h3>
+<ul>
+<li>[ ] 开启 <code>org.gradle.configuration-cache=true</code></li>
+<li>[ ] 检测并移除未使用的依赖</li>
+<li>[ ] 关闭不需要的 <code>buildFeatures</code></li>
+<li>[ ] 统一版本目录（Version Catalog）</li>
+</ul>
+<h3>本月可做</h3>
+<ul>
+<li>[ ] KAPT → KSP 迁移</li>
+<li>[ ] 拆分巨型模块</li>
+<li>[ ] API/Implementation 分离</li>
+<li>[ ] 搭建远程构建缓存</li>
+</ul>
+<h3>长期规划</h3>
+<ul>
+<li>[ ] 全面模块化（按功能拆分）</li>
+<li>[ ] 引入 Gradle Enterprise</li>
+<li>[ ] CI 分布式构建</li>
+<li>[ ] 定期 Build Scan 审查</li>
+</ul>
+<hr />
+<h2>常见误区</h2>
+<h3>误区一："升级 Gradle 版本就能变快"</h3>
+<p>升级确实有帮助，但不是万能的。Gradle 8.x 相比 7.x 在配置缓存和增量编译上有改进，但如果你的构建脚本不兼容配置缓存，升级也用不上。</p>
+<p><strong>正确做法</strong>：升级后先确认新特性是否生效，用 Build Scan 对比。</p>
+<h3>误区二："模块越多越快"</h3>
+<p>模块化有收益边界。过多的小模块会增加：</p>
+<ul>
+<li>配置阶段时间（每个模块都要解析 build.gradle）</li>
+<li>依赖解析时间（模块间依赖变多）</li>
+<li>Kotlin 编译的 classpath 查找时间</li>
+</ul>
+<p><strong>经验值</strong>：一个模块 50-200 个源文件比较合理。少于 30 个文件的模块考虑合并。</p>
+<h3>误区三："开越多线程越快"</h3>
+<p><code>org.gradle.workers.max</code> 不是越大越好。太多线程会导致：</p>
+<ul>
+<li>CPU 上下文切换开销</li>
+<li>内存压力增大（每个 worker 有独立类加载器）</li>
+<li>GC 压力</li>
+</ul>
+<p><strong>经验值</strong>：设为 CPU 核心数或 CPU 核心数 - 1。</p>
+<h3>误区四："远程缓存一定比本地快"</h3>
+<p>远程缓存受网络延迟影响。在低延迟网络中确实有效，但在高延迟或不稳定网络中，下载缓存可能比本地编译还慢。</p>
+<p><strong>正确做法</strong>：CI 环境推送缓存，开发者环境设置 <code>push = false</code> 只拉取。</p>
+<hr />
+<h2>结语</h2>
+<p>构建优化不是一次性的工作，而是持续的过程。项目的代码在增长，依赖在变化，构建时间也会慢慢膨胀。关键不是一次优化到位，而是<strong>建立可观测性和持续优化的习惯</strong>。</p>
+<p>我的建议是：</p>
+<ol>
+<li><strong>先量后改</strong>：用 Build Scan 或 <code>--profile</code> 量化当前状态</li>
+<li><strong>先低后高</strong>：先做零成本配置优化，再做架构级改造</li>
+<li><strong>先人后机</strong>：先优化开发者日常的增量构建，再优化 CI 的冷构建</li>
+<li><strong>定期体检</strong>：每月跑一次 Build Scan，监控构建时间趋势</li>
+</ol>
+<p>构建时间每减少 10 秒，假设团队 10 人每天构建 20 次，一年就省下了：</p>
+<div class="codehilite"><pre><span></span><code><span class="mf">10</span><span class="w"> </span><span class="n">秒</span><span class="w"> </span><span class="err">×</span><span class="w"> </span><span class="mf">10</span><span class="w"> </span><span class="n">人</span><span class="w"> </span><span class="err">×</span><span class="w"> </span><span class="mf">20</span><span class="w"> </span><span class="n">次</span><span class="w"> </span><span class="err">×</span><span class="w"> </span><span class="mf">250</span><span class="w"> </span><span class="n">工作日</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">500</span><span class="p">,</span><span class="mf">000</span><span class="w"> </span><span class="n">秒</span><span class="w"> </span><span class="err">≈</span><span class="w"> </span><span class="mf">138</span><span class="w"> </span><span class="n">小时</span><span class="w"> </span><span class="err">≈</span><span class="w"> </span><span class="mf">17</span><span class="w"> </span><span class="n">个工作日</span>
+</code></pre></div>
+
+<p>这 17 天，够写多少有价值的功能了。</p>
+<hr />
+<p><em>参考资源：</em>
+- <em>Gradle 官方文档 — Performance Tuning</em>
+- <em>Android Developers — Reduce build times</em>
+- <em>《Gradle in Action》— Benjamin Muschko</em>
+- <em>Google I/O 2025 — What's new in Android Gradle Plugin</em>
+- <em>Gradle Build Cache 最佳实践</em></p>
+      </article>
+    </div>
+  </main>
+
+  <!-- Related Posts / Navigation -->
+  <section class="section" style="padding-top: 0;">
+    <div class="container container-narrow">
+      <hr style="border: none; border-top: 1px solid var(--color-border); margin: var(--space-3xl) 0;">
+      
+      <div class="blog-topics" style="margin-bottom: var(--space-xl);">
+        <span class="topic-label">读完之后：</span>
+        <a href="../index.html" class="topic-tag">返回博客列表</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <p class="footer-signature">写代码，做产品，也认真生活。</p>
+      <div class="footer-links">
+        <a href="https://github.com/zzdbilly" class="footer-link" target="_blank" rel="noopener">GitHub</a>
+        <a href="../../projects/index.html" class="footer-link">项目</a>
+        <a href="../../about/index.html" class="footer-link">关于</a>
+      </div>
+      <p class="footer-copyright">
+        &copy; 2026 张小猛
+      </p>
+    </div>
+  </footer>
+
+  
+  <script src="../../assets/js/related-posts.js"></script>
+  <script src="../../assets/js/share.js"></script>
+  <script src="../../assets/js/main.js"></script>
+
+  <!-- Back to Top & Reading Progress -->
+  <button class="back-to-top" id="backToTop" aria-label="回到顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
+  <div class="reading-progress" id="readingProgress"></div>
+
+  <script>
+    const backToTop = document.getElementById("backToTop");
+    
+    window.addEventListener("scroll", () => {
+      if (window.scrollY > 300) {
+        backToTop.classList.add("visible");
+      } else {
+        backToTop.classList.remove("visible");
+      }
+      
+      const progressBar = document.getElementById("readingProgress");
+      if (progressBar && document.querySelector(".post-content")) {
+        const scrollTop = window.scrollY;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const progress = (scrollTop / docHeight) * 100;
+        progressBar.style.width = progress + "%";
+      }
+    });
+    
+    backToTop.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    // Keyboard shortcuts
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "j") window.scrollBy({ top: 200, behavior: "smooth" });
+      else if (e.key === "k") window.scrollBy({ top: -200, behavior: "smooth" });
+      else if (e.key === "Escape") document.getElementById("blog-search-results")?.classList.remove("active");
+      else if (e.altKey && e.key === "b") window.location.href = "../index.html";
+    });
+  </script>
+
+  <!-- Post TOC -->
+  <div class="post-toc-container" id="postToc">
+    <nav class="post-toc">
+      <div class="post-toc-title">目录</div>
+      <ul class="post-toc-list" id="tocList">
+      </ul>
+    </nav>
+  </div>
+
+  <script>
+    (function() {
+      const tocList = document.getElementById('tocList');
+      const tocContainer = document.getElementById('postToc');
+      if (!tocList || !tocContainer) return;
+      
+      const headings = document.querySelectorAll('.post-content h2, .post-content h3');
+      if (headings.length === 0) { tocContainer.style.display = 'none'; return; }
+      
+      headings.forEach((h, i) => {
+        const id = 'toc-' + i;
+        h.id = h.id || id;
+        
+        const li = document.createElement('li');
+        const a = document.createElement('a');
+        a.href = '#' + h.id;
+        a.textContent = h.textContent.replace(/^\d+[.、]\s*/, '');
+        a.className = h.tagName === 'H3' ? 'toc-h3' : 'toc-h2';
+        
+        a.addEventListener('click', (e) => {
+          e.preventDefault();
+          document.getElementById(h.id).scrollIntoView({ behavior: 'smooth' });
+          history.pushState(null, '', '#' + h.id);
+        });
+        
+        li.appendChild(a);
+        tocList.appendChild(li);
+      });
+      
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            tocList.querySelectorAll('a').forEach(a => a.classList.remove('active'));
+            const id = entry.target.id;
+            const activeLink = tocList.querySelector('a[href="#' + id + '"]');
+            if (activeLink) {
+              activeLink.classList.add('active');
+              activeLink.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+          }
+        });
+      }, { rootMargin: '-20% 0px -60% 0px' });
+      
+      headings.forEach(h => observer.observe(h));
+    })();
+  </script>
+  <script src="../../assets/js/og-generator.js"></script>
+</body>
+</html>
