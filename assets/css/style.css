@@ -3411,3 +3411,147 @@ pre code {
   background: rgba(255, 255, 255, 0.8);
   border-color: rgba(0, 0, 0, 0.1);
 }
+
+/* ===================================
+   Mobile TOC Button & Drawer
+   =================================== */
+.mobile-toc-btn {
+  display: none;
+  position: fixed;
+  right: 1rem;
+  bottom: 5rem;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  z-index: 999;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.mobile-toc-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.mobile-toc-btn svg {
+  width: 24px;
+  height: 24px;
+  color: var(--color-text-primary);
+}
+
+.toc-drawer {
+  display: none;
+  position: fixed;
+  top: 0;
+  right: -280px;
+  width: 280px;
+  height: 100vh;
+  background: var(--color-bg-secondary);
+  border-left: 1px solid var(--color-border);
+  z-index: 1001;
+  padding: 1.5rem;
+  overflow-y: auto;
+  transition: right 0.3s ease;
+  box-shadow: -4px 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.toc-drawer.open {
+  right: 0;
+}
+
+.toc-drawer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.toc-drawer-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.toc-drawer-close {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-secondary);
+  transition: background 0.2s;
+}
+
+.toc-drawer-close:hover {
+  background: var(--color-bg-tertiary);
+}
+
+.toc-drawer-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.toc-drawer-overlay.open {
+  display: block;
+  opacity: 1;
+}
+
+/* 移动端显示按钮 */
+@media (max-width: 1199px) {
+  .mobile-toc-btn {
+    display: flex;
+  }
+}
+
+/* 抽屉内 TOC 列表样式 */
+.toc-drawer .post-toc-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.toc-drawer .post-toc-list li {
+  margin-bottom: 0.25rem;
+}
+
+.toc-drawer .post-toc-list a {
+  display: block;
+  padding: 0.5rem 0.75rem;
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  font-size: 0.85rem;
+  border-radius: 8px;
+  border-left: 2px solid transparent;
+  transition: all 0.2s;
+}
+
+.toc-drawer .post-toc-list a:hover,
+.toc-drawer .post-toc-list a.active {
+  color: var(--color-accent-primary);
+  background: var(--color-bg-tertiary);
+  border-left-color: var(--color-accent-primary);
+}
+
+.toc-drawer .toc-h3 {
+  padding-left: 1.5rem;
+  font-size: 0.8rem;
+}
