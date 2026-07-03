@@ -1,6 +1,6 @@
 /* 文章页专用样式 - 从内联样式抽离 */
+/* 注意：post-toc-container / post-toc / post-toc-list 等 TOC 样式在 style.css 中定义，此处不重复 */
 
-  
     .arch-diagram { background: var(--color-bg-tertiary); border-radius: 12px; padding: 1.5rem; margin: 2rem 0; font-family: monospace; font-size: 0.85rem; line-height: 1.6; overflow-x: auto; white-space: pre; }
 
     .back-link svg { width: 16px; height: 16px; }
@@ -65,27 +65,7 @@
 
     .post-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 3rem; }
 
-    .post-toc { background: var(--color-bg-secondary); border: 1px solid var(--color-border); border-radius: 16px; padding: 1rem; max-height: calc(100vh - 240px); overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--color-border) transparent; }
-
-    .post-toc-list .toc-h2 { font-weight: 600; font-size: 0.8rem; }
-
-    .post-toc-list .toc-h3 { padding-left: 1rem; font-size: 0.72rem; }
-
-    .post-toc-list a { display: block; color: var(--color-text-secondary); text-decoration: none; font-size: 0.78rem; padding: 0.3rem 0.5rem; border-radius: 6px; border-left: 2px solid transparent; transition: all 0.2s ease; line-height: 1.4; }
-
-    .post-toc-list a.active { color: var(--color-accent-primary); background: var(--color-bg-tertiary); border-left-color: var(--color-accent-primary); }
-
-    .post-toc-list a:hover { color: var(--color-accent-primary); background: var(--color-bg-tertiary); }
-
-    .post-toc-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.25rem; }
-
-    .post-toc-title { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted); margin-bottom: 0.75rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--color-border); position: sticky; top: 0; background: var(--color-bg-secondary); z-index: 1; }
-
-    .post-toc::-webkit-scrollbar { width: 4px; }
-
-    .post-toc::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 4px; }
-
-    .post-toc::-webkit-scrollbar-track { background: transparent; }
+    /* TOC 相关样式（post-toc, post-toc-list, post-toc-title 等）在 style.css 中统一定义，此处不重复 */
 
     .tip-box { background: rgba(34, 197, 94, 0.1); border-left: 3px solid #22c55e; padding: 1rem 1.2rem; margin: 1.5rem 0; border-radius: 0 6px 6px 0; }
 
