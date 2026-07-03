@@ -12,21 +12,15 @@
     <meta property="og:description" content="Android 离线语音输入实现方案：Sherpa ONNX、Whisper、Vosk 三大主流方案深度对比">
     <meta property="og:url" content="https://709527.xyz/blog/posts/android-offline-speech-input.html">
     <meta property="og:type" content="article">
-    <meta property="og:image" content="../../assets/images/og-image.png">
+        <meta property="og:image" content="../../assets/images/og-image.png">
     <meta property="og:site_name" content="loczb">
-    
-    
-    
-    <link rel="stylesheet" href="../../assets/css/style.css">
-    <link rel="stylesheet" href="../../assets/css/article.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500;600&display=swap" media="print" onload="this.media='all'">
-<link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
-    <link rel="alternate icon" href="../../assets/images/favicon.ico">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Android 离线语音输入实现方案 | 张小猛 - loczb">
+    <meta name="twitter:description" content="Android 离线语音输入实现方案：Sherpa ONNX、Whisper、Vosk 三大主流方案深度对比">
 
-    <script type="application/ld+json">
-    {
+    
+        <script type="application/ld+json">
+{
       "@context": "https://schema.org",
       "@type": "Article",
       "headline": "Android 离线语音输入实现方案",
@@ -57,7 +51,15 @@
       "inLanguage": "zh-CN"
     }
     </script>
-  </head>
+    
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/article.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500;600&display=swap" media="print" onload="this.media='all'">
+    <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
+    <link rel="alternate icon" href="../../assets/images/favicon.ico">
+</head>
 <body>
   <!-- Loading -->
   <div class="loading">
@@ -100,13 +102,13 @@
 
       <article class="post-content">
         <h1>Android 离线语音输入实现方案</h1>
-      
-      <div class="post-meta">
+        
+        <div class="post-meta">
           <span>📅 2026-04-03</span>
           <span>⏱️ 10 min read</span>
           <span>👤 张小猛</span>
         </div>
-
+        
         <div class="post-tags">
           <span class="tag">Android</span>
           <span class="tag">离线语音识别</span>
@@ -114,8 +116,8 @@
           <span class="tag">Whisper</span>
           <span class="tag">端侧AI</span>
         </div>
-
-      <p>在移动应用开发中，语音输入已成为提升用户体验的重要交互方式。然而，传统的云端语音识别方案存在明显的痛点：<strong>网络依赖、隐私风险、延迟抖动、成本不可控</strong>。对于需要高隐私保护、弱网环境可用、或实时性要求高的场景，<strong>真正的离线语音识别</strong>成为必需。</p>
+        
+        <p>在移动应用开发中，语音输入已成为提升用户体验的重要交互方式。然而，传统的云端语音识别方案存在明显的痛点：<strong>网络依赖、隐私风险、延迟抖动、成本不可控</strong>。对于需要高隐私保护、弱网环境可用、或实时性要求高的场景，<strong>真正的离线语音识别</strong>成为必需。</p>
 
       <div class="warning-box">
         <strong>⚠️ 注意</strong>：本文讨论的"离线语音识别"指的是<strong>完全端侧运行</strong>的方案，模型文件打包在 APK 中或下载到本地，识别过程不依赖任何网络请求。Google SpeechRecognizer 的"离线模式"并非真正的离线方案。
@@ -269,7 +271,6 @@ val result = recognizer.result()</code></pre>
   </button>
   <div class="reading-progress" id="readingProgress"></div>
 
-
   <!-- Post TOC -->
   <div class="post-toc-container" id="postToc">
     <nav class="post-toc">
@@ -278,7 +279,6 @@ val result = recognizer.result()</code></pre>
       </ul>
     </nav>
   </div>
-
 <script src="../../assets/js/particles.js"></script>
 </body>
 </html>

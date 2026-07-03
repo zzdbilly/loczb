@@ -12,21 +12,15 @@
     <meta property="og:description" content="Linux eBPF 入门实战：内核可观测性新范式，从 BPF 程序编写到 bpftrace、BCC 工具链使用，覆盖网络、安全、性能分析场景">
     <meta property="og:url" content="https://709527.xyz/blog/posts/linux-ebpf-getting-started.html">
     <meta property="og:type" content="article">
-    <meta property="og:image" content="../../assets/images/og-image.png">
+        <meta property="og:image" content="../../assets/images/og-image.png">
     <meta property="og:site_name" content="loczb">
-    
-    
-    
-    <link rel="stylesheet" href="../../assets/css/style.css">
-    <link rel="stylesheet" href="../../assets/css/article.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500;600&display=swap" media="print" onload="this.media='all'">
-<link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
-    <link rel="alternate icon" href="../../assets/images/favicon.ico">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Linux eBPF 入门：内核可观测性新范式 | 张小猛 - loczb">
+    <meta name="twitter:description" content="Linux eBPF 入门实战：内核可观测性新范式，从 BPF 程序编写到 bpftrace、BCC 工具链使用，覆盖网络、安全、性能分析场景">
 
-    <script type="application/ld+json">
-    {
+    
+        <script type="application/ld+json">
+{
       "@context": "https://schema.org",
       "@type": "Article",
       "headline": "Linux eBPF 入门：内核可观测性新范式",
@@ -57,7 +51,15 @@
       "inLanguage": "zh-CN"
     }
     </script>
-  </head>
+    
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/article.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500;600&display=swap" media="print" onload="this.media='all'">
+    <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
+    <link rel="alternate icon" href="../../assets/images/favicon.ico">
+</head>
 <body>
   <!-- Loading -->
   <div class="loading">
@@ -100,13 +102,13 @@
 
       <article class="post-content">
         <h1>Linux eBPF 入门：内核可观测性新范式</h1>
-      
-      <div class="post-meta">
+        
+        <div class="post-meta">
           <span>📅 2026-06-27</span>
           <span>⏱️ 18 min read</span>
           <span>👤 张小猛</span>
         </div>
-
+        
         <div class="post-tags">
           <span class="tag">eBPF</span>
           <span class="tag">Linux 内核</span>
@@ -114,8 +116,8 @@
           <span class="tag">bpftrace</span>
           <span class="tag">云原生</span>
         </div>
-
-      <p>传统的 Linux 内核观测手段——printf 调试、内核模块、ftrace——要么侵入性强，要么能力有限。eBPF（extended Berkeley Packet Filter）改变了这一切：你可以在不修改内核源码、不加载内核模块的情况下，安全地在内核态运行自定义逻辑。它已经成为云原生可观测性、网络和安全领域的基石技术。</p>
+        
+        <p>传统的 Linux 内核观测手段——printf 调试、内核模块、ftrace——要么侵入性强，要么能力有限。eBPF（extended Berkeley Packet Filter）改变了这一切：你可以在不修改内核源码、不加载内核模块的情况下，安全地在内核态运行自定义逻辑。它已经成为云原生可观测性、网络和安全领域的基石技术。</p>
 
       <div class="tip-box">
         <strong>适合谁读</strong>：后端工程师想做性能分析、SRE 需要生产级可观测性、云原生开发者想理解 Cilium/Falco 底层原理、对 Linux 内核感兴趣但不想写内核模块的工程师。
@@ -921,7 +923,6 @@ sudo bpftool feature probe | grep "bpf_"</code></pre>
   </button>
   <div class="reading-progress" id="readingProgress"></div>
 
-
   <!-- Post TOC -->
   <div class="post-toc-container" id="postToc">
     <nav class="post-toc">
@@ -930,7 +931,6 @@ sudo bpftool feature probe | grep "bpf_"</code></pre>
       </ul>
     </nav>
   </div>
-
 <script src="../../assets/js/particles.js"></script>
 </body>
 </html>

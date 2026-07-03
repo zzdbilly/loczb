@@ -12,21 +12,15 @@
     <meta property="og:description" content="PWA 实战：从零开始打造离线可用的 Web 应用，详解 Service Worker、manifest.json 配置与缓存策略">
     <meta property="og:url" content="https://709527.xyz/blog/posts/pwa-offline-web-app.html">
     <meta property="og:type" content="article">
-    <meta property="og:image" content="../../assets/images/og-image.png">
+        <meta property="og:image" content="../../assets/images/og-image.png">
     <meta property="og:site_name" content="loczb">
-    
-    
-    
-    <link rel="stylesheet" href="../../assets/css/style.css">
-    <link rel="stylesheet" href="../../assets/css/article.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500;600&display=swap" media="print" onload="this.media='all'">
-<link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
-    <link rel="alternate icon" href="../../assets/images/favicon.ico">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="PWA 实战：从零打造离线可用 Web 应用 | 张小猛 - loczb">
+    <meta name="twitter:description" content="PWA 实战：从零开始打造离线可用的 Web 应用，详解 Service Worker、manifest.json 配置与缓存策略">
 
-    <script type="application/ld+json">
-    {
+    
+        <script type="application/ld+json">
+{
       "@context": "https://schema.org",
       "@type": "Article",
       "headline": "PWA 实战：从零打造离线可用 Web 应用",
@@ -57,7 +51,15 @@
       "inLanguage": "zh-CN"
     }
     </script>
-  </head>
+    
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/article.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500;600&display=swap" media="print" onload="this.media='all'">
+    <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
+    <link rel="alternate icon" href="../../assets/images/favicon.ico">
+</head>
 <body>
   <!-- Loading -->
   <div class="loading">
@@ -99,19 +101,23 @@
       </a>
 
       <article class="post-content">
-        <header>
-        <h1>PWA 实战：从零打造离线可用的 Web 应用</h1>
+        <h1>PWA 实战：从零打造离线可用 Web 应用</h1>
+        
         <div class="post-meta">
           <span>📅 2026-03-22</span>
           <span>⏱️ 阅读时间：10 分钟</span>
+          <span>👤 张小猛</span>
         </div>
+        
         <div class="post-tags">
           <span class="tag">PWA</span>
           <span class="tag">Service Worker</span>
           <span class="tag">前端</span>
           <span class="tag">离线应用</span>
         </div>
-      </header><h2 id="intro">什么是 PWA？</h2>
+        
+        <header>
+        </header><h2 id="intro">什么是 PWA？</h2>
       <p>PWA（Progressive Web App）是一种结合了 Web 和原生 App 优势的技术方案。它让 Web 应用能够：</p>
       <ul>
         <li>📱 <strong>添加到桌面</strong>：像原生 App 一样安装</li>
@@ -403,7 +409,6 @@ self.addEventListener('notificationclick', (event) => {
   </button>
   <div class="reading-progress" id="readingProgress"></div>
 
-
   <!-- Post TOC -->
   <div class="post-toc-container" id="postToc">
     <nav class="post-toc">
@@ -412,7 +417,6 @@ self.addEventListener('notificationclick', (event) => {
       </ul>
     </nav>
   </div>
-
 <script src="../../assets/js/particles.js"></script>
 </body>
 </html>

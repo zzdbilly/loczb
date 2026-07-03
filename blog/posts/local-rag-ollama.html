@@ -12,21 +12,15 @@
     <meta property="og:description" content="RAG 本地实践：用 Ollama + Embedding 搭建私有知识库，实现完全离线的智能问答">
     <meta property="og:url" content="https://709527.xyz/blog/posts/local-rag-ollama.html">
     <meta property="og:type" content="article">
-    <meta property="og:image" content="../../assets/images/og-image.png">
+        <meta property="og:image" content="../../assets/images/og-image.png">
     <meta property="og:site_name" content="loczb">
-    
-    
-    
-    <link rel="stylesheet" href="../../assets/css/style.css">
-    <link rel="stylesheet" href="../../assets/css/article.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500;600&display=swap" media="print" onload="this.media='all'">
-<link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
-    <link rel="alternate icon" href="../../assets/images/favicon.ico">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="RAG 本地实践：用 Ollama + Embedding 搭建私有知识库 | 张小猛 - loczb">
+    <meta name="twitter:description" content="RAG 本地实践：用 Ollama + Embedding 搭建私有知识库，实现完全离线的智能问答">
 
-    <script type="application/ld+json">
-    {
+    
+        <script type="application/ld+json">
+{
       "@context": "https://schema.org",
       "@type": "Article",
       "headline": "RAG 本地实践：用 Ollama + Embedding 搭建私有知识库",
@@ -57,7 +51,15 @@
       "inLanguage": "zh-CN"
     }
     </script>
-  </head>
+    
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/article.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500;600&display=swap" media="print" onload="this.media='all'">
+    <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
+    <link rel="alternate icon" href="../../assets/images/favicon.ico">
+</head>
 <body>
   <!-- Loading -->
   <div class="loading">
@@ -100,13 +102,13 @@
 
       <article class="post-content">
         <h1>RAG 本地实践：用 Ollama + Embedding 搭建私有知识库</h1>
-      
-      <div class="post-meta">
+        
+        <div class="post-meta">
           <span>📅 2026-04-07</span>
           <span>⏱️ 15 min read</span>
           <span>👤 张小猛</span>
         </div>
-
+        
         <div class="post-tags">
           <span class="tag">RAG</span>
           <span class="tag">Ollama</span>
@@ -114,8 +116,8 @@
           <span class="tag">向量数据库</span>
           <span class="tag">本地部署</span>
         </div>
-
-      <p>大模型虽然强大，但有两个致命弱点：<strong>知识截止</strong>和<strong>幻觉问题</strong>。RAG（Retrieval-Augmented Generation，检索增强生成）通过在回答前检索相关知识，有效解决了这两个问题。</p>
+        
+        <p>大模型虽然强大，但有两个致命弱点：<strong>知识截止</strong>和<strong>幻觉问题</strong>。RAG（Retrieval-Augmented Generation，检索增强生成）通过在回答前检索相关知识，有效解决了这两个问题。</p>
 
       <p>但云端 RAG 服务存在隐私风险。本文介绍如何<strong>完全本地化</strong>搭建 RAG 系统，数据不出本机，同时获得接近 GPT-4 的问答体验。</p>
 
@@ -306,7 +308,6 @@ if question:
   </button>
   <div class="reading-progress" id="readingProgress"></div>
 
-
   <!-- Post TOC -->
   <div class="post-toc-container" id="postToc">
     <nav class="post-toc">
@@ -315,7 +316,6 @@ if question:
       </ul>
     </nav>
   </div>
-
 <script src="../../assets/js/particles.js"></script>
 </body>
 </html>
