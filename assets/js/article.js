@@ -1,6 +1,6 @@
 /**
  * article.js - 文章页专用脚本
- * 包含：返回顶部、阅读进度、键盘快捷键、TOC 目录
+ * 包含：返回顶部、阅读进度、键盘快捷键、TOC 目录、手机端 TOC 抽屉
  */
 
 (function() {
@@ -38,11 +38,16 @@
     document.addEventListener('keydown', (e) => {
       if (e.key === 'j') window.scrollBy({ top: 200, behavior: 'smooth' });
       else if (e.key === 'k') window.scrollBy({ top: -200, behavior: 'smooth' });
-      else if (e.key === 'Escape') document.getElementById('blog-search-results')?.classList.remove('active');
+      else if (e.key === 'Escape') {
+        document.getElementById('blog-search-results')?.classList.remove('active');
+        // 关闭手机端 TOC 抽屉
+        document.querySelector('.toc-drawer')?.classList.remove('open');
+        document.querySelector('.toc-drawer-overlay')?.classList.remove('open');
+      }
       else if (e.altKey && e.key === 'b') window.location.href = '../index.html';
     });
 
-    // === TOC 目录 ===
+    // === TOC 目录（桌面端） ===
     const tocList = document.getElementById('tocList');
     const tocContainer = document.getElementById('postToc');
     if (!tocList || !tocContainer) return;
@@ -89,5 +94,68 @@
     }, { rootMargin: '-20% 0px -60% 0px' });
 
     headings.forEach(h => observer.observe(h));
+
+    // === 手机端 TOC 按钮 & 抽屉 ===
+    (function() {
+      // 创建手机端 TOC 按钮
+      const tocBtn = document.createElement('button');
+      tocBtn.className = 'mobile-toc-btn';
+      tocBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>';
+      tocBtn.setAttribute('aria-label', '显示目录');
+
+      // 创建抽屉
+      const drawer = document.createElement('div');
+      drawer.className = 'toc-drawer';
+      drawer.innerHTML = `
+        <div class="toc-drawer-header">
+          <span class="toc-drawer-title">目录</span>
+          <button class="toc-drawer-close" aria-label="关闭目录">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 6L6 18M6 6l12 12"/>
+            </svg>
+          </button>
+        </div>
+        <ul class="post-toc-list"></ul>
+      `;
+
+      // 创建遮罩层
+      const overlay = document.createElement('div');
+      overlay.className = 'toc-drawer-overlay';
+
+      // 把目录项复制到抽屉
+      const drawerList = drawer.querySelector('.post-toc-list');
+      const originalItems = tocList.querySelectorAll('li');
+      originalItems.forEach(item => {
+        drawerList.appendChild(item.cloneNode(true));
+      });
+
+      // 添加到页面
+      document.body.appendChild(tocBtn);
+      document.body.appendChild(drawer);
+      document.body.appendChild(overlay);
+
+      // 事件处理
+      const openDrawer = () => {
+        drawer.classList.add('open');
+        overlay.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      };
+      const closeDrawer = () => {
+        drawer.classList.remove('open');
+        overlay.classList.remove('open');
+        document.body.style.overflow = '';
+      };
+
+      tocBtn.addEventListener('click', openDrawer);
+      overlay.addEventListener('click', closeDrawer);
+      drawer.querySelector('.toc-drawer-close').addEventListener('click', closeDrawer);
+
+      // 抽屉内链接点击后关闭
+      drawerList.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+          closeDrawer();
+        });
+      });
+    })();
   });
 })();
