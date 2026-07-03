@@ -12,21 +12,15 @@
     <meta property="og:description" content="React Server Components 深入解析：理解服务端组件的工作原理、数据获取方式、与客户端组件的交互，以及最佳实践">
     <meta property="og:url" content="https://709527.xyz/blog/posts/react-server-components.html">
     <meta property="og:type" content="article">
-    <meta property="og:image" content="../../assets/images/og-image.png">
+        <meta property="og:image" content="../../assets/images/og-image.png">
     <meta property="og:site_name" content="loczb">
-    
-    
-    
-    <link rel="stylesheet" href="../../assets/css/style.css">
-    <link rel="stylesheet" href="../../assets/css/article.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500;600&display=swap" media="print" onload="this.media='all'">
-<link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
-    <link rel="alternate icon" href="../../assets/images/favicon.ico">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="React Server Components 深入解析 | 张小猛 - loczb">
+    <meta name="twitter:description" content="React Server Components 深入解析：理解服务端组件的工作原理、数据获取方式、与客户端组件的交互，以及最佳实践">
 
-    <script type="application/ld+json">
-    {
+    
+        <script type="application/ld+json">
+{
       "@context": "https://schema.org",
       "@type": "Article",
       "headline": "React Server Components 深入解析",
@@ -57,7 +51,15 @@
       "inLanguage": "zh-CN"
     }
     </script>
-  </head>
+    
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/article.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500;600&display=swap" media="print" onload="this.media='all'">
+    <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
+    <link rel="alternate icon" href="../../assets/images/favicon.ico">
+</head>
 <body>
   <!-- Loading -->
   <div class="loading">
@@ -100,21 +102,21 @@
 
       <article class="post-content">
         <h1>React Server Components 深入解析</h1>
-      
-      <div class="post-meta">
+        
+        <div class="post-meta">
           <span>📅 2026-04-26</span>
           <span>⏱️ 15 min read</span>
           <span>👤 张小猛</span>
         </div>
-
+        
         <div class="post-tags">
           <span class="tag">React</span>
           <span class="tag">Server Components</span>
           <span class="tag">Next.js</span>
           <span class="tag">前端架构</span>
         </div>
-
-      <p>React Server Components（RSC）是 React 19 的核心特性，也是 Next.js App Router 的基础。它彻底改变了我们构建 React 应用的方式，将组件分为服务端和客户端两种类型，各自有不同的职责和限制。</p>
+        
+        <p>React Server Components（RSC）是 React 19 的核心特性，也是 Next.js App Router 的基础。它彻底改变了我们构建 React 应用的方式，将组件分为服务端和客户端两种类型，各自有不同的职责和限制。</p>
 
       <div class="tip-box">
         <strong>核心概念</strong>：Server Components 在服务端渲染，不发送 JavaScript 到客户端；Client Components 在客户端渲染，可以使用状态和交互。
@@ -454,7 +456,6 @@ function ClientButton() {
   </button>
   <div class="reading-progress" id="readingProgress"></div>
 
-
   <!-- Post TOC -->
   <div class="post-toc-container" id="postToc">
     <nav class="post-toc">
@@ -463,7 +464,6 @@ function ClientButton() {
       </ul>
     </nav>
   </div>
-
 <script src="../../assets/js/particles.js"></script>
 </body>
 </html>

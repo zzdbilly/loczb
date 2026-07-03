@@ -12,21 +12,15 @@
     <meta property="og:description" content="Go 并发模式深度解析：Goroutine 与 Channel 实战、GMP 调度模型、Context 包详解、Fan-Out/Fan-In 模式、并发测试最佳实践">
     <meta property="og:url" content="https://709527.xyz/blog/posts/go-concurrency-patterns.html">
     <meta property="og:type" content="article">
-    <meta property="og:image" content="../../assets/images/og-image.png">
+        <meta property="og:image" content="../../assets/images/og-image.png">
     <meta property="og:site_name" content="loczb">
-    
-    
-    
-    <link rel="stylesheet" href="../../assets/css/style.css">
-    <link rel="stylesheet" href="../../assets/css/article.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500;600&display=swap" media="print" onload="this.media='all'">
-<link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
-    <link rel="alternate icon" href="../../assets/images/favicon.ico">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Go 并发模式：Channel 与 Context | 张小猛 - loczb">
+    <meta name="twitter:description" content="Go 并发模式深度解析：Goroutine 与 Channel 实战、GMP 调度模型、Context 包详解、Fan-Out/Fan-In 模式、并发测试最佳实践">
 
-    <script type="application/ld+json">
-    {
+    
+        <script type="application/ld+json">
+{
       "@context": "https://schema.org",
       "@type": "Article",
       "headline": "Go 并发模式：Channel 与 Context",
@@ -57,7 +51,15 @@
       "inLanguage": "zh-CN"
     }
     </script>
-  </head>
+    
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/article.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500;600&display=swap" media="print" onload="this.media='all'">
+    <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
+    <link rel="alternate icon" href="../../assets/images/favicon.ico">
+</head>
 <body>
   <!-- Loading -->
   <div class="loading">
@@ -100,13 +102,13 @@
 
       <article class="post-content">
         <h1>Go 并发模式：Channel 与 Context</h1>
-      
-      <div class="post-meta">
+        
+        <div class="post-meta">
           <span>📅 2026-06-27</span>
           <span>⏱️ 18 min read</span>
           <span>👤 张小猛</span>
         </div>
-
+        
         <div class="post-tags">
           <span class="tag">Go</span>
           <span class="tag">Golang</span>
@@ -115,8 +117,8 @@
           <span class="tag">Channel</span>
           <span class="tag">Context</span>
         </div>
-
-      <p>Go 语言从诞生之初就以并发编程为核心设计理念。"Don't communicate by sharing memory; share memory by communicating"——这句话不是口号，而是 Go 并发哲学的全部。Goroutine 让并发变得廉价，Channel 让通信变得安全，Context 让取消变得优雅。</p>
+        
+        <p>Go 语言从诞生之初就以并发编程为核心设计理念。"Don't communicate by sharing memory; share memory by communicating"——这句话不是口号，而是 Go 并发哲学的全部。Goroutine 让并发变得廉价，Channel 让通信变得安全，Context 让取消变得优雅。</p>
 
       <p>本文从底层调度模型到上层并发模式，系统梳理 Go 并发编程的核心知识。</p>
 
@@ -1000,7 +1002,6 @@ func TestNoLeak(t *testing.T) {
   </button>
   <div class="reading-progress" id="readingProgress"></div>
 
-
   <!-- Post TOC -->
   <div class="post-toc-container" id="postToc">
     <nav class="post-toc">
@@ -1009,7 +1010,6 @@ func TestNoLeak(t *testing.T) {
       </ul>
     </nav>
   </div>
-
 <script src="../../assets/js/particles.js"></script>
 </body>
 </html>

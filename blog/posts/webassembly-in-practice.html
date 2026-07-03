@@ -12,21 +12,15 @@
     <meta property="og:description" content="WebAssembly 实战指南：从 C/Rust 编译到浏览器运行，WASM 与 JS 互操作、内存管理、性能优化与真实应用场景">
     <meta property="og:url" content="https://709527.xyz/blog/posts/webassembly-in-practice.html">
     <meta property="og:type" content="article">
-    <meta property="og:image" content="../../assets/images/og-image.png">
+        <meta property="og:image" content="../../assets/images/og-image.png">
     <meta property="og:site_name" content="loczb">
-    
-    
-    
-    <link rel="stylesheet" href="../../assets/css/style.css">
-    <link rel="stylesheet" href="../../assets/css/article.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500;600&display=swap" media="print" onload="this.media='all'">
-<link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
-    <link rel="alternate icon" href="../../assets/images/favicon.ico">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="WebAssembly 实战：浏览器端高性能计算 | 张小猛 - loczb">
+    <meta name="twitter:description" content="WebAssembly 实战指南：从 C/Rust 编译到浏览器运行，WASM 与 JS 互操作、内存管理、性能优化与真实应用场景">
 
-    <script type="application/ld+json">
-    {
+    
+        <script type="application/ld+json">
+{
       "@context": "https://schema.org",
       "@type": "Article",
       "headline": "WebAssembly 实战：浏览器端高性能计算",
@@ -57,7 +51,15 @@
       "inLanguage": "zh-CN"
     }
     </script>
-  </head>
+    
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/article.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500;600&display=swap" media="print" onload="this.media='all'">
+    <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
+    <link rel="alternate icon" href="../../assets/images/favicon.ico">
+</head>
 <body>
   <!-- Loading -->
   <div class="loading">
@@ -100,13 +102,13 @@
 
       <article class="post-content">
         <h1>WebAssembly 实战：浏览器端高性能计算</h1>
-      
-      <div class="post-meta">
+        
+        <div class="post-meta">
           <span>📅 2026-06-27</span>
           <span>⏱️ 16 min read</span>
           <span>👤 张小猛</span>
         </div>
-
+        
         <div class="post-tags">
           <span class="tag">WebAssembly</span>
           <span class="tag">Rust</span>
@@ -114,8 +116,8 @@
           <span class="tag">WASM</span>
           <span class="tag">浏览器</span>
         </div>
-
-      <p>JavaScript 统治浏览器 20 多年，但在图像处理、音视频编解码、科学计算等场景下，它的性能始终有瓶颈。WebAssembly（WASM）的出现改变了一切——你可以用 C、C++、Rust 等编译型语言编写高性能逻辑，编译后在浏览器中以接近原生的速度运行。本文从实战角度出发，带你完成从编写到部署的全流程。</p>
+        
+        <p>JavaScript 统治浏览器 20 多年，但在图像处理、音视频编解码、科学计算等场景下，它的性能始终有瓶颈。WebAssembly（WASM）的出现改变了一切——你可以用 C、C++、Rust 等编译型语言编写高性能逻辑，编译后在浏览器中以接近原生的速度运行。本文从实战角度出发，带你完成从编写到部署的全流程。</p>
 
       <div class="tip-box">
         <strong>适合谁读</strong>：前端开发者想突破 JS 性能瓶颈、后端/系统程序员想把能力搬到浏览器、对 WASM 感兴趣但不知如何下手的工程师。
@@ -621,7 +623,6 @@ const { instance } = await WebAssembly.instantiateStreaming(
   </button>
   <div class="reading-progress" id="readingProgress"></div>
 
-
   <!-- Post TOC -->
   <div class="post-toc-container" id="postToc">
     <nav class="post-toc">
@@ -630,7 +631,6 @@ const { instance } = await WebAssembly.instantiateStreaming(
       </ul>
     </nav>
   </div>
-
 <script src="../../assets/js/particles.js"></script>
 </body>
 </html>

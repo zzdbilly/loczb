@@ -12,21 +12,15 @@
     <meta property="og:description" content="Kotlin Multiplatform 实战：将 Android 业务逻辑共享到 iOS - 架构设计、expect/actual、网络层、数据层完整实现">
     <meta property="og:url" content="https://709527.xyz/blog/posts/kotlin-multiplatform-practice.html">
     <meta property="og:type" content="article">
-    <meta property="og:image" content="../../assets/images/og-image.png">
+        <meta property="og:image" content="../../assets/images/og-image.png">
     <meta property="og:site_name" content="loczb">
-    
-    
-    
-    <link rel="stylesheet" href="../../assets/css/style.css">
-    <link rel="stylesheet" href="../../assets/css/article.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500;600&display=swap" media="print" onload="this.media='all'">
-<link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
-    <link rel="alternate icon" href="../../assets/images/favicon.ico">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Kotlin Multiplatform 实战：共享业务逻辑到 iOS | 张小猛 - loczb">
+    <meta name="twitter:description" content="Kotlin Multiplatform 实战：将 Android 业务逻辑共享到 iOS - 架构设计、expect/actual、网络层、数据层完整实现">
 
-    <script type="application/ld+json">
-    {
+    
+        <script type="application/ld+json">
+{
       "@context": "https://schema.org",
       "@type": "Article",
       "headline": "Kotlin Multiplatform 实战：共享业务逻辑到 iOS",
@@ -57,7 +51,15 @@
       "inLanguage": "zh-CN"
     }
     </script>
-  </head>
+    
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/article.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500;600&display=swap" media="print" onload="this.media='all'">
+    <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
+    <link rel="alternate icon" href="../../assets/images/favicon.ico">
+</head>
 <body>
   <!-- Loading -->
   <div class="loading">
@@ -100,13 +102,13 @@
 
       <article class="post-content">
         <h1>Kotlin Multiplatform 实战：共享业务逻辑到 iOS</h1>
-      
-      <div class="post-meta">
+        
+        <div class="post-meta">
           <span>📅 2026-06-24</span>
           <span>⏱️ 22 min read</span>
           <span>👤 张小猛</span>
         </div>
-
+        
         <div class="post-tags">
           <span class="tag">Kotlin Multiplatform</span>
           <span class="tag">KMP</span>
@@ -115,8 +117,8 @@
           <span class="tag">跨平台</span>
           <span class="tag">Ktor</span>
         </div>
-
-      <p>Kotlin Multiplatform（KMP）已经从「实验特性」进化到「生产可用」。2024 年 Google 宣布 KMP 成为 Android 官方推荐的跨平台方案，2026 年 Compose Multiplatform for iOS 进入 Stable，KMP 的生态已经成熟到可以认真考虑在商业项目中使用了。</p>
+        
+        <p>Kotlin Multiplatform（KMP）已经从「实验特性」进化到「生产可用」。2024 年 Google 宣布 KMP 成为 Android 官方推荐的跨平台方案，2026 年 Compose Multiplatform for iOS 进入 Stable，KMP 的生态已经成熟到可以认真考虑在商业项目中使用了。</p>
 
       <p>但对很多 Android 开发者来说，KMP 仍然是个模糊的概念——知道能跨平台，但不知道从哪里下手。这篇文章就是为你准备的：<strong>从一个纯 Android 项目出发，逐步把业务逻辑抽到 shared module，最终让 iOS 端也能调用</strong>。</p>
 
@@ -847,7 +849,6 @@ val localDate = now.toLocalDateTime(TimeZone.currentSystemDefault())</code></pre
   </button>
   <div class="reading-progress" id="readingProgress"></div>
 
-
   <!-- Post TOC -->
   <div class="post-toc-container" id="postToc">
     <nav class="post-toc">
@@ -856,7 +857,6 @@ val localDate = now.toLocalDateTime(TimeZone.currentSystemDefault())</code></pre
       </ul>
     </nav>
   </div>
-
 <script src="../../assets/js/particles.js"></script>
 </body>
 </html>

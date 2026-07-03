@@ -12,21 +12,15 @@
     <meta property="og:description" content="PostgreSQL 索引优化实战：B-Tree、GiST、GIN 索引类型对比，复合索引、部分索引设计，EXPLAIN 执行计划分析与慢查询优化">
     <meta property="og:url" content="https://709527.xyz/blog/posts/postgresql-index-optimization.html">
     <meta property="og:type" content="article">
-    <meta property="og:image" content="../../assets/images/og-image.png">
+        <meta property="og:image" content="../../assets/images/og-image.png">
     <meta property="og:site_name" content="loczb">
-    
-    
-    
-    <link rel="stylesheet" href="../../assets/css/style.css">
-    <link rel="stylesheet" href="../../assets/css/article.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500;600&display=swap" media="print" onload="this.media='all'">
-<link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
-    <link rel="alternate icon" href="../../assets/images/favicon.ico">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="PostgreSQL 索引优化实战 | 张小猛 - loczb">
+    <meta name="twitter:description" content="PostgreSQL 索引优化实战：B-Tree、GiST、GIN 索引类型对比，复合索引、部分索引设计，EXPLAIN 执行计划分析与慢查询优化">
 
-    <script type="application/ld+json">
-    {
+    
+        <script type="application/ld+json">
+{
       "@context": "https://schema.org",
       "@type": "Article",
       "headline": "PostgreSQL 索引优化实战",
@@ -57,7 +51,15 @@
       "inLanguage": "zh-CN"
     }
     </script>
-  </head>
+    
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/article.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500;600&display=swap" media="print" onload="this.media='all'">
+    <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
+    <link rel="alternate icon" href="../../assets/images/favicon.ico">
+</head>
 <body>
   <!-- Loading -->
   <div class="loading">
@@ -100,13 +102,13 @@
 
       <article class="post-content">
         <h1>PostgreSQL 索引优化实战</h1>
-      
-      <div class="post-meta">
+        
+        <div class="post-meta">
           <span>📅 2026-06-27</span>
           <span>⏱️ 20 min read</span>
           <span>👤 张小猛</span>
         </div>
-
+        
         <div class="post-tags">
           <span class="tag">PostgreSQL</span>
           <span class="tag">索引优化</span>
@@ -116,8 +118,8 @@
           <span class="tag">慢查询</span>
           <span class="tag">数据库</span>
         </div>
-
-      <p>数据库性能优化中，索引是最重要的手段——没有之一。PostgreSQL 提供了丰富的索引类型和灵活的索引策略，但用错了比不用更糟：不仅查询没变快，写入还变慢了，磁盘空间也白白浪费。</p>
+        
+        <p>数据库性能优化中，索引是最重要的手段——没有之一。PostgreSQL 提供了丰富的索引类型和灵活的索引策略，但用错了比不用更糟：不仅查询没变快，写入还变慢了，磁盘空间也白白浪费。</p>
 
       <p>本文从索引类型对比开始，逐步深入复合索引设计、部分索引、覆盖索引、执行计划分析，最后通过真实慢查询案例串联全部知识。</p>
 
@@ -1196,7 +1198,6 @@ SELECT * FROM orders WHERE id &gt; 999980 ORDER BY id LIMIT 21;
   </button>
   <div class="reading-progress" id="readingProgress"></div>
 
-
   <!-- Post TOC -->
   <div class="post-toc-container" id="postToc">
     <nav class="post-toc">
@@ -1205,7 +1206,6 @@ SELECT * FROM orders WHERE id &gt; 999980 ORDER BY id LIMIT 21;
       </ul>
     </nav>
   </div>
-
 <script src="../../assets/js/particles.js"></script>
 </body>
 </html>

@@ -12,21 +12,15 @@
     <meta property="og:description" content="Android Gradle 从 Groovy 迁移到 Kotlin DSL (KTS) 完整指南 - 语法对比、迁移步骤、踩坑记录与最佳实践">
     <meta property="og:url" content="https://709527.xyz/blog/posts/android-gradle-kts-migration.html">
     <meta property="og:type" content="article">
-    <meta property="og:image" content="../../assets/images/og-image.png">
+        <meta property="og:image" content="../../assets/images/og-image.png">
     <meta property="og:site_name" content="loczb">
-    
-    
-    
-    <link rel="stylesheet" href="../../assets/css/style.css">
-    <link rel="stylesheet" href="../../assets/css/article.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500;600&display=swap" media="print" onload="this.media='all'">
-<link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
-    <link rel="alternate icon" href="../../assets/images/favicon.ico">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Android Gradle 迁移到 KTS 完整指南：从 Groovy 到 Kotlin DSL | 张小猛 - loczb">
+    <meta name="twitter:description" content="Android Gradle 从 Groovy 迁移到 Kotlin DSL (KTS) 完整指南 - 语法对比、迁移步骤、踩坑记录与最佳实践">
 
-    <script type="application/ld+json">
-    {
+    
+        <script type="application/ld+json">
+{
       "@context": "https://schema.org",
       "@type": "Article",
       "headline": "Android Gradle 迁移到 KTS 完整指南：从 Groovy 到 Kotlin DSL",
@@ -57,7 +51,15 @@
       "inLanguage": "zh-CN"
     }
     </script>
-  </head>
+    
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/article.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500;600&display=swap" media="print" onload="this.media='all'">
+    <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
+    <link rel="alternate icon" href="../../assets/images/favicon.ico">
+</head>
 <body>
   <!-- Loading -->
   <div class="loading">
@@ -100,13 +102,13 @@
 
       <article class="post-content">
         <h1>Android Gradle 迁移到 KTS 完整指南：从 Groovy 到 Kotlin DSL</h1>
-      
-      <div class="post-meta">
+        
+        <div class="post-meta">
           <span>📅 2026-06-24</span>
           <span>⏱️ 18 min read</span>
           <span>👤 张小猛</span>
         </div>
-
+        
         <div class="post-tags">
           <span class="tag">Android</span>
           <span class="tag">Gradle</span>
@@ -114,8 +116,8 @@
           <span class="tag">Kotlin DSL</span>
           <span class="tag">构建优化</span>
         </div>
-
-      <p>Android 项目的 Gradle 构建脚本，长期以来都是用 Groovy 写的（<code>.gradle</code> 文件）。但自从 Gradle 引入 Kotlin DSL 后，越来越多的项目开始迁移到 <code>.gradle.kts</code>。Google 官方也在 Android Studio 的新项目模板中默认使用 KTS。</p>
+        
+        <p>Android 项目的 Gradle 构建脚本，长期以来都是用 Groovy 写的（<code>.gradle</code> 文件）。但自从 Gradle 引入 Kotlin DSL 后，越来越多的项目开始迁移到 <code>.gradle.kts</code>。Google 官方也在 Android Studio 的新项目模板中默认使用 KTS。</p>
 
       <p>为什么要迁移？三个核心原因：</p>
 
@@ -853,7 +855,6 @@ android {
   </button>
   <div class="reading-progress" id="readingProgress"></div>
 
-
   <!-- Post TOC -->
   <div class="post-toc-container" id="postToc">
     <nav class="post-toc">
@@ -862,7 +863,6 @@ android {
       </ul>
     </nav>
   </div>
-
 <script src="../../assets/js/particles.js"></script>
 </body>
 </html>

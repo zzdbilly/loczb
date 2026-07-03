@@ -12,21 +12,15 @@
     <meta property="og:description" content="HTTPS 与 TLS 1.3 深度解析：握手流程、ECDHE 密钥交换、证书体系、性能优化与 Nginx 配置最佳实践">
     <meta property="og:url" content="https://709527.xyz/blog/posts/https-tls13-deep-dive.html">
     <meta property="og:type" content="article">
-    <meta property="og:image" content="../../assets/images/og-image.png">
+        <meta property="og:image" content="../../assets/images/og-image.png">
     <meta property="og:site_name" content="loczb">
-    
-    
-    
-    <link rel="stylesheet" href="../../assets/css/style.css">
-    <link rel="stylesheet" href="../../assets/css/article.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500;600&display=swap" media="print" onload="this.media='all'">
-<link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
-    <link rel="alternate icon" href="../../assets/images/favicon.ico">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="HTTPS 与 TLS 1.3 深度解析 | 张小猛 - loczb">
+    <meta name="twitter:description" content="HTTPS 与 TLS 1.3 深度解析：握手流程、ECDHE 密钥交换、证书体系、性能优化与 Nginx 配置最佳实践">
 
-    <script type="application/ld+json">
-    {
+    
+        <script type="application/ld+json">
+{
       "@context": "https://schema.org",
       "@type": "Article",
       "headline": "HTTPS 与 TLS 1.3 深度解析",
@@ -57,7 +51,15 @@
       "inLanguage": "zh-CN"
     }
     </script>
-  </head>
+    
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/article.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500;600&display=swap" media="print" onload="this.media='all'">
+    <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
+    <link rel="alternate icon" href="../../assets/images/favicon.ico">
+</head>
 <body>
   <!-- Loading -->
   <div class="loading">
@@ -100,21 +102,21 @@
 
       <article class="post-content">
         <h1>HTTPS 与 TLS 1.3 深度解析</h1>
-      
-      <div class="post-meta">
+        
+        <div class="post-meta">
           <span>📅 2026-06-27</span>
           <span>⏱️ 20 min read</span>
           <span>👤 张小猛</span>
         </div>
-
+        
         <div class="post-tags">
           <span class="tag">安全</span>
           <span class="tag">HTTPS</span>
           <span class="tag">TLS 1.3</span>
           <span class="tag">Nginx</span>
         </div>
-
-      <p>当你在浏览器地址栏看到那把小锁图标时，背后是一场精密的密码学协作——TLS 协议在几十毫秒内完成了身份验证、密钥协商和加密通道建立。而 TLS 1.3 的出现，让这个过程更快、更安全、更简洁。</p>
+        
+        <p>当你在浏览器地址栏看到那把小锁图标时，背后是一场精密的密码学协作——TLS 协议在几十毫秒内完成了身份验证、密钥协商和加密通道建立。而 TLS 1.3 的出现，让这个过程更快、更安全、更简洁。</p>
 
       <p>本文从 SSL/TLS 的历史演进出发，深入解析 TLS 1.3 的握手流程、ECDHE 密钥交换、证书体系、性能优化与 Nginx 配置最佳实践。</p>
 
@@ -863,7 +865,6 @@ curl -sI https://example.com | grep Strict-Transport-Security</code></pre>
   </button>
   <div class="reading-progress" id="readingProgress"></div>
 
-
   <!-- Post TOC -->
   <div class="post-toc-container" id="postToc">
     <nav class="post-toc">
@@ -872,7 +873,6 @@ curl -sI https://example.com | grep Strict-Transport-Security</code></pre>
       </ul>
     </nav>
   </div>
-
 <script src="../../assets/js/particles.js"></script>
 </body>
 </html>
