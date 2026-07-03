@@ -1,7 +1,7 @@
 /* 文章页专用样式 - 从内联样式抽离 */
 /* 注意：post-toc-container / post-toc / post-toc-list 等 TOC 样式在 style.css 中定义，此处不重复 */
 
-    .arch-diagram { background: var(--color-bg-tertiary); border-radius: 12px; padding: 1.5rem; margin: 2rem 0; font-family: monospace; font-size: 0.85rem; line-height: 1.6; overflow-x: auto; white-space: pre; }
+    .arch-diagram { background: var(--color-bg-tertiary); border-radius: 12px; padding: 1.5rem; margin: 2rem 0; font-family: var(--font-mono); font-size: 0.85rem; line-height: 1.6; overflow-x: auto; white-space: pre; }
 
     .back-link svg { width: 16px; height: 16px; }
 
@@ -45,9 +45,7 @@
 
     .info-box { background: rgba(59, 130, 246, 0.1); border-left: 3px solid #3b82f6; padding: 1rem 1.2rem; margin: 1.5rem 0; border-radius: 0 6px 6px 0; }
 
-    .post-content code { background: var(--color-bg-tertiary); padding: 0.15rem 0.4rem; border-radius: 4px; font-family: monospace; font-size: 0.9em; }
-
-    .post-content code { background: var(--color-bg-tertiary); padding: 0.15rem 0.4rem; border-radius: 4px; font-family: monospace; font-size: 0.9em;}
+    .post-content code { background: var(--color-bg-tertiary); padding: 0.15rem 0.4rem; border-radius: 4px; font-family: var(--font-mono); font-size: 0.9em; }
 
     .post-content h1 { font-size: 2.4rem; margin: 2rem 0 1rem; }
 
@@ -57,7 +55,7 @@
 
     .post-content pre code { line-height: 1.5; display: block; }
 
-    .post-content pre { background: var(--color-bg-tertiary); padding: 1.2rem 1.2rem 1.2rem 1.5rem; border-radius: 8px; overflow-x: auto; margin: 0; font-size: 0.9rem; white-space: pre; text-indent: 0; line-height: 1.5; font-family: Consolas, "Courier New", monospace; -webkit-padding-start: 1.5rem; -moz-padding-start: 1.5rem; padding-left: 1.5rem; }
+    .post-content pre { background: var(--color-bg-tertiary); padding: 1.2rem 1.2rem 1.2rem 1.5rem; border-radius: 8px; overflow-x: auto; margin: 0; font-size: 0.9rem; white-space: pre; text-indent: 0; line-height: 1.5; font-family: var(--font-mono); -webkit-padding-start: 1.5rem; -moz-padding-start: 1.5rem; padding-left: 1.5rem; }
 
     .post-meta { color: var(--color-text-secondary); font-size: 0.9rem; margin-bottom: 2rem; }
 
