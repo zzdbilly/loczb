@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+  <script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>静态博客性能优化实战：从 59MB 到精简高效 | 张小猛 - loczb</title>
+    <meta name="description" content="66篇文章4KB重复内联样式、4.4MB死文件、404幽灵引用——一次完整的静态博客性能优化记录">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="静态博客性能优化实战：从 59MB 到精简高效 | 张小猛 - loczb">
+    <meta property="og:description" content="66篇文章4KB重复内联样式、4.4MB死文件、404幽灵引用——一次完整的静态博客性能优化记录">
+    <meta property="og:url" content="https://709527.xyz/blog/posts/静态博客性能优化实战从-59mb-到精简高效.html">
+    <meta property="og:type" content="article">
+        <meta property="og:image" content="../../assets/images/og-image.png">
+    <meta property="og:site_name" content="loczb">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="静态博客性能优化实战：从 59MB 到精简高效 | 张小猛 - loczb">
+    <meta name="twitter:description" content="66篇文章4KB重复内联样式、4.4MB死文件、404幽灵引用——一次完整的静态博客性能优化记录">
+
+    
+        <script type="application/ld+json">
+{
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "静态博客性能优化实战：从 59MB 到精简高效",
+      "description": "66篇文章4KB重复内联样式、4.4MB死文件、404幽灵引用——一次完整的静态博客性能优化记录",
+      "image": "https://709527.xyz/assets/images/og-image.png",
+      "author": {
+            "@type": "Person",
+            "name": "张小猛",
+            "url": "https://709527.xyz/about/"
+      },
+      "publisher": {
+            "@type": "Organization",
+            "name": "loczb",
+            "logo": {
+                  "@type": "ImageObject",
+                  "url": "https://709527.xyz/assets/images/favicon.svg"
+            }
+      },
+      "datePublished": "2026-07-03T00:00:00+08:00",
+      "dateModified": "2026-07-03T00:00:00+08:00",
+      "url": "https://709527.xyz/blog/posts/静态博客性能优化实战从-59mb-到精简高效.html",
+      "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://709527.xyz/blog/posts/静态博客性能优化实战从-59mb-到精简高效.html"
+      },
+      "keywords": "性能优化, 静态网站, GitHub Pages, 前端优化, CSS, JavaScript",
+      "articleSection": "前端",
+      "timeRequired": "PT15M",
+      "inLanguage": "zh-CN"
+}
+    </script>
+    
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/article.css">
+    <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
+    <link rel="alternate icon" href="../../assets/images/favicon.ico">
+</head>
+<body>
+  <!-- Loading -->
+  <div class="loading">
+    <div class="loading-spinner"></div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../../index.html" class="nav-logo">
+        loc<span>zb</span>
+      </a>
+      <button class="nav-toggle" aria-label="打开菜单" aria-expanded="false" aria-controls="nav-links-menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <div class="nav-overlay"></div>
+      <ul class="nav-links" id="nav-links-menu">
+        <li><a href="../../index.html" class="nav-link">首页</a></li>
+        <li><a href="../../projects/index.html" class="nav-link">项目</a></li>
+        <li><a href="../index.html" class="nav-link active">博客</a></li>
+        <li><a href="../../about/index.html" class="nav-link">关于</a></li>
+      </ul>
+    </div>
+  </nav>
+  <!-- Particle Canvas Background -->
+  <canvas id="particle-canvas" class="particle-canvas"></canvas>
+
+  <div class="scroll-progress"></div>
+
+  <main class="section" style="padding-bottom: 0;">
+    <div class="container container-narrow">
+      <a href="../index.html" class="back-link">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        返回博客列表
+      </a>
+
+      <article class="post-content">
+        <h1>静态博客性能优化实战：从 59MB 到精简高效</h1>
+        
+        <div class="post-meta">
+          <span>📅 2026-07-03</span>
+          <span>⏱️ 15 min read</span>
+          <span>👤 张小猛</span>
+        </div>
+        
+        <div class="post-tags">
+          <span class="tag">性能优化</span>
+          <span class="tag">静态网站</span>
+          <span class="tag">GitHub Pages</span>
+          <span class="tag">前端优化</span>
+          <span class="tag">CSS</span>
+          <span class="tag">JavaScript</span>
+        </div>
+        
+        <h1>静态博客性能优化实战：从 59MB 到精简高效</h1>
+<h2>为什么需要性能优化</h2>
+<p>很多人觉得静态网站（如 GitHub Pages）天然就快，不需要优化。但实际情况是，随着内容增长，没有维护的静态站会积累大量问题：死文件占空间、内联样式膨胀、缓存策略缺失、404 错误拖慢加载……</p>
+<p>我的博客运行在 GitHub Pages 上，经过半年的内容积累，仓库膨胀到 59MB，66 篇文章每篇都带着 4KB 重复的内联样式，文章页引用着不存在的 JS 文件，社交分享图指向 404 图片。这些问题单个看起来不大，但叠加起来严重影响用户体验和 SEO。</p>
+<p>本文记录了一次完整的性能优化过程，涵盖文件清理、CSS/JS 优化、缓存策略、结构化数据等方面。</p>
+<h2>第一步：全面体检</h2>
+<h3>文件体积分析</h3>
+<p>优化的第一步是搞清楚现状。用 <code>du</code> 命令快速扫描：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 查看各目录体积</span>
+du<span class="w"> </span>-sh<span class="w"> </span>assets/<span class="w"> </span>blog/<span class="w"> </span>templates/
+
+<span class="c1"># 查看 JS 文件大小</span>
+du<span class="w"> </span>-h<span class="w"> </span>assets/js/*.js<span class="w"> </span><span class="p">|</span><span class="w"> </span>sort<span class="w"> </span>-rh
+
+<span class="c1"># 查看图片大小</span>
+find<span class="w"> </span>assets/images/<span class="w"> </span>-type<span class="w"> </span>f<span class="w"> </span>-exec<span class="w"> </span>du<span class="w"> </span>-h<span class="w"> </span><span class="o">{}</span><span class="w"> </span><span class="se">\;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sort<span class="w"> </span>-rh
+</code></pre></div>
+
+<p>扫描结果发现了几个明显的问题：</p>
+<ul>
+<li>仓库总体积 59MB，其中图片占了大部分</li>
+<li>有 4.4MB 的图片没有被任何页面引用</li>
+<li>有 20KB 的 JS 文件（ai-assistant.js、toc.js）没有被任何页面加载</li>
+<li>66 篇文章每篇都有约 4KB 的内联 <code>&lt;style&gt;</code> 块</li>
+</ul>
+<h3>死文件检测</h3>
+<p>检测死文件的核心思路是：遍历所有 HTML 文件中的引用，找出没有被引用的资源文件。</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 检查 JS 文件是否被引用</span>
+<span class="k">for</span><span class="w"> </span>js<span class="w"> </span><span class="k">in</span><span class="w"> </span>assets/js/*.js<span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span><span class="nv">name</span><span class="o">=</span><span class="k">$(</span>basename<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$js</span><span class="s2">&quot;</span><span class="k">)</span>
+<span class="w">  </span><span class="nv">count</span><span class="o">=</span><span class="k">$(</span>grep<span class="w"> </span>-rl<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$name</span><span class="s2">&quot;</span><span class="w"> </span>--include<span class="o">=</span><span class="s2">&quot;*.html&quot;</span><span class="w"> </span>.<span class="w"> </span><span class="p">|</span><span class="w"> </span>wc<span class="w"> </span>-l<span class="k">)</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$count</span><span class="s2">&quot;</span><span class="w"> </span>-eq<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;❌ 死文件: </span><span class="nv">$js</span><span class="s2">&quot;</span>
+<span class="w">  </span><span class="k">fi</span>
+<span class="k">done</span>
+</code></pre></div>
+
+<p>这个脚本可以快速找出没有被任何 HTML 文件引用的 JS 文件。同样的方法也适用于 CSS 和图片文件。</p>
+<h3>404 错误检测</h3>
+<p>比死文件更隐蔽的是"幽灵引用"——HTML 中引用了不存在的文件。这会导致浏览器请求返回 404，虽然不会直接报错，但会拖慢页面加载。</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 检查文章页引用的 JS 是否存在</span>
+<span class="k">for</span><span class="w"> </span>f<span class="w"> </span><span class="k">in</span><span class="w"> </span>blog/posts/*.html<span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span><span class="nv">refs</span><span class="o">=</span><span class="k">$(</span>grep<span class="w"> </span>-o<span class="w"> </span><span class="s1">&#39;src=&quot;[^&quot;]*\.js[^&quot;]*&quot;&#39;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$f</span><span class="s2">&quot;</span><span class="k">)</span>
+<span class="w">  </span><span class="k">for</span><span class="w"> </span>ref<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="nv">$refs</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">    </span><span class="nv">path</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$ref</span><span class="s2">&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sed<span class="w"> </span><span class="s1">&#39;s/src=&quot;//;s/&quot;//;s/..\///&#39;</span><span class="k">)</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>!<span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$path</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">      </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;❌ 404: </span><span class="nv">$f</span><span class="s2"> -&gt; </span><span class="nv">$ref</span><span class="s2">&quot;</span>
+<span class="w">    </span><span class="k">fi</span>
+<span class="w">  </span><span class="k">done</span>
+<span class="k">done</span>
+</code></pre></div>
+
+<p>通过这个检查，发现 66 篇文章都引用了一个不存在的 <code>og-generator.js</code> 文件。这个文件可能在某次重构中被删除了，但文章模板中的引用没有同步清理。</p>
+<h2>第二步：文件清理</h2>
+<h3>删除死文件</h3>
+<p>清理工作从最简单的开始——直接删除没有被引用的文件：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 删除未被引用的 JS</span>
+rm<span class="w"> </span>assets/js/ai-assistant.js<span class="w">    </span><span class="c1"># 16KB</span>
+rm<span class="w"> </span>assets/js/toc.js<span class="w">              </span><span class="c1"># 4KB</span>
+
+<span class="c1"># 删除未被引用的图片</span>
+rm<span class="w"> </span>assets/images/qwen_20260424_*.png<span class="w">  </span><span class="c1"># 4.4MB</span>
+</code></pre></div>
+
+<h3>修复幽灵引用</h3>
+<p>对于引用了不存在文件的幽灵引用，需要从所有 HTML 文件中移除这些引用：</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">re</span><span class="o">,</span><span class="w"> </span><span class="nn">os</span>
+
+<span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="s1">&#39;blog/posts&#39;</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">fname</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.html&#39;</span><span class="p">):</span>
+        <span class="k">continue</span>
+    <span class="n">fpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;blog/posts&#39;</span><span class="p">,</span> <span class="n">fname</span><span class="p">)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fpath</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">html</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+    <span class="c1"># 移除对不存在文件的引用</span>
+    <span class="n">new_html</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span>
+        <span class="sa">r</span><span class="s1">&#39;\s*&lt;script src=&quot;[^&quot;]*og-generator\.js[^&quot;]*&quot;\s*&gt;&lt;/script&gt;\s*\n?&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">html</span>
+    <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">new_html</span> <span class="o">!=</span> <span class="n">html</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fpath</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">new_html</span><span class="p">)</span>
+</code></pre></div>
+
+<h3>修复 og:image 路径</h3>
+<p>文章模板中的 Open Graph 图片指向了 <code>og-default.webp</code>，但实际文件是 <code>og-image.png</code>。这会导致社交分享时图片无法显示：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 批量修复 og:image 路径</span>
+<span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="s1">&#39;blog/posts&#39;</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">fname</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.html&#39;</span><span class="p">):</span>
+        <span class="k">continue</span>
+    <span class="n">fpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;blog/posts&#39;</span><span class="p">,</span> <span class="n">fname</span><span class="p">)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fpath</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">html</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+    <span class="n">html</span> <span class="o">=</span> <span class="n">html</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
+        <span class="s1">&#39;assets/images/og-default.webp&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;assets/images/og-image.png&#39;</span>
+    <span class="p">)</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fpath</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">html</span><span class="p">)</span>
+</code></pre></div>
+
+<h2>第三步：CSS 优化</h2>
+<h3>内联样式抽离</h3>
+<p>这是本次优化中收益最大的一项。66 篇文章每篇都有约 4KB 的内联 <code>&lt;style&gt;</code> 块，这些样式大部分是重复的（文章页专用样式如代码块高亮、提示框、表格等）。</p>
+<h4>问题分析</h4>
+<p>通过对比发现，66 篇文章的内联样式有 14 种变体，但核心内容几乎相同。去重后只有 6.7KB 的有效 CSS。</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">re</span><span class="o">,</span><span class="w"> </span><span class="nn">hashlib</span><span class="o">,</span><span class="w"> </span><span class="nn">os</span>
+
+<span class="c1"># 统计内联样式变体</span>
+<span class="n">hashes</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="s1">&#39;blog/posts&#39;</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">f</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.html&#39;</span><span class="p">):</span>
+        <span class="k">continue</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;blog/posts/</span><span class="si">{</span><span class="n">f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fh</span><span class="p">:</span>
+        <span class="n">html</span> <span class="o">=</span> <span class="n">fh</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+    <span class="n">styles</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&lt;style&gt;(.*?)&lt;/style&gt;&#39;</span><span class="p">,</span> <span class="n">html</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">DOTALL</span><span class="p">)</span>
+    <span class="n">combined</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">styles</span><span class="p">)</span>
+    <span class="n">h</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">md5</span><span class="p">(</span><span class="n">combined</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
+    <span class="n">hashes</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;唯一样式块数量: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">hashes</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">h</span><span class="p">,</span> <span class="n">files</span> <span class="ow">in</span> <span class="n">hashes</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;  </span><span class="si">{</span><span class="n">h</span><span class="p">[:</span><span class="mi">8</span><span class="p">]</span><span class="si">}</span><span class="s1">: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">files</span><span class="p">)</span><span class="si">}</span><span class="s1"> 篇文章&#39;</span><span class="p">)</span>
+</code></pre></div>
+
+<h4>抽离方案</h4>
+<p>将所有内联样式合并去重，生成一个 <code>article.css</code> 文件：</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">re</span><span class="o">,</span><span class="w"> </span><span class="nn">os</span>
+
+<span class="c1"># 收集所有不同的内联样式规则</span>
+<span class="n">all_css</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="s1">&#39;blog/posts&#39;</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">f</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.html&#39;</span><span class="p">):</span>
+        <span class="k">continue</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;blog/posts/</span><span class="si">{</span><span class="n">f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fh</span><span class="p">:</span>
+        <span class="n">html</span> <span class="o">=</span> <span class="n">fh</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+    <span class="n">styles</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&lt;style&gt;(.*?)&lt;/style&gt;&#39;</span><span class="p">,</span> <span class="n">html</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">DOTALL</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">styles</span><span class="p">:</span>
+        <span class="n">rules</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;[^</span><span class="si">{}</span><span class="s1">]+\{[^</span><span class="si">{}</span><span class="s1">]+\}&#39;</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>
+        <span class="n">all_css</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">rules</span><span class="p">)</span>
+
+<span class="c1"># 写入文章页专用 CSS</span>
+<span class="n">article_css</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">all_css</span><span class="p">))</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;assets/css/article.css&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;/* 文章页专用样式 */</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">article_css</span><span class="p">)</span>
+</code></pre></div>
+
+<p>然后从所有文章中移除内联样式块，替换为外部 CSS 引用：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="s1">&#39;blog/posts&#39;</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">f</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.html&#39;</span><span class="p">):</span>
+        <span class="k">continue</span>
+    <span class="n">fpath</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;blog/posts/</span><span class="si">{</span><span class="n">f</span><span class="si">}</span><span class="s1">&#39;</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fpath</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fh</span><span class="p">:</span>
+        <span class="n">html</span> <span class="o">=</span> <span class="n">fh</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+    <span class="c1"># 移除 &lt;style&gt; 块</span>
+    <span class="n">new_html</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\s*&lt;style&gt;.*?&lt;/style&gt;\s*&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">html</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">re</span><span class="o">.</span><span class="n">DOTALL</span><span class="p">)</span>
+
+    <span class="c1"># 添加外部 CSS 引用</span>
+    <span class="n">new_html</span> <span class="o">=</span> <span class="n">new_html</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
+        <span class="s1">&#39;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../assets/css/style.css&quot;&gt;&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../assets/css/style.css&quot;&gt;</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="s1">&#39;    &lt;link rel=&quot;stylesheet&quot; href=&quot;../../assets/css/article.css&quot;&gt;&#39;</span>
+    <span class="p">)</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fpath</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fh</span><span class="p">:</span>
+        <span class="n">fh</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">new_html</span><span class="p">)</span>
+</code></pre></div>
+
+<h4>效果</h4>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>优化前</th>
+<th>优化后</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>每篇文章内联 CSS</td>
+<td>~4KB</td>
+<td>0</td>
+</tr>
+<tr>
+<td>article.css</td>
+<td>不存在</td>
+<td>6.7KB</td>
+</tr>
+<tr>
+<td>总 CSS 冗余</td>
+<td>~262KB</td>
+<td>0</td>
+</tr>
+<tr>
+<td>浏览器缓存</td>
+<td>不支持</td>
+<td>支持</td>
+</tr>
+</tbody>
+</table>
+<p>净节省 252KB，且浏览器缓存 <code>article.css</code> 后，后续文章页加载更快。</p>
+<h2>第四步：JavaScript 优化</h2>
+<h3>内联脚本抽离</h3>
+<p>和 CSS 类似，文章页有约 80 行内联 JavaScript，包含返回顶部、阅读进度、键盘快捷键、TOC 目录等功能。</p>
+<h4>抽离到 article.js</h4>
+<div class="codehilite"><pre><span></span><code><span class="cm">/**</span>
+<span class="cm"> * article.js - 文章页专用脚本</span>
+<span class="cm"> * 返回顶部、阅读进度、键盘快捷键、TOC 目录</span>
+<span class="cm"> */</span>
+
+<span class="p">(</span><span class="kd">function</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="s1">&#39;use strict&#39;</span><span class="p">;</span>
+
+<span class="w">  </span><span class="nb">document</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;DOMContentLoaded&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// 返回顶部 &amp; 阅读进度</span>
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">backToTop</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;backToTop&#39;</span><span class="p">);</span>
+<span class="w">    </span><span class="nb">window</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;scroll&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="c1">// ... 滚动逻辑</span>
+<span class="w">    </span><span class="p">});</span>
+
+<span class="w">    </span><span class="c1">// TOC 目录</span>
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">headings</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">document</span><span class="p">.</span><span class="nx">querySelectorAll</span><span class="p">(</span><span class="s1">&#39;.post-content h2, .post-content h3&#39;</span><span class="p">);</span>
+<span class="w">    </span><span class="nx">headings</span><span class="p">.</span><span class="nx">forEach</span><span class="p">((</span><span class="nx">h</span><span class="p">,</span><span class="w"> </span><span class="nx">i</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="c1">// ... TOC 生成逻辑</span>
+<span class="w">    </span><span class="p">});</span>
+<span class="w">  </span><span class="p">});</span>
+<span class="p">})();</span>
+</code></pre></div>
+
+<h4>关键陷阱：DOMContentLoaded</h4>
+<p>抽离内联脚本时最容易踩的坑是执行时机。内联 <code>&lt;script&gt;</code> 在解析到该行时同步执行，此时 DOM 可能还没准备好。抽到外部文件后如果不用 <code>DOMContentLoaded</code> 包裹，<code>getElementById</code> 会返回 null。</p>
+<div class="codehilite"><pre><span></span><code><span class="c1">// ❌ 错误：外部脚本同步执行时 DOM 未就绪</span>
+<span class="p">(</span><span class="kd">function</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">tocList</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;tocList&#39;</span><span class="p">);</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="nx">tocList</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="p">;</span><span class="w"> </span><span class="c1">// 直接退出了！</span>
+<span class="p">})();</span>
+
+<span class="c1">// ✅ 正确：等 DOM 准备好再执行</span>
+<span class="nb">document</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;DOMContentLoaded&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">tocList</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;tocList&#39;</span><span class="p">);</span>
+<span class="w">  </span><span class="c1">// ...</span>
+<span class="p">});</span>
+</code></pre></div>
+
+<p>这个坑导致了 TOC 目录全部消失，花了时间才定位到。</p>
+<h3>手机端 TOC 抽屉</h3>
+<p>桌面端 TOC 是固定在右侧的浮动面板，但在手机端屏幕太窄不适合。方案是：</p>
+<ul>
+<li>大屏（≥1200px）：显示固定浮动 TOC</li>
+<li>小屏（&lt;1200px）：隐藏浮动 TOC，显示右下角按钮，点击弹出抽屉</li>
+</ul>
+<div class="codehilite"><pre><span></span><code><span class="c">/* 桌面端：固定浮动 */</span>
+<span class="p">.</span><span class="nc">post-toc-container</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">display</span><span class="p">:</span><span class="w"> </span><span class="kc">none</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="p">@</span><span class="k">media</span><span class="w"> </span><span class="o">(</span><span class="nt">min-width</span><span class="o">:</span><span class="w"> </span><span class="nt">1200px</span><span class="o">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="p">.</span><span class="nc">post-toc-container</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">display</span><span class="p">:</span><span class="w"> </span><span class="kc">block</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c">/* 手机端：浮动按钮 */</span>
+<span class="p">.</span><span class="nc">mobile-toc-btn</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">display</span><span class="p">:</span><span class="w"> </span><span class="kc">none</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="p">@</span><span class="k">media</span><span class="w"> </span><span class="o">(</span><span class="nt">max-width</span><span class="o">:</span><span class="w"> </span><span class="nt">1199px</span><span class="o">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="p">.</span><span class="nc">mobile-toc-btn</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">display</span><span class="p">:</span><span class="w"> </span><span class="kc">flex</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c">/* 抽屉 */</span>
+<span class="p">.</span><span class="nc">toc-drawer</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">position</span><span class="p">:</span><span class="w"> </span><span class="kc">fixed</span><span class="p">;</span>
+<span class="w">  </span><span class="k">right</span><span class="p">:</span><span class="w"> </span><span class="mi">-280</span><span class="kt">px</span><span class="p">;</span>
+<span class="w">  </span><span class="k">width</span><span class="p">:</span><span class="w"> </span><span class="mi">280</span><span class="kt">px</span><span class="p">;</span>
+<span class="w">  </span><span class="k">height</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="kt">vh</span><span class="p">;</span>
+<span class="w">  </span><span class="k">transition</span><span class="p">:</span><span class="w"> </span><span class="kc">right</span><span class="w"> </span><span class="mf">0.3</span><span class="kt">s</span><span class="w"> </span><span class="kc">ease</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="p">.</span><span class="nc">toc-drawer</span><span class="p">.</span><span class="nc">open</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">right</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h2>第五步：缓存策略</h2>
+<h3>CSS/JS 版本化</h3>
+<p>静态资源更新后，浏览器缓存会导致用户看到旧版本。解决方案是给文件引用加内容 hash：</p>
+<div class="codehilite"><pre><span></span><code><span class="cm">&lt;!-- 优化前 --&gt;</span>
+<span class="p">&lt;</span><span class="nt">link</span> <span class="na">rel</span><span class="o">=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;assets/css/style.css&quot;</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;assets/js/main.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+
+<span class="cm">&lt;!-- 优化后 --&gt;</span>
+<span class="p">&lt;</span><span class="nt">link</span> <span class="na">rel</span><span class="o">=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;assets/css/style.css?v=a1b2c3d4&quot;</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;assets/js/main.js?v=e5f6g7h8&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</code></pre></div>
+
+<h3>GitHub Actions 自动注入 hash</h3>
+<p>手动维护 hash 不现实，用 CI 自动化。在每次 push 时扫描文件内容，生成 8 位 hash 并注入到 HTML 引用中：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># .github/workflows/update-index.yml</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Update cache hashes</span>
+<span class="w">  </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">    </span><span class="no">node -e &quot;</span>
+<span class="w">    </span><span class="no">const fs = require(&#39;fs&#39;);</span>
+<span class="w">    </span><span class="no">const crypto = require(&#39;crypto&#39;);</span>
+
+<span class="w">    </span><span class="no">const files = [</span>
+<span class="w">      </span><span class="no">[&#39;assets/css/style.css&#39;, &#39;index.html&#39;],</span>
+<span class="w">      </span><span class="no">[&#39;assets/js/main.js&#39;, &#39;index.html&#39;],</span>
+<span class="w">      </span><span class="no">// ... 更多文件</span>
+<span class="w">    </span><span class="no">];</span>
+
+<span class="w">    </span><span class="no">files.forEach(([asset, page]) =&gt; {</span>
+<span class="w">      </span><span class="no">const content = fs.readFileSync(asset);</span>
+<span class="w">      </span><span class="no">const hash = crypto.createHash(&#39;md5&#39;).update(content).digest(&#39;hex&#39;).slice(0, 8);</span>
+<span class="w">      </span><span class="no">let html = fs.readFileSync(page, &#39;utf8&#39;);</span>
+<span class="w">      </span><span class="no">html = html.replace(</span>
+<span class="w">        </span><span class="no">new RegExp(asset + &#39;\\?v=[a-f0-9]+&#39;, &#39;g&#39;),</span>
+<span class="w">        </span><span class="no">asset + &#39;?v=&#39; + hash</span>
+<span class="w">      </span><span class="no">);</span>
+<span class="w">      </span><span class="no">fs.writeFileSync(page, html);</span>
+<span class="w">    </span><span class="no">});</span>
+<span class="w">    </span><span class="no">&quot;</span>
+</code></pre></div>
+
+<h3>robots.txt 优化</h3>
+<p>之前 robots.txt 禁止了 <code>/assets/css/</code> 和 <code>/assets/js/</code> 目录的抓取，这没有必要。虽然不影响搜索排名，但有些爬虫会因此不缓存这些资源：</p>
+<div class="codehilite"><pre><span></span><code><span class="gd">- Disallow: /assets/css/</span>
+<span class="gd">- Disallow: /assets/js/</span>
+<span class="gi">+ Disallow: /node_modules/</span>
+</code></pre></div>
+
+<h2>第六步：结构化数据</h2>
+<h3>JSON-LD 结构化数据</h3>
+<p>Google 搜索结果中显示作者、发布日期、阅读时间等富文本信息，需要 JSON-LD 结构化数据。</p>
+<h4>安全生成 JSON-LD</h4>
+<p>直接用字符串拼接生成 JSON-LD 有风险——标题或描述中包含双引号会破坏 JSON 结构。正确做法是用 <code>json.dumps</code>：</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+
+<span class="n">json_ld_obj</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;@context&quot;</span><span class="p">:</span> <span class="s2">&quot;https://schema.org&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;@type&quot;</span><span class="p">:</span> <span class="s2">&quot;Article&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;headline&quot;</span><span class="p">:</span> <span class="n">title</span><span class="p">,</span>
+    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="n">description</span><span class="p">,</span>
+    <span class="s2">&quot;image&quot;</span><span class="p">:</span> <span class="s2">&quot;https://709527.xyz/assets/images/og-image.png&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;@type&quot;</span><span class="p">:</span> <span class="s2">&quot;Person&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;张小猛&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://709527.xyz/about/&quot;</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;datePublished&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">article_date</span><span class="si">}</span><span class="s2">T00:00:00+08:00&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;keywords&quot;</span><span class="p">:</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tag_list</span><span class="p">),</span>
+    <span class="s2">&quot;articleSection&quot;</span><span class="p">:</span> <span class="n">category</span>
+<span class="p">}</span>
+
+<span class="c1"># json.dumps 自动处理转义</span>
+<span class="n">json_ld_str</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">json_ld_obj</span><span class="p">,</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+</code></pre></div>
+
+<h4>RSS XML 转义</h4>
+<p>同样，RSS 中的标题和描述也需要 XML 转义：</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">xml.sax.saxutils</span><span class="w"> </span><span class="kn">import</span> <span class="n">escape</span> <span class="k">as</span> <span class="n">xml_escape</span>
+
+<span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;      &lt;title&gt;</span><span class="si">{</span><span class="n">xml_escape</span><span class="p">(</span><span class="n">title</span><span class="p">)</span><span class="si">}</span><span class="s1">&lt;/title&gt;&#39;</span><span class="p">)</span>
+<span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;      &lt;description&gt;</span><span class="si">{</span><span class="n">xml_escape</span><span class="p">(</span><span class="n">description</span><span class="p">)</span><span class="si">}</span><span class="s1">&lt;/description&gt;&#39;</span><span class="p">)</span>
+</code></pre></div>
+
+<h2>第七步：访问统计</h2>
+<h3>Cloudflare Web Analytics</h3>
+<p>对于部署在 Cloudflare 后面的域名，Cloudflare Web Analytics 是最佳选择：</p>
+<ul>
+<li>免费</li>
+<li>无 cookie</li>
+<li>不需要 JS SDK（只是一个 beacon 请求）</li>
+<li>隐私友好</li>
+</ul>
+<div class="codehilite"><pre><span></span><code><span class="p">&lt;</span><span class="nt">script</span> <span class="na">defer</span> <span class="na">src</span><span class="o">=</span><span class="s">&#39;https://static.cloudflareinsights.com/beacon.min.js&#39;</span>
+  <span class="na">data-cf-beacon</span><span class="o">=</span><span class="s">&#39;{&quot;token&quot;: &quot;your-token-here&quot;}&#39;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</code></pre></div>
+
+<p>只需要在 Cloudflare Dashboard → Web Analytics 中添加站点，获取 token 后填入即可。</p>
+<h2>效果总结</h2>
+<h3>仓库体积</h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>优化前</th>
+<th>优化后</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>死文件</td>
+<td>4.4MB 图片 + 20KB JS</td>
+<td>0</td>
+</tr>
+<tr>
+<td>内联 CSS</td>
+<td>262KB（66篇×4KB）</td>
+<td>6.7KB article.css</td>
+</tr>
+<tr>
+<td>内联 JS</td>
+<td>~80行/篇</td>
+<td>3KB article.js</td>
+</tr>
+<tr>
+<td>总节省</td>
+<td>-</td>
+<td>~252KB + 4.4MB</td>
+</tr>
+</tbody>
+</table>
+<h3>加载性能</h3>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>优化前</th>
+<th>优化后</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>404 请求</td>
+<td>66个文章页各1个</td>
+<td>0</td>
+</tr>
+<tr>
+<td>重复 CSS 下载</td>
+<td>每篇 4KB</td>
+<td>缓存后 0</td>
+</tr>
+<tr>
+<td>缓存命中率</td>
+<td>低（无版本化）</td>
+<td>高（hash 版本化）</td>
+</tr>
+<tr>
+<td>移动端 TOC</td>
+<td>不可用</td>
+<td>抽屉式可用</td>
+</tr>
+</tbody>
+</table>
+<h3>SEO 改善</h3>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>优化前</th>
+<th>优化后</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>sitemap 文章数</td>
+<td>32</td>
+<td>66</td>
+</tr>
+<tr>
+<td>JSON-LD 结构化数据</td>
+<td>无</td>
+<td>66篇全有</td>
+</tr>
+<tr>
+<td>og:image</td>
+<td>404</td>
+<td>正常显示</td>
+</tr>
+<tr>
+<td>RSS 订阅</td>
+<td>10篇</td>
+<td>20篇</td>
+</tr>
+</tbody>
+</table>
+<h2>经验总结</h2>
+<h3>1. 静态站也需要定期维护</h3>
+<p>静态网站不是"设好就忘"的。随着内容增长，会积累死文件、幽灵引用、内联代码膨胀等问题。建议每季度做一次全面体检。</p>
+<h3>2. 内联代码是万恶之源</h3>
+<p>内联 CSS 和 JS 虽然方便，但会导致：
+- 重复代码膨胀
+- 浏览器无法缓存
+- 维护困难（改一处要更新所有页面）
+- 容易引发冲突</p>
+<p>尽量抽到外部文件，用缓存策略管理版本。</p>
+<h3>3. 抽离代码时注意执行时机</h3>
+<p>内联脚本同步执行，外部脚本也是同步执行（除非加 defer/async），但放入外部文件后容易忽略 DOM 就绪问题。始终用 <code>DOMContentLoaded</code> 包裹是安全的做法。</p>
+<h3>4. CI 自动化是关键</h3>
+<p>手动维护缓存 hash、sitemap、索引等容易出错。用 GitHub Actions 自动化可以避免人为错误，每次提交自动更新所有依赖文件。</p>
+<h3>5. 数据驱动优化</h3>
+<p>不要凭感觉优化。用 <code>du</code>、<code>grep</code>、脚本统计来量化问题，优化后再验证效果。每一步优化都应该有可测量的数据支撑。</p>
+      </article>
+    </div>
+  </main>
+
+  <!-- Related Posts / Navigation -->
+  <section class="section" style="padding-top: 0;">
+    <div class="container container-narrow">
+      <hr style="border: none; border-top: 1px solid var(--color-border); margin: var(--space-3xl) 0;">
+      
+      <div class="blog-topics" style="margin-bottom: var(--space-xl);">
+        <span class="topic-label">读完之后：</span>
+        <a href="../index.html" class="topic-tag">返回博客列表</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <p class="footer-signature">写代码，做产品，也认真生活。</p>
+      <div class="footer-links">
+        <a href="https://github.com/zzdbilly" class="footer-link" target="_blank" rel="noopener">GitHub</a>
+        <a href="../../projects/index.html" class="footer-link">项目</a>
+        <a href="../../about/index.html" class="footer-link">关于</a>
+      </div>
+      <p class="footer-copyright">
+        &copy; 2026 张小猛
+      </p>
+    </div>
+  </footer>
+
+  
+  <script src="../../assets/js/related-posts.js"></script>
+  <script src="../../assets/js/share.js"></script>
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../assets/js/article.js"></script>
+
+  <!-- Back to Top & Reading Progress -->
+  <button class="back-to-top" id="backToTop" aria-label="回到顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
+  <div class="reading-progress" id="readingProgress"></div>
+
+  <!-- Post TOC -->
+  <div class="post-toc-container" id="postToc">
+    <nav class="post-toc">
+      <div class="post-toc-title">目录</div>
+      <ul class="post-toc-list" id="tocList">
+      </ul>
+    </nav>
+  </div>
+<script src="../../assets/js/particles.js"></script>
+</body>
+</html>

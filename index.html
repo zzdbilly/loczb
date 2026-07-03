@@ -454,26 +454,40 @@
       
       <div class="blog-grid">
         <!-- 代表文章大卡 -->
-                                                                                                                                                                                                <article class="blog-card-featured animate-on-scroll" id="home-featured-post" style="display: block;">
+                                                                                                                                                                                                        <article class="blog-card-featured animate-on-scroll" id="home-featured-post" style="display: block;">
           <div class="blog-card-header">
             <div class="blog-card-meta">
+              <span class="blog-date">2026-07-03</span>
+              <span>·</span>
+              <span class="blog-read-time">15 min</span>
+            </div>
+            <span class="blog-list-tag">前端</span>
+          </div>
+          <h3 class="blog-card-title">
+            <a href="blog/posts/静态博客性能优化实战从-59mb-到精简高效.html">静态博客性能优化实战：从 59MB 到精简高效</a>
+          </h3>
+          <p class="blog-card-excerpt">66篇文章4KB重复内联样式、4.4MB死文件、404幽灵引用——一次完整的静态博客性能优化记录...</p>
+          <div class="blog-card-tags">
+            <span class="tech-tag">性能优化</span><span class="tech-tag">静态网站</span><span class="tech-tag">GitHub Pages</span><span class="tech-tag">前端优化</span><span class="tech-tag">CSS</span><span class="tech-tag">JavaScript</span>
+          </div>
+        </article>
+        
+        <!-- 最新文章列表 -->
+                <div class="blog-list">
+<article class="blog-list-item animate-on-scroll" data-category="Android" data-page="1">
+          <div class="blog-list-header">
+            <div class="blog-list-meta">
               <span class="blog-date">2026-07-02</span>
               <span>·</span>
               <span class="blog-read-time">5 min</span>
             </div>
             <span class="blog-list-tag">Android</span>
           </div>
-          <h3 class="blog-card-title">
-            <a href="blog/posts/gradle-构建加速全攻略从-5-分钟到-30-秒.html">Gradle 构建加速全攻略：从 5 分钟到 30 秒</a>
+          <h3 class="blog-list-title">
+            <a href="posts/gradle-构建加速全攻略从-5-分钟到-30-秒.html">Gradle 构建加速全攻略：从 5 分钟到 30 秒</a>
           </h3>
-          <p class="blog-card-excerpt">系统梳理 Gradle 构建加速的完整方法论——配置调优、KAPT迁移KSP、增量编译、模块化拆分、远程缓存、CI优化，附真实项目优化案例，构建时间减少85%...</p>
-          <div class="blog-card-tags">
-            <span class="tech-tag">Gradle</span><span class="tech-tag">Android</span><span class="tech-tag">性能优化</span>
-          </div>
+          <p class="blog-list-excerpt">系统梳理 Gradle 构建加速的完整方法论——配置调优、KAPT迁移KSP、增量编译、模块化拆分、远程缓存、CI优化，附真实项目优化案例，构建时间减少85%</p>
         </article>
-        
-        <!-- 最新文章列表 -->
-                <div class="blog-list">
 <article class="blog-list-item animate-on-scroll" data-category="思考" data-page="1">
           <div class="blog-list-header">
             <div class="blog-list-meta">
@@ -487,20 +501,6 @@
             <a href="posts/像规划城市一样设计系统城市规划给软件架构的启示.html">像规划城市一样设计系统：城市规划给软件架构的启示</a>
           </h3>
           <p class="blog-list-excerpt">城市和软件系统的本质惊人相似——功能分区映射限界上下文、交通网络映射数据流、基础设施先行映射可观测性、有机更新映射演进式架构。从城市规划的百年智慧中，找到软件架构的跨界启发</p>
-        </article>
-<article class="blog-list-item animate-on-scroll" data-category="思考" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-07-02</span>
-              <span>·</span>
-              <span class="blog-read-time">5 min</span>
-            </div>
-            <span class="blog-list-tag">思考</span>
-          </div>
-          <h3 class="blog-list-title">
-            <a href="posts/软件工程师能从制造业学到什么精益思维重塑开发流程.html">软件工程师能从制造业学到什么：精益思维重塑开发流程</a>
-          </h3>
-          <p class="blog-list-excerpt">制造业精益思想如何重塑软件开发流程——从丰田生产系统到敏捷开发，从5S方法论到持续交付，跨行业视角下的效率革命</p>
         </article>
         </div>
         <!-- /最新文章列表 --></div>
@@ -553,6 +553,15 @@
   <script>
     // 首页随机选择代表文章
     const posts = [
+      {
+        url: 'blog/posts/静态博客性能优化实战从-59mb-到精简高效.html',
+        title: '静态博客性能优化实战：从 59MB 到精简高效',
+        date: '2026-07-03',
+        readTime: '15 min',
+        category: '前端',
+        category2: '前端',
+        desc: '66篇文章4KB重复内联样式、4.4MB死文件、404幽灵引用——一次完整的静态博客性能优化记录'
+      },
       {
         url: 'blog/posts/gradle-构建加速全攻略从-5-分钟到-30-秒.html',
         title: 'Gradle 构建加速全攻略：从 5 分钟到 30 秒',
@@ -633,15 +642,6 @@
         category: '思考',
         category2: '思考',
         desc: '信息爆炸不是问题，问题是我们在海量输入中丧失了深度思考的能力。本文分享我在信息筛选、注意力管理和深度工作方面的实践经验与反思。'
-      },
-      {
-        url: 'blog/posts/why-i-started-blogging.html',
-        title: '为什么我开始写博客：从潜水到发声',
-        date: '2026-06-30',
-        readTime: '4 min',
-        category: '思考',
-        category2: '思考',
-        desc: '一个普通工程师的写作心路 — 为什么要开始写博客，写作如何改变了我的学习方式，以及我对个人品牌的理解'
       },
     ];
     

@@ -7,6 +7,14 @@
     <language>zh-CN</language>
     <atom:link href="https://709527.xyz/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>静态博客性能优化实战：从 59MB 到精简高效</title>
+      <link>https://709527.xyz/blog/posts/静态博客性能优化实战从-59mb-到精简高效.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/静态博客性能优化实战从-59mb-到精简高效.html</guid>
+      <description>66篇文章4KB重复内联样式、4.4MB死文件、404幽灵引用——一次完整的静态博客性能优化记录</description>
+      <category>前端</category>
+      <pubDate>Fri, 03 Jul 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
       <title>Gradle 构建加速全攻略：从 5 分钟到 30 秒</title>
       <link>https://709527.xyz/blog/posts/gradle-构建加速全攻略从-5-分钟到-30-秒.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/gradle-构建加速全攻略从-5-分钟到-30-秒.html</guid>
@@ -156,14 +164,6 @@
       <guid isPermaLink="true">https://709527.xyz/blog/posts/css-view-transitions.html</guid>
       <description>CSS View Transitions API 实战：从 document.startViewTransition 到跨页面导航过渡、SPA 集成、列表动画完整指南</description>
       <category>前端</category>
-      <pubDate>Sat, 27 Jun 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>GitHub Actions 高级工作流：CI/CD 最佳实践</title>
-      <link>https://709527.xyz/blog/posts/github-actions-advanced.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/github-actions-advanced.html</guid>
-      <description>GitHub Actions 高级工作流实战：矩阵构建、可复用工作流、自定义 Action、OIDC 集成、安全审计与性能优化完整指南</description>
-      <category>DevOps</category>
       <pubDate>Sat, 27 Jun 2026 00:00:00 +0800</pubDate>
     </item>
   </channel>
