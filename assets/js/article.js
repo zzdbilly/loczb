@@ -50,11 +50,17 @@
     // === TOC 目录（桌面端） ===
     const tocList = document.getElementById('tocList');
     const tocContainer = document.getElementById('postToc');
-    if (!tocList || !tocContainer) return;
+    console.log('[TOC] tocList:', tocList, 'tocContainer:', tocContainer);
+    if (!tocList || !tocContainer) {
+      console.log('[TOC] 元素不存在，退出');
+      return;
+    }
 
     const headings = document.querySelectorAll('.post-content h2, .post-content h3');
+    console.log('[TOC] headings 数量:', headings.length);
     if (headings.length === 0) {
       tocContainer.style.display = 'none';
+      console.log('[TOC] 没有 headings，隐藏容器');
       return;
     }
 
