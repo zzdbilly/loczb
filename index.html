@@ -170,15 +170,15 @@
           <!-- 数据统计 -->
           <div class="hero-stats">
             <div class="stat">
-              <div class="stat-value">5+</div>
+              <div class="stat-value" data-count="5" data-suffix="+">0</div>
               <div class="stat-label">年开发经验</div>
             </div>
             <div class="stat">
-              <div class="stat-value">20+</div>
+              <div class="stat-value" data-count="20" data-suffix="+">0</div>
               <div class="stat-label">项目实践</div>
             </div>
             <div class="stat">
-              <div class="stat-value">1000+</div>
+              <div class="stat-value" data-count="1000" data-suffix="+">0</div>
               <div class="stat-label">代码提交</div>
             </div>
           </div>
@@ -521,6 +521,15 @@
         </article>
         </div>
         <!-- /最新文章列表 --></div>
+
+      <div class="blog-view-all">
+        <a href="blog/index.html" class="btn btn-secondary">
+          查看全部文章
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </a>
+      </div>
       </div>
     </div>
   </section>
@@ -534,6 +543,7 @@
       </div>
       
       <div class="about-content animate-on-scroll">
+        <div class="about-quote-mark" aria-hidden="true">"</div>
         <p class="about-text">
           我是一名 Android 开发工程师，也在持续探索端侧 + AI 接入这条路。<br>
           比起追逐概念，我更在意一项技术能不能真正落地，能不能变成顺手、稳定、长期可用的功能。
@@ -575,6 +585,50 @@
   <script src="assets/js/main.js"></script>
   <script src="assets/js/particles.js"></script>
   <script src="assets/js/time-progress.js"></script>
+  <script>
+    // 统计数字滚动动画
+    (function() {
+      const stats = document.querySelectorAll('.stat-value[data-count]');
+      let animated = false;
+      
+      function animateStats() {
+        if (animated) return;
+        animated = true;
+        stats.forEach(stat => {
+          const target = parseInt(stat.dataset.count);
+          const suffix = stat.dataset.suffix || '';
+          const duration = 1500;
+          const startTime = performance.now();
+          
+          function update(currentTime) {
+            const elapsed = currentTime - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            const eased = 1 - Math.pow(1 - progress, 3); // easeOutCubic
+            const current = Math.floor(eased * target);
+            stat.textContent = current + suffix;
+            if (progress < 1) {
+              requestAnimationFrame(update);
+            } else {
+              stat.textContent = target + suffix;
+            }
+          }
+          requestAnimationFrame(update);
+        });
+      }
+      
+      // 延迟启动，等 hero 动画完成后触发
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            setTimeout(animateStats, 600);
+          }
+        });
+      }, { threshold: 0.3 });
+      
+      const heroStats = document.querySelector('.hero-stats');
+      if (heroStats) observer.observe(heroStats);
+    })();
+  </script>
   <script>
     // 首页随机选择代表文章
     const posts = [
