@@ -2,9 +2,7 @@
 User-agent: *
 Allow: /
 
-# Disallow paths (if any)
-Disallow: /assets/css/
-Disallow: /assets/js/
+# Disallow non-content paths
 Disallow: /node_modules/
 
 # Sitemap
