@@ -751,6 +751,11 @@ a:hover {
   z-index: 1;
 }
 
+/* 交替背景色，制造层次感 */
+.section-alt {
+  background: var(--color-bg-secondary);
+}
+
 .section-header {
   margin-bottom: var(--space-sm);
 }
@@ -993,6 +998,36 @@ a:hover {
 .footer-links {
   display: flex;
   gap: var(--space-xl);
+  align-items: center;
+}
+
+.footer-social {
+  display: flex;
+  gap: var(--space-md);
+  align-items: center;
+}
+
+.footer-social-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-full);
+  color: var(--color-text-secondary);
+  background: var(--color-bg-tertiary);
+  transition: all var(--transition-fast);
+}
+
+.footer-social-link:hover {
+  color: var(--color-accent-primary);
+  background: var(--color-accent-subtle);
+  transform: translateY(-2px);
+}
+
+.footer-social-link svg {
+  width: 18px;
+  height: 18px;
 }
 
 .footer-link {
@@ -1989,8 +2024,9 @@ pre code {
 }
 
 .blog-list-item:hover {
-  border-color: var(--color-border-hover);
-  transform: translateY(-2px);
+  border-color: var(--color-accent-primary);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2), 0 0 0 1px var(--color-accent-subtle);
 }
 
 .blog-list-meta {
@@ -2155,8 +2191,9 @@ pre code {
 }
 
 .blog-list-item:hover {
-  border-color: var(--color-border-hover);
-  transform: translateY(-2px);
+  border-color: var(--color-accent-primary);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2), 0 0 0 1px var(--color-accent-subtle);
 }
 
 .blog-list-header {
