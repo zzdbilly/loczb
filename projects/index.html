@@ -38,7 +38,8 @@
   <meta name="theme-color" content="#3b82f6">
   <link rel="stylesheet" href="../assets/css/style.css">
   <style>
-    .case-card { background: var(--color-bg-secondary); border-radius: 16px; overflow: hidden; margin-bottom: 2rem; border: 1px solid var(--color-border); }
+    .case-card { background: var(--color-bg-secondary); border-radius: 16px; overflow: hidden; margin-bottom: 2rem; border: 1px solid var(--color-border); transition: all var(--transition-base); }
+    .case-card:hover { border-color: var(--color-accent-primary); transform: translateY(-2px); box-shadow: var(--shadow-xl); }
     .case-card-header { padding: 2rem; border-bottom: 1px solid var(--color-border); }
     .case-card-badge { display: inline-block; background: var(--color-accent-primary); color: white; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; margin-bottom: 1rem; }
     .case-card-title { font-size: 1.75rem; margin-bottom: 0.5rem; }
@@ -213,7 +214,7 @@
     <!-- CTA Section -->
     <section class="section">
       <div class="container">
-        <div class="cta-box animate-on-scroll" style="text-align: center; padding: 3rem; background: var(--color-bg-secondary); border-radius: 16px; border: 1px solid var(--color-border);">
+        <div class="cta-box animate-on-scroll" style="text-align: center; padding: 3rem; background: linear-gradient(135deg, var(--color-bg-secondary), var(--color-bg-tertiary)); border-radius: 16px; border: 1px solid var(--color-border); position: relative; overflow: hidden; box-shadow: 0 0 40px rgba(99,102,241,0.1);">
           <h2 style="margin-bottom: 1rem;">有项目想合作？</h2>
           <p style="color: var(--color-text-secondary); margin-bottom: 1.5rem;">Android 开发 · AI 接入 · Agent 工作流 · 技术咨询</p>
           <div style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
