@@ -2277,6 +2277,229 @@
       ]
     }
   ],
+  "series": [
+    {
+      "id": "devops",
+      "name": "DevOps 实战",
+      "count": 8,
+      "posts": [
+        {
+          "title": "Gradle 构建加速全攻略：从 5 分钟到 30 秒",
+          "date": "2026-07-02",
+          "url": "blog/posts/gradle-构建加速全攻略从-5-分钟到-30-秒.html"
+        },
+        {
+          "title": "软件工程师能从制造业学到什么：精益思维重塑开发流程",
+          "date": "2026-07-02",
+          "url": "blog/posts/软件工程师能从制造业学到什么精益思维重塑开发流程.html"
+        },
+        {
+          "title": "GitHub Actions 高级工作流：CI/CD 最佳实践",
+          "date": "2026-06-27",
+          "url": "blog/posts/github-actions-advanced.html"
+        },
+        {
+          "title": "Nginx 反向代理性能调优：从入门到生产",
+          "date": "2026-06-27",
+          "url": "blog/posts/nginx-reverse-proxy-tuning.html"
+        },
+        {
+          "title": "Docker Compose 最佳实践",
+          "date": "2026-04-26",
+          "url": "blog/posts/docker-compose-best-practices.html"
+        },
+        {
+          "title": "云服务器 SSH 安全加固完整指南",
+          "date": "2026-03-18",
+          "url": "blog/posts/ssh-security-hardening.html"
+        },
+        {
+          "title": "自建 Tailscale DERP 中继服务器完整指南",
+          "date": "2026-03-17",
+          "url": "blog/posts/tailscale-derp-server.html"
+        },
+        {
+          "title": "VS Code 端口转发原理详解",
+          "date": "2026-03-17",
+          "url": "blog/posts/vscode-port-forward.html"
+        }
+      ]
+    },
+    {
+      "id": "android-16",
+      "name": "Android 16 专题",
+      "count": 4,
+      "posts": [
+        {
+          "title": "Android 16 前台服务类型全新限制：类型强制匹配与迁移指南",
+          "date": "2026-06-30",
+          "url": "blog/posts/android-16-foreground-service-constraints.html"
+        },
+        {
+          "title": "Android 16 后台任务新限制：开发者迁移指南",
+          "date": "2026-06-27",
+          "url": "blog/posts/android-16-background-tasks.html"
+        },
+        {
+          "title": "Android 16 通知系统新 API 详解",
+          "date": "2026-06-27",
+          "url": "blog/posts/android-16-notifications.html"
+        },
+        {
+          "title": "Android 16 新特性详解：开发者需要知道的 8 件事",
+          "date": "2026-06-19",
+          "url": "blog/posts/android-16-features.html"
+        }
+      ]
+    },
+    {
+      "id": "ai-tools",
+      "name": "AI 工具与实践",
+      "count": 4,
+      "posts": [
+        {
+          "title": "AI 代码编辑器深度横评：Cursor vs Windsurf vs Copilot",
+          "date": "2026-06-28",
+          "url": "blog/posts/ai-代码编辑器深度横评cursor-vs-windsurf-vs-copilot.html"
+        },
+        {
+          "title": "主流 AI 编程工具深度对比：Cursor、Claude Code、OpenCode、GitHub Copilot",
+          "date": "2026-04-19",
+          "url": "blog/posts/ai-coding-tools-comparison.html"
+        },
+        {
+          "title": "Gemini Notebooks 深度体验：与 NotebookLM 无缝整合后的全新 AI 工作流",
+          "date": "2026-04-11",
+          "url": "blog/posts/gemini-notebooklm-integration.html"
+        },
+        {
+          "title": "Gemini + NotebookLM 结合使用指南",
+          "date": "2026-04-10",
+          "url": "blog/posts/gemini-notebooklm-workflow.html"
+        }
+      ]
+    },
+    {
+      "id": "kotlin-advanced",
+      "name": "Kotlin 进阶",
+      "count": 4,
+      "posts": [
+        {
+          "title": "Kotlin Coroutine 异常处理机制全面解析",
+          "date": "2026-07-01",
+          "url": "blog/posts/kotlin-coroutine-异常处理机制全面解析.html"
+        },
+        {
+          "title": "Kotlin Multiplatform 实战：共享业务逻辑到 iOS",
+          "date": "2026-06-24",
+          "url": "blog/posts/kotlin-multiplatform-practice.html"
+        },
+        {
+          "title": "Kotlin 2.4.0 重磅发布：Context Parameters 稳定、Destructuring 升级、Lombok 插件进入 Alpha",
+          "date": "2026-06-19",
+          "url": "blog/posts/kotlin-240-features.html"
+        },
+        {
+          "title": "Kotlin Coroutines 最佳实践",
+          "date": "2026-04-08",
+          "url": "blog/posts/kotlin-coroutines-best-practices.html"
+        }
+      ]
+    },
+    {
+      "id": "ai-agent",
+      "name": "AI Agent 开发",
+      "count": 4,
+      "posts": [
+        {
+          "title": "Google I/O 2026 完整回顾：AI 重塑一切",
+          "date": "2026-06-19",
+          "url": "blog/posts/google-io-2026-recap.html"
+        },
+        {
+          "title": "MCP 协议在 Android 端的应用：AI 工具调用新范式",
+          "date": "2026-06-19",
+          "url": "blog/posts/mcp-android-integration.html"
+        },
+        {
+          "title": "AI Agent 技能开发实战：从需求到上线的完整流程",
+          "date": "2026-03-14",
+          "url": "blog/posts/ai-agent-skill-development.html"
+        },
+        {
+          "title": "OpenClaw 深度使用指南：从 0 到 1 构建个人 AI Agent",
+          "date": "2026-03-13",
+          "url": "blog/posts/openclaw-guide.html"
+        }
+      ]
+    },
+    {
+      "id": "jetpack-compose",
+      "name": "Jetpack Compose 指南",
+      "count": 3,
+      "posts": [
+        {
+          "title": "Jetpack Compose Navigation 进阶指南：从路由设计到深层链接",
+          "date": "2026-06-22",
+          "url": "blog/posts/compose-navigation-guide.html"
+        },
+        {
+          "title": "Jetpack Compose April 2026 Update 深度解读",
+          "date": "2026-06-19",
+          "url": "blog/posts/compose-april-2026-update.html"
+        },
+        {
+          "title": "Jetpack Compose 动画实战",
+          "date": "2026-04-25",
+          "url": "blog/posts/jetpack-compose-animation.html"
+        }
+      ]
+    },
+    {
+      "id": "security",
+      "name": "安全加固",
+      "count": 3,
+      "posts": [
+        {
+          "title": "HTTPS 与 TLS 1.3 深度解析",
+          "date": "2026-06-27",
+          "url": "blog/posts/https-tls13-deep-dive.html"
+        },
+        {
+          "title": "Android 应用签名与安全加固完整指南",
+          "date": "2026-06-19",
+          "url": "blog/posts/android-app-security-hardening.html"
+        },
+        {
+          "title": "云服务器 SSH 安全加固完整指南",
+          "date": "2026-03-18",
+          "url": "blog/posts/ssh-security-hardening.html"
+        }
+      ]
+    },
+    {
+      "id": "personal-growth",
+      "name": "个人成长",
+      "count": 3,
+      "posts": [
+        {
+          "title": "技术人如何高效学习新技术",
+          "date": "2026-07-01",
+          "url": "blog/posts/技术人如何高效学习新技术.html"
+        },
+        {
+          "title": "技术人为什么要写作",
+          "date": "2026-07-01",
+          "url": "blog/posts/技术人为什么要写作.html"
+        },
+        {
+          "title": "为什么我开始写博客：从潜水到发声",
+          "date": "2026-06-30",
+          "url": "blog/posts/why-i-started-blogging.html"
+        }
+      ]
+    }
+  ],
   "categories": [
     "Android",
     "思考",

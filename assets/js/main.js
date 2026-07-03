@@ -324,7 +324,7 @@ function copyToClipboard(text) {
 }
 
 // ===================================
-// Theme Toggle
+// Theme Toggle with View Transition
 // ===================================
 function initThemeToggle() {
   const toggle = document.querySelector('.theme-toggle');
@@ -333,21 +333,49 @@ function initThemeToggle() {
   function setTheme(theme) {
     document.documentElement.setAttribute('data-theme', theme);
     localStorage.setItem('theme', theme);
-    // 更新 meta theme-color（移动端浏览器地址栏颜色）
     const metaTheme = document.querySelector('meta[name="theme-color"]');
     if (metaTheme) {
       metaTheme.setAttribute('content', theme === 'light' ? '#ffffff' : '#3b82f6');
     }
   }
   
-  // Check saved preference, default to dark if not set
   const savedTheme = localStorage.getItem('theme') || 'dark';
   setTheme(savedTheme);
   
-  toggle.addEventListener('click', () => {
+  toggle.addEventListener('click', async (e) => {
     const currentTheme = document.documentElement.getAttribute('data-theme');
     const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-    setTheme(newTheme);
+    
+    // View Transition API - 圆形扩散动画
+    if (document.startViewTransition) {
+      const x = e.clientX;
+      const y = e.clientY;
+      const endRadius = Math.hypot(
+        Math.max(x, window.innerWidth - x),
+        Math.max(y, window.innerHeight - y)
+      );
+      
+      const transition = document.startViewTransition(() => {
+        setTheme(newTheme);
+      });
+      
+      transition.ready.then(() => {
+        document.documentElement.animate({
+          clipPath: [
+            `circle(0px at ${x}px ${y}px)`,
+            `circle(${endRadius}px at ${x}px ${y}px)`
+          ]
+        }, {
+          duration: 500,
+          easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
+          pseudoElement: '::view-new'
+        });
+      });
+    } else {
+      // Fallback: 简单过渡
+      document.body.style.transition = 'background-color 0.3s ease, color 0.3s ease';
+      setTheme(newTheme);
+    }
   });
 }
 

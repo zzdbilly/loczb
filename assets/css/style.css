@@ -3288,6 +3288,31 @@ pre code {
 }
 
 /* ===================================
+   Theme Transition - View Transition API
+   =================================== */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-old(root) {
+  z-index: 1;
+}
+
+::view-transition-new(root) {
+  z-index: 9999;
+}
+
+/* 禁止非主题切换时的 view transition 默认动画 */
+@supports not (view-transition-name: none) {
+  /* 降级：全局颜色过渡 */
+  html {
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+}
+
+/* ===================================
    Time Progress Bar - 时光进度条
    =================================== */
 .time-progress-container {
