@@ -12,21 +12,15 @@
     <meta property="og:description" content="ONNX 移动端侧模型实践：从模型转换到端侧部署的完整指南，涵盖模型优化、量化压缩、多框架推理对比">
     <meta property="og:url" content="https://709527.xyz/blog/posts/onnx-mobile-deployment.html">
     <meta property="og:type" content="article">
-    <meta property="og:image" content="../../assets/images/og-image.png">
+        <meta property="og:image" content="../../assets/images/og-image.png">
     <meta property="og:site_name" content="loczb">
-    
-    
-    
-    <link rel="stylesheet" href="../../assets/css/style.css">
-    <link rel="stylesheet" href="../../assets/css/article.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500;600&display=swap" media="print" onload="this.media='all'">
-<link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
-    <link rel="alternate icon" href="../../assets/images/favicon.ico">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="ONNX 移动端侧模型实践：从转换到部署 | 张小猛 - loczb">
+    <meta name="twitter:description" content="ONNX 移动端侧模型实践：从模型转换到端侧部署的完整指南，涵盖模型优化、量化压缩、多框架推理对比">
 
-    <script type="application/ld+json">
-    {
+    
+        <script type="application/ld+json">
+{
       "@context": "https://schema.org",
       "@type": "Article",
       "headline": "ONNX 移动端侧模型实践：从转换到部署",
@@ -57,7 +51,15 @@
       "inLanguage": "zh-CN"
     }
     </script>
-  </head>
+    
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/article.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500;600&display=swap" media="print" onload="this.media='all'">
+    <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
+    <link rel="alternate icon" href="../../assets/images/favicon.ico">
+</head>
 <body>
   <!-- Loading -->
   <div class="loading">
@@ -100,12 +102,13 @@
 
       <article class="post-content">
         <h1>ONNX 移动端侧模型实践：从转换到部署</h1>
-      
-      <div class="post-meta">
-        <span>📅 2026-03-30</span>
-        <span style="margin-left: 1rem;">⏱️ 阅读约 12 分钟</span>
+        
+        <div class="post-meta">
+          <span>📅 2026-03-30</span>
+          <span>⏱️ 阅读约 12 分钟</span>
+          <span>👤 张小猛</span>
         </div>
-
+        
         <div class="post-tags">
           <span class="tag">ONNX</span>
           <span class="tag">移动端AI</span>
@@ -113,8 +116,8 @@
           <span class="tag">Android</span>
           <span class="tag">端侧推理</span>
         </div>
-      
-      <p>随着移动端 AI 能力的不断提升，越来越多的模型开始从云端下沉到端侧运行。ONNX（Open Neural Network Exchange）作为业界主流的模型交换格式，为跨框架、跨平台的模型部署提供了便利。本文将分享 ONNX 模型在移动端部署的完整实践路径。</p>
+        
+        <p>随着移动端 AI 能力的不断提升，越来越多的模型开始从云端下沉到端侧运行。ONNX（Open Neural Network Exchange）作为业界主流的模型交换格式，为跨框架、跨平台的模型部署提供了便利。本文将分享 ONNX 模型在移动端部署的完整实践路径。</p>
 
       <h2>为什么选择 ONNX</h2>
       
@@ -455,7 +458,6 @@ class ONNXModel(private val context: Context) {
   </button>
   <div class="reading-progress" id="readingProgress"></div>
 
-
   <!-- Post TOC -->
   <div class="post-toc-container" id="postToc">
     <nav class="post-toc">
@@ -464,7 +466,6 @@ class ONNXModel(private val context: Context) {
       </ul>
     </nav>
   </div>
-
 <script src="../../assets/js/particles.js"></script>
 </body>
 </html>

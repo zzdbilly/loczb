@@ -12,21 +12,15 @@
     <meta property="og:description" content="SQLite 进阶：WAL 模式原理、性能优化技巧、并发处理、索引策略、PRAGMA 配置详解">
     <meta property="og:url" content="https://709527.xyz/blog/posts/sqlite-wal-performance.html">
     <meta property="og:type" content="article">
-    <meta property="og:image" content="../../assets/images/og-image.png">
+        <meta property="og:image" content="../../assets/images/og-image.png">
     <meta property="og:site_name" content="loczb">
-    
-    
-    
-    <link rel="stylesheet" href="../../assets/css/style.css">
-    <link rel="stylesheet" href="../../assets/css/article.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500;600&display=swap" media="print" onload="this.media='all'">
-<link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
-    <link rel="alternate icon" href="../../assets/images/favicon.ico">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="SQLite 进阶：WAL 模式与性能优化 | 张小猛 - loczb">
+    <meta name="twitter:description" content="SQLite 进阶：WAL 模式原理、性能优化技巧、并发处理、索引策略、PRAGMA 配置详解">
 
-    <script type="application/ld+json">
-    {
+    
+        <script type="application/ld+json">
+{
       "@context": "https://schema.org",
       "@type": "Article",
       "headline": "SQLite 进阶：WAL 模式与性能优化",
@@ -57,7 +51,15 @@
       "inLanguage": "zh-CN"
     }
     </script>
-  </head>
+    
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/article.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500;600&display=swap" media="print" onload="this.media='all'">
+    <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
+    <link rel="alternate icon" href="../../assets/images/favicon.ico">
+</head>
 <body>
   <!-- Loading -->
   <div class="loading">
@@ -100,21 +102,21 @@
 
       <article class="post-content">
         <h1>SQLite 进阶：WAL 模式与性能优化</h1>
-      
-      <div class="post-meta">
+        
+        <div class="post-meta">
           <span>📅 2026-04-26</span>
           <span>⏱️ 14 min read</span>
           <span>👤 张小猛</span>
         </div>
-
+        
         <div class="post-tags">
           <span class="tag">SQLite</span>
           <span class="tag">数据库</span>
           <span class="tag">WAL</span>
           <span class="tag">性能优化</span>
         </div>
-
-      <p>SQLite 是世界上最广泛使用的嵌入式数据库，但很多人只知道基础用法。合理配置 WAL 模式、索引、PRAGMA 参数后，SQLite 的性能可以媲美甚至超越传统数据库。本文深入 SQLite 的高级特性与优化技巧。</p>
+        
+        <p>SQLite 是世界上最广泛使用的嵌入式数据库，但很多人只知道基础用法。合理配置 WAL 模式、索引、PRAGMA 参数后，SQLite 的性能可以媲美甚至超越传统数据库。本文深入 SQLite 的高级特性与优化技巧。</p>
 
       <div class="tip-box">
         <strong>适用场景</strong>：移动应用、桌面软件、小型 Web 服务、嵌入式设备、原型开发。单文件、零配置、可靠性高。
@@ -548,7 +550,6 @@ PRAGMA foreign_keys = ON;</pre>
   </button>
   <div class="reading-progress" id="readingProgress"></div>
 
-
   <!-- Post TOC -->
   <div class="post-toc-container" id="postToc">
     <nav class="post-toc">
@@ -557,7 +558,6 @@ PRAGMA foreign_keys = ON;</pre>
       </ul>
     </nav>
   </div>
-
 <script src="../../assets/js/particles.js"></script>
 </body>
 </html>

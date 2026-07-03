@@ -12,21 +12,15 @@
     <meta property="og:description" content="Android 16 后台任务新限制完整解读：JobScheduler 强化、前台服务严格限制、WorkManager 迁移策略与兼容性适配指南">
     <meta property="og:url" content="https://709527.xyz/blog/posts/android-16-background-tasks.html">
     <meta property="og:type" content="article">
-    <meta property="og:image" content="../../assets/images/og-image.png">
+        <meta property="og:image" content="../../assets/images/og-image.png">
     <meta property="og:site_name" content="loczb">
-    
-    
-    
-    <link rel="stylesheet" href="../../assets/css/style.css">
-    <link rel="stylesheet" href="../../assets/css/article.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500;600&display=swap" media="print" onload="this.media='all'">
-<link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
-    <link rel="alternate icon" href="../../assets/images/favicon.ico">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Android 16 后台任务新限制：开发者迁移指南 | 张小猛 - loczb">
+    <meta name="twitter:description" content="Android 16 后台任务新限制完整解读：JobScheduler 强化、前台服务严格限制、WorkManager 迁移策略与兼容性适配指南">
 
-    <script type="application/ld+json">
-    {
+    
+        <script type="application/ld+json">
+{
       "@context": "https://schema.org",
       "@type": "Article",
       "headline": "Android 16 后台任务新限制：开发者迁移指南",
@@ -57,7 +51,15 @@
       "inLanguage": "zh-CN"
     }
     </script>
-  </head>
+    
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/article.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500;600&display=swap" media="print" onload="this.media='all'">
+    <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
+    <link rel="alternate icon" href="../../assets/images/favicon.ico">
+</head>
 <body>
   <!-- Loading -->
   <div class="loading">
@@ -100,13 +102,13 @@
 
       <article class="post-content">
         <h1>Android 16 后台任务新限制：开发者迁移指南</h1>
-      
-      <div class="post-meta">
+        
+        <div class="post-meta">
           <span>📅 2026-06-27</span>
           <span>⏱️ 16 min read</span>
           <span>👤 张小猛</span>
         </div>
-
+        
         <div class="post-tags">
           <span class="tag">Android 16</span>
           <span class="tag">后台任务</span>
@@ -114,8 +116,8 @@
           <span class="tag">前台服务</span>
           <span class="tag">电池优化</span>
         </div>
-
-      <p>如果你从 Android Oreo 时代就开始做 Android 开发，一定对"后台限制"这个词不陌生——每隔一个大版本，Google 都在收紧后台任务的生存空间。Android 16 也不例外，而且这次力度空前：JobScheduler 执行时间被进一步压缩，前台服务新增 short-lived 类型和硬性超时，后台定位访问更加严格。</p>
+        
+        <p>如果你从 Android Oreo 时代就开始做 Android 开发，一定对"后台限制"这个词不陌生——每隔一个大版本，Google 都在收紧后台任务的生存空间。Android 16 也不例外，而且这次力度空前：JobScheduler 执行时间被进一步压缩，前台服务新增 short-lived 类型和硬性超时，后台定位访问更加严格。</p>
 
       <p>如果你的 App 还在用 <code>Service</code>、<code>AlarmManager</code> 甚至 <code>BroadcastReceiver</code> 做后台工作，这篇文章就是你的迁移路线图。</p>
 
@@ -944,7 +946,6 @@ adb shell dumpsys deviceidle whitelist</code></pre>
   </button>
   <div class="reading-progress" id="readingProgress"></div>
 
-
   <!-- Post TOC -->
   <div class="post-toc-container" id="postToc">
     <nav class="post-toc">
@@ -953,7 +954,6 @@ adb shell dumpsys deviceidle whitelist</code></pre>
       </ul>
     </nav>
   </div>
-
 <script src="../../assets/js/particles.js"></script>
 </body>
 </html>

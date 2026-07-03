@@ -12,21 +12,15 @@
     <meta property="og:description" content="Kotlin Coroutines 最佳实践：从入门到精通，掌握异步编程的核心技巧与常见陷阱">
     <meta property="og:url" content="https://709527.xyz/blog/posts/kotlin-coroutines-best-practices.html">
     <meta property="og:type" content="article">
-    <meta property="og:image" content="../../assets/images/og-image.png">
+        <meta property="og:image" content="../../assets/images/og-image.png">
     <meta property="og:site_name" content="loczb">
-    
-    
-    
-    <link rel="stylesheet" href="../../assets/css/style.css">
-    <link rel="stylesheet" href="../../assets/css/article.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500;600&display=swap" media="print" onload="this.media='all'">
-<link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
-    <link rel="alternate icon" href="../../assets/images/favicon.ico">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Kotlin Coroutines 最佳实践 | 张小猛 - loczb">
+    <meta name="twitter:description" content="Kotlin Coroutines 最佳实践：从入门到精通，掌握异步编程的核心技巧与常见陷阱">
 
-    <script type="application/ld+json">
-    {
+    
+        <script type="application/ld+json">
+{
       "@context": "https://schema.org",
       "@type": "Article",
       "headline": "Kotlin Coroutines 最佳实践",
@@ -57,7 +51,15 @@
       "inLanguage": "zh-CN"
     }
     </script>
-  </head>
+    
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/article.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500;600&display=swap" media="print" onload="this.media='all'">
+    <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
+    <link rel="alternate icon" href="../../assets/images/favicon.ico">
+</head>
 <body>
   <!-- Loading -->
   <div class="loading">
@@ -100,13 +102,13 @@
 
       <article class="post-content">
         <h1>Kotlin Coroutines 最佳实践</h1>
-      
-      <div class="post-meta">
+        
+        <div class="post-meta">
           <span>📅 2026-04-08</span>
           <span>⏱️ 18 min read</span>
           <span>👤 张小猛</span>
         </div>
-
+        
         <div class="post-tags">
           <span class="tag">Kotlin</span>
           <span class="tag">Coroutines</span>
@@ -114,8 +116,8 @@
           <span class="tag">Android</span>
           <span class="tag">最佳实践</span>
         </div>
-
-      <p>协程（Coroutines）是 Kotlin 最强大的特性之一，它让异步编程变得像同步代码一样简洁。但在实际使用中，很多开发者容易踩坑：<strong>内存泄漏、异常丢失、线程阻塞</strong>等问题频发。</p>
+        
+        <p>协程（Coroutines）是 Kotlin 最强大的特性之一，它让异步编程变得像同步代码一样简洁。但在实际使用中，很多开发者容易踩坑：<strong>内存泄漏、异常丢失、线程阻塞</strong>等问题频发。</p>
 
       <p>本文基于实际项目经验，总结 Kotlin 协程的核心概念、最佳实践和常见陷阱。</p>
 
@@ -417,7 +419,6 @@ suspend fun <T> retry(
   </button>
   <div class="reading-progress" id="readingProgress"></div>
 
-
   <!-- Post TOC -->
   <div class="post-toc-container" id="postToc">
     <nav class="post-toc">
@@ -426,7 +427,6 @@ suspend fun <T> retry(
       </ul>
     </nav>
   </div>
-
 <script src="../../assets/js/particles.js"></script>
 </body>
 </html>

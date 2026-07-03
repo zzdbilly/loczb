@@ -12,21 +12,15 @@
     <meta property="og:description" content="Nginx 反向代理生产级调优指南：worker 配置、SSL 优化、缓存策略、负载均衡、限流与监控完整实践">
     <meta property="og:url" content="https://709527.xyz/blog/posts/nginx-reverse-proxy-tuning.html">
     <meta property="og:type" content="article">
-    <meta property="og:image" content="../../assets/images/og-image.png">
+        <meta property="og:image" content="../../assets/images/og-image.png">
     <meta property="og:site_name" content="loczb">
-    
-    
-    
-    <link rel="stylesheet" href="../../assets/css/style.css">
-    <link rel="stylesheet" href="../../assets/css/article.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500;600&display=swap" media="print" onload="this.media='all'">
-<link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
-    <link rel="alternate icon" href="../../assets/images/favicon.ico">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Nginx 反向代理性能调优：从入门到生产 | 张小猛 - loczb">
+    <meta name="twitter:description" content="Nginx 反向代理生产级调优指南：worker 配置、SSL 优化、缓存策略、负载均衡、限流与监控完整实践">
 
-    <script type="application/ld+json">
-    {
+    
+        <script type="application/ld+json">
+{
       "@context": "https://schema.org",
       "@type": "Article",
       "headline": "Nginx 反向代理性能调优：从入门到生产",
@@ -57,7 +51,15 @@
       "inLanguage": "zh-CN"
     }
     </script>
-  </head>
+    
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/article.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500;600&display=swap" media="print" onload="this.media='all'">
+    <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
+    <link rel="alternate icon" href="../../assets/images/favicon.ico">
+</head>
 <body>
   <!-- Loading -->
   <div class="loading">
@@ -100,13 +102,13 @@
 
       <article class="post-content">
         <h1>Nginx 反向代理性能调优：从入门到生产</h1>
-      
-      <div class="post-meta">
+        
+        <div class="post-meta">
           <span>📅 2026-06-27</span>
           <span>⏱️ 18 min read</span>
           <span>👤 张小猛</span>
         </div>
-
+        
         <div class="post-tags">
           <span class="tag">Nginx</span>
           <span class="tag">反向代理</span>
@@ -115,8 +117,8 @@
           <span class="tag">负载均衡</span>
           <span class="tag">DevOps</span>
         </div>
-
-      <p>Nginx 作为反向代理几乎是现代 Web 架构的标配。但很多人止步于 <code>proxy_pass</code> 的基本配置，默认参数跑起来能工作，一上量就出问题——502 频发、SSL 握手拖慢首字节、缓存没命中反而多了一跳、限流太粗暴误杀正常用户。</p>
+        
+        <p>Nginx 作为反向代理几乎是现代 Web 架构的标配。但很多人止步于 <code>proxy_pass</code> 的基本配置，默认参数跑起来能工作，一上量就出问题——502 频发、SSL 握手拖慢首字节、缓存没命中反而多了一跳、限流太粗暴误杀正常用户。</p>
 
       <p>本文从反向代理基础概念出发，逐层深入到 worker 调优、负载均衡、SSL 加速、缓存策略、压缩传输、限流安全和监控体系，最后给出一份可直接用于生产环境的检查清单。</p>
 
@@ -1019,7 +1021,6 @@ scrape_configs:
   </button>
   <div class="reading-progress" id="readingProgress"></div>
 
-
   <!-- Post TOC -->
   <div class="post-toc-container" id="postToc">
     <nav class="post-toc">
@@ -1028,7 +1029,6 @@ scrape_configs:
       </ul>
     </nav>
   </div>
-
 <script src="../../assets/js/particles.js"></script>
 </body>
 </html>
