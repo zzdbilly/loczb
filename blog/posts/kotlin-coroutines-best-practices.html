@@ -54,6 +54,7 @@
     
     <link rel="stylesheet" href="../../assets/css/style.css">
     <link rel="stylesheet" href="../../assets/css/article.css">
+    <link rel="stylesheet" href="../../assets/css/syntax-highlight.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500;600&display=swap" media="print" onload="this.media='all'">
@@ -428,6 +429,20 @@ suspend fun <T> retry(
     </nav>
   </div>
 <script defer src="../../assets/js/particles.js"></script>
+
+  <!-- highlight.js for code syntax highlighting -->
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // 只对没有 codehilite 的代码块应用 highlight.js
+      document.querySelectorAll('pre code:not(.codehilite code)').forEach(function(block) {
+        // 跳过已经有 Pygments 高亮的块
+        if (!block.closest('.codehilite') && !block.querySelector('span[class^="hljs"]')) {
+          hljs.highlightElement(block);
+        }
+      });
+    });
+  </script>
 
   <!-- Cloudflare Web Analytics -->
   <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "29e7cff6f37448989538e2165cb79187"}'></script>
