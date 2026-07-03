@@ -29,10 +29,11 @@ import re
 import os
 import sys
 import json
+import subprocess
 from datetime import datetime
+from xml.sax.saxutils import escape as xml_escape
 
 TEMPLATE = 'templates/blog-post-template.html'
-INLINE_STYLES = 'templates/inline-styles.css'
 POSTS_DIR = 'blog/posts'
 RELATED_JS = 'assets/js/related-posts.js'
 BLOG_INDEX = 'blog/index.html'
@@ -43,9 +44,10 @@ RSS_XML = 'rss.xml'
 
 
 def slugify(title):
-    """将标题转为文件 slug"""
+    """将标题转为文件 slug，保留中文"""
     slug = title.lower()
-    slug = re.sub(r'[^\w\s-]', '', slug)
+    # 保留中文、字母、数字、空格、连字符
+    slug = re.sub(r'[^\w\u4e00-\u9fff\s-]', '', slug)
     slug = re.sub(r'[\s_]+', '-', slug)
     slug = slug.strip('-')
     return slug
@@ -54,12 +56,6 @@ def slugify(title):
 def load_template():
     with open(TEMPLATE, 'r', encoding='utf-8') as f:
         return f.read()
-
-def load_default_styles():
-    if os.path.exists(INLINE_STYLES):
-        with open(INLINE_STYLES, 'r', encoding='utf-8') as f:
-            return f.read()
-    return ''
 
 
 def generate_article(title, description, article_date, read_time, tags, content_html, category):
@@ -77,48 +73,46 @@ def generate_article(title, description, article_date, read_time, tags, content_
         tag_list = []
         tags_html = ''
     
-    # 生成 JSON-LD 结构化数据
-    json_ld = f'''    <script type="application/ld+json">
-    {{
-      "@context": "https://schema.org",
-      "@type": "Article",
-      "headline": "{title}",
-      "description": "{description}",
-      "image": "https://709527.xyz/assets/images/og-default.webp",
-      "author": {{
-        "@type": "Person",
-        "name": "张小猛",
-        "url": "https://709527.xyz/about/"
-      }},
-      "publisher": {{
-        "@type": "Organization",
-        "name": "loczb",
-        "logo": {{
-          "@type": "ImageObject",
-          "url": "https://709527.xyz/assets/images/favicon.svg"
-        }}
-      }},
-      "datePublished": "{article_date}T00:00:00+08:00",
-      "dateModified": "{article_date}T00:00:00+08:00",
-      "url": "{og_url}",
-      "mainEntityOfPage": {{
-        "@type": "WebPage",
-        "@id": "{og_url}"
-      }},
-      "keywords": "{', '.join(tag_list)}",
-      "articleSection": "{category}",
-      "timeRequired": "PT{read_time}M",
-      "inLanguage": "zh-CN"
-    }}
-    </script>'''
+    # 生成 JSON-LD 结构化数据（使用 json.dumps 确保正确转义）
+    json_ld_obj = {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": title,
+        "description": description,
+        "image": "https://709527.xyz/assets/images/og-image.png",
+        "author": {
+            "@type": "Person",
+            "name": "张小猛",
+            "url": "https://709527.xyz/about/"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "loczb",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https://709527.xyz/assets/images/favicon.svg"
+            }
+        },
+        "datePublished": f"{article_date}T00:00:00+08:00",
+        "dateModified": f"{article_date}T00:00:00+08:00",
+        "url": og_url,
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": og_url
+        },
+        "keywords": ", ".join(tag_list),
+        "articleSection": category,
+        "timeRequired": f"PT{read_time}M",
+        "inLanguage": "zh-CN"
+    }
+    json_ld_str = json.dumps(json_ld_obj, ensure_ascii=False, indent=6)
+    json_ld = f'    <script type="application/ld+json">\n{json_ld_str}\n    </script>'
     
     html = template
     html = html.replace('{{TITLE}}', f"{title} | 张小猛 - loczb")
     html = html.replace('{{DESCRIPTION}}', description)
     html = html.replace('{{OG_URL}}', og_url)
     html = html.replace('{{JSON_LD}}', json_ld)
-    # 文章页样式已抽离到 article.css，不再需要内联
-    # html = html.replace('{{INLINE_STYLES}}', load_default_styles())
     html = html.replace('{{ARTICLE_TITLE}}', title)
     html = html.replace('{{ARTICLE_DATE}}', article_date)
     html = html.replace('{{ARTICLE_READ_TIME}}', f"{read_time} min read")
@@ -274,97 +268,18 @@ def update_homepage(slug, title, description, article_date, read_time, tags, cat
 
 
 def update_articles_index(slug, title, description, article_date, read_time, tags, category):
-    """更新 blog/articles-index.json - 添加新文章到索引"""
-    tag_list = [t.strip() for t in tags.split(',')]
-    
-    # 读取现有索引
-    if os.path.exists(ARTICLES_JSON):
-        with open(ARTICLES_JSON, 'r', encoding='utf-8') as f:
-            data = json.load(f)
-    else:
-        # 如果文件不存在，创建一个新结构
-        data = {
-            'posts': [],
-            'tagCloud': [],
-            'archives': [],
-            'categories': [],
-            'stats': {'totalPosts': 0, 'totalTags': 0, 'latestDate': '', 'oldestDate': ''}
-        }
-    
-    # 添加新文章
-    new_post = {
-        'slug': slug,
-        'title': title,
-        'date': article_date,
-        'category': category,
-        'tags': tag_list,
-        'excerpt': description,
-        'url': f'blog/posts/{slug}.html'
-    }
-    
-    # 检查是否已存在（避免重复）
-    existing_index = -1
-    for i, p in enumerate(data['posts']):
-        if p['slug'] == slug:
-            existing_index = i
-            break
-    
-    if existing_index >= 0:
-        # 更新已存在的文章
-        data['posts'][existing_index] = new_post
-    else:
-        # 添加新文章
-        data['posts'].append(new_post)
-    
-    # 重新计算统计数据
-    data['posts'].sort(key=lambda p: p['date'], reverse=True)
-    data['stats']['totalPosts'] = len(data['posts'])
-    
-    # 重新计算 tag cloud
-    tag_counts = {}
-    for post in data['posts']:
-        for tag in post.get('tags', []):
-            tag_counts[tag] = tag_counts.get(tag, 0) + 1
-    data['tagCloud'] = [{'tag': t, 'count': c} for t, c in tag_counts.items()]
-    data['tagCloud'].sort(key=lambda x: x['count'], reverse=True)
-    data['stats']['totalTags'] = len(tag_counts)
-    
-    # 重新计算归档
-    archives = {}
-    for post in data['posts']:
-        month = post['date'][:7]  # YYYY-MM
-        if month not in archives:
-            archives[month] = []
-        archives[month].append({
-            'title': post['title'],
-            'date': post['date'],
-            'url': post['url']
-        })
-    
-    data['archives'] = [
-        {
-            'month': m,
-            'count': len(items),
-            'posts': sorted(items, key=lambda x: x['date'], reverse=True)
-        }
-        for m, items in archives.items()
-    ]
-    data['archives'].sort(key=lambda x: x['month'], reverse=True)
-    
-    # 更新日期统计
-    if data['posts']:
-        dates = [p['date'] for p in data['posts']]
-        data['stats']['latestDate'] = max(dates)
-        data['stats']['oldestDate'] = min(dates)
-    
-    # 提取所有分类
-    data['categories'] = list(set(p['category'] for p in data['posts']))
-    
-    # 写回文件
-    with open(ARTICLES_JSON, 'w', encoding='utf-8') as f:
-        json.dump(data, f, ensure_ascii=False, indent=2)
-    
-    print(f"  ✅ 已更新 articles-index.json")
+    """调用 generate-index.js 重建完整的 articles-index.json（包括 series/tagCloud/archives）"""
+    try:
+        result = subprocess.run(
+            ['node', 'scripts/generate-index.js'],
+            capture_output=True, text=True, cwd=os.getcwd()
+        )
+        if result.returncode == 0:
+            print(f"  ✅ 已重建 articles-index.json (via generate-index.js)")
+        else:
+            print(f"  ⚠️ generate-index.js 失败: {result.stderr}")
+    except Exception as e:
+        print(f"  ⚠️ 调用 generate-index.js 失败: {e}")
 
 
 def update_filter_buttons():
@@ -623,11 +538,11 @@ def update_rss():
             rss_date = date
         
         lines.append('    <item>')
-        lines.append(f'      <title>{title}</title>')
+        lines.append(f'      <title>{xml_escape(title)}</title>')
         lines.append(f'      <link>{BASE_URL}/blog/posts/{slug}.html</link>')
         lines.append(f'      <guid isPermaLink="true">{BASE_URL}/blog/posts/{slug}.html</guid>')
-        lines.append(f'      <description>{desc}</description>')
-        lines.append(f'      <category>{category}</category>')
+        lines.append(f'      <description>{xml_escape(desc)}</description>')
+        lines.append(f'      <category>{xml_escape(category)}</category>')
         lines.append(f'      <pubDate>{rss_date}</pubDate>')
         lines.append('    </item>')
     
