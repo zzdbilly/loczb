@@ -242,8 +242,9 @@ def update_homepage(slug, title, description, article_date, read_time, tags, cat
         content = content.replace(old_featured, featured)
         
         # 替换首页的最新文章列表区域
+        # 匹配 <!-- 最新文章列表 --> 到 <!-- /最新文章列表 --> 之间的内容
         list_match = re.search(
-            r'(<!-- 最新文章列表 -->[\s\S]*?<div class="blog-list">).*?(</div>[\s\S]*?<!-- /最新文章列表 -->)',
+            r'(<!-- 最新文章列表 -->[\s\S]*?<div class="blog-list">)(.*?)(</div>\s*<!-- /最新文章列表 -->)',
             content,
             re.DOTALL
         )
@@ -252,12 +253,27 @@ def update_homepage(slug, title, description, article_date, read_time, tags, cat
             # 构建新的列表内容
             new_list = list_match.group(1)
             for article in list_articles:
-                new_list += article.group(0)
-            new_list += '</div>'
+                new_list += '\n' + article.group(0)
+            new_list += '\n        ' + list_match.group(3)
             
             # 替换
             old_list = list_match.group(0)
             content = content.replace(old_list, new_list)
+        else:
+            # 回退方案：直接替换 blog-list div 内容
+            if list_articles:
+                list_div_match = re.search(
+                    r'(<div class="blog-list">)(.*?)(</div>)',
+                    content,
+                    re.DOTALL
+                )
+                if list_div_match:
+                    new_content = list_div_match.group(1)
+                    for article in list_articles:
+                        new_content += '\n' + article.group(0)
+                    new_content += '\n        ' + list_div_match.group(3)
+                    content = content.replace(list_div_match.group(0), new_content)
+                    print(f"  ⚠️ 使用回退方案更新列表")
         
         with open(HOME_INDEX, 'w', encoding='utf-8') as f:
             f.write(content)
