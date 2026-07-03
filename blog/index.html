@@ -1372,7 +1372,11 @@
         listContainer.classList.add('hidden');
         seriesView.classList.add('active');
         seriesBtn.classList.add('active');
-        if (!seriesData) loadSeries().then(renderSeries).catch(e => console.error(e));
+        if (!seriesData) {
+          loadSeries().then(renderSeries).catch(e => console.error(e));
+        } else {
+          renderSeries(seriesData);
+        }
       } else {
         listBtn.classList.add('active');
       }
