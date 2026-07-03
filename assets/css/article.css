@@ -1,8 +1,6 @@
 /* 文章页专用样式 - 从内联样式抽离 */
 
   
-    .post-toc-container { position: fixed; right: 2rem; top: 180px; width: 220px; max-height: calc(100vh - 220px); border-radius: 16px; overflow: hidden; }
-
     .arch-diagram { background: var(--color-bg-tertiary); border-radius: 12px; padding: 1.5rem; margin: 2rem 0; font-family: monospace; font-size: 0.85rem; line-height: 1.6; overflow-x: auto; white-space: pre; }
 
     .back-link svg { width: 16px; height: 16px; }
