@@ -117,7 +117,8 @@ def generate_article(title, description, article_date, read_time, tags, content_
     html = html.replace('{{DESCRIPTION}}', description)
     html = html.replace('{{OG_URL}}', og_url)
     html = html.replace('{{JSON_LD}}', json_ld)
-    html = html.replace('{{INLINE_STYLES}}', load_default_styles())
+    # 文章页样式已抽离到 article.css，不再需要内联
+    # html = html.replace('{{INLINE_STYLES}}', load_default_styles())
     html = html.replace('{{ARTICLE_TITLE}}', title)
     html = html.replace('{{ARTICLE_DATE}}', article_date)
     html = html.replace('{{ARTICLE_READ_TIME}}', f"{read_time} min read")
