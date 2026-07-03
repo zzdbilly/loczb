@@ -1,0 +1,171 @@
+/* ===================================
+   Syntax Highlighting - highlight.js
+   自定义配色，匹配 loczb 主题
+   =================================== */
+
+/* Dark theme (default) */
+[data-theme="dark"] .hljs {
+  color: #e4e4e7;
+  background: transparent;
+}
+[data-theme="dark"] .hljs-comment,
+[data-theme="dark"] .hljs-quote {
+  color: #6b7280;
+  font-style: italic;
+}
+[data-theme="dark"] .hljs-keyword,
+[data-theme="dark"] .hljs-selector-tag,
+[data-theme="dark"] .hljs-built_in,
+[data-theme="dark"] .hljs-name,
+[data-theme="dark"] .hljs-tag {
+  color: #c084fc;
+}
+[data-theme="dark"] .hljs-string,
+[data-theme="dark"] .hljs-title,
+[data-theme="dark"] .hljs-section,
+[data-theme="dark"] .hljs-attribute,
+[data-theme="dark"] .hljs-literal,
+[data-theme="dark"] .hljs-template-tag,
+[data-theme="dark"] .hljs-template-variable,
+[data-theme="dark"] .hljs-type,
+[data-theme="dark"] .hljs-addition {
+  color: #86efac;
+}
+[data-theme="dark"] .hljs-number,
+[data-theme="dark"] .hljs-symbol,
+[data-theme="dark"] .hljs-bullet,
+[data-theme="dark"] .hljs-link,
+[data-theme="dark"] .hljs-meta,
+[data-theme="dark"] .hljs-selector-id,
+[data-theme="dark"] .hljs-selector-class {
+  color: #fbbf24;
+}
+[data-theme="dark"] .hljs-attr,
+[data-theme="dark"] .hljs-variable,
+[data-theme="dark"] .hljs-property,
+[data-theme="dark"] .hljs-params {
+  color: #60a5fa;
+}
+[data-theme="dark"] .hljs-function .hljs-title,
+[data-theme="dark"] .hljs-title.function_ {
+  color: #93c5fd;
+}
+[data-theme="dark"] .hljs-deletion {
+  color: #fca5a5;
+}
+[data-theme="dark"] .hljs-emphasis {
+  font-style: italic;
+}
+[data-theme="dark"] .hljs-strong {
+  font-weight: 700;
+}
+
+/* Light theme */
+[data-theme="light"] .hljs {
+  color: #1f2937;
+  background: transparent;
+}
+[data-theme="light"] .hljs-comment,
+[data-theme="light"] .hljs-quote {
+  color: #9ca3af;
+  font-style: italic;
+}
+[data-theme="light"] .hljs-keyword,
+[data-theme="light"] .hljs-selector-tag,
+[data-theme="light"] .hljs-built_in,
+[data-theme="light"] .hljs-name,
+[data-theme="light"] .hljs-tag {
+  color: #7c3aed;
+}
+[data-theme="light"] .hljs-string,
+[data-theme="light"] .hljs-title,
+[data-theme="light"] .hljs-section,
+[data-theme="light"] .hljs-attribute,
+[data-theme="light"] .hljs-literal,
+[data-theme="light"] .hljs-template-tag,
+[data-theme="light"] .hljs-template-variable,
+[data-theme="light"] .hljs-type,
+[data-theme="light"] .hljs-addition {
+  color: #059669;
+}
+[data-theme="light"] .hljs-number,
+[data-theme="light"] .hljs-symbol,
+[data-theme="light"] .hljs-bullet,
+[data-theme="light"] .hljs-link,
+[data-theme="light"] .hljs-meta,
+[data-theme="light"] .hljs-selector-id,
+[data-theme="light"] .hljs-selector-class {
+  color: #d97706;
+}
+[data-theme="light"] .hljs-attr,
+[data-theme="light"] .hljs-variable,
+[data-theme="light"] .hljs-property,
+[data-theme="light"] .hljs-params {
+  color: #2563eb;
+}
+[data-theme="light"] .hljs-function .hljs-title,
+[data-theme="light"] .hljs-title.function_ {
+  color: #1d4ed8;
+}
+[data-theme="light"] .hljs-deletion {
+  color: #dc2626;
+}
+[data-theme="light"] .hljs-emphasis {
+  font-style: italic;
+}
+[data-theme="light"] .hljs-strong {
+  font-weight: 700;
+}
+
+/* Pygments codehilite 兼容 - 映射到相同配色 */
+[data-theme="dark"] .codehilite .c1,
+[data-theme="dark"] .codehilite .cm,
+[data-theme="dark"] .codehilite .c { color: #6b7280; font-style: italic; }
+[data-theme="dark"] .codehilite .k,
+[data-theme="dark"] .codehilite .kd,
+[data-theme="dark"] .codehilite .kn,
+[data-theme="dark"] .codehilite .kt { color: #c084fc; }
+[data-theme="dark"] .codehilite .s,
+[data-theme="dark"] .codehilite .s1,
+[data-theme="dark"] .codehilite .s2 { color: #86efac; }
+[data-theme="dark"] .codehilite .n { color: #e4e4e7; }
+[data-theme="dark"] .codehilite .nf { color: #93c5fd; }
+[data-theme="dark"] .codehilite .nc { color: #60a5fa; }
+[data-theme="dark"] .codehilite .mi,
+[data-theme="dark"] .codehilite .mf { color: #fbbf24; }
+[data-theme="dark"] .codehilite .p { color: #e4e4e7; }
+[data-theme="dark"] .codehilite .w { color: #6b7280; }
+
+[data-theme="light"] .codehilite .c1,
+[data-theme="light"] .codehilite .cm,
+[data-theme="light"] .codehilite .c { color: #9ca3af; font-style: italic; }
+[data-theme="light"] .codehilite .k,
+[data-theme="light"] .codehilite .kd,
+[data-theme="light"] .codehilite .kn,
+[data-theme="light"] .codehilite .kt { color: #7c3aed; }
+[data-theme="light"] .codehilite .s,
+[data-theme="light"] .codehilite .s1,
+[data-theme="light"] .codehilite .s2 { color: #059669; }
+[data-theme="light"] .codehilite .n { color: #1f2937; }
+[data-theme="light"] .codehilite .nf { color: #1d4ed8; }
+[data-theme="light"] .codehilite .nc { color: #2563eb; }
+[data-theme="light"] .codehilite .mi,
+[data-theme="light"] .codehilite .mf { color: #d97706; }
+[data-theme="light"] .codehilite .p { color: #1f2937; }
+[data-theme="light"] .codehilite .w { color: #9ca3af; }
+
+/* 代码块容器样式优化 */
+pre code.hljs {
+  display: block;
+  overflow-x: auto;
+  padding: 0;
+  background: transparent;
+}
+
+/* 确保 codehilite 的 pre 也没有多余 padding */
+.codehilite pre {
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  border: none;
+}
