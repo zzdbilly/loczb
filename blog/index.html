@@ -1317,7 +1317,7 @@
     let seriesData = null;
     async function loadSeries() {
       if (seriesData) return seriesData;
-      const resp = await fetch('articles-index.json');
+      const resp = await fetch('articles-index.json?t=' + Date.now());
       const data = await resp.json();
       seriesData = data.series || [];
       return seriesData;
