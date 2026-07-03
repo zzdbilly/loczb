@@ -80,6 +80,22 @@
     .archive-post-title a { color: var(--color-text-primary); text-decoration: none; font-size: var(--text-sm); transition: color 0.15s; }
     .archive-post-title a:hover { color: var(--color-accent-primary); }
     .archive-post-cat { font-size: 0.7rem; padding: 0.15rem 0.5rem; border-radius: var(--radius-full); background: var(--color-bg-tertiary); color: var(--color-text-muted); white-space: nowrap; }
+    /* Series View */
+    .series-view { display: none; }
+    .series-view.active { display: block; }
+    .series-card { margin-bottom: 2rem; padding: 1.5rem; border-radius: var(--radius-lg); background: var(--color-bg-tertiary); border: 1px solid var(--color-border); transition: border-color 0.2s; }
+    .series-card:hover { border-color: var(--color-accent-primary); }
+    .series-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
+    .series-card-title { font-size: var(--text-lg); font-weight: 600; color: var(--color-text-primary); display: flex; align-items: center; gap: 0.5rem; }
+    .series-card-title .series-icon { color: var(--color-accent-primary); }
+    .series-card-count { font-size: var(--text-xs); padding: 0.2rem 0.6rem; border-radius: var(--radius-full); background: var(--color-accent-subtle); color: var(--color-accent-primary); }
+    .series-post-list { list-style: none; padding: 0; margin: 0; }
+    .series-post-item { display: flex; align-items: baseline; gap: 0.75rem; padding: 0.5rem 0; border-bottom: 1px solid var(--color-border); }
+    .series-post-item:last-child { border-bottom: none; }
+    .series-post-num { font-family: var(--font-mono); font-size: var(--text-xs); color: var(--color-text-muted); min-width: 1.5rem; text-align: right; }
+    .series-post-date { font-family: var(--font-mono); font-size: var(--text-xs); color: var(--color-text-muted); white-space: nowrap; min-width: 5.5rem; }
+    .series-post-title a { color: var(--color-text-primary); text-decoration: none; font-size: var(--text-sm); transition: color 0.15s; }
+    .series-post-title a:hover { color: var(--color-accent-primary); }
     /* Hide list view when archive active */
     .blog-list-container.hidden { display: none; }
     .pagination.hidden { display: none; }
@@ -158,6 +174,7 @@
         <h2 class="section-title" id="blog-filter-title">全部文章</h2>
         <div class="blog-view-toggle">
           <button class="view-toggle-btn active" data-view="list" onclick="toggleBlogView('list')">文章列表</button>
+          <button class="view-toggle-btn" data-view="series" onclick="toggleBlogView('series')">系列</button>
           <button class="view-toggle-btn" data-view="archive" onclick="toggleBlogView('archive')">归档</button>
         </div>
       </div>
@@ -1105,6 +1122,8 @@
       <div class="pagination" id="pagination"></div>
       <!-- Archive View -->
       <div id="archive-view" class="archive-view"></div>
+      <!-- Series View -->
+      <div id="series-view" class="series-view"></div>
     </div>
   </section>
   </main>
@@ -1295,22 +1314,67 @@
         </div>
       `).join('');
     }
+    let seriesData = null;
+    async function loadSeries() {
+      if (seriesData) return seriesData;
+      const resp = await fetch('articles-index.json');
+      const data = await resp.json();
+      seriesData = data.series || [];
+      return seriesData;
+    }
+    function renderSeries(series) {
+      const container = document.getElementById('series-view');
+      if (!container || !series.length) {
+        if (container) container.innerHTML = '<p style="text-align:center;color:var(--color-text-muted);padding:2rem;">暂无系列文章</p>';
+        return;
+      }
+      container.innerHTML = series.map(s => `
+        <div class="series-card">
+          <div class="series-card-header">
+            <div class="series-card-title">
+              <span class="series-icon">📚</span>
+              ${s.name}
+            </div>
+            <span class="series-card-count">${s.count} 篇</span>
+          </div>
+          <ul class="series-post-list">
+            ${s.posts.map((p, i) => `
+              <li class="series-post-item">
+                <span class="series-post-num">${String(i + 1).padStart(2, '0')}</span>
+                <span class="series-post-date">${p.date}</span>
+                <span class="series-post-title"><a href="${p.url}">${p.title}</a></span>
+              </li>
+            `).join('')}
+          </ul>
+        </div>
+      `).join('');
+    }
     function toggleBlogView(view) {
       const listContainer = document.querySelector('.blog-list-container');
       const archiveView = document.getElementById('archive-view');
+      const seriesView = document.getElementById('series-view');
       const listBtn = document.querySelector('[data-view="list"]');
       const archiveBtn = document.querySelector('[data-view="archive"]');
+      const seriesBtn = document.querySelector('[data-view="series"]');
+      // Reset all
+      listContainer.classList.remove('hidden');
+      archiveView.classList.remove('active');
+      seriesView.classList.remove('active');
+      listBtn.classList.remove('active');
+      archiveBtn.classList.remove('active');
+      if (seriesBtn) seriesBtn.classList.remove('active');
       if (view === 'archive') {
         listContainer.classList.add('hidden');
         archiveView.classList.add('active');
-        listBtn.classList.remove('active');
         archiveBtn.classList.add('active');
         if (!archiveData) loadArchive().then(renderArchive).catch(e => console.error(e));
+      } else if (view === 'series') {
+        listContainer.classList.add('hidden');
+        seriesView.classList.add('active');
+        seriesBtn.classList.add('active');
+        if (!seriesData) loadSeries().then(renderSeries).catch(e => console.error(e));
       } else {
-        listContainer.classList.remove('hidden');
-        archiveView.classList.remove('active');
         listBtn.classList.add('active');
-        archiveBtn.classList.remove('active');
       }
     }
   </script>

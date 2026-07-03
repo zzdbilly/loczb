@@ -141,11 +141,38 @@ const archiveList = Object.entries(archives)
   }))
   .sort((a, b) => b.month.localeCompare(a.month));
 
+// Generate series (文章系列) - group posts by predefined series rules
+const seriesRules = [
+  { id: 'android-16', name: 'Android 16 专题', match: (p) => p.tags.includes('Android 16') },
+  { id: 'ai-tools', name: 'AI 工具与实践', match: (p) => p.tags.includes('AI 工具') },
+  { id: 'jetpack-compose', name: 'Jetpack Compose 指南', match: (p) => p.tags.includes('Jetpack Compose') },
+  { id: 'kotlin-advanced', name: 'Kotlin 进阶', match: (p) => p.category === 'Kotlin' },
+  { id: 'devops', name: 'DevOps 实战', match: (p) => p.tags.includes('DevOps') },
+  { id: 'ai-agent', name: 'AI Agent 开发', match: (p) => p.category === 'AI Agent' || p.tags.includes('Agent') },
+  { id: 'security', name: '安全加固', match: (p) => p.tags.includes('安全') },
+  { id: 'personal-growth', name: '个人成长', match: (p) => p.tags.includes('个人成长') },
+];
+
+const series = seriesRules
+  .map(rule => {
+    const matched = posts.filter(rule.match);
+    if (matched.length < 2) return null; // 至少2篇才算系列
+    return {
+      id: rule.id,
+      name: rule.name,
+      count: matched.length,
+      posts: matched.map(p => ({ title: p.title, date: p.date, url: p.url }))
+    };
+  })
+  .filter(Boolean)
+  .sort((a, b) => b.count - a.count);
+
 // Output
 const data = {
   posts,
   tagCloud,
   archives: archiveList,
+  series,
   categories: [...new Set(posts.map(p => p.category))],
   stats: {
     totalPosts: posts.length,
