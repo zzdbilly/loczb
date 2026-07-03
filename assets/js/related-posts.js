@@ -74,20 +74,16 @@ const ARTICLE_INDEX = [
 ];
 
 function initRelatedPosts() {
-  console.log('🚀 initRelatedPosts 开始执行');
   // 使用 querySelectorAll 获取所有匹配元素，检查第一个
   const postTagsElements = document.querySelectorAll('.post-tags');
   if (postTagsElements.length === 0) {
-    console.log('❌ 未找到 .post-tags 元素');
     return;
   }
   const postTags = postTagsElements[0];
   const postContent = document.querySelector('.post-content');
   if (!postContent || !postTags) {
-    console.log('❌ 元素缺失');
     return;
   }
-  console.log('✅ 找到 post-tags 元素');
   
   // Identify current article from URL
   // 注意：URL 中的中文是编码的（如 %E9%9A%90），需要解码
@@ -95,16 +91,12 @@ function initRelatedPosts() {
   let currentSlug = currentPath.split('/').pop().replace('.html', '');
   // 解码 URL 编码的中文字符
   try { currentSlug = decodeURIComponent(currentSlug); } catch (e) {}
-  console.log('currentSlug:', currentSlug);
   const currentArticle = ARTICLE_INDEX.find(a => a.slug === currentSlug);
-  console.log('currentArticle:', currentArticle);
   if (!currentArticle) {
-    console.log('❌ 未找到当前文章在索引中');
     return;
   }
   
   // Find related articles by tag overlap
-  console.log('当前文章标签:', currentArticle.tags);
   const scored = ARTICLE_INDEX
     .filter(a => a.slug !== currentSlug)
     .map(a => {
@@ -115,9 +107,7 @@ function initRelatedPosts() {
     .sort((a, b) => b.score - a.score)
     .slice(0, 3);
   
-  console.log('匹配到的相关文章:', scored);
   if (scored.length === 0) {
-    console.log('❌ 没有匹配的文章');
     return;
   }
   
@@ -159,7 +149,6 @@ function initRelatedPosts() {
   
   section.appendChild(list);
   postTags.parentNode.insertBefore(section, postTags.nextSibling);
-  console.log('✅ 相关文章已添加到页面');
 }
 
 document.addEventListener('DOMContentLoaded', initRelatedPosts);

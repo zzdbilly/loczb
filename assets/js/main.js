@@ -314,8 +314,6 @@ function initCountUp() {
 // ===================================
 function copyToClipboard(text) {
   return navigator.clipboard.writeText(text).then(() => {
-    // Success feedback
-    console.log('Copied to clipboard');
     return true;
   }).catch(err => {
     console.error('Failed to copy:', err);
