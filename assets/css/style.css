@@ -835,7 +835,7 @@ a:hover {
 }
 
 .card:hover {
-  border-color: var(--color-border-hover);
+  border-color: var(--color-accent-primary);
   transform: translateY(-4px);
   box-shadow: var(--shadow-xl);
 }
@@ -1216,6 +1216,8 @@ a:hover {
 .about-hero {
   padding-top: 100px;
   padding-bottom: var(--space-3xl);
+  position: relative;
+  overflow: hidden;
 }
 
 .about-grid {
@@ -1240,6 +1242,23 @@ a:hover {
   justify-content: center;
   font-size: 80px;
   margin: 0 auto var(--space-xl);
+  position: relative;
+  box-shadow: 0 0 0 4px var(--color-bg-primary), 0 0 30px var(--color-accent-glow);
+}
+
+.about-avatar::after {
+  content: '';
+  position: absolute;
+  inset: -8px;
+  border-radius: var(--radius-2xl);
+  border: 2px solid var(--color-accent-primary);
+  opacity: 0;
+  animation: avatarPulse 3s ease-in-out infinite;
+}
+
+@keyframes avatarPulse {
+  0%, 100% { opacity: 0; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(1.05); }
 }
 
 .about-info h1 {
@@ -1275,6 +1294,19 @@ a:hover {
 .blog-hero {
   padding-top: 80px;
   padding-bottom: var(--space-sm);
+  position: relative;
+  overflow: hidden;
+}
+
+.blog-hero::after {
+  content: '';
+  position: absolute;
+  top: -200px;
+  right: -300px;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.08), transparent 70%);
+  pointer-events: none;
 }
 
 .blog-filters {
@@ -1343,6 +1375,19 @@ a:hover {
 .projects-hero {
   padding-top: 100px;
   padding-bottom: 0.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.projects-hero::after {
+  content: '';
+  position: absolute;
+  top: -200px;
+  left: -300px;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.08), transparent 70%);
+  pointer-events: none;
 }
 
 .projects-grid {
@@ -2103,6 +2148,24 @@ pre code {
   margin-bottom: var(--space-sm);
 }
 
+.blog-list-meta .blog-date {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.blog-list-meta .blog-read-time {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.blog-list-meta svg {
+  width: 14px;
+  height: 14px;
+  opacity: 0.7;
+}
+
 .blog-list-title {
   font-size: var(--text-lg);
   font-weight: 600;
@@ -2279,14 +2342,6 @@ pre code {
   gap: var(--space-md);
 }
 
-.blog-list-meta {
-  display: flex;
-  align-items: center;
-  gap: var(--space-md);
-  font-size: var(--text-xs);
-  color: var(--color-text-tertiary);
-}
-
 .blog-list-tag {
   font-family: var(--font-mono);
   font-size: var(--text-xs);
@@ -2348,6 +2403,8 @@ pre code {
 .filter-btn:hover {
   border-color: var(--color-accent-primary);
   color: var(--color-accent-primary);
+  background: var(--color-accent-subtle);
+  transform: translateY(-1px);
 }
 
 .filter-btn-active {
@@ -3666,4 +3723,65 @@ pre code {
 .toc-drawer .toc-h3 {
   padding-left: 1.5rem;
   font-size: 0.8rem;
+}
+
+/* ===================================
+   Timeline (About page)
+   =================================== */
+
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  position: relative;
+  padding-left: 1.5rem;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 5px;
+  top: 6px;
+  bottom: 6px;
+  width: 2px;
+  background: linear-gradient(to bottom, var(--color-accent-primary), var(--color-border));
+  border-radius: 1px;
+}
+
+.timeline-item {
+  position: relative;
+}
+
+.timeline-dot {
+  position: absolute;
+  left: -1.5rem;
+  top: 6px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--color-accent-primary);
+  border: 2px solid var(--color-bg-primary);
+  box-shadow: 0 0 8px var(--color-accent-glow);
+  transition: transform var(--transition-fast);
+}
+
+.timeline-item:hover .timeline-dot {
+  transform: scale(1.3);
+}
+
+.timeline-date {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--color-accent-primary);
+  margin-bottom: 2px;
+}
+
+.timeline-title {
+  font-weight: 500;
+  color: var(--color-text-primary);
+}
+
+.timeline-desc {
+  color: var(--color-text-secondary);
+  font-size: var(--text-sm);
 }
