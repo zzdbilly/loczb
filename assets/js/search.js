@@ -14,7 +14,7 @@
   // 加载搜索数据
   async function loadSearchData() {
     try {
-      const resp = await fetch('articles-index.json');
+      const resp = await fetch('articles-index.json?t=' + Date.now());
       const data = await resp.json();
       searchData = data;
       
@@ -35,8 +35,7 @@
       // 渲染标签云
       renderTagCloud(data.tagCloud);
       
-      // 渲染归档视图
-      renderArchive(data.archives);
+      // 归档视图由内联脚本的 loadArchive/renderArchive 处理，不再重复渲染
     } catch (e) {
       console.error('加载搜索数据失败:', e);
     }
@@ -102,6 +101,11 @@
     container.classList.remove('hidden');
     pagination.classList.remove('hidden');
     document.getElementById('archive-view')?.classList.remove('active');
+    document.getElementById('series-view')?.classList.remove('active');
+    // 重置视图切换按钮
+    document.querySelectorAll('.view-toggle-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.view === 'list');
+    });
     
     // 更新标题
     if (filterTitle) filterTitle.textContent = title || '全部文章';
@@ -169,28 +173,8 @@
     }).join('');
   }
 
-  // 切换视图
-  window.toggleBlogView = function(view) {
-    const listContainer = document.querySelector('.blog-list-container');
-    const pagination = document.getElementById('pagination');
-    const archiveView = document.getElementById('archive-view');
-    const buttons = document.querySelectorAll('.view-toggle-btn');
-    
-    // Toggle button active state
-    buttons.forEach(btn => {
-      btn.classList.toggle('active', btn.dataset.view === view);
-    });
-    
-    if (view === 'list') {
-      listContainer.classList.remove('hidden');
-      pagination.classList.remove('hidden');
-      archiveView.classList.remove('active');
-    } else {
-      listContainer.classList.add('hidden');
-      pagination.classList.add('hidden');
-      archiveView.classList.add('active');
-    }
-  };
+  // 视图切换由内联脚本 toggleBlogView 处理，此处不再覆盖
+  // 系列视图和归档视图各有独立渲染逻辑在内联脚本中
 
   // 执行搜索
   function performSearch(query) {
