@@ -77,11 +77,46 @@ def generate_article(title, description, article_date, read_time, tags, content_
         tag_list = []
         tags_html = ''
     
+    # 生成 JSON-LD 结构化数据
+    json_ld = f'''    <script type="application/ld+json">
+    {{
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "{title}",
+      "description": "{description}",
+      "image": "https://709527.xyz/assets/images/og-default.webp",
+      "author": {{
+        "@type": "Person",
+        "name": "张小猛",
+        "url": "https://709527.xyz/about/"
+      }},
+      "publisher": {{
+        "@type": "Organization",
+        "name": "loczb",
+        "logo": {{
+          "@type": "ImageObject",
+          "url": "https://709527.xyz/assets/images/favicon.svg"
+        }}
+      }},
+      "datePublished": "{article_date}T00:00:00+08:00",
+      "dateModified": "{article_date}T00:00:00+08:00",
+      "url": "{og_url}",
+      "mainEntityOfPage": {{
+        "@type": "WebPage",
+        "@id": "{og_url}"
+      }},
+      "keywords": "{', '.join(tag_list)}",
+      "articleSection": "{category}",
+      "timeRequired": "PT{read_time}M",
+      "inLanguage": "zh-CN"
+    }}
+    </script>'''
+    
     html = template
     html = html.replace('{{TITLE}}', f"{title} | 张小猛 - loczb")
     html = html.replace('{{DESCRIPTION}}', description)
     html = html.replace('{{OG_URL}}', og_url)
-    html = html.replace('{{JSON_LD}}', '')
+    html = html.replace('{{JSON_LD}}', json_ld)
     html = html.replace('{{INLINE_STYLES}}', load_default_styles())
     html = html.replace('{{ARTICLE_TITLE}}', title)
     html = html.replace('{{ARTICLE_DATE}}', article_date)
