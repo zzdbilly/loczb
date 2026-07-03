@@ -69,7 +69,7 @@
 
     .warning-box { background: rgba(234, 179, 8, 0.1); border-left: 3px solid #eab308; padding: 1rem 1.2rem; margin: 1.5rem 0; border-radius: 0 6px 6px 0; }
 
-    .workflow-diagram { background: var(--color-bg-tertiary); padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0; font-family: monospace; font-size: 0.85rem; overflow-x: auto; }
+    .workflow-diagram { background: var(--color-bg-tertiary); padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0; font-family: var(--font-mono); font-size: 0.85rem; overflow-x: auto; }
 
     table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.95rem; }
 
@@ -81,8 +81,9 @@
 
 .code-block-wrapper { margin: 1.2rem 0 !important; }
 
-/* Code block first-line fix */
-    .back-link { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--color-text-secondary); font-size: 0.9rem; text-decoration: none; margin-bottom: 1rem; transition: color 0.2s; }
- .comparison-grid { grid-template-columns: 1fr; }
- .post-content pre code { line-height: 1.5; display: block; }
+/* 响应式 */
+@media (max-width: 768px) {
+  .comparison-grid { grid-template-columns: 1fr; }
+}
+
 .post-content { max-width: 760px; margin: 0 auto; line-height: 1.85; }
