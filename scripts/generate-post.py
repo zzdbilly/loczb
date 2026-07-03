@@ -327,17 +327,24 @@ def update_filter_buttons():
     
     # 替换旧的筛选按钮区域
     import re
-    pattern = r'(<div class="blog-filters"[^>]*>)[\s\S]*?(<!-- Search Bar -->)'
-    replacement = r'\1' + buttons_html + r'\2'
+    pattern = r'(<div class="blog-filters"[^>]*>)[\s\S]*?(</div>\s*<!-- Search Bar -->)'
+    # 检查是否匹配到
+    match = re.search(pattern, content)
+    if not match:
+        print(f"  ⚠️ 分类筛选按钮区域未找到")
+        return
     
-    new_content = re.sub(pattern, replacement, content)
+    def replace_buttons(m):
+        return m.group(1) + buttons_html + '\n      ' + m.group(2)
+    
+    new_content = re.sub(pattern, replace_buttons, content)
     
     if new_content != content:
         with open(BLOG_INDEX, 'w', encoding='utf-8') as f:
             f.write(new_content)
         print(f"  ✅ 已更新分类筛选按钮 ({len(sorted_cats)} 个分类)")
     else:
-        print(f"  ⚠️ 分类筛选按钮更新失败")
+        print(f"  ✅ 分类筛选按钮已是最新 ({len(sorted_cats)} 个分类)")
 
 
 def parse_args(args):
@@ -409,6 +416,9 @@ def main():
             if params['content_file'].endswith('.md'):
                 import markdown as md_lib
                 content_html = md_lib.markdown(content_raw, extensions=['fenced_code', 'codehilite', 'tables', 'sane_lists'])
+                # 移除 markdown 第一个 h1（模板已有 <h1>{{ARTICLE_TITLE}}</h1>）
+                import re as _re
+                content_html = _re.sub(r'^<h1>.*?</h1>\s*', '', content_html, count=1)
                 print(f"  📖 从 markdown 文件读取并转换 ({len(content_raw)} chars -> {len(content_html)} chars)")
             else:
                 content_html = content_raw
