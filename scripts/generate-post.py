@@ -131,8 +131,10 @@ def add_to_index(slug, title, tag_list):
         print(f"  ⚠️ 已在索引中，跳过")
         return False
     
+    # 转义标题中的双引号
+    safe_title = title.replace('\\', '\\\\').replace('"', '\\"')
     tags_json = json.dumps(tag_list, ensure_ascii=False)
-    new_entry = f'  {{ slug: "{slug}", tags: {tags_json}, title: "{title}" }}'
+    new_entry = f'  {{ slug: "{slug}", tags: {tags_json}, title: "{safe_title}" }}'
     
     content = content.replace(
         'const ARTICLE_INDEX = [',
@@ -615,14 +617,23 @@ def update_homepage_js_array():
         if url and not url.startswith('blog/'):
             url = 'blog/' + url
         
+        # 转义单引号
+        safe_title = title.replace("\\", "\\\\").replace("'", "\\'")
+        safe_desc = desc.replace("\\", "\\\\").replace("'", "\\'")
+        safe_url = url.replace("'", "\\'")
+        safe_cat1 = cat1.replace("'", "\\'")
+        safe_cat2 = cat2.replace("'", "\\'")
+        safe_date = date.replace("'", "\\'")
+        safe_read_time = read_time.replace("'", "\\'")
+        
         posts_js += f'''      {{
-        url: '{url}',
-        title: '{title}',
-        date: '{date}',
-        readTime: '{read_time} min',
-        category: '{cat1}',
-        category2: '{cat2}',
-        desc: '{desc}'
+        url: '{safe_url}',
+        title: '{safe_title}',
+        date: '{safe_date}',
+        readTime: '{safe_read_time} min',
+        category: '{safe_cat1}',
+        category2: '{safe_cat2}',
+        desc: '{safe_desc}'
       }},
 '''
     
