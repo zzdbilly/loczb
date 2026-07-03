@@ -39,5 +39,9 @@ tmp/
 temp/
 STATE.yaml
 
+# Python cache
+__pycache__/
+*.pyc
+
 # AI Assistant Config
 assets/js/ai-config.js
