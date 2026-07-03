@@ -38,6 +38,8 @@ RELATED_JS = 'assets/js/related-posts.js'
 BLOG_INDEX = 'blog/index.html'
 HOME_INDEX = 'index.html'
 ARTICLES_JSON = 'blog/articles-index.json'
+SITEMAP = 'sitemap.xml'
+RSS_XML = 'rss.xml'
 
 
 def slugify(title):
@@ -490,6 +492,116 @@ def main():
     
     # 更新首页的 JavaScript posts 数组
     update_homepage_js_array()
+    
+    # 更新 sitemap.xml
+    update_sitemap()
+    
+    # 更新 rss.xml
+    update_rss()
+
+
+def update_sitemap():
+    """从 articles-index.json 重新生成 sitemap.xml"""
+    if not os.path.exists(ARTICLES_JSON):
+        print("  ⚠️ articles-index.json 不存在，跳过 sitemap 更新")
+        return
+    
+    with open(ARTICLES_JSON, 'r', encoding='utf-8') as f:
+        data = json.load(f)
+    
+    BASE_URL = 'https://709527.xyz'
+    
+    lines = ['<?xml version="1.0" encoding="UTF-8"?>']
+    lines.append('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">')
+    
+    # 固定页面
+    static_pages = [
+        (f'{BASE_URL}/', 'weekly', '1.0'),
+        (f'{BASE_URL}/blog/', 'daily', '0.9'),
+        (f'{BASE_URL}/projects/', 'monthly', '0.8'),
+        (f'{BASE_URL}/about/', 'monthly', '0.7'),
+    ]
+    for url, freq, priority in static_pages:
+        lines.append(f'  <url>')
+        lines.append(f'    <loc>{url}</loc>')
+        lines.append(f'    <changefreq>{freq}</changefreq>')
+        lines.append(f'    <priority>{priority}</priority>')
+        lines.append(f'  </url>')
+    
+    # 博客文章
+    for post in data.get('posts', []):
+        slug = post.get('slug', '')
+        date = post.get('date', '')
+        if not slug:
+            continue
+        lines.append(f'  <url>')
+        lines.append(f'    <loc>{BASE_URL}/blog/posts/{slug}.html</loc>')
+        if date:
+            lines.append(f'    <lastmod>{date}</lastmod>')
+        lines.append(f'    <changefreq>monthly</changefreq>')
+        lines.append(f'    <priority>0.6</priority>')
+        lines.append(f'  </url>')
+    
+    lines.append('</urlset>')
+    
+    with open(SITEMAP, 'w', encoding='utf-8') as f:
+        f.write('\n'.join(lines) + '\n')
+    
+    post_count = len(data.get('posts', []))
+    print(f"  ✅ 已更新 sitemap.xml ({post_count} 篇文章)")
+
+
+def update_rss():
+    """从 articles-index.json 重新生成 rss.xml"""
+    if not os.path.exists(ARTICLES_JSON):
+        print("  ⚠️ articles-index.json 不存在，跳过 RSS 更新")
+        return
+    
+    with open(ARTICLES_JSON, 'r', encoding='utf-8') as f:
+        data = json.load(f)
+    
+    BASE_URL = 'https://709527.xyz'
+    posts = data.get('posts', [])[:20]  # RSS 取最新 20 篇
+    
+    lines = ['<?xml version="1.0" encoding="UTF-8"?>']
+    lines.append('<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">')
+    lines.append('  <channel>')
+    lines.append(f'    <title>张小猛 - loczb 技术博客</title>')
+    lines.append(f'    <link>{BASE_URL}/blog/</link>')
+    lines.append(f'    <description>张小猛的技术博客 - Android、Kotlin、AI、全栈开发</description>')
+    lines.append(f'    <language>zh-CN</language>')
+    lines.append(f'    <atom:link href="{BASE_URL}/rss.xml" rel="self" type="application/rss+xml"/>')
+    
+    for post in posts:
+        slug = post.get('slug', '')
+        title = post.get('title', '')
+        date = post.get('date', '')
+        desc = post.get('excerpt', '')
+        category = post.get('category', '')
+        
+        # RSS 日期格式: RFC 822
+        try:
+            dt = datetime.strptime(date, '%Y-%m-%d')
+            rss_date = dt.strftime('%a, %d %b %Y 00:00:00 +0800')
+        except:
+            rss_date = date
+        
+        lines.append('    <item>')
+        lines.append(f'      <title>{title}</title>')
+        lines.append(f'      <link>{BASE_URL}/blog/posts/{slug}.html</link>')
+        lines.append(f'      <guid isPermaLink="true">{BASE_URL}/blog/posts/{slug}.html</guid>')
+        lines.append(f'      <description>{desc}</description>')
+        lines.append(f'      <category>{category}</category>')
+        lines.append(f'      <pubDate>{rss_date}</pubDate>')
+        lines.append('    </item>')
+    
+    lines.append('  </channel>')
+    lines.append('</rss>')
+    
+    with open(RSS_XML, 'w', encoding='utf-8') as f:
+        f.write('\n'.join(lines) + '\n')
+    
+    print(f"  ✅ 已更新 rss.xml ({len(posts)} 篇文章)")
 
 def update_homepage_js_array():
     """更新首页的 JavaScript posts 数组，使用博客列表的最新文章"""

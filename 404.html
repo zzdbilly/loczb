@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex">
+  <title>404 - 页面走丢了 | loczb</title>
+  <link rel="icon" type="image/x-icon" href="/assets/images/favicon.ico">
+  <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg">
+  <meta name="theme-color" content="#3b82f6">
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <style>
+    .error-page {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2rem;
+    }
+    .error-content { max-width: 480px; }
+    .error-code {
+      font-size: clamp(6rem, 20vw, 10rem);
+      font-weight: 800;
+      line-height: 1;
+      background: linear-gradient(135deg, var(--color-accent-primary), #8b5cf6);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 1rem;
+    }
+    .error-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--color-text-primary);
+      margin-bottom: 0.5rem;
+    }
+    .error-desc {
+      color: var(--color-text-secondary);
+      margin-bottom: 2rem;
+      line-height: 1.6;
+    }
+    .error-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .error-actions a {
+      padding: 0.75rem 1.5rem;
+      border-radius: var(--radius-full);
+      font-size: 0.95rem;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+    .error-actions .btn-primary {
+      background: var(--color-accent-primary);
+      color: #fff;
+    }
+    .error-actions .btn-primary:hover {
+      background: var(--color-accent-hover, #2563eb);
+      transform: translateY(-1px);
+    }
+    .error-actions .btn-secondary {
+      border: 1px solid var(--color-border);
+      color: var(--color-text-secondary);
+      background: var(--color-bg-secondary);
+    }
+    .error-actions .btn-secondary:hover {
+      border-color: var(--color-border-hover);
+      color: var(--color-text-primary);
+    }
+  </style>
+</head>
+<body>
+  <div class="error-page">
+    <div class="error-content">
+      <div class="error-code">404</div>
+      <h1 class="error-title">页面走丢了</h1>
+      <p class="error-desc">你访问的页面不存在，可能已被移动或删除。<br>不如看看我写的博客吧。</p>
+      <div class="error-actions">
+        <a href="/blog/" class="btn-primary">浏览博客</a>
+        <a href="/" class="btn-secondary">回到首页</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
