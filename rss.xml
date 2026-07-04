@@ -63,11 +63,19 @@
       <pubDate>Thu, 02 Jul 2026 00:00:00 +0800</pubDate>
     </item>
     <item>
-      <title>Android 15 隐私新特性：所有文件都需要 MEDIA_VISUAL_PERMISSION</title>
-      <link>https://709527.xyz/blog/posts/android-15-隐私新特性所有文件都需要-media-visual-permission.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/android-15-隐私新特性所有文件都需要-media-visual-permission.html</guid>
-      <description>详解 Android 15 引入的媒体权限重大变更，以及从 MediaStore 迁移到 Photo Picker 的完整指南</description>
-      <category>Android</category>
+      <title>技术人如何高效学习新技术</title>
+      <link>https://709527.xyz/blog/posts/技术人如何高效学习新技术.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/技术人如何高效学习新技术.html</guid>
+      <description>从被动输入到主动输出，80/20 法则选技术，知识体系建立，实践驱动学习，构建记忆宫殿，善用 AI 与社群</description>
+      <category>思考</category>
+      <pubDate>Wed, 01 Jul 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
+      <title>技术人为什么要写作</title>
+      <link>https://709527.xyz/blog/posts/技术人为什么要写作.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/技术人为什么要写作.html</guid>
+      <description>写作不仅是最强的学习方式，更能帮助技术人建立个人品牌、打破信息茧房、留下成长痕迹</description>
+      <category>思考</category>
       <pubDate>Wed, 01 Jul 2026 00:00:00 +0800</pubDate>
     </item>
     <item>
@@ -76,6 +84,14 @@
       <guid isPermaLink="true">https://709527.xyz/blog/posts/kotlin-coroutine-异常处理机制全面解析.html</guid>
       <description>全面解析 Kotlin 协程异常处理机制，涵盖 launch/async 异常传播差异、SupervisorJob、结构化并发、CoroutineExceptionHandler、Android 最佳实践等核心内容</description>
       <category>Kotlin</category>
+      <pubDate>Wed, 01 Jul 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
+      <title>Android 15 隐私新特性：所有文件都需要 MEDIA_VISUAL_PERMISSION</title>
+      <link>https://709527.xyz/blog/posts/android-15-隐私新特性所有文件都需要-media-visual-permission.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/android-15-隐私新特性所有文件都需要-media-visual-permission.html</guid>
+      <description>详解 Android 15 引入的媒体权限重大变更，以及从 MediaStore 迁移到 Photo Picker 的完整指南</description>
+      <category>Android</category>
       <pubDate>Wed, 01 Jul 2026 00:00:00 +0800</pubDate>
     </item>
     <item>
@@ -95,20 +111,12 @@
       <pubDate>Wed, 01 Jul 2026 00:00:00 +0800</pubDate>
     </item>
     <item>
-      <title>技术人为什么要写作</title>
-      <link>https://709527.xyz/blog/posts/技术人为什么要写作.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/技术人为什么要写作.html</guid>
-      <description>写作不仅是最强的学习方式，更能帮助技术人建立个人品牌、打破信息茧房、留下成长痕迹</description>
+      <title>为什么我开始写博客：从潜水到发声</title>
+      <link>https://709527.xyz/blog/posts/why-i-started-blogging.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/why-i-started-blogging.html</guid>
+      <description>一个普通工程师的写作心路 — 为什么要开始写博客，写作如何改变了我的学习方式，以及我对个人品牌的理解</description>
       <category>思考</category>
-      <pubDate>Wed, 01 Jul 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>技术人如何高效学习新技术</title>
-      <link>https://709527.xyz/blog/posts/技术人如何高效学习新技术.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/技术人如何高效学习新技术.html</guid>
-      <description>从被动输入到主动输出，80/20 法则选技术，知识体系建立，实践驱动学习，构建记忆宫殿，善用 AI 与社群</description>
-      <category>思考</category>
-      <pubDate>Wed, 01 Jul 2026 00:00:00 +0800</pubDate>
+      <pubDate>Tue, 30 Jun 2026 00:00:00 +0800</pubDate>
     </item>
     <item>
       <title>Android 16 前台服务类型全新限制：类型强制匹配与迁移指南</title>
@@ -135,14 +143,6 @@
       <pubDate>Tue, 30 Jun 2026 00:00:00 +0800</pubDate>
     </item>
     <item>
-      <title>为什么我开始写博客：从潜水到发声</title>
-      <link>https://709527.xyz/blog/posts/why-i-started-blogging.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/why-i-started-blogging.html</guid>
-      <description>一个普通工程师的写作心路 — 为什么要开始写博客，写作如何改变了我的学习方式，以及我对个人品牌的理解</description>
-      <category>思考</category>
-      <pubDate>Tue, 30 Jun 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
       <title>AI 代码编辑器深度横评：Cursor vs Windsurf vs Copilot</title>
       <link>https://709527.xyz/blog/posts/ai-代码编辑器深度横评cursor-vs-windsurf-vs-copilot.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/ai-代码编辑器深度横评cursor-vs-windsurf-vs-copilot.html</guid>
@@ -159,10 +159,10 @@
       <pubDate>Sun, 28 Jun 2026 00:00:00 +0800</pubDate>
     </item>
     <item>
-      <title>Android 16 后台任务新限制：开发者迁移指南</title>
-      <link>https://709527.xyz/blog/posts/android-16-background-tasks.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/android-16-background-tasks.html</guid>
-      <description>Android 16 后台任务新限制完整解读：JobScheduler 强化、前台服务严格限制、WorkManager 迁移策略与兼容性适配指南</description>
+      <title>Android Hilt 依赖注入最佳实践：从入门到架构</title>
+      <link>https://709527.xyz/blog/posts/android-hilt-dependency-injection.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/android-hilt-dependency-injection.html</guid>
+      <description>Android Hilt 依赖注入完整指南：核心注解、ViewModel 注入、多模块架构、作用域管理、第三方库集成与测试最佳实践</description>
       <category>Android</category>
       <pubDate>Sat, 27 Jun 2026 00:00:00 +0800</pubDate>
     </item>
