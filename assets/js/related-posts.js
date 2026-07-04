@@ -4,6 +4,7 @@
 
 // Article index with tags
 const ARTICLE_INDEX = [
+  { slug: "ai-编程助手进化论从结对编程到自主编程团队-2026", tags: ["AI 工具", "AI Agent", "Agent", "编程"], title: "AI 编程助手进化论：从结对编程到自主编程团队 (2026)" },
   { slug: "linux-inode-mechanism-deep-dive", tags: ["Linux", "inode", "文件系统", "ext4", "系统编程", "运维"], title: "Linux inode 机制深入理解：从数据结构到实战排查" },
   { slug: "github-actions-auto-index-blog-cicd", tags: ["CI/CD", "DevOps", "GitHub Actions", "前端", "自动化"], title: "GitHub Actions 自动索引：我的静态博客 CI/CD 进化之路" },
   { slug: "programmers-should-learn-to-unplug", tags: ["工作方法", "生活方式", "自我管理"], title: "程序员应该学会「关机」：工作焦虑如何侵蚀你的休息时间" },
