@@ -1464,6 +1464,10 @@ pre code {
     padding: var(--space-3xl) var(--space-md);
   }
   
+  #projects {
+    padding-top: var(--space-4xl);
+  }
+  
   .container {
     padding: 0 var(--space-md);
   }
