@@ -9,8 +9,7 @@ const CORE_URLS = [
   '/about/',
   '/assets/css/style.css',
   '/assets/js/main.js',
-  '/assets/js/search.js',
-  '/assets/js/toc.js'
+  '/assets/js/search.js'
 ];
 
 // Install: cache core pages
