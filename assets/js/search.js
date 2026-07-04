@@ -6,7 +6,7 @@
   'use strict';
 
   let fuse;
-  let searchData = { posts: [], tagCloud: [], archives: [] };
+  let searchData = { posts: [], archives: [] };
   let fuseLoaded = false;
   const searchInput = document.getElementById('blog-search-input');
   const searchResults = document.getElementById('blog-search-results');
@@ -54,158 +54,16 @@
         minMatchCharLength: 2
       };
       fuse = new Fuse(data.posts, options);
-      
-      // 渲染标签云
-      renderTagCloud(data.tagCloud);
-      
-      // 归档视图由内联脚本的 loadArchive/renderArchive 处理，不再重复渲染
     } catch (e) {
       console.error('加载搜索数据失败:', e);
     }
   }
-
-  // 渲染标签云
-  function renderTagCloud(tagCloud) {
-    const container = document.getElementById('tag-cloud');
-    if (!container || !tagCloud.length) return;
-
-    // 取前 20 个高频标签
-    const topTags = tagCloud.slice(0, 20);
-    container.innerHTML = topTags.map(tag => `
-      <button class="tag-cloud-item" data-tag="${tag.tag}">
-        ${tag.tag}<span class="tag-count">${tag.count}</span>
-      </button>
-    `).join('');
-
-    // 绑定点击事件
-    container.querySelectorAll('.tag-cloud-item').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const tag = btn.dataset.tag;
-        // 搜索包含该标签的文章
-        searchByTag(tag);
-      });
-    });
-  }
-
-  // 按标签搜索 - 直接渲染到列表
-  function searchByTag(tag) {
-    if (!fuse) return;
-    
-    // 先删除旧的返回按钮
-    const existingBackBtn = document.getElementById('tag-search-back');
-    if (existingBackBtn) existingBackBtn.remove();
-    
-    // 激活标签样式
-    document.querySelectorAll('.tag-cloud-item').forEach(b => {
-      b.classList.toggle('active', b.dataset.tag === tag);
-    });
-    // 清除搜索框
-    searchInput.value = '';
-    searchResults.classList.remove('active');
-    searchClear.classList.remove('visible');
-    
-    const results = searchData.posts.filter(post => 
-      post.tags.some(t => t.toLowerCase().includes(tag.toLowerCase()))
-    );
-    
-    // 直接渲染到页面列表
-    renderPostsToList(results, `标签: ${tag}`);
-  }
-
-  // 渲染文章到列表容器
-  function renderPostsToList(posts, title) {
-    const container = document.querySelector('.blog-list-container');
-    const pagination = document.getElementById('pagination');
-    const filterTitle = document.getElementById('blog-filter-title');
-    
-    if (!container) return;
-    
-    // 确保在列表视图
-    container.classList.remove('hidden');
-    pagination.classList.remove('hidden');
-    document.getElementById('archive-view')?.classList.remove('active');
-    document.getElementById('series-view')?.classList.remove('active');
-    // 重置视图切换按钮
-    document.querySelectorAll('.view-toggle-btn').forEach(btn => {
-      btn.classList.toggle('active', btn.dataset.view === 'list');
-    });
-    
-    // 更新标题
-    if (filterTitle) filterTitle.textContent = title || '全部文章';
-    
-    // 渲染文章
-    container.innerHTML = posts.map(post => `
-      <article class="blog-list-item" data-category="${post.category}">
-        <div class="blog-list-meta">
-          <time datetime="${post.date}">${post.date}</time>
-          <span class="blog-list-tag">${post.category}</span>
-        </div>
-        <h3 class="blog-list-title">
-          <a href="posts/${post.slug}.html">${post.title}</a>
-        </h3>
-        <p class="blog-list-excerpt">${post.excerpt}</p>
-      </article>
-    `).join('');
-    
-    // 隐藏分页
-    pagination.style.display = 'none';
-    
-    // 添加返回全部按钮
-    if (title) {
-      const backBtn = document.createElement('div');
-      backBtn.id = 'tag-search-back';
-      backBtn.innerHTML = `<button onclick="clearTagFilter()" style="margin: 1rem auto; padding: 0.5rem 1.5rem; border-radius: var(--radius-full); border: 1px solid var(--color-border); background: var(--color-bg-secondary); color: var(--color-text-secondary); cursor: pointer;">← 显示全部文章</button>`;
-      container.before(backBtn);
-    }
-  }
-
-  // 清除标签过滤
-  window.clearTagFilter = function() {
-    const backBtn = document.getElementById('tag-search-back');
-    if (backBtn) backBtn.remove();
-    
-    document.querySelectorAll('.tag-cloud-item').forEach(b => b.classList.remove('active'));
-    document.getElementById('pagination').style.display = 'flex';
-    
-    // 重新加载原始列表（刷新页面最简单）
-    window.location.reload();
-  };
-
-  // 渲染归档视图
-  function renderArchive(archives) {
-    const container = document.getElementById('archive-view');
-    if (!container || !archives.length) return;
-
-    const monthNames = { '01': '一月', '02': '二月', '03': '三月', '04': '四月', '05': '五月', '06': '六月', '07': '七月', '08': '八月', '09': '九月', '10': '十月', '11': '十一月', '12': '十二月' };
-    
-    container.innerHTML = archives.map(arch => {
-      const [year, month] = arch.month.split('-');
-      const monthName = monthNames[month] || month;
-      
-      return `
-        <div class="archive-month">
-          <h3 class="archive-month-header">${year}年 ${monthName}<span class="archive-count">${arch.count} 篇</span></h3>
-          ${arch.posts.map(post => `
-            <div class="archive-post">
-              <span class="archive-post-date">${post.date}</span>
-              <span class="archive-post-title"><a href="posts/${post.url.replace('blog/posts/', '')}">${post.title}</a></span>
-            </div>
-          `).join('')}
-        </div>
-      `;
-    }).join('');
-  }
-
-  // 视图切换由内联脚本 toggleBlogView 处理，此处不再覆盖
-  // 系列视图和归档视图各有独立渲染逻辑在内联脚本中
 
   // 执行搜索
   function performSearch(query) {
     if (!query.trim()) {
       searchResults.classList.remove('active');
       searchClear.classList.remove('visible');
-      // 清除标签激活状态
-      document.querySelectorAll('.tag-cloud-item').forEach(b => b.classList.remove('active'));
       return;
     }
 
