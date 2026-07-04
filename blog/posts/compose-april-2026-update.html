@@ -138,7 +138,7 @@
       <ul>
         <li><strong>懒布局性能持续优化</strong>：LazyColumn / LazyRow 在复杂 item 场景下的重组范围进一步收窄，减少不必要的子树重组</li>
         <li><strong>Modifier 链优化</strong>：Modifier 组合的开销进一步降低，尤其在大量使用 <code>.graphicsLayer()</code> 和 <code>.clip()</code> 的场景下</li>
-        <li><strong>CompositionLocal 改进</strong>：CompositionLocal 的读取性能在 1.11 中获得了��项优化，对主题和配置密集型应用有明显收益</li>
+        <li><strong>CompositionLocal 改进</strong>：CompositionLocal 的读取性能在 1.11 中获得了多项优化，对主题和配置密集型应用有明显收益</li>
         <li><strong>快照状态系统增强</strong>：读写锁的竞争减少，多线程场景下的状态同步更加高效</li>
       </ul>
 
@@ -199,7 +199,7 @@ enum class SharedElementRenderMode {
       <p>Compose 1.11 引入了一项新的实验性 API：<strong>触控板事件（Trackpad Events）</strong>。这虽然看起来是为 Desktop / Web 平台准备的，但对 Android 开发者同样有意义——尤其是那些正在或计划使用 Compose Multiplatform 构建跨平台应用的人。</p>
 
       <h3>为什么需要触控板事件</h3>
-      <p>传统的 Compose 指针事件（<code>pointerInput</code>）是为触摸屏设计的：单指点击、滑动、长按。但触控板（Trackpad / Touchpad）的交互模式不同：它支持多指手势（双指缩放、三指滑动）、精确滚动（带 momentum）、压力感应等。如果没有原生支持，触控板在这些平台上只能模拟鼠标事件，体��大打折扣。</p>
+      <p>传统的 Compose 指针事件（<code>pointerInput</code>）是为触摸屏设计的：单指点击、滑动、长按。但触控板（Trackpad / Touchpad）的交互模式不同：它支持多指手势（双指缩放、三指滑动）、精确滚动（带 momentum）、压力感应等。如果没有原生支持，触控板在这些平台上只能模拟鼠标事件，体验大打折扣。</p>
 
       <h3>API 概览</h3>
 
@@ -351,7 +351,7 @@ composeTestRule.waitUntil(
         <li><strong>性能优化</strong>：减少了导航图构建期间不必要的重组</li>
       </ul>
 
-      <pre><code>// Navigation3 典型用法（类型���全路由）
+      <pre><code>// Navigation3 典型用法（类型安全路由）
 @Serializable
 sealed class Route {
     @Serializable
@@ -390,7 +390,7 @@ fun AppNavigation() {
 
       <ul>
         <li><strong>事件类型扩展</strong>：新增 <code>NavigationEvent.ScreenChanged</code> 和 <code>NavigationEvent.DeeplinkResolved</code> 事件类型</li>
-        <li><strong>Analytics 集成</strong>：内置与 Firebase Analytics 和自建分析系���的集成示例</li>
+        <li><strong>Analytics 集成</strong>：内置与 Firebase Analytics 和自建分析系统的集成示例</li>
         <li><strong>条件监听</strong>：支持基于 <code>NavDestination</code> 属性的条件过滤，只收集关心的导航事件</li>
         <li><strong>性能开销降低</strong>：事件发射路径上的序列化开销减少了约 40%</li>
       </ul>
