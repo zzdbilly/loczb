@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+  <script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub Actions 自动索引：我的静态博客 CI/CD 进化之路 | 张小猛 - loczb</title>
+    <meta name="description" content="68篇技术博客的索引更新从手动7文件到CI全量自动重建——聊聊全量vs增量的取舍、HTML解析技巧、RSS日期格式化踩坑，以及为什么应该让CI管索引">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="GitHub Actions 自动索引：我的静态博客 CI/CD 进化之路 | 张小猛 - loczb">
+    <meta property="og:description" content="68篇技术博客的索引更新从手动7文件到CI全量自动重建——聊聊全量vs增量的取舍、HTML解析技巧、RSS日期格式化踩坑，以及为什么应该让CI管索引">
+    <meta property="og:url" content="https://709527.xyz/blog/posts/github-actions-自动索引我的静态博客-cicd-进化之路.html">
+    <meta property="og:type" content="article">
+        <meta property="og:image" content="../../assets/images/og-image.png">
+    <meta property="og:site_name" content="loczb">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="GitHub Actions 自动索引：我的静态博客 CI/CD 进化之路 | 张小猛 - loczb">
+    <meta name="twitter:description" content="68篇技术博客的索引更新从手动7文件到CI全量自动重建——聊聊全量vs增量的取舍、HTML解析技巧、RSS日期格式化踩坑，以及为什么应该让CI管索引">
+
+    
+        <script type="application/ld+json">
+{
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "GitHub Actions 自动索引：我的静态博客 CI/CD 进化之路",
+      "description": "68篇技术博客的索引更新从手动7文件到CI全量自动重建——聊聊全量vs增量的取舍、HTML解析技巧、RSS日期格式化踩坑，以及为什么应该让CI管索引",
+      "image": "https://709527.xyz/assets/images/og-image.png",
+      "author": {
+            "@type": "Person",
+            "name": "张小猛",
+            "url": "https://709527.xyz/about/"
+      },
+      "publisher": {
+            "@type": "Organization",
+            "name": "loczb",
+            "logo": {
+                  "@type": "ImageObject",
+                  "url": "https://709527.xyz/assets/images/favicon.svg"
+            }
+      },
+      "datePublished": "2026-07-04T00:00:00+08:00",
+      "dateModified": "2026-07-04T00:00:00+08:00",
+      "url": "https://709527.xyz/blog/posts/github-actions-自动索引我的静态博客-cicd-进化之路.html",
+      "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://709527.xyz/blog/posts/github-actions-自动索引我的静态博客-cicd-进化之路.html"
+      },
+      "keywords": "CI/CD, DevOps, GitHub Actions, 前端, 自动化",
+      "articleSection": "DevOps",
+      "timeRequired": "PT5M",
+      "inLanguage": "zh-CN"
+}
+    </script>
+    
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&family=Noto+Sans+SC:wght@500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500&display=swap" media="print" onload="this.media='all'">
+    <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
+    <link rel="alternate icon" href="../../assets/images/favicon.ico">
+</head>
+<body>
+  <!-- Loading -->
+  <div class="loading">
+    <div class="loading-spinner"></div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../../index.html" class="nav-logo">
+        loc<span>zb</span>
+      </a>
+      <button class="nav-toggle" aria-label="打开菜单" aria-expanded="false" aria-controls="nav-links-menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <div class="nav-overlay"></div>
+      <ul class="nav-links" id="nav-links-menu">
+        <li><a href="../../index.html" class="nav-link">首页</a></li>
+        <li><a href="../../projects/index.html" class="nav-link">项目</a></li>
+        <li><a href="../index.html" class="nav-link active">博客</a></li>
+        <li><a href="../../about/index.html" class="nav-link">关于</a></li>
+      </ul>
+    </div>
+  </nav>
+  <!-- Particle Canvas Background -->
+  <canvas id="particle-canvas" class="particle-canvas"></canvas>
+
+  <div class="scroll-progress"></div>
+
+  <main class="section" style="padding-bottom: 0;">
+    <div class="container container-narrow">
+      <a href="../index.html" class="back-link">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        返回博客列表
+      </a>
+
+      <article class="post-content">
+        <h1>GitHub Actions 自动索引：我的静态博客 CI/CD 进化之路</h1>
+        
+        <div class="post-meta">
+          <span>📅 2026-07-04</span>
+          <span>⏱️ 5 min read</span>
+          <span>👤 张小猛</span>
+        </div>
+        
+        <div class="post-tags">
+          <span class="tag">CI/CD</span>
+          <span class="tag">DevOps</span>
+          <span class="tag">GitHub Actions</span>
+          <span class="tag">前端</span>
+          <span class="tag">自动化</span>
+        </div>
+        
+        <h2>为什么手动更新索引是个坑</h2>
+<p>我一直维护着一个 68 篇技术文章的静态博客。每写一篇文章，要手动更新至少 <strong>6 个文件</strong>：首页 index.html、博客列表 blog/index.html、搜索索引 articles-index.json、sitemap.xml、rss.xml、相关文章 related-posts.js。</p>
+<p>这不是我的博客独有的问题——所有静态博客都会遇到。区别在于你是否意识到这已经是个自动化任务。</p>
+<p>之前我的 <code>generate-post.py</code> 脚本虽然能自动完成这些更新，但问题在于：每次改模板、改样式、改索引逻辑，都要回刷全量文章。而且本地脚本和线上部署状态不一致——你在本地更新了 <code>index.html</code>，但如果之后 CI 又覆盖了一次，就出现冲突。</p>
+<h2>问题分解</h2>
+<p>静态博客的索引更新可以分为两类：</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>内容</th>
+<th>依赖</th>
+<th>更新时机</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>文章级</strong></td>
+<td>文章 HTML</td>
+<td>模板 + 内容</td>
+<td>写文章时</td>
+</tr>
+<tr>
+<td><strong>站点级</strong></td>
+<td>首页/���表/RSS/sitemap/搜索索引</td>
+<td>所有文章</td>
+<td>文章变更后</td>
+</tr>
+</tbody>
+</table>
+<p>文章级更新需要本地 markdown → HTML 转换，因为有模板渲染逻辑。</p>
+<p>站点级更新本质上是"把已有的文章列表扫一遍 → 生成对应数据文件"。这完全可以在 CI 里做。</p>
+<h3>数据流设计</h3>
+<p>核心思路很简单：</p>
+<ol>
+<li><strong><code>generate-post.py</code></strong> 只生成文章 HTML + 更新 related-posts.js</li>
+<li><strong><code>generate-index.js</code></strong> 接管所有站点级更新——从 <code>blog/posts/*.html</code> 解析出所有文章元数据，全量重建</li>
+<li><strong>GitHub Actions</strong> 监听 <code>blog/posts/</code> 的 push，自动跑 <code>generate-index.js</code>，提交结果</li>
+</ol>
+<div class="codehilite"><pre><span></span><code>本地写文章 → git push → CI 触发:
+  1. node scripts/generate-index.js
+  2. 生成 articles-index.json (搜索索引 + 标签云 + 归档 + 系列)
+  3. 重建 blog/index.html (文章列表 + 分类按钮)
+  4. 更新 index.html (首页大卡 + 最新列表 + JS数组)
+  5. 生成 sitemap.xml + rss.xml
+  6. git commit + push → Pages 自动部署
+</code></pre></div>
+
+<h2>方案设计</h2>
+<h3>为什么选择全量重建而非增量</h3>
+<p>增量更新的诱惑很大——只改一行，快。但问题很棘手：</p>
+<ul>
+<li>要判断文章是否已存在，需要解析 HTML</li>
+<li>排序逻辑变了怎么办？比如某篇文章改了日期</li>
+<li>模板结构变了怎么办？比如分类按钮从 <code>&lt;select&gt;</code> 换成了 <code>&lt;button&gt;</code> 列表</li>
+<li>删文章怎么办？</li>
+</ul>
+<p>全量重建的好处：</p>
+<ul>
+<li><strong>原子性</strong>：每次 CI 跑完，索引文件一定精确反映当前 <code>blog/posts/</code> 的状态。没有"删了文章但列表还在"的幽灵问题</li>
+<li><strong>幂等性</strong>：同样的输入（<code>blog/posts/</code> 目录），同样的输出（所有索引文件）。不需要"检查是否存在 → 决定 insert/update"的分支逻辑</li>
+<li><strong>可恢复性</strong>：索引文件坏了？<code>rm index.html sitemap.xml &amp;&amp; node generate-index.js</code> 就恢复了</li>
+<li><strong>一致性</strong>：删文章、改日期、换分类——任何变更都不会产生幽灵数据</li>
+</ul>
+<p>增量更新需要维护状态（"这篇文章在 index 的第几行？"），而状态维护本身就是 bug 的来源。全量重建没有状态。</p>
+<p>而且 68 篇文章的全量重建在 CI 上只需要 <strong>不到 1 秒</strong>。完全没有性能压力。</p>
+<h2>generate-index.js 实现</h2>
+<p>核心逻辑非常直白：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1">// Phase 1: 扫描所有文章，解析元数据</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">files</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">fs</span><span class="p">.</span><span class="nx">readdirSync</span><span class="p">(</span><span class="nx">POSTS_DIR</span><span class="p">).</span><span class="nx">filter</span><span class="p">(</span><span class="nx">f</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">f</span><span class="p">.</span><span class="nx">endsWith</span><span class="p">(</span><span class="s1">&#39;.html&#39;</span><span class="p">));</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">posts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">files</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">file</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">content</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">fs</span><span class="p">.</span><span class="nx">readFileSync</span><span class="p">(</span><span class="nx">path</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="nx">POSTS_DIR</span><span class="p">,</span><span class="w"> </span><span class="nx">file</span><span class="p">),</span><span class="w"> </span><span class="s1">&#39;utf-8&#39;</span><span class="p">);</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">titleMatch</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">content</span><span class="p">.</span><span class="nx">match</span><span class="p">(</span><span class="sr">/&lt;title&gt;([^&lt;]+)&lt;\/title&gt;/</span><span class="p">);</span>
+<span class="w">  </span><span class="c1">// ... 从 HTML 中提取 title/date/tags/category/excerpt</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">slug</span><span class="p">,</span><span class="w"> </span><span class="nx">title</span><span class="p">,</span><span class="w"> </span><span class="nx">date</span><span class="p">,</span><span class="w"> </span><span class="nx">category</span><span class="p">,</span><span class="w"> </span><span class="nx">tags</span><span class="p">,</span><span class="w"> </span><span class="nx">excerpt</span><span class="p">,</span><span class="w"> </span><span class="nx">readTime</span><span class="p">,</span><span class="w"> </span><span class="nx">url</span><span class="w"> </span><span class="p">};</span>
+<span class="p">});</span>
+
+<span class="c1">// Phase 2-6: 写入各种输出文件</span>
+<span class="nx">rebuildBlogIndex</span><span class="p">(</span><span class="nx">posts</span><span class="p">);</span><span class="w">   </span><span class="c1">// blog/index.html</span>
+<span class="nx">rebuildHomePage</span><span class="p">(</span><span class="nx">posts</span><span class="p">);</span><span class="w">    </span><span class="c1">// index.html</span>
+<span class="nx">generateSitemap</span><span class="p">(</span><span class="nx">posts</span><span class="p">);</span><span class="w">    </span><span class="c1">// sitemap.xml</span>
+<span class="nx">generateRSS</span><span class="p">(</span><span class="nx">posts</span><span class="p">);</span><span class="w">        </span><span class="c1">// rss.xml</span>
+<span class="c1">// articles-index.json 在 Phase 1 排序后直接写入</span>
+</code></pre></div>
+
+<p>整个脚本不到 250 行，纯 Node.js 无外部依赖。CI 上不需要 <code>npm install</code>。</p>
+<h3>解析 HTML 的元数据提取</h3>
+<p>从 HTML 中提取元数据用正则：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1">// 日期: &lt;span&gt;📅 2026-07-04&lt;/span&gt;</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">dateMatch</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">content</span><span class="p">.</span><span class="nx">match</span><span class="p">(</span><span class="sr">/&lt;span&gt;📅 (\d{4}-\d{1,2}-\d{1,2})&lt;\/span&gt;/</span><span class="p">);</span>
+
+<span class="c1">// 标签: &lt;span class=&quot;tag&quot;&gt;Android&lt;/span&gt;</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">tagMatches</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">content</span><span class="p">.</span><span class="nx">match</span><span class="p">(</span><span class="sr">/&lt;span class=&quot;tag&quot;&gt;([^&lt;]+)&lt;\/span&gt;/g</span><span class="p">);</span>
+
+<span class="c1">// 分类: &lt;span class=&quot;category-tag&quot;&gt;前端&lt;/span&gt;</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">catMatch</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">content</span><span class="p">.</span><span class="nx">match</span><span class="p">(</span><span class="sr">/&lt;span class=&quot;category-tag&quot;[^&gt;]*&gt;([^&lt;]+)&lt;\/span&gt;/</span><span class="p">);</span>
+
+<span class="c1">// 描述: &lt;meta name=&quot;description&quot; content=&quot;...&quot;&gt;</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">descMatch</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">content</span><span class="p">.</span><span class="nx">match</span><span class="p">(</span><span class="sr">/&lt;meta name=&quot;description&quot; content=&quot;([^&quot;]+)&quot;/</span><span class="p">);</span>
+</code></pre></div>
+
+<p>这种"数据在 HTML 里"的模式其实很适合静态博客——HTML 就是唯一的真相源。不需要额外的 frontmatter 或数���库。</p>
+<h3>处理排序的边界情况</h3>
+<p>排序规则：按日期降序，同日文章按 <code>blog/index.html</code> 原有顺序。</p>
+<div class="codehilite"><pre><span></span><code><span class="c1">// 先构建&quot;原顺序&quot;映射</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">htmlOrder</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{};</span>
+<span class="kd">let</span><span class="w"> </span><span class="nx">orderIdx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0</span><span class="p">;</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">linkRegex</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sr">/href=&quot;posts\/([^&quot;&#39;]+\.html)&quot;/g</span><span class="p">;</span>
+<span class="k">while</span><span class="w"> </span><span class="p">((</span><span class="nx">match</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">linkRegex</span><span class="p">.</span><span class="nx">exec</span><span class="p">(</span><span class="nx">blogIndexContent</span><span class="p">))</span><span class="w"> </span><span class="o">!==</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="nx">match</span><span class="p">[</span><span class="mf">1</span><span class="p">]</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="nx">htmlOrder</span><span class="p">))</span><span class="w"> </span><span class="nx">htmlOrder</span><span class="p">[</span><span class="nx">match</span><span class="p">[</span><span class="mf">1</span><span class="p">]]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">orderIdx</span><span class="o">++</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">// 排序</span>
+<span class="nx">posts</span><span class="p">.</span><span class="nx">sort</span><span class="p">((</span><span class="nx">a</span><span class="p">,</span><span class="w"> </span><span class="nx">b</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">dateDiff</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nb">Date</span><span class="p">(</span><span class="nx">b</span><span class="p">.</span><span class="nx">date</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nb">Date</span><span class="p">(</span><span class="nx">a</span><span class="p">.</span><span class="nx">date</span><span class="p">);</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">dateDiff</span><span class="w"> </span><span class="o">!==</span><span class="w"> </span><span class="mf">0</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="nx">dateDiff</span><span class="p">;</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="nx">htmlOrder</span><span class="p">[</span><span class="nx">a</span><span class="p">.</span><span class="nx">slug</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s1">&#39;.html&#39;</span><span class="p">]</span><span class="w"> </span><span class="o">??</span><span class="w"> </span><span class="mf">9999</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="p">(</span><span class="nx">htmlOrder</span><span class="p">[</span><span class="nx">b</span><span class="p">.</span><span class="nx">slug</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s1">&#39;.html&#39;</span><span class="p">]</span><span class="w"> </span><span class="o">??</span><span class="w"> </span><span class="mf">9999</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre></div>
+
+<p>第一次跑的时候 <code>blog/index.html</code> 是旧的，排出来的顺序和旧的一致。第二次跑的时候 <code>blog/index.html</code> 已更新，所以同日的顺序会稳定下来。</p>
+<h3>RSS 日期格式化的坑</h3>
+<p>RSS 规范要求 RFC 822 格式：<code>Sat, 04 Jul 2026 00:00:00 +0800</code>。</p>
+<p>JavaScript 处理日期的坑不少。我踩了一个：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1">// ❌ 错误：Date 解析带时区的 ISO 字符串时有偏移</span>
+<span class="ow">new</span><span class="w"> </span><span class="nb">Date</span><span class="p">(</span><span class="s1">&#39;2026-07-04T00:00:00+08:00&#39;</span><span class="p">).</span><span class="nx">getUTCDay</span><span class="p">()</span><span class="w"> </span><span class="c1">// → 5 (Fri)</span>
+<span class="w">                                                      </span><span class="c1">// 因为 2026-07-04 00:00+08</span>
+<span class="w">                                                      </span><span class="c1">// = 2026-07-03 16:00 UTC</span>
+
+<span class="c1">// ✅ 正确：用本地时间构造函数</span>
+<span class="kd">const</span><span class="w"> </span><span class="p">[</span><span class="nx">y</span><span class="p">,</span><span class="w"> </span><span class="nx">m</span><span class="p">,</span><span class="w"> </span><span class="nx">d</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;2026-07-04&#39;</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">).</span><span class="nx">map</span><span class="p">(</span><span class="nb">Number</span><span class="p">);</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">localDate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nb">Date</span><span class="p">(</span><span class="nx">y</span><span class="p">,</span><span class="w"> </span><span class="nx">m</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="nx">d</span><span class="p">);</span>
+<span class="nx">localDate</span><span class="p">.</span><span class="nx">getDay</span><span class="p">()</span><span class="w"> </span><span class="c1">// → 6 (Sat)</span>
+</code></pre></div>
+
+<h3>GitHub Actions workflow 配置</h3>
+<div class="codehilite"><pre><span></span><code><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Update Blog Index &amp; Cache Hash</span>
+<span class="nt">on</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">push</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">branches</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">main</span><span class="p p-Indicator">]</span>
+<span class="w">    </span><span class="nt">paths</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;blog/posts/**&#39;</span>
+<span class="nt">jobs</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">update-index</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
+<span class="w">    </span><span class="nt">permissions</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">contents</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">write</span><span class="w">    </span><span class="c1"># ← 关键：允许提交回仓库</span>
+<span class="w">    </span><span class="nt">steps</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/checkout@v4</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/setup-node@v4</span>
+<span class="w">        </span><span class="nt">with</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">node-version</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;20&#39;</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Generate blog index</span>
+<span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">node scripts/generate-index.js</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Update cache-busting hashes</span>
+<span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">node -e &#39;...&#39;</span><span class="w">  </span><span class="c1"># 计算 CSS/JS 的 MD5 hash</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Commit and Push</span>
+<span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">          </span><span class="no">git config user.email &quot;github-actions[bot]@users.noreply.github.com&quot;</span>
+<span class="w">          </span><span class="no">git config user.name &quot;github-actions[bot]&quot;</span>
+<span class="w">          </span><span class="no">git add -A</span>
+<span class="w">          </span><span class="no">git diff --staged --quiet || git commit -m &quot;chore: auto-update blog index &amp; cache hashes&quot;</span>
+<span class="w">          </span><span class="no">git push</span>
+</code></pre></div>
+
+<p>关键是 <code>permissions: contents: write</code>——允许 CI 提交回仓库。</p>
+<p>另一个要点：<code>GITHUB_TOKEN</code> 的提交<strong>不会再次触发 workflow</strong>。这避免了"提交 → CI → 提交 → CI → ..."的死循环。</p>
+<h3>缓存哈希自动更新</h3>
+<p>CI workflow 还有个重要的副作用：自动更新 CSS/JS 的缓存版本号。</p>
+<div class="codehilite"><pre><span></span><code><span class="c1">// CI 中的缓存哈希更新逻辑</span>
+<span class="kd">function</span><span class="w"> </span><span class="nx">updateHtmlFile</span><span class="p">(</span><span class="nx">htmlPath</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">let</span><span class="w"> </span><span class="nx">html</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">fs</span><span class="p">.</span><span class="nx">readFileSync</span><span class="p">(</span><span class="nx">htmlPath</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;utf-8&#39;</span><span class="p">);</span>
+<span class="w">  </span><span class="nx">html</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">html</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/(assets\/(?:css|js)\/[^&quot;?]+)\?v=[a-f0-9]+/g</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="nx">match</span><span class="p">,</span><span class="w"> </span><span class="nx">assetPath</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">hash</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">crypto</span><span class="p">.</span><span class="nx">createHash</span><span class="p">(</span><span class="s1">&#39;md5&#39;</span><span class="p">)</span>
+<span class="w">      </span><span class="p">.</span><span class="nx">update</span><span class="p">(</span><span class="nx">fs</span><span class="p">.</span><span class="nx">readFileSync</span><span class="p">(</span><span class="nx">assetPath</span><span class="p">))</span>
+<span class="w">      </span><span class="p">.</span><span class="nx">digest</span><span class="p">(</span><span class="s1">&#39;hex&#39;</span><span class="p">).</span><span class="nx">slice</span><span class="p">(</span><span class="mf">0</span><span class="p">,</span><span class="w"> </span><span class="mf">8</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">assetPath</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s1">&#39;?v=&#39;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">hash</span><span class="p">;</span>
+<span class="w">  </span><span class="p">});</span>
+<span class="w">  </span><span class="nx">fs</span><span class="p">.</span><span class="nx">writeFileSync</span><span class="p">(</span><span class="nx">htmlPath</span><span class="p">,</span><span class="w"> </span><span class="nx">html</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>每次 CSS/JS 内容变化，引用它们的 HTML 文件中的 <code>?v=xxx</code> 会自动更新，确保访客拿到的是最新版本。之前这个也要手动改或靠 Python 脚本处理。</p>
+<h3>模板与索引的解耦</h3>
+<p>模板（<code>blog-post-template.html</code>）决定文章的视觉呈现，索引（<code>index.html</code> / <code>sitemap.xml</code> 等）决定文章的发现路径。</p>
+<p>这两者原本就是独立的变化维度：</p>
+<ul>
+<li>改样式：只影响所有文章的 HTML 生成，索引结构不变</li>
+<li>改索引逻辑：只影响站点级文件的生成方式，文章内容不变</li>
+<li>发新文章：既需要新文章 HTML，也需要更新索引</li>
+</ul>
+<p>在旧的 "generate-post.py 一把梭" 模式下，这三个操作都混在一起。改模板后必须用 <code>refresh-posts.py</code> 回刷所有文章，但 <code>generate-post.py</code> 会再次修改 index.html——产生不必要的 diff。</p>
+<p>解耦后：</p>
+<div class="codehilite"><pre><span></span><code>模板变更: refresh-posts.py (只改文章) → generate-index.js (CI 改索引)
+                            └──── 两个步骤，互不干扰 ────┘
+</code></pre></div>
+
+<h2>前后对比</h2>
+<h3>变更量对比</h3>
+<table>
+<thead>
+<tr>
+<th>操作</th>
+<th>改前</th>
+<th>改后</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>写一篇新文章</td>
+<td>修改 7 个文件</td>
+<td>修改 2 个文件</td>
+</tr>
+<tr>
+<td>git diff 行数</td>
+<td>200+ 行</td>
+<td>文章本身的行数</td>
+</tr>
+<tr>
+<td>可能的人为错误</td>
+<td>高（手动改 HTML，忘了更新某文件）</td>
+<td>无</td>
+</tr>
+<tr>
+<td>回滚复杂度</td>
+<td>多个文件各自回滚</td>
+<td>只回滚文章 HTML</td>
+</tr>
+</tbody>
+</table>
+<h3>流程对比</h3>
+<p><strong>改前</strong>（写一篇文章的完整流程）：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 1. 生成文章</span>
+python3<span class="w"> </span>scripts/generate-post.py<span class="w"> </span><span class="s2">&quot;标题&quot;</span><span class="w"> </span><span class="s2">&quot;描述&quot;</span><span class="w"> </span>--tags<span class="w"> </span><span class="s2">&quot;标签&quot;</span><span class="w"> </span>--category<span class="w"> </span>分类<span class="w"> </span>--content<span class="w"> </span>article.md
+<span class="c1"># 这一步修改了：文章HTML、首页、列表、sitemap、rss、articles-index.json、related-posts.js</span>
+
+<span class="c1"># 2. 手动检查（容易遗漏）</span>
+grep<span class="w"> </span><span class="s2">&quot;标题&quot;</span><span class="w"> </span>index.html<span class="w"> </span>blog/index.html<span class="w">  </span><span class="c1"># 确认首页和列表已更新</span>
+grep<span class="w"> </span><span class="s2">&quot;标题&quot;</span><span class="w"> </span>sitemap.xml<span class="w"> </span>rss.xml<span class="w">         </span><span class="c1"># 确认 sitemap 和 RSS</span>
+
+<span class="c1"># 3. git diff 里一堆&quot;自动化改动&quot;</span>
+git<span class="w"> </span>status
+<span class="c1"># modified: blog/posts/xxx.html</span>
+<span class="c1"># modified: index.html</span>
+<span class="c1"># modified: blog/index.html</span>
+<span class="c1"># modified: sitemap.xml</span>
+<span class="c1"># modified: rss.xml</span>
+<span class="c1"># modified: blog/articles-index.json</span>
+<span class="c1"># modified: assets/js/related-posts.js</span>
+
+<span class="c1"># 4. 提交（commit message 很难写清楚）</span>
+git<span class="w"> </span>add<span class="w"> </span>-A<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;new post: xxx&quot;</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>git<span class="w"> </span>push
+</code></pre></div>
+
+<p><strong>改后</strong>：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 1. 生成文章</span>
+python3<span class="w"> </span>scripts/generate-post.py<span class="w"> </span><span class="s2">&quot;标题&quot;</span><span class="w"> </span><span class="s2">&quot;描述&quot;</span><span class="w"> </span>--tags<span class="w"> </span><span class="s2">&quot;标签&quot;</span><span class="w"> </span>--category<span class="w"> </span>分类<span class="w"> </span>--content<span class="w"> </span>article.md
+<span class="c1"># 只修改：文章HTML、related-posts.js</span>
+
+<span class="c1"># 2. 直接提交</span>
+git<span class="w"> </span>add<span class="w"> </span>blog/posts/<span class="w"> </span>assets/js/related-posts.js
+git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;new post: xxx&quot;</span>
+git<span class="w"> </span>push
+
+<span class="c1"># 3. CI 自动搞定剩下的，30秒后页面生效</span>
+</code></pre></div>
+
+<p><code>git diff</code> 再也不会超过文章内容本身的长度了。</p>
+<h3>速度</h3>
+<p>CI 全量重建耗时 &lt; 5 秒（含 npm install）。实际上 <code>generate-index.js</code> 无外部依赖，去掉 <code>npm install</code> 后 &lt; 2 秒。</p>
+<p>本地感知的差异：<strong>从 push 到页面生效，前后没有区别</strong>（都是等 Pages 部署）。但本地操作简洁了很多——不用在 git diff 里翻找真正的改动。</p>
+<h2>还解决了什么附带问题</h2>
+<h3>模板变更后的回刷不再冲突</h3>
+<p>之前改一次模板，需要用 <code>scripts/refresh-posts.py</code> 回刷所有旧文章，再手动执行 <code>generate-index.js</code> 更新索引。步骤多且容易漏。</p>
+<p>现在：改模板 → 回刷文章 → <code>node scripts/generate-index.js</code> → push。CI 不会再产生额外冲突，因为它做的和你本地做的一模一样。</p>
+<h3>幽灵文章问题不复存在</h3>
+<p>删了 <code>blog/posts/xxx.html</code> 但忘了从列表/filter/sitemap/RSS 里删掉？不会再有了——<code>generate-index.js</code> 扫描的是 <code>blog/posts/</code> 目录，删了文件就自动消失。</p>
+<h3>多设备协作的冲突消除</h3>
+<p>以前在另一台电脑上改了文章，push 回来后本地的 index.html 没更新就出现冲突。现在不会有这个问题——索引文件永远只在 CI 端生成。</p>
+<p>本地工作副本里 <code>index.html</code> / <code>blog/index.html</code> / <code>sitemap.xml</code> / <code>rss.xml</code> 完全可以不关心，因为它们在任何设备上都是一样的内容（由 CI 决定）。</p>
+<h3>调试效率提升</h3>
+<p>以前想排查"为什么这篇文章没出现在博客列表"，要翻 <code>generate-post.py</code> 里的 <code>update_blog_list</code> 函数，看它是否检测到文章已存在、排序是否正确、是否触发了某个边界条件。代码路径长且散落在 Python 文件中。</p>
+<p>现在只要看 <code>generate-index.js</code> 里的排序逻辑——因为它是全量重建，输入确定，输出就确定。出错了直接跑本地 <code>node generate-index.js</code>，看哪一步出了问题。</p>
+<h2>适用场景</h2>
+<p>这个方案适合：</p>
+<ul>
+<li>静态博客 / SSG（Jekyll / Hugo / Hexo ���理）</li>
+<li>文章数 100-1000 篇（全量重建 &lt; 1s）</li>
+<li>有 GitHub Pages / Vercel / Netlify 部署</li>
+</ul>
+<p>不适合：</p>
+<ul>
+<li>文章数 &gt; 10,000 篇（全量重建可能超过 CI 时间限制）</li>
+<li>需要即时生效的场景（Pages 部署有 30-60 秒延迟）</li>
+<li>多人同时编辑同一篇文章（CI 提交可能冲突）</li>
+</ul>
+<h2>总结</h2>
+<p>把站点级索引生成从本地脚本迁移到 CI，是一个"做减法"的优化。每次写文章少改 5 个文件，少看 100 行 git diff，少担心漏了哪个索引。</p>
+<p>核心原则：<strong>文章 HTML 是唯一真相源</strong>，所有索引都是衍生数据。衍生数据的生成应该是确定性的、可重复的、自动的。</p>
+<p>代码在 GitHub：https://github.com/zzdbilly/loczb</p>
+<hr />
+<p><em>如果你也在维护静态博客，不妨试试把索引生成放入 CI。这可能是你今年做的性价比最高的自动化。</em></p>
+      </article>
+    </div>
+  </main>
+
+  <!-- Related Posts / Navigation -->
+  <section class="section" style="padding-top: 0;">
+    <div class="container container-narrow">
+      <hr style="border: none; border-top: 1px solid var(--color-border); margin: var(--space-3xl) 0;">
+      
+      <div class="blog-topics" style="margin-bottom: var(--space-xl);">
+        <span class="topic-label">读完之后：</span>
+        <a href="../index.html" class="topic-tag">返回博客列表</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <p class="footer-signature">写代码，做产品，也认真生活。</p>
+      <div class="footer-social">
+        <a href="https://github.com/zzdbilly" class="footer-social-link" target="_blank" rel="noopener" aria-label="GitHub">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+        </a>
+        <a href="../../rss.xml" class="footer-social-link" aria-label="RSS">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+      </div>
+      <div class="footer-links">
+        <a href="../../index.html" class="footer-link">首页</a>
+        <a href="../../projects/index.html" class="footer-link">项目</a>
+        <a href="../../about/index.html" class="footer-link">关于</a>
+      </div>
+      <p class="footer-copyright">
+        &copy; 2026 张小猛
+      </p>
+    </div>
+  </footer>
+
+  
+  <script defer src="../../assets/js/related-posts.js"></script>
+  <script defer src="../../assets/js/main.js"></script>
+  <script defer src="../../assets/js/article.js"></script>
+
+  <!-- Back to Top & Reading Progress -->
+  <button class="back-to-top" id="backToTop" aria-label="回到顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
+  <div class="reading-progress" id="readingProgress"></div>
+
+  <!-- Post TOC -->
+  <div class="post-toc-container" id="postToc">
+    <nav class="post-toc">
+      <div class="post-toc-title">目录</div>
+      <ul class="post-toc-list" id="tocList">
+      </ul>
+    </nav>
+  </div>
+<script defer src="../../assets/js/particles.js"></script>
+
+  <!-- highlight.js for code syntax highlighting -->
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // 只对没有 codehilite 的代码块应用 highlight.js
+      document.querySelectorAll('pre code').forEach(function(block) {
+        // 跳过已经有 Pygments 高亮的块
+        if (!block.closest('.codehilite') && !block.classList.contains('hljs')) {
+          hljs.highlightElement(block);
+        }
+      });
+    });
+  </script>
+
+  <!-- Cloudflare Web Analytics -->
+  <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "29e7cff6f37448989538e2165cb79187"}'></script>
+</body>
+</html>
