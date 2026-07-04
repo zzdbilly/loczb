@@ -471,7 +471,7 @@
       
       <div class="blog-grid">
         <!-- 代表文章大卡 -->
-                                                                                                                                                                                                                <article class="blog-card-featured animate-on-scroll" id="home-featured-post" style="display: block;">
+                                                                                                                                                                                                                                <article class="blog-card-featured animate-on-scroll" id="home-featured-post" style="display: block;">
           <div class="blog-card-header">
             <div class="blog-card-meta">
               <span class="blog-date">2026-07-04</span>
@@ -485,13 +485,15 @@
           </h3>
           <p class="blog-card-excerpt">不会关机的程序员不是在拼事业，而是在慢性消耗自己。聊聊为什么下班后的大脑还在 debug，以及如何真正停下来。...</p>
           <div class="blog-card-tags">
-            <span class="tech-tag">工作方法</span><span class="tech-tag">生活方式</span><span class="tech-tag">自我管理</span>
+            <span class="tech-tag">工作方法</span>
+            <span class="tech-tag">生活方式</span>
+            <span class="tech-tag">自我管理</span>
           </div>
         </article>
         
         <!-- 最新文章列表 -->
                 <div class="blog-list">
-<article class="blog-list-item animate-on-scroll" data-category="前端" data-page="1">
+        <article class="blog-list-item animate-on-scroll" data-category="前端" data-page="1">
           <div class="blog-list-header">
             <div class="blog-list-meta">
               <span class="blog-date">2026-07-03</span>
@@ -501,11 +503,11 @@
             <span class="blog-list-tag">前端</span>
           </div>
           <h3 class="blog-list-title">
-            <a href="posts/静态博客性能优化实战从-59mb-到精简高效.html">静态博客性能优化实战：从 59MB 到精简高效</a>
+            <a href="blog/posts/静态博客性能优化实战从-59mb-到精简高效.html">静态博客性能优化实战：从 59MB 到精简高效</a>
           </h3>
           <p class="blog-list-excerpt">66篇文章4KB重复内联样式、4.4MB死文件、404幽灵引用——一次完整的静态博客性能优化记录</p>
         </article>
-<article class="blog-list-item animate-on-scroll" data-category="Android" data-page="1">
+        <article class="blog-list-item animate-on-scroll" data-category="Android" data-page="1">
           <div class="blog-list-header">
             <div class="blog-list-meta">
               <span class="blog-date">2026-07-02</span>
@@ -515,7 +517,7 @@
             <span class="blog-list-tag">Android</span>
           </div>
           <h3 class="blog-list-title">
-            <a href="posts/gradle-构建加速全攻略从-5-分钟到-30-秒.html">Gradle 构建加速全攻略：从 5 分钟到 30 秒</a>
+            <a href="blog/posts/gradle-构建加速全攻略从-5-分钟到-30-秒.html">Gradle 构建加速全攻略：从 5 分钟到 30 秒</a>
           </h3>
           <p class="blog-list-excerpt">系统梳理 Gradle 构建加速的完整方法论——配置调优、KAPT迁移KSP、增量编译、模块化拆分、远程缓存、CI优化，附真实项目优化案例，构建时间减少85%</p>
         </article>
@@ -693,7 +695,7 @@
         readTime: '8 min',
         category: '思考',
         category2: '思考',
-        desc: '写作不仅是最强的学习方式，更能帮助技术人建立个人品牌、打破信息茧房、留下成长痕迹。本文分享我开始写作以来的思考和收获'
+        desc: '写作不仅是最强的学习方式，更能帮助技术人建立个人品牌、打破信息茧房、留下成长痕迹'
       },
       {
         url: 'blog/posts/kotlin-coroutine-异常处理机制全面解析.html',
@@ -721,7 +723,7 @@
         category: '思考',
         category2: '思考',
         desc: '技术能力决定了你能走多快，但软技能决定了你能走多远。本文聊聊沟通、表达、影响力等容易被技术人忽视的能力。'
-      },
+      }
     ];
     
     const randomPost = posts[0]; // Always use latest post
