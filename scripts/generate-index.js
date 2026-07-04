@@ -183,7 +183,8 @@ function rebuildBlogIndex() {
   const articleItems = posts.map(p => {
     const tagsForArticle = p.tags;
     const dateStr = p.date;
-    const dataTags = tagsForArticle.map(t => escapeHtml(t)).join(' ');
+    // data-tags 用逗号分隔（避免多词标签被空格误拆）
+    const dataTags = tagsForArticle.map(t => escapeHtml(t)).join(',');
     return `        <article class="blog-list-item animate-on-scroll" data-category="${escapeHtml(p.category)}" data-tags="${dataTags}" data-page="1">
           <div class="blog-list-header">
             <div class="blog-list-meta">
@@ -231,10 +232,10 @@ function rebuildBlogIndex() {
     return `        <span class="tag-cloud-item" data-filter="${escapeHtml(t.tag)}">${escapeHtml(t.tag)} <span class="tag-count">${t.count}</span></span>`;
   }).join('\n');
 
-  // 替换标签云
+  // 替换标签云（包含 id 容器，供 JS 事件委托使用）
   const tagCloudPattern = /(<!-- Tag Cloud -->)[\s\S]*?(<!-- \/Tag Cloud -->)/;
   if (tagCloudPattern.test(html)) {
-    html = html.replace(tagCloudPattern, `$1\n${tagCloudHtml}\n      $2`);
+    html = html.replace(tagCloudPattern, `$1\n      <div id="blog-tag-cloud" class="tag-cloud">\n${tagCloudHtml}\n      </div>\n      $2`);
   } else {
     console.warn('⚠️  blog/index.html: 缺少 <!-- Tag Cloud --> 标记');
   }
