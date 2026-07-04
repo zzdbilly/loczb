@@ -268,7 +268,7 @@ function rebuildHomePage() {
   html = html.replace(featuredPattern, featured);
 
   // 更新最新文章列表 (第2、3篇)
-  const listArticles = posts.slice(1, 3);
+  const listArticles = posts.slice(1, 5);
   if (listArticles.length > 0) {
     const listItems = listArticles.map(p => {
       return `        <article class="blog-list-item animate-on-scroll" data-category="${escapeHtml(p.category)}" data-page="1">
