@@ -14,6 +14,21 @@
       "url": "blog/posts/程序员应该学会关机工作焦虑如何侵蚀你的休息时间.html"
     },
     {
+      "slug": "github-actions-自动索引我的静态博客-cicd-进化之路",
+      "title": "GitHub Actions 自动索引：我的静态博客 CI/CD 进化之路",
+      "date": "2026-07-04",
+      "category": "技术",
+      "tags": [
+        "CI/CD",
+        "DevOps",
+        "GitHub Actions",
+        "前端",
+        "自动化"
+      ],
+      "excerpt": "68篇技术博客的索引更新从手动7文件到CI全量自动重建——聊聊全量vs增量的取舍、HTML解析技巧、RSS日期格式化踩坑，以及为什么应该让CI管索引",
+      "url": "blog/posts/github-actions-自动索引我的静态博客-cicd-进化之路.html"
+    },
+    {
       "slug": "静态博客性能优化实战从-59mb-到精简高效",
       "title": "静态博客性能优化实战：从 59MB 到精简高效",
       "date": "2026-07-03",
@@ -1031,7 +1046,7 @@
     },
     {
       "tag": "DevOps",
-      "count": 8
+      "count": 9
     },
     {
       "tag": "Kotlin",
@@ -1042,12 +1057,24 @@
       "count": 6
     },
     {
+      "tag": "前端",
+      "count": 4
+    },
+    {
       "tag": "Android 16",
       "count": 4
     },
     {
       "tag": "AI 工具",
       "count": 4
+    },
+    {
+      "tag": "CI/CD",
+      "count": 3
+    },
+    {
+      "tag": "自动化",
+      "count": 3
     },
     {
       "tag": "性能优化",
@@ -1063,10 +1090,6 @@
     },
     {
       "tag": "开发技巧",
-      "count": 3
-    },
-    {
-      "tag": "前端",
       "count": 3
     },
     {
@@ -1087,6 +1110,10 @@
     },
     {
       "tag": "自我管理",
+      "count": 2
+    },
+    {
+      "tag": "GitHub Actions",
       "count": 2
     },
     {
@@ -1159,14 +1186,6 @@
     },
     {
       "tag": "Live Updates",
-      "count": 2
-    },
-    {
-      "tag": "CI/CD",
-      "count": 2
-    },
-    {
-      "tag": "自动化",
       "count": 2
     },
     {
@@ -1439,10 +1458,6 @@
     },
     {
       "tag": "SPA",
-      "count": 1
-    },
-    {
-      "tag": "GitHub Actions",
       "count": 1
     },
     {
@@ -1953,12 +1968,17 @@
   "archives": [
     {
       "month": "2026-07",
-      "count": 11,
+      "count": 12,
       "posts": [
         {
           "title": "程序员应该学会「关机」：工作焦虑如何侵蚀你的休息时间",
           "date": "2026-07-04",
           "url": "blog/posts/程序员应该学会关机工作焦虑如何侵蚀你的休息时间.html"
+        },
+        {
+          "title": "GitHub Actions 自动索引：我的静态博客 CI/CD 进化之路",
+          "date": "2026-07-04",
+          "url": "blog/posts/github-actions-自动索引我的静态博客-cicd-进化之路.html"
         },
         {
           "title": "静态博客性能优化实战：从 59MB 到精简高效",
@@ -2332,8 +2352,13 @@
     {
       "id": "devops",
       "name": "DevOps 实战",
-      "count": 8,
+      "count": 9,
       "posts": [
+        {
+          "title": "GitHub Actions 自动索引：我的静态博客 CI/CD 进化之路",
+          "date": "2026-07-04",
+          "url": "blog/posts/github-actions-自动索引我的静态博客-cicd-进化之路.html"
+        },
         {
           "title": "Gradle 构建加速全攻略：从 5 分钟到 30 秒",
           "date": "2026-07-02",
@@ -2568,6 +2593,7 @@
   ],
   "categories": [
     "思考",
+    "技术",
     "前端",
     "Android",
     "Kotlin",
@@ -2580,7 +2606,7 @@
     "AI Agent"
   ],
   "stats": {
-    "totalPosts": 68,
+    "totalPosts": 69,
     "totalTags": 232,
     "latestDate": "2026-07-04",
     "oldestDate": "2026-02-15"
