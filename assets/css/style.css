@@ -604,6 +604,7 @@ a:hover {
   opacity: 0.3;
   filter: blur(60px);
   animation: pulse 8s ease-in-out infinite;
+  pointer-events: none;
 }
 
 .hero-grid {
@@ -614,6 +615,7 @@ a:hover {
     linear-gradient(90deg, rgba(99, 102, 241, 0.03) 1px, transparent 1px);
   background-size: 50px 50px;
   mask-image: radial-gradient(ellipse at center, black 0%, transparent 70%);
+  pointer-events: none;
 }
 
 .hero-content {
