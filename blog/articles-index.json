@@ -35,7 +35,7 @@
       "slug": "programmers-should-learn-to-unplug",
       "title": "程序员应该学会「关机」：工作焦虑如何侵蚀你的休息时间",
       "date": "2026-07-04",
-      "category": "思考",
+      "category": "技术",
       "tags": [
         "工作方法",
         "生活方式",
@@ -48,7 +48,7 @@
       "slug": "static-blog-performance-optimization-59mb",
       "title": "静态博客性能优化实战：从 59MB 到精简高效",
       "date": "2026-07-03",
-      "category": "前端",
+      "category": "技术",
       "tags": [
         "性能优化",
         "静态网站",
@@ -64,7 +64,7 @@
       "slug": "gradle-build-acceleration-5min-to-30sec",
       "title": "Gradle 构建加速全攻略：从 5 分钟到 30 秒",
       "date": "2026-07-02",
-      "category": "Android",
+      "category": "技术",
       "tags": [
         "Gradle",
         "Android",
@@ -81,7 +81,7 @@
       "slug": "urban-planning-inspires-software-architecture",
       "title": "像规划城市一样设计系统：城市规划给软件架构的启示",
       "date": "2026-07-02",
-      "category": "思考",
+      "category": "技术",
       "tags": [
         "架构设计",
         "领域驱动设计",
@@ -98,7 +98,7 @@
       "slug": "software-engineer-learns-from-manufacturing-lean",
       "title": "软件工程师能从制造业学到什么：精益思维重塑开发流程",
       "date": "2026-07-02",
-      "category": "思考",
+      "category": "技术",
       "tags": [
         "精益",
         "DevOps",
@@ -115,7 +115,7 @@
       "slug": "how-tech-people-learn-new-tech",
       "title": "how-tech-people-learn-new-tech",
       "date": "2026-07-01",
-      "category": "思考",
+      "category": "技术",
       "tags": [
         "学习方法",
         "个人成长",
@@ -130,7 +130,7 @@
       "slug": "why-tech-people-should-write",
       "title": "why-tech-people-should-write",
       "date": "2026-07-01",
-      "category": "思考",
+      "category": "技术",
       "tags": [
         "思考",
         "写作",
@@ -146,7 +146,7 @@
       "slug": "kotlin-coroutine-exception-handling",
       "title": "Kotlin Coroutine 异常处理机制全面解析",
       "date": "2026-07-01",
-      "category": "Kotlin",
+      "category": "技术",
       "tags": [
         "Kotlin",
         "协程",
@@ -162,7 +162,7 @@
       "slug": "android-15-privacy-media-visual-permission",
       "title": "Android 15 隐私新特性：所有文件都需要 MEDIA_VISUAL_PERMISSION",
       "date": "2026-07-01",
-      "category": "Android",
+      "category": "技术",
       "tags": [
         "Android",
         "隐私",
@@ -179,7 +179,7 @@
       "slug": "less-is-more-focus-in-information-age",
       "title": "少即是多：信息过载时代的专注力修炼",
       "date": "2026-07-01",
-      "category": "思考",
+      "category": "技术",
       "tags": [
         "思考",
         "专注力",
@@ -194,7 +194,7 @@
       "slug": "soft-skills-tech-people-overlook",
       "title": "代码之外的竞争力：技术人最容易忽视的软技能",
       "date": "2026-07-01",
-      "category": "思考",
+      "category": "技术",
       "tags": [
         "思考",
         "软技能",
@@ -265,7 +265,7 @@
       "slug": "ai-code-editor-review-cursor-windsurf-copilot",
       "title": "AI 代码编辑器深度横评：Cursor vs Windsurf vs Copilot",
       "date": "2026-06-28",
-      "category": "前端",
+      "category": "技术",
       "tags": [
         "AI",
         "AI 工具",
@@ -278,7 +278,7 @@
       "slug": "git-worktree-multi-branch-guide",
       "title": "Git Worktree 高效多分支开发指南",
       "date": "2026-06-28",
-      "category": "前端",
+      "category": "技术",
       "tags": [
         "Git",
         "开发技巧",
@@ -2445,7 +2445,7 @@
     {
       "id": "personal-growth",
       "name": "个人成长",
-      "count": 6,
+      "count": 5,
       "posts": [
         {
           "title": "程序员应该学会「关机」：工作焦虑如何侵蚀你的休息时间",
@@ -2466,11 +2466,6 @@
           "title": "少即是多：信息过载时代的专注力修炼",
           "date": "2026-07-01",
           "url": "blog/posts/less-is-more-focus-in-information-age.html"
-        },
-        {
-          "title": "代码之外的竞争力：技术人最容易忽视的软技能",
-          "date": "2026-07-01",
-          "url": "blog/posts/soft-skills-tech-people-overlook.html"
         },
         {
           "title": "为什么我开始写博客：从潜水到发声",
@@ -2534,33 +2529,6 @@
       ]
     },
     {
-      "id": "kotlin-advanced",
-      "name": "Kotlin 进阶",
-      "count": 4,
-      "posts": [
-        {
-          "title": "Kotlin Coroutine 异常处理机制全面解析",
-          "date": "2026-07-01",
-          "url": "blog/posts/kotlin-coroutine-exception-handling.html"
-        },
-        {
-          "title": "Kotlin Multiplatform 实战：共享业务逻辑到 iOS",
-          "date": "2026-06-24",
-          "url": "blog/posts/kotlin-multiplatform-practice.html"
-        },
-        {
-          "title": "Kotlin 2.4.0 重磅发布：Context Parameters 稳定、Destructuring 升级、Lombok 插件进入 Alpha",
-          "date": "2026-06-19",
-          "url": "blog/posts/kotlin-240-features.html"
-        },
-        {
-          "title": "Kotlin Coroutines 最佳实践",
-          "date": "2026-04-08",
-          "url": "blog/posts/kotlin-coroutines-best-practices.html"
-        }
-      ]
-    },
-    {
       "id": "ai-agent",
       "name": "AI Agent 开发",
       "count": 4,
@@ -2610,6 +2578,28 @@
       ]
     },
     {
+      "id": "kotlin-advanced",
+      "name": "Kotlin 进阶",
+      "count": 3,
+      "posts": [
+        {
+          "title": "Kotlin Multiplatform 实战：共享业务逻辑到 iOS",
+          "date": "2026-06-24",
+          "url": "blog/posts/kotlin-multiplatform-practice.html"
+        },
+        {
+          "title": "Kotlin 2.4.0 重磅发布：Context Parameters 稳定、Destructuring 升级、Lombok 插件进入 Alpha",
+          "date": "2026-06-19",
+          "url": "blog/posts/kotlin-240-features.html"
+        },
+        {
+          "title": "Kotlin Coroutines 最佳实践",
+          "date": "2026-04-08",
+          "url": "blog/posts/kotlin-coroutines-best-practices.html"
+        }
+      ]
+    },
+    {
       "id": "security",
       "name": "安全加固",
       "count": 3,
@@ -2635,15 +2625,15 @@
   "categories": [
     "技术",
     "思考",
-    "前端",
     "Android",
-    "Kotlin",
     "AI",
     "DevOps",
     "系统编程",
+    "前端",
     "开发",
     "数据库",
     "安全",
+    "Kotlin",
     "AI Agent"
   ],
   "stats": {
