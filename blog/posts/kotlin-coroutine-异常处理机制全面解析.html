@@ -200,7 +200,7 @@
 <span class="p">}</span>
 </code></pre></div>
 
-<p>这个特性非常关键：<strong>如果 <code>async</code> 的结果被忽略（从不调用 <code>await()</code>），异常也不会被抛出——但协程框架仍然会记���它，并在未处理时触发全局异常处理器。</strong></p>
+<p>这个特性非常关键：<strong>如果 <code>async</code> 的结果被忽略（从不调用 <code>await()</code>），异常也不会被抛出——但协程框架仍然会记录它，并在未处理时触发全局异常处理器。</strong></p>
 <div class="codehilite"><pre><span></span><code><span class="kd">fun</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">runBlocking</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">scope</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CoroutineScope</span><span class="p">(</span><span class="n">Job</span><span class="p">())</span>
 
@@ -499,7 +499,7 @@
 <span class="w">        </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
 <span class="w">            </span><span class="n">riskyOperation</span><span class="p">()</span>
 <span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">e</span><span class="p">:</span><span class="w"> </span><span class="n">Exception</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="kc">null</span><span class="w"> </span><span class="c1">// 返回默��值</span>
+<span class="w">            </span><span class="kc">null</span><span class="w"> </span><span class="c1">// 返回默认值</span>
 <span class="w">        </span><span class="p">}</span>
 <span class="w">    </span><span class="p">}</span>
 
@@ -772,7 +772,7 @@
 <span class="w">        </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="kc">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">            </span><span class="kd">val</span><span class="w"> </span><span class="nv">users</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">api</span><span class="p">.</span><span class="na">getUsers</span><span class="p">()</span>
 <span class="w">            </span><span class="n">emit</span><span class="p">(</span><span class="n">users</span><span class="p">)</span>
-<span class="w">            </span><span class="n">delay</span><span class="p">(</span><span class="m">30</span><span class="n">_000</span><span class="p">)</span><span class="w"> </span><span class="c1">// 每 30 秒��询</span>
+<span class="w">            </span><span class="n">delay</span><span class="p">(</span><span class="m">30</span><span class="n">_000</span><span class="p">)</span><span class="w"> </span><span class="c1">// 每 30 秒轮询</span>
 <span class="w">        </span><span class="p">}</span>
 <span class="w">    </span><span class="p">}.</span><span class="na">retry</span><span class="p">(</span><span class="m">3</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">cause</span><span class="w"> </span><span class="o">-&gt;</span>
 <span class="w">        </span><span class="c1">// 网络错误时重试，最多 3 次</span>
