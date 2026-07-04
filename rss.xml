@@ -7,11 +7,11 @@
     <language>zh-CN</language>
     <atom:link href="https://709527.xyz/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
-      <title>程序员应该学会「关机」：工作焦虑如何侵蚀你的休息时间</title>
-      <link>https://709527.xyz/blog/posts/程序员应该学会关机工作焦虑如何侵蚀你的休息时间.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/程序员应该学会关机工作焦虑如何侵蚀你的休息时间.html</guid>
-      <description>不会关机的程序员不是在拼事业，而是在慢性消耗自己。聊聊为什么下班后的大脑还在 debug，以及如何真正停下来。</description>
-      <category>思考</category>
+      <title>Linux inode 机制深入理解：从数据结构到实战排查</title>
+      <link>https://709527.xyz/blog/posts/linux-inode-机制深入理解从数据结构到实战排查.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/linux-inode-机制深入理解从数据结构到实战排查.html</guid>
+      <description>inode 是 Linux 文件系统的核心概念。本文从 ext4 inode 数据结构、硬链接软链接原理、文件删除机制到 inode 耗尽排查，全面解析 inode 工作原理。</description>
+      <category>技术</category>
       <pubDate>Sat, 04 Jul 2026 00:00:00 +0800</pubDate>
     </item>
     <item>
@@ -23,11 +23,11 @@
       <pubDate>Sat, 04 Jul 2026 00:00:00 +0800</pubDate>
     </item>
     <item>
-      <title>Linux inode 机制深入理解：从数据结构到实战排查</title>
-      <link>https://709527.xyz/blog/posts/linux-inode-机制深入理解从数据结构到实战排查.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/linux-inode-机制深入理解从数据结构到实战排查.html</guid>
-      <description>inode 是 Linux 文件系统的核心概念。本文从 ext4 inode 数据结构、硬链接软链接原理、文件删除机制到 inode 耗尽排查，全面解析 inode 工作原理。</description>
-      <category>技术</category>
+      <title>程序员应该学会「关机」：工作焦虑如何侵蚀你的休息时间</title>
+      <link>https://709527.xyz/blog/posts/程序员应该学会关机工作焦虑如何侵蚀你的休息时间.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/程序员应该学会关机工作焦虑如何侵蚀你的休息时间.html</guid>
+      <description>不会关机的程序员不是在拼事业，而是在慢性消耗自己。聊聊为什么下班后的大脑还在 debug，以及如何真正停下来。</description>
+      <category>思考</category>
       <pubDate>Sat, 04 Jul 2026 00:00:00 +0800</pubDate>
     </item>
     <item>
@@ -63,19 +63,11 @@
       <pubDate>Thu, 02 Jul 2026 00:00:00 +0800</pubDate>
     </item>
     <item>
-      <title>技术人如何高效学习新技术</title>
-      <link>https://709527.xyz/blog/posts/技术人如何高效学习新技术.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/技术人如何高效学习新技术.html</guid>
-      <description>从被动输入到主动输出，80/20 法则选技术，知识体系建立，实践驱动学习，构建记忆宫殿，善用 AI 与社群</description>
-      <category>思考</category>
-      <pubDate>Wed, 01 Jul 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>技术人为什么要写作</title>
-      <link>https://709527.xyz/blog/posts/技术人为什么要写作.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/技术人为什么要写作.html</guid>
-      <description>写作不仅是最强的学习方式，更能帮助技术人建立个人品牌、打破信息茧房、留下成长痕迹</description>
-      <category>思考</category>
+      <title>Android 15 隐私新特性：所有文件都需要 MEDIA_VISUAL_PERMISSION</title>
+      <link>https://709527.xyz/blog/posts/android-15-隐私新特性所有文件都需要-media-visual-permission.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/android-15-隐私新特性所有文件都需要-media-visual-permission.html</guid>
+      <description>详解 Android 15 引入的媒体权限重大变更，以及从 MediaStore 迁移到 Photo Picker 的完整指南</description>
+      <category>Android</category>
       <pubDate>Wed, 01 Jul 2026 00:00:00 +0800</pubDate>
     </item>
     <item>
@@ -84,14 +76,6 @@
       <guid isPermaLink="true">https://709527.xyz/blog/posts/kotlin-coroutine-异常处理机制全面解析.html</guid>
       <description>全面解析 Kotlin 协程异常处理机制，涵盖 launch/async 异常传播差异、SupervisorJob、结构化并发、CoroutineExceptionHandler、Android 最佳实践等核心内容</description>
       <category>Kotlin</category>
-      <pubDate>Wed, 01 Jul 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>Android 15 隐私新特性：所有文件都需要 MEDIA_VISUAL_PERMISSION</title>
-      <link>https://709527.xyz/blog/posts/android-15-隐私新特性所有文件都需要-media-visual-permission.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/android-15-隐私新特性所有文件都需要-media-visual-permission.html</guid>
-      <description>详解 Android 15 引入的媒体权限重大变更，以及从 MediaStore 迁移到 Photo Picker 的完整指南</description>
-      <category>Android</category>
       <pubDate>Wed, 01 Jul 2026 00:00:00 +0800</pubDate>
     </item>
     <item>
@@ -111,12 +95,20 @@
       <pubDate>Wed, 01 Jul 2026 00:00:00 +0800</pubDate>
     </item>
     <item>
-      <title>为什么我开始写博客：从潜水到发声</title>
-      <link>https://709527.xyz/blog/posts/why-i-started-blogging.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/why-i-started-blogging.html</guid>
-      <description>一个普通工程师的写作心路 — 为什么要开始写博客，写作如何改变了我的学习方式，以及我对个人品牌的理解</description>
+      <title>技术人为什么要写作</title>
+      <link>https://709527.xyz/blog/posts/技术人为什么要写作.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/技术人为什么要写作.html</guid>
+      <description>写作不仅是最强的学习方式，更能帮助技术人建立个人品牌、打破信息茧房、留下成长痕迹</description>
       <category>思考</category>
-      <pubDate>Tue, 30 Jun 2026 00:00:00 +0800</pubDate>
+      <pubDate>Wed, 01 Jul 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
+      <title>技术人如何高效学习新技术</title>
+      <link>https://709527.xyz/blog/posts/技术人如何高效学习新技术.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/技术人如何高效学习新技术.html</guid>
+      <description>从被动输入到主动输出，80/20 法则选技术，知识体系建立，实践驱动学习，构建记忆宫殿，善用 AI 与社群</description>
+      <category>思考</category>
+      <pubDate>Wed, 01 Jul 2026 00:00:00 +0800</pubDate>
     </item>
     <item>
       <title>Android 16 前台服务类型全新限制：类型强制匹配与迁移指南</title>
@@ -140,6 +132,14 @@
       <guid isPermaLink="true">https://709527.xyz/blog/posts/mcp-server-deep-dive.html</guid>
       <description>3000字完整教程，从零搭建 MCP Server，涵盖协议核心、SDK 使用、调试技巧和生产部署最佳实践</description>
       <category>AI</category>
+      <pubDate>Tue, 30 Jun 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
+      <title>为什么我开始写博客：从潜水到发声</title>
+      <link>https://709527.xyz/blog/posts/why-i-started-blogging.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/why-i-started-blogging.html</guid>
+      <description>一个普通工程师的写作心路 — 为什么要开始写博客，写作如何改变了我的学习方式，以及我对个人品牌的理解</description>
+      <category>思考</category>
       <pubDate>Tue, 30 Jun 2026 00:00:00 +0800</pubDate>
     </item>
     <item>
