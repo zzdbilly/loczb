@@ -25,14 +25,11 @@
       if (filter === 'all' || filter === '全部') return true;
       // 1. 检查 data-category
       if (post.dataset.category === filter) return true;
-      // 2. 检查 data-tags（空格分隔的标签列表）
-      var tags = (post.getAttribute('data-tags') || '').split(/\s+/).filter(Boolean);
+      // 2. 检查 data-tags（逗号分隔的标签列表）
+      var tagsStr = post.getAttribute('data-tags') || '';
+      var tags = tagsStr ? tagsStr.split(',').filter(Boolean) : [];
       if (tags.indexOf(filter) !== -1) return true;
-      // 3. 模糊匹配：标签可能包含多词标签（如 "AI 工具"），data-tags 用空格分隔会拆开
-      //    所以也检查完整 tags 字符串是否包含 filter
-      var fullTags = post.getAttribute('data-tags') || '';
-      if (fullTags.indexOf(filter) !== -1) return true;
-      // 4. 检查文章内 .tag / .tag-accent / .blog-list-tag 元素的文本
+      // 3. 检查文章内 .tag / .tag-accent / .blog-list-tag 元素的文本
       var tagEls = post.querySelectorAll('.tag, .tag-accent, .blog-list-tag');
       for (var i = 0; i < tagEls.length; i++) {
         if (tagEls[i].textContent.trim() === filter) return true;
@@ -148,7 +145,7 @@
           applyFilter(this.dataset.filter || this.textContent.trim());
         });
       });
-      // 绑定标签云点击
+      // 绑定标签云点击（事件委托到容器）
       var tagCloud = document.getElementById('blog-tag-cloud');
       if (tagCloud) {
         tagCloud.addEventListener('click', function(e) {
@@ -158,23 +155,11 @@
           var tag = item.getAttribute('data-filter');
           if (!tag) return;
           // 切换到列表视图
-          if (typeof toggleBlogView === 'function') {
+          var viewBtn = document.querySelector('[data-view="list"]');
+          if (viewBtn && !viewBtn.classList.contains('active')) {
             toggleBlogView('list');
           }
           applyFilter(tag);
-        });
-      } else {
-        // 标签云可能不在 #blog-tag-cloud 容器内（直接在 .tag-cloud 里）
-        document.querySelectorAll('.tag-cloud-item').forEach(item => {
-          item.addEventListener('click', function(e) {
-            e.preventDefault();
-            var tag = this.getAttribute('data-filter');
-            if (!tag) return;
-            if (typeof toggleBlogView === 'function') {
-              toggleBlogView('list');
-            }
-            applyFilter(tag);
-          });
         });
       }
       // 处理浏览器后退
