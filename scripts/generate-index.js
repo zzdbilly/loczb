@@ -183,7 +183,8 @@ function rebuildBlogIndex() {
   const articleItems = posts.map(p => {
     const tagsForArticle = p.tags;
     const dateStr = p.date;
-    return `        <article class="blog-list-item animate-on-scroll" data-category="${escapeHtml(p.category)}" data-page="1">
+    const dataTags = tagsForArticle.map(t => escapeHtml(t)).join(' ');
+    return `        <article class="blog-list-item animate-on-scroll" data-category="${escapeHtml(p.category)}" data-tags="${dataTags}" data-page="1">
           <div class="blog-list-header">
             <div class="blog-list-meta">
               <span class="blog-date">${escapeHtml(dateStr)}</span>
@@ -222,8 +223,24 @@ function rebuildBlogIndex() {
   const filterPattern = /(<div class="blog-filters"[^>]*>)[\s\S]*?(<\/div>\s*<!-- Search Bar -->)/;
   html = html.replace(filterPattern, `$1\n${filterButtons}\n      $2`);
 
+  // 生成标签云 HTML — 只显示出现 ≥2 次的标签，最多 30 个
+  const tagCloudItems = indexData.tagCloud
+    .filter(t => t.count >= 2)
+    .slice(0, 30);
+  const tagCloudHtml = tagCloudItems.map(t => {
+    return `        <span class="tag-cloud-item" data-filter="${escapeHtml(t.tag)}">${escapeHtml(t.tag)} <span class="tag-count">${t.count}</span></span>`;
+  }).join('\n');
+
+  // 替换标签云
+  const tagCloudPattern = /(<!-- Tag Cloud -->)[\s\S]*?(<!-- \/Tag Cloud -->)/;
+  if (tagCloudPattern.test(html)) {
+    html = html.replace(tagCloudPattern, `$1\n${tagCloudHtml}\n      $2`);
+  } else {
+    console.warn('⚠️  blog/index.html: 缺少 <!-- Tag Cloud --> 标记');
+  }
+
   fs.writeFileSync(BLOG_INDEX, html);
-  console.log(`✅ blog/index.html: ${posts.length} articles, ${sortedCats.length} categories`);
+  console.log(`✅ blog/index.html: ${posts.length} articles, ${sortedCats.length} categories, ${tagCloudHtml.length} tags in cloud`);
 }
 
 // ═══════════════════════════════════════════════
