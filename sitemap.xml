@@ -63,13 +63,25 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://709527.xyz/blog/posts/android-15-隐私新特性所有文件都需要-media-visual-permission.html</loc>
+    <loc>https://709527.xyz/blog/posts/技术人如何高效学习新技术.html</loc>
+    <lastmod>2026-07-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://709527.xyz/blog/posts/技术人为什么要写作.html</loc>
     <lastmod>2026-07-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://709527.xyz/blog/posts/kotlin-coroutine-异常处理机制全面解析.html</loc>
+    <lastmod>2026-07-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://709527.xyz/blog/posts/android-15-隐私新特性所有文件都需要-media-visual-permission.html</loc>
     <lastmod>2026-07-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -87,14 +99,8 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://709527.xyz/blog/posts/技术人为什么要写作.html</loc>
-    <lastmod>2026-07-01</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://709527.xyz/blog/posts/技术人如何高效学习新技术.html</loc>
-    <lastmod>2026-07-01</lastmod>
+    <loc>https://709527.xyz/blog/posts/why-i-started-blogging.html</loc>
+    <lastmod>2026-06-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -117,12 +123,6 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://709527.xyz/blog/posts/why-i-started-blogging.html</loc>
-    <lastmod>2026-06-30</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
     <loc>https://709527.xyz/blog/posts/ai-代码编辑器深度横评cursor-vs-windsurf-vs-copilot.html</loc>
     <lastmod>2026-06-28</lastmod>
     <changefreq>monthly</changefreq>
@@ -135,25 +135,31 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://709527.xyz/blog/posts/android-16-background-tasks.html</loc>
-    <lastmod>2026-06-27</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://709527.xyz/blog/posts/android-16-notifications.html</loc>
-    <lastmod>2026-06-27</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
     <loc>https://709527.xyz/blog/posts/android-hilt-dependency-injection.html</loc>
     <lastmod>2026-06-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://709527.xyz/blog/posts/css-view-transitions.html</loc>
+    <loc>https://709527.xyz/blog/posts/nginx-reverse-proxy-tuning.html</loc>
+    <lastmod>2026-06-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://709527.xyz/blog/posts/zig-language-introduction.html</loc>
+    <lastmod>2026-06-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://709527.xyz/blog/posts/rag-introduction.html</loc>
+    <lastmod>2026-06-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://709527.xyz/blog/posts/android-16-background-tasks.html</loc>
     <lastmod>2026-06-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -165,13 +171,37 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://709527.xyz/blog/posts/css-view-transitions.html</loc>
+    <lastmod>2026-06-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://709527.xyz/blog/posts/go-concurrency-patterns.html</loc>
     <lastmod>2026-06-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://709527.xyz/blog/posts/postgresql-index-optimization.html</loc>
+    <lastmod>2026-06-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://709527.xyz/blog/posts/android-16-notifications.html</loc>
+    <lastmod>2026-06-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://709527.xyz/blog/posts/https-tls13-deep-dive.html</loc>
+    <lastmod>2026-06-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://709527.xyz/blog/posts/prompt-engineering-systematic.html</loc>
     <lastmod>2026-06-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -189,37 +219,7 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://709527.xyz/blog/posts/nginx-reverse-proxy-tuning.html</loc>
-    <lastmod>2026-06-27</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://709527.xyz/blog/posts/postgresql-index-optimization.html</loc>
-    <lastmod>2026-06-27</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://709527.xyz/blog/posts/prompt-engineering-systematic.html</loc>
-    <lastmod>2026-06-27</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://709527.xyz/blog/posts/rag-introduction.html</loc>
-    <lastmod>2026-06-27</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
     <loc>https://709527.xyz/blog/posts/webassembly-in-practice.html</loc>
-    <lastmod>2026-06-27</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://709527.xyz/blog/posts/zig-language-introduction.html</loc>
     <lastmod>2026-06-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
