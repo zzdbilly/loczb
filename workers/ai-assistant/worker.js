@@ -26,12 +26,15 @@ const SITE_CONTEXT = `
 2. NoFap Tracker Web - 一个帮助追踪习惯的 Web 应用
 3. OpenClaw 实践 - 基于 OpenClaw 的自动化工作流
 
-博客分类：
-- AI (8篇)：AI 编程、Prompt 设计、Agent 工作流
-- Android (3篇)：Gemini Nano 集成、Kotlin、Jetpack Compose
-- 前端 (5篇)：React、TypeScript、CSS、PWA
-- DevOps (4篇)：Docker、SSH 安全、Tailscale
-- 其他：数据库、系統编程、Kotlin、安全
+博客分类（共 70 篇）：
+- Android (16篇)：Gradle 构建、Jetpack Compose、Hilt 依赖注入、Gemini Nano 集成、Android 16 新特性、性能优化
+- AI (14篇)：AI 编程工具横评、Prompt 设计、Agent 工作流、RAG、MCP 协议、本地大模型
+- 前端 (10篇)：React Server Components、TypeScript、CSS、PWA、WebAssembly
+- 思考 (8篇)：技术人写作、高效学习、软技能、专注力、工作焦虑、软件架构
+- DevOps (7篇)：Docker Compose、GitHub Actions CI/CD、SSH 安全、Tailscale、Nginx
+- Kotlin (4篇)：Kotlin 2.4、Coroutines 最佳实践、Flow 进阶、异常处理机制
+- 安全 (3篇)：App 安全加固、HTTPS/TLS 1.3、SSH 安全
+- 其他 (8篇)：数据库（PostgreSQL/SQLite）、系统编程（eBPF/Inode）、Rust/Zig/Go 入门
 
 可以问的问题：
 - 张小猛擅长什么？
@@ -39,6 +42,8 @@ const SITE_CONTEXT = `
 - 推荐几篇 AI Agent 相关文章
 - OpenClaw 实践内容是什么？
 - 技术栈是什么？
+- 有关于 Android 16 / Jetpack Compose 的文章吗？
+- 最新的文章有哪些？
 `;
 
 export default {
