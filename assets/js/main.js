@@ -504,7 +504,8 @@ function initBlogFilters() {
   
   if (filterButtons.length === 0 || blogPosts.length === 0) return;
   
-  function applyFilter(filter) {
+  // Extract applyFilter to global scope so tag cloud can use it
+  window._blogApplyFilter = function applyFilter(filter) {
     let visibleCount = 0;
     
     blogPosts.forEach(post => {
@@ -513,11 +514,13 @@ function initBlogFilters() {
         post.classList.add('animate-on-scroll');
         visibleCount++;
       } else {
-        // Check data-category attribute first, then fall back to tag matching
+        // Check data-category attribute first, then fall back to data-tags
         const category = post.getAttribute('data-category');
+        const dataTags = (post.getAttribute('data-tags') || '').split(' ').filter(Boolean);
         const hasMatch = category === filter || 
+          dataTags.includes(filter) ||
           Array.from(post.querySelectorAll('.tag-accent, .blog-list-tag')).some(tag => 
-            tag.textContent.trim().toLowerCase().includes(filter.toLowerCase())
+            tag.textContent.trim().toLowerCase() === filter.toLowerCase()
           );
         post.style.display = hasMatch ? '' : 'none';
         if (hasMatch) visibleCount++;
@@ -528,13 +531,16 @@ function initBlogFilters() {
     filterButtons.forEach(btn => {
       btn.classList.remove('tag-accent', 'filter-btn-active');
       const btnFilter = btn.getAttribute('data-filter') || btn.textContent.trim();
-      // 精确匹配：只有当前选中的按钮才高亮
-      // "全部" 按钮对应 'all' 或 '全部'
       const isAllButton = btnFilter === 'all' || btnFilter === '全部';
       const isActive = (filter === 'all' || filter === '全部') ? isAllButton : (btnFilter === filter);
       if (isActive) {
         btn.classList.add('tag-accent', 'filter-btn-active');
       }
+    });
+    
+    // Update tag cloud active states
+    document.querySelectorAll('.tag-cloud-item').forEach(item => {
+      item.classList.toggle('active', item.getAttribute('data-filter') === filter);
     });
     
     // Show/hide Featured section - only show on "all" filter
@@ -547,23 +553,41 @@ function initBlogFilters() {
     if (emptyState) {
       emptyState.style.display = visibleCount === 0 ? 'block' : 'none';
     }
-  }
+
+    // Update filter title
+    const titleEl = document.getElementById('blog-filter-title');
+    if (titleEl) {
+      titleEl.textContent = (filter === 'all' || filter === '全部') ? '全部文章' : `筛选: ${filter}`;
+    }
+  };
   
-  // Click handlers
+  // Click handlers for filter buttons
   filterButtons.forEach(button => {
     button.addEventListener('click', () => {
       const filter = button.getAttribute('data-filter') || button.textContent.trim();
-      applyFilter(filter);
+      window._blogApplyFilter(filter);
     });
   });
+  
+  // Tag cloud click handlers
+  const tagCloud = document.getElementById('blog-tag-cloud');
+  if (tagCloud) {
+    tagCloud.addEventListener('click', (e) => {
+      const item = e.target.closest('.tag-cloud-item');
+      if (!item) return;
+      const tag = item.getAttribute('data-filter');
+      if (!tag) return;
+      window._blogApplyFilter(tag);
+    });
+  }
   
   // Check URL hash on page load
   if (window.location.hash) {
     const hashFilter = decodeURIComponent(window.location.hash.substring(1));
-    applyFilter(hashFilter);
+    window._blogApplyFilter(hashFilter);
   } else {
     // Initialize with default filter (show Featured section for "all")
-    applyFilter('all');
+    window._blogApplyFilter('all');
   }
 }
 
