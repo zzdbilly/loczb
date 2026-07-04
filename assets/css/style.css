@@ -1457,15 +1457,11 @@ pre code {
    =================================== */
 @media (max-width: 640px) {
   .hero {
-    padding: var(--space-3xl) var(--space-md);
+    padding: var(--space-4xl) var(--space-md);
   }
   
   .section {
     padding: var(--space-3xl) var(--space-md);
-  }
-  
-  #projects {
-    padding-top: var(--space-4xl);
   }
   
   .container {
