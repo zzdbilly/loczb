@@ -4156,3 +4156,40 @@ pre code.hljs {
   background: transparent;
   border: none;
 }
+
+/* About page - fun facts list */
+.fun-list { list-style: none; display: flex; flex-direction: column; gap: var(--space-md); }
+.fun-list li { display: flex; align-items: flex-start; gap: var(--space-sm); }
+
+/* ===================================
+   Projects Page - Case Cards
+   =================================== */
+.case-card { background: var(--color-bg-secondary); border-radius: 16px; overflow: hidden; margin-bottom: 2rem; border: 1px solid var(--color-border); transition: all var(--transition-base); }
+.case-card:hover { border-color: var(--color-accent-primary); transform: translateY(-2px); box-shadow: var(--shadow-xl); }
+.case-card-header { padding: 2rem; border-bottom: 1px solid var(--color-border); }
+.case-card-badge { display: inline-block; background: var(--color-accent-primary); color: white; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; margin-bottom: 1rem; }
+.case-card-title { font-size: 1.75rem; margin-bottom: 0.5rem; }
+.case-card-subtitle { color: var(--color-text-secondary); font-size: 1rem; }
+.case-card-body { padding: 2rem; }
+.case-section { margin-bottom: 1.5rem; }
+.case-section:last-child { margin-bottom: 0; }
+.case-section-title { font-size: 0.875rem; font-weight: 600; color: var(--color-accent-primary); margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; }
+.case-section-content { color: var(--color-text-secondary); line-height: 1.7; }
+.case-metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 1rem; margin-top: 1rem; }
+.case-metric { background: var(--color-bg-tertiary); padding: 1rem; border-radius: 8px; text-align: center; }
+.case-metric-value { font-size: 1.5rem; font-weight: 700; color: var(--color-text-primary); }
+.case-metric-label { font-size: 0.75rem; color: var(--color-text-secondary); margin-top: 0.25rem; }
+.case-links { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.5rem; }
+.section-compact { padding: 1.5rem var(--space-lg); }
+.section-narrow-compact { padding: 1rem var(--space-lg); }
+.flex-wrap { flex-wrap: wrap; }
+
+/* CTA Box */
+.cta-box { text-align: center; padding: 3rem; background: linear-gradient(135deg, var(--color-bg-secondary), var(--color-bg-tertiary)); border-radius: 16px; border: 1px solid var(--color-border); position: relative; overflow: hidden; box-shadow: 0 0 40px rgba(99,102,241,0.1); }
+.cta-box h2 { margin-bottom: 1rem; }
+.cta-box p { color: var(--color-text-secondary); margin-bottom: 1.5rem; }
+.cta-box-actions { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; }
+@media (max-width: 640px) {
+  .case-card-header, .case-card-body { padding: 1.5rem; }
+  .case-card-title { font-size: 1.5rem; }
+}
