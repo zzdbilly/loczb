@@ -2377,6 +2377,43 @@
       ]
     },
     {
+      "id": "personal-growth",
+      "name": "个人成长",
+      "count": 6,
+      "posts": [
+        {
+          "title": "程序员应该学会「关机」：工作焦虑如何侵蚀你的休息时间",
+          "date": "2026-07-04",
+          "url": "blog/posts/程序员应该学会关机工作焦虑如何侵蚀你的休息时间.html"
+        },
+        {
+          "title": "技术人如何高效学习新技术",
+          "date": "2026-07-01",
+          "url": "blog/posts/技术人如何高效学习新技术.html"
+        },
+        {
+          "title": "技术人为什么要写作",
+          "date": "2026-07-01",
+          "url": "blog/posts/技术人为什么要写作.html"
+        },
+        {
+          "title": "代码之外的竞争力：技术人最容易忽视的软技能",
+          "date": "2026-07-01",
+          "url": "blog/posts/代码之外的竞争力技术人最容易忽视的软技能.html"
+        },
+        {
+          "title": "少即是多：信息过载时代的专注力修炼",
+          "date": "2026-07-01",
+          "url": "blog/posts/少即是多信息过载时代的专注力修炼.html"
+        },
+        {
+          "title": "为什么我开始写博客：从潜水到发声",
+          "date": "2026-06-30",
+          "url": "blog/posts/why-i-started-blogging.html"
+        }
+      ]
+    },
+    {
       "id": "android-16",
       "name": "Android 16 专题",
       "count": 4,
@@ -2525,28 +2562,6 @@
           "title": "云服务器 SSH 安全加固完整指南",
           "date": "2026-03-18",
           "url": "blog/posts/ssh-security-hardening.html"
-        }
-      ]
-    },
-    {
-      "id": "personal-growth",
-      "name": "个人成长",
-      "count": 3,
-      "posts": [
-        {
-          "title": "技术人如何高效学习新技术",
-          "date": "2026-07-01",
-          "url": "blog/posts/技术人如何高效学习新技术.html"
-        },
-        {
-          "title": "技术人为什么要写作",
-          "date": "2026-07-01",
-          "url": "blog/posts/技术人为什么要写作.html"
-        },
-        {
-          "title": "为什么我开始写博客：从潜水到发声",
-          "date": "2026-06-30",
-          "url": "blog/posts/why-i-started-blogging.html"
         }
       ]
     }

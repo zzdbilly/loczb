@@ -150,7 +150,7 @@ const seriesRules = [
   { id: 'devops', name: 'DevOps 实战', match: (p) => p.tags.includes('DevOps') },
   { id: 'ai-agent', name: 'AI Agent 开发', match: (p) => p.category === 'AI Agent' || p.tags.includes('Agent') },
   { id: 'security', name: '安全加固', match: (p) => p.tags.includes('安全') },
-  { id: 'personal-growth', name: '个人成长', match: (p) => p.tags.includes('个人成长') },
+  { id: 'personal-growth', name: '个人成长', match: (p) => p.tags.includes('个人成长') || p.tags.includes('自我管理') || (p.category === '思考' && (p.tags.includes('技术人成长') || p.tags.includes('学习方法') || p.tags.includes('软技能'))) },
 ];
 
 const series = seriesRules
