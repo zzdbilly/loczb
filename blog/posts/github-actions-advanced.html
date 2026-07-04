@@ -1091,6 +1091,70 @@ tar xzf actions-runner-linux-x64-2.321.0.tar.gz
     });
   </script>
 
+  <!-- Mobile TOC Button & Drawer -->
+  <button class="mobile-toc-btn" id="mobileTocBtn" aria-label="目录">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <line x1="4" y1="6" x2="20" y2="6"/>
+      <line x1="4" y1="12" x2="20" y2="12"/>
+      <line x1="4" y1="18" x2="20" y2="18"/>
+    </svg>
+  </button>
+  <div class="toc-drawer-overlay" id="tocDrawerOverlay"></div>
+  <div class="toc-drawer" id="tocDrawer">
+    <div class="toc-drawer-header">
+      <span class="toc-drawer-title">目录</span>
+      <button class="toc-drawer-close" id="tocDrawerClose" aria-label="关闭目录">&times;</button>
+    </div>
+    <div id="tocDrawerContent" class="post-toc-list"></div>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var btn = document.getElementById('mobileTocBtn');
+      var drawer = document.getElementById('tocDrawer');
+      var overlay = document.getElementById('tocDrawerOverlay');
+      var close = document.getElementById('tocDrawerClose');
+      var content = document.getElementById('tocDrawerContent');
+      var desktopToc = document.querySelector('.post-toc-list');
+
+      function openDrawer() {
+        drawer.classList.add('open');
+        overlay.classList.add('open');
+        document.body.style.overflow = 'hidden';
+        // 复制桌面端 TOC 链接到抽屉
+        if (content && desktopToc) {
+          content.innerHTML = desktopToc.innerHTML;
+        }
+      }
+
+      function closeDrawer() {
+        drawer.classList.remove('open');
+        overlay.classList.remove('open');
+        document.body.style.overflow = '';
+      }
+
+      if (btn) btn.addEventListener('click', openDrawer);
+      if (close) close.addEventListener('click', closeDrawer);
+      if (overlay) overlay.addEventListener('click', closeDrawer);
+
+      // ESC key
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && drawer && drawer.classList.contains('open')) {
+          closeDrawer();
+        }
+      });
+
+      // 桌面端 TOC 更新时（article.js 填充后）同步到抽屉
+      if (desktopToc) {
+        var observer = new MutationObserver(function() {
+          if (content && drawer.classList.contains('open')) {
+            content.innerHTML = desktopToc.innerHTML;
+          }
+        });
+        observer.observe(desktopToc, { childList: true, subtree: true });
+      }
+    });
+  </script>
+
   <!-- Cloudflare Web Analytics -->
   <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "29e7cff6f37448989538e2165cb79187"}'></script>
 </body>
