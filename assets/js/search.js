@@ -7,13 +7,36 @@
 
   let fuse;
   let searchData = { posts: [], tagCloud: [], archives: [] };
+  let fuseLoaded = false;
   const searchInput = document.getElementById('blog-search-input');
   const searchResults = document.getElementById('blog-search-results');
   const searchClear = document.querySelector('.search-clear');
 
+  // 动态加载 Fuse.js（按需加载，不阻塞首屏）
+  async function loadFuse() {
+    if (fuseLoaded) return true;
+    if (typeof Fuse !== 'undefined') { fuseLoaded = true; return true; }
+    try {
+      await new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = 'https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.js';
+        script.onload = () => { fuseLoaded = true; resolve(); };
+        script.onerror = reject;
+        document.head.appendChild(script);
+      });
+      return true;
+    } catch (e) {
+      console.error('Fuse.js 加载失败:', e);
+      return false;
+    }
+  }
+
   // 加载搜索数据
   async function loadSearchData() {
     try {
+      const loaded = await loadFuse();
+      if (!loaded) return;
+      
       const resp = await fetch('articles-index.json?t=' + Date.now());
       const data = await resp.json();
       searchData = data;
