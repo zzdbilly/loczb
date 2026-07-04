@@ -4,6 +4,7 @@
 
 // Article index with tags
 const ARTICLE_INDEX = [
+  { slug: "linux-inode-机制深入理解从数据结构到实战排查", tags: ["Linux", "inode", "文件系统", "ext4", "系统编程", "运维"], title: "Linux inode 机制深入理解：从数据结构到实战排查" },
   { slug: "github-actions-自动索引我的静态博客-cicd-进化之路", tags: ["CI/CD", "DevOps", "GitHub Actions", "前端", "自动化"], title: "GitHub Actions 自动索引：我的静态博客 CI/CD 进化之路" },
   { slug: "程序员应该学会关机工作焦虑如何侵蚀你的休息时间", tags: ["工作方法", "生活方式", "自我管理"], title: "程序员应该学会「关机」：工作焦虑如何侵蚀你的休息时间" },
   { slug: "静态博客性能优化实战从-59mb-到精简高效", tags: ["性能优化", "静态网站", "GitHub Pages", "前端优化", "CSS", "JavaScript"], title: "静态博客性能优化实战：从 59MB 到精简高效" },
