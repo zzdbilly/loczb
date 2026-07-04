@@ -8,105 +8,105 @@
     <atom:link href="https://709527.xyz/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
       <title>Linux inode 机制深入理解：从数据结构到实战排查</title>
-      <link>https://709527.xyz/blog/posts/linux-inode-机制深入理解从数据结构到实战排查.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/linux-inode-机制深入理解从数据结构到实战排查.html</guid>
+      <link>https://709527.xyz/blog/posts/linux-inode-mechanism-deep-dive.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/linux-inode-mechanism-deep-dive.html</guid>
       <description>inode 是 Linux 文件系统的核心概念。本文从 ext4 inode 数据结构、硬链接软链接原理、文件删除机制到 inode 耗尽排查，全面解析 inode 工作原理。</description>
       <category>技术</category>
       <pubDate>Sat, 04 Jul 2026 00:00:00 +0800</pubDate>
     </item>
     <item>
       <title>GitHub Actions 自动索引：我的静态博客 CI/CD 进化之路</title>
-      <link>https://709527.xyz/blog/posts/github-actions-自动索引我的静态博客-cicd-进化之路.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/github-actions-自动索引我的静态博客-cicd-进化之路.html</guid>
+      <link>https://709527.xyz/blog/posts/github-actions-auto-index-blog-cicd.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/github-actions-auto-index-blog-cicd.html</guid>
       <description>68篇技术博客的索引更新从手动7文件到CI全量自动重建——聊聊全量vs增量的取舍、HTML解析技巧、RSS日期格式化踩坑，以及为什么应该让CI管索引</description>
       <category>技术</category>
       <pubDate>Sat, 04 Jul 2026 00:00:00 +0800</pubDate>
     </item>
     <item>
       <title>程序员应该学会「关机」：工作焦虑如何侵蚀你的休息时间</title>
-      <link>https://709527.xyz/blog/posts/程序员应该学会关机工作焦虑如何侵蚀你的休息时间.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/程序员应该学会关机工作焦虑如何侵蚀你的休息时间.html</guid>
+      <link>https://709527.xyz/blog/posts/programmers-should-learn-to-unplug.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/programmers-should-learn-to-unplug.html</guid>
       <description>不会关机的程序员不是在拼事业，而是在慢性消耗自己。聊聊为什么下班后的大脑还在 debug，以及如何真正停下来。</description>
       <category>思考</category>
       <pubDate>Sat, 04 Jul 2026 00:00:00 +0800</pubDate>
     </item>
     <item>
       <title>静态博客性能优化实战：从 59MB 到精简高效</title>
-      <link>https://709527.xyz/blog/posts/静态博客性能优化实战从-59mb-到精简高效.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/静态博客性能优化实战从-59mb-到精简高效.html</guid>
+      <link>https://709527.xyz/blog/posts/static-blog-performance-optimization-59mb.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/static-blog-performance-optimization-59mb.html</guid>
       <description>66篇文章4KB重复内联样式、4.4MB死文件、404幽灵引用——一次完整的静态博客性能优化记录</description>
       <category>前端</category>
       <pubDate>Fri, 03 Jul 2026 00:00:00 +0800</pubDate>
     </item>
     <item>
       <title>Gradle 构建加速全攻略：从 5 分钟到 30 秒</title>
-      <link>https://709527.xyz/blog/posts/gradle-构建加速全攻略从-5-分钟到-30-秒.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/gradle-构建加速全攻略从-5-分钟到-30-秒.html</guid>
+      <link>https://709527.xyz/blog/posts/gradle-build-acceleration-5min-to-30sec.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/gradle-build-acceleration-5min-to-30sec.html</guid>
       <description>系统梳理 Gradle 构建加速的完整方法论——配置调优、KAPT迁移KSP、增量编译、模块化拆分、远程缓存、CI优化，附真实项目优化案例，构建时间减少85%</description>
       <category>Android</category>
       <pubDate>Thu, 02 Jul 2026 00:00:00 +0800</pubDate>
     </item>
     <item>
       <title>像规划城市一样设计系统：城市规划给软件架构的启示</title>
-      <link>https://709527.xyz/blog/posts/像规划城市一样设计系统城市规划给软件架构的启示.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/像规划城市一样设计系统城市规划给软件架构的启示.html</guid>
+      <link>https://709527.xyz/blog/posts/urban-planning-inspires-software-architecture.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/urban-planning-inspires-software-architecture.html</guid>
       <description>城市和软件系统的本质惊人相似——功能分区映射限界上下文、交通网络映射数据流、基础设施先行映射可观测性、有机更新映射演进式架构。从城市规划的百年智慧中，找到软件架构的跨界启发</description>
       <category>思考</category>
       <pubDate>Thu, 02 Jul 2026 00:00:00 +0800</pubDate>
     </item>
     <item>
       <title>软件工程师能从制造业学到什么：精益思维重塑开发流程</title>
-      <link>https://709527.xyz/blog/posts/软件工程师能从制造业学到什么精益思维重塑开发流程.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/软件工程师能从制造业学到什么精益思维重塑开发流程.html</guid>
+      <link>https://709527.xyz/blog/posts/software-engineer-learns-from-manufacturing-lean.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/software-engineer-learns-from-manufacturing-lean.html</guid>
       <description>制造业精益思想如何重塑软件开发流程——从丰田生产系统到敏捷开发，从5S方法论到持续交付，跨行业视角下的效率革命</description>
       <category>思考</category>
       <pubDate>Thu, 02 Jul 2026 00:00:00 +0800</pubDate>
     </item>
     <item>
-      <title>技术人如何高效学习新技术</title>
-      <link>https://709527.xyz/blog/posts/技术人如何高效学习新技术.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/技术人如何高效学习新技术.html</guid>
+      <title>how-tech-people-learn-new-tech</title>
+      <link>https://709527.xyz/blog/posts/how-tech-people-learn-new-tech.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/how-tech-people-learn-new-tech.html</guid>
       <description>从被动输入到主动输出，80/20 法则选技术，知识体系建立，实践驱动学习，构建记忆宫殿，善用 AI 与社群</description>
       <category>思考</category>
       <pubDate>Wed, 01 Jul 2026 00:00:00 +0800</pubDate>
     </item>
     <item>
-      <title>技术人为什么要写作</title>
-      <link>https://709527.xyz/blog/posts/技术人为什么要写作.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/技术人为什么要写作.html</guid>
+      <title>why-tech-people-should-write</title>
+      <link>https://709527.xyz/blog/posts/why-tech-people-should-write.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/why-tech-people-should-write.html</guid>
       <description>写作不仅是最强的学习方式，更能帮助技术人建立个人品牌、打破信息茧房、留下成长痕迹</description>
       <category>思考</category>
       <pubDate>Wed, 01 Jul 2026 00:00:00 +0800</pubDate>
     </item>
     <item>
       <title>Kotlin Coroutine 异常处理机制全面解析</title>
-      <link>https://709527.xyz/blog/posts/kotlin-coroutine-异常处理机制全面解析.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/kotlin-coroutine-异常处理机制全面解析.html</guid>
+      <link>https://709527.xyz/blog/posts/kotlin-coroutine-exception-handling.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/kotlin-coroutine-exception-handling.html</guid>
       <description>全面解析 Kotlin 协程异常处理机制，涵盖 launch/async 异常传播差异、SupervisorJob、结构化并发、CoroutineExceptionHandler、Android 最佳实践等核心内容</description>
       <category>Kotlin</category>
       <pubDate>Wed, 01 Jul 2026 00:00:00 +0800</pubDate>
     </item>
     <item>
       <title>Android 15 隐私新特性：所有文件都需要 MEDIA_VISUAL_PERMISSION</title>
-      <link>https://709527.xyz/blog/posts/android-15-隐私新特性所有文件都需要-media-visual-permission.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/android-15-隐私新特性所有文件都需要-media-visual-permission.html</guid>
+      <link>https://709527.xyz/blog/posts/android-15-privacy-media-visual-permission.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/android-15-privacy-media-visual-permission.html</guid>
       <description>详解 Android 15 引入的媒体权限重大变更，以及从 MediaStore 迁移到 Photo Picker 的完整指南</description>
       <category>Android</category>
       <pubDate>Wed, 01 Jul 2026 00:00:00 +0800</pubDate>
     </item>
     <item>
-      <title>代码之外的竞争力：技术人最容易忽视的软技能</title>
-      <link>https://709527.xyz/blog/posts/代码之外的竞争力技术人最容易忽视的软技能.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/代码之外的竞争力技术人最容易忽视的软技能.html</guid>
-      <description>技术能力决定了你能走多快，但软技能决定了你能走多远。本文聊聊沟通、表达、影响力等容易被技术人忽视的能力。</description>
+      <title>少即是多：信息过载时代的专注力修炼</title>
+      <link>https://709527.xyz/blog/posts/less-is-more-focus-in-information-age.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/less-is-more-focus-in-information-age.html</guid>
+      <description>信息爆炸不是问题，问题是我们在海量输入中丧失了深度思考的能力。本文分享我在信息筛选、注意力管理和深度工作方面的实践经验与反思。</description>
       <category>思考</category>
       <pubDate>Wed, 01 Jul 2026 00:00:00 +0800</pubDate>
     </item>
     <item>
-      <title>少即是多：信息过载时代的专注力修炼</title>
-      <link>https://709527.xyz/blog/posts/少即是多信息过载时代的专注力修炼.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/少即是多信息过载时代的专注力修炼.html</guid>
-      <description>信息爆炸不是问题，问题是我们在海量输入中丧失了深度思考的能力。本文分享我在信息筛选、注意力管理和深度工作方面的实践经验与反思。</description>
+      <title>代码之外的竞争力：技术人最容易忽视的软技能</title>
+      <link>https://709527.xyz/blog/posts/soft-skills-tech-people-overlook.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/soft-skills-tech-people-overlook.html</guid>
+      <description>技术能力决定了你能走多快，但软技能决定了你能走多远。本文聊聊沟通、表达、影响力等容易被技术人忽视的能力。</description>
       <category>思考</category>
       <pubDate>Wed, 01 Jul 2026 00:00:00 +0800</pubDate>
     </item>
@@ -144,16 +144,16 @@
     </item>
     <item>
       <title>AI 代码编辑器深度横评：Cursor vs Windsurf vs Copilot</title>
-      <link>https://709527.xyz/blog/posts/ai-代码编辑器深度横评cursor-vs-windsurf-vs-copilot.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/ai-代码编辑器深度横评cursor-vs-windsurf-vs-copilot.html</guid>
+      <link>https://709527.xyz/blog/posts/ai-code-editor-review-cursor-windsurf-copilot.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/ai-code-editor-review-cursor-windsurf-copilot.html</guid>
       <description>三大主流 AI 代码编辑器全方位对比</description>
       <category>前端</category>
       <pubDate>Sun, 28 Jun 2026 00:00:00 +0800</pubDate>
     </item>
     <item>
       <title>Git Worktree 高效多分支开发指南</title>
-      <link>https://709527.xyz/blog/posts/git-worktree-高效多分支开发指南.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/git-worktree-高效多分支开发指南.html</guid>
+      <link>https://709527.xyz/blog/posts/git-worktree-multi-branch-guide.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/git-worktree-multi-branch-guide.html</guid>
       <description>Git Worktree 让你同时检出多个分支，切换零成本，告别 stash 和冲突的烦恼。本文详解 worktree 的使用场景和最佳实践。</description>
       <category>前端</category>
       <pubDate>Sun, 28 Jun 2026 00:00:00 +0800</pubDate>
