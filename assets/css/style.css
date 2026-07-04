@@ -3948,14 +3948,14 @@ pre code {
   color: var(--color-text-primary);
 }
 
-/* 亮色主题：代码块保持深色背景 */
+/* 亮色主题：代码块用中等深色背景，减少与白色页面的对比跳跃 */
 [data-theme="light"] .post-content pre {
-  background: #1e1e2e;
+  background: #282a36;
   border-color: #404052;
 }
 
 [data-theme="light"] .post-content pre code {
-  color: #c0caf5;
+  color: #e4e4e7;
 }
 
 [data-theme="light"] .post-content code {
