@@ -224,24 +224,14 @@ function rebuildBlogIndex() {
   const filterPattern = /(<div class="blog-filters"[^>]*>)[\s\S]*?(<\/div>\s*<!-- Search Bar -->)/;
   html = html.replace(filterPattern, `$1\n${filterButtons}\n      $2`);
 
-  // 生成标签云 HTML — 只显示出现 ≥2 次的标签，最多 30 个
-  const tagCloudItems = indexData.tagCloud
-    .filter(t => t.count >= 2)
-    .slice(0, 30);
-  const tagCloudHtml = tagCloudItems.map(t => {
-    return `        <span class="tag-cloud-item" data-filter="${escapeHtml(t.tag)}">${escapeHtml(t.tag)} <span class="tag-count">${t.count}</span></span>`;
-  }).join('\n');
-
-  // 替换标签云（包含 id 容器，供 JS 事件委托使用）
+  // 移除标签云（功能重复，分类筛选按钮已覆盖）
   const tagCloudPattern = /(<!-- Tag Cloud -->)[\s\S]*?(<!-- \/Tag Cloud -->)/;
   if (tagCloudPattern.test(html)) {
-    html = html.replace(tagCloudPattern, `$1\n      <div id="blog-tag-cloud" class="tag-cloud">\n${tagCloudHtml}\n      </div>\n      $2`);
-  } else {
-    console.warn('⚠️  blog/index.html: 缺少 <!-- Tag Cloud --> 标记');
+    html = html.replace(tagCloudPattern, `$1\n        <!-- 标签云已移除（分类筛选按钮已覆盖功能） -->\n      $2`);
   }
 
   fs.writeFileSync(BLOG_INDEX, html);
-  console.log(`✅ blog/index.html: ${posts.length} articles, ${sortedCats.length} categories, ${tagCloudHtml.length} tags in cloud`);
+  console.log(`✅ blog/index.html: ${posts.length} articles, ${sortedCats.length} categories`);
 }
 
 // ═══════════════════════════════════════════════
