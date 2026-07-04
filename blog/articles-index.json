@@ -112,21 +112,35 @@
       "url": "blog/posts/软件工程师能从制造业学到什么精益思维重塑开发流程.html"
     },
     {
-      "slug": "android-15-隐私新特性所有文件都需要-media-visual-permission",
-      "title": "Android 15 隐私新特性：所有文件都需要 MEDIA_VISUAL_PERMISSION",
+      "slug": "技术人如何高效学习新技术",
+      "title": "技术人如何高效学习新技术",
       "date": "2026-07-01",
-      "category": "Android",
+      "category": "思考",
       "tags": [
-        "Android",
-        "隐私",
-        "Android 15",
-        "权限",
-        "适配",
-        "Photo Picker",
-        "迁移"
+        "学习方法",
+        "个人成长",
+        "技术人",
+        "效率",
+        "知识管理"
       ],
-      "excerpt": "详解 Android 15 引入的媒体权限重大变更，以及从 MediaStore 迁移到 Photo Picker 的完整指南",
-      "url": "blog/posts/android-15-隐私新特性所有文件都需要-media-visual-permission.html"
+      "excerpt": "从被动输入到主动输出，80/20 法则选技术，知识体系建立，实践驱动学习，构建记忆宫殿，善用 AI 与社群",
+      "url": "blog/posts/技术人如何高效学习新技术.html"
+    },
+    {
+      "slug": "技术人为什么要写作",
+      "title": "技术人为什么要写作",
+      "date": "2026-07-01",
+      "category": "思考",
+      "tags": [
+        "思考",
+        "写作",
+        "个人成长",
+        "技术人",
+        "学习方法",
+        "个人品牌"
+      ],
+      "excerpt": "写作不仅是最强的学习方式，更能帮助技术人建立个人品牌、打破信息茧房、留下成长痕迹",
+      "url": "blog/posts/技术人为什么要写作.html"
     },
     {
       "slug": "kotlin-coroutine-异常处理机制全面解析",
@@ -143,6 +157,23 @@
       ],
       "excerpt": "全面解析 Kotlin 协程异常处理机制，涵盖 launch/async 异常传播差异、SupervisorJob、结构化并发、CoroutineExceptionHandler、Android 最佳实践等核心内容",
       "url": "blog/posts/kotlin-coroutine-异常处理机制全面解析.html"
+    },
+    {
+      "slug": "android-15-隐私新特性所有文件都需要-media-visual-permission",
+      "title": "Android 15 隐私新特性：所有文件都需要 MEDIA_VISUAL_PERMISSION",
+      "date": "2026-07-01",
+      "category": "Android",
+      "tags": [
+        "Android",
+        "隐私",
+        "Android 15",
+        "权限",
+        "适配",
+        "Photo Picker",
+        "迁移"
+      ],
+      "excerpt": "详解 Android 15 引入的媒体权限重大变更，以及从 MediaStore 迁移到 Photo Picker 的完整指南",
+      "url": "blog/posts/android-15-隐私新特性所有文件都需要-media-visual-permission.html"
     },
     {
       "slug": "代码之外的竞争力技术人最容易忽视的软技能",
@@ -175,35 +206,18 @@
       "url": "blog/posts/少即是多信息过载时代的专注力修炼.html"
     },
     {
-      "slug": "技术人为什么要写作",
-      "title": "技术人为什么要写作",
-      "date": "2026-07-01",
+      "slug": "why-i-started-blogging",
+      "title": "为什么我开始写博客：从潜水到发声",
+      "date": "2026-06-30",
       "category": "思考",
       "tags": [
         "思考",
-        "写作",
+        "学习",
         "个人成长",
-        "技术人",
-        "学习方法",
-        "个人品牌"
+        "博客"
       ],
-      "excerpt": "写作不仅是最强的学习方式，更能帮助技术人建立个人品牌、打破信息茧房、留下成长痕迹",
-      "url": "blog/posts/技术人为什么要写作.html"
-    },
-    {
-      "slug": "技术人如何高效学习新技术",
-      "title": "技术人如何高效学习新技术",
-      "date": "2026-07-01",
-      "category": "思考",
-      "tags": [
-        "学习方法",
-        "个人成长",
-        "技术人",
-        "效率",
-        "知识管理"
-      ],
-      "excerpt": "从被动输入到主动输出，80/20 法则选技术，知识体系建立，实践驱动学习，构建记忆宫殿，善用 AI 与社群",
-      "url": "blog/posts/技术人如何高效学习新技术.html"
+      "excerpt": "一个普通工程师的写作心路 — 为什么要开始写博客，写作如何改变了我的学习方式，以及我对个人品牌的理解",
+      "url": "blog/posts/why-i-started-blogging.html"
     },
     {
       "slug": "android-16-foreground-service-constraints",
@@ -248,20 +262,6 @@
       "url": "blog/posts/mcp-server-deep-dive.html"
     },
     {
-      "slug": "why-i-started-blogging",
-      "title": "为什么我开始写博客：从潜水到发声",
-      "date": "2026-06-30",
-      "category": "思考",
-      "tags": [
-        "思考",
-        "学习",
-        "个人成长",
-        "博客"
-      ],
-      "excerpt": "一个普通工程师的写作心路 — 为什么要开始写博客，写作如何改变了我的学习方式，以及我对个人品牌的理解",
-      "url": "blog/posts/why-i-started-blogging.html"
-    },
-    {
       "slug": "ai-代码编辑器深度横评cursor-vs-windsurf-vs-copilot",
       "title": "AI 代码编辑器深度横评：Cursor vs Windsurf vs Copilot",
       "date": "2026-06-28",
@@ -288,36 +288,6 @@
       "url": "blog/posts/git-worktree-高效多分支开发指南.html"
     },
     {
-      "slug": "android-16-background-tasks",
-      "title": "Android 16 后台任务新限制：开发者迁移指南",
-      "date": "2026-06-27",
-      "category": "Android",
-      "tags": [
-        "Android 16",
-        "后台任务",
-        "WorkManager",
-        "前台服务",
-        "电池优化"
-      ],
-      "excerpt": "Android 16 后台任务新限制完整解读：JobScheduler 强化、前台服务严格限制、WorkManager 迁移策略与兼容性适配指南",
-      "url": "blog/posts/android-16-background-tasks.html"
-    },
-    {
-      "slug": "android-16-notifications",
-      "title": "Android 16 通知系统新 API 详解",
-      "date": "2026-06-27",
-      "category": "Android",
-      "tags": [
-        "Android 16",
-        "通知系统",
-        "Live Updates",
-        "Notifications",
-        "Android 开发"
-      ],
-      "excerpt": "Android 16 通知系统新 API 详解：Live Updates、Rich Ongoing、Bubble API 增强、通知优先级改革与迁移指南",
-      "url": "blog/posts/android-16-notifications.html"
-    },
-    {
       "slug": "android-hilt-dependency-injection",
       "title": "Android Hilt 依赖注入最佳实践：从入门到架构",
       "date": "2026-06-27",
@@ -334,19 +304,69 @@
       "url": "blog/posts/android-hilt-dependency-injection.html"
     },
     {
-      "slug": "css-view-transitions",
-      "title": "CSS View Transitions API 实战：页面过渡动画新范式",
+      "slug": "nginx-reverse-proxy-tuning",
+      "title": "Nginx 反向代理性能调优：从入门到生产",
       "date": "2026-06-27",
-      "category": "前端",
+      "category": "DevOps",
       "tags": [
-        "前端",
-        "CSS",
-        "View Transitions",
-        "页面过渡",
-        "SPA"
+        "Nginx",
+        "反向代理",
+        "性能调优",
+        "SSL",
+        "负载均衡",
+        "DevOps"
       ],
-      "excerpt": "CSS View Transitions API 实战：从 document.startViewTransition 到跨页面导航过渡、SPA 集成、列表动画完整指南",
-      "url": "blog/posts/css-view-transitions.html"
+      "excerpt": "Nginx 反向代理生产级调优指南：worker 配置、SSL 优化、缓存策略、负载均衡、限流与监控完整实践",
+      "url": "blog/posts/nginx-reverse-proxy-tuning.html"
+    },
+    {
+      "slug": "zig-language-introduction",
+      "title": "Zig 语言入门：比 C 更安全的系统编程",
+      "date": "2026-06-27",
+      "category": "系统编程",
+      "tags": [
+        "Zig",
+        "系统编程",
+        "comptime",
+        "Allocator",
+        "交叉编译",
+        "build.zig",
+        "C 互操作"
+      ],
+      "excerpt": "Zig 语言入门完整指南：comptime 编译期计算、Allocator 模式、错误处理、C 互操作、交叉编译与构建系统深度解析",
+      "url": "blog/posts/zig-language-introduction.html"
+    },
+    {
+      "slug": "rag-introduction",
+      "title": "RAG 检索增强生成入门：从理念到落地",
+      "date": "2026-06-27",
+      "category": "AI",
+      "tags": [
+        "RAG",
+        "检索增强生成",
+        "LLM",
+        "向量数据库",
+        "Embedding",
+        "LangChain",
+        "AI"
+      ],
+      "excerpt": "RAG 检索增强生成完整入门指南：文档分块策略、嵌入模型选型、向量数据库对比、LangChain 实现、HyDE/RAG-Fusion 高级优化与 RAGAS 评估框架",
+      "url": "blog/posts/rag-introduction.html"
+    },
+    {
+      "slug": "android-16-background-tasks",
+      "title": "Android 16 后台任务新限制：开发者迁移指南",
+      "date": "2026-06-27",
+      "category": "Android",
+      "tags": [
+        "Android 16",
+        "后台任务",
+        "WorkManager",
+        "前台服务",
+        "电池优化"
+      ],
+      "excerpt": "Android 16 后台任务新限制完整解读：JobScheduler 强化、前台服务严格限制、WorkManager 迁移策略与兼容性适配指南",
+      "url": "blog/posts/android-16-background-tasks.html"
     },
     {
       "slug": "github-actions-advanced",
@@ -362,6 +382,21 @@
       ],
       "excerpt": "GitHub Actions 高级工作流实战：矩阵构建、可复用工作流、自定义 Action、OIDC 集成、安全审计与性能优化完整指南",
       "url": "blog/posts/github-actions-advanced.html"
+    },
+    {
+      "slug": "css-view-transitions",
+      "title": "CSS View Transitions API 实战：页面过渡动画新范式",
+      "date": "2026-06-27",
+      "category": "前端",
+      "tags": [
+        "前端",
+        "CSS",
+        "View Transitions",
+        "页面过渡",
+        "SPA"
+      ],
+      "excerpt": "CSS View Transitions API 实战：从 document.startViewTransition 到跨页面导航过渡、SPA 集成、列表动画完整指南",
+      "url": "blog/posts/css-view-transitions.html"
     },
     {
       "slug": "go-concurrency-patterns",
@@ -380,6 +415,38 @@
       "url": "blog/posts/go-concurrency-patterns.html"
     },
     {
+      "slug": "postgresql-index-optimization",
+      "title": "PostgreSQL 索引优化实战",
+      "date": "2026-06-27",
+      "category": "数据库",
+      "tags": [
+        "PostgreSQL",
+        "索引优化",
+        "B-Tree",
+        "GIN",
+        "EXPLAIN",
+        "慢查询",
+        "数据库"
+      ],
+      "excerpt": "PostgreSQL 索引优化实战：B-Tree、GiST、GIN 索引类型对比，复合索引、部分索引设计，EXPLAIN 执行计划分析与慢查询优化",
+      "url": "blog/posts/postgresql-index-optimization.html"
+    },
+    {
+      "slug": "android-16-notifications",
+      "title": "Android 16 通知系统新 API 详解",
+      "date": "2026-06-27",
+      "category": "Android",
+      "tags": [
+        "Android 16",
+        "通知系统",
+        "Live Updates",
+        "Notifications",
+        "Android 开发"
+      ],
+      "excerpt": "Android 16 通知系统新 API 详解：Live Updates、Rich Ongoing、Bubble API 增强、通知优先级改革与迁移指南",
+      "url": "blog/posts/android-16-notifications.html"
+    },
+    {
       "slug": "https-tls13-deep-dive",
       "title": "HTTPS 与 TLS 1.3 深度解析",
       "date": "2026-06-27",
@@ -392,6 +459,21 @@
       ],
       "excerpt": "HTTPS 与 TLS 1.3 深度解析：握手流程、ECDHE 密钥交换、证书体系、性能优化与 Nginx 配置最佳实践",
       "url": "blog/posts/https-tls13-deep-dive.html"
+    },
+    {
+      "slug": "prompt-engineering-systematic",
+      "title": "Prompt Engineering 系统化方法论",
+      "date": "2026-06-27",
+      "category": "AI",
+      "tags": [
+        "Prompt Engineering",
+        "CRISPE",
+        "Chain-of-Thought",
+        "Function Calling",
+        "AI"
+      ],
+      "excerpt": "Prompt Engineering 系统化方法论：从 CRISPE 框架到思维链、自一致性、Function Calling，覆盖评估与迭代的系统性指南",
+      "url": "blog/posts/prompt-engineering-systematic.html"
     },
     {
       "slug": "kotlin-flow-advanced",
@@ -424,71 +506,6 @@
       "url": "blog/posts/linux-ebpf-getting-started.html"
     },
     {
-      "slug": "nginx-reverse-proxy-tuning",
-      "title": "Nginx 反向代理性能调优：从入门到生产",
-      "date": "2026-06-27",
-      "category": "DevOps",
-      "tags": [
-        "Nginx",
-        "反向代理",
-        "性能调优",
-        "SSL",
-        "负载均衡",
-        "DevOps"
-      ],
-      "excerpt": "Nginx 反向代理生产级调优指南：worker 配置、SSL 优化、缓存策略、负载均衡、限流与监控完整实践",
-      "url": "blog/posts/nginx-reverse-proxy-tuning.html"
-    },
-    {
-      "slug": "postgresql-index-optimization",
-      "title": "PostgreSQL 索引优化实战",
-      "date": "2026-06-27",
-      "category": "数据库",
-      "tags": [
-        "PostgreSQL",
-        "索引优化",
-        "B-Tree",
-        "GIN",
-        "EXPLAIN",
-        "慢查询",
-        "数据库"
-      ],
-      "excerpt": "PostgreSQL 索引优化实战：B-Tree、GiST、GIN 索引类型对比，复合索引、部分索引设计，EXPLAIN 执行计划分析与慢查询优化",
-      "url": "blog/posts/postgresql-index-optimization.html"
-    },
-    {
-      "slug": "prompt-engineering-systematic",
-      "title": "Prompt Engineering 系统化方法论",
-      "date": "2026-06-27",
-      "category": "AI",
-      "tags": [
-        "Prompt Engineering",
-        "CRISPE",
-        "Chain-of-Thought",
-        "Function Calling",
-        "AI"
-      ],
-      "excerpt": "Prompt Engineering 系统化方法论：从 CRISPE 框架到思维链、自一致性、Function Calling，覆盖评估与迭代的系统性指南",
-      "url": "blog/posts/prompt-engineering-systematic.html"
-    },
-    {
-      "slug": "rag-introduction",
-      "title": "RAG 检索增强生成入门：从理念到落地",
-      "date": "2026-06-27",
-      "category": "AI",
-      "tags": [
-        "RAG",
-        "检索增强生成",
-        "LLM",
-        "向量数据库",
-        "Embedding",
-        "LangChain",
-        "AI"
-      ],
-      "excerpt": "RAG 检索增强生成完整入门指南：文档分块策略、嵌入模型选型、向量数据库对比、LangChain 实现、HyDE/RAG-Fusion 高级优化与 RAGAS 评估框架",
-      "url": "blog/posts/rag-introduction.html"
-    },
-    {
       "slug": "webassembly-in-practice",
       "title": "WebAssembly 实战：浏览器端高性能计算",
       "date": "2026-06-27",
@@ -502,23 +519,6 @@
       ],
       "excerpt": "WebAssembly 实战指南：从 C/Rust 编译到浏览器运行，WASM 与 JS 互操作、内存管理、性能优化与真实应用场景",
       "url": "blog/posts/webassembly-in-practice.html"
-    },
-    {
-      "slug": "zig-language-introduction",
-      "title": "Zig 语言入门：比 C 更安全的系统编程",
-      "date": "2026-06-27",
-      "category": "系统编程",
-      "tags": [
-        "Zig",
-        "系统编程",
-        "comptime",
-        "Allocator",
-        "交叉编译",
-        "build.zig",
-        "C 互操作"
-      ],
-      "excerpt": "Zig 语言入门完整指南：comptime 编译期计算、Allocator 模式、错误处理、C 互操作、交叉编译与构建系统深度解析",
-      "url": "blog/posts/zig-language-introduction.html"
     },
     {
       "slug": "android-gradle-kts-migration",
@@ -1165,11 +1165,11 @@
       "count": 2
     },
     {
-      "tag": "技术人",
+      "tag": "学习方法",
       "count": 2
     },
     {
-      "tag": "学习方法",
+      "tag": "技术人",
       "count": 2
     },
     {
@@ -1205,15 +1205,7 @@
       "count": 2
     },
     {
-      "tag": "Live Updates",
-      "count": 2
-    },
-    {
       "tag": "Nginx",
-      "count": 2
-    },
-    {
-      "tag": "数据库",
       "count": 2
     },
     {
@@ -1226,6 +1218,14 @@
     },
     {
       "tag": "向量数据库",
+      "count": 2
+    },
+    {
+      "tag": "数据库",
+      "count": 2
+    },
+    {
+      "tag": "Live Updates",
       "count": 2
     },
     {
@@ -1349,6 +1349,34 @@
       "count": 1
     },
     {
+      "tag": "效率",
+      "count": 1
+    },
+    {
+      "tag": "写作",
+      "count": 1
+    },
+    {
+      "tag": "个人品牌",
+      "count": 1
+    },
+    {
+      "tag": "协程",
+      "count": 1
+    },
+    {
+      "tag": "Coroutine",
+      "count": 1
+    },
+    {
+      "tag": "异常处理",
+      "count": 1
+    },
+    {
+      "tag": "Kotlin进阶",
+      "count": 1
+    },
+    {
       "tag": "隐私",
       "count": 1
     },
@@ -1370,22 +1398,6 @@
     },
     {
       "tag": "迁移",
-      "count": 1
-    },
-    {
-      "tag": "协程",
-      "count": 1
-    },
-    {
-      "tag": "Coroutine",
-      "count": 1
-    },
-    {
-      "tag": "异常处理",
-      "count": 1
-    },
-    {
-      "tag": "Kotlin进阶",
       "count": 1
     },
     {
@@ -1417,15 +1429,11 @@
       "count": 1
     },
     {
-      "tag": "写作",
+      "tag": "学习",
       "count": 1
     },
     {
-      "tag": "个人品牌",
-      "count": 1
-    },
-    {
-      "tag": "效率",
+      "tag": "博客",
       "count": 1
     },
     {
@@ -1445,30 +1453,6 @@
       "count": 1
     },
     {
-      "tag": "学习",
-      "count": 1
-    },
-    {
-      "tag": "博客",
-      "count": 1
-    },
-    {
-      "tag": "电池优化",
-      "count": 1
-    },
-    {
-      "tag": "通知系统",
-      "count": 1
-    },
-    {
-      "tag": "Notifications",
-      "count": 1
-    },
-    {
-      "tag": "Android 开发",
-      "count": 1
-    },
-    {
       "tag": "Hilt",
       "count": 1
     },
@@ -1485,6 +1469,66 @@
       "count": 1
     },
     {
+      "tag": "反向代理",
+      "count": 1
+    },
+    {
+      "tag": "性能调优",
+      "count": 1
+    },
+    {
+      "tag": "SSL",
+      "count": 1
+    },
+    {
+      "tag": "负载均衡",
+      "count": 1
+    },
+    {
+      "tag": "Zig",
+      "count": 1
+    },
+    {
+      "tag": "comptime",
+      "count": 1
+    },
+    {
+      "tag": "Allocator",
+      "count": 1
+    },
+    {
+      "tag": "交叉编译",
+      "count": 1
+    },
+    {
+      "tag": "build.zig",
+      "count": 1
+    },
+    {
+      "tag": "C 互操作",
+      "count": 1
+    },
+    {
+      "tag": "检索增强生成",
+      "count": 1
+    },
+    {
+      "tag": "Embedding",
+      "count": 1
+    },
+    {
+      "tag": "LangChain",
+      "count": 1
+    },
+    {
+      "tag": "电池优化",
+      "count": 1
+    },
+    {
+      "tag": "OIDC",
+      "count": 1
+    },
+    {
       "tag": "View Transitions",
       "count": 1
     },
@@ -1494,10 +1538,6 @@
     },
     {
       "tag": "SPA",
-      "count": 1
-    },
-    {
-      "tag": "OIDC",
       "count": 1
     },
     {
@@ -1525,11 +1565,63 @@
       "count": 1
     },
     {
+      "tag": "PostgreSQL",
+      "count": 1
+    },
+    {
+      "tag": "索引优化",
+      "count": 1
+    },
+    {
+      "tag": "B-Tree",
+      "count": 1
+    },
+    {
+      "tag": "GIN",
+      "count": 1
+    },
+    {
+      "tag": "EXPLAIN",
+      "count": 1
+    },
+    {
+      "tag": "慢查询",
+      "count": 1
+    },
+    {
+      "tag": "通知系统",
+      "count": 1
+    },
+    {
+      "tag": "Notifications",
+      "count": 1
+    },
+    {
+      "tag": "Android 开发",
+      "count": 1
+    },
+    {
       "tag": "HTTPS",
       "count": 1
     },
     {
       "tag": "TLS 1.3",
+      "count": 1
+    },
+    {
+      "tag": "Prompt Engineering",
+      "count": 1
+    },
+    {
+      "tag": "CRISPE",
+      "count": 1
+    },
+    {
+      "tag": "Chain-of-Thought",
+      "count": 1
+    },
+    {
+      "tag": "Function Calling",
       "count": 1
     },
     {
@@ -1569,74 +1661,6 @@
       "count": 1
     },
     {
-      "tag": "反向代理",
-      "count": 1
-    },
-    {
-      "tag": "性能调优",
-      "count": 1
-    },
-    {
-      "tag": "SSL",
-      "count": 1
-    },
-    {
-      "tag": "负载均衡",
-      "count": 1
-    },
-    {
-      "tag": "PostgreSQL",
-      "count": 1
-    },
-    {
-      "tag": "索引优化",
-      "count": 1
-    },
-    {
-      "tag": "B-Tree",
-      "count": 1
-    },
-    {
-      "tag": "GIN",
-      "count": 1
-    },
-    {
-      "tag": "EXPLAIN",
-      "count": 1
-    },
-    {
-      "tag": "慢查询",
-      "count": 1
-    },
-    {
-      "tag": "Prompt Engineering",
-      "count": 1
-    },
-    {
-      "tag": "CRISPE",
-      "count": 1
-    },
-    {
-      "tag": "Chain-of-Thought",
-      "count": 1
-    },
-    {
-      "tag": "Function Calling",
-      "count": 1
-    },
-    {
-      "tag": "检索增强生成",
-      "count": 1
-    },
-    {
-      "tag": "Embedding",
-      "count": 1
-    },
-    {
-      "tag": "LangChain",
-      "count": 1
-    },
-    {
       "tag": "WebAssembly",
       "count": 1
     },
@@ -1650,30 +1674,6 @@
     },
     {
       "tag": "浏览器",
-      "count": 1
-    },
-    {
-      "tag": "Zig",
-      "count": 1
-    },
-    {
-      "tag": "comptime",
-      "count": 1
-    },
-    {
-      "tag": "Allocator",
-      "count": 1
-    },
-    {
-      "tag": "交叉编译",
-      "count": 1
-    },
-    {
-      "tag": "build.zig",
-      "count": 1
-    },
-    {
-      "tag": "C 互操作",
       "count": 1
     },
     {
@@ -2042,14 +2042,24 @@
           "url": "blog/posts/软件工程师能从制造业学到什么精益思维重塑开发流程.html"
         },
         {
-          "title": "Android 15 隐私新特性：所有文件都需要 MEDIA_VISUAL_PERMISSION",
+          "title": "技术人如何高效学习新技术",
           "date": "2026-07-01",
-          "url": "blog/posts/android-15-隐私新特性所有文件都需要-media-visual-permission.html"
+          "url": "blog/posts/技术人如何高效学习新技术.html"
+        },
+        {
+          "title": "技术人为什么要写作",
+          "date": "2026-07-01",
+          "url": "blog/posts/技术人为什么要写作.html"
         },
         {
           "title": "Kotlin Coroutine 异常处理机制全面解析",
           "date": "2026-07-01",
           "url": "blog/posts/kotlin-coroutine-异常处理机制全面解析.html"
+        },
+        {
+          "title": "Android 15 隐私新特性：所有文件都需要 MEDIA_VISUAL_PERMISSION",
+          "date": "2026-07-01",
+          "url": "blog/posts/android-15-隐私新特性所有文件都需要-media-visual-permission.html"
         },
         {
           "title": "代码之外的竞争力：技术人最容易忽视的软技能",
@@ -2060,16 +2070,6 @@
           "title": "少即是多：信息过载时代的专注力修炼",
           "date": "2026-07-01",
           "url": "blog/posts/少即是多信息过载时代的专注力修炼.html"
-        },
-        {
-          "title": "技术人为什么要写作",
-          "date": "2026-07-01",
-          "url": "blog/posts/技术人为什么要写作.html"
-        },
-        {
-          "title": "技术人如何高效学习新技术",
-          "date": "2026-07-01",
-          "url": "blog/posts/技术人如何高效学习新技术.html"
         }
       ]
     },
@@ -2077,6 +2077,11 @@
       "month": "2026-06",
       "count": 31,
       "posts": [
+        {
+          "title": "为什么我开始写博客：从潜水到发声",
+          "date": "2026-06-30",
+          "url": "blog/posts/why-i-started-blogging.html"
+        },
         {
           "title": "Android 16 前台服务类型全新限制：类型强制匹配与迁移指南",
           "date": "2026-06-30",
@@ -2093,11 +2098,6 @@
           "url": "blog/posts/mcp-server-deep-dive.html"
         },
         {
-          "title": "为什么我开始写博客：从潜水到发声",
-          "date": "2026-06-30",
-          "url": "blog/posts/why-i-started-blogging.html"
-        },
-        {
           "title": "AI 代码编辑器深度横评：Cursor vs Windsurf vs Copilot",
           "date": "2026-06-28",
           "url": "blog/posts/ai-代码编辑器深度横评cursor-vs-windsurf-vs-copilot.html"
@@ -2108,24 +2108,29 @@
           "url": "blog/posts/git-worktree-高效多分支开发指南.html"
         },
         {
-          "title": "Android 16 后台任务新限制：开发者迁移指南",
-          "date": "2026-06-27",
-          "url": "blog/posts/android-16-background-tasks.html"
-        },
-        {
-          "title": "Android 16 通知系统新 API 详解",
-          "date": "2026-06-27",
-          "url": "blog/posts/android-16-notifications.html"
-        },
-        {
           "title": "Android Hilt 依赖注入最佳实践：从入门到架构",
           "date": "2026-06-27",
           "url": "blog/posts/android-hilt-dependency-injection.html"
         },
         {
-          "title": "CSS View Transitions API 实战：页面过渡动画新范式",
+          "title": "Nginx 反向代理性能调优：从入门到生产",
           "date": "2026-06-27",
-          "url": "blog/posts/css-view-transitions.html"
+          "url": "blog/posts/nginx-reverse-proxy-tuning.html"
+        },
+        {
+          "title": "Zig 语言入门：比 C 更安全的系统编程",
+          "date": "2026-06-27",
+          "url": "blog/posts/zig-language-introduction.html"
+        },
+        {
+          "title": "RAG 检索增强生成入门：从理念到落地",
+          "date": "2026-06-27",
+          "url": "blog/posts/rag-introduction.html"
+        },
+        {
+          "title": "Android 16 后台任务新限制：开发者迁移指南",
+          "date": "2026-06-27",
+          "url": "blog/posts/android-16-background-tasks.html"
         },
         {
           "title": "GitHub Actions 高级工作流：CI/CD 最佳实践",
@@ -2133,14 +2138,34 @@
           "url": "blog/posts/github-actions-advanced.html"
         },
         {
+          "title": "CSS View Transitions API 实战：页面过渡动画新范式",
+          "date": "2026-06-27",
+          "url": "blog/posts/css-view-transitions.html"
+        },
+        {
           "title": "Go 并发模式：Channel 与 Context",
           "date": "2026-06-27",
           "url": "blog/posts/go-concurrency-patterns.html"
         },
         {
+          "title": "PostgreSQL 索引优化实战",
+          "date": "2026-06-27",
+          "url": "blog/posts/postgresql-index-optimization.html"
+        },
+        {
+          "title": "Android 16 通知系统新 API 详解",
+          "date": "2026-06-27",
+          "url": "blog/posts/android-16-notifications.html"
+        },
+        {
           "title": "HTTPS 与 TLS 1.3 深度解析",
           "date": "2026-06-27",
           "url": "blog/posts/https-tls13-deep-dive.html"
+        },
+        {
+          "title": "Prompt Engineering 系统化方法论",
+          "date": "2026-06-27",
+          "url": "blog/posts/prompt-engineering-systematic.html"
         },
         {
           "title": "Kotlin Flow 进阶：背压策略与共享流",
@@ -2153,34 +2178,9 @@
           "url": "blog/posts/linux-ebpf-getting-started.html"
         },
         {
-          "title": "Nginx 反向代理性能调优：从入门到生产",
-          "date": "2026-06-27",
-          "url": "blog/posts/nginx-reverse-proxy-tuning.html"
-        },
-        {
-          "title": "PostgreSQL 索引优化实战",
-          "date": "2026-06-27",
-          "url": "blog/posts/postgresql-index-optimization.html"
-        },
-        {
-          "title": "Prompt Engineering 系统化方法论",
-          "date": "2026-06-27",
-          "url": "blog/posts/prompt-engineering-systematic.html"
-        },
-        {
-          "title": "RAG 检索增强生成入门：从理念到落地",
-          "date": "2026-06-27",
-          "url": "blog/posts/rag-introduction.html"
-        },
-        {
           "title": "WebAssembly 实战：浏览器端高性能计算",
           "date": "2026-06-27",
           "url": "blog/posts/webassembly-in-practice.html"
-        },
-        {
-          "title": "Zig 语言入门：比 C 更安全的系统编程",
-          "date": "2026-06-27",
-          "url": "blog/posts/zig-language-introduction.html"
         },
         {
           "title": "Android Gradle 迁移到 KTS 完整指南：从 Groovy 到 Kotlin DSL",
@@ -2411,14 +2411,14 @@
           "url": "blog/posts/软件工程师能从制造业学到什么精益思维重塑开发流程.html"
         },
         {
-          "title": "GitHub Actions 高级工作流：CI/CD 最佳实践",
-          "date": "2026-06-27",
-          "url": "blog/posts/github-actions-advanced.html"
-        },
-        {
           "title": "Nginx 反向代理性能调优：从入门到生产",
           "date": "2026-06-27",
           "url": "blog/posts/nginx-reverse-proxy-tuning.html"
+        },
+        {
+          "title": "GitHub Actions 高级工作流：CI/CD 最佳实践",
+          "date": "2026-06-27",
+          "url": "blog/posts/github-actions-advanced.html"
         },
         {
           "title": "Docker Compose 最佳实践",
@@ -2453,6 +2453,16 @@
           "url": "blog/posts/程序员应该学会关机工作焦虑如何侵蚀你的休息时间.html"
         },
         {
+          "title": "技术人如何高效学习新技术",
+          "date": "2026-07-01",
+          "url": "blog/posts/技术人如何高效学习新技术.html"
+        },
+        {
+          "title": "技术人为什么要写作",
+          "date": "2026-07-01",
+          "url": "blog/posts/技术人为什么要写作.html"
+        },
+        {
           "title": "代码之外的竞争力：技术人最容易忽视的软技能",
           "date": "2026-07-01",
           "url": "blog/posts/代码之外的竞争力技术人最容易忽视的软技能.html"
@@ -2461,16 +2471,6 @@
           "title": "少即是多：信息过载时代的专注力修炼",
           "date": "2026-07-01",
           "url": "blog/posts/少即是多信息过载时代的专注力修炼.html"
-        },
-        {
-          "title": "技术人为什么要写作",
-          "date": "2026-07-01",
-          "url": "blog/posts/技术人为什么要写作.html"
-        },
-        {
-          "title": "技术人如何高效学习新技术",
-          "date": "2026-07-01",
-          "url": "blog/posts/技术人如何高效学习新技术.html"
         },
         {
           "title": "为什么我开始写博客：从潜水到发声",
@@ -2640,10 +2640,10 @@
     "Kotlin",
     "AI",
     "DevOps",
-    "开发",
-    "安全",
-    "数据库",
     "系统编程",
+    "开发",
+    "数据库",
+    "安全",
     "AI Agent"
   ],
   "stats": {
