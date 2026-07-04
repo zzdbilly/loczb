@@ -767,7 +767,7 @@ a:hover {
 }
 
 #projects {
-  padding-top: calc(var(--space-4xl) - 1rem);
+  padding-top: 3rem;
 }
 
 /* 交替背景色，制造层次感 */
