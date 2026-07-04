@@ -457,26 +457,13 @@ def main():
     # 更新相关文章索引
     add_to_index(slug, title, tag_list)
     
-    # 更新博客列表页
-    update_blog_list(slug, title, description, article_date, read_time, tags, category)
-    
-    # 更新首页
-    update_homepage(slug, title, description, article_date, read_time, tags, category)
-    
-    # 更新博客索引（articles-index.json）
-    update_articles_index(slug, title, description, article_date, read_time, tags, category)
-    
-    # 更新博客列表的分类筛选按钮
-    update_filter_buttons()
-    
-    # 更新首页的 JavaScript posts 数组
-    update_homepage_js_array()
-    
-    # 更新 sitemap.xml
-    update_sitemap()
-    
-    # 更新 rss.xml
-    update_rss()
+    print(f"\n💡 提示: 索引/列表/首页/sitemap/RSS 由 CI 自动更新，请 push 后等待 Pages 部署")
+
+    # ═══════════════════════════════════════════════
+    # 以下索引更新已迁移至 CI workflow
+    # 本地不再自动更新 index.html / blog/index.html /
+    # sitemap.xml / rss.xml / articles-index.json
+    # ═══════════════════════════════════════════════
 
 
 def update_sitemap():
