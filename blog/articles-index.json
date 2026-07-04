@@ -1,17 +1,20 @@
 {
   "posts": [
     {
-      "slug": "程序员应该学会关机工作焦虑如何侵蚀你的休息时间",
-      "title": "程序员应该学会「关机」：工作焦虑如何侵蚀你的休息时间",
+      "slug": "linux-inode-机制深入理解从数据结构到实战排查",
+      "title": "Linux inode 机制深入理解：从数据结构到实战排查",
       "date": "2026-07-04",
-      "category": "思考",
+      "category": "技术",
       "tags": [
-        "工作方法",
-        "生活方式",
-        "自我管理"
+        "Linux",
+        "inode",
+        "文件系统",
+        "ext4",
+        "系统编程",
+        "运维"
       ],
-      "excerpt": "不会关机的程序员不是在拼事业，而是在慢性消耗自己。聊聊为什么下班后的大脑还在 debug，以及如何真正停下来。",
-      "url": "blog/posts/程序员应该学会关机工作焦虑如何侵蚀你的休息时间.html"
+      "excerpt": "inode 是 Linux 文件系统的核心概念。本文从 ext4 inode 数据结构、硬链接软链接原理、文件删除机制到 inode 耗尽排查，全面解析 inode 工作原理。",
+      "url": "blog/posts/linux-inode-机制深入理解从数据结构到实战排查.html"
     },
     {
       "slug": "github-actions-自动索引我的静态博客-cicd-进化之路",
@@ -29,20 +32,17 @@
       "url": "blog/posts/github-actions-自动索引我的静态博客-cicd-进化之路.html"
     },
     {
-      "slug": "linux-inode-机制深入理解从数据结构到实战排查",
-      "title": "Linux inode 机制深入理解：从数据结构到实战排查",
+      "slug": "程序员应该学会关机工作焦虑如何侵蚀你的休息时间",
+      "title": "程序员应该学会「关机」：工作焦虑如何侵蚀你的休息时间",
       "date": "2026-07-04",
-      "category": "技术",
+      "category": "思考",
       "tags": [
-        "Linux",
-        "inode",
-        "文件系统",
-        "ext4",
-        "系统编程",
-        "运维"
+        "工作方法",
+        "生活方式",
+        "自我管理"
       ],
-      "excerpt": "inode 是 Linux 文件系统的核心概念。本文从 ext4 inode 数据结构、硬链接软链接原理、文件删除机制到 inode 耗尽排查，全面解析 inode 工作原理。",
-      "url": "blog/posts/linux-inode-机制深入理解从数据结构到实战排查.html"
+      "excerpt": "不会关机的程序员不是在拼事业，而是在慢性消耗自己。聊聊为什么下班后的大脑还在 debug，以及如何真正停下来。",
+      "url": "blog/posts/程序员应该学会关机工作焦虑如何侵蚀你的休息时间.html"
     },
     {
       "slug": "静态博客性能优化实战从-59mb-到精简高效",
@@ -112,35 +112,21 @@
       "url": "blog/posts/软件工程师能从制造业学到什么精益思维重塑开发流程.html"
     },
     {
-      "slug": "技术人如何高效学习新技术",
-      "title": "技术人如何高效学习新技术",
+      "slug": "android-15-隐私新特性所有文件都需要-media-visual-permission",
+      "title": "Android 15 隐私新特性：所有文件都需要 MEDIA_VISUAL_PERMISSION",
       "date": "2026-07-01",
-      "category": "思考",
+      "category": "Android",
       "tags": [
-        "学习方法",
-        "个人成长",
-        "技术人",
-        "效率",
-        "知识管理"
+        "Android",
+        "隐私",
+        "Android 15",
+        "权限",
+        "适配",
+        "Photo Picker",
+        "迁移"
       ],
-      "excerpt": "从被动输入到主动输出，80/20 法则选技术，知识体系建立，实践驱动学习，构建记忆宫殿，善用 AI 与社群",
-      "url": "blog/posts/技术人如何高效学习新技术.html"
-    },
-    {
-      "slug": "技术人为什么要写作",
-      "title": "技术人为什么要写作",
-      "date": "2026-07-01",
-      "category": "思考",
-      "tags": [
-        "思考",
-        "写作",
-        "个人成长",
-        "技术人",
-        "学习方法",
-        "个人品牌"
-      ],
-      "excerpt": "写作不仅是最强的学习方式，更能帮助技术人建立个人品牌、打破信息茧房、留下成长痕迹",
-      "url": "blog/posts/技术人为什么要写作.html"
+      "excerpt": "详解 Android 15 引入的媒体权限重大变更，以及从 MediaStore 迁移到 Photo Picker 的完整指南",
+      "url": "blog/posts/android-15-隐私新特性所有文件都需要-media-visual-permission.html"
     },
     {
       "slug": "kotlin-coroutine-异常处理机制全面解析",
@@ -157,23 +143,6 @@
       ],
       "excerpt": "全面解析 Kotlin 协程异常处理机制，涵盖 launch/async 异常传播差异、SupervisorJob、结构化并发、CoroutineExceptionHandler、Android 最佳实践等核心内容",
       "url": "blog/posts/kotlin-coroutine-异常处理机制全面解析.html"
-    },
-    {
-      "slug": "android-15-隐私新特性所有文件都需要-media-visual-permission",
-      "title": "Android 15 隐私新特性：所有文件都需要 MEDIA_VISUAL_PERMISSION",
-      "date": "2026-07-01",
-      "category": "Android",
-      "tags": [
-        "Android",
-        "隐私",
-        "Android 15",
-        "权限",
-        "适配",
-        "Photo Picker",
-        "迁移"
-      ],
-      "excerpt": "详解 Android 15 引入的媒体权限重大变更，以及从 MediaStore 迁移到 Photo Picker 的完整指南",
-      "url": "blog/posts/android-15-隐私新特性所有文件都需要-media-visual-permission.html"
     },
     {
       "slug": "代码之外的竞争力技术人最容易忽视的软技能",
@@ -206,18 +175,35 @@
       "url": "blog/posts/少即是多信息过载时代的专注力修炼.html"
     },
     {
-      "slug": "why-i-started-blogging",
-      "title": "为什么我开始写博客：从潜水到发声",
-      "date": "2026-06-30",
+      "slug": "技术人为什么要写作",
+      "title": "技术人为什么要写作",
+      "date": "2026-07-01",
       "category": "思考",
       "tags": [
         "思考",
-        "学习",
+        "写作",
         "个人成长",
-        "博客"
+        "技术人",
+        "学习方法",
+        "个人品牌"
       ],
-      "excerpt": "一个普通工程师的写作心路 — 为什么要开始写博客，写作如何改变了我的学习方式，以及我对个人品牌的理解",
-      "url": "blog/posts/why-i-started-blogging.html"
+      "excerpt": "写作不仅是最强的学习方式，更能帮助技术人建立个人品牌、打破信息茧房、留下成长痕迹",
+      "url": "blog/posts/技术人为什么要写作.html"
+    },
+    {
+      "slug": "技术人如何高效学习新技术",
+      "title": "技术人如何高效学习新技术",
+      "date": "2026-07-01",
+      "category": "思考",
+      "tags": [
+        "学习方法",
+        "个人成长",
+        "技术人",
+        "效率",
+        "知识管理"
+      ],
+      "excerpt": "从被动输入到主动输出，80/20 法则选技术，知识体系建立，实践驱动学习，构建记忆宫殿，善用 AI 与社群",
+      "url": "blog/posts/技术人如何高效学习新技术.html"
     },
     {
       "slug": "android-16-foreground-service-constraints",
@@ -260,6 +246,20 @@
       ],
       "excerpt": "3000字完整教程，从零搭建 MCP Server，涵盖协议核心、SDK 使用、调试技巧和生产部署最佳实践",
       "url": "blog/posts/mcp-server-deep-dive.html"
+    },
+    {
+      "slug": "why-i-started-blogging",
+      "title": "为什么我开始写博客：从潜水到发声",
+      "date": "2026-06-30",
+      "category": "思考",
+      "tags": [
+        "思考",
+        "学习",
+        "个人成长",
+        "博客"
+      ],
+      "excerpt": "一个普通工程师的写作心路 — 为什么要开始写博客，写作如何改变了我的学习方式，以及我对个人品牌的理解",
+      "url": "blog/posts/why-i-started-blogging.html"
     },
     {
       "slug": "ai-代码编辑器深度横评cursor-vs-windsurf-vs-copilot",
@@ -1085,15 +1085,15 @@
       "count": 4
     },
     {
+      "tag": "系统编程",
+      "count": 3
+    },
+    {
       "tag": "CI/CD",
       "count": 3
     },
     {
       "tag": "自动化",
-      "count": 3
-    },
-    {
-      "tag": "系统编程",
       "count": 3
     },
     {
@@ -1129,11 +1129,11 @@
       "count": 3
     },
     {
-      "tag": "自我管理",
+      "tag": "GitHub Actions",
       "count": 2
     },
     {
-      "tag": "GitHub Actions",
+      "tag": "自我管理",
       "count": 2
     },
     {
@@ -1165,11 +1165,11 @@
       "count": 2
     },
     {
-      "tag": "学习方法",
+      "tag": "技术人",
       "count": 2
     },
     {
-      "tag": "技术人",
+      "tag": "学习方法",
       "count": 2
     },
     {
@@ -1273,14 +1273,6 @@
       "count": 2
     },
     {
-      "tag": "工作方法",
-      "count": 1
-    },
-    {
-      "tag": "生活方式",
-      "count": 1
-    },
-    {
       "tag": "Linux",
       "count": 1
     },
@@ -1298,6 +1290,14 @@
     },
     {
       "tag": "运维",
+      "count": 1
+    },
+    {
+      "tag": "工作方法",
+      "count": 1
+    },
+    {
+      "tag": "生活方式",
       "count": 1
     },
     {
@@ -1349,34 +1349,6 @@
       "count": 1
     },
     {
-      "tag": "效率",
-      "count": 1
-    },
-    {
-      "tag": "写作",
-      "count": 1
-    },
-    {
-      "tag": "个人品牌",
-      "count": 1
-    },
-    {
-      "tag": "协程",
-      "count": 1
-    },
-    {
-      "tag": "Coroutine",
-      "count": 1
-    },
-    {
-      "tag": "异常处理",
-      "count": 1
-    },
-    {
-      "tag": "Kotlin进阶",
-      "count": 1
-    },
-    {
       "tag": "隐私",
       "count": 1
     },
@@ -1398,6 +1370,22 @@
     },
     {
       "tag": "迁移",
+      "count": 1
+    },
+    {
+      "tag": "协程",
+      "count": 1
+    },
+    {
+      "tag": "Coroutine",
+      "count": 1
+    },
+    {
+      "tag": "异常处理",
+      "count": 1
+    },
+    {
+      "tag": "Kotlin进阶",
       "count": 1
     },
     {
@@ -1429,11 +1417,15 @@
       "count": 1
     },
     {
-      "tag": "学习",
+      "tag": "写作",
       "count": 1
     },
     {
-      "tag": "博客",
+      "tag": "个人品牌",
+      "count": 1
+    },
+    {
+      "tag": "效率",
       "count": 1
     },
     {
@@ -1450,6 +1442,14 @@
     },
     {
       "tag": "协议",
+      "count": 1
+    },
+    {
+      "tag": "学习",
+      "count": 1
+    },
+    {
+      "tag": "博客",
       "count": 1
     },
     {
@@ -2007,9 +2007,9 @@
       "count": 13,
       "posts": [
         {
-          "title": "程序员应该学会「关机」：工作焦虑如何侵蚀你的休息时间",
+          "title": "Linux inode 机制深入理解：从数据结构到实战排查",
           "date": "2026-07-04",
-          "url": "blog/posts/程序员应该学会关机工作焦虑如何侵蚀你的休息时间.html"
+          "url": "blog/posts/linux-inode-机制深入理解从数据结构到实战排查.html"
         },
         {
           "title": "GitHub Actions 自动索引：我的静态博客 CI/CD 进化之路",
@@ -2017,9 +2017,9 @@
           "url": "blog/posts/github-actions-自动索引我的静态博客-cicd-进化之路.html"
         },
         {
-          "title": "Linux inode 机制深入理解：从数据结构到实战排查",
+          "title": "程序员应该学会「关机」：工作焦虑如何侵蚀你的休息时间",
           "date": "2026-07-04",
-          "url": "blog/posts/linux-inode-机制深入理解从数据结构到实战排查.html"
+          "url": "blog/posts/程序员应该学会关机工作焦虑如何侵蚀你的休息时间.html"
         },
         {
           "title": "静态博客性能优化实战：从 59MB 到精简高效",
@@ -2042,24 +2042,14 @@
           "url": "blog/posts/软件工程师能从制造业学到什么精益思维重塑开发流程.html"
         },
         {
-          "title": "技术人如何高效学习新技术",
+          "title": "Android 15 隐私新特性：所有文件都需要 MEDIA_VISUAL_PERMISSION",
           "date": "2026-07-01",
-          "url": "blog/posts/技术人如何高效学习新技术.html"
-        },
-        {
-          "title": "技术人为什么要写作",
-          "date": "2026-07-01",
-          "url": "blog/posts/技术人为什么要写作.html"
+          "url": "blog/posts/android-15-隐私新特性所有文件都需要-media-visual-permission.html"
         },
         {
           "title": "Kotlin Coroutine 异常处理机制全面解析",
           "date": "2026-07-01",
           "url": "blog/posts/kotlin-coroutine-异常处理机制全面解析.html"
-        },
-        {
-          "title": "Android 15 隐私新特性：所有文件都需要 MEDIA_VISUAL_PERMISSION",
-          "date": "2026-07-01",
-          "url": "blog/posts/android-15-隐私新特性所有文件都需要-media-visual-permission.html"
         },
         {
           "title": "代码之外的竞争力：技术人最容易忽视的软技能",
@@ -2070,6 +2060,16 @@
           "title": "少即是多：信息过载时代的专注力修炼",
           "date": "2026-07-01",
           "url": "blog/posts/少即是多信息过载时代的专注力修炼.html"
+        },
+        {
+          "title": "技术人为什么要写作",
+          "date": "2026-07-01",
+          "url": "blog/posts/技术人为什么要写作.html"
+        },
+        {
+          "title": "技术人如何高效学习新技术",
+          "date": "2026-07-01",
+          "url": "blog/posts/技术人如何高效学习新技术.html"
         }
       ]
     },
@@ -2077,11 +2077,6 @@
       "month": "2026-06",
       "count": 31,
       "posts": [
-        {
-          "title": "为什么我开始写博客：从潜水到发声",
-          "date": "2026-06-30",
-          "url": "blog/posts/why-i-started-blogging.html"
-        },
         {
           "title": "Android 16 前台服务类型全新限制：类型强制匹配与迁移指南",
           "date": "2026-06-30",
@@ -2096,6 +2091,11 @@
           "title": "MCP 协议深入实战：从入门到编写自定义 MCP Server",
           "date": "2026-06-30",
           "url": "blog/posts/mcp-server-deep-dive.html"
+        },
+        {
+          "title": "为什么我开始写博客：从潜水到发声",
+          "date": "2026-06-30",
+          "url": "blog/posts/why-i-started-blogging.html"
         },
         {
           "title": "AI 代码编辑器深度横评：Cursor vs Windsurf vs Copilot",
@@ -2453,16 +2453,6 @@
           "url": "blog/posts/程序员应该学会关机工作焦虑如何侵蚀你的休息时间.html"
         },
         {
-          "title": "技术人如何高效学习新技术",
-          "date": "2026-07-01",
-          "url": "blog/posts/技术人如何高效学习新技术.html"
-        },
-        {
-          "title": "技术人为什么要写作",
-          "date": "2026-07-01",
-          "url": "blog/posts/技术人为什么要写作.html"
-        },
-        {
           "title": "代码之外的竞争力：技术人最容易忽视的软技能",
           "date": "2026-07-01",
           "url": "blog/posts/代码之外的竞争力技术人最容易忽视的软技能.html"
@@ -2471,6 +2461,16 @@
           "title": "少即是多：信息过载时代的专注力修炼",
           "date": "2026-07-01",
           "url": "blog/posts/少即是多信息过载时代的专注力修炼.html"
+        },
+        {
+          "title": "技术人为什么要写作",
+          "date": "2026-07-01",
+          "url": "blog/posts/技术人为什么要写作.html"
+        },
+        {
+          "title": "技术人如何高效学习新技术",
+          "date": "2026-07-01",
+          "url": "blog/posts/技术人如何高效学习新技术.html"
         },
         {
           "title": "为什么我开始写博客：从潜水到发声",
@@ -2633,8 +2633,8 @@
     }
   ],
   "categories": [
-    "思考",
     "技术",
+    "思考",
     "前端",
     "Android",
     "Kotlin",

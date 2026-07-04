@@ -37,11 +37,17 @@ const posts = files.map(file => {
   const titleMatch = content.match(/<title>([^<]+)<\/title>/);
   const title = titleMatch ? titleMatch[1].replace(/ \| 张小猛 - loczb$/, '') : '';
 
-  const dateMatch = content.match(/<span>📅 (\d{4}-\d{1,2}-\d{1,2})(?:\s+\d{1,2}:\d{1,2}:\d{1,2})?<\/span>/);
+  const dateMatch = content.match(/<span>📅 (\d{4}-\d{1,2}-\d{1,2})(?:\s+(\d{1,2}:\d{1,2}:\d{1,2}))?<\/span>/);
   let date = dateMatch ? dateMatch[1] : '';
+  let dateTime = dateMatch ? dateMatch[1] + (dateMatch[2] ? ' ' + dateMatch[2] : '') : '';
   if (date) {
     const parts = date.split('-');
     date = `${parts[0]}-${parts[1].padStart(2, '0')}-${parts[2].padStart(2, '0')}`;
+  }
+  if (dateTime) {
+    const parts = dateTime.split(/[- :]/);
+    const m = (n) => String(n).padStart(2, '0');
+    dateTime = `${parts[0]}-${m(parts[1])}-${m(parts[2])} ${m(parts[3] || '0')}:${m(parts[4] || '0')}:${m(parts[5] || '0')}`;
   }
 
   const descMatch = content.match(/<meta name="description" content="([^"]+)"/);
@@ -68,6 +74,7 @@ const posts = files.map(file => {
     slug,
     title,
     date,
+    dateTime,
     category,
     tags,
     excerpt,
@@ -95,24 +102,11 @@ posts.forEach(p => {
   if (!p.category) p.category = '技术';
 });
 
-// 构建 blog/index.html 的位置映射
-const linkRegex = /href="posts\/([^"']+\.html)"/g;
-const htmlOrder = {};
-let orderIdx = 0;
-let linkMatch;
-while ((linkMatch = linkRegex.exec(blogIndexContent)) !== null) {
-  if (!(linkMatch[1] in htmlOrder)) {
-    htmlOrder[linkMatch[1]] = orderIdx++;
-  }
-}
-
-// 排序：日期降序，同日按 HTML 列表顺序
+// 排序：按日期时间降序（同日的文章按精确时间排，新写的排前面）
 posts.sort((a, b) => {
-  const dateDiff = new Date(b.date) - new Date(a.date);
-  if (dateDiff !== 0) return dateDiff;
-  const aOrder = htmlOrder[a.slug + '.html'] ?? 9999;
-  const bOrder = htmlOrder[b.slug + '.html'] ?? 9999;
-  return aOrder - bOrder;
+  const aTime = a.dateTime || a.date + ' 00:00:00';
+  const bTime = b.dateTime || b.date + ' 00:00:00';
+  return new Date(bTime) - new Date(aTime);
 });
 
 console.log(`📊 解析完成: ${posts.length} 篇文章`);
