@@ -29,6 +29,22 @@
       "url": "blog/posts/github-actions-自动索引我的静态博客-cicd-进化之路.html"
     },
     {
+      "slug": "linux-inode-机制深入理解从数据结构到实战排查",
+      "title": "Linux inode 机制深入理解：从数据结构到实战排查",
+      "date": "2026-07-04",
+      "category": "技术",
+      "tags": [
+        "Linux",
+        "inode",
+        "文件系统",
+        "ext4",
+        "系统编程",
+        "运维"
+      ],
+      "excerpt": "inode 是 Linux 文件系统的核心概念。本文从 ext4 inode 数据结构、硬链接软链接原理、文件删除机制到 inode 耗尽排查，全面解析 inode 工作原理。",
+      "url": "blog/posts/linux-inode-机制深入理解从数据结构到实战排查.html"
+    },
+    {
       "slug": "静态博客性能优化实战从-59mb-到精简高效",
       "title": "静态博客性能优化实战：从 59MB 到精简高效",
       "date": "2026-07-03",
@@ -1077,6 +1093,10 @@
       "count": 3
     },
     {
+      "tag": "系统编程",
+      "count": 3
+    },
+    {
       "tag": "性能优化",
       "count": 3
     },
@@ -1213,10 +1233,6 @@
       "count": 2
     },
     {
-      "tag": "系统编程",
-      "count": 2
-    },
-    {
       "tag": "Compose Multiplatform",
       "count": 2
     },
@@ -1262,6 +1278,26 @@
     },
     {
       "tag": "生活方式",
+      "count": 1
+    },
+    {
+      "tag": "Linux",
+      "count": 1
+    },
+    {
+      "tag": "inode",
+      "count": 1
+    },
+    {
+      "tag": "文件系统",
+      "count": 1
+    },
+    {
+      "tag": "ext4",
+      "count": 1
+    },
+    {
+      "tag": "运维",
       "count": 1
     },
     {
@@ -1968,7 +2004,7 @@
   "archives": [
     {
       "month": "2026-07",
-      "count": 12,
+      "count": 13,
       "posts": [
         {
           "title": "程序员应该学会「关机」：工作焦虑如何侵蚀你的休息时间",
@@ -1979,6 +2015,11 @@
           "title": "GitHub Actions 自动索引：我的静态博客 CI/CD 进化之路",
           "date": "2026-07-04",
           "url": "blog/posts/github-actions-自动索引我的静态博客-cicd-进化之路.html"
+        },
+        {
+          "title": "Linux inode 机制深入理解：从数据结构到实战排查",
+          "date": "2026-07-04",
+          "url": "blog/posts/linux-inode-机制深入理解从数据结构到实战排查.html"
         },
         {
           "title": "静态博客性能优化实战：从 59MB 到精简高效",
@@ -2606,8 +2647,8 @@
     "AI Agent"
   ],
   "stats": {
-    "totalPosts": 69,
-    "totalTags": 232,
+    "totalPosts": 70,
+    "totalTags": 237,
     "latestDate": "2026-07-04",
     "oldestDate": "2026-02-15"
   }

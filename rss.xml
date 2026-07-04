@@ -23,6 +23,14 @@
       <pubDate>Sat, 04 Jul 2026 00:00:00 +0800</pubDate>
     </item>
     <item>
+      <title>Linux inode 机制深入理解：从数据结构到实战排查</title>
+      <link>https://709527.xyz/blog/posts/linux-inode-机制深入理解从数据结构到实战排查.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/linux-inode-机制深入理解从数据结构到实战排查.html</guid>
+      <description>inode 是 Linux 文件系统的核心概念。本文从 ext4 inode 数据结构、硬链接软链接原理、文件删除机制到 inode 耗尽排查，全面解析 inode 工作原理。</description>
+      <category>技术</category>
+      <pubDate>Sat, 04 Jul 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
       <title>静态博客性能优化实战：从 59MB 到精简高效</title>
       <link>https://709527.xyz/blog/posts/静态博客性能优化实战从-59mb-到精简高效.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/静态博客性能优化实战从-59mb-到精简高效.html</guid>
@@ -155,14 +163,6 @@
       <link>https://709527.xyz/blog/posts/android-16-background-tasks.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/android-16-background-tasks.html</guid>
       <description>Android 16 后台任务新限制完整解读：JobScheduler 强化、前台服务严格限制、WorkManager 迁移策略与兼容性适配指南</description>
-      <category>Android</category>
-      <pubDate>Sat, 27 Jun 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>Android 16 通知系统新 API 详解</title>
-      <link>https://709527.xyz/blog/posts/android-16-notifications.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/android-16-notifications.html</guid>
-      <description>Android 16 通知系统新 API 详解：Live Updates、Rich Ongoing、Bubble API 增强、通知优先级改革与迁移指南</description>
       <category>Android</category>
       <pubDate>Sat, 27 Jun 2026 00:00:00 +0800</pubDate>
     </item>
