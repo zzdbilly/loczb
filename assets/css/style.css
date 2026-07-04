@@ -2951,6 +2951,14 @@ pre code {
   user-select: none;
 }
 
+[data-theme="dark"] .code-lang-label {
+  color: #818cf8;
+}
+
+[data-theme="light"] .code-lang-label {
+  color: #a5b4fc;
+}
+
 .code-block-wrapper pre {
   margin: 0;
 }
@@ -2972,6 +2980,18 @@ pre code {
   opacity: 0;
   transition: opacity 0.2s, background 0.2s;
   font-family: var(--font-sans);
+}
+
+[data-theme="dark"] .copy-code-btn {
+  background: #27272a;
+  border-color: #3f3f46;
+  color: #a1a1aa;
+}
+
+[data-theme="light"] .copy-code-btn {
+  background: #2a2a3c;
+  border-color: #45475a;
+  color: #a1a1aa;
 }
 
 .code-block-wrapper:hover .copy-code-btn {
@@ -3948,7 +3968,8 @@ pre code {
 }
 
 [data-theme="dark"] .post-content pre {
-  border-color: #27272a;
+  background: #161619;
+  border-color: #3f3f46;
 }
 
 .post-content pre code {
@@ -3959,10 +3980,10 @@ pre code {
   color: var(--color-text-primary);
 }
 
-/* 亮色主题：代码块用中等深色背景，减少与白色页面的对比跳跃 */
+/* 亮色主题：代码块用深色背景，代码配色两套主题统一 */
 [data-theme="light"] .post-content pre {
-  background: #282a36;
-  border-color: #404052;
+  background: #1e1e2e;
+  border-color: #45475a;
 }
 
 [data-theme="light"] .post-content pre code {
@@ -4032,7 +4053,7 @@ th, td {
 
 .code-block {
   background: #1e1e2e;
-  border: 1px solid #404052;
+  border: 1px solid #45475a;
   padding: 1.2rem 1.2rem 1.2rem 1.5rem;
   border-radius: 8px;
   overflow-x: auto;
