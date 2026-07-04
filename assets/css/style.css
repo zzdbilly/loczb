@@ -3933,7 +3933,11 @@ pre code {
   white-space: pre;
   line-height: 1.5;
   font-family: var(--font-mono);
-  border: 1px solid var(--color-border-hover);
+  border: 1px solid var(--color-border);
+}
+
+[data-theme="dark"] .post-content pre {
+  border-color: #27272a;
 }
 
 .post-content pre code {
@@ -3946,8 +3950,8 @@ pre code {
 
 /* 亮色主题：代码块保持深色背景 */
 [data-theme="light"] .post-content pre {
-  background: #1a1b26;
-  border-color: #2a2b3d;
+  background: #1e1e2e;
+  border-color: #313244;
 }
 
 [data-theme="light"] .post-content pre code {
@@ -4016,7 +4020,8 @@ th, td {
 .code-block code { background: transparent; padding: 0; color: #e0e0e0; }
 
 .code-block {
-  background: #1a1a2e;
+  background: #1e1e2e;
+  border: 1px solid #313244;
   padding: 1.2rem 1.2rem 1.2rem 1.5rem;
   border-radius: 8px;
   overflow-x: auto;
@@ -4066,17 +4071,6 @@ th, td {
 .warning-box { background: rgba(234, 179, 8, 0.1); border-left: 3px solid #eab308; padding: 1rem 1.2rem; margin: 1.5rem 0; border-radius: 0 6px 6px 0; }
 
 .workflow-diagram { background: var(--color-bg-tertiary); padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0; font-family: var(--font-mono); font-size: 0.85rem; overflow-x: auto; }
-
-/* 代码块 wrapper + 复制按钮 */
-.code-block-wrapper {
-  position: relative;
-  margin: 1.2rem 0;
-}
-
-.code-block-wrapper pre {
-  margin: 0 !important;
-  padding: 1.2rem 1.2rem 1.2rem 1.5rem !important;
-}
 
 /* 响应式 */
 @media (max-width: 768px) {
