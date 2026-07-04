@@ -2940,6 +2940,17 @@ pre code {
   margin: 1.2rem 0;
 }
 
+.code-lang-label {
+  padding: 0.35rem 1.2rem 0.5rem 1.5rem;
+  font-size: 0.7rem;
+  font-family: var(--font-mono);
+  font-weight: 500;
+  color: var(--color-accent-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  user-select: none;
+}
+
 .code-block-wrapper pre {
   margin: 0;
 }

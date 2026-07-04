@@ -568,17 +568,60 @@ function initBlogFilters() {
 }
 
 // ===================================
-// ===================================
-// Code Block Copy Button
+// Code Block Copy Button + Language Label
 // ===================================
 function initCodeCopy() {
   const codeBlocks = document.querySelectorAll('.post-content pre');
-  
+
+  // 语言名称映射（hljs 返回的 short name → 显示名）
+  const langNames = {
+    kotlin: 'Kotlin', java: 'Java', python: 'Python', javascript: 'JavaScript',
+    typescript: 'TypeScript', bash: 'Bash', sh: 'Shell', shell: 'Shell',
+    json: 'JSON', xml: 'XML', html: 'HTML', css: 'CSS', sql: 'SQL',
+    yaml: 'YAML', dockerfile: 'Dockerfile', groovy: 'Groovy', gradle: 'Gradle',
+    ruby: 'Ruby', go: 'Go', rust: 'Rust', c: 'C', cpp: 'C++', swift: 'Swift',
+    php: 'PHP', markdown: 'Markdown', plaintext: 'Text', diff: 'Diff',
+    nginx: 'Nginx', properties: 'Properties', ini: 'INI', toml: 'TOML',
+    makefile: 'Makefile', dart: 'Dart', scala: 'Scala', lua: 'Lua',
+    perl: 'Perl', r: 'R', matlab: 'MATLAB', pascal: 'Pascal',
+  };
+
+  function detectLanguage(pre) {
+    // 优先从 pygments class 检测
+    const codeBlock = pre.closest('.codehilite, .highlight');
+    if (codeBlock) {
+      const cls = codeBlock.className;
+      // pygments 输出如 "codehilite language-kotlin" 或 "highlight-kotlin"
+      const langMatch = cls.match(/(?:language-|highlight-)([a-zA-Z0-9_+#-]+)/);
+      if (langMatch) return langMatch[1].toLowerCase();
+    }
+    // 回退：hljs 自动检测
+    if (typeof hljs !== 'undefined') {
+      const code = pre.querySelector('code') || pre;
+      const result = hljs.highlightAuto(code.textContent || '');
+      if (result.language && result.language !== 'undefined') {
+        return result.language;
+      }
+    }
+    return null;
+  }
+
+  const codeBlockMargin = '1.2rem';
+
   codeBlocks.forEach(pre => {
-    // Wrap in container if not already wrapped
     if (!pre.parentElement.classList.contains('code-block-wrapper')) {
       const wrapper = document.createElement('div');
       wrapper.className = 'code-block-wrapper';
+
+      // 检测语言并添加标签
+      const lang = detectLanguage(pre);
+      if (lang) {
+        const label = document.createElement('div');
+        label.className = 'code-lang-label';
+        label.textContent = langNames[lang] || lang;
+        wrapper.appendChild(label);
+      }
+
       pre.parentNode.insertBefore(wrapper, pre);
       wrapper.appendChild(pre);
     }
