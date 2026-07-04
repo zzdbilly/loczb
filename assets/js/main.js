@@ -494,52 +494,11 @@ function validateForm(form) {
 // ===================================
 // Blog Filters
 // ===================================
+// Blog filtering, pagination, and tag cloud are fully handled by blog-list.js.
+// This function is kept as a no-op stub for backward compatibility.
 function initBlogFilters() {
-  // blog-list.js handles all blog filtering, pagination, and tag cloud.
-  // This is only a fallback when blog-list.js is missing.
-  if (window._blogApplyFilter && window._blogApplyFilter._blogListJS) return;
-  
-  // Fallback: basic filter (no pagination)
-  const filterButtons = document.querySelectorAll('.blog-filters .tag, .blog-filters .filter-btn');
-  const blogPosts = document.querySelectorAll('.blog-post, .blog-list-item');
-  const emptyState = document.getElementById('blog-empty-state');
-  const featuredSection = document.getElementById('featured-section');
-  
-  if (filterButtons.length === 0 || blogPosts.length === 0) return;
-  
-  window._blogApplyFilter = function applyFilter(filter) {
-    let visibleCount = 0;
-    blogPosts.forEach(post => {
-      if (filter === 'all' || filter === '全部') {
-        post.style.display = '';
-        visibleCount++;
-      } else {
-        const category = post.getAttribute('data-category');
-        const dataTags = (post.getAttribute('data-tags') || '').split(',').filter(Boolean);
-        const hasMatch = category === filter || dataTags.includes(filter);
-        post.style.display = hasMatch ? '' : 'none';
-        if (hasMatch) visibleCount++;
-      }
-    });
-    filterButtons.forEach(btn => {
-      btn.classList.remove('filter-btn-active', 'tag-accent');
-      const btnFilter = btn.getAttribute('data-filter') || btn.textContent.trim();
-      const isAll = btnFilter === 'all' || btnFilter === '全部';
-      const isActive = (filter === 'all' || filter === '全部') ? isAll : (btnFilter === filter);
-      if (isActive) btn.classList.add('filter-btn-active', 'tag-accent');
-    });
-    if (featuredSection) {
-      featuredSection.style.display = (filter === 'all' || filter === '全部') ? '' : 'none';
-    }
-    if (emptyState) emptyState.style.display = visibleCount === 0 ? 'block' : 'none';
-  };
-  
-  // Initial load
-  if (window.location.hash) {
-    window._blogApplyFilter(decodeURIComponent(window.location.hash.substring(1)));
-  } else {
-    window._blogApplyFilter('all');
-  }
+  // All blog filter logic is handled by blog-list.js
+  return;
 }
 
 // ===================================
@@ -682,13 +641,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initScrollProgress();
   initBackToTop();
   setActiveNavLink();
-  // Blog filters are handled by blog-list.js. Delay initBlogFilters
-  // so blog-list.js can set _blogListJS marker first.
-  setTimeout(function() {
-    if (!window._blogApplyFilter || !window._blogApplyFilter._blogListJS) {
-      initBlogFilters();
-    }
-  }, 0);
+  // Blog filters are fully handled by blog-list.js — no action needed here.
   initCodeCopy();
   initLightbox();
   
