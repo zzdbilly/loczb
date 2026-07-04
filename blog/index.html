@@ -1268,7 +1268,75 @@
   <script defer src="../assets/js/back-to-top.js?v=97bbf5c9"></script>
   <script defer src="../assets/js/particles.js"></script>
 
-  <!-- Cloudflare Web Analytics -->
+  <!-- Fallback: ensure filter buttons work even if blog-list.js fails -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Check if blog-list.js already handled filtering
+      function hasBlogList() {
+        return window._blogApplyFilter && window._blogApplyFilter._blogListJS;
+      }
+      
+      // If blog-list.js didn't bind events (e.g., loaded but errored),
+      // bind filter buttons directly here
+      if (!hasBlogList()) {
+        console.warn('blog-list.js filter not detected; using inline fallback');
+        var btns = document.querySelectorAll('.filter-btn');
+        btns.forEach(function(btn) {
+          btn.addEventListener('click', function(e) {
+            var filter = this.getAttribute('data-filter') || this.textContent.trim();
+            // Try blog-list's applyFilter if available
+            if (window._blogApplyFilter) {
+              window._blogApplyFilter(filter);
+              return;
+            }
+            // Bare-minimum filter: show/hide articles
+            var posts = document.querySelectorAll('.blog-list-item');
+            posts.forEach(function(post) {
+              if (filter === 'all') {
+                post.style.display = '';
+              } else {
+                var cat = post.getAttribute('data-category');
+                post.style.display = (cat === filter) ? '' : 'none';
+              }
+            });
+            btns.forEach(function(b) { b.classList.remove('filter-btn-active'); });
+            btn.classList.add('filter-btn-active');
+          });
+        });
+        
+        // Also handle tag cloud if it exists
+        var tagCloud = document.getElementById('blog-tag-cloud');
+        if (!tagCloud) {
+          // Try legacy container
+          tagCloud = document.querySelector('.tag-cloud');
+        }
+        if (tagCloud) {
+          tagCloud.addEventListener('click', function(e) {
+            var item = e.target.closest('.tag-cloud-item');
+            if (!item) return;
+            var tag = item.getAttribute('data-filter');
+            if (!tag) return;
+            // Try blog-list's _blogApplyFilter if available
+            if (window._blogApplyFilter) {
+              window._blogApplyFilter(tag);
+              return;
+            }
+            // Fallback: find matching data-tags in articles
+            var posts = document.querySelectorAll('.blog-list-item');
+            posts.forEach(function(post) {
+              var tags = (post.getAttribute('data-tags') || '').split(',');
+              var match = tags.indexOf(tag) !== -1 || post.getAttribute('data-category') === tag;
+              post.style.display = match ? '' : 'none';
+            });
+            btns.forEach(function(b) { b.classList.remove('filter-btn-active'); });
+            item.classList.add('active');
+          });
+        }
+      }
+    });
+  </script>
+
+<!-- Cloudflare Web Analytics -->
   <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "29e7cff6f37448989538e2165cb79187"}'></script>
 
 </body>
