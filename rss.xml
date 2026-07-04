@@ -7,6 +7,14 @@
     <language>zh-CN</language>
     <atom:link href="https://709527.xyz/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>AI 编程助手进化论：从结对编程到自主编程团队 (2026)</title>
+      <link>https://709527.xyz/blog/posts/ai-编程助手进化论从结对编程到自主编程团队-2026.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/ai-编程助手进化论从结对编程到自主编程团队-2026.html</guid>
+      <description>2026 年，AI 编程 Agent 跨越了从辅助工具到自主成员的临界点。Cursor 移动端发布、Claude Code 深度推理、Codex CLI 稳定执行、多 Agent 并行协作——本文梳理 AI 编程的三次范式跃迁，分析主流工具，分享落地实践，并展望 2027 年的开发者生态。</description>
+      <category>技术</category>
+      <pubDate>Sat, 04 Jul 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
       <title>Linux inode 机制深入理解：从数据结构到实战排查</title>
       <link>https://709527.xyz/blog/posts/linux-inode-mechanism-deep-dive.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/linux-inode-mechanism-deep-dive.html</guid>
@@ -157,14 +165,6 @@
       <description>Git Worktree 让你同时检出多个分支，切换零成本，告别 stash 和冲突的烦恼。本文详解 worktree 的使用场景和最佳实践。</description>
       <category>技术</category>
       <pubDate>Sun, 28 Jun 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>Android Hilt 依赖注入最佳实践：从入门到架构</title>
-      <link>https://709527.xyz/blog/posts/android-hilt-dependency-injection.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/android-hilt-dependency-injection.html</guid>
-      <description>Android Hilt 依赖注入完整指南：核心注解、ViewModel 注入、多模块架构、作用域管理、第三方库集成与测试最佳实践</description>
-      <category>Android</category>
-      <pubDate>Sat, 27 Jun 2026 00:00:00 +0800</pubDate>
     </item>
   </channel>
 </rss>
