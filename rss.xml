@@ -15,6 +15,14 @@
       <pubDate>Sat, 04 Jul 2026 00:00:00 +0800</pubDate>
     </item>
     <item>
+      <title>GitHub Actions 自动索引：我的静态博客 CI/CD 进化之路</title>
+      <link>https://709527.xyz/blog/posts/github-actions-自动索引我的静态博客-cicd-进化之路.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/github-actions-自动索引我的静态博客-cicd-进化之路.html</guid>
+      <description>68篇技术博客的索引更新从手动7文件到CI全量自动重建——聊聊全量vs增量的取舍、HTML解析技巧、RSS日期格式化踩坑，以及为什么应该让CI管索引</description>
+      <category>技术</category>
+      <pubDate>Sat, 04 Jul 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
       <title>静态博客性能优化实战：从 59MB 到精简高效</title>
       <link>https://709527.xyz/blog/posts/静态博客性能优化实战从-59mb-到精简高效.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/静态博客性能优化实战从-59mb-到精简高效.html</guid>
@@ -155,14 +163,6 @@
       <link>https://709527.xyz/blog/posts/android-16-notifications.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/android-16-notifications.html</guid>
       <description>Android 16 通知系统新 API 详解：Live Updates、Rich Ongoing、Bubble API 增强、通知优先级改革与迁移指南</description>
-      <category>Android</category>
-      <pubDate>Sat, 27 Jun 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>Android Hilt 依赖注入最佳实践：从入门到架构</title>
-      <link>https://709527.xyz/blog/posts/android-hilt-dependency-injection.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/android-hilt-dependency-injection.html</guid>
-      <description>Android Hilt 依赖注入完整指南：核心注解、ViewModel 注入、多模块架构、作用域管理、第三方库集成与测试最佳实践</description>
       <category>Android</category>
       <pubDate>Sat, 27 Jun 2026 00:00:00 +0800</pubDate>
     </item>
