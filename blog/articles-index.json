@@ -1,6 +1,20 @@
 {
   "posts": [
     {
+      "slug": "ai-编程助手进化论从结对编程到自主编程团队-2026",
+      "title": "AI 编程助手进化论：从结对编程到自主编程团队 (2026)",
+      "date": "2026-07-04",
+      "category": "技术",
+      "tags": [
+        "AI 工具",
+        "AI Agent",
+        "Agent",
+        "编程"
+      ],
+      "excerpt": "2026 年，AI 编程 Agent 跨越了从辅助工具到自主成员的临界点。Cursor 移动端发布、Claude Code 深度推理、Codex CLI 稳定执行、多 Agent 并行协作——本文梳理 AI 编程的三次范式跃迁，分析主流工具，分享落地实践，并展望 2027 年的开发者生态。",
+      "url": "blog/posts/ai-编程助手进化论从结对编程到自主编程团队-2026.html"
+    },
+    {
       "slug": "linux-inode-mechanism-deep-dive",
       "title": "Linux inode 机制深入理解：从数据结构到实战排查",
       "date": "2026-07-04",
@@ -1073,15 +1087,19 @@
       "count": 6
     },
     {
+      "tag": "AI 工具",
+      "count": 5
+    },
+    {
+      "tag": "Agent",
+      "count": 4
+    },
+    {
       "tag": "前端",
       "count": 4
     },
     {
       "tag": "Android 16",
-      "count": 4
-    },
-    {
-      "tag": "AI 工具",
       "count": 4
     },
     {
@@ -1125,8 +1143,8 @@
       "count": 3
     },
     {
-      "tag": "Agent",
-      "count": 3
+      "tag": "AI Agent",
+      "count": 2
     },
     {
       "tag": "GitHub Actions",
@@ -1271,6 +1289,10 @@
     {
       "tag": "OpenClaw",
       "count": 2
+    },
+    {
+      "tag": "编程",
+      "count": 1
     },
     {
       "tag": "Linux",
@@ -1977,10 +1999,6 @@
       "count": 1
     },
     {
-      "tag": "AI Agent",
-      "count": 1
-    },
-    {
       "tag": "Skill",
       "count": 1
     },
@@ -2004,8 +2022,13 @@
   "archives": [
     {
       "month": "2026-07",
-      "count": 13,
+      "count": 14,
       "posts": [
+        {
+          "title": "AI 编程助手进化论：从结对编程到自主编程团队 (2026)",
+          "date": "2026-07-04",
+          "url": "blog/posts/ai-编程助手进化论从结对编程到自主编程团队-2026.html"
+        },
         {
           "title": "Linux inode 机制深入理解：从数据结构到实战排查",
           "date": "2026-07-04",
@@ -2443,6 +2466,70 @@
       ]
     },
     {
+      "id": "ai-tools",
+      "name": "AI 工具与实践",
+      "count": 5,
+      "posts": [
+        {
+          "title": "AI 编程助手进化论：从结对编程到自主编程团队 (2026)",
+          "date": "2026-07-04",
+          "url": "blog/posts/ai-编程助手进化论从结对编程到自主编程团队-2026.html"
+        },
+        {
+          "title": "AI 代码编辑器深度横评：Cursor vs Windsurf vs Copilot",
+          "date": "2026-06-28",
+          "url": "blog/posts/ai-code-editor-review-cursor-windsurf-copilot.html"
+        },
+        {
+          "title": "主流 AI 编程工具深度对比：Cursor、Claude Code、OpenCode、GitHub Copilot",
+          "date": "2026-04-19",
+          "url": "blog/posts/ai-coding-tools-comparison.html"
+        },
+        {
+          "title": "Gemini Notebooks 深度体验：与 NotebookLM 无缝整合后的全新 AI 工作流",
+          "date": "2026-04-11",
+          "url": "blog/posts/gemini-notebooklm-integration.html"
+        },
+        {
+          "title": "Gemini + NotebookLM 结合使用指南",
+          "date": "2026-04-10",
+          "url": "blog/posts/gemini-notebooklm-workflow.html"
+        }
+      ]
+    },
+    {
+      "id": "ai-agent",
+      "name": "AI Agent 开发",
+      "count": 5,
+      "posts": [
+        {
+          "title": "AI 编程助手进化论：从结对编程到自主编程团队 (2026)",
+          "date": "2026-07-04",
+          "url": "blog/posts/ai-编程助手进化论从结对编程到自主编程团队-2026.html"
+        },
+        {
+          "title": "Google I/O 2026 完整回顾：AI 重塑一切",
+          "date": "2026-06-19",
+          "url": "blog/posts/google-io-2026-recap.html"
+        },
+        {
+          "title": "MCP 协议在 Android 端的应用：AI 工具调用新范式",
+          "date": "2026-06-19",
+          "url": "blog/posts/mcp-android-integration.html"
+        },
+        {
+          "title": "AI Agent 技能开发实战：从需求到上线的完整流程",
+          "date": "2026-03-14",
+          "url": "blog/posts/ai-agent-skill-development.html"
+        },
+        {
+          "title": "OpenClaw 深度使用指南：从 0 到 1 构建个人 AI Agent",
+          "date": "2026-03-13",
+          "url": "blog/posts/openclaw-guide.html"
+        }
+      ]
+    },
+    {
       "id": "personal-growth",
       "name": "个人成长",
       "count": 5,
@@ -2498,60 +2585,6 @@
           "title": "Android 16 新特性详解：开发者需要知道的 8 件事",
           "date": "2026-06-19",
           "url": "blog/posts/android-16-features.html"
-        }
-      ]
-    },
-    {
-      "id": "ai-tools",
-      "name": "AI 工具与实践",
-      "count": 4,
-      "posts": [
-        {
-          "title": "AI 代码编辑器深度横评：Cursor vs Windsurf vs Copilot",
-          "date": "2026-06-28",
-          "url": "blog/posts/ai-code-editor-review-cursor-windsurf-copilot.html"
-        },
-        {
-          "title": "主流 AI 编程工具深度对比：Cursor、Claude Code、OpenCode、GitHub Copilot",
-          "date": "2026-04-19",
-          "url": "blog/posts/ai-coding-tools-comparison.html"
-        },
-        {
-          "title": "Gemini Notebooks 深度体验：与 NotebookLM 无缝整合后的全新 AI 工作流",
-          "date": "2026-04-11",
-          "url": "blog/posts/gemini-notebooklm-integration.html"
-        },
-        {
-          "title": "Gemini + NotebookLM 结合使用指南",
-          "date": "2026-04-10",
-          "url": "blog/posts/gemini-notebooklm-workflow.html"
-        }
-      ]
-    },
-    {
-      "id": "ai-agent",
-      "name": "AI Agent 开发",
-      "count": 4,
-      "posts": [
-        {
-          "title": "Google I/O 2026 完整回顾：AI 重塑一切",
-          "date": "2026-06-19",
-          "url": "blog/posts/google-io-2026-recap.html"
-        },
-        {
-          "title": "MCP 协议在 Android 端的应用：AI 工具调用新范式",
-          "date": "2026-06-19",
-          "url": "blog/posts/mcp-android-integration.html"
-        },
-        {
-          "title": "AI Agent 技能开发实战：从需求到上线的完整流程",
-          "date": "2026-03-14",
-          "url": "blog/posts/ai-agent-skill-development.html"
-        },
-        {
-          "title": "OpenClaw 深度使用指南：从 0 到 1 构建个人 AI Agent",
-          "date": "2026-03-13",
-          "url": "blog/posts/openclaw-guide.html"
         }
       ]
     },
@@ -2637,8 +2670,8 @@
     "AI Agent"
   ],
   "stats": {
-    "totalPosts": 70,
-    "totalTags": 237,
+    "totalPosts": 71,
+    "totalTags": 238,
     "latestDate": "2026-07-04",
     "oldestDate": "2026-02-15"
   }
