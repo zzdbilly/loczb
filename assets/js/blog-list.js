@@ -49,10 +49,6 @@
         btn.classList.toggle('tag-accent', isActive);
         btn.setAttribute('aria-selected', isActive ? 'true' : 'false');
       });
-      // 更新标签云 active 状态
-      document.querySelectorAll('.tag-cloud-item').forEach(item => {
-        item.classList.toggle('active', item.getAttribute('data-filter') === filter);
-      });
       // 筛选文章
       filteredPosts = (filter === 'all' || filter === '全部')
         ? Array.from(allPosts)
@@ -145,23 +141,7 @@
           applyFilter(this.dataset.filter || this.textContent.trim());
         });
       });
-      // 绑定标签云点击（事件委托到容器）
-      var tagCloud = document.getElementById('blog-tag-cloud');
-      if (tagCloud) {
-        tagCloud.addEventListener('click', function(e) {
-          var item = e.target.closest('.tag-cloud-item');
-          if (!item) return;
-          e.preventDefault();
-          var tag = item.getAttribute('data-filter');
-          if (!tag) return;
-          // 切换到列表视图
-          var viewBtn = document.querySelector('[data-view="list"]');
-          if (viewBtn && !viewBtn.classList.contains('active')) {
-            toggleBlogView('list');
-          }
-          applyFilter(tag);
-        });
-      }
+
       // 处理浏览器后退
       window.addEventListener('popstate', function(e) {
         if (e.state) {

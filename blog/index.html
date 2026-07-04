@@ -75,12 +75,6 @@
     .blog-search-results .sr-meta { font-size: 0.8rem; color: var(--color-text-muted); display: flex; gap: 0.75rem; align-items: center; }
     .blog-search-results .sr-meta .category { color: var(--color-accent-primary); font-weight: 600; }
     .blog-search-results .sr-empty { text-align: center; padding: 2rem; color: var(--color-text-muted); font-size: var(--text-sm); }
-    /* Tag Cloud */
-    .tag-cloud { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; margin-top: 1.5rem; }
-    .tag-cloud-item { display: inline-flex; align-items: center; padding: 0.3rem 0.8rem; border-radius: var(--radius-full); font-size: var(--text-xs); background: var(--color-bg-tertiary); border: 1px solid var(--color-border); color: var(--color-text-secondary); cursor: pointer; transition: all 0.2s; text-decoration: none; }
-    .tag-cloud-item:hover, .tag-cloud-item.active { border-color: var(--color-accent-primary); color: var(--color-accent-primary); background: var(--color-accent-subtle); }
-    .tag-cloud-item .tag-count { margin-left: 0.35rem; font-size: 0.7rem; color: var(--color-text-muted); }
-    .tag-cloud-item.active .tag-count { color: var(--color-accent-primary); }
     /* View Toggle */
     .blog-view-toggle { display: flex; justify-content: flex-end; gap: 0.5rem; margin-bottom: 1.5rem; }
     .view-toggle-btn { padding: 0.4rem 0.9rem; border-radius: var(--radius-full); border: 1px solid var(--color-border); background: transparent; color: var(--color-text-secondary); font-size: var(--text-xs); cursor: pointer; transition: all 0.2s; }
@@ -190,38 +184,7 @@
       </div>
 
       <!-- Tag Cloud -->
-      <div id="blog-tag-cloud" class="tag-cloud">
-        <span class="tag-cloud-item" data-filter="Android">Android <span class="tag-count">19</span></span>
-        <span class="tag-cloud-item" data-filter="AI">AI <span class="tag-count">10</span></span>
-        <span class="tag-cloud-item" data-filter="DevOps">DevOps <span class="tag-count">9</span></span>
-        <span class="tag-cloud-item" data-filter="Kotlin">Kotlin <span class="tag-count">7</span></span>
-        <span class="tag-cloud-item" data-filter="思考">思考 <span class="tag-count">6</span></span>
-        <span class="tag-cloud-item" data-filter="AI 工具">AI 工具 <span class="tag-count">5</span></span>
-        <span class="tag-cloud-item" data-filter="Agent">Agent <span class="tag-count">4</span></span>
-        <span class="tag-cloud-item" data-filter="前端">前端 <span class="tag-count">4</span></span>
-        <span class="tag-cloud-item" data-filter="Android 16">Android 16 <span class="tag-count">4</span></span>
-        <span class="tag-cloud-item" data-filter="系统编程">系统编程 <span class="tag-count">3</span></span>
-        <span class="tag-cloud-item" data-filter="CI/CD">CI/CD <span class="tag-count">3</span></span>
-        <span class="tag-cloud-item" data-filter="自动化">自动化 <span class="tag-count">3</span></span>
-        <span class="tag-cloud-item" data-filter="性能优化">性能优化 <span class="tag-count">3</span></span>
-        <span class="tag-cloud-item" data-filter="CSS">CSS <span class="tag-count">3</span></span>
-        <span class="tag-cloud-item" data-filter="个人成长">个人成长 <span class="tag-count">3</span></span>
-        <span class="tag-cloud-item" data-filter="开发技巧">开发技巧 <span class="tag-count">3</span></span>
-        <span class="tag-cloud-item" data-filter="安全">安全 <span class="tag-count">3</span></span>
-        <span class="tag-cloud-item" data-filter="Jetpack Compose">Jetpack Compose <span class="tag-count">3</span></span>
-        <span class="tag-cloud-item" data-filter="Gemini">Gemini <span class="tag-count">3</span></span>
-        <span class="tag-cloud-item" data-filter="AI Agent">AI Agent <span class="tag-count">2</span></span>
-        <span class="tag-cloud-item" data-filter="GitHub Actions">GitHub Actions <span class="tag-count">2</span></span>
-        <span class="tag-cloud-item" data-filter="自我管理">自我管理 <span class="tag-count">2</span></span>
-        <span class="tag-cloud-item" data-filter="静态网站">静态网站 <span class="tag-count">2</span></span>
-        <span class="tag-cloud-item" data-filter="GitHub Pages">GitHub Pages <span class="tag-count">2</span></span>
-        <span class="tag-cloud-item" data-filter="JavaScript">JavaScript <span class="tag-count">2</span></span>
-        <span class="tag-cloud-item" data-filter="Gradle">Gradle <span class="tag-count">2</span></span>
-        <span class="tag-cloud-item" data-filter="构建优化">构建优化 <span class="tag-count">2</span></span>
-        <span class="tag-cloud-item" data-filter="模块化">模块化 <span class="tag-count">2</span></span>
-        <span class="tag-cloud-item" data-filter="跨行业">跨行业 <span class="tag-count">2</span></span>
-        <span class="tag-cloud-item" data-filter="学习方法">学习方法 <span class="tag-count">2</span></span>
-      </div>
+        <!-- 标签云已移除（分类筛选按钮已覆盖功能） -->
       <!-- /Tag Cloud -->
 
       <!-- Search Bar -->
@@ -1274,7 +1237,7 @@
   </footer>
 
 
-  <script defer src="../assets/js/main.js?v=77ef8322"></script>
+  <script defer src="../assets/js/main.js?v=aabb0011"></script>
 
   <script>
     // 给博客列表 meta 加图标
@@ -1292,7 +1255,7 @@
   <script defer src="../assets/js/time-progress.js"></script>
 
 
-  <script defer src="../assets/js/blog-list.js?v=aee460db"></script>
+  <script defer src="../assets/js/blog-list.js?v=ccdd0022"></script>
 
   <script defer src="../assets/js/search.js?v=679e56ff"></script>
   <!-- Back to Top & Reading Progress -->
