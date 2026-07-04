@@ -495,101 +495,49 @@ function validateForm(form) {
 // Blog Filters
 // ===================================
 function initBlogFilters() {
-  // If blog-list.js has already set up _blogApplyFilter (with _blogListJS marker),
-  // skip our duplicate filter setup to avoid conflicts with pagination logic.
+  // blog-list.js handles all blog filtering, pagination, and tag cloud.
+  // This is only a fallback when blog-list.js is missing.
   if (window._blogApplyFilter && window._blogApplyFilter._blogListJS) return;
-  // Support both old (.tag) and new (.filter-btn) filter buttons
+  
+  // Fallback: basic filter (no pagination)
   const filterButtons = document.querySelectorAll('.blog-filters .tag, .blog-filters .filter-btn');
   const blogPosts = document.querySelectorAll('.blog-post, .blog-list-item');
-  const blogContainer = document.querySelector('.blog-list-container');
   const emptyState = document.getElementById('blog-empty-state');
   const featuredSection = document.getElementById('featured-section');
   
   if (filterButtons.length === 0 || blogPosts.length === 0) return;
   
-  // Extract applyFilter to global scope so tag cloud can use it
   window._blogApplyFilter = function applyFilter(filter) {
     let visibleCount = 0;
-    
     blogPosts.forEach(post => {
       if (filter === 'all' || filter === '全部') {
         post.style.display = '';
-        post.classList.add('animate-on-scroll');
         visibleCount++;
       } else {
-        // Check data-category attribute first, then fall back to data-tags
         const category = post.getAttribute('data-category');
         const dataTags = (post.getAttribute('data-tags') || '').split(',').filter(Boolean);
-        const hasMatch = category === filter || 
-          dataTags.includes(filter) ||
-          Array.from(post.querySelectorAll('.tag-accent, .blog-list-tag')).some(tag => 
-            tag.textContent.trim().toLowerCase() === filter.toLowerCase()
-          );
+        const hasMatch = category === filter || dataTags.includes(filter);
         post.style.display = hasMatch ? '' : 'none';
         if (hasMatch) visibleCount++;
       }
     });
-    
-    // Update button active states
     filterButtons.forEach(btn => {
-      btn.classList.remove('tag-accent', 'filter-btn-active');
+      btn.classList.remove('filter-btn-active', 'tag-accent');
       const btnFilter = btn.getAttribute('data-filter') || btn.textContent.trim();
-      const isAllButton = btnFilter === 'all' || btnFilter === '全部';
-      const isActive = (filter === 'all' || filter === '全部') ? isAllButton : (btnFilter === filter);
-      if (isActive) {
-        btn.classList.add('tag-accent', 'filter-btn-active');
-      }
+      const isAll = btnFilter === 'all' || btnFilter === '全部';
+      const isActive = (filter === 'all' || filter === '全部') ? isAll : (btnFilter === filter);
+      if (isActive) btn.classList.add('filter-btn-active', 'tag-accent');
     });
-    
-    // Update tag cloud active states
-    document.querySelectorAll('.tag-cloud-item').forEach(item => {
-      item.classList.toggle('active', item.getAttribute('data-filter') === filter);
-    });
-    
-    // Show/hide Featured section - only show on "all" filter
     if (featuredSection) {
-      const isAllFilter = filter === 'all' || filter === '全部';
-      featuredSection.style.display = isAllFilter ? '' : 'none';
+      featuredSection.style.display = (filter === 'all' || filter === '全部') ? '' : 'none';
     }
-    
-    // Show/hide empty state
-    if (emptyState) {
-      emptyState.style.display = visibleCount === 0 ? 'block' : 'none';
-    }
-
-    // Update filter title
-    const titleEl = document.getElementById('blog-filter-title');
-    if (titleEl) {
-      titleEl.textContent = (filter === 'all' || filter === '全部') ? '全部文章' : `筛选: ${filter}`;
-    }
+    if (emptyState) emptyState.style.display = visibleCount === 0 ? 'block' : 'none';
   };
   
-  // Click handlers for filter buttons
-  filterButtons.forEach(button => {
-    button.addEventListener('click', () => {
-      const filter = button.getAttribute('data-filter') || button.textContent.trim();
-      window._blogApplyFilter(filter);
-    });
-  });
-  
-  // Tag cloud click handlers
-  const tagCloud = document.getElementById('blog-tag-cloud');
-  if (tagCloud) {
-    tagCloud.addEventListener('click', (e) => {
-      const item = e.target.closest('.tag-cloud-item');
-      if (!item) return;
-      const tag = item.getAttribute('data-filter');
-      if (!tag) return;
-      window._blogApplyFilter(tag);
-    });
-  }
-  
-  // Check URL hash on page load
+  // Initial load
   if (window.location.hash) {
-    const hashFilter = decodeURIComponent(window.location.hash.substring(1));
-    window._blogApplyFilter(hashFilter);
+    window._blogApplyFilter(decodeURIComponent(window.location.hash.substring(1)));
   } else {
-    // Initialize with default filter (show Featured section for "all")
     window._blogApplyFilter('all');
   }
 }
@@ -734,7 +682,13 @@ document.addEventListener('DOMContentLoaded', () => {
   initScrollProgress();
   initBackToTop();
   setActiveNavLink();
-  initBlogFilters();
+  // Blog filters are handled by blog-list.js. Delay initBlogFilters
+  // so blog-list.js can set _blogListJS marker first.
+  setTimeout(function() {
+    if (!window._blogApplyFilter || !window._blogApplyFilter._blogListJS) {
+      initBlogFilters();
+    }
+  }, 0);
   initCodeCopy();
   initLightbox();
   
