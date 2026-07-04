@@ -116,6 +116,16 @@
     /* Hide list view when archive active */
     .blog-list-container.hidden { display: none; }
     .pagination.hidden { display: none; }
+    /* Archive collapse/expand */
+    .archive-month-header { cursor: pointer; user-select: none; display: flex; align-items: center; gap: 0.4rem; }
+    .archive-month-header:hover { color: var(--color-accent-primary); }
+    .archive-expand-icon { font-size: 0.7rem; color: var(--color-text-muted); min-width: 0.8rem; }
+    .archive-expand-more-wrap { text-align: center; padding: 1rem 0; }
+    .archive-expand-more-btn { padding: 0.5rem 1.2rem; border-radius: var(--radius-full); border: 1px solid var(--color-border); background: var(--color-bg-tertiary); color: var(--color-text-secondary); font-size: var(--text-sm); cursor: pointer; transition: all 0.2s; }
+    .archive-expand-more-btn:hover { border-color: var(--color-accent-primary); color: var(--color-accent-primary); background: var(--color-accent-subtle); }
+    /* Series expand/collapse */
+    .series-expand-btn { display: block; width: 100%; padding: 0.5rem; margin-top: 0.75rem; border: none; border-radius: var(--radius-md); background: var(--color-bg-secondary); color: var(--color-text-secondary); font-size: var(--text-xs); cursor: pointer; transition: all 0.2s; }
+    .series-expand-btn:hover { color: var(--color-accent-primary); background: var(--color-accent-subtle); }
   </style>
   <!-- Preconnect to Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1260,7 +1270,7 @@
       <p class="footer-copyright">© 2026 张小猛</p>
     </div>
   </footer>
-  <script defer src="../assets/js/main.js?v=69807f9a"></script>
+  <script defer src="../assets/js/main.js?v=a18c8d97"></script>
   <script>
     // 给博客列表 meta 加图标
     (function() {
@@ -1275,7 +1285,7 @@
     })();
   </script>
   <script defer src="../assets/js/time-progress.js"></script>
-  <script defer src="../assets/js/blog-list.js?v=936ed9aa"></script>
+  <script defer src="../assets/js/blog-list.js?v=78611078"></script>
   <script defer src="../assets/js/search.js?v=679e56ff"></script>
   <!-- Back to Top & Reading Progress -->
   <button class="back-to-top" id="backToTop" aria-label="回到顶部">
