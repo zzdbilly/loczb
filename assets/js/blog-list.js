@@ -236,11 +236,16 @@
         html += '</div>'; // archive-month-body
         html += '</div>'; // archive-month
       });
-      // 如果有超过 ARCHIVE_EXPANDED_COUNT 个月的归档，加一个"展开更早归档"按钮
+      // 如果有超过 ARCHIVE_EXPANDED_COUNT 个月的归档，加一个"展开更早归档"按钮和隐藏的"折叠"按钮
       if (archiveData.length > ARCHIVE_EXPANDED_COUNT) {
         html += '<div class="archive-expand-more-wrap" id="archive-expand-more-wrap">';
         html += '<button class="archive-expand-more-btn" onclick="expandAllArchive()">';
         html += '展开更早归档 (' + (archiveData.length - ARCHIVE_EXPANDED_COUNT) + ' 个月)';
+        html += '</button>';
+        html += '</div>';
+        html += '<div class="archive-expand-more-wrap" id="archive-collapse-more-wrap" style="display:none;">';
+        html += '<button class="archive-expand-more-btn" onclick="collapseAllArchive()">';
+        html += '折叠更早归档 ▲';
         html += '</button>';
         html += '</div>';
       }
@@ -271,12 +276,31 @@
         if (icon) icon.textContent = '▼';
         el.classList.remove('archive-month-collapsed');
       });
-      // 隐藏"展开更早归档"按钮
+      // 隐藏"展开更早归档"按钮，显示"折叠"按钮
       var btnWrap = document.getElementById('archive-expand-more-wrap');
       if (btnWrap) btnWrap.style.display = 'none';
-      // 显示"折叠更早归档"按钮
       var collapseBtn = document.getElementById('archive-collapse-more-wrap');
       if (collapseBtn) collapseBtn.style.display = '';
+    };
+    window.collapseAllArchive = function() {
+      // 重新折叠超出 ARCHIVE_EXPANDED_COUNT 的月份
+      archiveData.forEach(function(m, idx) {
+        if (idx >= ARCHIVE_EXPANDED_COUNT) {
+          var monthEl = document.querySelector('[data-archive-idx="' + idx + '"]');
+          if (monthEl) {
+            var body = monthEl.querySelector('.archive-month-body');
+            var icon = monthEl.querySelector('.archive-expand-icon');
+            if (body) body.style.display = 'none';
+            if (icon) icon.textContent = '▶';
+            monthEl.classList.add('archive-month-collapsed');
+          }
+        }
+      });
+      // 隐藏"折叠"按钮，显示"展开"按钮
+      var collapseWrap = document.getElementById('archive-collapse-more-wrap');
+      if (collapseWrap) collapseWrap.style.display = 'none';
+      var expandWrap = document.getElementById('archive-expand-more-wrap');
+      if (expandWrap) expandWrap.style.display = '';
     };
     let seriesData = null;
     async function loadSeries() {

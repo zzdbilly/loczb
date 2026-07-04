@@ -519,7 +519,7 @@ function initBlogFilters() {
       } else {
         // Check data-category attribute first, then fall back to data-tags
         const category = post.getAttribute('data-category');
-        const dataTags = (post.getAttribute('data-tags') || '').split(' ').filter(Boolean);
+        const dataTags = (post.getAttribute('data-tags') || '').split(',').filter(Boolean);
         const hasMatch = category === filter || 
           dataTags.includes(filter) ||
           Array.from(post.querySelectorAll('.tag-accent, .blog-list-tag')).some(tag => 
