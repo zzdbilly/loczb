@@ -207,6 +207,10 @@ function rebuildBlogIndex() {
 
   // 替换 <!-- Post List --> 到 <!-- /Post List --> 之间的内容
   const listPattern = /(<!-- Post List -->)[\s\S]*?(<!-- \/Post List -->)/;
+  if (!listPattern.test(html)) {
+    console.warn('⚠️  blog/index.html: 缺少 <!-- Post List --> 或 <!-- /Post List --> 标记，跳过列表更新');
+    return;
+  }
   const replacement = `$1\n${articleItems}\n      $2`;
   html = html.replace(listPattern, replacement);
 
