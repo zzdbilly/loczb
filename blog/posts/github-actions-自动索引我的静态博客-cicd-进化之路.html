@@ -141,7 +141,7 @@
 </tr>
 <tr>
 <td><strong>站点级</strong></td>
-<td>首页/���表/RSS/sitemap/搜索索引</td>
+<td>首页/列表/RSS/sitemap/搜索索引</td>
 <td>所有文章</td>
 <td>文章变更后</td>
 </tr>
@@ -218,7 +218,7 @@
 <span class="kd">const</span><span class="w"> </span><span class="nx">descMatch</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">content</span><span class="p">.</span><span class="nx">match</span><span class="p">(</span><span class="sr">/&lt;meta name=&quot;description&quot; content=&quot;([^&quot;]+)&quot;/</span><span class="p">);</span>
 </code></pre></div>
 
-<p>这种"数据在 HTML 里"的模式其实很适合静态博客——HTML 就是唯一的真相源。不需要额外的 frontmatter 或数���库。</p>
+<p>这种"数据在 HTML 里"的模式其实很适合静态博客——HTML 就是唯一的真相源。不需要额外的 frontmatter 或数据库。</p>
 <h3>处理排序的边界情况</h3>
 <p>排序规则：按日期降序，同日文章按 <code>blog/index.html</code> 原有顺序。</p>
 <div class="codehilite"><pre><span></span><code><span class="c1">// 先构建&quot;原顺序&quot;映射</span>
@@ -403,7 +403,7 @@ git<span class="w"> </span>push
 <h2>适用场景</h2>
 <p>这个方案适合：</p>
 <ul>
-<li>静态博客 / SSG（Jekyll / Hugo / Hexo ���理）</li>
+<li>静态博客 / SSG（Jekyll / Hugo / Hexo 原理）</li>
 <li>文章数 100-1000 篇（全量重建 &lt; 1s）</li>
 <li>有 GitHub Pages / Vercel / Netlify 部署</li>
 </ul>
