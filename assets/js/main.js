@@ -495,6 +495,9 @@ function validateForm(form) {
 // Blog Filters
 // ===================================
 function initBlogFilters() {
+  // If blog-list.js has already set up _blogApplyFilter (with _blogListJS marker),
+  // skip our duplicate filter setup to avoid conflicts with pagination logic.
+  if (window._blogApplyFilter && window._blogApplyFilter._blogListJS) return;
   // Support both old (.tag) and new (.filter-btn) filter buttons
   const filterButtons = document.querySelectorAll('.blog-filters .tag, .blog-filters .filter-btn');
   const blogPosts = document.querySelectorAll('.blog-post, .blog-list-item');

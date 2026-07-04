@@ -20,37 +20,80 @@
         currentPage = Math.max(1, parseInt(pageParam));
       }
     }
-    // 应用筛选
+    // 检查文章是否匹配筛选条件（支持 category 和 tags）
+    function postMatchesFilter(post, filter) {
+      if (filter === 'all' || filter === '全部') return true;
+      // 1. 检查 data-category
+      if (post.dataset.category === filter) return true;
+      // 2. 检查 data-tags（空格分隔的标签列表）
+      var tags = (post.getAttribute('data-tags') || '').split(/\s+/).filter(Boolean);
+      if (tags.indexOf(filter) !== -1) return true;
+      // 3. 模糊匹配：标签可能包含多词标签（如 "AI 工具"），data-tags 用空格分隔会拆开
+      //    所以也检查完整 tags 字符串是否包含 filter
+      var fullTags = post.getAttribute('data-tags') || '';
+      if (fullTags.indexOf(filter) !== -1) return true;
+      // 4. 检查文章内 .tag / .tag-accent / .blog-list-tag 元素的文本
+      var tagEls = post.querySelectorAll('.tag, .tag-accent, .blog-list-tag');
+      for (var i = 0; i < tagEls.length; i++) {
+        if (tagEls[i].textContent.trim() === filter) return true;
+      }
+      return false;
+    }
+    // 应用筛选（支持 category 和 tags，整合 main.js 的 _blogApplyFilter 逻辑）
     function applyFilter(filter) {
       currentFilter = filter;
       currentPage = 1; // 筛选后重置到第一页
-      // 更新筛选按钮
+      // 更新筛选按钮（.filter-btn 和 .tag）
       document.querySelectorAll('.filter-btn').forEach(btn => {
-        btn.classList.toggle('filter-btn-active', btn.dataset.filter === filter);
-        btn.setAttribute('aria-selected', btn.dataset.filter === filter);
+        var btnFilter = btn.dataset.filter || btn.textContent.trim();
+        var isAll = btnFilter === 'all' || btnFilter === '全部';
+        var isActive = (filter === 'all' || filter === '全部') ? isAll : (btnFilter === filter);
+        btn.classList.toggle('filter-btn-active', isActive);
+        btn.classList.toggle('tag-accent', isActive);
+        btn.setAttribute('aria-selected', isActive ? 'true' : 'false');
+      });
+      // 更新标签云 active 状态
+      document.querySelectorAll('.tag-cloud-item').forEach(item => {
+        item.classList.toggle('active', item.getAttribute('data-filter') === filter);
       });
       // 筛选文章
-      filteredPosts = filter === 'all' 
+      filteredPosts = (filter === 'all' || filter === '全部')
         ? Array.from(allPosts)
-        : Array.from(allPosts).filter(post => post.dataset.category === filter);
+        : Array.from(allPosts).filter(post => postMatchesFilter(post, filter));
       // 更新标题显示
       var titleEl = document.getElementById('blog-filter-title');
       if (titleEl) {
-        if (filter === 'all') {
+        if (filter === 'all' || filter === '全部') {
           titleEl.textContent = '全部文章';
         } else {
-          titleEl.textContent = filter + ' 文章 · ' + filteredPosts.length + ' 篇';
+          titleEl.textContent = filter + ' · ' + filteredPosts.length + ' 篇';
         }
+      }
+      // 显示/隐藏 Featured section（只在 "all" 时显示）
+      var featuredSection = document.getElementById('featured-section');
+      if (featuredSection) {
+        var isAll = (filter === 'all' || filter === '全部');
+        featuredSection.style.display = isAll ? '' : 'none';
+      }
+      // 显示/隐藏空状态
+      var emptyState = document.getElementById('blog-empty-state');
+      if (emptyState) {
+        emptyState.style.display = filteredPosts.length === 0 ? 'block' : 'none';
       }
       totalPages = calcTotalPages();
       showPage(1);
       // 更新 URL
       var params = new URLSearchParams();
-      if (filter !== 'all') params.set('filter', filter);
+      if (filter !== 'all' && filter !== '全部') params.set('filter', filter);
       if (currentPage > 1) params.set('page', currentPage);
       var newUrl = params.toString() ? '?' + params.toString() : window.location.pathname;
       window.history.pushState({ page: currentPage, filter: filter }, '', newUrl);
     }
+    // 暴露到全局，让 main.js 的标签云点击可以调用
+    // 加 _blogListJS 标记，让 main.js 的 initBlogFilters 检测到已由 blog-list.js 接管
+    applyFilter._blogListJS = true;
+    window._blogApplyFilter = applyFilter;
+    window.applyFilter = applyFilter;
     // 显示指定页
     window.showPage = function(page) {
       if (page < 1 || page > totalPages) return;
@@ -64,7 +107,7 @@
       updatePagination(page);
       // 更新 URL
       var params = new URLSearchParams();
-      if (currentFilter !== 'all') params.set('filter', currentFilter);
+      if (currentFilter !== 'all' && currentFilter !== '全部') params.set('filter', currentFilter);
       if (page > 1) params.set('page', page);
       var newUrl = params.toString() ? '?' + params.toString() : window.location.pathname;
       window.history.pushState({ page: page, filter: currentFilter }, '', newUrl);
@@ -88,6 +131,8 @@
     }
     // 初始化
     window.addEventListener('DOMContentLoaded', function() {
+      // 重新声明 window._blogApplyFilter 为我们的版本（覆盖 main.js 的 initBlogFilters 中设置的版本）
+      window._blogApplyFilter = applyFilter;
       initFromURL();
       // 设置初始筛选状态
       if (currentFilter !== 'all') {
@@ -96,25 +141,57 @@
         totalPages = calcTotalPages();
         showPage(currentPage);
       }
-      // 绑定筛选按钮
-      document.querySelectorAll('.filter-btn').forEach(btn => {
+      // 绑定筛选按钮（.filter-btn 和 .tag）
+      document.querySelectorAll('.filter-btn, .blog-filters .tag').forEach(btn => {
         btn.addEventListener('click', function(e) {
           e.preventDefault();
-          applyFilter(this.dataset.filter);
+          applyFilter(this.dataset.filter || this.textContent.trim());
         });
       });
+      // 绑定标签云点击
+      var tagCloud = document.getElementById('blog-tag-cloud');
+      if (tagCloud) {
+        tagCloud.addEventListener('click', function(e) {
+          var item = e.target.closest('.tag-cloud-item');
+          if (!item) return;
+          e.preventDefault();
+          var tag = item.getAttribute('data-filter');
+          if (!tag) return;
+          // 切换到列表视图
+          if (typeof toggleBlogView === 'function') {
+            toggleBlogView('list');
+          }
+          applyFilter(tag);
+        });
+      } else {
+        // 标签云可能不在 #blog-tag-cloud 容器内（直接在 .tag-cloud 里）
+        document.querySelectorAll('.tag-cloud-item').forEach(item => {
+          item.addEventListener('click', function(e) {
+            e.preventDefault();
+            var tag = this.getAttribute('data-filter');
+            if (!tag) return;
+            if (typeof toggleBlogView === 'function') {
+              toggleBlogView('list');
+            }
+            applyFilter(tag);
+          });
+        });
+      }
       // 处理浏览器后退
       window.addEventListener('popstate', function(e) {
         if (e.state) {
           currentPage = e.state.page || 1;
           currentFilter = e.state.filter || 'all';
-          filteredPosts = currentFilter === 'all' 
+          filteredPosts = (currentFilter === 'all' || currentFilter === '全部')
             ? Array.from(allPosts)
-            : Array.from(allPosts).filter(post => post.dataset.category === currentFilter);
+            : Array.from(allPosts).filter(post => postMatchesFilter(post, currentFilter));
           totalPages = calcTotalPages();
           // 更新筛选按钮
           document.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.classList.toggle('filter-btn-active', btn.dataset.filter === currentFilter);
+            var btnFilter = btn.dataset.filter;
+            var isAll = btnFilter === 'all';
+            var isActive = (currentFilter === 'all') ? isAll : (btnFilter === currentFilter);
+            btn.classList.toggle('filter-btn-active', isActive);
           });
           showPage(currentPage);
         } else {
@@ -124,9 +201,10 @@
     });
     // 归档功能
     let archiveData = null;
+    var ARCHIVE_EXPANDED_COUNT = 3; // 默认展开最近3个月
     async function loadArchive() {
       try {
-        const response = await fetch('../blog/articles-index.json?t=' + Date.now());
+        const response = await fetch('articles-index.json?t=' + Date.now());
         const data = await response.json();
         // 生成归档数据
         const archives = {};
@@ -154,23 +232,67 @@
     function renderArchive() {
       const container = document.getElementById('archive-view');
       if (!container || !archiveData) return;
-      container.innerHTML = archiveData.map(m => `
-        <div class="archive-month">
-          <div class="archive-month-header">
-            ${m.month} <span class="archive-count">${m.count} 篇</span>
-          </div>
-          ${m.posts.map(p => `
-            <div class="archive-post">
-              <span class="archive-post-date">${p.date.substring(0, 10)}</span>
-              <span class="archive-post-title">
-                <a href="posts/${p.url.replace('blog/posts/', '')}">${p.title}</a>
-              </span>
-              <span class="archive-post-cat">${p.category || ''}</span>
-            </div>
-          `).join('')}
-        </div>
-      `).join('');
+      var html = '';
+      archiveData.forEach(function(m, idx) {
+        var isCollapsed = idx >= ARCHIVE_EXPANDED_COUNT;
+        html += '<div class="archive-month' + (isCollapsed ? ' archive-month-collapsed' : '') + '" data-archive-idx="' + idx + '">';
+        html += '<div class="archive-month-header" onclick="toggleArchiveMonth(' + idx + ')">';
+        html += '<span class="archive-expand-icon">' + (isCollapsed ? '▶' : '▼') + '</span>';
+        html += m.month + ' <span class="archive-count">' + m.count + ' 篇</span>';
+        html += '</div>';
+        html += '<div class="archive-month-body"' + (isCollapsed ? ' style="display:none;"' : '') + '>';
+        html += m.posts.map(function(p) {
+          return '<div class="archive-post">'
+            + '<span class="archive-post-date">' + p.date.substring(0, 10) + '</span>'
+            + '<span class="archive-post-title"><a href="posts/' + p.url.replace('blog/posts/', '') + '">' + p.title + '</a></span>'
+            + '<span class="archive-post-cat">' + (p.category || '') + '</span>'
+            + '</div>';
+        }).join('');
+        html += '</div>'; // archive-month-body
+        html += '</div>'; // archive-month
+      });
+      // 如果有超过 ARCHIVE_EXPANDED_COUNT 个月的归档，加一个"展开更早归档"按钮
+      if (archiveData.length > ARCHIVE_EXPANDED_COUNT) {
+        html += '<div class="archive-expand-more-wrap" id="archive-expand-more-wrap">';
+        html += '<button class="archive-expand-more-btn" onclick="expandAllArchive()">';
+        html += '展开更早归档 (' + (archiveData.length - ARCHIVE_EXPANDED_COUNT) + ' 个月)';
+        html += '</button>';
+        html += '</div>';
+      }
+      container.innerHTML = html;
     }
+    window.toggleArchiveMonth = function(idx) {
+      var monthEl = document.querySelector('[data-archive-idx="' + idx + '"]');
+      if (!monthEl) return;
+      var body = monthEl.querySelector('.archive-month-body');
+      var icon = monthEl.querySelector('.archive-expand-icon');
+      if (!body) return;
+      if (body.style.display === 'none') {
+        body.style.display = '';
+        if (icon) icon.textContent = '▼';
+        monthEl.classList.remove('archive-month-collapsed');
+      } else {
+        body.style.display = 'none';
+        if (icon) icon.textContent = '▶';
+        monthEl.classList.add('archive-month-collapsed');
+      }
+    };
+    window.expandAllArchive = function() {
+      // 展开所有折叠的月份
+      document.querySelectorAll('.archive-month-collapsed').forEach(function(el) {
+        var body = el.querySelector('.archive-month-body');
+        var icon = el.querySelector('.archive-expand-icon');
+        if (body) body.style.display = '';
+        if (icon) icon.textContent = '▼';
+        el.classList.remove('archive-month-collapsed');
+      });
+      // 隐藏"展开更早归档"按钮
+      var btnWrap = document.getElementById('archive-expand-more-wrap');
+      if (btnWrap) btnWrap.style.display = 'none';
+      // 显示"折叠更早归档"按钮
+      var collapseBtn = document.getElementById('archive-collapse-more-wrap');
+      if (collapseBtn) collapseBtn.style.display = '';
+    };
     let seriesData = null;
     async function loadSeries() {
       if (seriesData) return seriesData;
@@ -185,27 +307,69 @@
         if (container) container.innerHTML = '<p style="text-align:center;color:var(--color-text-muted);padding:2rem;">暂无系列文章</p>';
         return;
       }
-      container.innerHTML = series.map(s => `
-        <div class="series-card">
-          <div class="series-card-header">
-            <div class="series-card-title">
-              <span class="series-icon">📚</span>
-              ${s.name}
-            </div>
-            <span class="series-card-count">${s.count} 篇</span>
-          </div>
-          <ul class="series-post-list">
-            ${s.posts.map((p, i) => `
-              <li class="series-post-item">
-                <span class="series-post-num">${String(i + 1).padStart(2, '0')}</span>
-                <span class="series-post-date">${p.date}</span>
-                <span class="series-post-title"><a href="posts/${p.url.replace('blog/posts/', '')}">${p.title}</a></span>
-              </li>
-            `).join('')}
-          </ul>
-        </div>
-      `).join('');
+      var SERIES_COLLAPSE_THRESHOLD = 3; // 默认显示前3篇
+      container.innerHTML = series.map(function(s, sIdx) {
+        var needCollapse = s.posts.length > SERIES_COLLAPSE_THRESHOLD;
+        var visiblePosts = needCollapse ? s.posts.slice(0, SERIES_COLLAPSE_THRESHOLD) : s.posts;
+        var html = '<div class="series-card" data-series-idx="' + sIdx + '">';
+        html += '<div class="series-card-header">';
+        html += '<div class="series-card-title"><span class="series-icon">📚</span>' + s.name + '</div>';
+        html += '<span class="series-card-count">' + s.count + ' 篇</span>';
+        html += '</div>';
+        html += '<ul class="series-post-list">';
+        // 渲染可见的文章
+        visiblePosts.forEach(function(p, i) {
+          html += '<li class="series-post-item">'
+            + '<span class="series-post-num">' + String(i + 1).padStart(2, '0') + '</span>'
+            + '<span class="series-post-date">' + p.date + '</span>'
+            + '<span class="series-post-title"><a href="posts/' + p.url.replace('blog/posts/', '') + '">' + p.title + '</a></span>'
+            + '</li>';
+        });
+        html += '</ul>';
+        // 如果需要折叠，加展开按钮
+        if (needCollapse) {
+          html += '<button class="series-expand-btn" onclick="toggleSeriesExpand(' + sIdx + ')">';
+          html += '展开全部 ' + s.count + ' 篇 ▼';
+          html += '</button>';
+        }
+        html += '</div>';
+        return html;
+      }).join('');
     }
+    window.toggleSeriesExpand = function(sIdx) {
+      var card = document.querySelector('[data-series-idx="' + sIdx + '"]');
+      if (!card) return;
+      var list = card.querySelector('.series-post-list');
+      var btn = card.querySelector('.series-expand-btn');
+      if (!list || !btn) return;
+      // 检查是否已展开
+      var isExpanded = list.dataset.expanded === '1';
+      if (isExpanded) {
+        // 折叠：只显示前3篇
+        var allItems = list.querySelectorAll('.series-post-item');
+        allItems.forEach(function(item, idx) {
+          if (idx >= 3) item.style.display = 'none';
+        });
+        list.dataset.expanded = '0';
+        btn.textContent = '展开全部 ' + (parseInt(btn.dataset.count) || 0) + ' 篇 ▼';
+      } else {
+        // 展开：从 seriesData 恢复全部文章
+        var series = seriesData[sIdx];
+        if (!series) return;
+        var html = '';
+        series.posts.forEach(function(p, i) {
+          html += '<li class="series-post-item">'
+            + '<span class="series-post-num">' + String(i + 1).padStart(2, '0') + '</span>'
+            + '<span class="series-post-date">' + p.date + '</span>'
+            + '<span class="series-post-title"><a href="posts/' + p.url.replace('blog/posts/', '') + '">' + p.title + '</a></span>'
+            + '</li>';
+        });
+        list.innerHTML = html;
+        list.dataset.expanded = '1';
+        if (!btn.dataset.count) btn.dataset.count = series.count;
+        btn.textContent = '收起 ▲';
+      }
+    };
     function toggleBlogView(view) {
       const listContainer = document.querySelector('.blog-list-container');
       const pagination = document.getElementById('pagination');
@@ -227,14 +391,15 @@
         if (pagination) pagination.classList.add('hidden');
         archiveView.classList.add('active');
         archiveBtn.classList.add('active');
-        if (!archiveData) loadArchive().then(renderArchive).catch(e => console.error(e));
+        if (!archiveData) loadArchive().then(renderArchive).catch(function(e) { console.error(e); });
+        else renderArchive();
       } else if (view === 'series') {
         listContainer.classList.add('hidden');
         if (pagination) pagination.classList.add('hidden');
         seriesView.classList.add('active');
         seriesBtn.classList.add('active');
         if (!seriesData) {
-          loadSeries().then(renderSeries).catch(e => console.error(e));
+          loadSeries().then(renderSeries).catch(function(e) { console.error(e); });
         } else {
           renderSeries(seriesData);
         }
@@ -242,3 +407,4 @@
         listBtn.classList.add('active');
       }
     }
+    window.toggleBlogView = toggleBlogView;
