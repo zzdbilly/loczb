@@ -471,26 +471,40 @@
       
       <div class="blog-grid">
         <!-- 代表文章大卡 -->
-                                                                                                                                                                                                        <article class="blog-card-featured animate-on-scroll" id="home-featured-post" style="display: block;">
+                                                                                                                                                                                                                <article class="blog-card-featured animate-on-scroll" id="home-featured-post" style="display: block;">
           <div class="blog-card-header">
             <div class="blog-card-meta">
+              <span class="blog-date">2026-07-04</span>
+              <span>·</span>
+              <span class="blog-read-time">8 min</span>
+            </div>
+            <span class="blog-list-tag">思考</span>
+          </div>
+          <h3 class="blog-card-title">
+            <a href="blog/posts/程序员应该学会关机工作焦虑如何侵蚀你的休息时间.html">程序员应该学会「关机」：工作焦虑如何侵蚀你的休息时间</a>
+          </h3>
+          <p class="blog-card-excerpt">不会关机的程序员不是在拼事业，而是在慢性消耗自己。聊聊为什么下班后的大脑还在 debug，以及如何真正停下来。...</p>
+          <div class="blog-card-tags">
+            <span class="tech-tag">工作方法</span><span class="tech-tag">生活方式</span><span class="tech-tag">自我管理</span>
+          </div>
+        </article>
+        
+        <!-- 最新文章列表 -->
+                <div class="blog-list">
+<article class="blog-list-item animate-on-scroll" data-category="前端" data-page="1">
+          <div class="blog-list-header">
+            <div class="blog-list-meta">
               <span class="blog-date">2026-07-03</span>
               <span>·</span>
               <span class="blog-read-time">15 min</span>
             </div>
             <span class="blog-list-tag">前端</span>
           </div>
-          <h3 class="blog-card-title">
-            <a href="blog/posts/静态博客性能优化实战从-59mb-到精简高效.html">静态博客性能优化实战：从 59MB 到精简高效</a>
+          <h3 class="blog-list-title">
+            <a href="posts/静态博客性能优化实战从-59mb-到精简高效.html">静态博客性能优化实战：从 59MB 到精简高效</a>
           </h3>
-          <p class="blog-card-excerpt">66篇文章4KB重复内联样式、4.4MB死文件、404幽灵引用——一次完整的静态博客性能优化记录...</p>
-          <div class="blog-card-tags">
-            <span class="tech-tag">性能优化</span><span class="tech-tag">静态网站</span><span class="tech-tag">GitHub Pages</span><span class="tech-tag">前端优化</span><span class="tech-tag">CSS</span><span class="tech-tag">JavaScript</span>
-          </div>
+          <p class="blog-list-excerpt">66篇文章4KB重复内联样式、4.4MB死文件、404幽灵引用——一次完整的静态博客性能优化记录</p>
         </article>
-        
-        <!-- 最新文章列表 -->
-                <div class="blog-list">
 <article class="blog-list-item animate-on-scroll" data-category="Android" data-page="1">
           <div class="blog-list-header">
             <div class="blog-list-meta">
@@ -504,20 +518,6 @@
             <a href="posts/gradle-构建加速全攻略从-5-分钟到-30-秒.html">Gradle 构建加速全攻略：从 5 分钟到 30 秒</a>
           </h3>
           <p class="blog-list-excerpt">系统梳理 Gradle 构建加速的完整方法论——配置调优、KAPT迁移KSP、增量编译、模块化拆分、远程缓存、CI优化，附真实项目优化案例，构建时间减少85%</p>
-        </article>
-<article class="blog-list-item animate-on-scroll" data-category="思考" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-07-02</span>
-              <span>·</span>
-              <span class="blog-read-time">5 min</span>
-            </div>
-            <span class="blog-list-tag">思考</span>
-          </div>
-          <h3 class="blog-list-title">
-            <a href="posts/像规划城市一样设计系统城市规划给软件架构的启示.html">像规划城市一样设计系统：城市规划给软件架构的启示</a>
-          </h3>
-          <p class="blog-list-excerpt">城市和软件系统的本质惊人相似——功能分区映射限界上下文、交通网络映射数据流、基础设施先行映射可观测性、有机更新映射演进式架构。从城市规划的百年智慧中，找到软件架构的跨界启发</p>
         </article>
         </div>
         <!-- /最新文章列表 --></div>
@@ -633,6 +633,15 @@
     // 首页随机选择代表文章
     const posts = [
       {
+        url: 'blog/posts/程序员应该学会关机工作焦虑如何侵蚀你的休息时间.html',
+        title: '程序员应该学会「关机」：工作焦虑如何侵蚀你的休息时间',
+        date: '2026-07-04',
+        readTime: '8 min',
+        category: '思考',
+        category2: '思考',
+        desc: '不会关机的程序员不是在拼事业，而是在慢性消耗自己。聊聊为什么下班后的大脑还在 debug，以及如何真正停下来。'
+      },
+      {
         url: 'blog/posts/静态博客性能优化实战从-59mb-到精简高效.html',
         title: '静态博客性能优化实战：从 59MB 到精简高效',
         date: '2026-07-03',
@@ -712,15 +721,6 @@
         category: '思考',
         category2: '思考',
         desc: '技术能力决定了你能走多快，但软技能决定了你能走多远。本文聊聊沟通、表达、影响力等容易被技术人忽视的能力。'
-      },
-      {
-        url: 'blog/posts/少即是多信息过载时代的专注力修炼.html',
-        title: '少即是多：信息过载时代的专注力修炼',
-        date: '2026-07-01',
-        readTime: '5 min',
-        category: '思考',
-        category2: '思考',
-        desc: '信息爆炸不是问题，问题是我们在海量输入中丧失了深度思考的能力。本文分享我在信息筛选、注意力管理和深度工作方面的实践经验与反思。'
       },
     ];
     
