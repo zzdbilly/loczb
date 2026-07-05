@@ -457,12 +457,12 @@ def main():
     # 更新相关文章索引
     add_to_index(slug, title, tag_list)
     
-    print(f"\n💡 提示: 索引/列表/首页/sitemap/RSS 由 CI 自动更新，请 push 后等待 Pages 部署")
+    print(f"\n💡 提示: 文章已生成，generate-index.js 自动重建全部索引")
 
     # ═══════════════════════════════════════════════
-    # 以下索引更新已迁移至 CI workflow
-    # 本地不再自动更新 index.html / blog/index.html /
-    # sitemap.xml / rss.xml / articles-index.json
+    # generate-index.js 统一处理索引更新
+    # 不需要再手动单独执行 node scripts/generate-index.js
+    # 
     # ═══════════════════════════════════════════════
 
 
