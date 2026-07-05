@@ -11,7 +11,7 @@
       <link>https://709527.xyz/blog/posts/gradle-构建加速全攻略从-5-分钟到-30-秒.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/gradle-构建加速全攻略从-5-分钟到-30-秒.html</guid>
       <description>从 Profile 找到瓶颈到 Configuration Cache，一步步把 Android 项目构建从 5 分钟优化到 30 秒的完整方案</description>
-      <category>技术</category>
+      <category>Android</category>
       <pubDate>Sun, 05 Jul 2026 00:00:00 +0800</pubDate>
     </item>
     <item>
@@ -19,7 +19,7 @@
       <link>https://709527.xyz/blog/posts/kotlin-scope-functions-实战选择五个函数一个决策树.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/kotlin-scope-functions-实战选择五个函数一个决策树.html</guid>
       <description>别再纠结 let 和 apply 的区别了——从 this/it 和返回值两个维度理清 Kotlin 的五个 Scope Functions，附反模式和团队规范</description>
-      <category>技术</category>
+      <category>Kotlin</category>
       <pubDate>Sun, 05 Jul 2026 00:00:00 +0800</pubDate>
     </item>
     <item>
@@ -27,7 +27,7 @@
       <link>https://709527.xyz/blog/posts/vps-选购与使用指南五个常见场景的配置与避坑.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/vps-选购与使用指南五个常见场景的配置与避坑.html</guid>
       <description>从扶墙线路到生产环境部署，不同场景下 VPS 怎么选、怎么配、怎么不踩坑</description>
-      <category>技术</category>
+      <category>DevOps</category>
       <pubDate>Sun, 05 Jul 2026 00:00:00 +0800</pubDate>
     </item>
     <item>
@@ -35,7 +35,7 @@
       <link>https://709527.xyz/blog/posts/mysql-索引优化实战从慢查询到最佳实践.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/mysql-索引优化实战从慢查询到最佳实践.html</guid>
       <description>从 EXPLAIN 认识索引失效到复合索引设计，一个慢查询从 2 秒优化到 12 毫秒的完整过程</description>
-      <category>技术</category>
+      <category>数据库</category>
       <pubDate>Sun, 05 Jul 2026 00:00:00 +0800</pubDate>
     </item>
     <item>
@@ -43,7 +43,7 @@
       <link>https://709527.xyz/blog/posts/ai-编程助手进化论从结对编程到自主编程团队-2026.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/ai-编程助手进化论从结对编程到自主编程团队-2026.html</guid>
       <description>2026 年，AI 编程 Agent 跨越了从辅助工具到自主成员的临界点。Cursor 移动端发布、Claude Code 深度推理、Codex CLI 稳定执行、多 Agent 并行协作——本文梳理 AI 编程的三次范式跃迁，分析主流工具，分享落地实践，并展望 2027 年的开发者生态。</description>
-      <category>技术</category>
+      <category>AI</category>
       <pubDate>Sat, 04 Jul 2026 00:00:00 +0800</pubDate>
     </item>
     <item>
@@ -51,7 +51,7 @@
       <link>https://709527.xyz/blog/posts/linux-inode-mechanism-deep-dive.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/linux-inode-mechanism-deep-dive.html</guid>
       <description>inode 是 Linux 文件系统的核心概念。本文从 ext4 inode 数据结构、硬链接软链接原理、文件删除机制到 inode 耗尽排查，全面解析 inode 工作原理。</description>
-      <category>技术</category>
+      <category>系统编程</category>
       <pubDate>Sat, 04 Jul 2026 00:00:00 +0800</pubDate>
     </item>
     <item>
@@ -59,7 +59,7 @@
       <link>https://709527.xyz/blog/posts/github-actions-auto-index-blog-cicd.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/github-actions-auto-index-blog-cicd.html</guid>
       <description>68篇技术博客的索引更新从手动7文件到CI全量自动重建——聊聊全量vs增量的取舍、HTML解析技巧、RSS日期格式化踩坑，以及为什么应该让CI管索引</description>
-      <category>技术</category>
+      <category>DevOps</category>
       <pubDate>Sat, 04 Jul 2026 00:00:00 +0800</pubDate>
     </item>
     <item>
@@ -67,7 +67,7 @@
       <link>https://709527.xyz/blog/posts/programmers-should-learn-to-unplug.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/programmers-should-learn-to-unplug.html</guid>
       <description>不会关机的程序员不是在拼事业，而是在慢性消耗自己。聊聊为什么下班后的大脑还在 debug，以及如何真正停下来。</description>
-      <category>技术</category>
+      <category>思考</category>
       <pubDate>Sat, 04 Jul 2026 00:00:00 +0800</pubDate>
     </item>
     <item>
@@ -75,7 +75,7 @@
       <link>https://709527.xyz/blog/posts/static-blog-performance-optimization-59mb.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/static-blog-performance-optimization-59mb.html</guid>
       <description>66篇文章4KB重复内联样式、4.4MB死文件、404幽灵引用——一次完整的静态博客性能优化记录</description>
-      <category>技术</category>
+      <category>前端</category>
       <pubDate>Fri, 03 Jul 2026 00:00:00 +0800</pubDate>
     </item>
     <item>
@@ -83,7 +83,7 @@
       <link>https://709527.xyz/blog/posts/gradle-build-acceleration-5min-to-30sec.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/gradle-build-acceleration-5min-to-30sec.html</guid>
       <description>系统梳理 Gradle 构建加速的完整方法论——配置调优、KAPT迁移KSP、增量编译、模块化拆分、远程缓存、CI优化，附真实项目优化案例，构建时间减少85%</description>
-      <category>技术</category>
+      <category>Android</category>
       <pubDate>Thu, 02 Jul 2026 00:00:00 +0800</pubDate>
     </item>
     <item>
@@ -91,7 +91,7 @@
       <link>https://709527.xyz/blog/posts/urban-planning-inspires-software-architecture.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/urban-planning-inspires-software-architecture.html</guid>
       <description>城市和软件系统的本质惊人相似——功能分区映射限界上下文、交通网络映射数据流、基础设施先行映射可观测性、有机更新映射演进式架构。从城市规划的百年智慧中，找到软件架构的跨界启发</description>
-      <category>技术</category>
+      <category>思考</category>
       <pubDate>Thu, 02 Jul 2026 00:00:00 +0800</pubDate>
     </item>
     <item>
@@ -99,7 +99,7 @@
       <link>https://709527.xyz/blog/posts/software-engineer-learns-from-manufacturing-lean.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/software-engineer-learns-from-manufacturing-lean.html</guid>
       <description>制造业精益思想如何重塑软件开发流程——从丰田生产系统到敏捷开发，从5S方法论到持续交付，跨行业视角下的效率革命</description>
-      <category>技术</category>
+      <category>思考</category>
       <pubDate>Thu, 02 Jul 2026 00:00:00 +0800</pubDate>
     </item>
     <item>
@@ -107,7 +107,7 @@
       <link>https://709527.xyz/blog/posts/how-tech-people-learn-new-tech.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/how-tech-people-learn-new-tech.html</guid>
       <description>从被动输入到主动输出，80/20 法则选技术，知识体系建立，实践驱动学习，构建记忆宫殿，善用 AI 与社群</description>
-      <category>技术</category>
+      <category>思考</category>
       <pubDate>Wed, 01 Jul 2026 00:00:00 +0800</pubDate>
     </item>
     <item>
@@ -115,7 +115,7 @@
       <link>https://709527.xyz/blog/posts/why-tech-people-should-write.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/why-tech-people-should-write.html</guid>
       <description>写作不仅是最强的学习方式，更能帮助技术人建立个人品牌、打破信息茧房、留下成长痕迹</description>
-      <category>技术</category>
+      <category>思考</category>
       <pubDate>Wed, 01 Jul 2026 00:00:00 +0800</pubDate>
     </item>
     <item>
@@ -123,7 +123,7 @@
       <link>https://709527.xyz/blog/posts/kotlin-coroutine-exception-handling.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/kotlin-coroutine-exception-handling.html</guid>
       <description>全面解析 Kotlin 协程异常处理机制，涵盖 launch/async 异常传播差异、SupervisorJob、结构化并发、CoroutineExceptionHandler、Android 最佳实践等核心内容</description>
-      <category>技术</category>
+      <category>Kotlin</category>
       <pubDate>Wed, 01 Jul 2026 00:00:00 +0800</pubDate>
     </item>
     <item>
@@ -131,7 +131,7 @@
       <link>https://709527.xyz/blog/posts/android-15-privacy-media-visual-permission.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/android-15-privacy-media-visual-permission.html</guid>
       <description>详解 Android 15 引入的媒体权限重大变更，以及从 MediaStore 迁移到 Photo Picker 的完整指南</description>
-      <category>技术</category>
+      <category>Android</category>
       <pubDate>Wed, 01 Jul 2026 00:00:00 +0800</pubDate>
     </item>
     <item>
@@ -139,7 +139,7 @@
       <link>https://709527.xyz/blog/posts/less-is-more-focus-in-information-age.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/less-is-more-focus-in-information-age.html</guid>
       <description>信息爆炸不是问题，问题是我们在海量输入中丧失了深度思考的能力。本文分享我在信息筛选、注意力管理和深度工作方面的实践经验与反思。</description>
-      <category>技术</category>
+      <category>思考</category>
       <pubDate>Wed, 01 Jul 2026 00:00:00 +0800</pubDate>
     </item>
     <item>
@@ -147,7 +147,7 @@
       <link>https://709527.xyz/blog/posts/soft-skills-tech-people-overlook.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/soft-skills-tech-people-overlook.html</guid>
       <description>技术能力决定了你能走多快，但软技能决定了你能走多远。本文聊聊沟通、表达、影响力等容易被技术人忽视的能力。</description>
-      <category>技术</category>
+      <category>思考</category>
       <pubDate>Wed, 01 Jul 2026 00:00:00 +0800</pubDate>
     </item>
     <item>

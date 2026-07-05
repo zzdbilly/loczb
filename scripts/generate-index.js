@@ -61,8 +61,10 @@ const posts = files.map(file => {
     tags = oldTags ? oldTags.map(t => t.replace(/<[^>]*>/g, '')) : [];
   }
 
-  const catMatch = content.match(/<span class="category-tag"[^>]*>([^<]+)<\/span>/);
-  let category = catMatch ? catMatch[1] : '';
+  // 优先从 schema.org articleSection 读取，其次从 category-tag 读取
+  const sectionMatch = content.match(/"articleSection":\s*"([^"]+)"/);
+  const catTagMatch = content.match(/<span class="category-tag"[^>]*>([^<]+)<\/span>/);
+  let category = (sectionMatch ? sectionMatch[1] : null) || (catTagMatch ? catTagMatch[1] : '');
 
   // 从文章中读阅读时间
   const readTimeMatch = content.match(/(\d+)\s*min/);
