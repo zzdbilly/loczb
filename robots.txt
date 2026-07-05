@@ -4,7 +4,6 @@ Allow: /
 
 # Disallow non-content paths
 Disallow: /node_modules/
-Disallow: /blog/posts/
 
 # Sitemap
 Sitemap: https://709527.xyz/sitemap.xml
