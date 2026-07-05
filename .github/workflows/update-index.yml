@@ -1,7 +1,0 @@
-# 已禁用 - 改为手动执行
-# 
-# 每次修改内容后，push 前务必手动执行：
-#   cd /root/.openclaw/workspace-xiaoma/nook/loczb
-#   node scripts/generate-index.js
-# 
-# 这行 script 同时会更新 cache-busting hash
