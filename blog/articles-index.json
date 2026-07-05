@@ -1,6 +1,20 @@
 {
   "posts": [
     {
+      "slug": "gradle-构建加速全攻略从-5-分钟到-30-秒",
+      "title": "Gradle 构建加速全攻略：从 5 分钟到 30 秒",
+      "date": "2026-07-05",
+      "category": "技术",
+      "tags": [
+        "Gradle",
+        "Android",
+        "构建优化",
+        "性能优化"
+      ],
+      "excerpt": "从 Profile 找到瓶颈到 Configuration Cache，一步步把 Android 项目构建从 5 分钟优化到 30 秒的完整方案",
+      "url": "blog/posts/gradle-构建加速全攻略从-5-分钟到-30-秒.html"
+    },
+    {
       "slug": "kotlin-scope-functions-实战选择五个函数一个决策树",
       "title": "Kotlin Scope Functions 实战选择：五个函数一个决策树",
       "date": "2026-07-05",
@@ -1043,7 +1057,7 @@
   "tagCloud": [
     {
       "tag": "Android",
-      "count": 18
+      "count": 19
     },
     {
       "tag": "AI",
@@ -1068,6 +1082,10 @@
     {
       "tag": "AI 工具",
       "count": 4
+    },
+    {
+      "tag": "性能优化",
+      "count": 3
     },
     {
       "tag": "个人成长",
@@ -1096,6 +1114,14 @@
     {
       "tag": "Agent",
       "count": 3
+    },
+    {
+      "tag": "Gradle",
+      "count": 2
+    },
+    {
+      "tag": "构建优化",
+      "count": 2
     },
     {
       "tag": "最佳实践",
@@ -1187,10 +1213,6 @@
     },
     {
       "tag": "Rust",
-      "count": 2
-    },
-    {
-      "tag": "性能优化",
       "count": 2
     },
     {
@@ -1562,19 +1584,11 @@
       "count": 1
     },
     {
-      "tag": "Gradle",
-      "count": 1
-    },
-    {
       "tag": "KTS",
       "count": 1
     },
     {
       "tag": "Kotlin DSL",
-      "count": 1
-    },
-    {
-      "tag": "构建优化",
       "count": 1
     },
     {
@@ -1905,8 +1919,13 @@
   "archives": [
     {
       "month": "2026-07",
-      "count": 17,
+      "count": 18,
       "posts": [
+        {
+          "title": "Gradle 构建加速全攻略：从 5 分钟到 30 秒",
+          "date": "2026-07-05",
+          "url": "blog/posts/gradle-构建加速全攻略从-5-分钟到-30-秒.html"
+        },
         {
           "title": "Kotlin Scope Functions 实战选择：五个函数一个决策树",
           "date": "2026-07-05",
@@ -2543,7 +2562,7 @@
     "AI Agent"
   ],
   "stats": {
-    "totalPosts": 74,
+    "totalPosts": 75,
     "totalTags": 215,
     "latestDate": "2026-07-05",
     "oldestDate": "2026-02-15"
