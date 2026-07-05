@@ -56,7 +56,13 @@
     .pagination-btn:hover { background: var(--color-accent-subtle); border-color: var(--color-accent-primary); color: var(--color-accent-primary); transform: translateY(-1px); box-shadow: var(--shadow-sm); }
     .pagination-btn.active { background: var(--color-accent-primary); border-color: var(--color-accent-primary); color: #fff; }
     .pagination-btn.disabled { opacity: 0.5; pointer-events: none; }
+    .pagination-ellipsis { color: var(--color-text-muted); font-size: 0.9rem; padding: 0 0.25rem; user-select: none; }
     .pagination-info { color: var(--color-text-secondary); font-size: 0.85rem; margin: 0 1rem; font-family: var(--font-mono); }
+    @media (max-width: 640px) {
+      .pagination { flex-wrap: wrap; gap: 0.3rem; }
+      .pagination-btn { padding: 0.4rem 0.7rem; font-size: 0.85rem; }
+      .pagination-ellipsis { padding: 0 0.15rem; }
+    }
     /* Blog Search Bar */
     .blog-search-bar { position: relative; width: 100%; max-width: 800px; margin: 0.5rem auto 0; }
     .blog-search-bar input { width: 100%; padding: 0.75rem 1rem; border-radius: var(--radius-full); border: 1px solid var(--color-border); background: var(--color-bg-secondary); color: var(--color-text-primary); font-size: var(--text-sm); outline: none; transition: border-color 0.2s; }
@@ -83,43 +89,24 @@
     /* Archive View */
     .archive-view { display: none; }
     .archive-view.active { display: block; }
-    .archive-month { margin-bottom: 2rem; }
-    .archive-month-header { font-size: var(--text-lg); font-weight: 600; color: var(--color-text-primary); margin-bottom: 0.75rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--color-border); }
+    .archive-year { margin-bottom: 2.5rem; }
+    .archive-year-header { font-size: var(--text-2xl); font-weight: 700; color: var(--color-text-primary); margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid var(--color-border); }
+    .archive-year-header .archive-count { font-weight: 400; font-size: var(--text-sm); color: var(--color-text-muted); margin-left: 0.5rem; }
+    .archive-year-body { padding-left: 0.5rem; }
+    .archive-month { margin-bottom: 1.5rem; }
+    .archive-month-header { font-size: var(--text-base); font-weight: 600; color: var(--color-accent-primary); margin-bottom: 0.5rem; padding-bottom: 0.25rem; border-bottom: 1px solid var(--color-border); display: flex; align-items: center; gap: 0.4rem; }
     .archive-month-header .archive-count { font-weight: 400; font-size: var(--text-sm); color: var(--color-text-muted); margin-left: 0.5rem; }
-    .archive-post { display: flex; align-items: baseline; gap: 1rem; padding: 0.5rem 0; }
-    .archive-post-date { font-family: var(--font-mono); font-size: var(--text-xs); color: var(--color-text-muted); white-space: nowrap; min-width: 5.5rem; }
+    .archive-post { display: flex; align-items: center; gap: 1rem; padding: 0.5rem 0.75rem; border-bottom: 1px solid rgba(0,0,0,0.04); transition: background 0.15s; border-radius: var(--radius-sm); }
+    .archive-post:last-child { border-bottom: none; }
+    .archive-post:hover { background: var(--color-bg-tertiary); }
+    .archive-post-date { font-family: var(--font-mono); font-size: var(--text-xs); color: var(--color-text-muted); white-space: nowrap; min-width: 3.5rem; }
+    .archive-post-title { flex: 1; }
     .archive-post-title a { color: var(--color-text-primary); text-decoration: none; font-size: var(--text-sm); transition: color 0.15s; }
     .archive-post-title a:hover { color: var(--color-accent-primary); }
     .archive-post-cat { font-size: 0.7rem; padding: 0.15rem 0.5rem; border-radius: var(--radius-full); background: var(--color-bg-tertiary); color: var(--color-text-muted); white-space: nowrap; }
-    /* Series View */
-    .series-view { display: none; }
-    .series-view.active { display: block; }
-    .series-card { margin-bottom: 2rem; padding: 1.5rem; border-radius: var(--radius-lg); background: var(--color-bg-tertiary); border: 1px solid var(--color-border); transition: border-color 0.2s; }
-    .series-card:hover { border-color: var(--color-accent-primary); }
-    .series-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
-    .series-card-title { font-size: var(--text-lg); font-weight: 600; color: var(--color-text-primary); display: flex; align-items: center; gap: 0.5rem; }
-    .series-card-title .series-icon { color: var(--color-accent-primary); }
-    .series-card-count { font-size: var(--text-xs); padding: 0.2rem 0.6rem; border-radius: var(--radius-full); background: var(--color-accent-subtle); color: var(--color-accent-primary); }
-    .series-post-list { list-style: none; padding: 0; margin: 0; }
-    .series-post-item { display: flex; align-items: baseline; gap: 0.75rem; padding: 0.5rem 0; border-bottom: 1px solid var(--color-border); }
-    .series-post-item:last-child { border-bottom: none; }
-    .series-post-num { font-family: var(--font-mono); font-size: var(--text-xs); color: var(--color-text-muted); min-width: 1.5rem; text-align: right; }
-    .series-post-date { font-family: var(--font-mono); font-size: var(--text-xs); color: var(--color-text-muted); white-space: nowrap; min-width: 5.5rem; }
-    .series-post-title a { color: var(--color-text-primary); text-decoration: none; font-size: var(--text-sm); transition: color 0.15s; }
-    .series-post-title a:hover { color: var(--color-accent-primary); }
     /* Hide list view when archive active */
     .blog-list-container.hidden { display: none; }
     .pagination.hidden { display: none; }
-    /* Archive collapse/expand */
-    .archive-month-header { cursor: pointer; user-select: none; display: flex; align-items: center; gap: 0.4rem; }
-    .archive-month-header:hover { color: var(--color-accent-primary); }
-    .archive-expand-icon { font-size: 0.7rem; color: var(--color-text-muted); min-width: 0.8rem; }
-    .archive-expand-more-wrap { text-align: center; padding: 1rem 0; }
-    .archive-expand-more-btn { padding: 0.5rem 1.2rem; border-radius: var(--radius-full); border: 1px solid var(--color-border); background: var(--color-bg-tertiary); color: var(--color-text-secondary); font-size: var(--text-sm); cursor: pointer; transition: all 0.2s; }
-    .archive-expand-more-btn:hover { border-color: var(--color-accent-primary); color: var(--color-accent-primary); background: var(--color-accent-subtle); }
-    /* Series expand/collapse */
-    .series-expand-btn { display: block; width: 100%; padding: 0.5rem; margin-top: 0.75rem; border: none; border-radius: var(--radius-md); background: var(--color-bg-secondary); color: var(--color-text-secondary); font-size: var(--text-xs); cursor: pointer; transition: all 0.2s; }
-    .series-expand-btn:hover { color: var(--color-accent-primary); background: var(--color-accent-subtle); }
   </style>
   <!-- Preconnect to Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -204,7 +191,6 @@
         <h2 class="section-title" id="blog-filter-title">全部文章</h2>
         <div class="blog-view-toggle">
           <button class="view-toggle-btn active" data-view="list" onclick="toggleBlogView('list')">文章列表</button>
-          <button class="view-toggle-btn" data-view="series" onclick="toggleBlogView('series')">系列</button>
           <button class="view-toggle-btn" data-view="archive" onclick="toggleBlogView('archive')">归档</button>
         </div>
       </div>
@@ -1266,8 +1252,6 @@
       <div class="pagination" id="pagination"></div>
       <!-- Archive View -->
       <div id="archive-view" class="archive-view"></div>
-      <!-- Series View -->
-      <div id="series-view" class="series-view"></div>
     </div>
   </section>
   </main>
