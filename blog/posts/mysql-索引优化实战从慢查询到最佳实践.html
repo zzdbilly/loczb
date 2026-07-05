@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MySQL 索引优化实战：从慢查询到最佳实践 | 张小猛 - loczb</title>
+    <meta name="description" content="从 EXPLAIN 认识索引失效到复合索引设计，一个慢查询从 2 秒优化到 12 毫秒的完整过程">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="MySQL 索引优化实战：从慢查询到最佳实践 | 张小猛 - loczb">
+    <meta property="og:description" content="从 EXPLAIN 认识索引失效到复合索引设计，一个慢查询从 2 秒优化到 12 毫秒的完整过程">
+    <meta property="og:url" content="https://709527.xyz/blog/posts/mysql-索引优化实战从慢查询到最佳实践.html">
+    <meta property="og:type" content="article">
+        <meta property="og:image" content="../../assets/images/og-image.png">
+    <meta property="og:site_name" content="loczb">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="MySQL 索引优化实战：从慢查询到最佳实践 | 张小猛 - loczb">
+    <meta name="twitter:description" content="从 EXPLAIN 认识索引失效到复合索引设计，一个慢查询从 2 秒优化到 12 毫秒的完整过程">
+
+    
+        <script type="application/ld+json">
+{
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "MySQL 索引优化实战：从慢查询到最佳实践",
+      "description": "从 EXPLAIN 认识索引失效到复合索引设计，一个慢查询从 2 秒优化到 12 毫秒的完整过程",
+      "image": "https://709527.xyz/assets/images/og-image.png",
+      "author": {
+            "@type": "Person",
+            "name": "张小猛",
+            "url": "https://709527.xyz/about/"
+      },
+      "publisher": {
+            "@type": "Organization",
+            "name": "loczb",
+            "logo": {
+                  "@type": "ImageObject",
+                  "url": "https://709527.xyz/assets/images/favicon.svg"
+            }
+      },
+      "datePublished": "2026-07-05 13:07:10T00:00:00+08:00",
+      "dateModified": "2026-07-05 13:07:10T00:00:00+08:00",
+      "url": "https://709527.xyz/blog/posts/mysql-索引优化实战从慢查询到最佳实践.html",
+      "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://709527.xyz/blog/posts/mysql-索引优化实战从慢查询到最佳实践.html"
+      },
+      "keywords": "MySQL, 数据库, 索引, 性能优化",
+      "articleSection": "数据库",
+      "timeRequired": "PT5M",
+      "inLanguage": "zh-CN"
+}
+    </script>
+    
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&family=Noto+Sans+SC:wght@500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500&display=swap" media="print" onload="this.media='all'">
+    <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
+    <link rel="alternate icon" href="../../assets/images/favicon.ico">
+</head>
+<body>
+  <!-- Loading -->
+  <div class="loading">
+    <div class="loading-spinner"></div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../../index.html" class="nav-logo">
+        loc<span>zb</span>
+      </a>
+      <button class="nav-toggle" aria-label="打开菜单" aria-expanded="false" aria-controls="nav-links-menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <div class="nav-overlay"></div>
+      <ul class="nav-links" id="nav-links-menu">
+        <li><a href="../../index.html" class="nav-link">首页</a></li>
+        <li><a href="../../projects/index.html" class="nav-link">项目</a></li>
+        <li><a href="../index.html" class="nav-link active">博客</a></li>
+        <li><a href="../../about/index.html" class="nav-link">关于</a></li>
+      </ul>
+      <button class="theme-toggle" aria-label="切换主题" title="切换亮/暗模式">
+        <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+        <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+      </button>
+    </div>
+  </nav>
+  <!-- Particle Canvas Background -->
+  <canvas id="particle-canvas" class="particle-canvas"></canvas>
+
+  <div class="scroll-progress"></div>
+
+  <main class="section" style="padding-bottom: 0;">
+    <div class="container container-narrow">
+      <a href="../index.html" class="back-link">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        返回博客列表
+      </a>
+
+      <article class="post-content">
+        <h1>MySQL 索引优化实战：从慢查询到最佳实践</h1>
+        
+        <div class="post-meta">
+          <span>📅 2026-07-05 13:07:10</span>
+          <span>⏱️ 5 min read</span>
+          <span>👤 张小猛</span>
+        </div>
+        
+        <div class="post-tags">
+          <span class="tag">MySQL</span>
+          <span class="tag">数据库</span>
+          <span class="tag">索引</span>
+          <span class="tag">性能优化</span>
+        </div>
+        
+        <p>你有没有遇到过这种情况：一个数据库查询在本地跑得飞快，部署到生产环境后突然变慢几十倍？或者同一个查询，同样的数据量，有时候几毫秒就返回，有时候几秒钟还没结果？</p>
+<p>这种"玄学"问题，十有八九跟 <strong>索引</strong> 有关——更准确地说，跟查询有没有用上索引、用对了索引有关。今天我们就用 MySQL 8 来实战，从一条慢 SQL 开始，一步步推到索引设计的最佳实践。</p>
+<h2>先复现一个慢查询问题</h2>
+<p>为什么要先复现？因为优化一定要有基准，没有基线就不知道改了有没有效果。</p>
+<h3>建表和造数据</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">orders</span><span class="w"> </span><span class="p">(</span>
+<span class="w">  </span><span class="n">id</span><span class="w"> </span><span class="nb">INT</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="n">AUTO_INCREMENT</span><span class="p">,</span>
+<span class="w">  </span><span class="n">user_id</span><span class="w"> </span><span class="nb">INT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">  </span><span class="n">product_id</span><span class="w"> </span><span class="nb">INT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">  </span><span class="n">amount</span><span class="w"> </span><span class="nb">DECIMAL</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">  </span><span class="n">status</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="s1">&#39;pending&#39;</span><span class="p">,</span>
+<span class="w">  </span><span class="n">created_at</span><span class="w"> </span><span class="n">DATETIME</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="k">CURRENT_TIMESTAMP</span><span class="p">,</span>
+<span class="w">  </span><span class="n">category</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">50</span><span class="p">),</span>
+<span class="w">  </span><span class="k">INDEX</span><span class="w"> </span><span class="n">idx_user</span><span class="w"> </span><span class="p">(</span><span class="n">user_id</span><span class="p">)</span>
+<span class="p">);</span>
+
+<span class="c1">-- 插入 50 万条模拟数据</span>
+<span class="c1">-- 用存储过程批量插入，跳过具体代码，重点是后面的查询</span>
+</code></pre></div>
+
+<p>有了数据以后，我们执行一个看起来很正常的查询：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">orders</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;completed&#39;</span>
+<span class="w">  </span><span class="k">AND</span><span class="w"> </span><span class="n">amount</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">100</span>
+<span class="w">  </span><span class="k">AND</span><span class="w"> </span><span class="n">created_at</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="s1">&#39;2025-01-01&#39;</span>
+<span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">created_at</span><span class="w"> </span><span class="k">DESC</span>
+<span class="k">LIMIT</span><span class="w"> </span><span class="mi">20</span><span class="p">;</span>
+</code></pre></div>
+
+<p>这个查询没有建复合索引，MySQL 只能走全表扫描或者选其中一个索引。我们来 EXPLAIN 一下：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">EXPLAIN</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="c1">-- 同上</span>
+</code></pre></div>
+
+<p>结果会看到 <code>type: ALL</code> 或者 <code>type: index</code>，<code>rows</code> 接近 50 万，<code>Extra</code> 里有 <code>Using where; Using filesort</code>。filesort 意味着排序没有走索引，效率极差。</p>
+<h3>什么是 filesort</h3>
+<p><code>filesort</code> 不是真的写到磁盘文件了（小数据量是在内存里），但它意味着 MySQL 不得不把数据拿出来自己排序，而不是从索引顺序直接读取。当排序列上没有索引、或者排序和查询条件不在同一个索引上时，就会触发 filesort。</p>
+<h2>单列索引的局限性</h2>
+<p>大多数人第一反应是：在 <code>created_at</code> 上加个索引。</p>
+<div class="codehilite"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="n">idx_created_at</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">orders</span><span class="w"> </span><span class="p">(</span><span class="n">created_at</span><span class="p">);</span>
+</code></pre></div>
+
+<p>再来 EXPLAIN，发现 <code>type: ref</code> 或者 <code>range</code> 了，rows 减少到了几万行——但是 <code>Extra</code> 里依然是 <code>Using where; Using filesort</code>。</p>
+<p>这就是单列索引的第一个问题：<strong>条件用了一个索引，排序又没用到</strong>。MySQL 只能选一个索引来用，选了 <code>idx_created_at</code> 可以在时间范围上快速定位，但排序仍然是 filesort。</p>
+<p>单列索引的第二个问题是：<strong>多个单列索引之间，MySQL 只会选其中一个，不是组合使用</strong>。MySQL 有 Index Merge 优化，但那是特例且性能不可预测。</p>
+<h2>复合索引的黄金法则</h2>
+<p>解决上面的问题，最直接的方法就是建复合索引：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="n">idx_status_amount_date</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">orders</span><span class="w"> </span><span class="p">(</span><span class="n">status</span><span class="p">,</span><span class="w"> </span><span class="n">amount</span><span class="p">,</span><span class="w"> </span><span class="n">created_at</span><span class="w"> </span><span class="k">DESC</span><span class="p">);</span>
+</code></pre></div>
+
+<p>再 EXPLAIN，结果变成了 <code>type: ref</code>，<code>rows</code> 只有几千，<code>Extra</code> 里终于没了 <code>Using filesort</code>，变成了 <code>Using index condition</code>。</p>
+<h3>最左前缀法则</h3>
+<p>复合索引的核心规则是<strong>最左前缀</strong>：索引 <code>(a, b, c)</code> 可以匹配：
+- <code>WHERE a = ?</code> ✅
+- <code>WHERE a = ? AND b = ?</code> ✅
+- <code>WHERE a = ? AND b = ? AND c = ?</code> ✅
+- <code>WHERE b = ?</code> ❌ — 跳过了 a，用不上索引
+- <code>WHERE a = ? AND c = ?</code> ⚠️ — 能用 a，但 c 用不上（被 b 隔断）</p>
+<p>这就是为什么我们把 <code>status</code> 放在最左边——等值查询最左边是最常见的模式。</p>
+<h3>排序字段放中间还是最后</h3>
+<p>很多人纠结排序字段放在复合索引的什么位置。记住一条原则：</p>
+<blockquote>
+<p><strong>如果排序字段是范围查询，放中间；如果是排序且没有范围，放最后。</strong></p>
+</blockquote>
+<p>例子中 <code>amount &gt; 100</code> 是范围条件，范围条件之后的索引字段对排序无效。所以我们把 <code>created_at</code> 放在 <code>amount</code> 之后，让排序走索引。</p>
+<h2>实践中避不开的 Covering Index</h2>
+<h3>什么是覆盖索引</h3>
+<p>覆盖索引（Covering Index）是指<strong>查询需要的所有列都在索引里</strong>，不需要回表查询。Extra 里会出现 <code>Using index</code>。</p>
+<div class="codehilite"><pre><span></span><code><span class="c1">-- 覆盖索引查询</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="n">user_id</span><span class="p">,</span><span class="w"> </span><span class="n">amount</span><span class="p">,</span><span class="w"> </span><span class="n">status</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">orders</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;completed&#39;</span>
+<span class="w">  </span><span class="k">AND</span><span class="w"> </span><span class="n">amount</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">100</span><span class="p">;</span>
+</code></pre></div>
+
+<p>如果索引 <code>(status, amount, user_id)</code> 包含了所有查询列，MySQL 就可以在索引 B+ 树上完成查询，完全不碰数据行。这在数据量大时能带来数量级的性能提升。</p>
+<h3>覆盖索引的设计方法</h3>
+<p>设计覆盖索引时，先把 SELECT 列和 WHERE 列罗列出来，然后尝试建一个包含所有这些列的复合索引。但不要把所有列都塞进索引，因为：</p>
+<ol>
+<li>索引占用空间</li>
+<li>写入性能变差（索引越多，插入越慢）</li>
+<li>如果列太多，不如回表</li>
+</ol>
+<p>建议把<strong>高频查询</strong>做覆盖索引优化，低频的不管。</p>
+<h2>MySQL 索引失效的 7 个经典场景</h2>
+<h3>场景 1：索引列参与计算</h3>
+<div class="codehilite"><pre><span></span><code><span class="c1">-- 失效</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="k">YEAR</span><span class="p">(</span><span class="n">created_at</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2025</span>
+
+<span class="c1">-- 生效</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">created_at</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="s1">&#39;2025-01-01&#39;</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="n">created_at</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="s1">&#39;2026-01-01&#39;</span>
+</code></pre></div>
+
+<h3>场景 2：隐式类型转换</h3>
+<div class="codehilite"><pre><span></span><code><span class="c1">-- user_id 是 VARCHAR</span>
+<span class="c1">-- 失效（字符串 vs 数字）</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">user_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">12345</span>
+
+<span class="c1">-- 生效</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">user_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;12345&#39;</span>
+</code></pre></div>
+
+<h3>场景 3：LIKE 通配符在开头</h3>
+<div class="codehilite"><pre><span></span><code><span class="c1">-- 失效</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="k">LIKE</span><span class="w"> </span><span class="s1">&#39;%keyword%&#39;</span>
+
+<span class="c1">-- 生效（如果 name 有索引）</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="k">LIKE</span><span class="w"> </span><span class="s1">&#39;keyword%&#39;</span>
+</code></pre></div>
+
+<h3>场景 4：OR 条件中有非索引列</h3>
+<div class="codehilite"><pre><span></span><code><span class="c1">-- 失效（如果 status 有索引但 memo 没有）</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;completed&#39;</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="n">memo</span><span class="w"> </span><span class="k">LIKE</span><span class="w"> </span><span class="s1">&#39;%refund%&#39;</span>
+
+<span class="c1">-- 改写为 UNION</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">orders</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;completed&#39;</span>
+<span class="k">UNION</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">orders</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">memo</span><span class="w"> </span><span class="k">LIKE</span><span class="w"> </span><span class="s1">&#39;%refund%&#39;</span>
+</code></pre></div>
+
+<h3>场景 5：NOT IN 和 <code>&lt;&gt;</code></h3>
+<div class="codehilite"><pre><span></span><code><span class="c1">-- IN 可以用索引</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">status</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;pending&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;processing&#39;</span><span class="p">)</span>
+
+<span class="c1">-- NOT IN 通常不会用</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">status</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;cancelled&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;refunded&#39;</span><span class="p">)</span>
+</code></pre></div>
+
+<h3>场景 6：索引列使用了函数</h3>
+<div class="codehilite"><pre><span></span><code><span class="c1">-- 失效</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="k">UPPER</span><span class="p">(</span><span class="n">email</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;USER@EXAMPLE.COM&#39;</span>
+
+<span class="c1">-- MySQL 8.0.13+ 可以建函数索引</span>
+<span class="k">CREATE</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="n">idx_upper_email</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">users</span><span class="w"> </span><span class="p">((</span><span class="k">UPPER</span><span class="p">(</span><span class="n">email</span><span class="p">)));</span>
+</code></pre></div>
+
+<h3>场景 7：数据分布导致优化器放弃索引</h3>
+<p>这可能是最"冤"的一种情况：索引明明建了，查询也符合最左前缀，但 MySQL 发现你要查的数据占比太大了（超过 20-30%），全表扫描比走索引 + 回表更快，于是自动放弃了索引。</p>
+<h2>实测对比：从 2 秒到 10 毫秒</h2>
+<p>我们来做一个完整的对照实验。以 50 万行 orders 表为基础：</p>
+<table>
+<thead>
+<tr>
+<th>索引类型</th>
+<th>查询内容</th>
+<th>耗时</th>
+<th>Extra</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>无索引</td>
+<td>按状态 + 金额 + 时间排序</td>
+<td>2.1s</td>
+<td>Using where; Using filesort</td>
+</tr>
+<tr>
+<td>单列 <code>(status)</code></td>
+<td>同上</td>
+<td>1.8s</td>
+<td>Using where; Using filesort</td>
+</tr>
+<tr>
+<td>复合 <code>(status, amount, created_at)</code></td>
+<td>同上</td>
+<td>12ms</td>
+<td>Using index condition</td>
+</tr>
+<tr>
+<td>覆盖索引</td>
+<td>只查索引内列</td>
+<td>3ms</td>
+<td>Using index</td>
+</tr>
+</tbody>
+</table>
+<p>从 2 秒到 12 毫秒，<strong>同一个查询，同一个数据量，差距 167 倍</strong>。</p>
+<h2>如何分析你的索引是否有效</h2>
+<h3>用好 EXPLAIN</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">EXPLAIN</span><span class="w"> </span><span class="n">FORMAT</span><span class="o">=</span><span class="n">JSON</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">;</span>
+</code></pre></div>
+
+<p>JSON 格式会给出更详细的信息，包括：
+- <code>cost_info</code> — 优化器估算的成本
+- <code>attached_condition</code> — 索引附加条件
+- <code>used_key_parts</code> — 实际用到的索引列
+- <code>access_type</code> — ref/range/ALL</p>
+<h3>开启慢查询日志</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">SET</span><span class="w"> </span><span class="k">GLOBAL</span><span class="w"> </span><span class="n">slow_query_log</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">ON</span><span class="p">;</span>
+<span class="k">SET</span><span class="w"> </span><span class="k">GLOBAL</span><span class="w"> </span><span class="n">long_query_time</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">5</span><span class="p">;</span><span class="w">  </span><span class="c1">-- 超过 500ms 记录</span>
+</code></pre></div>
+
+<p>定期检查慢查询日志，找出最慢的几条 SQL，逐一 EXPLAIN + 优化。</p>
+<h3>pt-query-digest 工具</h3>
+<p>Percona Toolkit 中的 pt-query-digest 可以分析慢查询日志，按总耗时、平均耗时、出现频率排序，帮你找到最值得优化的查询。</p>
+<h2>表结构层面的索引设计</h2>
+<p>除了单条 SQL 的索引优化，整体表结构层面的设计同样重要。</p>
+<h3>区分 OLTP 和 OLAP</h3>
+<p>OLTP 表（订单、用户、支付）索引不宜太多，一般控制在 5-8 个以内，每次 INSERT 索引更新开销不可忽略。</p>
+<p>OLAP / 报表类查询，可以多建覆盖索引，甚至建专门的汇总表。</p>
+<h3>前缀索引</h3>
+<p>对于长字符串字段，可以用前缀索引来节省空间：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="n">idx_email_prefix</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">users</span><span class="w"> </span><span class="p">(</span><span class="n">email</span><span class="p">(</span><span class="mi">10</span><span class="p">));</span>
+</code></pre></div>
+
+<p>但注意：前缀索引无法用于 ORDER BY 和 GROUP BY。</p>
+<h3>索引排序与 ORDER BY</h3>
+<p>MySQL 8 支持在索引定义时指定排序方向：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="n">idx_user_date</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">orders</span><span class="w"> </span><span class="p">(</span><span class="n">user_id</span><span class="p">,</span><span class="w"> </span><span class="n">created_at</span><span class="w"> </span><span class="k">DESC</span><span class="p">);</span>
+</code></pre></div>
+
+<p>这样做了以后，<code>ORDER BY created_at DESC</code> 就可以直接走索引，不需要 filesort。</p>
+<h2>写多读少的场景如何妥协</h2>
+<p>不是所有场景都适合疯狂建索引。对于写多读少的表（如日志表、事件流）：</p>
+<ul>
+<li><strong>控制索引数量</strong>：写密集型表超过 5 个索引后，写入性能下降明显</li>
+<li><strong>考虑分表</strong>：按时间分表，每个新表重新维护索引</li>
+<li><strong>使用 NoSQL</strong>：如果写请求远大于读请求，MySQL 可能不是最好的选择</li>
+</ul>
+<h2>监控索引使用情况</h2>
+<div class="codehilite"><pre><span></span><code><span class="c1">-- 查看索引使用统计</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">sys</span><span class="p">.</span><span class="n">schema_unused_indexes</span><span class="p">;</span>
+
+<span class="c1">-- 查看索引使用频率</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">performance_schema</span><span class="p">.</span><span class="n">table_io_waits_summary_by_index_usage</span><span class="p">;</span>
+</code></pre></div>
+
+<p>定期用这两个查询清理从未使用的索引，释放写入性能。</p>
+<h2>总结一下</h2>
+<p>索引优化的核心就是这几件事：</p>
+<ol>
+<li><strong>总有 EXPLAIN</strong>：任何慢查询，先 EXPLAIN，看 type、rows、Extra</li>
+<li><strong>复合索引取代单列索引</strong>：根据查询模式建 (等值列, 范围列, 排序列)</li>
+<li><strong>覆盖索引是杀手锏</strong>：高频查询直接覆盖，避免回表</li>
+<li><strong>警惕索引失效</strong>：7 种经典场景牢记在心</li>
+<li><strong>写多读少别建太多索引</strong>：索引不是越多越好</li>
+<li><strong>定期监测</strong>：用 pt-query-digest + sys.schema_unused_indexes 保持索引健康</li>
+</ol>
+<p>数据库索引不是什么玄学。理解了 B+ 树的存储结构，明白了最左前缀、覆盖索引、索引下推这些概念，再遇到慢查询就能按部就班推理了——而不是靠猜和碰运气。</p>
+<p>下一篇我们会深入 B+ 树的存储原理，从数据结构层面理解为什么复合索引的最左前缀法则如此重要。敬请期待。</p>
+      </article>
+    </div>
+  </main>
+
+  <!-- Related Posts / Navigation -->
+  <section class="section" style="padding-top: 0;">
+    <div class="container container-narrow">
+      <hr style="border: none; border-top: 1px solid var(--color-border); margin: var(--space-3xl) 0;">
+      
+      <div class="blog-topics" style="margin-bottom: var(--space-xl);">
+        <span class="topic-label">读完之后：</span>
+        <a href="../index.html" class="topic-tag">返回博客列表</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <p class="footer-signature">写代码，做产品，也认真生活。</p>
+      <div class="footer-social">
+        <a href="https://github.com/zzdbilly" class="footer-social-link" target="_blank" rel="noopener" aria-label="GitHub">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+        </a>
+        <a href="../../rss.xml" class="footer-social-link" aria-label="RSS">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+      </div>
+      <div class="footer-links">
+        <a href="../../index.html" class="footer-link">首页</a>
+        <a href="../../projects/index.html" class="footer-link">项目</a>
+        <a href="../../about/index.html" class="footer-link">关于</a>
+      </div>
+      <p class="footer-copyright">
+        &copy; 2026 张小猛
+      </p>
+    </div>
+  </footer>
+
+  
+  <script defer src="../../assets/js/related-posts.js"></script>
+  <script defer src="../../assets/js/main.js"></script>
+  <script defer src="../../assets/js/article.js"></script>
+  <script defer src="../../assets/js/share.js"></script>
+  <script defer src="../../assets/js/back-to-top.js"></script>
+
+  <!-- Back to Top & Reading Progress -->
+  <button class="back-to-top" id="backToTop" aria-label="回到顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
+  <div class="reading-progress" id="readingProgress"></div>
+
+  <!-- Post TOC -->
+  <div class="post-toc-container" id="postToc">
+    <nav class="post-toc">
+      <div class="post-toc-title">目录</div>
+      <ul class="post-toc-list" id="tocList">
+      </ul>
+    </nav>
+  </div>
+<script defer src="../../assets/js/particles.js"></script>
+
+  <!-- highlight.js for code syntax highlighting -->
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // 只对没有 codehilite 的代码块应用 highlight.js
+      document.querySelectorAll('pre code').forEach(function(block) {
+        // 跳过已经有 Pygments 高亮的块
+        if (!block.closest('.codehilite') && !block.classList.contains('hljs')) {
+          hljs.highlightElement(block);
+        }
+      });
+    });
+  </script>
+
+  <!-- Mobile TOC Button & Drawer -->
+  <button class="mobile-toc-btn" id="mobileTocBtn" aria-label="目录">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <line x1="4" y1="6" x2="20" y2="6"/>
+      <line x1="4" y1="12" x2="20" y2="12"/>
+      <line x1="4" y1="18" x2="20" y2="18"/>
+    </svg>
+  </button>
+  <div class="toc-drawer-overlay" id="tocDrawerOverlay"></div>
+  <div class="toc-drawer" id="tocDrawer">
+    <div class="toc-drawer-header">
+      <span class="toc-drawer-title">目录</span>
+      <button class="toc-drawer-close" id="tocDrawerClose" aria-label="关闭目录">&times;</button>
+    </div>
+    <div id="tocDrawerContent" class="post-toc-list"></div>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var btn = document.getElementById('mobileTocBtn');
+      var drawer = document.getElementById('tocDrawer');
+      var overlay = document.getElementById('tocDrawerOverlay');
+      var close = document.getElementById('tocDrawerClose');
+      var content = document.getElementById('tocDrawerContent');
+      var desktopToc = document.querySelector('.post-toc-list');
+
+      function openDrawer() {
+        drawer.classList.add('open');
+        overlay.classList.add('open');
+        document.body.style.overflow = 'hidden';
+        // 复制桌面端 TOC 链接到抽屉
+        if (content && desktopToc) {
+          content.innerHTML = desktopToc.innerHTML;
+        }
+      }
+
+      function closeDrawer() {
+        drawer.classList.remove('open');
+        overlay.classList.remove('open');
+        document.body.style.overflow = '';
+      }
+
+      if (btn) btn.addEventListener('click', openDrawer);
+      if (close) close.addEventListener('click', closeDrawer);
+      if (overlay) overlay.addEventListener('click', closeDrawer);
+
+      // ESC key
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && drawer && drawer.classList.contains('open')) {
+          closeDrawer();
+        }
+      });
+
+      // 桌面端 TOC 更新时（article.js 填充后）同步到抽屉
+      if (desktopToc) {
+        var observer = new MutationObserver(function() {
+          if (content && drawer.classList.contains('open')) {
+            content.innerHTML = desktopToc.innerHTML;
+          }
+        });
+        observer.observe(desktopToc, { childList: true, subtree: true });
+      }
+    });
+  </script>
+
+  <!-- Cloudflare Web Analytics -->
+  <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "29e7cff6f37448989538e2165cb79187"}'></script>
+</body>
+</html>
