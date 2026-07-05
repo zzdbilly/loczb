@@ -39,8 +39,8 @@
                   "url": "https://709527.xyz/assets/images/favicon.svg"
             }
       },
-      "datePublished": "2026-07-04T00:00:00+08:00",
-      "dateModified": "2026-07-04T00:00:00+08:00",
+      "datePublished": "2026-07-04",
+      "dateModified": "2026-07-04",
       "url": "https://709527.xyz/blog/posts/github-actions-auto-index-blog-cicd.html",
       "mainEntityOfPage": {
             "@type": "WebPage",
@@ -108,7 +108,7 @@
         <h1>GitHub Actions 自动索引：我的静态博客 CI/CD 进化之路</h1>
         
         <div class="post-meta">
-          📅 2026-07-04 13:50:50
+          <span>📅 2026-07-04 13:50:50</span>
           ⏱️ 5 min read
           👤 张小猛
         </div>
@@ -209,7 +209,7 @@ generateRSS(posts);        // rss.xml
 <p>整个脚本不到 250 行，纯 Node.js 无外部依赖。CI 上不需要 <code>npm install</code>。</p>
 <h3>解析 HTML 的元数据提取</h3>
 <p>从 HTML 中提取元数据用正则：</p>
-<pre><code>// 日期: &lt;span&gt;📅 2026-07-04&lt;/span&gt;
+<pre><code>// 日期: &lt;span&gt;<span>📅 2026-07-04</span>&lt;/span&gt;
 const dateMatch = content.match(/&lt;span&gt;📅 (\d{4}-\d{1,2}-\d{1,2})&lt;\/span&gt;/);
 
 // 标签: &lt;span class=&quot;tag&quot;&gt;Android&lt;/span&gt;
