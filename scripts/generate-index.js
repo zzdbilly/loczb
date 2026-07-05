@@ -136,31 +136,12 @@ const archiveList = Object.entries(archives)
   .map(([month, items]) => ({ month, count: items.length, posts: items }))
   .sort((a, b) => b.month.localeCompare(a.month));
 
-const seriesRules = [
-  { id: 'android-16', name: 'Android 16 专题', match: (p) => p.tags.includes('Android 16') },
-  { id: 'ai-tools', name: 'AI 工具与实践', match: (p) => p.tags.includes('AI 工具') },
-  { id: 'jetpack-compose', name: 'Jetpack Compose 指南', match: (p) => p.tags.includes('Jetpack Compose') },
-  { id: 'kotlin-advanced', name: 'Kotlin 进阶', match: (p) => p.category === 'Kotlin' },
-  { id: 'devops', name: 'DevOps 实战', match: (p) => p.tags.includes('DevOps') },
-  { id: 'ai-agent', name: 'AI Agent 开发', match: (p) => p.category === 'AI Agent' || p.tags.includes('Agent') },
-  { id: 'security', name: '安全加固', match: (p) => p.tags.includes('安全') },
-  { id: 'personal-growth', name: '个人成长', match: (p) => p.tags.includes('个人成长') || p.tags.includes('自我管理') || (p.category === '思考' && (p.tags.includes('技术人成长') || p.tags.includes('学习方法') || p.tags.includes('软技能'))) },
-];
-
-const series = seriesRules
-  .map(rule => {
-    const matched = posts.filter(rule.match);
-    if (matched.length < 2) return null;
-    return { id: rule.id, name: rule.name, count: matched.length, posts: matched.map(p => ({ title: p.title, date: p.date, url: p.url })) };
-  })
-  .filter(Boolean)
-  .sort((a, b) => b.count - a.count);
+// Series 功能已移除
 
 const indexData = {
   posts: posts.map(p => ({ slug: p.slug, title: p.title, date: p.date, category: p.category, tags: p.tags, excerpt: p.excerpt, url: p.url })),
   tagCloud,
   archives: archiveList,
-  series,
   categories: [...new Set(posts.map(p => p.category))],
   stats: { totalPosts: posts.length, totalTags: Object.keys(tagCounts).length, latestDate: posts[0]?.date || '', oldestDate: posts[posts.length - 1]?.date || '' }
 };
@@ -278,11 +259,12 @@ function rebuildHomePage() {
   html = html.replace(featuredPattern, featured);
 
   // 更新最新文章列表 (第2、3篇)
-  const listArticles = posts.slice(1, 5);
+  const listArticles = posts.slice(1, 3);
   if (listArticles.length > 0) {
     const listItems = listArticles.map(p => {
-      return `        <article class="blog-list-item animate-on-scroll" data-category="${escapeHtml(p.category)}" data-page="1">
-          <div class="blog-list-header">
+      const tagsHtml = p.tags.slice(0, 3).map(t => `<span class="tech-tag">${escapeHtml(t)}</span>`).join('\n            ');
+      return `        <article class="blog-mini-card animate-on-scroll" data-category="${escapeHtml(p.category)}" data-page="1">
+          <div class="blog-mini-card-header">
             <div class="blog-list-meta">
               <span class="blog-date">${escapeHtml(p.date)}</span>
               <span>·</span>
@@ -290,10 +272,13 @@ function rebuildHomePage() {
             </div>
             <span class="blog-list-tag">${escapeHtml(p.category)}</span>
           </div>
-          <h3 class="blog-list-title">
+          <h3 class="blog-mini-card-title">
             <a href="blog/posts/${p.slug}.html">${escapeHtml(p.title)}</a>
           </h3>
-          <p class="blog-list-excerpt">${escapeHtml(p.excerpt)}</p>
+          <p class="blog-mini-card-excerpt">${escapeHtml(p.excerpt)}</p>
+          <div class="blog-mini-card-tags">
+            ${tagsHtml}
+          </div>
         </article>`;
     }).join('\n');
 

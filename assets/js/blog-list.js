@@ -106,7 +106,7 @@
       window.history.pushState({ page: page, filter: currentFilter }, '', newUrl);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
-    // 更新分页按钮
+    // 更新分页按钮 - 标准页码按钮组
     function updatePagination(page) {
       var container = document.getElementById('pagination');
       if (!container) return;
@@ -114,13 +114,59 @@
         container.innerHTML = '';
         return;
       }
-      var prevDisabled = page === 1 ? 'disabled' : '';
-      var nextDisabled = page === totalPages ? 'disabled' : '';
-      container.innerHTML = [
-        '<a href="#" class="pagination-btn ' + prevDisabled + '" onclick="event.preventDefault(); showPage(' + (page - 1) + ')">← 上一页</a>',
-        '<span class="pagination-info">第 ' + page + ' / ' + totalPages + ' 页（共 ' + filteredPosts.length + ' 篇）</span>',
-        '<a href="#" class="pagination-btn ' + nextDisabled + '" onclick="event.preventDefault(); showPage(' + (page + 1) + ')">下一页 →</a>'
-      ].join('');
+      var html = '';
+      // 上一页按钮
+      if (page > 1) {
+        html += '<a href="#" class="pagination-btn pagination-prev" onclick="event.preventDefault(); showPage(' + (page - 1) + ')">← 上一页</a>';
+      } else {
+        html += '<span class="pagination-btn disabled">← 上一页</span>';
+      }
+      // 生成页码按钮
+      var pageNumbers = generatePageNumbers(page, totalPages);
+      pageNumbers.forEach(function(item) {
+        if (item === '...') {
+          html += '<span class="pagination-ellipsis">···</span>';
+        } else if (item === page) {
+          html += '<span class="pagination-btn active">' + item + '</span>';
+        } else {
+          html += '<a href="#" class="pagination-btn" onclick="event.preventDefault(); showPage(' + item + ')">' + item + '</a>';
+        }
+      });
+      // 下一页按钮
+      if (page < totalPages) {
+        html += '<a href="#" class="pagination-btn pagination-next" onclick="event.preventDefault(); showPage(' + (page + 1) + ')">下一页 →</a>';
+      } else {
+        html += '<span class="pagination-btn disabled">下一页 →</span>';
+      }
+      container.innerHTML = html;
+    }
+    // 生成页码数组（当前页前后各2页 + 首尾 + 省略号）
+    function generatePageNumbers(current, total) {
+      var pages = [];
+      if (total <= 7) {
+        // 总页数 <= 7，全部显示
+        for (var i = 1; i <= total; i++) pages.push(i);
+        return pages;
+      }
+      // 首页
+      pages.push(1);
+      var leftStart = Math.max(2, current - 2);
+      var rightEnd = Math.min(total - 1, current + 2);
+      // 左省略号
+      if (leftStart > 2) {
+        pages.push('...');
+      }
+      // 中间页码
+      for (var i = leftStart; i <= rightEnd; i++) {
+        pages.push(i);
+      }
+      // 右省略号
+      if (rightEnd < total - 1) {
+        pages.push('...');
+      }
+      // 尾页
+      pages.push(total);
+      return pages;
     }
     // 初始化
     window.addEventListener('DOMContentLoaded', function() {
@@ -164,32 +210,36 @@
         }
       });
     });
-    // 归档功能
+    // 归档功能 - 按年份+月份分组
     let archiveData = null;
-    var ARCHIVE_EXPANDED_COUNT = 3; // 默认展开最近3个月
     async function loadArchive() {
       try {
         const response = await fetch('articles-index.json?t=' + Date.now());
         const data = await response.json();
-        // 生成归档数据
-        const archives = {};
+        // 按年份分组
+        const yearGroups = {};
         data.posts.forEach(post => {
+          const year = post.date.substring(0, 4);
           const month = post.date.substring(0, 7);
-          if (!archives[month]) archives[month] = [];
-          archives[month].push({
+          if (!yearGroups[year]) yearGroups[year] = {};
+          if (!yearGroups[year][month]) yearGroups[year][month] = [];
+          yearGroups[year][month].push({
             title: post.title,
             date: post.date,
             url: post.url,
             category: post.category
           });
         });
-        // Convert to array and sort properly
-        const months = Object.keys(archives).sort().reverse();
-        archiveData = months.map(month => ({
-          month,
-          count: archives[month].length,
-          posts: archives[month].sort((a, b) => b.date.localeCompare(a.date))
-        }));
+        // Convert to sorted array
+        archiveData = Object.keys(yearGroups).sort().reverse().map(year => {
+          const months = Object.keys(yearGroups[year]).sort().reverse().map(month => ({
+            month,
+            count: yearGroups[year][month].length,
+            posts: yearGroups[year][month].sort((a, b) => b.date.localeCompare(a.date))
+          }));
+          const total = months.reduce((sum, m) => sum + m.count, 0);
+          return { year, count: total, months };
+        });
       } catch (e) {
         console.error('加载归档失败:', e);
       }
@@ -198,183 +248,42 @@
       const container = document.getElementById('archive-view');
       if (!container || !archiveData) return;
       var html = '';
-      archiveData.forEach(function(m, idx) {
-        var isCollapsed = idx >= ARCHIVE_EXPANDED_COUNT;
-        html += '<div class="archive-month' + (isCollapsed ? ' archive-month-collapsed' : '') + '" data-archive-idx="' + idx + '">';
-        html += '<div class="archive-month-header" onclick="toggleArchiveMonth(' + idx + ')">';
-        html += '<span class="archive-expand-icon">' + (isCollapsed ? '▶' : '▼') + '</span>';
-        html += m.month + ' <span class="archive-count">' + m.count + ' 篇</span>';
-        html += '</div>';
-        html += '<div class="archive-month-body"' + (isCollapsed ? ' style="display:none;"' : '') + '>';
-        html += m.posts.map(function(p) {
-          return '<div class="archive-post">'
-            + '<span class="archive-post-date">' + p.date.substring(0, 10) + '</span>'
-            + '<span class="archive-post-title"><a href="posts/' + p.url.replace('blog/posts/', '') + '">' + p.title + '</a></span>'
-            + '<span class="archive-post-cat">' + (p.category || '') + '</span>'
-            + '</div>';
-        }).join('');
-        html += '</div>'; // archive-month-body
-        html += '</div>'; // archive-month
+      archiveData.forEach(function(yg) {
+        html += '<div class="archive-year">';
+        html += '<div class="archive-year-header">' + yg.year + '年 <span class="archive-count">(' + yg.count + ' 篇)</span></div>';
+        html += '<div class="archive-year-body">';
+        yg.months.forEach(function(m) {
+          html += '<div class="archive-month">';
+          html += '<div class="archive-month-header">' + m.month.substring(5) + '月 <span class="archive-count">(' + m.count + ' 篇)</span></div>';
+          html += '<div class="archive-month-body">';
+          m.posts.forEach(function(p) {
+            var dayStr = p.date.substring(5); // MM-DD
+            html += '<div class="archive-post">';
+            html += '<span class="archive-post-date">' + dayStr + '</span>';
+            html += '<span class="archive-post-title"><a href="posts/' + p.url.replace('blog/posts/', '') + '">' + p.title + '</a></span>';
+            html += '<span class="archive-post-cat">' + (p.category || '') + '</span>';
+            html += '</div>';
+          });
+          html += '</div>'; // archive-month-body
+          html += '</div>'; // archive-month
+        });
+        html += '</div>'; // archive-year-body
+        html += '</div>'; // archive-year
       });
-      // 如果有超过 ARCHIVE_EXPANDED_COUNT 个月的归档，加一个"展开更早归档"按钮和隐藏的"折叠"按钮
-      if (archiveData.length > ARCHIVE_EXPANDED_COUNT) {
-        html += '<div class="archive-expand-more-wrap" id="archive-expand-more-wrap">';
-        html += '<button class="archive-expand-more-btn" onclick="expandAllArchive()">';
-        html += '展开更早归档 (' + (archiveData.length - ARCHIVE_EXPANDED_COUNT) + ' 个月)';
-        html += '</button>';
-        html += '</div>';
-        html += '<div class="archive-expand-more-wrap" id="archive-collapse-more-wrap" style="display:none;">';
-        html += '<button class="archive-expand-more-btn" onclick="collapseAllArchive()">';
-        html += '折叠更早归档 ▲';
-        html += '</button>';
-        html += '</div>';
-      }
       container.innerHTML = html;
     }
-    window.toggleArchiveMonth = function(idx) {
-      var monthEl = document.querySelector('[data-archive-idx="' + idx + '"]');
-      if (!monthEl) return;
-      var body = monthEl.querySelector('.archive-month-body');
-      var icon = monthEl.querySelector('.archive-expand-icon');
-      if (!body) return;
-      if (body.style.display === 'none') {
-        body.style.display = '';
-        if (icon) icon.textContent = '▼';
-        monthEl.classList.remove('archive-month-collapsed');
-      } else {
-        body.style.display = 'none';
-        if (icon) icon.textContent = '▶';
-        monthEl.classList.add('archive-month-collapsed');
-      }
-    };
-    window.expandAllArchive = function() {
-      // 展开所有折叠的月份
-      document.querySelectorAll('.archive-month-collapsed').forEach(function(el) {
-        var body = el.querySelector('.archive-month-body');
-        var icon = el.querySelector('.archive-expand-icon');
-        if (body) body.style.display = '';
-        if (icon) icon.textContent = '▼';
-        el.classList.remove('archive-month-collapsed');
-      });
-      // 隐藏"展开更早归档"按钮，显示"折叠"按钮
-      var btnWrap = document.getElementById('archive-expand-more-wrap');
-      if (btnWrap) btnWrap.style.display = 'none';
-      var collapseBtn = document.getElementById('archive-collapse-more-wrap');
-      if (collapseBtn) collapseBtn.style.display = '';
-    };
-    window.collapseAllArchive = function() {
-      // 重新折叠超出 ARCHIVE_EXPANDED_COUNT 的月份
-      archiveData.forEach(function(m, idx) {
-        if (idx >= ARCHIVE_EXPANDED_COUNT) {
-          var monthEl = document.querySelector('[data-archive-idx="' + idx + '"]');
-          if (monthEl) {
-            var body = monthEl.querySelector('.archive-month-body');
-            var icon = monthEl.querySelector('.archive-expand-icon');
-            if (body) body.style.display = 'none';
-            if (icon) icon.textContent = '▶';
-            monthEl.classList.add('archive-month-collapsed');
-          }
-        }
-      });
-      // 隐藏"折叠"按钮，显示"展开"按钮
-      var collapseWrap = document.getElementById('archive-collapse-more-wrap');
-      if (collapseWrap) collapseWrap.style.display = 'none';
-      var expandWrap = document.getElementById('archive-expand-more-wrap');
-      if (expandWrap) expandWrap.style.display = '';
-    };
-    let seriesData = null;
-    async function loadSeries() {
-      if (seriesData) return seriesData;
-      const resp = await fetch('articles-index.json?t=' + Date.now());
-      const data = await resp.json();
-      seriesData = data.series || [];
-      return seriesData;
-    }
-    function renderSeries(series) {
-      const container = document.getElementById('series-view');
-      if (!container || !series.length) {
-        if (container) container.innerHTML = '<p style="text-align:center;color:var(--color-text-muted);padding:2rem;">暂无系列文章</p>';
-        return;
-      }
-      var SERIES_COLLAPSE_THRESHOLD = 3; // 默认显示前3篇
-      container.innerHTML = series.map(function(s, sIdx) {
-        var needCollapse = s.posts.length > SERIES_COLLAPSE_THRESHOLD;
-        var visiblePosts = needCollapse ? s.posts.slice(0, SERIES_COLLAPSE_THRESHOLD) : s.posts;
-        var html = '<div class="series-card" data-series-idx="' + sIdx + '">';
-        html += '<div class="series-card-header">';
-        html += '<div class="series-card-title"><span class="series-icon">📚</span>' + s.name + '</div>';
-        html += '<span class="series-card-count">' + s.count + ' 篇</span>';
-        html += '</div>';
-        html += '<ul class="series-post-list">';
-        // 渲染可见的文章
-        visiblePosts.forEach(function(p, i) {
-          html += '<li class="series-post-item">'
-            + '<span class="series-post-num">' + String(i + 1).padStart(2, '0') + '</span>'
-            + '<span class="series-post-date">' + p.date + '</span>'
-            + '<span class="series-post-title"><a href="posts/' + p.url.replace('blog/posts/', '') + '">' + p.title + '</a></span>'
-            + '</li>';
-        });
-        html += '</ul>';
-        // 如果需要折叠，加展开按钮
-        if (needCollapse) {
-          html += '<button class="series-expand-btn" onclick="toggleSeriesExpand(' + sIdx + ')">';
-          html += '展开全部 ' + s.count + ' 篇 ▼';
-          html += '</button>';
-        }
-        html += '</div>';
-        return html;
-      }).join('');
-    }
-    window.toggleSeriesExpand = function(sIdx) {
-      var card = document.querySelector('[data-series-idx="' + sIdx + '"]');
-      if (!card) return;
-      var list = card.querySelector('.series-post-list');
-      var btn = card.querySelector('.series-expand-btn');
-      if (!list || !btn) return;
-      // 检查是否已展开
-      var isExpanded = list.dataset.expanded === '1';
-      if (isExpanded) {
-        // 折叠：只显示前3篇
-        var allItems = list.querySelectorAll('.series-post-item');
-        allItems.forEach(function(item, idx) {
-          if (idx >= 3) item.style.display = 'none';
-        });
-        list.dataset.expanded = '0';
-        btn.textContent = '展开全部 ' + (parseInt(btn.dataset.count) || 0) + ' 篇 ▼';
-      } else {
-        // 展开：从 seriesData 恢复全部文章
-        var series = seriesData[sIdx];
-        if (!series) return;
-        var html = '';
-        series.posts.forEach(function(p, i) {
-          html += '<li class="series-post-item">'
-            + '<span class="series-post-num">' + String(i + 1).padStart(2, '0') + '</span>'
-            + '<span class="series-post-date">' + p.date + '</span>'
-            + '<span class="series-post-title"><a href="posts/' + p.url.replace('blog/posts/', '') + '">' + p.title + '</a></span>'
-            + '</li>';
-        });
-        list.innerHTML = html;
-        list.dataset.expanded = '1';
-        if (!btn.dataset.count) btn.dataset.count = series.count;
-        btn.textContent = '收起 ▲';
-      }
-    };
     function toggleBlogView(view) {
       const listContainer = document.querySelector('.blog-list-container');
       const pagination = document.getElementById('pagination');
       const archiveView = document.getElementById('archive-view');
-      const seriesView = document.getElementById('series-view');
       const listBtn = document.querySelector('[data-view="list"]');
       const archiveBtn = document.querySelector('[data-view="archive"]');
-      const seriesBtn = document.querySelector('[data-view="series"]');
       // Reset all
       listContainer.classList.remove('hidden');
       if (pagination) pagination.classList.remove('hidden');
       archiveView.classList.remove('active');
-      seriesView.classList.remove('active');
       listBtn.classList.remove('active');
       archiveBtn.classList.remove('active');
-      if (seriesBtn) seriesBtn.classList.remove('active');
       if (view === 'archive') {
         listContainer.classList.add('hidden');
         if (pagination) pagination.classList.add('hidden');
@@ -382,16 +291,6 @@
         archiveBtn.classList.add('active');
         if (!archiveData) loadArchive().then(renderArchive).catch(function(e) { console.error(e); });
         else renderArchive();
-      } else if (view === 'series') {
-        listContainer.classList.add('hidden');
-        if (pagination) pagination.classList.add('hidden');
-        seriesView.classList.add('active');
-        seriesBtn.classList.add('active');
-        if (!seriesData) {
-          loadSeries().then(renderSeries).catch(function(e) { console.error(e); });
-        } else {
-          renderSeries(seriesData);
-        }
       } else {
         listBtn.classList.add('active');
       }
