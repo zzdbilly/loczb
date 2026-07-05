@@ -7,106 +7,10 @@
     <language>zh-CN</language>
     <atom:link href="https://709527.xyz/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
-      <title>VPS 选购与使用指南：五个常见场景的配置与避坑</title>
-      <link>https://709527.xyz/blog/posts/vps-选购与使用指南五个常见场景的配置与避坑.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/vps-选购与使用指南五个常见场景的配置与避坑.html</guid>
-      <description>从扶墙线路到生产环境部署，不同场景下 VPS 怎么选、怎么配、怎么不踩坑</description>
-      <category>技术</category>
-      <pubDate>Sun, 05 Jul 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>MySQL 索引优化实战：从慢查询到最佳实践</title>
-      <link>https://709527.xyz/blog/posts/mysql-索引优化实战从慢查询到最佳实践.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/mysql-索引优化实战从慢查询到最佳实践.html</guid>
-      <description>从 EXPLAIN 认识索引失效到复合索引设计，一个慢查询从 2 秒优化到 12 毫秒的完整过程</description>
-      <category>技术</category>
-      <pubDate>Sun, 05 Jul 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>AI 编程助手进化论：从结对编程到自主编程团队 (2026)</title>
-      <link>https://709527.xyz/blog/posts/ai-编程助手进化论从结对编程到自主编程团队-2026.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/ai-编程助手进化论从结对编程到自主编程团队-2026.html</guid>
-      <description>2026 年，AI 编程 Agent 跨越了从辅助工具到自主成员的临界点。Cursor 移动端发布、Claude Code 深度推理、Codex CLI 稳定执行、多 Agent 并行协作——本文梳理 AI 编程的三次范式跃迁，分析主流工具，分享落地实践，并展望 2027 年的开发者生态。</description>
-      <category>技术</category>
-      <pubDate>Sat, 04 Jul 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>Linux inode 机制深入理解：从数据结构到实战排查</title>
-      <link>https://709527.xyz/blog/posts/linux-inode-mechanism-deep-dive.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/linux-inode-mechanism-deep-dive.html</guid>
-      <description>inode 是 Linux 文件系统的核心概念。本文从 ext4 inode 数据结构、硬链接软链接原理、文件删除机制到 inode 耗尽排查，全面解析 inode 工作原理。</description>
-      <category>技术</category>
-      <pubDate>Sat, 04 Jul 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>GitHub Actions 自动索引：我的静态博客 CI/CD 进化之路</title>
-      <link>https://709527.xyz/blog/posts/github-actions-auto-index-blog-cicd.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/github-actions-auto-index-blog-cicd.html</guid>
-      <description>68篇技术博客的索引更新从手动7文件到CI全量自动重建——聊聊全量vs增量的取舍、HTML解析技巧、RSS日期格式化踩坑，以及为什么应该让CI管索引</description>
-      <category>技术</category>
-      <pubDate>Sat, 04 Jul 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>程序员应该学会「关机」：工作焦虑如何侵蚀你的休息时间</title>
-      <link>https://709527.xyz/blog/posts/programmers-should-learn-to-unplug.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/programmers-should-learn-to-unplug.html</guid>
-      <description>不会关机的程序员不是在拼事业，而是在慢性消耗自己。聊聊为什么下班后的大脑还在 debug，以及如何真正停下来。</description>
-      <category>技术</category>
-      <pubDate>Sat, 04 Jul 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>静态博客性能优化实战：从 59MB 到精简高效</title>
-      <link>https://709527.xyz/blog/posts/static-blog-performance-optimization-59mb.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/static-blog-performance-optimization-59mb.html</guid>
-      <description>66篇文章4KB重复内联样式、4.4MB死文件、404幽灵引用——一次完整的静态博客性能优化记录</description>
-      <category>技术</category>
-      <pubDate>Fri, 03 Jul 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>Gradle 构建加速全攻略：从 5 分钟到 30 秒</title>
-      <link>https://709527.xyz/blog/posts/gradle-build-acceleration-5min-to-30sec.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/gradle-build-acceleration-5min-to-30sec.html</guid>
-      <description>系统梳理 Gradle 构建加速的完整方法论——配置调优、KAPT迁移KSP、增量编译、模块化拆分、远程缓存、CI优化，附真实项目优化案例，构建时间减少85%</description>
-      <category>技术</category>
-      <pubDate>Thu, 02 Jul 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>像规划城市一样设计系统：城市规划给软件架构的启示</title>
-      <link>https://709527.xyz/blog/posts/urban-planning-inspires-software-architecture.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/urban-planning-inspires-software-architecture.html</guid>
-      <description>城市和软件系统的本质惊人相似——功能分区映射限界上下文、交通网络映射数据流、基础设施先行映射可观测性、有机更新映射演进式架构。从城市规划的百年智慧中，找到软件架构的跨界启发</description>
-      <category>技术</category>
-      <pubDate>Thu, 02 Jul 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>软件工程师能从制造业学到什么：精益思维重塑开发流程</title>
-      <link>https://709527.xyz/blog/posts/software-engineer-learns-from-manufacturing-lean.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/software-engineer-learns-from-manufacturing-lean.html</guid>
-      <description>制造业精益思想如何重塑软件开发流程——从丰田生产系统到敏捷开发，从5S方法论到持续交付，跨行业视角下的效率革命</description>
-      <category>技术</category>
-      <pubDate>Thu, 02 Jul 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
       <title>技术人如何学习新技术</title>
       <link>https://709527.xyz/blog/posts/how-tech-people-learn-new-tech.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/how-tech-people-learn-new-tech.html</guid>
       <description>从被动输入到主动输出，80/20 法则选技术，知识体系建立，实践驱动学习，构建记忆宫殿，善用 AI 与社群</description>
-      <category>技术</category>
-      <pubDate>Wed, 01 Jul 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>技术人为什么要写作</title>
-      <link>https://709527.xyz/blog/posts/why-tech-people-should-write.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/why-tech-people-should-write.html</guid>
-      <description>写作不仅是最强的学习方式，更能帮助技术人建立个人品牌、打破信息茧房、留下成长痕迹</description>
-      <category>技术</category>
-      <pubDate>Wed, 01 Jul 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>Kotlin Coroutine 异常处理机制全面解析</title>
-      <link>https://709527.xyz/blog/posts/kotlin-coroutine-exception-handling.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/kotlin-coroutine-exception-handling.html</guid>
-      <description>全面解析 Kotlin 协程异常处理机制，涵盖 launch/async 异常传播差异、SupervisorJob、结构化并发、CoroutineExceptionHandler、Android 最佳实践等核心内容</description>
       <category>技术</category>
       <pubDate>Wed, 01 Jul 2026 00:00:00 +0800</pubDate>
     </item>
@@ -117,30 +21,6 @@
       <description>详解 Android 15 引入的媒体权限重大变更，以及从 MediaStore 迁移到 Photo Picker 的完整指南</description>
       <category>技术</category>
       <pubDate>Wed, 01 Jul 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>少即是多：信息过载时代的专注力修炼</title>
-      <link>https://709527.xyz/blog/posts/less-is-more-focus-in-information-age.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/less-is-more-focus-in-information-age.html</guid>
-      <description>信息爆炸不是问题，问题是我们在海量输入中丧失了深度思考的能力。本文分享我在信息筛选、注意力管理和深度工作方面的实践经验与反思。</description>
-      <category>技术</category>
-      <pubDate>Wed, 01 Jul 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>代码之外的竞争力：技术人最容易忽视的软技能</title>
-      <link>https://709527.xyz/blog/posts/soft-skills-tech-people-overlook.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/soft-skills-tech-people-overlook.html</guid>
-      <description>技术能力决定了你能走多快，但软技能决定了你能走多远。本文聊聊沟通、表达、影响力等容易被技术人忽视的能力。</description>
-      <category>技术</category>
-      <pubDate>Wed, 01 Jul 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>为什么我开始写博客：从潜水到发声</title>
-      <link>https://709527.xyz/blog/posts/why-i-started-blogging.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/why-i-started-blogging.html</guid>
-      <description>一个普通工程师的写作心路 — 为什么要开始写博客，写作如何改变了我的学习方式，以及我对个人品牌的理解</description>
-      <category>思考</category>
-      <pubDate>Tue, 30 Jun 2026 00:00:00 +0800</pubDate>
     </item>
     <item>
       <title>Android 16 前台服务类型全新限制：类型强制匹配与迁移指南</title>
@@ -159,12 +39,132 @@
       <pubDate>Tue, 30 Jun 2026 00:00:00 +0800</pubDate>
     </item>
     <item>
-      <title>MCP 协议深入实战：从入门到编写自定义 MCP Server</title>
-      <link>https://709527.xyz/blog/posts/mcp-server-deep-dive.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/mcp-server-deep-dive.html</guid>
-      <description>3000字完整教程，从零搭建 MCP Server，涵盖协议核心、SDK 使用、调试技巧和生产部署最佳实践</description>
+      <title>AI 代码编辑器深度横评：Cursor vs Windsurf vs Copilot</title>
+      <link>https://709527.xyz/blog/posts/ai-code-editor-review-cursor-windsurf-copilot.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/ai-code-editor-review-cursor-windsurf-copilot.html</guid>
+      <description>三大主流 AI 代码编辑器全方位对比</description>
+      <category>技术</category>
+      <pubDate>Sun, 28 Jun 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
+      <title>Git Worktree 高效多分支开发指南</title>
+      <link>https://709527.xyz/blog/posts/git-worktree-multi-branch-guide.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/git-worktree-multi-branch-guide.html</guid>
+      <description>Git Worktree 让你同时检出多个分支，切换零成本，告别 stash 和冲突的烦恼。本文详解 worktree 的使用场景和最佳实践。</description>
+      <category>技术</category>
+      <pubDate>Sun, 28 Jun 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
+      <title>Android Hilt 依赖注入最佳实践：从入门到架构</title>
+      <link>https://709527.xyz/blog/posts/android-hilt-dependency-injection.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/android-hilt-dependency-injection.html</guid>
+      <description>Android Hilt 依赖注入完整指南：核心注解、ViewModel 注入、多模块架构、作用域管理、第三方库集成与测试最佳实践</description>
+      <category>Android</category>
+      <pubDate>Sat, 27 Jun 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
+      <title>Android 16 后台任务新限制：开发者迁移指南</title>
+      <link>https://709527.xyz/blog/posts/android-16-background-tasks.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/android-16-background-tasks.html</guid>
+      <description>Android 16 后台任务新限制完整解读：JobScheduler 强化、前台服务严格限制、WorkManager 迁移策略与兼容性适配指南</description>
+      <category>Android</category>
+      <pubDate>Sat, 27 Jun 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
+      <title>GitHub Actions 高级工作流：CI/CD 最佳实践</title>
+      <link>https://709527.xyz/blog/posts/github-actions-advanced.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/github-actions-advanced.html</guid>
+      <description>GitHub Actions 高级工作流实战：矩阵构建、可复用工作流、自定义 Action、OIDC 集成、安全审计与性能优化完整指南</description>
+      <category>DevOps</category>
+      <pubDate>Sat, 27 Jun 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
+      <title>CSS View Transitions API 实战：页面过渡动画新范式</title>
+      <link>https://709527.xyz/blog/posts/css-view-transitions.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/css-view-transitions.html</guid>
+      <description>CSS View Transitions API 实战：从 document.startViewTransition 到跨页面导航过渡、SPA 集成、列表动画完整指南</description>
+      <category>前端</category>
+      <pubDate>Sat, 27 Jun 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
+      <title>Go 并发模式：Channel 与 Context</title>
+      <link>https://709527.xyz/blog/posts/go-concurrency-patterns.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/go-concurrency-patterns.html</guid>
+      <description>Go 并发模式深度解析：Goroutine 与 Channel 实战、GMP 调度模型、Context 包详解、Fan-Out/Fan-In 模式、并发测试最佳实践</description>
+      <category>开发</category>
+      <pubDate>Sat, 27 Jun 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
+      <title>Android 16 通知系统新 API 详解</title>
+      <link>https://709527.xyz/blog/posts/android-16-notifications.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/android-16-notifications.html</guid>
+      <description>Android 16 通知系统新 API 详解：Live Updates、Rich Ongoing、Bubble API 增强、通知优先级改革与迁移指南</description>
+      <category>Android</category>
+      <pubDate>Sat, 27 Jun 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
+      <title>HTTPS 与 TLS 1.3 深度解析</title>
+      <link>https://709527.xyz/blog/posts/https-tls13-deep-dive.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/https-tls13-deep-dive.html</guid>
+      <description>HTTPS 与 TLS 1.3 深度解析：握手流程、ECDHE 密钥交换、证书体系、性能优化与 Nginx 配置最佳实践</description>
+      <category>安全</category>
+      <pubDate>Sat, 27 Jun 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
+      <title>Android Gradle 迁移到 KTS 完整指南：从 Groovy 到 Kotlin DSL</title>
+      <link>https://709527.xyz/blog/posts/android-gradle-kts-migration.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/android-gradle-kts-migration.html</guid>
+      <description>Android Gradle 从 Groovy 迁移到 Kotlin DSL (KTS) 完整指南 - 语法对比、迁移步骤、踩坑记录与最佳实践</description>
+      <category>Android</category>
+      <pubDate>Wed, 24 Jun 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
+      <title>Android 性能优化完整实战：从启动到渲染</title>
+      <link>https://709527.xyz/blog/posts/android-performance-optimization.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/android-performance-optimization.html</guid>
+      <description>Android 性能优化完整实战指南 - 从启动优化、内存管理到渲染调优，涵盖 Baseline Profiles、R8、App Startup、LeakCanary 等工具和最佳实践</description>
+      <category>Android</category>
+      <pubDate>Mon, 22 Jun 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
+      <title>Jetpack Compose Navigation 进阶指南：从路由设计到深层链接</title>
+      <link>https://709527.xyz/blog/posts/compose-navigation-guide.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/compose-navigation-guide.html</guid>
+      <description>Jetpack Compose Navigation 进阶指南 - 路由设计、参数传递、深层链接、类型安全导航、动画过渡等实战技巧</description>
+      <category>Android</category>
+      <pubDate>Mon, 22 Jun 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
+      <title>Android 16 新特性详解：开发者需要知道的 8 件事</title>
+      <link>https://709527.xyz/blog/posts/android-16-features.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/android-16-features.html</guid>
+      <description>Android 16 新特性详解 - Live Updates、大屏强制适配、AICore 增强、APV 编码支持等开发者必知内容</description>
+      <category>Android</category>
+      <pubDate>Fri, 19 Jun 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
+      <title>Android 应用签名与安全加固完整指南</title>
+      <link>https://709527.xyz/blog/posts/android-app-security-hardening.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/android-app-security-hardening.html</guid>
+      <description>Android 应用签名与安全加固完整指南 - 签名机制、加固方案、完整性校验、混淆策略等</description>
+      <category>安全</category>
+      <pubDate>Fri, 19 Jun 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
+      <title>Jetpack Compose April 2026 Update 深度解读</title>
+      <link>https://709527.xyz/blog/posts/compose-april-2026-update.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/compose-april-2026-update.html</guid>
+      <description>Jetpack Compose April 2026 Update 完整解读 — BOM 2026.04.01、Compose 1.11、共享元素过渡调试工具、触控板事件、Testing v2 默认启用、Navigation3 1.1.1 等全解析</description>
+      <category>Android</category>
+      <pubDate>Fri, 19 Jun 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
+      <title>Google I/O 2026 完整回顾：AI 重塑一切</title>
+      <link>https://709527.xyz/blog/posts/google-io-2026-recap.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/google-io-2026-recap.html</guid>
+      <description>Google I/O 2026 完整回顾 - Gemini 3.5 Flash、Android 17、Android XR、Managed Agents 等重大发布全解析</description>
       <category>AI</category>
-      <pubDate>Tue, 30 Jun 2026 00:00:00 +0800</pubDate>
+      <pubDate>Fri, 19 Jun 2026 00:00:00 +0800</pubDate>
     </item>
   </channel>
 </rss>
