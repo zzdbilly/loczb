@@ -4259,3 +4259,20 @@ pre code.hljs {
     /* Hide list view when archive active */
     .blog-list-container.hidden { display: none; }
     .pagination.hidden { display: none; }
+
+/* Focus & Collaboration - merged section styles */
+.focus-card-collab {
+  margin-top: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.tech-strip {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--color-border);
+}
