@@ -239,14 +239,14 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://709527.xyz/blog/posts/programmers-should-learn-to-unplug.html</loc>
-    <lastmod>2026-07-04</lastmod>
+    <loc>https://709527.xyz/blog/posts/kotlin-scope-functions-实战选择五个函数一个决策树.html</loc>
+    <lastmod>2026-07-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://709527.xyz/blog/posts/why-tech-people-should-write.html</loc>
-    <lastmod>2026-07-01</lastmod>
+    <loc>https://709527.xyz/blog/posts/programmers-should-learn-to-unplug.html</loc>
+    <lastmod>2026-07-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -263,6 +263,12 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://709527.xyz/blog/posts/why-i-started-blogging.html</loc>
+    <lastmod>2026-06-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://709527.xyz/blog/posts/mcp-server-deep-dive.html</loc>
     <lastmod>2026-06-30</lastmod>
     <changefreq>monthly</changefreq>
@@ -270,6 +276,12 @@
   </url>
   <url>
     <loc>https://709527.xyz/blog/posts/nginx-reverse-proxy-tuning.html</loc>
+    <lastmod>2026-06-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://709527.xyz/blog/posts/zig-language-introduction.html</loc>
     <lastmod>2026-06-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -311,13 +323,7 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://709527.xyz/blog/posts/react-server-components.html</loc>
-    <lastmod>2026-04-26</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://709527.xyz/blog/posts/sqlite-wal-performance.html</loc>
+    <loc>https://709527.xyz/blog/posts/rust-getting-started.html</loc>
     <lastmod>2026-04-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -346,18 +352,6 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://709527.xyz/blog/posts/why-i-started-blogging.html</loc>
-    <lastmod>2026-06-30</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://709527.xyz/blog/posts/zig-language-introduction.html</loc>
-    <lastmod>2026-06-27</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
     <loc>https://709527.xyz/blog/posts/webassembly-in-practice.html</loc>
     <lastmod>2026-06-27</lastmod>
     <changefreq>monthly</changefreq>
@@ -370,7 +364,13 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://709527.xyz/blog/posts/rust-getting-started.html</loc>
+    <loc>https://709527.xyz/blog/posts/react-server-components.html</loc>
+    <lastmod>2026-04-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://709527.xyz/blog/posts/sqlite-wal-performance.html</loc>
     <lastmod>2026-04-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -382,26 +382,14 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://709527.xyz/blog/posts/pwa-offline-web-app.html</loc>
-    <lastmod>2026-03-22</lastmod>
+    <loc>https://709527.xyz/blog/posts/ssh-security-hardening.html</loc>
+    <lastmod>2026-03-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://709527.xyz/blog/posts/tailscale-derp-server.html</loc>
     <lastmod>2026-03-17</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://709527.xyz/blog/posts/vscode-port-forward.html</loc>
-    <lastmod>2026-03-17</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://709527.xyz/blog/posts/openclaw-guide.html</loc>
-    <lastmod>2026-03-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -423,13 +411,19 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://709527.xyz/blog/posts/software-engineer-learns-from-manufacturing-lean.html</loc>
+    <loc>https://709527.xyz/blog/posts/pwa-offline-web-app.html</loc>
+    <lastmod>2026-03-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://709527.xyz/blog/posts/ssh-security-hardening.html</loc>
-    <lastmod>2026-03-18</lastmod>
+    <loc>https://709527.xyz/blog/posts/openclaw-guide.html</loc>
+    <lastmod>2026-03-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://709527.xyz/blog/posts/software-engineer-learns-from-manufacturing-lean.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -445,6 +439,18 @@
   </url>
   <url>
     <loc>https://709527.xyz/blog/posts/vps-选购与使用指南五个常见场景的配置与避坑.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://709527.xyz/blog/posts/why-tech-people-should-write.html</loc>
+    <lastmod>2026-07-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://709527.xyz/blog/posts/vscode-port-forward.html</loc>
+    <lastmod>2026-03-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>

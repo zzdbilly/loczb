@@ -459,7 +459,7 @@ def main():
     
     # 调用 generate-index.js 重建所有索引
     import subprocess as sp
-    result = sp.run(['node', 'scripts/generate-index.js'], capture_output=True, text=True, cwd=os.path.dirname(os.path.abspath(__file__)))
+    result = sp.run(['node', 'scripts/generate-index.js'], capture_output=True, text=True, cwd=os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     if result.returncode == 0:
         for line in result.stdout.strip().split('\n'):
             print(f"  {line}")
