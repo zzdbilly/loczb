@@ -69,12 +69,12 @@
   <nav class="nav">
     <div class="nav-inner">
       <a href="../../index.html" class="nav-logo">
-        loc<span>zb</span>
+        loczb
       </a>
       <button class="nav-toggle" aria-label="打开菜单" aria-expanded="false" aria-controls="nav-links-menu">
-        <span></span>
-        <span></span>
-        <span></span>
+        
+        
+        
       </button>
       <div class="nav-overlay"></div>
       <ul class="nav-links" id="nav-links-menu">
@@ -107,19 +107,19 @@
         <h1>软件工程师能从制造业学到什么：精益思维重塑开发流程</h1>
         
         <div class="post-meta">
-          <span>📅 2026-07-02 10:54:35</span>
-          <span>⏱️ 5 min read</span>
-          <span>👤 张小猛</span>
+          📅 2026-07-02 10:54:35
+          ⏱️ 5 min read
+          👤 张小猛
         </div>
         
         <div class="post-tags">
-          <span class="tag">精益</span>
-          <span class="tag">DevOps</span>
-          <span class="tag">敏捷开发</span>
-          <span class="tag">持续交付</span>
-          <span class="tag">流程优化</span>
-          <span class="tag">跨行业</span>
-          <span class="tag">思考</span>
+          精益
+          DevOps
+          敏捷开发
+          持续交付
+          流程优化
+          跨行业
+          思考
         </div>
         
         <blockquote>
@@ -144,23 +144,23 @@
 <li>工程价值：降低维护成本、提升开发效率的技术改进</li>
 </ul>
 <p>精益思维要求我们优先交付用户价值，工程价值的投入要能证明它最终会转化为用户价值。</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># 反例：花两周重构了一个用户根本不用的模块</span>
-<span class="k">class</span><span class="w"> </span><span class="nc">LegacyModule</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;没人用的模块，但代码太丑了必须重构&quot;&quot;&quot;</span>
-    <span class="k">pass</span>
+<pre><code># 反例：花两周重构了一个用户根本不用的模块
+class LegacyModule:
+    &quot;&quot;&quot;没人用的模块，但代码太丑了必须重构&quot;&quot;&quot;
+    pass
 
-<span class="c1"># 精益做法：先验证用户是否需要这个功能</span>
-<span class="c1"># 如果不需要，直接删除比重构更有价值</span>
-</code></pre></div>
+# 精益做法：先验证用户是否需要这个功能
+# 如果不需要，直接删除比重构更有价值
+</code></pre>
 
 <h3>2. 识别价值流：看见隐藏的浪费</h3>
 <p>制造业原则：梳理从原材料到成品的完整流程，找出每一个不增值的环节。</p>
 <p>软件映射：一个需求从提出到上线，到底经历了哪些步骤？哪些是真正在创造价值，哪些只是"等待"和"搬运"？</p>
 <p>让我列一个典型的价值流图：</p>
-<div class="codehilite"><pre><span></span><code>需求提出 → 需求评审 → 排期等待 → 设计 → 评审 → 开发 → 
+<pre><code>需求提出 → 需求评审 → 排期等待 → 设计 → 评审 → 开发 → 
 代码审查等待 → 代码审查 → 修改 → 合并等待 → 测试 → 
 Bug修复 → 回归测试 → 部署准备 → 部署审批 → 部署 → 验证
-</code></pre></div>
+</code></pre>
 
 <p>在这个流程中，<strong>真正创造价值的只有：设计、开发、测试</strong>。其余大量时间花在"等待"上——等评审、等审查、等审批、等部署。丰田把这些叫做"等待的浪费"（Muda of Waiting），是七大浪费之首。</p>
 <p>制造业的解法是<strong>连续流（Continuous Flow）</strong>——消除工序间的等待。软件业的解法是<strong>持续交付（Continuous Delivery）</strong>——自动化一切可以自动化的环节：</p>
@@ -180,19 +180,19 @@ Bug修复 → 回归测试 → 部署准备 → 部署审批 → 部署 → 验�
 <li>如果部署需要运维手动操作且排期，部署就是瓶颈</li>
 </ul>
 <p>精益的做法是：<strong>找到瓶颈，将所有资源倾斜到打破瓶颈上</strong>。</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># 识别瓶颈的简单指标</span>
-<span class="nt">code_review</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">average_wait_time</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">48h</span><span class="w">    </span><span class="c1"># 代码审查平均等待 2 天 ← 瓶颈！</span>
-<span class="w">  </span><span class="nt">target_wait_time</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4h</span><span class="w">      </span><span class="c1"># 目标 4 小时</span>
+<pre><code># 识别瓶颈的简单指标
+code_review:
+  average_wait_time: 48h    # 代码审查平均等待 2 天 ← 瓶颈！
+  target_wait_time: 4h      # 目标 4 小时
 
-<span class="nt">deployment</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">average_wait_time</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2h</span><span class="w">     </span><span class="c1"># 部署等待 2 小时</span>
-<span class="w">  </span><span class="nt">target_wait_time</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30m</span><span class="w">     </span><span class="c1"># 目标 30 分钟</span>
+deployment:
+  average_wait_time: 2h     # 部署等待 2 小时
+  target_wait_time: 30m     # 目标 30 分钟
 
-<span class="nt">testing</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">average_wait_time</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">24h</span><span class="w">    </span><span class="c1"># 测试等待 1 天</span>
-<span class="w">  </span><span class="nt">target_wait_time</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8h</span><span class="w">      </span><span class="c1"># 目标 8 小时</span>
-</code></pre></div>
+testing:
+  average_wait_time: 24h    # 测试等待 1 天
+  target_wait_time: 8h      # 目标 8 小时
+</code></pre>
 
 <p>当代码审查成为瓶颈时，解决方案不是让审查者加班，而是：</p>
 <ol>
@@ -211,13 +211,13 @@ Bug修复 → 回归测试 → 部署准备 → 部署审批 → 部署 → 验�
 <li>这在制造业叫"过度生产的浪费"——最严重的浪费</li>
 </ul>
 <p>拉式生产（Pull）的做法：</p>
-<div class="codehilite"><pre><span></span><code><span class="nv">WIP</span><span class="w"> </span><span class="nv">Limit</span>:<span class="w"> </span><span class="mi">3</span>（团队最多同时处理<span class="w"> </span><span class="mi">3</span><span class="w"> </span>个需求）
+<pre><code>WIP Limit: 3（团队最多同时处理 3 个需求）
 
-<span class="nv">To</span><span class="w"> </span><span class="k">Do</span>:<span class="w">     </span>[需求<span class="mi">1</span>]<span class="w"> </span>[需求<span class="mi">2</span>]<span class="w"> </span>[需求<span class="mi">3</span>]<span class="w"> </span>[需求<span class="mi">4</span>]<span class="w"> </span>[需求<span class="mi">5</span>]
-<span class="w">                         </span>↑<span class="w"> </span>只拉<span class="w"> </span><span class="mi">3</span><span class="w"> </span>个
-<span class="nv">In</span><span class="w"> </span><span class="nv">Progress</span>:<span class="w"> </span>[需求<span class="mi">6</span>]<span class="w"> </span>[需求<span class="mi">7</span>]<span class="w"> </span>[需求<span class="mi">8</span>]<span class="w">  </span>←<span class="w"> </span>满了，不能再拉
-<span class="nv">Done</span>:<span class="w">       </span>[需求<span class="mi">9</span>]<span class="w"> </span>[需求<span class="mi">10</span>]
-</code></pre></div>
+To Do:     [需求1] [需求2] [需求3] [需求4] [需求5]
+                         ↑ 只拉 3 个
+In Progress: [需求6] [需求7] [需求8]  ← 满了，不能再拉
+Done:       [需求9] [需求10]
+</code></pre>
 
 <p>当 In Progress 中的一个完成并进入 Done 后，才能从 To Do 拉入一个新的。这看起来"慢"，但实际上：</p>
 <ul>
@@ -236,16 +236,16 @@ Bug修复 → 回归测试 → 部署准备 → 部署审批 → 部署 → 验�
 <li>CI 红灯时，修复它是全团队的最高优先级</li>
 <li>代码审查中发现设计问题，宁可不合并也不要"先上线再改"</li>
 </ul>
-<div class="codehilite"><pre><span></span><code><span class="c1"># CI 红灯 = 安灯亮起</span>
-<span class="c1"># 全团队停下来修，而不是&quot;先忽略继续推&quot;</span>
+<pre><code># CI 红灯 = 安灯亮起
+# 全团队停下来修，而不是&quot;先忽略继续推&quot;
 
-$<span class="w"> </span>pnpm<span class="w"> </span><span class="nb">test</span>
-FAIL<span class="w"> </span>src/payment.test.ts
-<span class="w">  </span>●<span class="w"> </span>Payment<span class="w"> </span>&gt;<span class="w"> </span>should<span class="w"> </span>reject<span class="w"> </span>invalid<span class="w"> </span>card<span class="w"> </span>number
+$ pnpm test
+FAIL src/payment.test.ts
+  ● Payment &gt; should reject invalid card number
 
-<span class="c1"># ❌ 反模式：发个 JIRA ticket 继续推</span>
-<span class="c1"># ✅ 精益做法：修好了再继续</span>
-</code></pre></div>
+# ❌ 反模式：发个 JIRA ticket 继续推
+# ✅ 精益做法：修好了再继续
+</code></pre>
 
 <hr />
 <h2>制造业工具箱：软件人可以直接用的方法</h2>
@@ -290,26 +290,26 @@ FAIL<span class="w"> </span>src/payment.test.ts
 <p><strong>一个整洁的代码库就像一个整洁的车间——找东西更快，出错更少，效率更高。</strong></p>
 <h3>PDCA 循环</h3>
 <p>Plan-Do-Check-Act，戴明环，精益改善的基本节奏：</p>
-<div class="codehilite"><pre><span></span><code><span class="w">     </span>┌──────────┐
-<span class="w">     </span>│<span class="w">   </span><span class="nv">Plan</span><span class="w">   </span>│<span class="w">  </span>制定改进计划
-<span class="w">     </span>│<span class="w">   </span>计划<span class="w">    </span>│
-<span class="w">     </span>└────┬─────┘
-<span class="w">          </span>│
-<span class="w">     </span>┌────▼─────┐
-<span class="w">     </span>│<span class="w">    </span><span class="k">Do</span><span class="w">    </span>│<span class="w">  </span>小范围试运行
-<span class="w">     </span>│<span class="w">   </span>执行<span class="w">    </span>│
-<span class="w">     </span>└────┬─────┘
-<span class="w">          </span>│
-<span class="w">     </span>┌────▼─────┐
-<span class="w">     </span>│<span class="w">  </span><span class="nv">Check</span><span class="w">   </span>│<span class="w">  </span>检查结果
-<span class="w">     </span>│<span class="w">   </span>检查<span class="w">    </span>│
-<span class="w">     </span>└────┬─────┘
-<span class="w">          </span>│
-<span class="w">     </span>┌────▼─────┐
-<span class="w">     </span>│<span class="w">   </span><span class="nv">Act</span><span class="w">    </span>│<span class="w">  </span>标准化或调整
-<span class="w">     </span>│<span class="w">   </span>处理<span class="w">    </span>│
-<span class="w">     </span>└──────────┘
-</code></pre></div>
+<pre><code>     ┌──────────┐
+     │   Plan   │  制定改进计划
+     │   计划    │
+     └────┬─────┘
+          │
+     ┌────▼─────┐
+     │    Do    │  小范围试运行
+     │   执行    │
+     └────┬─────┘
+          │
+     ┌────▼─────┐
+     │  Check   │  检查结果
+     │   检查    │
+     └────┬─────┘
+          │
+     ┌────▼─────┐
+     │   Act    │  标准化或调整
+     │   处理    │
+     └──────────┘
+</code></pre>
 
 <p>软件中的实例：</p>
 <ol>
@@ -321,7 +321,7 @@ FAIL<span class="w"> </span>src/payment.test.ts
 <p>这个循环和敏捷的 Sprint 回顾本质相同，但 PDCA 更强调<strong>小步试错</strong>——每次只改一个变量，验证效果后再决定是否推广。</p>
 <h3>根因分析：5 个为什么</h3>
 <p>丰田的经典方法：连续问 5 个"为什么"，找到问题的根本原因。</p>
-<div class="codehilite"><pre><span></span><code>问题：线上支付接口超时
+<pre><code>问题：线上支付接口超时
 
 为什么？→ 数据库查询太慢
 为什么？→ 缺少索引，全表扫描
@@ -331,7 +331,7 @@ FAIL<span class="w"> </span>src/payment.test.ts
 
 根因：缺乏标准化上线流程
 对策：建立上线检查清单，CI 中加入迁移脚本验证
-</code></pre></div>
+</code></pre>
 
 <p>注意最后的问题不是"谁忘了加索引"（这是找人背锅），而是"为什么系统允许漏加索引"（这是找流程漏洞）。<strong>精益思维关注改进系统，而非指责个人。</strong></p>
 <hr />
@@ -357,13 +357,13 @@ FAIL<span class="w"> </span>src/payment.test.ts
 <li>线上 Bug 平均 5 天才修复</li>
 </ul>
 <h3>诊断：价值流分析</h3>
-<div class="codehilite"><pre><span></span><code>需求 → 排期(3天) → 设计(2天) → 等审查(3天) → 审查(1天) → 
+<pre><code>需求 → 排期(3天) → 设计(2天) → 等审查(3天) → 审查(1天) → 
 修改(1天) → 等测试(2天) → 测试(1天) → 等部署(4天) → 
 部署(0.5天) → 验证(0.5天)
 
 总周期：18 天，其中创造价值的只有 5 天
 等待时间：13 天（72%！）
-</code></pre></div>
+</code></pre>
 
 <h3>改善措施</h3>
 <p><strong>第一轮（Week 1-2）：消除明显浪费</strong></p>
@@ -385,14 +385,14 @@ FAIL<span class="w"> </span>src/payment.test.ts
 <li>建立 CI 红灯"安灯"规则：红灯时全团队最高优先级修复</li>
 </ol>
 <h3>结果</h3>
-<div class="codehilite"><pre><span></span><code>改善前：                        改善后：
+<pre><code>改善前：                        改善后：
 总周期：18 天                   总周期：6 天
 等待时间：13 天（72%）           等待时间：2 天（33%）
 Sprint 完成率：60%              Sprint 完成率：90%
 代码审查等待：3 天              代码审查等待：4 小时
 部署频率：每周 1 次             部署频率：每天 2-3 次
 Bug 修复时间：5 天              Bug 修复时间：1 天
-</code></pre></div>
+</code></pre>
 
 <p>不是靠加班，不是靠加人，而是<strong>消除了浪费、优化了流程</strong>。这就是精益的力量。</p>
 <hr />
@@ -465,7 +465,7 @@ Bug 修复时间：5 天              Bug 修复时间：1 天
       <hr style="border: none; border-top: 1px solid var(--color-border); margin: var(--space-3xl) 0;">
       
       <div class="blog-topics" style="margin-bottom: var(--space-xl);">
-        <span class="topic-label">读完之后：</span>
+        读完之后：
         <a href="../index.html" class="topic-tag">返回博客列表</a>
       </div>
     </div>
@@ -544,7 +544,7 @@ Bug 修复时间：5 天              Bug 修复时间：1 天
   <div class="toc-drawer-overlay" id="tocDrawerOverlay"></div>
   <div class="toc-drawer" id="tocDrawer">
     <div class="toc-drawer-header">
-      <span class="toc-drawer-title">目录</span>
+      目录
       <button class="toc-drawer-close" id="tocDrawerClose" aria-label="关闭目录">&times;</button>
     </div>
     <div id="tocDrawerContent" class="post-toc-list"></div>

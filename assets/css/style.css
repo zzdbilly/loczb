@@ -4128,46 +4128,12 @@ th, td {
 .hljs-emphasis { font-style: italic; }
 .hljs-strong { font-weight: 700; }
 
-/* Pygments codehilite 兼容 */
-.codehilite .c1, .codehilite .cm, .codehilite .c { color: #6b7280; font-style: italic; }
-.codehilite .k, .codehilite .kd, .codehilite .kn, .codehilite .kt { color: #c084fc; }
-.codehilite .s, .codehilite .s1, .codehilite .s2 { color: #86efac; }
-.codehilite .n { color: #e4e4e7; }
-.codehilite .nf { color: #93c5fd; }
-.codehilite .nc { color: #60a5fa; }
-.codehilite .mi, .codehilite .mf { color: #fbbf24; }
-.codehilite .p { color: #e4e4e7; }
-.codehilite .w { color: #6b7280; }
-.codehilite .o { color: #c084fc; }
-.codehilite .cp { color: #6b7280; font-style: italic; }
-
 /* 代码块容器 */
 pre code.hljs {
   display: block;
   overflow-x: auto;
   padding: 0;
   background: transparent;
-}
-
-.codehilite pre {
-  background: var(--color-bg-tertiary);
-  padding: 1.2rem 1.2rem 1.2rem 1.5rem;
-  border-radius: 8px;
-  overflow-x: auto;
-  margin: 0;
-  font-size: 0.9rem;
-  white-space: pre;
-  line-height: 1.5;
-  font-family: var(--font-mono);
-  border: 1px solid var(--color-border);
-}
-[data-theme="dark"] .codehilite pre {
-  background: #161619;
-  border-color: #3f3f46;
-}
-[data-theme="light"] .codehilite pre {
-  background: #1e1e2e;
-  border-color: #45475a;
 }
 
 /* About page - fun facts list */

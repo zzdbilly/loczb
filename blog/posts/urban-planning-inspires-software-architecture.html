@@ -69,12 +69,12 @@
   <nav class="nav">
     <div class="nav-inner">
       <a href="../../index.html" class="nav-logo">
-        loc<span>zb</span>
+        loczb
       </a>
       <button class="nav-toggle" aria-label="打开菜单" aria-expanded="false" aria-controls="nav-links-menu">
-        <span></span>
-        <span></span>
-        <span></span>
+        
+        
+        
       </button>
       <div class="nav-overlay"></div>
       <ul class="nav-links" id="nav-links-menu">
@@ -107,19 +107,19 @@
         <h1>像规划城市一样设计系统：城市规划给软件架构的启示</h1>
         
         <div class="post-meta">
-          <span>📅 2026-07-02 11:05:59</span>
-          <span>⏱️ 5 min read</span>
-          <span>👤 张小猛</span>
+          📅 2026-07-02 11:05:59
+          ⏱️ 5 min read
+          👤 张小猛
         </div>
         
         <div class="post-tags">
-          <span class="tag">架构设计</span>
-          <span class="tag">领域驱动设计</span>
-          <span class="tag">微服务</span>
-          <span class="tag">演进式架构</span>
-          <span class="tag">韧性</span>
-          <span class="tag">跨行业</span>
-          <span class="tag">思考</span>
+          架构设计
+          领域驱动设计
+          微服务
+          演进式架构
+          韧性
+          跨行业
+          思考
         </div>
         
         <blockquote>
@@ -184,45 +184,45 @@
 <h3>软件的映射</h3>
 <p>这不就是<strong>限界上下文（Bounded Context）</strong>吗？</p>
 <p>一个没有"分区"的软件系统：</p>
-<div class="codehilite"><pre><span></span><code><span class="c1">// 所有东西搅在一起——就像中世纪的城市</span>
-<span class="kd">class</span> <span class="nc">OrderService</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">createOrder</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="c1">// 订单逻辑</span>
-<span class="w">        </span><span class="c1">// 库存扣减逻辑</span>
-<span class="w">        </span><span class="c1">// 支付逻辑</span>
-<span class="w">        </span><span class="c1">// 物流逻辑</span>
-<span class="w">        </span><span class="c1">// 通知逻辑</span>
-<span class="w">        </span><span class="c1">// 用户积分逻辑</span>
-<span class="w">        </span><span class="c1">// 优惠券核销逻辑</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div>
+<pre><code>// 所有东西搅在一起——就像中世纪的城市
+class OrderService {
+    void createOrder() {
+        // 订单逻辑
+        // 库存扣减逻辑
+        // 支付逻辑
+        // 物流逻辑
+        // 通知逻辑
+        // 用户积分逻辑
+        // 优惠券核销逻辑
+    }
+}
+</code></pre>
 
 <p>一个"分区"良好的系统：</p>
-<div class="codehilite"><pre><span></span><code><span class="c1">// 订单上下文——只管订单</span>
-<span class="kd">class</span> <span class="nc">OrderService</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">createOrder</span><span class="p">(</span><span class="n">OrderRequest</span><span class="w"> </span><span class="n">req</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">Order</span><span class="w"> </span><span class="n">order</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">orderRepo</span><span class="p">.</span><span class="na">save</span><span class="p">(</span><span class="n">req</span><span class="p">.</span><span class="na">toOrder</span><span class="p">());</span>
-<span class="w">        </span><span class="n">eventBus</span><span class="p">.</span><span class="na">publish</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">OrderCreatedEvent</span><span class="p">(</span><span class="n">order</span><span class="p">.</span><span class="na">getId</span><span class="p">()));</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="p">}</span>
+<pre><code>// 订单上下文——只管订单
+class OrderService {
+    void createOrder(OrderRequest req) {
+        Order order = orderRepo.save(req.toOrder());
+        eventBus.publish(new OrderCreatedEvent(order.getId()));
+    }
+}
 
-<span class="c1">// 库存上下文——只管库存</span>
-<span class="kd">class</span> <span class="nc">InventoryService</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="nd">@EventHandler</span>
-<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">on</span><span class="p">(</span><span class="n">OrderCreatedEvent</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">inventoryRepo</span><span class="p">.</span><span class="na">deduct</span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="na">getOrderId</span><span class="p">(),</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="na">getItems</span><span class="p">());</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="p">}</span>
+// 库存上下文——只管库存
+class InventoryService {
+    @EventHandler
+    void on(OrderCreatedEvent e) {
+        inventoryRepo.deduct(e.getOrderId(), e.getItems());
+    }
+}
 
-<span class="c1">// 支付上下文——只管支付</span>
-<span class="kd">class</span> <span class="nc">PaymentService</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="nd">@EventHandler</span>
-<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">on</span><span class="p">(</span><span class="n">OrderCreatedEvent</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">paymentGateway</span><span class="p">.</span><span class="na">charge</span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="na">getOrderId</span><span class="p">(),</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="na">getAmount</span><span class="p">());</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div>
+// 支付上下文——只管支付
+class PaymentService {
+    @EventHandler
+    void on(OrderCreatedEvent e) {
+        paymentGateway.charge(e.getOrderId(), e.getAmount());
+    }
+}
+</code></pre>
 
 <p><strong>分区原则</strong>：</p>
 <ol>
@@ -234,7 +234,7 @@
 <p>城市规划中有一个重要教训：<strong>过度分区和分区不足一样糟糕</strong>。</p>
 <p>巴西利亚是过度分区的典型——居住区、商业区、行政区严格分离，结果居民要开车穿越大半个城市才能买一瓶牛奶。城市失去了"混合活力"。</p>
 <p>软件中的"巴西利亚"：</p>
-<div class="codehilite"><pre><span></span><code>过度拆分的微服务：
+<pre><code>过度拆分的微服务：
 用户姓名查询 → 调用用户服务
 用户地址查询 → 调用地址服务  
 用户偏好查询 → 调用偏好服务
@@ -242,7 +242,7 @@
 
 一个简单的用户资料页要调 5 个服务
 延迟 = max(5 个服务) + 序列化 × 5 + 网络开销 × 5
-</code></pre></div>
+</code></pre>
 
 <p><strong>好的分区是高内聚低耦合的——相关的东西放在一起，不相关的东西隔离开。</strong> 不是拆得越细越好，而是每块内部功能完整，对外依赖最少。</p>
 <hr />
@@ -253,22 +253,22 @@
 <p>巴黎的思路不同：<strong>多中心、放射 + 环形混合</strong>。拉德芳斯是商务中心，拉丁区是文化中心，各有侧重，不必凡事都去"市中心"。</p>
 <h3>软件的映射</h3>
 <p><strong>北京环路 = 单体架构的中心数据库</strong>：</p>
-<div class="codehilite"><pre><span></span><code>所有服务 → 一个大数据库
+<pre><code>所有服务 → 一个大数据库
 
   用户服务 ─┐
   订单服务 ─┤
   支付服务 ─┼──→ [超级大数据库] ← 瓶颈！
   物流服务 ─┤
   报表服务 ─┘
-</code></pre></div>
+</code></pre>
 
 <p>当所有流量都汇聚到一个数据库时，它就是"三环"——一旦堵了，全城瘫痪。</p>
 <p><strong>巴黎多中心 = 每个限界上下文有自己的数据存储</strong>：</p>
-<div class="codehilite"><pre><span></span><code>用户服务 → [用户库]      订单服务 → [订单库]
+<pre><code>用户服务 → [用户库]      订单服务 → [订单库]
 支付服务 → [支付库]      物流服务 → [物流库]
 
 服务之间通过事件/API通信，而非共享数据库
-</code></pre></div>
+</code></pre>
 
 <h3>道路等级与数据管道</h3>
 <p>城市规划中，道路有明确等级：</p>
@@ -304,43 +304,43 @@
 </tbody>
 </table>
 <p>一个常见的架构错误：<strong>用高速公路送外卖</strong>。</p>
-<div class="codehilite"><pre><span></span><code><span class="p">#</span><span class="w"> </span><span class="err">两个同进程内的模块，却用</span><span class="w"> </span><span class="n">Kafka</span><span class="w"> </span><span class="err">通信</span>
-<span class="k">Module</span><span class="w"> </span><span class="nn">A</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="n">Kafka</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="k">Module</span><span class="w"> </span><span class="nn">B</span>
+<pre><code># 两个同进程内的模块，却用 Kafka 通信
+Module A → Kafka → Module B
 
-<span class="p">#</span><span class="w"> </span><span class="err">等同于：出门倒垃圾，先上高速公路，再下来</span>
-<span class="p">#</span><span class="w"> </span><span class="err">开销：序列化</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="err">网络传输</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Broker</span><span class="w"> </span><span class="err">中转</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="err">反序列化</span>
-<span class="p">#</span><span class="w"> </span><span class="err">正确做法：直接方法调用</span>
-</code></pre></div>
+# 等同于：出门倒垃圾，先上高速公路，再下来
+# 开销：序列化 + 网络传输 + Broker 中转 + 反序列化
+# 正确做法：直接方法调用
+</code></pre>
 
 <p>反过来，<strong>用支路跑长途货运</strong>也有问题：</p>
-<div class="codehilite"><pre><span></span><code><span class="gh">#</span> 两个独立部署的服务，通过共享数据库表&quot;通信&quot;
+<pre><code># 两个独立部署的服务，通过共享数据库表&quot;通信&quot;
 Service A 写入 shared_table，Service B 轮询读取
 
-<span class="gh">#</span> 等同于：用乡村小路跑集装箱卡车
-<span class="gh">#</span> 问题：耦合、性能差、无法独立部署
-</code></pre></div>
+# 等同于：用乡村小路跑集装箱卡车
+# 问题：耦合、性能差、无法独立部署
+</code></pre>
 
 <h3>交通疏导：限流与熔断</h3>
 <p>城市交通管理有"限号"和"单行道"，软件有<strong>限流（Rate Limiting）和熔断（Circuit Breaker）</strong>：</p>
-<div class="codehilite"><pre><span></span><code># 城市限号 → 限流
+<pre><code># 城市限号 → 限流
 限号: 每天只允许尾号 1/3/5/9 的车上路
 限流: 每秒只允许 1000 个请求通过
 
 # 交通管制 → 熔断
 前方事故 → 封路 → 车辆绕行
 下游服务故障 → 熔断 → 请求走降级路径
-</code></pre></div>
+</code></pre>
 
-<div class="codehilite"><pre><span></span><code><span class="c1">// Resilience4j 熔断器——就像交通管制</span>
-<span class="n">CircuitBreaker</span><span class="w"> </span><span class="n">breaker</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CircuitBreaker</span><span class="p">.</span><span class="na">ofDefaults</span><span class="p">(</span><span class="s">&quot;paymentService&quot;</span><span class="p">);</span>
-<span class="n">Supplier</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span><span class="w"> </span><span class="n">supplier</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CircuitBreaker</span><span class="p">.</span><span class="na">decorateSupplier</span><span class="p">(</span>
-<span class="w">    </span><span class="n">breaker</span><span class="p">,</span><span class="w"> </span>
-<span class="w">    </span><span class="p">()</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">paymentService</span><span class="p">.</span><span class="na">charge</span><span class="p">(</span><span class="n">request</span><span class="p">)</span><span class="w">  </span><span class="c1">// 正常路线</span>
-<span class="p">);</span>
-<span class="n">String</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Try</span><span class="p">.</span><span class="na">ofSupplier</span><span class="p">(</span><span class="n">supplier</span><span class="p">)</span>
-<span class="w">    </span><span class="p">.</span><span class="na">recover</span><span class="p">(</span><span class="n">throwable</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">fallbackCharge</span><span class="p">(</span><span class="n">request</span><span class="p">))</span><span class="w">  </span><span class="c1">// 绕行路线</span>
-<span class="w">    </span><span class="p">.</span><span class="na">get</span><span class="p">();</span>
-</code></pre></div>
+<pre><code>// Resilience4j 熔断器——就像交通管制
+CircuitBreaker breaker = CircuitBreaker.ofDefaults(&quot;paymentService&quot;);
+Supplier&lt;String&gt; supplier = CircuitBreaker.decorateSupplier(
+    breaker, 
+    () -&gt; paymentService.charge(request)  // 正常路线
+);
+String result = Try.ofSupplier(supplier)
+    .recover(throwable -&gt; fallbackCharge(request))  // 绕行路线
+    .get();
+</code></pre>
 
 <hr />
 <h2>第三课：基础设施先行——别在沙地上盖楼</h2>
@@ -355,7 +355,7 @@ Service A 写入 shared_table，Service B 轮询读取
 <li><strong>数据备份与恢复</strong>——城市的"应急避难所"</li>
 </ul>
 <p><strong>没有可观测性的服务，就像没有监控的城市——出了问题你甚至不知道。</strong></p>
-<div class="codehilite"><pre><span></span><code>反模式：
+<pre><code>反模式：
 1. 先写业务代码
 2. 上线后出 Bug
 3. &quot;加个日志吧&quot;
@@ -366,9 +366,9 @@ Service A 写入 shared_table，Service B 轮询读取
 8. 补链路追踪——但要改所有服务
 
 → 每一步都是补救，总成本远大于一开始就搭建好
-</code></pre></div>
+</code></pre>
 
-<div class="codehilite"><pre><span></span><code>精益做法：
+<pre><code>精益做法：
 1. 先搭建可观测性基座（日志 + 指标 + 链路追踪）
 2. CI/CD 流水线就位
 3. 安全基线配置好
@@ -376,25 +376,25 @@ Service A 写入 shared_table，Service B 轮询读取
 
 → 业务代码天然就在基础设施的&quot;保护&quot;下运行
 → 出问题时，三分钟定位而非三小时猜测
-</code></pre></div>
+</code></pre>
 
-<div class="codehilite"><pre><span></span><code><span class="c1"># 基础设施先行的实践：新服务脚手架</span>
-<span class="l l-Scalar l-Scalar-Plain">service-template/</span>
-<span class="l l-Scalar l-Scalar-Plain">├── Dockerfile</span><span class="w">              </span><span class="c1"># 容器化</span>
-<span class="l l-Scalar l-Scalar-Plain">├── .github/workflows/</span><span class="w">      </span><span class="c1"># CI/CD</span>
-<span class="l l-Scalar l-Scalar-Plain">├── health/</span><span class="w">                 </span><span class="c1"># 健康检查</span>
-<span class="l l-Scalar l-Scalar-Plain">│   ├── readiness.py</span>
-<span class="l l-Scalar l-Scalar-Plain">│   └── liveness.py</span>
-<span class="l l-Scalar l-Scalar-Plain">├── observability/</span><span class="w">          </span><span class="c1"># 可观测性</span>
-<span class="l l-Scalar l-Scalar-Plain">│   ├── logging.py</span><span class="w">          </span><span class="c1"># 结构化日志</span>
-<span class="l l-Scalar l-Scalar-Plain">│   ├── metrics.py</span><span class="w">          </span><span class="c1"># Prometheus 指标</span>
-<span class="l l-Scalar l-Scalar-Plain">│   └── tracing.py</span><span class="w">          </span><span class="c1"># OpenTelemetry 链路追踪</span>
-<span class="l l-Scalar l-Scalar-Plain">├── security/</span><span class="w">               </span><span class="c1"># 安全基线</span>
-<span class="l l-Scalar l-Scalar-Plain">│   ├── auth.py</span><span class="w">             </span><span class="c1"># 认证中间件</span>
-<span class="l l-Scalar l-Scalar-Plain">│   └── rate_limit.py</span><span class="w">       </span><span class="c1"># 限流</span>
-<span class="l l-Scalar l-Scalar-Plain">└── src/</span><span class="w">                    </span><span class="c1"># 业务代码——最后才写</span>
-<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">└── ...</span>
-</code></pre></div>
+<pre><code># 基础设施先行的实践：新服务脚手架
+service-template/
+├── Dockerfile              # 容器化
+├── .github/workflows/      # CI/CD
+├── health/                 # 健康检查
+│   ├── readiness.py
+│   └── liveness.py
+├── observability/          # 可观测性
+│   ├── logging.py          # 结构化日志
+│   ├── metrics.py          # Prometheus 指标
+│   └── tracing.py          # OpenTelemetry 链路追踪
+├── security/               # 安全基线
+│   ├── auth.py             # 认证中间件
+│   └── rate_limit.py       # 限流
+└── src/                    # 业务代码——最后才写
+    └── ...
+</code></pre>
 
 <h3>"临时"基础设施的诅咒</h3>
 <p>城市规划有一条铁律：<strong>临时建筑往往比永久建筑活得更久</strong>。</p>
@@ -408,7 +408,7 @@ Service A 写入 shared_table，Service B 轮询读取
 <p><strong>有机更新</strong>：保留城市肌理，逐步改造。巴黎的奥斯曼改造没有推平全部老城，而是在保留街道骨架的基础上拓宽道路、统一立面，形成了今天的美感。</p>
 <h3>软件的映射</h3>
 <p><strong>大拆大建 = 重写</strong>：</p>
-<div class="codehilite"><pre><span></span><code>&quot;现有系统太烂了，我们用最新技术栈重写！&quot;
+<pre><code>&quot;现有系统太烂了，我们用最新技术栈重写！&quot;
 
 旧系统：能跑，虽然丑
 新系统：设计完美，但——
@@ -416,11 +416,11 @@ Service A 写入 shared_table，Service B 轮询读取
   - 遗漏了旧系统的 100 个边界 case
   - 上线后用户投诉：功能还不如旧的
   - 最终两套系统并行运行（更糟了）
-</code></pre></div>
+</code></pre>
 
 <p>这就是经典的<strong>第二系统综合症（Second-System Effect）</strong>——Fred Brooks 在《人月神话》中警告过的：第二个系统往往过度设计，因为设计者试图把"第一版所有没做的东西"全塞进去。</p>
 <p><strong>有机更新 = 演进式架构</strong>：</p>
-<div class="codehilite"><pre><span></span><code>策略：绞杀者模式（Strangler Fig Pattern）
+<pre><code>策略：绞杀者模式（Strangler Fig Pattern）
 
 旧系统继续运行，新系统逐步替代：
 1. 在旧系统前加一层路由（Facade）
@@ -428,9 +428,9 @@ Service A 写入 shared_table，Service B 轮询读取
 3. 旧功能逐个迁移到新系统
 4. 每迁移一个，旧系统就小一分
 5. 最终旧系统被&quot;绞杀&quot;——自然退役
-</code></pre></div>
+</code></pre>
 
-<div class="codehilite"><pre><span></span><code>  请求 → [路由层] → 新服务（优先）
+<pre><code>  请求 → [路由层] → 新服务（优先）
                 ↘ 旧系统（降级）
 
 迁移进度：
@@ -438,7 +438,7 @@ Week 1:  5% 请求走新系统
 Week 4:  30% 请求走新系统
 Week 8:  70% 请求走新系统
 Week 12: 100% 请求走新系统 → 旧系统下线
-</code></pre></div>
+</code></pre>
 
 <p>绞杀者模式的名称来自热带雨林中的绞杀榕——它从宿主树的枝干上开始生长，逐渐向下扎根、向上扩展，最终完全包裹并替代宿主。这个过程是渐进的、安全的，宿主树在每一步都还是活的。</p>
 <h3>演进式架构的核心原则</h3>
@@ -448,17 +448,17 @@ Week 12: 100% 请求走新系统 → 旧系统下线
 <li><strong>双跑验证</strong>：新旧系统同时处理相同请求，对比结果确保一致</li>
 <li><strong>特性开关</strong>：用开关控制新旧路径，出问题秒级回滚</li>
 </ol>
-<div class="codehilite"><pre><span></span><code><span class="c1"># 演进式迁移：特性开关控制</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">process_order</span><span class="p">(</span><span class="n">order</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">feature_flags</span><span class="o">.</span><span class="n">is_enabled</span><span class="p">(</span><span class="s2">&quot;new_order_service&quot;</span><span class="p">):</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">new_order_service</span><span class="o">.</span><span class="n">process</span><span class="p">(</span><span class="n">order</span><span class="p">)</span>
-        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;New service failed: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">legacy_order_service</span><span class="o">.</span><span class="n">process</span><span class="p">(</span><span class="n">order</span><span class="p">)</span>  <span class="c1"># 降级</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">legacy_order_service</span><span class="o">.</span><span class="n">process</span><span class="p">(</span><span class="n">order</span><span class="p">)</span>
-</code></pre></div>
+<pre><code># 演进式迁移：特性开关控制
+def process_order(order):
+    if feature_flags.is_enabled(&quot;new_order_service&quot;):
+        try:
+            return new_order_service.process(order)
+        except Exception as e:
+            log.error(f&quot;New service failed: {e}&quot;)
+            return legacy_order_service.process(order)  # 降级
+    else:
+        return legacy_order_service.process(order)
+</code></pre>
 
 <hr />
 <h2>第五课：公共空间——API 是城市的广场</h2>
@@ -480,31 +480,31 @@ Week 12: 100% 请求走新系统 → 旧系统下线
 <li><strong>切割系统</strong>：紧耦合的 API 把消费者锁死在提供方的实现细节上</li>
 <li><strong>粗暴变更</strong>：今天改字段明天改路径，消费者被迫跟着改</li>
 </ul>
-<div class="codehilite"><pre><span></span><code><span class="c1"># 好的 API 设计——像好广场</span>
-<span class="nt">/api/v2/orders</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">get</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">summary</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">查询订单</span>
-<span class="w">    </span><span class="nt">parameters</span><span class="p">:</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">status</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">按状态筛选</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">page</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">分页</span>
-<span class="w">    </span><span class="nt">responses</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">200</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">content</span><span class="p">:</span>
-<span class="w">          </span><span class="nt">application/json</span><span class="p">:</span><span class="w">  </span><span class="c1"># 标准 MIME</span>
-<span class="w">        </span><span class="nt">links</span><span class="p">:</span>
-<span class="w">          </span><span class="nt">payment</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/api/v2/payments/{orderId}</span><span class="w">  </span><span class="c1"># 引导到关联资源</span>
-<span class="w">          </span><span class="nt">tracking</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/api/v2/logistics/{shipmentId}</span>
-<span class="w">    </span><span class="c1"># HATEOAS：像广场上的路标，告诉你还能去哪</span>
-</code></pre></div>
+<pre><code># 好的 API 设计——像好广场
+/api/v2/orders:
+  get:
+    summary: 查询订单
+    parameters:
+      - status: 按状态筛选
+      - page: 分页
+    responses:
+      200:
+        content:
+          application/json:  # 标准 MIME
+        links:
+          payment: /api/v2/payments/{orderId}  # 引导到关联资源
+          tracking: /api/v2/logistics/{shipmentId}
+    # HATEOAS：像广场上的路标，告诉你还能去哪
+</code></pre>
 
-<div class="codehilite"><pre><span></span><code><span class="c1">// 差的 API——像摩西的高速公路</span>
-<span class="c1">// 返回内部数据库字段，消费者被锁死在实现上</span>
-<span class="nd">@GetMapping</span><span class="p">(</span><span class="s">&quot;/internal/orders&quot;</span><span class="p">)</span>
-<span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="p">,</span><span class="w"> </span><span class="n">Object</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">getOrder</span><span class="p">(</span><span class="nd">@RequestParam</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">ord_id</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="c1">// 直接返回数据库行——字段名、类型、结构全暴露</span>
-<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">jdbcTemplate</span><span class="p">.</span><span class="na">queryForMap</span><span class="p">(</span><span class="s">&quot;SELECT * FROM t_ord WHERE id = ?&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ord_id</span><span class="p">);</span>
-<span class="p">}</span>
-</code></pre></div>
+<pre><code>// 差的 API——像摩西的高速公路
+// 返回内部数据库字段，消费者被锁死在实现上
+@GetMapping(&quot;/internal/orders&quot;)
+Map&lt;String, Object&gt; getOrder(@RequestParam String ord_id) {
+    // 直接返回数据库行——字段名、类型、结构全暴露
+    return jdbcTemplate.queryForMap(&quot;SELECT * FROM t_ord WHERE id = ?&quot;, ord_id);
+}
+</code></pre>
 
 <h3>API 的"街道眼"——可观测性</h3>
 <p>好的公共空间有自然监督（街道眼），差的公共空间是监控死角。</p>
@@ -522,12 +522,12 @@ Week 12: 100% 请求走新系统 → 旧系统下线
 <p>这个思路叫<strong>韧性（Resilience）</strong>——不是追求绝对不故障，而是故障发生时系统能承受并恢复。</p>
 <h3>软件的映射</h3>
 <p><strong>高可用不是"不会挂"，而是"挂了不影响"</strong>。</p>
-<div class="codehilite"><pre><span></span><code>非韧性架构：
+<pre><code>非韧性架构：
   单点故障 → 雪崩 → 全站挂
 
 韧性架构：
   局部故障 → 降级 → 核心功能仍可用
-</code></pre></div>
+</code></pre>
 
 <p>建筑抗震的三重策略，映射到软件：</p>
 <p><strong>1. 基础隔震（Base Isolation）= 故障隔离</strong></p>
@@ -539,39 +539,39 @@ Week 12: 100% 请求走新系统 → 旧系统下线
 </ul>
 <p><strong>2. 柔性结构（Ductile Structure）= 优雅降级</strong></p>
 <p>建筑允许梁柱在极限状态下弯曲变形但不断裂。软件中的优雅降级：</p>
-<div class="codehilite"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_product_detail</span><span class="p">(</span><span class="n">product_id</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;韧性设计：每个依赖都有降级方案&quot;&quot;&quot;</span>
+<pre><code>def get_product_detail(product_id):
+    &quot;&quot;&quot;韧性设计：每个依赖都有降级方案&quot;&quot;&quot;
 
-    <span class="c1"># 核心数据——必须成功</span>
-    <span class="n">product</span> <span class="o">=</span> <span class="n">product_repo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">product_id</span><span class="p">)</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">product</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="n">NotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Product </span><span class="si">{</span><span class="n">product_id</span><span class="si">}</span><span class="s2"> not found&quot;</span><span class="p">)</span>
+    # 核心数据——必须成功
+    product = product_repo.get(product_id)
+    if not product:
+        raise NotFoundError(f&quot;Product {product_id} not found&quot;)
 
-    <span class="c1"># 非核心：评论——挂了也能看商品</span>
-    <span class="n">reviews</span> <span class="o">=</span> <span class="n">safe_call</span><span class="p">(</span>
-        <span class="k">lambda</span><span class="p">:</span> <span class="n">review_service</span><span class="o">.</span><span class="n">get_reviews</span><span class="p">(</span><span class="n">product_id</span><span class="p">),</span>
-        <span class="n">fallback</span><span class="o">=</span><span class="p">[]</span>  <span class="c1"># 降级：返回空评论</span>
-    <span class="p">)</span>
+    # 非核心：评论——挂了也能看商品
+    reviews = safe_call(
+        lambda: review_service.get_reviews(product_id),
+        fallback=[]  # 降级：返回空评论
+    )
 
-    <span class="c1"># 非核心：推荐——挂了也不影响</span>
-    <span class="n">recommendations</span> <span class="o">=</span> <span class="n">safe_call</span><span class="p">(</span>
-        <span class="k">lambda</span><span class="p">:</span> <span class="n">recommend_service</span><span class="o">.</span><span class="n">get_similar</span><span class="p">(</span><span class="n">product_id</span><span class="p">),</span>
-        <span class="n">fallback</span><span class="o">=</span><span class="p">[]</span>  <span class="c1"># 降级：返回空推荐</span>
-    <span class="p">)</span>
+    # 非核心：推荐——挂了也不影响
+    recommendations = safe_call(
+        lambda: recommend_service.get_similar(product_id),
+        fallback=[]  # 降级：返回空推荐
+    )
 
-    <span class="c1"># 非核心：库存——挂了显示&quot;查询中&quot;</span>
-    <span class="n">stock</span> <span class="o">=</span> <span class="n">safe_call</span><span class="p">(</span>
-        <span class="k">lambda</span><span class="p">:</span> <span class="n">inventory_service</span><span class="o">.</span><span class="n">get_stock</span><span class="p">(</span><span class="n">product_id</span><span class="p">),</span>
-        <span class="n">fallback</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;unknown&quot;</span><span class="p">,</span> <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;库存查询中&quot;</span><span class="p">}</span>
-    <span class="p">)</span>
+    # 非核心：库存——挂了显示&quot;查询中&quot;
+    stock = safe_call(
+        lambda: inventory_service.get_stock(product_id),
+        fallback={&quot;status&quot;: &quot;unknown&quot;, &quot;text&quot;: &quot;库存查询中&quot;}
+    )
 
-    <span class="k">return</span> <span class="p">{</span>
-        <span class="s2">&quot;product&quot;</span><span class="p">:</span> <span class="n">product</span><span class="p">,</span>       <span class="c1"># 核心</span>
-        <span class="s2">&quot;reviews&quot;</span><span class="p">:</span> <span class="n">reviews</span><span class="p">,</span>       <span class="c1"># 非核心，降级</span>
-        <span class="s2">&quot;recommendations&quot;</span><span class="p">:</span> <span class="n">recommendations</span><span class="p">,</span>  <span class="c1"># 非核心，降级</span>
-        <span class="s2">&quot;stock&quot;</span><span class="p">:</span> <span class="n">stock</span>            <span class="c1"># 非核心，降级</span>
-    <span class="p">}</span>
-</code></pre></div>
+    return {
+        &quot;product&quot;: product,       # 核心
+        &quot;reviews&quot;: reviews,       # 非核心，降级
+        &quot;recommendations&quot;: recommendations,  # 非核心，降级
+        &quot;stock&quot;: stock            # 非核心，降级
+    }
+</code></pre>
 
 <p><strong>3. 冗余系统（Redundancy）= 多副本</strong></p>
 <p>关键建筑有备用电力、双水源、双消防通道。软件中的冗余：</p>
@@ -590,16 +590,16 @@ Week 12: 100% 请求走新系统 → 旧系统下线
 <p><strong>老代码不是债，是资产</strong>——前提是它能跑。</p>
 <p>一个运行了 5 年的系统，里面包含了无数边界 case 的处理、踩过的坑的修复、用户反馈的回应。这些信息不在文档里（文档早就过时了），而在代码本身。</p>
 <p>重写时丢失的，正是这些"城市记忆"：</p>
-<div class="codehilite"><pre><span></span><code><span class="nx">旧系统中一个看起来</span><span class="s">&quot;多余&quot;</span><span class="nx">的判断</span><span class="err">：</span>
+<pre><code>旧系统中一个看起来&quot;多余&quot;的判断：
 
-<span class="k">if</span><span class="w"> </span><span class="nx">order</span><span class="p">.</span><span class="nx">amount</span><span class="w"> </span><span class="p">&gt;</span><span class="w"> </span><span class="mi">10000</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="nx">user</span><span class="p">.</span><span class="nx">level</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">&quot;silver&quot;</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="nx">order</span><span class="p">.</span><span class="k">type</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="s">&quot;bulk&quot;</span><span class="p">:</span>
-<span class="w">    </span><span class="nx">order</span><span class="p">.</span><span class="nx">add_flag</span><span class="p">(</span><span class="s">&quot;MANUAL_REVIEW&quot;</span><span class="p">)</span>
+if order.amount &gt; 10000 and user.level == &quot;silver&quot; and order.type != &quot;bulk&quot;:
+    order.add_flag(&quot;MANUAL_REVIEW&quot;)
 
-<span class="nx">新系统重写时</span><span class="err">，</span><span class="nx">有人看了这行觉得</span><span class="s">&quot;没意义&quot;</span><span class="nx">就删了</span><span class="err">。</span>
-<span class="nx">结果</span><span class="err">：</span><span class="nx">上线后</span><span class="err">，</span><span class="nx">大额银牌用户的异常订单没人审核</span><span class="err">，</span><span class="nx">造成损失</span><span class="err">。</span>
+新系统重写时，有人看了这行觉得&quot;没意义&quot;就删了。
+结果：上线后，大额银牌用户的异常订单没人审核，造成损失。
 
-<span class="err">→</span><span class="w"> </span><span class="nx">那行代码是</span><span class="s">&quot;城市记忆&quot;</span><span class="err">：</span><span class="nx">它记录了一次事故的教训</span><span class="err">。</span>
-</code></pre></div>
+→ 那行代码是&quot;城市记忆&quot;：它记录了一次事故的教训。
+</code></pre>
 
 <p><strong>尊重老代码的态度</strong>：</p>
 <ol>
@@ -720,7 +720,7 @@ Week 12: 100% 请求走新系统 → 旧系统下线
       <hr style="border: none; border-top: 1px solid var(--color-border); margin: var(--space-3xl) 0;">
       
       <div class="blog-topics" style="margin-bottom: var(--space-xl);">
-        <span class="topic-label">读完之后：</span>
+        读完之后：
         <a href="../index.html" class="topic-tag">返回博客列表</a>
       </div>
     </div>
@@ -799,7 +799,7 @@ Week 12: 100% 请求走新系统 → 旧系统下线
   <div class="toc-drawer-overlay" id="tocDrawerOverlay"></div>
   <div class="toc-drawer" id="tocDrawer">
     <div class="toc-drawer-header">
-      <span class="toc-drawer-title">目录</span>
+      目录
       <button class="toc-drawer-close" id="tocDrawerClose" aria-label="关闭目录">&times;</button>
     </div>
     <div id="tocDrawerContent" class="post-toc-list"></div>

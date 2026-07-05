@@ -417,7 +417,7 @@ def main():
             # 如果是 markdown 文件，转换为 HTML
             if params['content_file'].endswith('.md'):
                 import markdown as md_lib
-                content_html = md_lib.markdown(content_raw, extensions=['fenced_code', 'codehilite', 'tables', 'sane_lists'])
+                content_html = md_lib.markdown(content_raw, extensions=['fenced_code', 'tables', 'sane_lists'])
                 # 移除 markdown 第一个 h1（模板已有 <h1>{{ARTICLE_TITLE}}</h1>）
                 import re as _re
                 content_html = _re.sub(r'^<h1>.*?</h1>\s*', '', content_html, count=1)

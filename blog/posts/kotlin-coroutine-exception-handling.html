@@ -69,12 +69,12 @@
   <nav class="nav">
     <div class="nav-inner">
       <a href="../../index.html" class="nav-logo">
-        loc<span>zb</span>
+        loczb
       </a>
       <button class="nav-toggle" aria-label="打开菜单" aria-expanded="false" aria-controls="nav-links-menu">
-        <span></span>
-        <span></span>
-        <span></span>
+        
+        
+        
       </button>
       <div class="nav-overlay"></div>
       <ul class="nav-links" id="nav-links-menu">
@@ -107,18 +107,18 @@
         <h1>Kotlin Coroutine 异常处理机制全面解析</h1>
         
         <div class="post-meta">
-          <span>📅 2026-07-01 17:43:07</span>
-          <span>⏱️ 25 min read</span>
-          <span>👤 张小猛</span>
+          📅 2026-07-01 17:43:07
+          ⏱️ 25 min read
+          👤 张小猛
         </div>
         
         <div class="post-tags">
-          <span class="tag">Kotlin</span>
-          <span class="tag">协程</span>
-          <span class="tag">Coroutine</span>
-          <span class="tag">异常处理</span>
-          <span class="tag">Android</span>
-          <span class="tag">Kotlin进阶</span>
+          Kotlin
+          协程
+          Coroutine
+          异常处理
+          Android
+          Kotlin进阶
         </div>
         
         <h2>引言</h2>
@@ -128,95 +128,95 @@
 <p>在传统编程中，<code>try-catch</code> 是异常处理的唯一方式。但在协程的世界里，异常处理的方式取决于你使用的是 <code>launch</code> 还是 <code>async</code>，以及协程的层次结构。</p>
 <h3>try-catch 在协程中的局限性</h3>
 <p>考虑以下代码：</p>
-<div class="codehilite"><pre><span></span><code><span class="kd">fun</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">runBlocking</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">launch</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="k">throw</span><span class="w"> </span><span class="n">RuntimeException</span><span class="p">(</span><span class="s">&quot;协程异常&quot;</span><span class="p">)</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">e</span><span class="p">:</span><span class="w"> </span><span class="n">Exception</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;捕获到异常: </span><span class="si">$</span><span class="n">e</span><span class="s">&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div>
+<pre><code>fun main() = runBlocking {
+    try {
+        launch {
+            throw RuntimeException(&quot;协程异常&quot;)
+        }
+    } catch (e: Exception) {
+        println(&quot;捕获到异常: $e&quot;)
+    }
+}
+</code></pre>
 
 <p>这段代码能捕获异常吗？<strong>不能。</strong> 抛出异常的协程在 <code>launch</code> 内部，而 <code>try-catch</code> 包裹的是 <code>launch</code> 本身（它是非阻塞的）。异常在协程体内部抛出时，<code>launch</code> 已经返回了。</p>
 <p>正确的方式是将 <code>try-catch</code> 放在协程体内部：</p>
-<div class="codehilite"><pre><span></span><code><span class="kd">fun</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">runBlocking</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="n">launch</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="k">throw</span><span class="w"> </span><span class="n">RuntimeException</span><span class="p">(</span><span class="s">&quot;协程异常&quot;</span><span class="p">)</span>
-<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">e</span><span class="p">:</span><span class="w"> </span><span class="n">Exception</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;捕获到异常: </span><span class="si">$</span><span class="n">e</span><span class="s">&quot;</span><span class="p">)</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div>
+<pre><code>fun main() = runBlocking {
+    launch {
+        try {
+            throw RuntimeException(&quot;协程异常&quot;)
+        } catch (e: Exception) {
+            println(&quot;捕获到异常: $e&quot;)
+        }
+    }
+}
+</code></pre>
 
 <p>这是最简单的异常处理方式，但在复杂场景下不够用。</p>
 <h2>Launch 与 Async 的异常传播差异</h2>
 <p>这是协程异常处理的核心知识点。<code>launch</code> 和 <code>async</code> 对异常的处理方式完全不同。</p>
 <h3>Launch：主动传播异常</h3>
 <p><code>launch</code> 创建的协程遇到未捕获异常时，会立即将异常传播给父协程，并取消父协程及其所有子协程。</p>
-<div class="codehilite"><pre><span></span><code><span class="kd">fun</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">runBlocking</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">scope</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CoroutineScope</span><span class="p">(</span><span class="n">Job</span><span class="p">())</span>
+<pre><code>fun main() = runBlocking {
+    val scope = CoroutineScope(Job())
 
-<span class="w">    </span><span class="n">scope</span><span class="p">.</span><span class="na">launch</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;子协程 1 开始&quot;</span><span class="p">)</span>
-<span class="w">        </span><span class="n">delay</span><span class="p">(</span><span class="m">100</span><span class="p">)</span>
-<span class="w">        </span><span class="k">throw</span><span class="w"> </span><span class="n">RuntimeException</span><span class="p">(</span><span class="s">&quot;子协程 1 异常&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="p">}</span>
+    scope.launch {
+        println(&quot;子协程 1 开始&quot;)
+        delay(100)
+        throw RuntimeException(&quot;子协程 1 异常&quot;)
+    }
 
-<span class="w">    </span><span class="n">scope</span><span class="p">.</span><span class="na">launch</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;子协程 2 开始&quot;</span><span class="p">)</span>
-<span class="w">        </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="n">delay</span><span class="p">(</span><span class="m">500</span><span class="p">)</span>
-<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">e</span><span class="p">:</span><span class="w"> </span><span class="n">CancellationException</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;子协程 2 被取消了&quot;</span><span class="p">)</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">    </span><span class="p">}</span>
+    scope.launch {
+        println(&quot;子协程 2 开始&quot;)
+        try {
+            delay(500)
+        } catch (e: CancellationException) {
+            println(&quot;子协程 2 被取消了&quot;)
+        }
+    }
 
-<span class="w">    </span><span class="n">delay</span><span class="p">(</span><span class="m">1000</span><span class="p">)</span>
-<span class="w">    </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;主协程结束&quot;</span><span class="p">)</span>
-<span class="p">}</span>
-<span class="c1">// 输出：</span>
-<span class="c1">// 子协程 1 开始</span>
-<span class="c1">// 子协程 2 开始</span>
-<span class="c1">// 子协程 2 被取消了</span>
-<span class="c1">// 子协程 1 异常 -&gt; 未捕获异常，程序崩溃</span>
-</code></pre></div>
+    delay(1000)
+    println(&quot;主协程结束&quot;)
+}
+// 输出：
+// 子协程 1 开始
+// 子协程 2 开始
+// 子协程 2 被取消了
+// 子协程 1 异常 -&gt; 未捕获异常，程序崩溃
+</code></pre>
 
 <p>因为两个子协程共享同一个父 Job，子协程 1 的异常会传播给父 Job，父 Job 取消自己并取消所有子协程。</p>
 <h3>Async：等待时才暴露异常</h3>
 <p><code>async</code> 将异常延迟到调用 <code>.await()</code> 时才抛出。这与 <code>Future.get()</code> 的行为类似——异常被存储起来，等待获取结果时才暴露。</p>
-<div class="codehilite"><pre><span></span><code><span class="kd">fun</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">runBlocking</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">deferred</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">async</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="k">throw</span><span class="w"> </span><span class="n">RuntimeException</span><span class="p">(</span><span class="s">&quot;async 异常&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="p">}</span>
+<pre><code>fun main() = runBlocking {
+    val deferred = async {
+        throw RuntimeException(&quot;async 异常&quot;)
+    }
 
-<span class="w">    </span><span class="n">delay</span><span class="p">(</span><span class="m">100</span><span class="p">)</span><span class="w"> </span><span class="c1">// async 已经执行完毕，异常被存储</span>
-<span class="w">    </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;这里还能执行&quot;</span><span class="p">)</span>
+    delay(100) // async 已经执行完毕，异常被存储
+    println(&quot;这里还能执行&quot;)
 
-<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">deferred</span><span class="p">.</span><span class="na">await</span><span class="p">()</span><span class="w"> </span><span class="c1">// 异常在这里抛出</span>
-<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">e</span><span class="p">:</span><span class="w"> </span><span class="n">Exception</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;在 await() 时捕获: </span><span class="si">$</span><span class="n">e</span><span class="s">&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div>
+    try {
+        deferred.await() // 异常在这里抛出
+    } catch (e: Exception) {
+        println(&quot;在 await() 时捕获: $e&quot;)
+    }
+}
+</code></pre>
 
 <p>这个特性非常关键：<strong>如果 <code>async</code> 的结果被忽略（从不调用 <code>await()</code>），异常也不会被抛出——但协程框架仍然会记录它，并在未处理时触发全局异常处理器。</strong></p>
-<div class="codehilite"><pre><span></span><code><span class="kd">fun</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">runBlocking</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">scope</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CoroutineScope</span><span class="p">(</span><span class="n">Job</span><span class="p">())</span>
+<pre><code>fun main() = runBlocking {
+    val scope = CoroutineScope(Job())
 
-<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">deferred</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">scope</span><span class="p">.</span><span class="na">async</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="k">throw</span><span class="w"> </span><span class="n">RuntimeException</span><span class="p">(</span><span class="s">&quot;被忽略的异常&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="p">}</span>
+    val deferred = scope.async {
+        throw RuntimeException(&quot;被忽略的异常&quot;)
+    }
 
-<span class="w">    </span><span class="c1">// 从不调用 deferred.await()</span>
-<span class="w">    </span><span class="n">delay</span><span class="p">(</span><span class="m">500</span><span class="p">)</span>
-<span class="w">    </span><span class="c1">// 程序退出时，异常由 CoroutineExceptionHandler 处理</span>
-<span class="p">}</span>
-</code></pre></div>
+    // 从不调用 deferred.await()
+    delay(500)
+    // 程序退出时，异常由 CoroutineExceptionHandler 处理
+}
+</code></pre>
 
 <p>这会导致异常在协程被垃圾回收时由未捕获异常处理器处理，通常意味着程序崩溃。</p>
 <h3>核心对比</h3>
@@ -254,157 +254,157 @@
 <h2>结构化并发下的异常传播</h2>
 <p>结构化并发是协程的核心设计原则：子协程中的异常会取消父协程，并级联取消所有兄弟协程。</p>
 <h3>默认行为：异常会向上取消整个作用域</h3>
-<div class="codehilite"><pre><span></span><code><span class="kd">fun</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">runBlocking</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">job</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">launch</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">launch</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="n">delay</span><span class="p">(</span><span class="m">100</span><span class="p">)</span>
-<span class="w">            </span><span class="k">throw</span><span class="w"> </span><span class="n">RuntimeException</span><span class="p">(</span><span class="s">&quot;子协程 A 异常&quot;</span><span class="p">)</span>
-<span class="w">        </span><span class="p">}</span>
+<pre><code>fun main() = runBlocking {
+    val job = launch {
+        launch {
+            delay(100)
+            throw RuntimeException(&quot;子协程 A 异常&quot;)
+        }
 
-<span class="w">        </span><span class="n">launch</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="n">delay</span><span class="p">(</span><span class="m">200</span><span class="p">)</span>
-<span class="w">            </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;子协程 B 完成&quot;</span><span class="p">)</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">    </span><span class="p">}</span>
+        launch {
+            delay(200)
+            println(&quot;子协程 B 完成&quot;)
+        }
+    }
 
-<span class="w">    </span><span class="n">job</span><span class="p">.</span><span class="na">join</span><span class="p">()</span>
-<span class="w">    </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;父协程完成&quot;</span><span class="p">)</span>
-<span class="p">}</span>
-<span class="c1">// 输出：</span>
-<span class="c1">// 子协程 A 异常 -&gt; 子协程 B 被取消</span>
-<span class="c1">// 父协程被取消</span>
-</code></pre></div>
+    job.join()
+    println(&quot;父协程完成&quot;)
+}
+// 输出：
+// 子协程 A 异常 -&gt; 子协程 B 被取消
+// 父协程被取消
+</code></pre>
 
 <p>这个模型保证了：<strong>任何一个子协程失败，整个作用域内的所有协程都停止工作。</strong> 这在很多场景下是合理的——如果一个子任务失败了，整体结果也就无意义了。</p>
 <h3>捕获父协程的异常</h3>
 <p>既然异常会传播到父协程，我们可以通过捕获父协程的异常来统一处理：</p>
-<div class="codehilite"><pre><span></span><code><span class="kd">fun</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">runBlocking</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">job</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">launch</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="n">launch</span><span class="w"> </span><span class="p">{</span>
-<span class="w">                </span><span class="n">delay</span><span class="p">(</span><span class="m">100</span><span class="p">)</span>
-<span class="w">                </span><span class="k">throw</span><span class="w"> </span><span class="n">RuntimeException</span><span class="p">(</span><span class="s">&quot;子协程异常&quot;</span><span class="p">)</span>
-<span class="w">            </span><span class="p">}</span>
-<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">e</span><span class="p">:</span><span class="w"> </span><span class="n">Exception</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="c1">// 这能捕获到吗？</span>
-<span class="w">            </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;在父协程中捕获: </span><span class="si">$</span><span class="n">e</span><span class="s">&quot;</span><span class="p">)</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div>
+<pre><code>fun main() = runBlocking {
+    val job = launch {
+        try {
+            launch {
+                delay(100)
+                throw RuntimeException(&quot;子协程异常&quot;)
+            }
+        } catch (e: Exception) {
+            // 这能捕获到吗？
+            println(&quot;在父协程中捕获: $e&quot;)
+        }
+    }
+}
+</code></pre>
 
 <p><strong>不能。</strong> 因为 <code>try-catch</code> 包裹的是 <code>launch</code> 调用本身（也是非阻塞的），而不是子协程的执行。</p>
 <p>正确的方式是在父协程体中使用 <code>try-catch</code> 包裹子协程的调用：</p>
-<div class="codehilite"><pre><span></span><code><span class="kd">fun</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">runBlocking</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="n">launch</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">launch</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
-<span class="w">                </span><span class="n">delay</span><span class="p">(</span><span class="m">100</span><span class="p">)</span>
-<span class="w">                </span><span class="k">throw</span><span class="w"> </span><span class="n">RuntimeException</span><span class="p">(</span><span class="s">&quot;子协程异常&quot;</span><span class="p">)</span>
-<span class="w">            </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">e</span><span class="p">:</span><span class="w"> </span><span class="n">Exception</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">                </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;在子协程中捕获: </span><span class="si">$</span><span class="n">e</span><span class="s">&quot;</span><span class="p">)</span>
-<span class="w">            </span><span class="p">}</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div>
+<pre><code>fun main() = runBlocking {
+    launch {
+        launch {
+            try {
+                delay(100)
+                throw RuntimeException(&quot;子协程异常&quot;)
+            } catch (e: Exception) {
+                println(&quot;在子协程中捕获: $e&quot;)
+            }
+        }
+    }
+}
+</code></pre>
 
 <p>或者，使用 <code>SupervisorJob</code> 阻止异常向上传播。</p>
 <h2>SupervisorJob：隔离异常传播</h2>
 <p><code>SupervisorJob</code> 是解决子协程异常影响兄弟协程的关键工具。</p>
 <h3>基本用法</h3>
-<div class="codehilite"><pre><span></span><code><span class="kd">fun</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">runBlocking</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">scope</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CoroutineScope</span><span class="p">(</span><span class="n">SupervisorJob</span><span class="p">())</span>
+<pre><code>fun main() = runBlocking {
+    val scope = CoroutineScope(SupervisorJob())
 
-<span class="w">    </span><span class="n">scope</span><span class="p">.</span><span class="na">launch</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">delay</span><span class="p">(</span><span class="m">100</span><span class="p">)</span>
-<span class="w">        </span><span class="k">throw</span><span class="w"> </span><span class="n">RuntimeException</span><span class="p">(</span><span class="s">&quot;子协程 1 异常&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="p">}</span>
+    scope.launch {
+        delay(100)
+        throw RuntimeException(&quot;子协程 1 异常&quot;)
+    }
 
-<span class="w">    </span><span class="n">scope</span><span class="p">.</span><span class="na">launch</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">delay</span><span class="p">(</span><span class="m">200</span><span class="p">)</span>
-<span class="w">        </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;子协程 2 完成&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="p">}</span>
+    scope.launch {
+        delay(200)
+        println(&quot;子协程 2 完成&quot;)
+    }
 
-<span class="w">    </span><span class="n">delay</span><span class="p">(</span><span class="m">500</span><span class="p">)</span>
-<span class="w">    </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;作用域完成&quot;</span><span class="p">)</span>
-<span class="p">}</span>
-<span class="c1">// 输出：</span>
-<span class="c1">// Exception in thread &quot;...&quot; RuntimeException: 子协程 1 异常</span>
-<span class="c1">// 子协程 2 完成</span>
-<span class="c1">// 作用域完成</span>
-</code></pre></div>
+    delay(500)
+    println(&quot;作用域完成&quot;)
+}
+// 输出：
+// Exception in thread &quot;...&quot; RuntimeException: 子协程 1 异常
+// 子协程 2 完成
+// 作用域完成
+</code></pre>
 
 <p>可以看到，子协程 1 的异常没有影响子协程 2 的执行，也没有取消作用域。</p>
 <h3>SupervisorJob 的工作原理</h3>
 <p>普通 <code>Job</code> 和 <code>SupervisorJob</code> 的区别在于如何处理子协程的异常：</p>
-<div class="codehilite"><pre><span></span><code><span class="c1">// Job 的行为：子协程异常 -&gt; 通知父 Job -&gt; 父 Job 取消所有子协程</span>
-<span class="c1">// fun Job(): Job = JobImpl(true) // true 表示会处理子协程异常</span>
+<pre><code>// Job 的行为：子协程异常 -&gt; 通知父 Job -&gt; 父 Job 取消所有子协程
+// fun Job(): Job = JobImpl(true) // true 表示会处理子协程异常
 
-<span class="c1">// SupervisorJob 的行为：子协程异常 -&gt; 忽略，不通知父 Job</span>
-<span class="c1">// fun SupervisorJob(): Job = JobImpl(false) // false 表示不处理子协程异常</span>
-</code></pre></div>
+// SupervisorJob 的行为：子协程异常 -&gt; 忽略，不通知父 Job
+// fun SupervisorJob(): Job = JobImpl(false) // false 表示不处理子协程异常
+</code></pre>
 
 <p>关键区别就在 <code>JobImpl</code> 的 <code>handleChildCompletion</code> 参数。普通 Job 在子协程失败时调用 <code>childCancelled()</code> 方法，而 <code>SupervisorJob</code> 不调用。</p>
 <h3>supervisorScope</h3>
 <p><code>supervisorScope</code> 提供了在现有作用域内容器化使用 SupervisorJob 的能力：</p>
-<div class="codehilite"><pre><span></span><code><span class="kd">fun</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">runBlocking</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="n">supervisorScope</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">launch</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="n">delay</span><span class="p">(</span><span class="m">100</span><span class="p">)</span>
-<span class="w">            </span><span class="k">throw</span><span class="w"> </span><span class="n">RuntimeException</span><span class="p">(</span><span class="s">&quot;子协程异常&quot;</span><span class="p">)</span>
-<span class="w">        </span><span class="p">}</span>
+<pre><code>fun main() = runBlocking {
+    supervisorScope {
+        launch {
+            delay(100)
+            throw RuntimeException(&quot;子协程异常&quot;)
+        }
 
-<span class="w">        </span><span class="n">launch</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="n">delay</span><span class="p">(</span><span class="m">200</span><span class="p">)</span>
-<span class="w">            </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;兄弟协程正常运行&quot;</span><span class="p">)</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="w">    </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;supervisorScope 结束&quot;</span><span class="p">)</span>
-<span class="p">}</span>
-<span class="c1">// 输出：</span>
-<span class="c1">// 兄弟协程正常运行</span>
-<span class="c1">// supervisorScope 结束</span>
-</code></pre></div>
+        launch {
+            delay(200)
+            println(&quot;兄弟协程正常运行&quot;)
+        }
+    }
+    println(&quot;supervisorScope 结束&quot;)
+}
+// 输出：
+// 兄弟协程正常运行
+// supervisorScope 结束
+</code></pre>
 
 <p><code>supervisorScope</code> 的典型用途：多个不相关的并发任务，其中一个失败不应该影响其他的。</p>
 <h3>实际场景：批量网络请求</h3>
-<div class="codehilite"><pre><span></span><code><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">fetchUserData</span><span class="p">(</span><span class="n">userIds</span><span class="p">:</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="kt">String</span><span class="o">&gt;</span><span class="p">):</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="n">UserData?&gt;</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">supervisorScope</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">userIds</span><span class="p">.</span><span class="na">map</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">userId</span><span class="w"> </span><span class="o">-&gt;</span>
-<span class="w">            </span><span class="n">async</span><span class="w"> </span><span class="p">{</span>
-<span class="w">                </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
-<span class="w">                    </span><span class="n">api</span><span class="p">.</span><span class="na">fetchUser</span><span class="p">(</span><span class="n">userId</span><span class="p">)</span>
-<span class="w">                </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">e</span><span class="p">:</span><span class="w"> </span><span class="n">Exception</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">                    </span><span class="n">Log</span><span class="p">.</span><span class="na">e</span><span class="p">(</span><span class="s">&quot;TAG&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;获取用户 </span><span class="si">$</span><span class="n">userId</span><span class="s"> 失败&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">e</span><span class="p">)</span>
-<span class="w">                    </span><span class="kc">null</span><span class="w"> </span><span class="c1">// 单个失败不影响其他的</span>
-<span class="w">                </span><span class="p">}</span>
-<span class="w">            </span><span class="p">}</span>
-<span class="w">        </span><span class="p">}.</span><span class="na">awaitAll</span><span class="p">()</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div>
+<pre><code>suspend fun fetchUserData(userIds: List&lt;String&gt;): List&lt;UserData?&gt; {
+    return supervisorScope {
+        userIds.map { userId -&gt;
+            async {
+                try {
+                    api.fetchUser(userId)
+                } catch (e: Exception) {
+                    Log.e(&quot;TAG&quot;, &quot;获取用户 $userId 失败&quot;, e)
+                    null // 单个失败不影响其他的
+                }
+            }
+        }.awaitAll()
+    }
+}
+</code></pre>
 
 <p>这里使用 <code>supervisorScope</code> 确保某个用户的数据请求失败不会取消其他请求。</p>
 <h2>CoroutineExceptionHandler</h2>
 <p><code>CoroutineExceptionHandler</code> 是协程的全局异常处理器，用于处理未捕获的异常。</p>
 <h3>基本用法</h3>
-<div class="codehilite"><pre><span></span><code><span class="kd">val</span><span class="w"> </span><span class="nv">handler</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CoroutineExceptionHandler</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">_</span><span class="p">,</span><span class="w"> </span><span class="n">exception</span><span class="w"> </span><span class="o">-&gt;</span>
-<span class="w">    </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;全局异常处理器捕获: </span><span class="si">$</span><span class="n">exception</span><span class="s">&quot;</span><span class="p">)</span>
-<span class="p">}</span>
+<pre><code>val handler = CoroutineExceptionHandler { _, exception -&gt;
+    println(&quot;全局异常处理器捕获: $exception&quot;)
+}
 
-<span class="kd">fun</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">runBlocking</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">scope</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CoroutineScope</span><span class="p">(</span><span class="n">Job</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">handler</span><span class="p">)</span>
+fun main() = runBlocking {
+    val scope = CoroutineScope(Job() + handler)
 
-<span class="w">    </span><span class="n">scope</span><span class="p">.</span><span class="na">launch</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="k">throw</span><span class="w"> </span><span class="n">RuntimeException</span><span class="p">(</span><span class="s">&quot;未捕获异常&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="p">}</span>
+    scope.launch {
+        throw RuntimeException(&quot;未捕获异常&quot;)
+    }
 
-<span class="w">    </span><span class="n">delay</span><span class="p">(</span><span class="m">500</span><span class="p">)</span>
-<span class="p">}</span>
-<span class="c1">// 输出：</span>
-<span class="c1">// 全局异常处理器捕获: RuntimeException: 未捕获异常</span>
-</code></pre></div>
+    delay(500)
+}
+// 输出：
+// 全局异常处理器捕获: RuntimeException: 未捕获异常
+</code></pre>
 
 <h3>处理器的生效条件</h3>
 <p><code>CoroutineExceptionHandler</code> 只在以下情况下生效：</p>
@@ -413,599 +413,599 @@
 <li>协程是 <code>launch</code> 启动的（<code>async</code> 的异常由 <code>await()</code> 抛出）</li>
 <li>异常传播到了顶级协程（没有父协程可以传递）</li>
 </ol>
-<div class="codehilite"><pre><span></span><code><span class="kd">fun</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">runBlocking</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">handler</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CoroutineExceptionHandler</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">_</span><span class="p">,</span><span class="w"> </span><span class="n">exception</span><span class="w"> </span><span class="o">-&gt;</span>
-<span class="w">        </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;处理器被调用: </span><span class="si">$</span><span class="n">exception</span><span class="s">&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="p">}</span>
+<pre><code>fun main() = runBlocking {
+    val handler = CoroutineExceptionHandler { _, exception -&gt;
+        println(&quot;处理器被调用: $exception&quot;)
+    }
 
-<span class="w">    </span><span class="n">launch</span><span class="p">(</span><span class="n">handler</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">launch</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="k">throw</span><span class="w"> </span><span class="n">RuntimeException</span><span class="p">(</span><span class="s">&quot;子协程异常&quot;</span><span class="p">)</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="p">}</span>
-<span class="c1">// 输出：（不会打印处理器消息）</span>
-<span class="c1">// 子协程异常传播到了父 launch，但父 launch 有父协程（runBlocking）</span>
-<span class="c1">// 异常最终由 runBlocking 处理</span>
-</code></pre></div>
+    launch(handler) {
+        launch {
+            throw RuntimeException(&quot;子协程异常&quot;)
+        }
+    }
+}
+// 输出：（不会打印处理器消息）
+// 子协程异常传播到了父 launch，但父 launch 有父协程（runBlocking）
+// 异常最终由 runBlocking 处理
+</code></pre>
 
 <p>只有在顶级协程（直接由 <code>CoroutineScope</code> 创建的协程）中的异常才会由 <code>CoroutineExceptionHandler</code> 处理：</p>
-<div class="codehilite"><pre><span></span><code><span class="kd">fun</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">handler</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CoroutineExceptionHandler</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">_</span><span class="p">,</span><span class="w"> </span><span class="n">exception</span><span class="w"> </span><span class="o">-&gt;</span>
-<span class="w">        </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;处理器被调用: </span><span class="si">$</span><span class="n">exception</span><span class="s">&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="p">}</span>
+<pre><code>fun main() {
+    val handler = CoroutineExceptionHandler { _, exception -&gt;
+        println(&quot;处理器被调用: $exception&quot;)
+    }
 
-<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">scope</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CoroutineScope</span><span class="p">(</span><span class="n">Job</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">handler</span><span class="p">)</span>
+    val scope = CoroutineScope(Job() + handler)
 
-<span class="w">    </span><span class="n">scope</span><span class="p">.</span><span class="na">launch</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">launch</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="k">throw</span><span class="w"> </span><span class="n">RuntimeException</span><span class="p">(</span><span class="s">&quot;子协程异常&quot;</span><span class="p">)</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">    </span><span class="p">}</span>
+    scope.launch {
+        launch {
+            throw RuntimeException(&quot;子协程异常&quot;)
+        }
+    }
 
-<span class="w">    </span><span class="n">Thread</span><span class="p">.</span><span class="na">sleep</span><span class="p">(</span><span class="m">500</span><span class="p">)</span>
-<span class="p">}</span>
-<span class="c1">// 输出：</span>
-<span class="c1">// 处理器被调用: RuntimeException: 子协程异常</span>
-<span class="c1">// 因为 scope.launch 是顶级协程，异常会传播到这里，由 handler 处理</span>
-</code></pre></div>
+    Thread.sleep(500)
+}
+// 输出：
+// 处理器被调用: RuntimeException: 子协程异常
+// 因为 scope.launch 是顶级协程，异常会传播到这里，由 handler 处理
+</code></pre>
 
 <h3>Handler 与 SupervisorJob 搭配使用</h3>
 <p>当 <code>SupervisorJob</code> 阻止了异常向上传播时，<code>CoroutineExceptionHandler</code> 也帮不上忙了：</p>
-<div class="codehilite"><pre><span></span><code><span class="kd">fun</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">handler</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CoroutineExceptionHandler</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">_</span><span class="p">,</span><span class="w"> </span><span class="n">exception</span><span class="w"> </span><span class="o">-&gt;</span>
-<span class="w">        </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;处理器: </span><span class="si">$</span><span class="n">exception</span><span class="s">&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="p">}</span>
+<pre><code>fun main() {
+    val handler = CoroutineExceptionHandler { _, exception -&gt;
+        println(&quot;处理器: $exception&quot;)
+    }
 
-<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">scope</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CoroutineScope</span><span class="p">(</span><span class="n">SupervisorJob</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">handler</span><span class="p">)</span>
+    val scope = CoroutineScope(SupervisorJob() + handler)
 
-<span class="w">    </span><span class="n">scope</span><span class="p">.</span><span class="na">launch</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="k">throw</span><span class="w"> </span><span class="n">RuntimeException</span><span class="p">(</span><span class="s">&quot;异常&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="p">}</span>
+    scope.launch {
+        throw RuntimeException(&quot;异常&quot;)
+    }
 
-<span class="w">    </span><span class="n">Thread</span><span class="p">.</span><span class="na">sleep</span><span class="p">(</span><span class="m">500</span><span class="p">)</span>
-<span class="p">}</span>
-<span class="c1">// 输出：</span>
-<span class="c1">// 处理器: RuntimeException: 异常</span>
-<span class="c1">// ✅ SupervisorJob 没有取消父协程，异常由子协程的 handler 处理</span>
-</code></pre></div>
+    Thread.sleep(500)
+}
+// 输出：
+// 处理器: RuntimeException: 异常
+// ✅ SupervisorJob 没有取消父协程，异常由子协程的 handler 处理
+</code></pre>
 
 <h3>设置全局默认处理器</h3>
 <p>可以通过设置 JVM 级全局处理器来兜底：</p>
-<div class="codehilite"><pre><span></span><code><span class="c1">// 全局未捕获异常处理器</span>
-<span class="n">Thread</span><span class="p">.</span><span class="na">setDefaultUncaughtExceptionHandler</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">thread</span><span class="p">,</span><span class="w"> </span><span class="n">exception</span><span class="w"> </span><span class="o">-&gt;</span>
-<span class="w">    </span><span class="n">Log</span><span class="p">.</span><span class="na">e</span><span class="p">(</span><span class="s">&quot;APP&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;全局未捕获异常: </span><span class="si">$</span><span class="n">exception</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">exception</span><span class="p">)</span>
-<span class="p">}</span>
+<pre><code>// 全局未捕获异常处理器
+Thread.setDefaultUncaughtExceptionHandler { thread, exception -&gt;
+    Log.e(&quot;APP&quot;, &quot;全局未捕获异常: $exception&quot;, exception)
+}
 
-<span class="c1">// 协程框架也会使用这个处理器</span>
-</code></pre></div>
+// 协程框架也会使用这个处理器
+</code></pre>
 
 <p>或者在 Android 中设置 <code>CoroutineExceptionHandler</code> 作为全局默认处理器（较新版本的 Kotlin 协程支持）：</p>
-<div class="codehilite"><pre><span></span><code><span class="c1">// 在 Application 类中设置</span>
-<span class="kd">class</span><span class="w"> </span><span class="nc">MyApp</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">Application</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="kd">override</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onCreate</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="k">super</span><span class="p">.</span><span class="na">onCreate</span><span class="p">()</span>
+<pre><code>// 在 Application 类中设置
+class MyApp : Application() {
+    override fun onCreate() {
+        super.onCreate()
 
-<span class="w">        </span><span class="c1">// Kotlin 协程提供的全局异常处理器</span>
-<span class="w">        </span><span class="n">CoroutineExceptionHandler</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">_</span><span class="p">,</span><span class="w"> </span><span class="n">throwable</span><span class="w"> </span><span class="o">-&gt;</span>
-<span class="w">            </span><span class="n">Log</span><span class="p">.</span><span class="na">e</span><span class="p">(</span><span class="s">&quot;APP&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;未处理的协程异常&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">throwable</span><span class="p">)</span>
-<span class="w">            </span><span class="c1">// 上报到 Crash 统计</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div>
+        // Kotlin 协程提供的全局异常处理器
+        CoroutineExceptionHandler { _, throwable -&gt;
+            Log.e(&quot;APP&quot;, &quot;未处理的协程异常&quot;, throwable)
+            // 上报到 Crash 统计
+        }
+    }
+}
+</code></pre>
 
 <h2>Async 的异常处理：应该在哪里 try-catch</h2>
 <p><code>async</code> 的异常处理有两种方式，效果不同。</p>
 <h3>在 async 内部捕获</h3>
-<div class="codehilite"><pre><span></span><code><span class="kd">fun</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">runBlocking</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">deferred</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">async</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="n">riskyOperation</span><span class="p">()</span>
-<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">e</span><span class="p">:</span><span class="w"> </span><span class="n">Exception</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="kc">null</span><span class="w"> </span><span class="c1">// 返回默认值</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">    </span><span class="p">}</span>
+<pre><code>fun main() = runBlocking {
+    val deferred = async {
+        try {
+            riskyOperation()
+        } catch (e: Exception) {
+            null // 返回默认值
+        }
+    }
 
-<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">deferred</span><span class="p">.</span><span class="na">await</span><span class="p">()</span><span class="w"> </span><span class="c1">// 不会抛出异常</span>
-<span class="p">}</span>
-</code></pre></div>
+    val result = deferred.await() // 不会抛出异常
+}
+</code></pre>
 
 <h3>在 await() 时捕获</h3>
-<div class="codehilite"><pre><span></span><code><span class="kd">fun</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">runBlocking</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">deferred</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">async</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">riskyOperation</span><span class="p">()</span><span class="w"> </span><span class="c1">// 异常存储在这里</span>
-<span class="w">    </span><span class="p">}</span>
+<pre><code>fun main() = runBlocking {
+    val deferred = async {
+        riskyOperation() // 异常存储在这里
+    }
 
-<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="nv">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">deferred</span><span class="p">.</span><span class="na">await</span><span class="p">()</span><span class="w"> </span><span class="c1">// 异常在这里抛出</span>
-<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">e</span><span class="p">:</span><span class="w"> </span><span class="n">Exception</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;捕获 async 异常: </span><span class="si">$</span><span class="n">e</span><span class="s">&quot;</span><span class="p">)</span>
-<span class="w">        </span><span class="c1">// 降级处理</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div>
+    try {
+        val result = deferred.await() // 异常在这里抛出
+    } catch (e: Exception) {
+        println(&quot;捕获 async 异常: $e&quot;)
+        // 降级处理
+    }
+}
+</code></pre>
 
 <h3>推荐的 Async 异常处理模式</h3>
-<div class="codehilite"><pre><span></span><code><span class="kd">sealed</span><span class="w"> </span><span class="kd">class</span><span class="w"> </span><span class="nc">AsyncResult</span><span class="o">&lt;</span><span class="k">out</span><span class="w"> </span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="kd">data</span><span class="w"> </span><span class="kd">class</span><span class="w"> </span><span class="nc">Success</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="kd">val</span><span class="w"> </span><span class="nv">data</span><span class="p">:</span><span class="w"> </span><span class="n">T</span><span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">AsyncResult</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">()</span>
-<span class="w">    </span><span class="kd">data</span><span class="w"> </span><span class="kd">class</span><span class="w"> </span><span class="nc">Error</span><span class="p">(</span><span class="kd">val</span><span class="w"> </span><span class="nv">exception</span><span class="p">:</span><span class="w"> </span><span class="n">Throwable</span><span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">AsyncResult</span><span class="o">&lt;</span><span class="n">Nothing</span><span class="o">&gt;</span><span class="p">()</span>
-<span class="p">}</span>
+<pre><code>sealed class AsyncResult&lt;out T&gt; {
+    data class Success&lt;T&gt;(val data: T) : AsyncResult&lt;T&gt;()
+    data class Error(val exception: Throwable) : AsyncResult&lt;Nothing&gt;()
+}
 
-<span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="n">CoroutineScope</span><span class="p">.</span><span class="nf">safeAsync</span><span class="p">(</span>
-<span class="w">    </span><span class="n">block</span><span class="p">:</span><span class="w"> </span><span class="n">suspend</span><span class="w"> </span><span class="n">CoroutineScope</span><span class="p">.()</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">T</span>
-<span class="p">):</span><span class="w"> </span><span class="n">AsyncResult</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">AsyncResult</span><span class="p">.</span><span class="na">Success</span><span class="p">(</span><span class="n">async</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">block</span><span class="p">()</span><span class="w"> </span><span class="p">}.</span><span class="na">await</span><span class="p">())</span>
-<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">e</span><span class="p">:</span><span class="w"> </span><span class="n">Exception</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">AsyncResult</span><span class="p">.</span><span class="na">Error</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="p">}</span>
+suspend fun &lt;T&gt; CoroutineScope.safeAsync(
+    block: suspend CoroutineScope.() -&gt; T
+): AsyncResult&lt;T&gt; {
+    return try {
+        AsyncResult.Success(async { block() }.await())
+    } catch (e: Exception) {
+        AsyncResult.Error(e)
+    }
+}
 
-<span class="c1">// 使用</span>
-<span class="kd">fun</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">runBlocking</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">safeAsync</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">fetchUserData</span><span class="p">()</span>
-<span class="w">    </span><span class="p">}</span>
+// 使用
+fun main() = runBlocking {
+    val result = safeAsync {
+        fetchUserData()
+    }
 
-<span class="w">    </span><span class="k">when</span><span class="w"> </span><span class="p">(</span><span class="n">result</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="k">is</span><span class="w"> </span><span class="n">AsyncResult</span><span class="p">.</span><span class="na">Success</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">showData</span><span class="p">(</span><span class="n">result</span><span class="p">.</span><span class="na">data</span><span class="p">)</span>
-<span class="w">        </span><span class="k">is</span><span class="w"> </span><span class="n">AsyncResult</span><span class="p">.</span><span class="na">Error</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">showError</span><span class="p">(</span><span class="n">result</span><span class="p">.</span><span class="na">exception</span><span class="p">)</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div>
+    when (result) {
+        is AsyncResult.Success -&gt; showData(result.data)
+        is AsyncResult.Error -&gt; showError(result.exception)
+    }
+}
+</code></pre>
 
 <h2>取消引发的 CancellationException</h2>
 <p><code>CancellationException</code> 是协程框架中的一个特殊异常，它的处理方式和普通异常不同。</p>
 <h3>特殊性</h3>
-<div class="codehilite"><pre><span></span><code><span class="kd">fun</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">runBlocking</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">job</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">launch</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="n">delay</span><span class="p">(</span><span class="m">1000</span><span class="p">)</span>
-<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">finally</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="c1">// 即使协程被取消，finally 块也会执行</span>
-<span class="w">            </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;清理资源&quot;</span><span class="p">)</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">    </span><span class="p">}</span>
+<pre><code>fun main() = runBlocking {
+    val job = launch {
+        try {
+            delay(1000)
+        } finally {
+            // 即使协程被取消，finally 块也会执行
+            println(&quot;清理资源&quot;)
+        }
+    }
 
-<span class="w">    </span><span class="n">delay</span><span class="p">(</span><span class="m">100</span><span class="p">)</span>
-<span class="w">    </span><span class="n">job</span><span class="p">.</span><span class="na">cancel</span><span class="p">()</span>
-<span class="w">    </span><span class="n">job</span><span class="p">.</span><span class="na">join</span><span class="p">()</span>
-<span class="p">}</span>
-</code></pre></div>
+    delay(100)
+    job.cancel()
+    job.join()
+}
+</code></pre>
 
 <h3>在 finally 块中调用挂起函数</h3>
 <p>当协程被取消后，在 <code>finally</code> 块中调用挂起函数需要特殊处理：</p>
-<div class="codehilite"><pre><span></span><code><span class="kd">fun</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">runBlocking</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">job</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">launch</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="n">delay</span><span class="p">(</span><span class="m">1000</span><span class="p">)</span>
-<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">finally</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="c1">// ❌ 协程已取消，这里调用挂起函数会再次抛出 CancellationException</span>
-<span class="w">            </span><span class="n">delay</span><span class="p">(</span><span class="m">100</span><span class="p">)</span><span class="w"> </span><span class="c1">// 这里会抛出 CancellationException</span>
-<span class="w">            </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;清理完成&quot;</span><span class="p">)</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">    </span><span class="p">}</span>
+<pre><code>fun main() = runBlocking {
+    val job = launch {
+        try {
+            delay(1000)
+        } finally {
+            // ❌ 协程已取消，这里调用挂起函数会再次抛出 CancellationException
+            delay(100) // 这里会抛出 CancellationException
+            println(&quot;清理完成&quot;)
+        }
+    }
 
-<span class="w">    </span><span class="n">delay</span><span class="p">(</span><span class="m">100</span><span class="p">)</span>
-<span class="w">    </span><span class="n">job</span><span class="p">.</span><span class="na">cancel</span><span class="p">()</span>
-<span class="w">    </span><span class="n">job</span><span class="p">.</span><span class="na">join</span><span class="p">()</span>
-<span class="p">}</span>
-</code></pre></div>
+    delay(100)
+    job.cancel()
+    job.join()
+}
+</code></pre>
 
 <p>正确的做法是使用 <code>withContext(NonCancellable)</code>：</p>
-<div class="codehilite"><pre><span></span><code><span class="kd">fun</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">runBlocking</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">job</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">launch</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="n">delay</span><span class="p">(</span><span class="m">1000</span><span class="p">)</span>
-<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">finally</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="c1">// ✅ 使用 NonCancellable 上下文执行挂起函数</span>
-<span class="w">            </span><span class="n">withContext</span><span class="p">(</span><span class="n">NonCancellable</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">                </span><span class="n">delay</span><span class="p">(</span><span class="m">100</span><span class="p">)</span>
-<span class="w">                </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;资源清理完成&quot;</span><span class="p">)</span>
-<span class="w">            </span><span class="p">}</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">    </span><span class="p">}</span>
+<pre><code>fun main() = runBlocking {
+    val job = launch {
+        try {
+            delay(1000)
+        } finally {
+            // ✅ 使用 NonCancellable 上下文执行挂起函数
+            withContext(NonCancellable) {
+                delay(100)
+                println(&quot;资源清理完成&quot;)
+            }
+        }
+    }
 
-<span class="w">    </span><span class="n">delay</span><span class="p">(</span><span class="m">100</span><span class="p">)</span>
-<span class="w">    </span><span class="n">job</span><span class="p">.</span><span class="na">cancel</span><span class="p">()</span>
-<span class="w">    </span><span class="n">job</span><span class="p">.</span><span class="na">join</span><span class="p">()</span>
-<span class="p">}</span>
-</code></pre></div>
+    delay(100)
+    job.cancel()
+    job.join()
+}
+</code></pre>
 
 <h3>CancellationException 不会被传播</h3>
-<div class="codehilite"><pre><span></span><code><span class="kd">fun</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">runBlocking</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">handler</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CoroutineExceptionHandler</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">_</span><span class="p">,</span><span class="w"> </span><span class="n">exception</span><span class="w"> </span><span class="o">-&gt;</span>
-<span class="w">        </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;处理器不会收到 CancellationException: </span><span class="si">$</span><span class="n">exception</span><span class="s">&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="p">}</span>
+<pre><code>fun main() = runBlocking {
+    val handler = CoroutineExceptionHandler { _, exception -&gt;
+        println(&quot;处理器不会收到 CancellationException: $exception&quot;)
+    }
 
-<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">scope</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CoroutineScope</span><span class="p">(</span><span class="n">Job</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">handler</span><span class="p">)</span>
+    val scope = CoroutineScope(Job() + handler)
 
-<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">job</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">scope</span><span class="p">.</span><span class="na">launch</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">launch</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="n">delay</span><span class="p">(</span><span class="m">1000</span><span class="p">)</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">        </span><span class="n">launch</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="n">delay</span><span class="p">(</span><span class="m">500</span><span class="p">)</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">    </span><span class="p">}</span>
+    val job = scope.launch {
+        launch {
+            delay(1000)
+        }
+        launch {
+            delay(500)
+        }
+    }
 
-<span class="w">    </span><span class="n">delay</span><span class="p">(</span><span class="m">100</span><span class="p">)</span>
-<span class="w">    </span><span class="n">job</span><span class="p">.</span><span class="na">cancel</span><span class="p">()</span><span class="w"> </span><span class="c1">// 取消会传递 CancellationException，但不会被异常处理器捕获</span>
-<span class="w">    </span><span class="n">job</span><span class="p">.</span><span class="na">join</span><span class="p">()</span>
-<span class="p">}</span>
-</code></pre></div>
+    delay(100)
+    job.cancel() // 取消会传递 CancellationException，但不会被异常处理器捕获
+    job.join()
+}
+</code></pre>
 
 <p><code>CancellationException</code> 不会被任何异常处理器捕获，也不会导致程序崩溃。</p>
 <h2>异常聚合</h2>
 <p>当一个父协程有多个子协程同时失败时，异常会被聚合到一个 <code>CancellationException</code> 中。</p>
-<div class="codehilite"><pre><span></span><code><span class="kd">fun</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">runBlocking</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">handler</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CoroutineExceptionHandler</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">_</span><span class="p">,</span><span class="w"> </span><span class="n">exception</span><span class="w"> </span><span class="o">-&gt;</span>
-<span class="w">        </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;聚合异常: </span><span class="si">$</span><span class="n">exception</span><span class="s">&quot;</span><span class="p">)</span>
-<span class="w">        </span><span class="n">exception</span><span class="p">.</span><span class="na">suppressed</span><span class="p">.</span><span class="na">forEach</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;  包含: </span><span class="si">$</span><span class="n">it</span><span class="s">&quot;</span><span class="p">)</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">    </span><span class="p">}</span>
+<pre><code>fun main() = runBlocking {
+    val handler = CoroutineExceptionHandler { _, exception -&gt;
+        println(&quot;聚合异常: $exception&quot;)
+        exception.suppressed.forEach {
+            println(&quot;  包含: $it&quot;)
+        }
+    }
 
-<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">scope</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CoroutineScope</span><span class="p">(</span><span class="n">Job</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">handler</span><span class="p">)</span>
+    val scope = CoroutineScope(Job() + handler)
 
-<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">job</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">scope</span><span class="p">.</span><span class="na">launch</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">launch</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
-<span class="w">                </span><span class="n">delay</span><span class="p">(</span><span class="kt">Long</span><span class="p">.</span><span class="na">MAX_VALUE</span><span class="p">)</span>
-<span class="w">            </span><span class="p">}</span><span class="w"> </span><span class="k">finally</span><span class="w"> </span><span class="p">{</span>
-<span class="w">                </span><span class="k">throw</span><span class="w"> </span><span class="n">RuntimeException</span><span class="p">(</span><span class="s">&quot;清理异常 1&quot;</span><span class="p">)</span>
-<span class="w">            </span><span class="p">}</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">        </span><span class="n">launch</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
-<span class="w">                </span><span class="n">delay</span><span class="p">(</span><span class="kt">Long</span><span class="p">.</span><span class="na">MAX_VALUE</span><span class="p">)</span>
-<span class="w">            </span><span class="p">}</span><span class="w"> </span><span class="k">finally</span><span class="w"> </span><span class="p">{</span>
-<span class="w">                </span><span class="k">throw</span><span class="w"> </span><span class="n">RuntimeException</span><span class="p">(</span><span class="s">&quot;清理异常 2&quot;</span><span class="p">)</span>
-<span class="w">            </span><span class="p">}</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">    </span><span class="p">}</span>
+    val job = scope.launch {
+        launch {
+            try {
+                delay(Long.MAX_VALUE)
+            } finally {
+                throw RuntimeException(&quot;清理异常 1&quot;)
+            }
+        }
+        launch {
+            try {
+                delay(Long.MAX_VALUE)
+            } finally {
+                throw RuntimeException(&quot;清理异常 2&quot;)
+            }
+        }
+    }
 
-<span class="w">    </span><span class="n">delay</span><span class="p">(</span><span class="m">100</span><span class="p">)</span>
-<span class="w">    </span><span class="n">job</span><span class="p">.</span><span class="na">cancelAndJoin</span><span class="p">()</span>
-<span class="p">}</span>
-<span class="c1">// 输出：</span>
-<span class="c1">// 聚合异常: kotlinx.coroutines.JobCancellationException: Job was cancelled</span>
-<span class="c1">//   包含: RuntimeException: 清理异常 1</span>
-<span class="c1">//   包含: RuntimeException: 清理异常 2</span>
-</code></pre></div>
+    delay(100)
+    job.cancelAndJoin()
+}
+// 输出：
+// 聚合异常: kotlinx.coroutines.JobCancellationException: Job was cancelled
+//   包含: RuntimeException: 清理异常 1
+//   包含: RuntimeException: 清理异常 2
+</code></pre>
 
 <p>异常聚合通过 Kotlin 的 <code>Throwable.addSuppressed()</code> 机制实现，可以用 <code>exception.suppressed</code> 访问所有被抑制的异常。</p>
 <h2>Android 中的协程异常处理最佳实践</h2>
 <p>在 Android 开发中，协程异常处理需要特别注意 UI 层和业务层的分离。</p>
 <h3>ViewModel 中的异常处理</h3>
-<div class="codehilite"><pre><span></span><code><span class="kd">class</span><span class="w"> </span><span class="nc">UserViewModel</span><span class="p">(</span>
-<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">userRepository</span><span class="p">:</span><span class="w"> </span><span class="n">UserRepository</span>
-<span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">ViewModel</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<pre><code>class UserViewModel(
+    private val userRepository: UserRepository
+) : ViewModel() {
 
-<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">_uiState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MutableStateFlow</span><span class="o">&lt;</span><span class="n">UiState</span><span class="o">&lt;</span><span class="n">List</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;&gt;&gt;</span><span class="p">(</span><span class="n">UiState</span><span class="p">.</span><span class="na">Loading</span><span class="p">)</span>
-<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">uiState</span><span class="p">:</span><span class="w"> </span><span class="n">StateFlow</span><span class="o">&lt;</span><span class="n">UiState</span><span class="o">&lt;</span><span class="n">List</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;&gt;&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_uiState</span><span class="p">.</span><span class="na">asStateFlow</span><span class="p">()</span>
+    private val _uiState = MutableStateFlow&lt;UiState&lt;List&lt;User&gt;&gt;&gt;(UiState.Loading)
+    val uiState: StateFlow&lt;UiState&lt;List&lt;User&gt;&gt;&gt; = _uiState.asStateFlow()
 
-<span class="w">    </span><span class="kd">fun</span><span class="w"> </span><span class="nf">loadUsers</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">viewModelScope</span><span class="p">.</span><span class="na">launch</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="n">_uiState</span><span class="p">.</span><span class="na">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">UiState</span><span class="p">.</span><span class="na">Loading</span>
-<span class="w">            </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
-<span class="w">                </span><span class="kd">val</span><span class="w"> </span><span class="nv">users</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">userRepository</span><span class="p">.</span><span class="na">fetchUsers</span><span class="p">()</span>
-<span class="w">                </span><span class="n">_uiState</span><span class="p">.</span><span class="na">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">UiState</span><span class="p">.</span><span class="na">Success</span><span class="p">(</span><span class="n">users</span><span class="p">)</span>
-<span class="w">            </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">e</span><span class="p">:</span><span class="w"> </span><span class="n">Exception</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">                </span><span class="n">_uiState</span><span class="p">.</span><span class="na">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">UiState</span><span class="p">.</span><span class="na">Error</span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="na">message</span><span class="w"> </span><span class="o">?:</span><span class="w"> </span><span class="s">&quot;未知错误&quot;</span><span class="p">)</span>
-<span class="w">                </span><span class="n">Log</span><span class="p">.</span><span class="na">e</span><span class="p">(</span><span class="s">&quot;UserViewModel&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;加载用户失败&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">e</span><span class="p">)</span>
-<span class="w">            </span><span class="p">}</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="p">}</span>
+    fun loadUsers() {
+        viewModelScope.launch {
+            _uiState.value = UiState.Loading
+            try {
+                val users = userRepository.fetchUsers()
+                _uiState.value = UiState.Success(users)
+            } catch (e: Exception) {
+                _uiState.value = UiState.Error(e.message ?: &quot;未知错误&quot;)
+                Log.e(&quot;UserViewModel&quot;, &quot;加载用户失败&quot;, e)
+            }
+        }
+    }
+}
 
-<span class="kd">sealed</span><span class="w"> </span><span class="kd">class</span><span class="w"> </span><span class="nc">UiState</span><span class="o">&lt;</span><span class="k">out</span><span class="w"> </span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="kd">object</span><span class="w"> </span><span class="nc">Loading</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">UiState</span><span class="o">&lt;</span><span class="n">Nothing</span><span class="o">&gt;</span><span class="p">()</span>
-<span class="w">    </span><span class="kd">data</span><span class="w"> </span><span class="kd">class</span><span class="w"> </span><span class="nc">Success</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="kd">val</span><span class="w"> </span><span class="nv">data</span><span class="p">:</span><span class="w"> </span><span class="n">T</span><span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">UiState</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">()</span>
-<span class="w">    </span><span class="kd">data</span><span class="w"> </span><span class="kd">class</span><span class="w"> </span><span class="nc">Error</span><span class="p">(</span><span class="kd">val</span><span class="w"> </span><span class="nv">message</span><span class="p">:</span><span class="w"> </span><span class="kt">String</span><span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">UiState</span><span class="o">&lt;</span><span class="n">Nothing</span><span class="o">&gt;</span><span class="p">()</span>
-<span class="p">}</span>
-</code></pre></div>
+sealed class UiState&lt;out T&gt; {
+    object Loading : UiState&lt;Nothing&gt;()
+    data class Success&lt;T&gt;(val data: T) : UiState&lt;T&gt;()
+    data class Error(val message: String) : UiState&lt;Nothing&gt;()
+}
+</code></pre>
 
 <h3>Repository 层的异常处理</h3>
-<div class="codehilite"><pre><span></span><code><span class="kd">class</span><span class="w"> </span><span class="nc">UserRepository</span><span class="p">(</span>
-<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">api</span><span class="p">:</span><span class="w"> </span><span class="n">UserApi</span><span class="p">,</span>
-<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">cache</span><span class="p">:</span><span class="w"> </span><span class="n">UserCache</span>
-<span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">fetchUsers</span><span class="p">():</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">withContext</span><span class="p">(</span><span class="n">Dispatchers</span><span class="p">.</span><span class="na">IO</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="kd">val</span><span class="w"> </span><span class="nv">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">api</span><span class="p">.</span><span class="na">getUsers</span><span class="p">()</span>
-<span class="w">            </span><span class="n">cache</span><span class="p">.</span><span class="na">saveUsers</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
-<span class="w">            </span><span class="n">response</span>
-<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">e</span><span class="p">:</span><span class="w"> </span><span class="n">IOException</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="c1">// 网络错误，尝试从缓存读取</span>
-<span class="w">            </span><span class="kd">val</span><span class="w"> </span><span class="nv">cached</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cache</span><span class="p">.</span><span class="na">getUsers</span><span class="p">()</span>
-<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">cached</span><span class="p">.</span><span class="na">isNotEmpty</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
-<span class="w">                </span><span class="n">cached</span>
-<span class="w">            </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
-<span class="w">                </span><span class="k">throw</span><span class="w"> </span><span class="n">e</span><span class="w"> </span><span class="c1">// 缓存也没有，继续抛出</span>
-<span class="w">            </span><span class="p">}</span>
-<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">e</span><span class="p">:</span><span class="w"> </span><span class="n">HttpException</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="c1">// HTTP 错误，返回缓存的过期数据（如果存在）</span>
-<span class="w">            </span><span class="n">cache</span><span class="p">.</span><span class="na">getUsers</span><span class="p">().</span><span class="na">also</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">users</span><span class="w"> </span><span class="o">-&gt;</span>
-<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">users</span><span class="p">.</span><span class="na">isEmpty</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
-<span class="w">                    </span><span class="k">throw</span><span class="w"> </span><span class="n">e</span>
-<span class="w">                </span><span class="p">}</span>
-<span class="w">            </span><span class="p">}</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div>
+<pre><code>class UserRepository(
+    private val api: UserApi,
+    private val cache: UserCache
+) {
+    suspend fun fetchUsers(): List&lt;User&gt; = withContext(Dispatchers.IO) {
+        try {
+            val response = api.getUsers()
+            cache.saveUsers(response)
+            response
+        } catch (e: IOException) {
+            // 网络错误，尝试从缓存读取
+            val cached = cache.getUsers()
+            if (cached.isNotEmpty()) {
+                cached
+            } else {
+                throw e // 缓存也没有，继续抛出
+            }
+        } catch (e: HttpException) {
+            // HTTP 错误，返回缓存的过期数据（如果存在）
+            cache.getUsers().also { users -&gt;
+                if (users.isEmpty()) {
+                    throw e
+                }
+            }
+        }
+    }
+}
+</code></pre>
 
 <h3>使用 Result 类型</h3>
 <p>Kotlin 标准库提供了 <code>Result</code> 类型，适合在 Repository 层包装可能失败的操作：</p>
-<div class="codehilite"><pre><span></span><code><span class="kd">class</span><span class="w"> </span><span class="nc">UserRepository</span><span class="p">(</span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">api</span><span class="p">:</span><span class="w"> </span><span class="n">UserApi</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<pre><code>class UserRepository(private val api: UserApi) {
 
-<span class="w">    </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">fetchUsers</span><span class="p">():</span><span class="w"> </span><span class="n">Result</span><span class="o">&lt;</span><span class="n">List</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">runCatching</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">api</span><span class="p">.</span><span class="na">getUsers</span><span class="p">()</span>
-<span class="w">    </span><span class="p">}</span>
+    suspend fun fetchUsers(): Result&lt;List&lt;User&gt;&gt; = runCatching {
+        api.getUsers()
+    }
 
-<span class="w">    </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">fetchUser</span><span class="p">(</span><span class="n">id</span><span class="p">:</span><span class="w"> </span><span class="kt">String</span><span class="p">):</span><span class="w"> </span><span class="n">Result</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">runCatching</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">api</span><span class="p">.</span><span class="na">getUser</span><span class="p">(</span><span class="n">id</span><span class="p">)</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="p">}</span>
+    suspend fun fetchUser(id: String): Result&lt;User&gt; = runCatching {
+        api.getUser(id)
+    }
+}
 
-<span class="c1">// ViewModel 中使用</span>
-<span class="kd">class</span><span class="w"> </span><span class="nc">UserViewModel</span><span class="p">(</span>
-<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">repository</span><span class="p">:</span><span class="w"> </span><span class="n">UserRepository</span>
-<span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">ViewModel</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+// ViewModel 中使用
+class UserViewModel(
+    private val repository: UserRepository
+) : ViewModel() {
 
-<span class="w">    </span><span class="kd">fun</span><span class="w"> </span><span class="nf">loadUsers</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">viewModelScope</span><span class="p">.</span><span class="na">launch</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="n">repository</span><span class="p">.</span><span class="na">fetchUsers</span><span class="p">()</span>
-<span class="w">                </span><span class="p">.</span><span class="na">onSuccess</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">users</span><span class="w"> </span><span class="o">-&gt;</span>
-<span class="w">                    </span><span class="n">_uiState</span><span class="p">.</span><span class="na">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">UiState</span><span class="p">.</span><span class="na">Success</span><span class="p">(</span><span class="n">users</span><span class="p">)</span>
-<span class="w">                </span><span class="p">}</span>
-<span class="w">                </span><span class="p">.</span><span class="na">onFailure</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">exception</span><span class="w"> </span><span class="o">-&gt;</span>
-<span class="w">                    </span><span class="n">_uiState</span><span class="p">.</span><span class="na">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">UiState</span><span class="p">.</span><span class="na">Error</span><span class="p">(</span><span class="n">exception</span><span class="p">.</span><span class="na">message</span><span class="w"> </span><span class="o">?:</span><span class="w"> </span><span class="s">&quot;加载失败&quot;</span><span class="p">)</span>
-<span class="w">                </span><span class="p">}</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div>
+    fun loadUsers() {
+        viewModelScope.launch {
+            repository.fetchUsers()
+                .onSuccess { users -&gt;
+                    _uiState.value = UiState.Success(users)
+                }
+                .onFailure { exception -&gt;
+                    _uiState.value = UiState.Error(exception.message ?: &quot;加载失败&quot;)
+                }
+        }
+    }
+}
+</code></pre>
 
 <h3>Flow 中的异常处理</h3>
-<div class="codehilite"><pre><span></span><code><span class="kd">class</span><span class="w"> </span><span class="nc">UserRepository</span><span class="p">(</span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">api</span><span class="p">:</span><span class="w"> </span><span class="n">UserApi</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<pre><code>class UserRepository(private val api: UserApi) {
 
-<span class="w">    </span><span class="kd">fun</span><span class="w"> </span><span class="nf">usersFlow</span><span class="p">():</span><span class="w"> </span><span class="n">Flow</span><span class="o">&lt;</span><span class="n">List</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">flow</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="kc">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="kd">val</span><span class="w"> </span><span class="nv">users</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">api</span><span class="p">.</span><span class="na">getUsers</span><span class="p">()</span>
-<span class="w">            </span><span class="n">emit</span><span class="p">(</span><span class="n">users</span><span class="p">)</span>
-<span class="w">            </span><span class="n">delay</span><span class="p">(</span><span class="m">30</span><span class="n">_000</span><span class="p">)</span><span class="w"> </span><span class="c1">// 每 30 秒轮询</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">    </span><span class="p">}.</span><span class="na">retry</span><span class="p">(</span><span class="m">3</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">cause</span><span class="w"> </span><span class="o">-&gt;</span>
-<span class="w">        </span><span class="c1">// 网络错误时重试，最多 3 次</span>
-<span class="w">        </span><span class="n">cause</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="n">IOException</span>
-<span class="w">    </span><span class="p">}.</span><span class="na">catch</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">exception</span><span class="w"> </span><span class="o">-&gt;</span>
-<span class="w">        </span><span class="c1">// 所有重试都失败后，发射空列表</span>
-<span class="w">        </span><span class="n">emit</span><span class="p">(</span><span class="n">emptyList</span><span class="p">())</span>
-<span class="w">        </span><span class="n">Log</span><span class="p">.</span><span class="na">e</span><span class="p">(</span><span class="s">&quot;UserRepository&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;获取用户列表失败&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">exception</span><span class="p">)</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div>
+    fun usersFlow(): Flow&lt;List&lt;User&gt;&gt; = flow {
+        while (true) {
+            val users = api.getUsers()
+            emit(users)
+            delay(30_000) // 每 30 秒轮询
+        }
+    }.retry(3) { cause -&gt;
+        // 网络错误时重试，最多 3 次
+        cause is IOException
+    }.catch { exception -&gt;
+        // 所有重试都失败后，发射空列表
+        emit(emptyList())
+        Log.e(&quot;UserRepository&quot;, &quot;获取用户列表失败&quot;, exception)
+    }
+}
+</code></pre>
 
 <h2>常见陷阱与最佳实践</h2>
 <h3>陷阱 1：错误的 try-catch 位置</h3>
-<div class="codehilite"><pre><span></span><code><span class="c1">// ❌ 错误：try-catch 包裹的是 launch，不是协程体</span>
-<span class="k">try</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="n">launch</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">throw</span><span class="w"> </span><span class="n">Exception</span><span class="p">()</span><span class="w"> </span><span class="p">}</span>
-<span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">e</span><span class="p">:</span><span class="w"> </span><span class="n">Exception</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="c1">// 永远不会执行</span>
-<span class="p">}</span>
+<pre><code>// ❌ 错误：try-catch 包裹的是 launch，不是协程体
+try {
+    launch { throw Exception() }
+} catch (e: Exception) {
+    // 永远不会执行
+}
 
-<span class="c1">// ✅ 正确：try-catch 在协程体内部</span>
-<span class="n">launch</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="k">throw</span><span class="w"> </span><span class="n">Exception</span><span class="p">()</span>
-<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">e</span><span class="p">:</span><span class="w"> </span><span class="n">Exception</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="c1">// 在这里处理</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div>
+// ✅ 正确：try-catch 在协程体内部
+launch {
+    try {
+        throw Exception()
+    } catch (e: Exception) {
+        // 在这里处理
+    }
+}
+</code></pre>
 
 <h3>陷阱 2：忽略 async 的异常</h3>
-<div class="codehilite"><pre><span></span><code><span class="c1">// ❌ 错误：async 的异常被忽略</span>
-<span class="n">scope</span><span class="p">.</span><span class="na">async</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="k">throw</span><span class="w"> </span><span class="n">RuntimeException</span><span class="p">(</span><span class="s">&quot;异常&quot;</span><span class="p">)</span>
-<span class="p">}</span>
+<pre><code>// ❌ 错误：async 的异常被忽略
+scope.async {
+    throw RuntimeException(&quot;异常&quot;)
+}
 
-<span class="c1">// ✅ 正确：必须 await()</span>
-<span class="n">scope</span><span class="p">.</span><span class="na">async</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="k">throw</span><span class="w"> </span><span class="n">RuntimeException</span><span class="p">(</span><span class="s">&quot;异常&quot;</span><span class="p">)</span>
-<span class="p">}.</span><span class="na">let</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">deferred</span><span class="w"> </span><span class="o">-&gt;</span>
-<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">deferred</span><span class="p">.</span><span class="na">await</span><span class="p">()</span>
-<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">e</span><span class="p">:</span><span class="w"> </span><span class="n">Exception</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="c1">// 处理异常</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="p">}</span>
+// ✅ 正确：必须 await()
+scope.async {
+    throw RuntimeException(&quot;异常&quot;)
+}.let { deferred -&gt;
+    try {
+        deferred.await()
+    } catch (e: Exception) {
+        // 处理异常
+    }
+}
 
-<span class="c1">// ✅ 或者如果不需要结果，使用 launch 代替 async</span>
-<span class="n">scope</span><span class="p">.</span><span class="na">launch</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="k">throw</span><span class="w"> </span><span class="n">RuntimeException</span><span class="p">(</span><span class="s">&quot;异常&quot;</span><span class="p">)</span>
-<span class="p">}</span>
-</code></pre></div>
+// ✅ 或者如果不需要结果，使用 launch 代替 async
+scope.launch {
+    throw RuntimeException(&quot;异常&quot;)
+}
+</code></pre>
 
 <h3>陷阱 3：在 CancellationException 中调用挂起函数</h3>
-<div class="codehilite"><pre><span></span><code><span class="c1">// ❌ 错误：在 finally 块中调用挂起函数</span>
-<span class="n">job</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">launch</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">delay</span><span class="p">(</span><span class="m">1000</span><span class="p">)</span>
-<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">finally</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">delay</span><span class="p">(</span><span class="m">100</span><span class="p">)</span><span class="w"> </span><span class="c1">// 协程取消后，这里抛出 CancellationException</span>
-<span class="w">        </span><span class="n">cleanup</span><span class="p">()</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="p">}</span>
+<pre><code>// ❌ 错误：在 finally 块中调用挂起函数
+job = launch {
+    try {
+        delay(1000)
+    } finally {
+        delay(100) // 协程取消后，这里抛出 CancellationException
+        cleanup()
+    }
+}
 
-<span class="c1">// ✅ 正确：使用 withContext(NonCancellable)</span>
-<span class="n">job</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">launch</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">delay</span><span class="p">(</span><span class="m">1000</span><span class="p">)</span>
-<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">finally</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">withContext</span><span class="p">(</span><span class="n">NonCancellable</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="n">delay</span><span class="p">(</span><span class="m">100</span><span class="p">)</span>
-<span class="w">            </span><span class="n">cleanup</span><span class="p">()</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div>
+// ✅ 正确：使用 withContext(NonCancellable)
+job = launch {
+    try {
+        delay(1000)
+    } finally {
+        withContext(NonCancellable) {
+            delay(100)
+            cleanup()
+        }
+    }
+}
+</code></pre>
 
 <h3>陷阱 4：在 CoroutineScope 中使用 try-catch 捕获子协程异常</h3>
-<div class="codehilite"><pre><span></span><code><span class="c1">// ❌ 错误：try-catch 不能跨协程边界</span>
-<span class="n">scope</span><span class="p">.</span><span class="na">launch</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">launch</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">throw</span><span class="w"> </span><span class="n">Exception</span><span class="p">()</span><span class="w"> </span><span class="p">}</span><span class="w">  </span><span class="c1">// 异常发生在这里</span>
-<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">e</span><span class="p">:</span><span class="w"> </span><span class="n">Exception</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="c1">// 捕获不到</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="p">}</span>
+<pre><code>// ❌ 错误：try-catch 不能跨协程边界
+scope.launch {
+    try {
+        launch { throw Exception() }  // 异常发生在这里
+    } catch (e: Exception) {
+        // 捕获不到
+    }
+}
 
-<span class="c1">// ✅ 正确：在子协程内部捕获</span>
-<span class="n">scope</span><span class="p">.</span><span class="na">launch</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="n">launch</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="k">throw</span><span class="w"> </span><span class="n">Exception</span><span class="p">()</span>
-<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">e</span><span class="p">:</span><span class="w"> </span><span class="n">Exception</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="c1">// 在这里处理</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div>
+// ✅ 正确：在子协程内部捕获
+scope.launch {
+    launch {
+        try {
+            throw Exception()
+        } catch (e: Exception) {
+            // 在这里处理
+        }
+    }
+}
+</code></pre>
 
 <h3>陷阱 5：ViewModelScope 中使用 async 不 await</h3>
 <p>在 Android 的 ViewModel 中，<code>viewModelScope</code> 使用 <code>SupervisorJob</code>，这意味着子协程的异常不会相互影响。但如果你使用 <code>async</code> 而不 <code>await()</code>：</p>
-<div class="codehilite"><pre><span></span><code><span class="kd">class</span><span class="w"> </span><span class="nc">MyViewModel</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">ViewModel</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="kd">fun</span><span class="w"> </span><span class="nf">load</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">viewModelScope</span><span class="p">.</span><span class="na">async</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="c1">// ❌ 不 await 的 async</span>
-<span class="w">            </span><span class="k">throw</span><span class="w"> </span><span class="n">RuntimeException</span><span class="p">(</span><span class="s">&quot;异常&quot;</span><span class="p">)</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">        </span><span class="c1">// 异常不会崩溃，但会丢失</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div>
+<pre><code>class MyViewModel : ViewModel() {
+    fun load() {
+        viewModelScope.async { // ❌ 不 await 的 async
+            throw RuntimeException(&quot;异常&quot;)
+        }
+        // 异常不会崩溃，但会丢失
+    }
+}
+</code></pre>
 
 <p>虽然不会崩溃，但异常信息会丢失。要么使用 <code>launch</code>，要么确保 <code>await()</code>。</p>
 <h2>实战：构建健壮的协程异常处理框架</h2>
 <h3>统一错误处理基类</h3>
-<div class="codehilite"><pre><span></span><code><span class="kd">abstract</span><span class="w"> </span><span class="kd">class</span><span class="w"> </span><span class="nc">BaseRepository</span><span class="w"> </span><span class="p">{</span>
+<pre><code>abstract class BaseRepository {
 
-<span class="w">    </span><span class="kd">protected</span><span class="w"> </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">safeApiCall</span><span class="p">(</span>
-<span class="w">        </span><span class="n">call</span><span class="p">:</span><span class="w"> </span><span class="n">suspend</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">T</span><span class="p">,</span>
-<span class="w">        </span><span class="n">errorMessage</span><span class="p">:</span><span class="w"> </span><span class="kt">String</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;请求失败&quot;</span>
-<span class="w">    </span><span class="p">):</span><span class="w"> </span><span class="n">Result</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">runCatching</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">call</span><span class="p">()</span>
-<span class="w">    </span><span class="p">}.</span><span class="na">recover</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">exception</span><span class="w"> </span><span class="o">-&gt;</span>
-<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="nv">wrappedException</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">when</span><span class="w"> </span><span class="p">(</span><span class="n">exception</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="k">is</span><span class="w"> </span><span class="n">IOException</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">NetworkException</span><span class="p">(</span><span class="n">errorMessage</span><span class="p">,</span><span class="w"> </span><span class="n">exception</span><span class="p">)</span>
-<span class="w">            </span><span class="k">is</span><span class="w"> </span><span class="n">HttpException</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">HttpException</span><span class="p">(</span><span class="n">exception</span><span class="p">.</span><span class="na">code</span><span class="p">(),</span><span class="w"> </span><span class="n">errorMessage</span><span class="p">)</span>
-<span class="w">            </span><span class="k">else</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">UnknownException</span><span class="p">(</span><span class="n">errorMessage</span><span class="p">,</span><span class="w"> </span><span class="n">exception</span><span class="p">)</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">        </span><span class="k">throw</span><span class="w"> </span><span class="n">wrappedException</span>
-<span class="w">    </span><span class="p">}</span>
+    protected suspend fun &lt;T&gt; safeApiCall(
+        call: suspend () -&gt; T,
+        errorMessage: String = &quot;请求失败&quot;
+    ): Result&lt;T&gt; = runCatching {
+        call()
+    }.recover { exception -&gt;
+        val wrappedException = when (exception) {
+            is IOException -&gt; NetworkException(errorMessage, exception)
+            is HttpException -&gt; HttpException(exception.code(), errorMessage)
+            else -&gt; UnknownException(errorMessage, exception)
+        }
+        throw wrappedException
+    }
 
-<span class="w">    </span><span class="kd">protected</span><span class="w"> </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">safeDbCall</span><span class="p">(</span>
-<span class="w">        </span><span class="n">call</span><span class="p">:</span><span class="w"> </span><span class="n">suspend</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">T</span>
-<span class="w">    </span><span class="p">):</span><span class="w"> </span><span class="n">Result</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">runCatching</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">call</span><span class="p">()</span>
-<span class="w">    </span><span class="p">}.</span><span class="na">recover</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">exception</span><span class="w"> </span><span class="o">-&gt;</span>
-<span class="w">        </span><span class="k">throw</span><span class="w"> </span><span class="n">DatabaseException</span><span class="p">(</span><span class="s">&quot;数据库操作失败&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">exception</span><span class="p">)</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div>
+    protected suspend fun &lt;T&gt; safeDbCall(
+        call: suspend () -&gt; T
+    ): Result&lt;T&gt; = runCatching {
+        call()
+    }.recover { exception -&gt;
+        throw DatabaseException(&quot;数据库操作失败&quot;, exception)
+    }
+}
+</code></pre>
 
 <h3>全局异常监控</h3>
-<div class="codehilite"><pre><span></span><code><span class="c1">// 在 Application 中初始化</span>
-<span class="kd">class</span><span class="w"> </span><span class="nc">MyApplication</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">Application</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<pre><code>// 在 Application 中初始化
+class MyApplication : Application() {
 
-<span class="w">    </span><span class="kd">lateinit</span><span class="w"> </span><span class="kd">var</span><span class="w"> </span><span class="nv">coroutineExceptionHandler</span><span class="p">:</span><span class="w"> </span><span class="n">CoroutineExceptionHandler</span>
-<span class="w">        </span><span class="n">private</span><span class="w"> </span><span class="k">set</span>
+    lateinit var coroutineExceptionHandler: CoroutineExceptionHandler
+        private set
 
-<span class="w">    </span><span class="kd">override</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onCreate</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="k">super</span><span class="p">.</span><span class="na">onCreate</span><span class="p">()</span>
+    override fun onCreate() {
+        super.onCreate()
 
-<span class="w">        </span><span class="n">coroutineExceptionHandler</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CoroutineExceptionHandler</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">_</span><span class="p">,</span><span class="w"> </span><span class="n">throwable</span><span class="w"> </span><span class="o">-&gt;</span>
-<span class="w">            </span><span class="k">when</span><span class="w"> </span><span class="p">(</span><span class="n">throwable</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">                </span><span class="k">is</span><span class="w"> </span><span class="n">NetworkException</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">{</span>
-<span class="w">                    </span><span class="n">Log</span><span class="p">.</span><span class="na">w</span><span class="p">(</span><span class="s">&quot;APP&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;网络异常: </span><span class="si">${</span><span class="n">throwable</span><span class="p">.</span><span class="na">message</span><span class="si">}</span><span class="s">&quot;</span><span class="p">)</span>
-<span class="w">                </span><span class="p">}</span>
-<span class="w">                </span><span class="k">is</span><span class="w"> </span><span class="n">CancellationException</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">{</span>
-<span class="w">                    </span><span class="c1">// 忽略正常取消</span>
-<span class="w">                </span><span class="p">}</span>
-<span class="w">                </span><span class="k">else</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">{</span>
-<span class="w">                    </span><span class="n">Log</span><span class="p">.</span><span class="na">e</span><span class="p">(</span><span class="s">&quot;APP&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;未处理的协程异常&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">throwable</span><span class="p">)</span>
-<span class="w">                    </span><span class="c1">// 上报到 Crashlytics 等分析平台</span>
-<span class="w">                    </span><span class="n">Crashlytics</span><span class="p">.</span><span class="na">logException</span><span class="p">(</span><span class="n">throwable</span><span class="p">)</span>
-<span class="w">                </span><span class="p">}</span>
-<span class="w">            </span><span class="p">}</span>
-<span class="w">        </span><span class="p">}</span>
+        coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable -&gt;
+            when (throwable) {
+                is NetworkException -&gt; {
+                    Log.w(&quot;APP&quot;, &quot;网络异常: ${throwable.message}&quot;)
+                }
+                is CancellationException -&gt; {
+                    // 忽略正常取消
+                }
+                else -&gt; {
+                    Log.e(&quot;APP&quot;, &quot;未处理的协程异常&quot;, throwable)
+                    // 上报到 Crashlytics 等分析平台
+                    Crashlytics.logException(throwable)
+                }
+            }
+        }
 
-<span class="w">        </span><span class="c1">// 设置全局默认处理器</span>
-<span class="w">        </span><span class="n">Thread</span><span class="p">.</span><span class="na">setDefaultUncaughtExceptionHandler</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">thread</span><span class="p">,</span><span class="w"> </span><span class="n">exception</span><span class="w"> </span><span class="o">-&gt;</span>
-<span class="w">            </span><span class="n">Log</span><span class="p">.</span><span class="na">e</span><span class="p">(</span><span class="s">&quot;APP&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;全局未捕获异常&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">exception</span><span class="p">)</span>
-<span class="w">            </span><span class="n">Crashlytics</span><span class="p">.</span><span class="na">logException</span><span class="p">(</span><span class="n">exception</span><span class="p">)</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div>
+        // 设置全局默认处理器
+        Thread.setDefaultUncaughtExceptionHandler { thread, exception -&gt;
+            Log.e(&quot;APP&quot;, &quot;全局未捕获异常&quot;, exception)
+            Crashlytics.logException(exception)
+        }
+    }
+}
+</code></pre>
 
 <h3>完整的 ViewModel 异常处理模板</h3>
-<div class="codehilite"><pre><span></span><code><span class="kd">abstract</span><span class="w"> </span><span class="kd">class</span><span class="w"> </span><span class="nc">BaseViewModel</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">ViewModel</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<pre><code>abstract class BaseViewModel : ViewModel() {
 
-<span class="w">    </span><span class="kd">protected</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">launchCatching</span><span class="p">(</span>
-<span class="w">        </span><span class="n">block</span><span class="p">:</span><span class="w"> </span><span class="n">suspend</span><span class="w"> </span><span class="n">CoroutineScope</span><span class="p">.()</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">T</span><span class="p">,</span>
-<span class="w">        </span><span class="n">onError</span><span class="p">:</span><span class="w"> </span><span class="p">((</span><span class="n">Throwable</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="kt">Unit</span><span class="p">)</span><span class="o">?</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">null</span>
-<span class="w">    </span><span class="p">):</span><span class="w"> </span><span class="n">Job</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">viewModelScope</span><span class="p">.</span><span class="na">launch</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
-<span class="w">                </span><span class="n">block</span><span class="p">()</span>
-<span class="w">            </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">e</span><span class="p">:</span><span class="w"> </span><span class="n">CancellationException</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">                </span><span class="c1">// 正常取消，不处理</span>
-<span class="w">                </span><span class="k">throw</span><span class="w"> </span><span class="n">e</span>
-<span class="w">            </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">e</span><span class="p">:</span><span class="w"> </span><span class="n">Exception</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">                </span><span class="n">Log</span><span class="p">.</span><span class="na">e</span><span class="p">(</span><span class="n">TAG</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;协程执行异常&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">e</span><span class="p">)</span>
-<span class="w">                </span><span class="n">onError</span><span class="o">?.</span><span class="na">invoke</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="o">?:</span><span class="w"> </span><span class="n">handleDefaultError</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
-<span class="w">            </span><span class="p">}</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">    </span><span class="p">}</span>
+    protected fun &lt;T&gt; launchCatching(
+        block: suspend CoroutineScope.() -&gt; T,
+        onError: ((Throwable) -&gt; Unit)? = null
+    ): Job {
+        return viewModelScope.launch {
+            try {
+                block()
+            } catch (e: CancellationException) {
+                // 正常取消，不处理
+                throw e
+            } catch (e: Exception) {
+                Log.e(TAG, &quot;协程执行异常&quot;, e)
+                onError?.invoke(e) ?: handleDefaultError(e)
+            }
+        }
+    }
 
-<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">handleDefaultError</span><span class="p">(</span><span class="n">exception</span><span class="p">:</span><span class="w"> </span><span class="n">Exception</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="nv">message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">when</span><span class="w"> </span><span class="p">(</span><span class="n">exception</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="k">is</span><span class="w"> </span><span class="n">NetworkException</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="s">&quot;网络连接失败，请检查网络&quot;</span>
-<span class="w">            </span><span class="k">is</span><span class="w"> </span><span class="n">TimeoutException</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="s">&quot;请求超时，请稍后重试&quot;</span>
-<span class="w">            </span><span class="k">else</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="s">&quot;操作失败: </span><span class="si">${</span><span class="n">exception</span><span class="p">.</span><span class="na">message</span><span class="si">}</span><span class="s">&quot;</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">        </span><span class="c1">// 通过 SharedFlow 发送给 UI 层</span>
-<span class="w">        </span><span class="n">_errorEvent</span><span class="p">.</span><span class="na">emit</span><span class="p">(</span><span class="n">ErrorEvent</span><span class="p">(</span><span class="n">message</span><span class="p">))</span>
-<span class="w">    </span><span class="p">}</span>
+    private fun handleDefaultError(exception: Exception) {
+        val message = when (exception) {
+            is NetworkException -&gt; &quot;网络连接失败，请检查网络&quot;
+            is TimeoutException -&gt; &quot;请求超时，请稍后重试&quot;
+            else -&gt; &quot;操作失败: ${exception.message}&quot;
+        }
+        // 通过 SharedFlow 发送给 UI 层
+        _errorEvent.emit(ErrorEvent(message))
+    }
 
-<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">_errorEvent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MutableSharedFlow</span><span class="o">&lt;</span><span class="n">ErrorEvent</span><span class="o">&gt;</span><span class="p">()</span>
-<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">errorEvent</span><span class="p">:</span><span class="w"> </span><span class="n">SharedFlow</span><span class="o">&lt;</span><span class="n">ErrorEvent</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_errorEvent</span><span class="p">.</span><span class="na">asSharedFlow</span><span class="p">()</span>
+    private val _errorEvent = MutableSharedFlow&lt;ErrorEvent&gt;()
+    val errorEvent: SharedFlow&lt;ErrorEvent&gt; = _errorEvent.asSharedFlow()
 
-<span class="w">    </span><span class="kd">data</span><span class="w"> </span><span class="kd">class</span><span class="w"> </span><span class="nc">ErrorEvent</span><span class="p">(</span><span class="kd">val</span><span class="w"> </span><span class="nv">message</span><span class="p">:</span><span class="w"> </span><span class="kt">String</span><span class="p">)</span>
-<span class="p">}</span>
+    data class ErrorEvent(val message: String)
+}
 
-<span class="c1">// 使用</span>
-<span class="kd">class</span><span class="w"> </span><span class="nc">ProfileViewModel</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">BaseViewModel</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+// 使用
+class ProfileViewModel : BaseViewModel() {
 
-<span class="w">    </span><span class="kd">fun</span><span class="w"> </span><span class="nf">loadProfile</span><span class="p">(</span><span class="n">userId</span><span class="p">:</span><span class="w"> </span><span class="kt">String</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">launchCatching</span><span class="p">(</span>
-<span class="w">            </span><span class="n">block</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
-<span class="w">                </span><span class="kd">val</span><span class="w"> </span><span class="nv">profile</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">repository</span><span class="p">.</span><span class="na">getProfile</span><span class="p">(</span><span class="n">userId</span><span class="p">)</span>
-<span class="w">                </span><span class="n">_profile</span><span class="p">.</span><span class="na">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">profile</span>
-<span class="w">            </span><span class="p">},</span>
-<span class="w">            </span><span class="n">onError</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">exception</span><span class="w"> </span><span class="o">-&gt;</span>
-<span class="w">                </span><span class="c1">// 自定义错误处理</span>
-<span class="w">                </span><span class="n">_profile</span><span class="p">.</span><span class="na">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Profile</span><span class="p">.</span><span class="na">default</span><span class="p">()</span>
-<span class="w">            </span><span class="p">}</span>
-<span class="w">        </span><span class="p">)</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div>
+    fun loadProfile(userId: String) {
+        launchCatching(
+            block = {
+                val profile = repository.getProfile(userId)
+                _profile.value = profile
+            },
+            onError = { exception -&gt;
+                // 自定义错误处理
+                _profile.value = Profile.default()
+            }
+        )
+    }
+}
+</code></pre>
 
 <h2>总结</h2>
 <p>Kotlin Coroutine 的异常处理需要理解三个核心概念：</p>
@@ -1031,7 +1031,7 @@
       <hr style="border: none; border-top: 1px solid var(--color-border); margin: var(--space-3xl) 0;">
       
       <div class="blog-topics" style="margin-bottom: var(--space-xl);">
-        <span class="topic-label">读完之后：</span>
+        读完之后：
         <a href="../index.html" class="topic-tag">返回博客列表</a>
       </div>
     </div>
@@ -1110,7 +1110,7 @@
   <div class="toc-drawer-overlay" id="tocDrawerOverlay"></div>
   <div class="toc-drawer" id="tocDrawer">
     <div class="toc-drawer-header">
-      <span class="toc-drawer-title">目录</span>
+      目录
       <button class="toc-drawer-close" id="tocDrawerClose" aria-label="关闭目录">&times;</button>
     </div>
     <div id="tocDrawerContent" class="post-toc-list"></div>
