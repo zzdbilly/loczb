@@ -4,6 +4,7 @@
 
 // Article index with tags
 const ARTICLE_INDEX = [
+  { slug: "gradle-构建加速全攻略从-5-分钟到-30-秒", tags: ["Gradle", "Android", "构建优化", "性能优化"], title: "Gradle 构建加速全攻略：从 5 分钟到 30 秒" },
   { slug: "kotlin-scope-functions-实战选择五个函数一个决策树", tags: ["Kotlin", "Android", "最佳实践"], title: "Kotlin Scope Functions 实战选择：五个函数一个决策树" },
   { slug: "vps-选购与使用指南五个常见场景的配置与避坑", tags: ["VPS", "服务器", "运维", "DevOps"], title: "VPS 选购与使用指南：五个常见场景的配置与避坑" },
   { slug: "mysql-索引优化实战从慢查询到最佳实践", tags: ["MySQL", "数据库", "索引", "性能优化"], title: "MySQL 索引优化实战：从慢查询到最佳实践" },
