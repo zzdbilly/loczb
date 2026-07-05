@@ -180,7 +180,9 @@ function rebuildBlogIndex() {
   let html = fs.readFileSync(BLOG_INDEX, 'utf-8');
 
   // 生成所有文章项 HTML
-  const articleItems = posts.map(p => {
+  const articleItems = [...posts]
+    .sort((a, b) => (b.date || '').localeCompare(a.date || ''))
+    .map(p => {
     const tagsForArticle = p.tags;
     const dateStr = p.date;
     // data-tags 用逗号分隔（避免多词标签被空格误拆）
