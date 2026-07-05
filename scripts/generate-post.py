@@ -457,13 +457,18 @@ def main():
     # 更新相关文章索引
     add_to_index(slug, title, tag_list)
     
-    print(f"\n💡 提示: 文章已生成，generate-index.js 自动重建全部索引")
-
-    # ═══════════════════════════════════════════════
-    # generate-index.js 统一处理索引更新
-    # 不需要再手动单独执行 node scripts/generate-index.js
-    # 
-    # ═══════════════════════════════════════════════
+    # 调用 generate-index.js 重建所有索引
+    import subprocess as sp
+    result = sp.run(['node', 'scripts/generate-index.js'], capture_output=True, text=True, cwd=os.path.dirname(os.path.abspath(__file__)))
+    if result.returncode == 0:
+        for line in result.stdout.strip().split('\n'):
+            print(f"  {line}")
+        print(f"  ✅ generate-index.js 重建完成")
+    else:
+        print(f"  ⚠️ generate-index.js 失败: {result.stderr}")
+    
+    print(f"")
+    print(f"🎉 文章已发布！所有索引已更新，直接 git push 即可")
 
 
 def update_sitemap():
