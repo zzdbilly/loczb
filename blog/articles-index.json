@@ -527,6 +527,19 @@
       "url": "blog/posts/kotlin-coroutine-exception-handling.html"
     },
     {
+      "slug": "kotlin-scope-functions-实战选择五个函数一个决策树",
+      "title": "Kotlin Scope Functions 实战选择：五个函数一个决策树",
+      "date": "2026-07-05",
+      "category": "技术",
+      "tags": [
+        "Kotlin",
+        "Android",
+        "最佳实践"
+      ],
+      "excerpt": "别再纠结 let 和 apply 的区别了——从 this/it 和返回值两个维度理清 Kotlin 的五个 Scope Functions，附反模式和团队规范",
+      "url": "blog/posts/kotlin-scope-functions-实战选择五个函数一个决策树.html"
+    },
+    {
       "slug": "programmers-should-learn-to-unplug",
       "title": "程序员应该学会「关机」：工作焦虑如何侵蚀你的休息时间",
       "date": "2026-07-04",
@@ -538,22 +551,6 @@
       ],
       "excerpt": "不会关机的程序员不是在拼事业，而是在慢性消耗自己。聊聊为什么下班后的大脑还在 debug，以及如何真正停下来。",
       "url": "blog/posts/programmers-should-learn-to-unplug.html"
-    },
-    {
-      "slug": "why-tech-people-should-write",
-      "title": "技术人为什么要写作",
-      "date": "2026-07-01",
-      "category": "技术",
-      "tags": [
-        "思考",
-        "写作",
-        "个人成长",
-        "技术人",
-        "学习方法",
-        "个人品牌"
-      ],
-      "excerpt": "写作不仅是最强的学习方式，更能帮助技术人建立个人品牌、打破信息茧房、留下成长痕迹",
-      "url": "blog/posts/why-tech-people-should-write.html"
     },
     {
       "slug": "less-is-more-focus-in-information-age",
@@ -586,6 +583,20 @@
       "url": "blog/posts/soft-skills-tech-people-overlook.html"
     },
     {
+      "slug": "why-i-started-blogging",
+      "title": "为什么我开始写博客：从潜水到发声",
+      "date": "2026-06-30",
+      "category": "思考",
+      "tags": [
+        "思考",
+        "学习",
+        "个人成长",
+        "博客"
+      ],
+      "excerpt": "一个普通工程师的写作心路 — 为什么要开始写博客，写作如何改变了我的学习方式，以及我对个人品牌的理解",
+      "url": "blog/posts/why-i-started-blogging.html"
+    },
+    {
       "slug": "mcp-server-deep-dive",
       "title": "MCP 协议深入实战：从入门到编写自定义 MCP Server",
       "date": "2026-06-30",
@@ -614,6 +625,23 @@
       ],
       "excerpt": "Nginx 反向代理生产级调优指南：worker 配置、SSL 优化、缓存策略、负载均衡、限流与监控完整实践",
       "url": "blog/posts/nginx-reverse-proxy-tuning.html"
+    },
+    {
+      "slug": "zig-language-introduction",
+      "title": "Zig 语言入门：比 C 更安全的系统编程",
+      "date": "2026-06-27",
+      "category": "系统编程",
+      "tags": [
+        "Zig",
+        "系统编程",
+        "comptime",
+        "Allocator",
+        "交叉编译",
+        "build.zig",
+        "C 互操作"
+      ],
+      "excerpt": "Zig 语言入门完整指南：comptime 编译期计算、Allocator 模式、错误处理、C 互操作、交叉编译与构建系统深度解析",
+      "url": "blog/posts/zig-language-introduction.html"
     },
     {
       "slug": "rag-introduction",
@@ -711,32 +739,18 @@
       "url": "blog/posts/kotlin-multiplatform-practice.html"
     },
     {
-      "slug": "react-server-components",
-      "title": "React Server Components 深入解析",
+      "slug": "rust-getting-started",
+      "title": "Rust 入门：从零到生产",
       "date": "2026-04-26",
-      "category": "前端",
+      "category": "系统编程",
       "tags": [
-        "React",
-        "Server Components",
-        "Next.js",
-        "前端架构"
+        "Rust",
+        "系统编程",
+        "所有权",
+        "内存安全"
       ],
-      "excerpt": "React Server Components 深入解析：理解服务端组件的工作原理、数据获取方式、与客户端组件的交互，以及最佳实践",
-      "url": "blog/posts/react-server-components.html"
-    },
-    {
-      "slug": "sqlite-wal-performance",
-      "title": "SQLite 进阶：WAL 模式与性能优化",
-      "date": "2026-04-26",
-      "category": "数据库",
-      "tags": [
-        "SQLite",
-        "数据库",
-        "WAL",
-        "性能优化"
-      ],
-      "excerpt": "SQLite 进阶：WAL 模式原理、性能优化技巧、并发处理、索引策略、PRAGMA 配置详解",
-      "url": "blog/posts/sqlite-wal-performance.html"
+      "excerpt": "Rust 入门指南：从零开始学习 Rust，掌握所有权、借用、生命周期等核心概念，构建高性能安全程序",
+      "url": "blog/posts/rust-getting-started.html"
     },
     {
       "slug": "typescript-type-gymnastics",
@@ -792,37 +806,6 @@
       "url": "blog/posts/linux-inode-mechanism-deep-dive.html"
     },
     {
-      "slug": "why-i-started-blogging",
-      "title": "为什么我开始写博客：从潜水到发声",
-      "date": "2026-06-30",
-      "category": "思考",
-      "tags": [
-        "思考",
-        "学习",
-        "个人成长",
-        "博客"
-      ],
-      "excerpt": "一个普通工程师的写作心路 — 为什么要开始写博客，写作如何改变了我的学习方式，以及我对个人品牌的理解",
-      "url": "blog/posts/why-i-started-blogging.html"
-    },
-    {
-      "slug": "zig-language-introduction",
-      "title": "Zig 语言入门：比 C 更安全的系统编程",
-      "date": "2026-06-27",
-      "category": "系统编程",
-      "tags": [
-        "Zig",
-        "系统编程",
-        "comptime",
-        "Allocator",
-        "交叉编译",
-        "build.zig",
-        "C 互操作"
-      ],
-      "excerpt": "Zig 语言入门完整指南：comptime 编译期计算、Allocator 模式、错误处理、C 互操作、交叉编译与构建系统深度解析",
-      "url": "blog/posts/zig-language-introduction.html"
-    },
-    {
       "slug": "webassembly-in-practice",
       "title": "WebAssembly 实战：浏览器端高性能计算",
       "date": "2026-06-27",
@@ -853,18 +836,32 @@
       "url": "blog/posts/mcp-android-integration.html"
     },
     {
-      "slug": "rust-getting-started",
-      "title": "Rust 入门：从零到生产",
+      "slug": "react-server-components",
+      "title": "React Server Components 深入解析",
       "date": "2026-04-26",
-      "category": "系统编程",
+      "category": "前端",
       "tags": [
-        "Rust",
-        "系统编程",
-        "所有权",
-        "内存安全"
+        "React",
+        "Server Components",
+        "Next.js",
+        "前端架构"
       ],
-      "excerpt": "Rust 入门指南：从零开始学习 Rust，掌握所有权、借用、生命周期等核心概念，构建高性能安全程序",
-      "url": "blog/posts/rust-getting-started.html"
+      "excerpt": "React Server Components 深入解析：理解服务端组件的工作原理、数据获取方式、与客户端组件的交互，以及最佳实践",
+      "url": "blog/posts/react-server-components.html"
+    },
+    {
+      "slug": "sqlite-wal-performance",
+      "title": "SQLite 进阶：WAL 模式与性能优化",
+      "date": "2026-04-26",
+      "category": "数据库",
+      "tags": [
+        "SQLite",
+        "数据库",
+        "WAL",
+        "性能优化"
+      ],
+      "excerpt": "SQLite 进阶：WAL 模式原理、性能优化技巧、并发处理、索引策略、PRAGMA 配置详解",
+      "url": "blog/posts/sqlite-wal-performance.html"
     },
     {
       "slug": "local-rag-ollama",
@@ -882,18 +879,18 @@
       "url": "blog/posts/local-rag-ollama.html"
     },
     {
-      "slug": "pwa-offline-web-app",
-      "title": "PWA 实战：从零打造离线可用 Web 应用",
-      "date": "2026-03-22",
-      "category": "前端",
+      "slug": "ssh-security-hardening",
+      "title": "云服务器 SSH 安全加固完整指南",
+      "date": "2026-03-18",
+      "category": "安全",
       "tags": [
-        "PWA",
-        "Service Worker",
-        "前端",
-        "离线应用"
+        "DevOps",
+        "安全",
+        "SSH",
+        "云服务器"
       ],
-      "excerpt": "PWA 实战：从零开始打造离线可用的 Web 应用，详解 Service Worker、manifest.json 配置与缓存策略",
-      "url": "blog/posts/pwa-offline-web-app.html"
+      "excerpt": "云服务器 SSH 安全加固完整指南 - 从端口修改到密钥认证，全方位提升 Linux VPS 安全性。适用于 AWS、阿里云、腾讯云、DigitalOcean 等主流云服务商",
+      "url": "blog/posts/ssh-security-hardening.html"
     },
     {
       "slug": "tailscale-derp-server",
@@ -908,34 +905,6 @@
       ],
       "excerpt": "自建 Tailscale DERP 中继服务器完整指南 - 从原理到实战，掌握私有 DERP 服务器搭建",
       "url": "blog/posts/tailscale-derp-server.html"
-    },
-    {
-      "slug": "vscode-port-forward",
-      "title": "VS Code 端口转发原理详解",
-      "date": "2026-03-17",
-      "category": "DevOps",
-      "tags": [
-        "DevOps",
-        "SSH",
-        "VS Code",
-        "网络"
-      ],
-      "excerpt": "VS Code 端口转发原理详解：SSH 隧道工作机制与实战应用 - 张小猛的技术博客",
-      "url": "blog/posts/vscode-port-forward.html"
-    },
-    {
-      "slug": "openclaw-guide",
-      "title": "OpenClaw 深度使用指南：从 0 到 1 构建个人 AI Agent",
-      "date": "2026-03-13",
-      "category": "AI",
-      "tags": [
-        "AI",
-        "OpenClaw",
-        "Agent",
-        "自动化"
-      ],
-      "excerpt": "OpenClaw 深度使用指南：从 0 到 1 构建个人 AI Agent - 张小猛的技术博客",
-      "url": "blog/posts/openclaw-guide.html"
     },
     {
       "slug": "mobile-gs-paper-review",
@@ -977,6 +946,34 @@
       "url": "blog/posts/onnx-mobile-deployment.html"
     },
     {
+      "slug": "pwa-offline-web-app",
+      "title": "PWA 实战：从零打造离线可用 Web 应用",
+      "date": "2026-03-22",
+      "category": "前端",
+      "tags": [
+        "PWA",
+        "Service Worker",
+        "前端",
+        "离线应用"
+      ],
+      "excerpt": "PWA 实战：从零开始打造离线可用的 Web 应用，详解 Service Worker、manifest.json 配置与缓存策略",
+      "url": "blog/posts/pwa-offline-web-app.html"
+    },
+    {
+      "slug": "openclaw-guide",
+      "title": "OpenClaw 深度使用指南：从 0 到 1 构建个人 AI Agent",
+      "date": "2026-03-13",
+      "category": "AI",
+      "tags": [
+        "AI",
+        "OpenClaw",
+        "Agent",
+        "自动化"
+      ],
+      "excerpt": "OpenClaw 深度使用指南：从 0 到 1 构建个人 AI Agent - 张小猛的技术博客",
+      "url": "blog/posts/openclaw-guide.html"
+    },
+    {
       "slug": "software-engineer-learns-from-manufacturing-lean",
       "title": "软件工程师能从制造业学到什么：精益思维重塑开发流程",
       "date": "",
@@ -984,20 +981,6 @@
       "tags": [],
       "excerpt": "制造业精益思想如何重塑软件开发流程——从丰田生产系统到敏捷开发，从5S方法论到持续交付，跨行业视角下的效率革命",
       "url": "blog/posts/software-engineer-learns-from-manufacturing-lean.html"
-    },
-    {
-      "slug": "ssh-security-hardening",
-      "title": "云服务器 SSH 安全加固完整指南",
-      "date": "2026-03-18",
-      "category": "安全",
-      "tags": [
-        "DevOps",
-        "安全",
-        "SSH",
-        "云服务器"
-      ],
-      "excerpt": "云服务器 SSH 安全加固完整指南 - 从端口修改到密钥认证，全方位提升 Linux VPS 安全性。适用于 AWS、阿里云、腾讯云、DigitalOcean 等主流云服务商",
-      "url": "blog/posts/ssh-security-hardening.html"
     },
     {
       "slug": "static-blog-performance-optimization-59mb",
@@ -1025,23 +1008,53 @@
       "tags": [],
       "excerpt": "从扶墙线路到生产环境部署，不同场景下 VPS 怎么选、怎么配、怎么不踩坑",
       "url": "blog/posts/vps-选购与使用指南五个常见场景的配置与避坑.html"
+    },
+    {
+      "slug": "why-tech-people-should-write",
+      "title": "技术人为什么要写作",
+      "date": "2026-07-01",
+      "category": "技术",
+      "tags": [
+        "思考",
+        "写作",
+        "个人成长",
+        "技术人",
+        "学习方法",
+        "个人品牌"
+      ],
+      "excerpt": "写作不仅是最强的学习方式，更能帮助技术人建立个人品牌、打破信息茧房、留下成长痕迹",
+      "url": "blog/posts/why-tech-people-should-write.html"
+    },
+    {
+      "slug": "vscode-port-forward",
+      "title": "VS Code 端口转发原理详解",
+      "date": "2026-03-17",
+      "category": "DevOps",
+      "tags": [
+        "DevOps",
+        "SSH",
+        "VS Code",
+        "网络"
+      ],
+      "excerpt": "VS Code 端口转发原理详解：SSH 隧道工作机制与实战应用 - 张小猛的技术博客",
+      "url": "blog/posts/vscode-port-forward.html"
     }
   ],
   "tagCloud": [
     {
       "tag": "Android",
-      "count": 17
+      "count": 18
     },
     {
       "tag": "AI",
       "count": 10
     },
     {
-      "tag": "DevOps",
-      "count": 6
+      "tag": "Kotlin",
+      "count": 7
     },
     {
-      "tag": "Kotlin",
+      "tag": "DevOps",
       "count": 6
     },
     {
@@ -1169,11 +1182,19 @@
       "count": 2
     },
     {
+      "tag": "最佳实践",
+      "count": 2
+    },
+    {
       "tag": "自我管理",
       "count": 2
     },
     {
       "tag": "MCP",
+      "count": 2
+    },
+    {
+      "tag": "系统编程",
       "count": 2
     },
     {
@@ -1193,7 +1214,7 @@
       "count": 2
     },
     {
-      "tag": "React",
+      "tag": "Rust",
       "count": 2
     },
     {
@@ -1201,19 +1222,15 @@
       "count": 2
     },
     {
-      "tag": "系统编程",
-      "count": 2
-    },
-    {
-      "tag": "Rust",
-      "count": 2
-    },
-    {
-      "tag": "网络",
+      "tag": "React",
       "count": 2
     },
     {
       "tag": "SSH",
+      "count": 2
+    },
+    {
+      "tag": "网络",
       "count": 2
     },
     {
@@ -1545,14 +1562,6 @@
       "count": 1
     },
     {
-      "tag": "写作",
-      "count": 1
-    },
-    {
-      "tag": "个人品牌",
-      "count": 1
-    },
-    {
       "tag": "专注力",
       "count": 1
     },
@@ -1581,6 +1590,14 @@
       "count": 1
     },
     {
+      "tag": "学习",
+      "count": 1
+    },
+    {
+      "tag": "博客",
+      "count": 1
+    },
+    {
       "tag": "工具调用",
       "count": 1
     },
@@ -1602,6 +1619,30 @@
     },
     {
       "tag": "负载均衡",
+      "count": 1
+    },
+    {
+      "tag": "Zig",
+      "count": 1
+    },
+    {
+      "tag": "comptime",
+      "count": 1
+    },
+    {
+      "tag": "Allocator",
+      "count": 1
+    },
+    {
+      "tag": "交叉编译",
+      "count": 1
+    },
+    {
+      "tag": "build.zig",
+      "count": 1
+    },
+    {
+      "tag": "C 互操作",
       "count": 1
     },
     {
@@ -1713,19 +1754,11 @@
       "count": 1
     },
     {
-      "tag": "Server Components",
+      "tag": "所有权",
       "count": 1
     },
     {
-      "tag": "前端架构",
-      "count": 1
-    },
-    {
-      "tag": "SQLite",
-      "count": 1
-    },
-    {
-      "tag": "WAL",
+      "tag": "内存安全",
       "count": 1
     },
     {
@@ -1761,42 +1794,6 @@
       "count": 1
     },
     {
-      "tag": "最佳实践",
-      "count": 1
-    },
-    {
-      "tag": "学习",
-      "count": 1
-    },
-    {
-      "tag": "博客",
-      "count": 1
-    },
-    {
-      "tag": "Zig",
-      "count": 1
-    },
-    {
-      "tag": "comptime",
-      "count": 1
-    },
-    {
-      "tag": "Allocator",
-      "count": 1
-    },
-    {
-      "tag": "交叉编译",
-      "count": 1
-    },
-    {
-      "tag": "build.zig",
-      "count": 1
-    },
-    {
-      "tag": "C 互操作",
-      "count": 1
-    },
-    {
       "tag": "WebAssembly",
       "count": 1
     },
@@ -1813,11 +1810,19 @@
       "count": 1
     },
     {
-      "tag": "所有权",
+      "tag": "Server Components",
       "count": 1
     },
     {
-      "tag": "内存安全",
+      "tag": "前端架构",
+      "count": 1
+    },
+    {
+      "tag": "SQLite",
+      "count": 1
+    },
+    {
+      "tag": "WAL",
       "count": 1
     },
     {
@@ -1829,15 +1834,7 @@
       "count": 1
     },
     {
-      "tag": "PWA",
-      "count": 1
-    },
-    {
-      "tag": "Service Worker",
-      "count": 1
-    },
-    {
-      "tag": "离线应用",
+      "tag": "云服务器",
       "count": 1
     },
     {
@@ -1846,10 +1843,6 @@
     },
     {
       "tag": "VPN",
-      "count": 1
-    },
-    {
-      "tag": "VS Code",
       "count": 1
     },
     {
@@ -1885,14 +1878,34 @@
       "count": 1
     },
     {
-      "tag": "云服务器",
+      "tag": "PWA",
+      "count": 1
+    },
+    {
+      "tag": "Service Worker",
+      "count": 1
+    },
+    {
+      "tag": "离线应用",
+      "count": 1
+    },
+    {
+      "tag": "写作",
+      "count": 1
+    },
+    {
+      "tag": "个人品牌",
+      "count": 1
+    },
+    {
+      "tag": "VS Code",
       "count": 1
     }
   ],
   "archives": [
     {
       "month": "2026-07",
-      "count": 6,
+      "count": 7,
       "posts": [
         {
           "title": "技术人如何学习新技术",
@@ -1905,14 +1918,14 @@
           "url": "blog/posts/android-15-privacy-media-visual-permission.html"
         },
         {
+          "title": "Kotlin Scope Functions 实战选择：五个函数一个决策树",
+          "date": "2026-07-05",
+          "url": "blog/posts/kotlin-scope-functions-实战选择五个函数一个决策树.html"
+        },
+        {
           "title": "程序员应该学会「关机」：工作焦虑如何侵蚀你的休息时间",
           "date": "2026-07-04",
           "url": "blog/posts/programmers-should-learn-to-unplug.html"
-        },
-        {
-          "title": "技术人为什么要写作",
-          "date": "2026-07-01",
-          "url": "blog/posts/why-tech-people-should-write.html"
         },
         {
           "title": "少即是多：信息过载时代的专注力修炼",
@@ -1923,6 +1936,11 @@
           "title": "代码之外的竞争力：技术人最容易忽视的软技能",
           "date": "2026-07-01",
           "url": "blog/posts/soft-skills-tech-people-overlook.html"
+        },
+        {
+          "title": "技术人为什么要写作",
+          "date": "2026-07-01",
+          "url": "blog/posts/why-tech-people-should-write.html"
         }
       ]
     },
@@ -2026,6 +2044,11 @@
           "url": "blog/posts/kotlin-240-features.html"
         },
         {
+          "title": "为什么我开始写博客：从潜水到发声",
+          "date": "2026-06-30",
+          "url": "blog/posts/why-i-started-blogging.html"
+        },
+        {
           "title": "MCP 协议深入实战：从入门到编写自定义 MCP Server",
           "date": "2026-06-30",
           "url": "blog/posts/mcp-server-deep-dive.html"
@@ -2034,6 +2057,11 @@
           "title": "Nginx 反向代理性能调优：从入门到生产",
           "date": "2026-06-27",
           "url": "blog/posts/nginx-reverse-proxy-tuning.html"
+        },
+        {
+          "title": "Zig 语言入门：比 C 更安全的系统编程",
+          "date": "2026-06-27",
+          "url": "blog/posts/zig-language-introduction.html"
         },
         {
           "title": "RAG 检索增强生成入门：从理念到落地",
@@ -2064,16 +2092,6 @@
           "title": "Kotlin Multiplatform 实战：共享业务逻辑到 iOS",
           "date": "2026-06-24",
           "url": "blog/posts/kotlin-multiplatform-practice.html"
-        },
-        {
-          "title": "为什么我开始写博客：从潜水到发声",
-          "date": "2026-06-30",
-          "url": "blog/posts/why-i-started-blogging.html"
-        },
-        {
-          "title": "Zig 语言入门：比 C 更安全的系统编程",
-          "date": "2026-06-27",
-          "url": "blog/posts/zig-language-introduction.html"
         },
         {
           "title": "WebAssembly 实战：浏览器端高性能计算",
@@ -2153,14 +2171,9 @@
           "url": "blog/posts/android-offline-speech-input.html"
         },
         {
-          "title": "React Server Components 深入解析",
+          "title": "Rust 入门：从零到生产",
           "date": "2026-04-26",
-          "url": "blog/posts/react-server-components.html"
-        },
-        {
-          "title": "SQLite 进阶：WAL 模式与性能优化",
-          "date": "2026-04-26",
-          "url": "blog/posts/sqlite-wal-performance.html"
+          "url": "blog/posts/rust-getting-started.html"
         },
         {
           "title": "TypeScript 类型体操指南",
@@ -2178,9 +2191,14 @@
           "url": "blog/posts/kotlin-coroutines-best-practices.html"
         },
         {
-          "title": "Rust 入门：从零到生产",
+          "title": "React Server Components 深入解析",
           "date": "2026-04-26",
-          "url": "blog/posts/rust-getting-started.html"
+          "url": "blog/posts/react-server-components.html"
+        },
+        {
+          "title": "SQLite 进阶：WAL 模式与性能优化",
+          "date": "2026-04-26",
+          "url": "blog/posts/sqlite-wal-performance.html"
         },
         {
           "title": "RAG 本地实践：用 Ollama + Embedding 搭建私有知识库",
@@ -2199,9 +2217,9 @@
           "url": "blog/posts/ai-agent-skill-development.html"
         },
         {
-          "title": "PWA 实战：从零打造离线可用 Web 应用",
-          "date": "2026-03-22",
-          "url": "blog/posts/pwa-offline-web-app.html"
+          "title": "云服务器 SSH 安全加固完整指南",
+          "date": "2026-03-18",
+          "url": "blog/posts/ssh-security-hardening.html"
         },
         {
           "title": "自建 Tailscale DERP 中继服务器完整指南",
@@ -2209,9 +2227,14 @@
           "url": "blog/posts/tailscale-derp-server.html"
         },
         {
-          "title": "VS Code 端口转发原理详解",
-          "date": "2026-03-17",
-          "url": "blog/posts/vscode-port-forward.html"
+          "title": "ONNX 移动端侧模型实践：从转换到部署",
+          "date": "2026-03-30",
+          "url": "blog/posts/onnx-mobile-deployment.html"
+        },
+        {
+          "title": "PWA 实战：从零打造离线可用 Web 应用",
+          "date": "2026-03-22",
+          "url": "blog/posts/pwa-offline-web-app.html"
         },
         {
           "title": "OpenClaw 深度使用指南：从 0 到 1 构建个人 AI Agent",
@@ -2219,14 +2242,9 @@
           "url": "blog/posts/openclaw-guide.html"
         },
         {
-          "title": "ONNX 移动端侧模型实践：从转换到部署",
-          "date": "2026-03-30",
-          "url": "blog/posts/onnx-mobile-deployment.html"
-        },
-        {
-          "title": "云服务器 SSH 安全加固完整指南",
-          "date": "2026-03-18",
-          "url": "blog/posts/ssh-security-hardening.html"
+          "title": "VS Code 端口转发原理详解",
+          "date": "2026-03-17",
+          "url": "blog/posts/vscode-port-forward.html"
         }
       ]
     },
@@ -2320,6 +2338,11 @@
           "url": "blog/posts/nginx-reverse-proxy-tuning.html"
         },
         {
+          "title": "云服务器 SSH 安全加固完整指南",
+          "date": "2026-03-18",
+          "url": "blog/posts/ssh-security-hardening.html"
+        },
+        {
           "title": "自建 Tailscale DERP 中继服务器完整指南",
           "date": "2026-03-17",
           "url": "blog/posts/tailscale-derp-server.html"
@@ -2328,11 +2351,6 @@
           "title": "VS Code 端口转发原理详解",
           "date": "2026-03-17",
           "url": "blog/posts/vscode-port-forward.html"
-        },
-        {
-          "title": "云服务器 SSH 安全加固完整指南",
-          "date": "2026-03-18",
-          "url": "blog/posts/ssh-security-hardening.html"
         }
       ]
     },
@@ -2352,11 +2370,6 @@
           "url": "blog/posts/programmers-should-learn-to-unplug.html"
         },
         {
-          "title": "技术人为什么要写作",
-          "date": "2026-07-01",
-          "url": "blog/posts/why-tech-people-should-write.html"
-        },
-        {
           "title": "少即是多：信息过载时代的专注力修炼",
           "date": "2026-07-01",
           "url": "blog/posts/less-is-more-focus-in-information-age.html"
@@ -2365,6 +2378,11 @@
           "title": "为什么我开始写博客：从潜水到发声",
           "date": "2026-06-30",
           "url": "blog/posts/why-i-started-blogging.html"
+        },
+        {
+          "title": "技术人为什么要写作",
+          "date": "2026-07-01",
+          "url": "blog/posts/why-tech-people-should-write.html"
         }
       ]
     },
@@ -2526,14 +2544,14 @@
     "安全",
     "Kotlin",
     "AI Agent",
-    "数据库",
     "思考",
-    "系统编程"
+    "系统编程",
+    "数据库"
   ],
   "stats": {
-    "totalPosts": 73,
+    "totalPosts": 74,
     "totalTags": 215,
     "latestDate": "2026-07-01",
-    "oldestDate": ""
+    "oldestDate": "2026-03-17"
   }
 }

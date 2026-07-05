@@ -4,6 +4,7 @@
 
 // Article index with tags
 const ARTICLE_INDEX = [
+  { slug: "kotlin-scope-functions-实战选择五个函数一个决策树", tags: ["Kotlin", "Android", "最佳实践"], title: "Kotlin Scope Functions 实战选择：五个函数一个决策树" },
   { slug: "vps-选购与使用指南五个常见场景的配置与避坑", tags: ["VPS", "服务器", "运维", "DevOps"], title: "VPS 选购与使用指南：五个常见场景的配置与避坑" },
   { slug: "mysql-索引优化实战从慢查询到最佳实践", tags: ["MySQL", "数据库", "索引", "性能优化"], title: "MySQL 索引优化实战：从慢查询到最佳实践" },
   { slug: "ai-编程助手进化论从结对编程到自主编程团队-2026", tags: ["AI 工具", "AI Agent", "Agent", "编程"], title: "AI 编程助手进化论：从结对编程到自主编程团队 (2026)" },
