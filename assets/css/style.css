@@ -4166,6 +4166,9 @@ pre code.hljs {
   background: transparent;
   border: none;
 }
+.codehilite code {
+  display: block;
+}
 [data-theme="dark"] .codehilite {
   background: #161619;
   border-color: #3f3f46;
