@@ -7,6 +7,14 @@
     <language>zh-CN</language>
     <atom:link href="https://709527.xyz/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>Gradle 构建加速全攻略：从 5 分钟到 30 秒</title>
+      <link>https://709527.xyz/blog/posts/gradle-构建加速全攻略从-5-分钟到-30-秒.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/gradle-构建加速全攻略从-5-分钟到-30-秒.html</guid>
+      <description>从 Profile 找到瓶颈到 Configuration Cache，一步步把 Android 项目构建从 5 分钟优化到 30 秒的完整方案</description>
+      <category>技术</category>
+      <pubDate>Sun, 05 Jul 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
       <title>Kotlin Scope Functions 实战选择：五个函数一个决策树</title>
       <link>https://709527.xyz/blog/posts/kotlin-scope-functions-实战选择五个函数一个决策树.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/kotlin-scope-functions-实战选择五个函数一个决策树.html</guid>
@@ -156,14 +164,6 @@
       <guid isPermaLink="true">https://709527.xyz/blog/posts/android-16-foreground-service-constraints.html</guid>
       <description>Android 16 前台服务类型强制约束详解，涵盖 shortService、specialUse、类型匹配规则和迁移适配方案</description>
       <category>Android</category>
-      <pubDate>Tue, 30 Jun 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>Cursor Rules 实战：自定义 AI 代码助手的进阶指南</title>
-      <link>https://709527.xyz/blog/posts/cursor-rules-guide.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/cursor-rules-guide.html</guid>
-      <description>从零搭建 Cursor Rules 体系，涵盖规则语法、分层架构、真实 Android 项目案例和最佳实践</description>
-      <category>AI</category>
       <pubDate>Tue, 30 Jun 2026 00:00:00 +0800</pubDate>
     </item>
   </channel>
