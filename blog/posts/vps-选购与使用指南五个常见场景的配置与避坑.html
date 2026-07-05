@@ -70,12 +70,12 @@
   <nav class="nav">
     <div class="nav-inner">
       <a href="../../index.html" class="nav-logo">
-        loc<span>zb</span>
+        loczb
       </a>
       <button class="nav-toggle" aria-label="打开菜单" aria-expanded="false" aria-controls="nav-links-menu">
-        <span></span>
-        <span></span>
-        <span></span>
+        
+        
+        
       </button>
       <div class="nav-overlay"></div>
       <ul class="nav-links" id="nav-links-menu">
@@ -108,16 +108,16 @@
         <h1>VPS 选购与使用指南：五个常见场景的配置与避坑</h1>
         
         <div class="post-meta">
-          <span>📅 2026-07-05 13:07:14</span>
-          <span>⏱️ 5 min read</span>
-          <span>👤 张小猛</span>
+          📅 2026-07-05 13:07:14
+          ⏱️ 5 min read
+          👤 张小猛
         </div>
         
         <div class="post-tags">
-          <span class="tag">VPS</span>
-          <span class="tag">服务器</span>
-          <span class="tag">运维</span>
-          <span class="tag">DevOps</span>
+          VPS
+          服务器
+          运维
+          DevOps
         </div>
         
         <p>每次看到有人问"想薅羊毛怎么弄台便宜的服务器"，下面的回复一定少不了"搬瓦工""RN""绿云"这些名字。但如果你对 VPS 的定义就是一个月 5 块钱开个代理，那我建议你先别急着买低价 VPS——先搞清楚你需要什么，不然省下来的钱都会变成运维成本赔回去。</p>
@@ -178,18 +178,18 @@
 <p>如果你的博客是纯静态的，别买 VPS。GitHub Pages / Cloudflare Pages / Netlify 都是免费的，用的 CDN 节点比你买的 VPS 快得多。</p>
 <h3>安全兜底</h3>
 <p>开放 80/443 端口的 VPS 每天会被各种扫描器光顾几百次。最低限度要做三件事：</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># 1. 改 SSH 端口，禁止密码登录</span>
-sed<span class="w"> </span>-i<span class="w"> </span><span class="s1">&#39;s/#Port 22/Port 2222/&#39;</span><span class="w"> </span>/etc/ssh/sshd_config
-sed<span class="w"> </span>-i<span class="w"> </span><span class="s1">&#39;s/#PasswordAuthentication yes/PasswordAuthentication no/&#39;</span><span class="w"> </span>/etc/ssh/sshd_config
+<pre><code># 1. 改 SSH 端口，禁止密码登录
+sed -i &#39;s/#Port 22/Port 2222/&#39; /etc/ssh/sshd_config
+sed -i &#39;s/#PasswordAuthentication yes/PasswordAuthentication no/&#39; /etc/ssh/sshd_config
 
-<span class="c1"># 2. 装 fail2ban</span>
-apt<span class="w"> </span>install<span class="w"> </span>fail2ban
+# 2. 装 fail2ban
+apt install fail2ban
 
-<span class="c1"># 3. 配 ufw / iptables，只开放需要的端口</span>
-ufw<span class="w"> </span>default<span class="w"> </span>deny<span class="w"> </span>incoming
-ufw<span class="w"> </span>allow<span class="w"> </span><span class="m">80</span>,443/tcp
-ufw<span class="w"> </span>allow<span class="w"> </span><span class="m">2222</span>
-</code></pre></div>
+# 3. 配 ufw / iptables，只开放需要的端口
+ufw default deny incoming
+ufw allow 80,443/tcp
+ufw allow 2222
+</code></pre>
 
 <p>就这三步，挡住 99% 的基础扫描攻击。</p>
 <h2>场景三：个人开发测试环境</h2>
@@ -201,25 +201,25 @@ ufw<span class="w"> </span>allow<span class="w"> </span><span class="m">2222</sp
 <li>跑 K3s / 微服务测试集群：3 台 2C4G</li>
 </ul>
 <h3>Docker 踩坑</h3>
-<div class="codehilite"><pre><span></span><code><span class="c1"># docker-compose.yml 常见陷阱</span>
-<span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;3&#39;</span>
-<span class="nt">services</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">postgres</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres:16</span>
-<span class="w">    </span><span class="c1"># ❌ 不要这样</span>
-<span class="w">    </span><span class="c1"># volumes:</span>
-<span class="w">    </span><span class="c1">#   - /var/lib/postgresql/data</span>
-<span class="w">    </span><span class="c1"># ✅ 应该显式指定命名卷</span>
-<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres_data:/var/lib/postgresql/data</span>
-</code></pre></div>
+<pre><code># docker-compose.yml 常见陷阱
+version: &#39;3&#39;
+services:
+  postgres:
+    image: postgres:16
+    # ❌ 不要这样
+    # volumes:
+    #   - /var/lib/postgresql/data
+    # ✅ 应该显式指定命名卷
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+</code></pre>
 
 <p>一个常见的坑是 MySQL / PostgreSQL 的默认配置在 1C2G 的机器上跑不起来——它们默认分配的 buffer pool 和 shared buffers 是机器内存的 25%，在 2GB 内存上就是 512MB，没毛病。但如果是内存 512MB 的机器，数据库会频繁 OOM。</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># MySQL 5.7+ 在 1C1G 上的安全配置</span>
-<span class="na">innodb_buffer_pool_size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">256M</span>
-<span class="na">innodb_log_file_size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">64M</span>
-<span class="na">max_connections</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">50</span>
-</code></pre></div>
+<pre><code># MySQL 5.7+ 在 1C1G 上的安全配置
+innodb_buffer_pool_size = 256M
+innodb_log_file_size = 64M
+max_connections = 50
+</code></pre>
 
 <h3>用快照备份</h3>
 <p>这是 VPS 比物理服务器方便的地方。在控制面板点一下快照（Snapshot），整个系统状态就保存下来了。开发测试时先打快照，搞坏了恢复就是几秒钟的事。</p>
@@ -235,14 +235,14 @@ ufw<span class="w"> </span>allow<span class="w"> </span><span class="m">2222</sp
 </ul>
 <h3>注意硬盘 IO</h3>
 <p>很多便宜的 VPS 用的是<strong>共享硬盘</strong>（比如 OpenVZ 架构或者某些 KVM 超售严重的商家），IO 性能很差。你用 DD 命令测试一下：</p>
-<div class="codehilite"><pre><span></span><code>dd<span class="w"> </span><span class="k">if</span><span class="o">=</span>/dev/zero<span class="w"> </span><span class="nv">of</span><span class="o">=</span><span class="nb">test</span><span class="w"> </span><span class="nv">bs</span><span class="o">=</span>64k<span class="w"> </span><span class="nv">count</span><span class="o">=</span>16k<span class="w"> </span><span class="nv">conv</span><span class="o">=</span>fdatasync
-</code></pre></div>
+<pre><code>dd if=/dev/zero of=test bs=64k count=16k conv=fdatasync
+</code></pre>
 
 <p>如果顺序写入速度低于 100MB/s，或者 4K 随机写入低于 5MB/s，这台 VPS 就不适合做下载/NAS 用途。</p>
 <h3>rclone + 云盘方案</h3>
 <p>如果 VPS 硬盘不够大，可以用 rclone 挂载 Google Drive / OneDrive / 阿里云盘：</p>
-<div class="codehilite"><pre><span></span><code>rclone<span class="w"> </span>mount<span class="w"> </span>remote:path<span class="w"> </span>/mnt/cloud<span class="w"> </span>--daemon
-</code></pre></div>
+<pre><code>rclone mount remote:path /mnt/cloud --daemon
+</code></pre>
 
 <p>好处是无限存储，坏处是带宽限制和 API 配额。一天下载超过 750GB 会被 Google 限速。如果不考虑这个限制，这个方案对个人用户已经足够用了。</p>
 <h2>场景五：生产级的小型业务服务</h2>
@@ -338,7 +338,7 @@ ufw<span class="w"> </span>allow<span class="w"> </span><span class="m">2222</sp
       <hr style="border: none; border-top: 1px solid var(--color-border); margin: var(--space-3xl) 0;">
       
       <div class="blog-topics" style="margin-bottom: var(--space-xl);">
-        <span class="topic-label">读完之后：</span>
+        读完之后：
         <a href="../index.html" class="topic-tag">返回博客列表</a>
       </div>
     </div>
@@ -417,7 +417,7 @@ ufw<span class="w"> </span>allow<span class="w"> </span><span class="m">2222</sp
   <div class="toc-drawer-overlay" id="tocDrawerOverlay"></div>
   <div class="toc-drawer" id="tocDrawer">
     <div class="toc-drawer-header">
-      <span class="toc-drawer-title">目录</span>
+      目录
       <button class="toc-drawer-close" id="tocDrawerClose" aria-label="关闭目录">&times;</button>
     </div>
     <div id="tocDrawerContent" class="post-toc-list"></div>

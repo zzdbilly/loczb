@@ -70,12 +70,12 @@
   <nav class="nav">
     <div class="nav-inner">
       <a href="../../index.html" class="nav-logo">
-        loc<span>zb</span>
+        loczb
       </a>
       <button class="nav-toggle" aria-label="打开菜单" aria-expanded="false" aria-controls="nav-links-menu">
-        <span></span>
-        <span></span>
-        <span></span>
+        
+        
+        
       </button>
       <div class="nav-overlay"></div>
       <ul class="nav-links" id="nav-links-menu">
@@ -108,16 +108,16 @@
         <h1>MySQL 索引优化实战：从慢查询到最佳实践</h1>
         
         <div class="post-meta">
-          <span>📅 2026-07-05 13:07:10</span>
-          <span>⏱️ 5 min read</span>
-          <span>👤 张小猛</span>
+          📅 2026-07-05 13:07:10
+          ⏱️ 5 min read
+          👤 张小猛
         </div>
         
         <div class="post-tags">
-          <span class="tag">MySQL</span>
-          <span class="tag">数据库</span>
-          <span class="tag">索引</span>
-          <span class="tag">性能优化</span>
+          MySQL
+          数据库
+          索引
+          性能优化
         </div>
         
         <p>你有没有遇到过这种情况：一个数据库查询在本地跑得飞快，部署到生产环境后突然变慢几十倍？或者同一个查询，同样的数据量，有时候几毫秒就返回，有时候几秒钟还没结果？</p>
@@ -125,49 +125,49 @@
 <h2>先复现一个慢查询问题</h2>
 <p>为什么要先复现？因为优化一定要有基准，没有基线就不知道改了有没有效果。</p>
 <h3>建表和造数据</h3>
-<div class="codehilite"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">orders</span><span class="w"> </span><span class="p">(</span>
-<span class="w">  </span><span class="n">id</span><span class="w"> </span><span class="nb">INT</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="n">AUTO_INCREMENT</span><span class="p">,</span>
-<span class="w">  </span><span class="n">user_id</span><span class="w"> </span><span class="nb">INT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
-<span class="w">  </span><span class="n">product_id</span><span class="w"> </span><span class="nb">INT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
-<span class="w">  </span><span class="n">amount</span><span class="w"> </span><span class="nb">DECIMAL</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
-<span class="w">  </span><span class="n">status</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="s1">&#39;pending&#39;</span><span class="p">,</span>
-<span class="w">  </span><span class="n">created_at</span><span class="w"> </span><span class="n">DATETIME</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="k">CURRENT_TIMESTAMP</span><span class="p">,</span>
-<span class="w">  </span><span class="n">category</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">50</span><span class="p">),</span>
-<span class="w">  </span><span class="k">INDEX</span><span class="w"> </span><span class="n">idx_user</span><span class="w"> </span><span class="p">(</span><span class="n">user_id</span><span class="p">)</span>
-<span class="p">);</span>
+<pre><code>CREATE TABLE orders (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  user_id INT NOT NULL,
+  product_id INT NOT NULL,
+  amount DECIMAL(10,2) NOT NULL,
+  status VARCHAR(20) NOT NULL DEFAULT &#39;pending&#39;,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  category VARCHAR(50),
+  INDEX idx_user (user_id)
+);
 
-<span class="c1">-- 插入 50 万条模拟数据</span>
-<span class="c1">-- 用存储过程批量插入，跳过具体代码，重点是后面的查询</span>
-</code></pre></div>
+-- 插入 50 万条模拟数据
+-- 用存储过程批量插入，跳过具体代码，重点是后面的查询
+</code></pre>
 
 <p>有了数据以后，我们执行一个看起来很正常的查询：</p>
-<div class="codehilite"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">orders</span>
-<span class="k">WHERE</span><span class="w"> </span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;completed&#39;</span>
-<span class="w">  </span><span class="k">AND</span><span class="w"> </span><span class="n">amount</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">100</span>
-<span class="w">  </span><span class="k">AND</span><span class="w"> </span><span class="n">created_at</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="s1">&#39;2025-01-01&#39;</span>
-<span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">created_at</span><span class="w"> </span><span class="k">DESC</span>
-<span class="k">LIMIT</span><span class="w"> </span><span class="mi">20</span><span class="p">;</span>
-</code></pre></div>
+<pre><code>SELECT * FROM orders
+WHERE status = &#39;completed&#39;
+  AND amount &gt; 100
+  AND created_at &gt;= &#39;2025-01-01&#39;
+ORDER BY created_at DESC
+LIMIT 20;
+</code></pre>
 
 <p>这个查询没有建复合索引，MySQL 只能走全表扫描或者选其中一个索引。我们来 EXPLAIN 一下：</p>
-<div class="codehilite"><pre><span></span><code><span class="k">EXPLAIN</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="c1">-- 同上</span>
-</code></pre></div>
+<pre><code>EXPLAIN SELECT ... -- 同上
+</code></pre>
 
 <p>结果会看到 <code>type: ALL</code> 或者 <code>type: index</code>，<code>rows</code> 接近 50 万，<code>Extra</code> 里有 <code>Using where; Using filesort</code>。filesort 意味着排序没有走索引，效率极差。</p>
 <h3>什么是 filesort</h3>
 <p><code>filesort</code> 不是真的写到磁盘文件了（小数据量是在内存里），但它意味着 MySQL 不得不把数据拿出来自己排序，而不是从索引顺序直接读取。当排序列上没有索引、或者排序和查询条件不在同一个索引上时，就会触发 filesort。</p>
 <h2>单列索引的局限性</h2>
 <p>大多数人第一反应是：在 <code>created_at</code> 上加个索引。</p>
-<div class="codehilite"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="n">idx_created_at</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">orders</span><span class="w"> </span><span class="p">(</span><span class="n">created_at</span><span class="p">);</span>
-</code></pre></div>
+<pre><code>CREATE INDEX idx_created_at ON orders (created_at);
+</code></pre>
 
 <p>再来 EXPLAIN，发现 <code>type: ref</code> 或者 <code>range</code> 了，rows 减少到了几万行——但是 <code>Extra</code> 里依然是 <code>Using where; Using filesort</code>。</p>
 <p>这就是单列索引的第一个问题：<strong>条件用了一个索引，排序又没用到</strong>。MySQL 只能选一个索引来用，选了 <code>idx_created_at</code> 可以在时间范围上快速定位，但排序仍然是 filesort。</p>
 <p>单列索引的第二个问题是：<strong>多个单列索引之间，MySQL 只会选其中一个，不是组合使用</strong>。MySQL 有 Index Merge 优化，但那是特例且性能不可预测。</p>
 <h2>复合索引的黄金法则</h2>
 <p>解决上面的问题，最直接的方法就是建复合索引：</p>
-<div class="codehilite"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="n">idx_status_amount_date</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">orders</span><span class="w"> </span><span class="p">(</span><span class="n">status</span><span class="p">,</span><span class="w"> </span><span class="n">amount</span><span class="p">,</span><span class="w"> </span><span class="n">created_at</span><span class="w"> </span><span class="k">DESC</span><span class="p">);</span>
-</code></pre></div>
+<pre><code>CREATE INDEX idx_status_amount_date ON orders (status, amount, created_at DESC);
+</code></pre>
 
 <p>再 EXPLAIN，结果变成了 <code>type: ref</code>，<code>rows</code> 只有几千，<code>Extra</code> 里终于没了 <code>Using filesort</code>，变成了 <code>Using index condition</code>。</p>
 <h3>最左前缀法则</h3>
@@ -187,11 +187,11 @@
 <h2>实践中避不开的 Covering Index</h2>
 <h3>什么是覆盖索引</h3>
 <p>覆盖索引（Covering Index）是指<strong>查询需要的所有列都在索引里</strong>，不需要回表查询。Extra 里会出现 <code>Using index</code>。</p>
-<div class="codehilite"><pre><span></span><code><span class="c1">-- 覆盖索引查询</span>
-<span class="k">SELECT</span><span class="w"> </span><span class="n">user_id</span><span class="p">,</span><span class="w"> </span><span class="n">amount</span><span class="p">,</span><span class="w"> </span><span class="n">status</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">orders</span>
-<span class="k">WHERE</span><span class="w"> </span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;completed&#39;</span>
-<span class="w">  </span><span class="k">AND</span><span class="w"> </span><span class="n">amount</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">100</span><span class="p">;</span>
-</code></pre></div>
+<pre><code>-- 覆盖索引查询
+SELECT user_id, amount, status FROM orders
+WHERE status = &#39;completed&#39;
+  AND amount &gt; 100;
+</code></pre>
 
 <p>如果索引 <code>(status, amount, user_id)</code> 包含了所有查询列，MySQL 就可以在索引 B+ 树上完成查询，完全不碰数据行。这在数据量大时能带来数量级的性能提升。</p>
 <h3>覆盖索引的设计方法</h3>
@@ -204,55 +204,55 @@
 <p>建议把<strong>高频查询</strong>做覆盖索引优化，低频的不管。</p>
 <h2>MySQL 索引失效的 7 个经典场景</h2>
 <h3>场景 1：索引列参与计算</h3>
-<div class="codehilite"><pre><span></span><code><span class="c1">-- 失效</span>
-<span class="k">WHERE</span><span class="w"> </span><span class="k">YEAR</span><span class="p">(</span><span class="n">created_at</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2025</span>
+<pre><code>-- 失效
+WHERE YEAR(created_at) = 2025
 
-<span class="c1">-- 生效</span>
-<span class="k">WHERE</span><span class="w"> </span><span class="n">created_at</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="s1">&#39;2025-01-01&#39;</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="n">created_at</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="s1">&#39;2026-01-01&#39;</span>
-</code></pre></div>
+-- 生效
+WHERE created_at &gt;= &#39;2025-01-01&#39; AND created_at &lt; &#39;2026-01-01&#39;
+</code></pre>
 
 <h3>场景 2：隐式类型转换</h3>
-<div class="codehilite"><pre><span></span><code><span class="c1">-- user_id 是 VARCHAR</span>
-<span class="c1">-- 失效（字符串 vs 数字）</span>
-<span class="k">WHERE</span><span class="w"> </span><span class="n">user_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">12345</span>
+<pre><code>-- user_id 是 VARCHAR
+-- 失效（字符串 vs 数字）
+WHERE user_id = 12345
 
-<span class="c1">-- 生效</span>
-<span class="k">WHERE</span><span class="w"> </span><span class="n">user_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;12345&#39;</span>
-</code></pre></div>
+-- 生效
+WHERE user_id = &#39;12345&#39;
+</code></pre>
 
 <h3>场景 3：LIKE 通配符在开头</h3>
-<div class="codehilite"><pre><span></span><code><span class="c1">-- 失效</span>
-<span class="k">WHERE</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="k">LIKE</span><span class="w"> </span><span class="s1">&#39;%keyword%&#39;</span>
+<pre><code>-- 失效
+WHERE name LIKE &#39;%keyword%&#39;
 
-<span class="c1">-- 生效（如果 name 有索引）</span>
-<span class="k">WHERE</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="k">LIKE</span><span class="w"> </span><span class="s1">&#39;keyword%&#39;</span>
-</code></pre></div>
+-- 生效（如果 name 有索引）
+WHERE name LIKE &#39;keyword%&#39;
+</code></pre>
 
 <h3>场景 4：OR 条件中有非索引列</h3>
-<div class="codehilite"><pre><span></span><code><span class="c1">-- 失效（如果 status 有索引但 memo 没有）</span>
-<span class="k">WHERE</span><span class="w"> </span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;completed&#39;</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="n">memo</span><span class="w"> </span><span class="k">LIKE</span><span class="w"> </span><span class="s1">&#39;%refund%&#39;</span>
+<pre><code>-- 失效（如果 status 有索引但 memo 没有）
+WHERE status = &#39;completed&#39; OR memo LIKE &#39;%refund%&#39;
 
-<span class="c1">-- 改写为 UNION</span>
-<span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">orders</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;completed&#39;</span>
-<span class="k">UNION</span>
-<span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">orders</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">memo</span><span class="w"> </span><span class="k">LIKE</span><span class="w"> </span><span class="s1">&#39;%refund%&#39;</span>
-</code></pre></div>
+-- 改写为 UNION
+SELECT * FROM orders WHERE status = &#39;completed&#39;
+UNION
+SELECT * FROM orders WHERE memo LIKE &#39;%refund%&#39;
+</code></pre>
 
 <h3>场景 5：NOT IN 和 <code>&lt;&gt;</code></h3>
-<div class="codehilite"><pre><span></span><code><span class="c1">-- IN 可以用索引</span>
-<span class="k">WHERE</span><span class="w"> </span><span class="n">status</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;pending&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;processing&#39;</span><span class="p">)</span>
+<pre><code>-- IN 可以用索引
+WHERE status IN (&#39;pending&#39;, &#39;processing&#39;)
 
-<span class="c1">-- NOT IN 通常不会用</span>
-<span class="k">WHERE</span><span class="w"> </span><span class="n">status</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;cancelled&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;refunded&#39;</span><span class="p">)</span>
-</code></pre></div>
+-- NOT IN 通常不会用
+WHERE status NOT IN (&#39;cancelled&#39;, &#39;refunded&#39;)
+</code></pre>
 
 <h3>场景 6：索引列使用了函数</h3>
-<div class="codehilite"><pre><span></span><code><span class="c1">-- 失效</span>
-<span class="k">WHERE</span><span class="w"> </span><span class="k">UPPER</span><span class="p">(</span><span class="n">email</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;USER@EXAMPLE.COM&#39;</span>
+<pre><code>-- 失效
+WHERE UPPER(email) = &#39;USER@EXAMPLE.COM&#39;
 
-<span class="c1">-- MySQL 8.0.13+ 可以建函数索引</span>
-<span class="k">CREATE</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="n">idx_upper_email</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">users</span><span class="w"> </span><span class="p">((</span><span class="k">UPPER</span><span class="p">(</span><span class="n">email</span><span class="p">)));</span>
-</code></pre></div>
+-- MySQL 8.0.13+ 可以建函数索引
+CREATE INDEX idx_upper_email ON users ((UPPER(email)));
+</code></pre>
 
 <h3>场景 7：数据分布导致优化器放弃索引</h3>
 <p>这可能是最"冤"的一种情况：索引明明建了，查询也符合最左前缀，但 MySQL 发现你要查的数据占比太大了（超过 20-30%），全表扫描比走索引 + 回表更快，于是自动放弃了索引。</p>
@@ -297,8 +297,8 @@
 <p>从 2 秒到 12 毫秒，<strong>同一个查询，同一个数据量，差距 167 倍</strong>。</p>
 <h2>如何分析你的索引是否有效</h2>
 <h3>用好 EXPLAIN</h3>
-<div class="codehilite"><pre><span></span><code><span class="k">EXPLAIN</span><span class="w"> </span><span class="n">FORMAT</span><span class="o">=</span><span class="n">JSON</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">;</span>
-</code></pre></div>
+<pre><code>EXPLAIN FORMAT=JSON SELECT ... ;
+</code></pre>
 
 <p>JSON 格式会给出更详细的信息，包括：
 - <code>cost_info</code> — 优化器估算的成本
@@ -306,9 +306,9 @@
 - <code>used_key_parts</code> — 实际用到的索引列
 - <code>access_type</code> — ref/range/ALL</p>
 <h3>开启慢查询日志</h3>
-<div class="codehilite"><pre><span></span><code><span class="k">SET</span><span class="w"> </span><span class="k">GLOBAL</span><span class="w"> </span><span class="n">slow_query_log</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">ON</span><span class="p">;</span>
-<span class="k">SET</span><span class="w"> </span><span class="k">GLOBAL</span><span class="w"> </span><span class="n">long_query_time</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">5</span><span class="p">;</span><span class="w">  </span><span class="c1">-- 超过 500ms 记录</span>
-</code></pre></div>
+<pre><code>SET GLOBAL slow_query_log = ON;
+SET GLOBAL long_query_time = 0.5;  -- 超过 500ms 记录
+</code></pre>
 
 <p>定期检查慢查询日志，找出最慢的几条 SQL，逐一 EXPLAIN + 优化。</p>
 <h3>pt-query-digest 工具</h3>
@@ -320,14 +320,14 @@
 <p>OLAP / 报表类查询，可以多建覆盖索引，甚至建专门的汇总表。</p>
 <h3>前缀索引</h3>
 <p>对于长字符串字段，可以用前缀索引来节省空间：</p>
-<div class="codehilite"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="n">idx_email_prefix</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">users</span><span class="w"> </span><span class="p">(</span><span class="n">email</span><span class="p">(</span><span class="mi">10</span><span class="p">));</span>
-</code></pre></div>
+<pre><code>CREATE INDEX idx_email_prefix ON users (email(10));
+</code></pre>
 
 <p>但注意：前缀索引无法用于 ORDER BY 和 GROUP BY。</p>
 <h3>索引排序与 ORDER BY</h3>
 <p>MySQL 8 支持在索引定义时指定排序方向：</p>
-<div class="codehilite"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="n">idx_user_date</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">orders</span><span class="w"> </span><span class="p">(</span><span class="n">user_id</span><span class="p">,</span><span class="w"> </span><span class="n">created_at</span><span class="w"> </span><span class="k">DESC</span><span class="p">);</span>
-</code></pre></div>
+<pre><code>CREATE INDEX idx_user_date ON orders (user_id, created_at DESC);
+</code></pre>
 
 <p>这样做了以后，<code>ORDER BY created_at DESC</code> 就可以直接走索引，不需要 filesort。</p>
 <h2>写多读少的场景如何妥协</h2>
@@ -338,12 +338,12 @@
 <li><strong>使用 NoSQL</strong>：如果写请求远大于读请求，MySQL 可能不是最好的选择</li>
 </ul>
 <h2>监控索引使用情况</h2>
-<div class="codehilite"><pre><span></span><code><span class="c1">-- 查看索引使用统计</span>
-<span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">sys</span><span class="p">.</span><span class="n">schema_unused_indexes</span><span class="p">;</span>
+<pre><code>-- 查看索引使用统计
+SELECT * FROM sys.schema_unused_indexes;
 
-<span class="c1">-- 查看索引使用频率</span>
-<span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">performance_schema</span><span class="p">.</span><span class="n">table_io_waits_summary_by_index_usage</span><span class="p">;</span>
-</code></pre></div>
+-- 查看索引使用频率
+SELECT * FROM performance_schema.table_io_waits_summary_by_index_usage;
+</code></pre>
 
 <p>定期用这两个查询清理从未使用的索引，释放写入性能。</p>
 <h2>总结一下</h2>
@@ -368,7 +368,7 @@
       <hr style="border: none; border-top: 1px solid var(--color-border); margin: var(--space-3xl) 0;">
       
       <div class="blog-topics" style="margin-bottom: var(--space-xl);">
-        <span class="topic-label">读完之后：</span>
+        读完之后：
         <a href="../index.html" class="topic-tag">返回博客列表</a>
       </div>
     </div>
@@ -447,7 +447,7 @@
   <div class="toc-drawer-overlay" id="tocDrawerOverlay"></div>
   <div class="toc-drawer" id="tocDrawer">
     <div class="toc-drawer-header">
-      <span class="toc-drawer-title">目录</span>
+      目录
       <button class="toc-drawer-close" id="tocDrawerClose" aria-label="关闭目录">&times;</button>
     </div>
     <div id="tocDrawerContent" class="post-toc-list"></div>

@@ -21,79 +21,7 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://709527.xyz/blog/posts/vps-选购与使用指南五个常见场景的配置与避坑.html</loc>
-    <lastmod>2026-07-05</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://709527.xyz/blog/posts/mysql-索引优化实战从慢查询到最佳实践.html</loc>
-    <lastmod>2026-07-05</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://709527.xyz/blog/posts/ai-编程助手进化论从结对编程到自主编程团队-2026.html</loc>
-    <lastmod>2026-07-04</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://709527.xyz/blog/posts/linux-inode-mechanism-deep-dive.html</loc>
-    <lastmod>2026-07-04</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://709527.xyz/blog/posts/github-actions-auto-index-blog-cicd.html</loc>
-    <lastmod>2026-07-04</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://709527.xyz/blog/posts/programmers-should-learn-to-unplug.html</loc>
-    <lastmod>2026-07-04</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://709527.xyz/blog/posts/static-blog-performance-optimization-59mb.html</loc>
-    <lastmod>2026-07-03</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://709527.xyz/blog/posts/gradle-build-acceleration-5min-to-30sec.html</loc>
-    <lastmod>2026-07-02</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://709527.xyz/blog/posts/urban-planning-inspires-software-architecture.html</loc>
-    <lastmod>2026-07-02</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://709527.xyz/blog/posts/software-engineer-learns-from-manufacturing-lean.html</loc>
-    <lastmod>2026-07-02</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
     <loc>https://709527.xyz/blog/posts/how-tech-people-learn-new-tech.html</loc>
-    <lastmod>2026-07-01</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://709527.xyz/blog/posts/why-tech-people-should-write.html</loc>
-    <lastmod>2026-07-01</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://709527.xyz/blog/posts/kotlin-coroutine-exception-handling.html</loc>
     <lastmod>2026-07-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -105,24 +33,6 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://709527.xyz/blog/posts/less-is-more-focus-in-information-age.html</loc>
-    <lastmod>2026-07-01</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://709527.xyz/blog/posts/soft-skills-tech-people-overlook.html</loc>
-    <lastmod>2026-07-01</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://709527.xyz/blog/posts/why-i-started-blogging.html</loc>
-    <lastmod>2026-06-30</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
     <loc>https://709527.xyz/blog/posts/android-16-foreground-service-constraints.html</loc>
     <lastmod>2026-06-30</lastmod>
     <changefreq>monthly</changefreq>
@@ -130,12 +40,6 @@
   </url>
   <url>
     <loc>https://709527.xyz/blog/posts/cursor-rules-guide.html</loc>
-    <lastmod>2026-06-30</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://709527.xyz/blog/posts/mcp-server-deep-dive.html</loc>
     <lastmod>2026-06-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -154,24 +58,6 @@
   </url>
   <url>
     <loc>https://709527.xyz/blog/posts/android-hilt-dependency-injection.html</loc>
-    <lastmod>2026-06-27</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://709527.xyz/blog/posts/nginx-reverse-proxy-tuning.html</loc>
-    <lastmod>2026-06-27</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://709527.xyz/blog/posts/zig-language-introduction.html</loc>
-    <lastmod>2026-06-27</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://709527.xyz/blog/posts/rag-introduction.html</loc>
     <lastmod>2026-06-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -201,12 +87,6 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://709527.xyz/blog/posts/postgresql-index-optimization.html</loc>
-    <lastmod>2026-06-27</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
     <loc>https://709527.xyz/blog/posts/android-16-notifications.html</loc>
     <lastmod>2026-06-27</lastmod>
     <changefreq>monthly</changefreq>
@@ -219,37 +99,7 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://709527.xyz/blog/posts/prompt-engineering-systematic.html</loc>
-    <lastmod>2026-06-27</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://709527.xyz/blog/posts/kotlin-flow-advanced.html</loc>
-    <lastmod>2026-06-27</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://709527.xyz/blog/posts/linux-ebpf-getting-started.html</loc>
-    <lastmod>2026-06-27</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://709527.xyz/blog/posts/webassembly-in-practice.html</loc>
-    <lastmod>2026-06-27</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
     <loc>https://709527.xyz/blog/posts/android-gradle-kts-migration.html</loc>
-    <lastmod>2026-06-24</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://709527.xyz/blog/posts/kotlin-multiplatform-practice.html</loc>
     <lastmod>2026-06-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -297,12 +147,6 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://709527.xyz/blog/posts/mcp-android-integration.html</loc>
-    <lastmod>2026-06-19</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
     <loc>https://709527.xyz/blog/posts/ai-coding-workflow-optimization.html</loc>
     <lastmod>2026-05-08</lastmod>
     <changefreq>monthly</changefreq>
@@ -321,30 +165,6 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://709527.xyz/blog/posts/docker-compose-best-practices.html</loc>
-    <lastmod>2026-04-26</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://709527.xyz/blog/posts/react-server-components.html</loc>
-    <lastmod>2026-04-26</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://709527.xyz/blog/posts/rust-getting-started.html</loc>
-    <lastmod>2026-04-26</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://709527.xyz/blog/posts/sqlite-wal-performance.html</loc>
-    <lastmod>2026-04-26</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
     <loc>https://709527.xyz/blog/posts/git-advanced-techniques.html</loc>
     <lastmod>2026-04-25</lastmod>
     <changefreq>monthly</changefreq>
@@ -357,20 +177,31 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://709527.xyz/blog/posts/typescript-type-gymnastics.html</loc>
-    <lastmod>2026-04-25</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://709527.xyz/blog/posts/nextjs-16-tutorial.html</loc>
-    <lastmod>2026-04-20</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
     <loc>https://709527.xyz/blog/posts/ai-coding-tools-comparison.html</loc>
     <lastmod>2026-04-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://709527.xyz/blog/posts/github-pages-blog-setup.html</loc>
+    <lastmod>2026-04-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://709527.xyz/blog/posts/ai-agent-skill-development.html</loc>
+    <lastmod>2026-03-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://709527.xyz/blog/posts/ai-编程助手进化论从结对编程到自主编程团队-2026.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://709527.xyz/blog/posts/docker-compose-best-practices.html</loc>
+    <lastmod>2026-04-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -387,8 +218,119 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://709527.xyz/blog/posts/github-pages-blog-setup.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <loc>https://709527.xyz/blog/posts/android-offline-speech-input.html</loc>
+    <lastmod>2026-04-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://709527.xyz/blog/posts/github-actions-auto-index-blog-cicd.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://709527.xyz/blog/posts/gradle-build-acceleration-5min-to-30sec.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://709527.xyz/blog/posts/kotlin-coroutine-exception-handling.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://709527.xyz/blog/posts/programmers-should-learn-to-unplug.html</loc>
+    <lastmod>2026-07-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://709527.xyz/blog/posts/why-tech-people-should-write.html</loc>
+    <lastmod>2026-07-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://709527.xyz/blog/posts/less-is-more-focus-in-information-age.html</loc>
+    <lastmod>2026-07-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://709527.xyz/blog/posts/soft-skills-tech-people-overlook.html</loc>
+    <lastmod>2026-07-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://709527.xyz/blog/posts/mcp-server-deep-dive.html</loc>
+    <lastmod>2026-06-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://709527.xyz/blog/posts/nginx-reverse-proxy-tuning.html</loc>
+    <lastmod>2026-06-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://709527.xyz/blog/posts/rag-introduction.html</loc>
+    <lastmod>2026-06-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://709527.xyz/blog/posts/postgresql-index-optimization.html</loc>
+    <lastmod>2026-06-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://709527.xyz/blog/posts/prompt-engineering-systematic.html</loc>
+    <lastmod>2026-06-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://709527.xyz/blog/posts/kotlin-flow-advanced.html</loc>
+    <lastmod>2026-06-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://709527.xyz/blog/posts/linux-ebpf-getting-started.html</loc>
+    <lastmod>2026-06-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://709527.xyz/blog/posts/kotlin-multiplatform-practice.html</loc>
+    <lastmod>2026-06-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://709527.xyz/blog/posts/react-server-components.html</loc>
+    <lastmod>2026-04-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://709527.xyz/blog/posts/sqlite-wal-performance.html</loc>
+    <lastmod>2026-04-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://709527.xyz/blog/posts/typescript-type-gymnastics.html</loc>
+    <lastmod>2026-04-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://709527.xyz/blog/posts/nextjs-16-tutorial.html</loc>
+    <lastmod>2026-04-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -399,32 +341,49 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://709527.xyz/blog/posts/linux-inode-mechanism-deep-dive.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://709527.xyz/blog/posts/why-i-started-blogging.html</loc>
+    <lastmod>2026-06-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://709527.xyz/blog/posts/zig-language-introduction.html</loc>
+    <lastmod>2026-06-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://709527.xyz/blog/posts/webassembly-in-practice.html</loc>
+    <lastmod>2026-06-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://709527.xyz/blog/posts/mcp-android-integration.html</loc>
+    <lastmod>2026-06-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://709527.xyz/blog/posts/rust-getting-started.html</loc>
+    <lastmod>2026-04-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://709527.xyz/blog/posts/local-rag-ollama.html</loc>
     <lastmod>2026-04-07</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://709527.xyz/blog/posts/android-offline-speech-input.html</loc>
-    <lastmod>2026-04-03</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://709527.xyz/blog/posts/onnx-mobile-deployment.html</loc>
-    <lastmod>2026-03-30</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
     <loc>https://709527.xyz/blog/posts/pwa-offline-web-app.html</loc>
     <lastmod>2026-03-22</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://709527.xyz/blog/posts/ssh-security-hardening.html</loc>
-    <lastmod>2026-03-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -441,12 +400,6 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://709527.xyz/blog/posts/ai-agent-skill-development.html</loc>
-    <lastmod>2026-03-14</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
     <loc>https://709527.xyz/blog/posts/openclaw-guide.html</loc>
     <lastmod>2026-03-13</lastmod>
     <changefreq>monthly</changefreq>
@@ -455,6 +408,43 @@
   <url>
     <loc>https://709527.xyz/blog/posts/mobile-gs-paper-review.html</loc>
     <lastmod>2026-02-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://709527.xyz/blog/posts/mysql-索引优化实战从慢查询到最佳实践.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://709527.xyz/blog/posts/onnx-mobile-deployment.html</loc>
+    <lastmod>2026-03-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://709527.xyz/blog/posts/software-engineer-learns-from-manufacturing-lean.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://709527.xyz/blog/posts/ssh-security-hardening.html</loc>
+    <lastmod>2026-03-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://709527.xyz/blog/posts/static-blog-performance-optimization-59mb.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://709527.xyz/blog/posts/urban-planning-inspires-software-architecture.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://709527.xyz/blog/posts/vps-选购与使用指南五个常见场景的配置与避坑.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
