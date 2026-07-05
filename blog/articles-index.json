@@ -4,7 +4,7 @@
       "slug": "gradle-构建加速全攻略从-5-分钟到-30-秒",
       "title": "Gradle 构建加速全攻略：从 5 分钟到 30 秒",
       "date": "2026-07-05",
-      "category": "技术",
+      "category": "Android",
       "tags": [
         "Gradle",
         "Android",
@@ -18,7 +18,7 @@
       "slug": "kotlin-scope-functions-实战选择五个函数一个决策树",
       "title": "Kotlin Scope Functions 实战选择：五个函数一个决策树",
       "date": "2026-07-05",
-      "category": "技术",
+      "category": "Kotlin",
       "tags": [
         "Kotlin",
         "Android",
@@ -31,7 +31,7 @@
       "slug": "vps-选购与使用指南五个常见场景的配置与避坑",
       "title": "VPS 选购与使用指南：五个常见场景的配置与避坑",
       "date": "2026-07-05",
-      "category": "技术",
+      "category": "DevOps",
       "tags": [],
       "excerpt": "从扶墙线路到生产环境部署，不同场景下 VPS 怎么选、怎么配、怎么不踩坑",
       "url": "blog/posts/vps-选购与使用指南五个常见场景的配置与避坑.html"
@@ -40,7 +40,7 @@
       "slug": "mysql-索引优化实战从慢查询到最佳实践",
       "title": "MySQL 索引优化实战：从慢查询到最佳实践",
       "date": "2026-07-05",
-      "category": "技术",
+      "category": "数据库",
       "tags": [],
       "excerpt": "从 EXPLAIN 认识索引失效到复合索引设计，一个慢查询从 2 秒优化到 12 毫秒的完整过程",
       "url": "blog/posts/mysql-索引优化实战从慢查询到最佳实践.html"
@@ -49,7 +49,7 @@
       "slug": "ai-编程助手进化论从结对编程到自主编程团队-2026",
       "title": "AI 编程助手进化论：从结对编程到自主编程团队 (2026)",
       "date": "2026-07-04",
-      "category": "技术",
+      "category": "AI",
       "tags": [],
       "excerpt": "2026 年，AI 编程 Agent 跨越了从辅助工具到自主成员的临界点。Cursor 移动端发布、Claude Code 深度推理、Codex CLI 稳定执行、多 Agent 并行协作——本文梳理 AI 编程的三次范式跃迁，分析主流工具，分享落地实践，并展望 2027 年的开发者生态。",
       "url": "blog/posts/ai-编程助手进化论从结对编程到自主编程团队-2026.html"
@@ -58,7 +58,7 @@
       "slug": "linux-inode-mechanism-deep-dive",
       "title": "Linux inode 机制深入理解：从数据结构到实战排查",
       "date": "2026-07-04",
-      "category": "技术",
+      "category": "系统编程",
       "tags": [],
       "excerpt": "inode 是 Linux 文件系统的核心概念。本文从 ext4 inode 数据结构、硬链接软链接原理、文件删除机制到 inode 耗尽排查，全面解析 inode 工作原理。",
       "url": "blog/posts/linux-inode-mechanism-deep-dive.html"
@@ -67,7 +67,7 @@
       "slug": "github-actions-auto-index-blog-cicd",
       "title": "GitHub Actions 自动索引：我的静态博客 CI/CD 进化之路",
       "date": "2026-07-04",
-      "category": "技术",
+      "category": "DevOps",
       "tags": [],
       "excerpt": "68篇技术博客的索引更新从手动7文件到CI全量自动重建——聊聊全量vs增量的取舍、HTML解析技巧、RSS日期格式化踩坑，以及为什么应该让CI管索引",
       "url": "blog/posts/github-actions-auto-index-blog-cicd.html"
@@ -76,7 +76,7 @@
       "slug": "programmers-should-learn-to-unplug",
       "title": "程序员应该学会「关机」：工作焦虑如何侵蚀你的休息时间",
       "date": "2026-07-04",
-      "category": "技术",
+      "category": "思考",
       "tags": [
         "工作方法",
         "生活方式",
@@ -89,7 +89,7 @@
       "slug": "static-blog-performance-optimization-59mb",
       "title": "静态博客性能优化实战：从 59MB 到精简高效",
       "date": "2026-07-03",
-      "category": "技术",
+      "category": "前端",
       "tags": [],
       "excerpt": "66篇文章4KB重复内联样式、4.4MB死文件、404幽灵引用——一次完整的静态博客性能优化记录",
       "url": "blog/posts/static-blog-performance-optimization-59mb.html"
@@ -98,7 +98,7 @@
       "slug": "gradle-build-acceleration-5min-to-30sec",
       "title": "Gradle 构建加速全攻略：从 5 分钟到 30 秒",
       "date": "2026-07-02",
-      "category": "技术",
+      "category": "Android",
       "tags": [],
       "excerpt": "系统梳理 Gradle 构建加速的完整方法论——配置调优、KAPT迁移KSP、增量编译、模块化拆分、远程缓存、CI优化，附真实项目优化案例，构建时间减少85%",
       "url": "blog/posts/gradle-build-acceleration-5min-to-30sec.html"
@@ -107,7 +107,7 @@
       "slug": "urban-planning-inspires-software-architecture",
       "title": "像规划城市一样设计系统：城市规划给软件架构的启示",
       "date": "2026-07-02",
-      "category": "技术",
+      "category": "思考",
       "tags": [],
       "excerpt": "城市和软件系统的本质惊人相似——功能分区映射限界上下文、交通网络映射数据流、基础设施先行映射可观测性、有机更新映射演进式架构。从城市规划的百年智慧中，找到软件架构的跨界启发",
       "url": "blog/posts/urban-planning-inspires-software-architecture.html"
@@ -116,7 +116,7 @@
       "slug": "software-engineer-learns-from-manufacturing-lean",
       "title": "软件工程师能从制造业学到什么：精益思维重塑开发流程",
       "date": "2026-07-02",
-      "category": "技术",
+      "category": "思考",
       "tags": [],
       "excerpt": "制造业精益思想如何重塑软件开发流程——从丰田生产系统到敏捷开发，从5S方法论到持续交付，跨行业视角下的效率革命",
       "url": "blog/posts/software-engineer-learns-from-manufacturing-lean.html"
@@ -125,7 +125,7 @@
       "slug": "how-tech-people-learn-new-tech",
       "title": "技术人如何学习新技术",
       "date": "2026-07-01",
-      "category": "技术",
+      "category": "思考",
       "tags": [
         "学习方法",
         "个人成长",
@@ -140,7 +140,7 @@
       "slug": "why-tech-people-should-write",
       "title": "技术人为什么要写作",
       "date": "2026-07-01",
-      "category": "技术",
+      "category": "思考",
       "tags": [
         "思考",
         "写作",
@@ -156,7 +156,7 @@
       "slug": "kotlin-coroutine-exception-handling",
       "title": "Kotlin Coroutine 异常处理机制全面解析",
       "date": "2026-07-01",
-      "category": "技术",
+      "category": "Kotlin",
       "tags": [],
       "excerpt": "全面解析 Kotlin 协程异常处理机制，涵盖 launch/async 异常传播差异、SupervisorJob、结构化并发、CoroutineExceptionHandler、Android 最佳实践等核心内容",
       "url": "blog/posts/kotlin-coroutine-exception-handling.html"
@@ -165,7 +165,7 @@
       "slug": "android-15-privacy-media-visual-permission",
       "title": "Android 15 隐私新特性：所有文件都需要 MEDIA_VISUAL_PERMISSION",
       "date": "2026-07-01",
-      "category": "技术",
+      "category": "Android",
       "tags": [
         "Android",
         "隐私",
@@ -182,7 +182,7 @@
       "slug": "less-is-more-focus-in-information-age",
       "title": "少即是多：信息过载时代的专注力修炼",
       "date": "2026-07-01",
-      "category": "技术",
+      "category": "思考",
       "tags": [
         "思考",
         "专注力",
@@ -197,7 +197,7 @@
       "slug": "soft-skills-tech-people-overlook",
       "title": "代码之外的竞争力：技术人最容易忽视的软技能",
       "date": "2026-07-01",
-      "category": "技术",
+      "category": "思考",
       "tags": [
         "思考",
         "软技能",
@@ -268,7 +268,7 @@
       "slug": "ai-code-editor-review-cursor-windsurf-copilot",
       "title": "AI 代码编辑器深度横评：Cursor vs Windsurf vs Copilot",
       "date": "2026-06-28",
-      "category": "技术",
+      "category": "AI",
       "tags": [
         "AI",
         "AI 工具",
@@ -281,7 +281,7 @@
       "slug": "git-worktree-multi-branch-guide",
       "title": "Git Worktree 高效多分支开发指南",
       "date": "2026-06-28",
-      "category": "技术",
+      "category": "开发",
       "tags": [
         "Git",
         "开发技巧",
@@ -497,7 +497,7 @@
       "slug": "linux-ebpf-getting-started",
       "title": "Linux eBPF 入门：内核可观测性新范式",
       "date": "2026-06-27",
-      "category": "DevOps",
+      "category": "系统编程",
       "tags": [
         "eBPF",
         "Linux 内核",
@@ -527,7 +527,7 @@
       "slug": "android-gradle-kts-migration",
       "title": "Android Gradle 迁移到 KTS 完整指南：从 Groovy 到 Kotlin DSL",
       "date": "2026-06-24",
-      "category": "Android",
+      "category": "Kotlin",
       "tags": [
         "Android",
         "Gradle",
@@ -603,7 +603,7 @@
       "slug": "android-app-security-hardening",
       "title": "Android 应用签名与安全加固完整指南",
       "date": "2026-06-19",
-      "category": "安全",
+      "category": "Android",
       "tags": [
         "Android",
         "安全",
@@ -665,7 +665,7 @@
       "slug": "mcp-android-integration",
       "title": "MCP 协议在 Android 端的应用：AI 工具调用新范式",
       "date": "2026-06-19",
-      "category": "Android",
+      "category": "AI",
       "tags": [
         "Android",
         "MCP",
@@ -694,7 +694,7 @@
       "slug": "android-gemini-nano-integration",
       "title": "Android 端侧 AI 实战：Gemini Nano 集成指南",
       "date": "2026-05-07",
-      "category": "Android",
+      "category": "AI",
       "tags": [
         "Android",
         "AI",
@@ -1014,7 +1014,7 @@
       "slug": "ai-agent-skill-development",
       "title": "AI Agent 技能开发实战：从需求到上线的完整流程",
       "date": "2026-03-14",
-      "category": "AI Agent",
+      "category": "AI",
       "tags": [
         "AI Agent",
         "OpenClaw",
@@ -2330,18 +2330,16 @@
     }
   ],
   "categories": [
-    "技术",
-    "思考",
     "Android",
-    "AI",
+    "Kotlin",
     "DevOps",
+    "数据库",
+    "AI",
     "系统编程",
+    "思考",
     "前端",
     "开发",
-    "数据库",
-    "安全",
-    "Kotlin",
-    "AI Agent"
+    "安全"
   ],
   "stats": {
     "totalPosts": 75,
