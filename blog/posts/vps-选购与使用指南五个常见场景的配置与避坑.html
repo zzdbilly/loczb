@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VPS 选购与使用指南：五个常见场景的配置与避坑 | 张小猛 - loczb</title>
+    <meta name="description" content="从扶墙线路到生产环境部署，不同场景下 VPS 怎么选、怎么配、怎么不踩坑">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="VPS 选购与使用指南：五个常见场景的配置与避坑 | 张小猛 - loczb">
+    <meta property="og:description" content="从扶墙线路到生产环境部署，不同场景下 VPS 怎么选、怎么配、怎么不踩坑">
+    <meta property="og:url" content="https://709527.xyz/blog/posts/vps-选购与使用指南五个常见场景的配置与避坑.html">
+    <meta property="og:type" content="article">
+        <meta property="og:image" content="../../assets/images/og-image.png">
+    <meta property="og:site_name" content="loczb">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="VPS 选购与使用指南：五个常见场景的配置与避坑 | 张小猛 - loczb">
+    <meta name="twitter:description" content="从扶墙线路到生产环境部署，不同场景下 VPS 怎么选、怎么配、怎么不踩坑">
+
+    
+        <script type="application/ld+json">
+{
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "VPS 选购与使用指南：五个常见场景的配置与避坑",
+      "description": "从扶墙线路到生产环境部署，不同场景下 VPS 怎么选、怎么配、怎么不踩坑",
+      "image": "https://709527.xyz/assets/images/og-image.png",
+      "author": {
+            "@type": "Person",
+            "name": "张小猛",
+            "url": "https://709527.xyz/about/"
+      },
+      "publisher": {
+            "@type": "Organization",
+            "name": "loczb",
+            "logo": {
+                  "@type": "ImageObject",
+                  "url": "https://709527.xyz/assets/images/favicon.svg"
+            }
+      },
+      "datePublished": "2026-07-05 13:07:14T00:00:00+08:00",
+      "dateModified": "2026-07-05 13:07:14T00:00:00+08:00",
+      "url": "https://709527.xyz/blog/posts/vps-选购与使用指南五个常见场景的配置与避坑.html",
+      "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://709527.xyz/blog/posts/vps-选购与使用指南五个常见场景的配置与避坑.html"
+      },
+      "keywords": "VPS, 服务器, 运维, DevOps",
+      "articleSection": "DevOps",
+      "timeRequired": "PT5M",
+      "inLanguage": "zh-CN"
+}
+    </script>
+    
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&family=Noto+Sans+SC:wght@500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500&display=swap" media="print" onload="this.media='all'">
+    <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
+    <link rel="alternate icon" href="../../assets/images/favicon.ico">
+</head>
+<body>
+  <!-- Loading -->
+  <div class="loading">
+    <div class="loading-spinner"></div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../../index.html" class="nav-logo">
+        loc<span>zb</span>
+      </a>
+      <button class="nav-toggle" aria-label="打开菜单" aria-expanded="false" aria-controls="nav-links-menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <div class="nav-overlay"></div>
+      <ul class="nav-links" id="nav-links-menu">
+        <li><a href="../../index.html" class="nav-link">首页</a></li>
+        <li><a href="../../projects/index.html" class="nav-link">项目</a></li>
+        <li><a href="../index.html" class="nav-link active">博客</a></li>
+        <li><a href="../../about/index.html" class="nav-link">关于</a></li>
+      </ul>
+      <button class="theme-toggle" aria-label="切换主题" title="切换亮/暗模式">
+        <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+        <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+      </button>
+    </div>
+  </nav>
+  <!-- Particle Canvas Background -->
+  <canvas id="particle-canvas" class="particle-canvas"></canvas>
+
+  <div class="scroll-progress"></div>
+
+  <main class="section" style="padding-bottom: 0;">
+    <div class="container container-narrow">
+      <a href="../index.html" class="back-link">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        返回博客列表
+      </a>
+
+      <article class="post-content">
+        <h1>VPS 选购与使用指南：五个常见场景的配置与避坑</h1>
+        
+        <div class="post-meta">
+          <span>📅 2026-07-05 13:07:14</span>
+          <span>⏱️ 5 min read</span>
+          <span>👤 张小猛</span>
+        </div>
+        
+        <div class="post-tags">
+          <span class="tag">VPS</span>
+          <span class="tag">服务器</span>
+          <span class="tag">运维</span>
+          <span class="tag">DevOps</span>
+        </div>
+        
+        <p>每次看到有人问"想薅羊毛怎么弄台便宜的服务器"，下面的回复一定少不了"搬瓦工""RN""绿云"这些名字。但如果你对 VPS 的定义就是一个月 5 块钱开个代理，那我建议你先别急着买低价 VPS——先搞清楚你需要什么，不然省下来的钱都会变成运维成本赔回去。</p>
+<p>这篇文章我想聊五个常见的 VPS 使用场景，分别对应是什么配置够用、怎么挑、有什么坑。不推荐具体商家（那东西变得太快），但给了思路至少不会被割。</p>
+<h2>场景一：扶墙/代理（最入门的需求）</h2>
+<p>大多数人买第一台 VPS 就是为了这个。配置需求其实极低：</p>
+<h3>配置建议</h3>
+<ul>
+<li><strong>CPU</strong>：1 核足以</li>
+<li><strong>内存</strong>：512MB 够用，1GB 舒坦</li>
+<li><strong>带宽</strong>：1Gbps 基本是标配，看的是国际链路质量</li>
+<li><strong>流量</strong>：每月 500GB 对个人完全够</li>
+</ul>
+<h3>核心不是配置，是线路</h3>
+<p>扶墙场景下，什么 CPU 内存硬盘都是浮云。最重要的是两点：</p>
+<p><strong>延迟</strong>：新加坡、香港、日本、洛杉矶这几个主流位置对国内延迟最好。韩国也不错，但商家少。欧洲基本不用考虑，延迟 200ms 起步。</p>
+<p><strong>丢包率</strong>：线路绕路比延迟更致命。一个典型的区别是：</p>
+<ul>
+<li>CN2 GIA 线路：国内三网直连，晚高峰 1% 以下丢包</li>
+<li>普通线路（比如 NTT/Cogent）：晚高峰 20%+ 丢包是常态</li>
+</ul>
+<p>CN2 GIA 线路的机器通常比普通线路贵 3-5 倍。你需要问自己：<strong>我真的是每天都要用吗？还是偶尔用用？</strong> 偶尔用的话普通线路也凑合。</p>
+<h3>推荐的传输协议</h3>
+<p>老生常谈但还是值得说一句：Shadowsocks 已经完全够用了。不推荐 SSR 因为是闭源 fork 且已经停止维护。VLESS + XTLS 是目前性能最优的方案之一。</p>
+<p>完全不推荐 OpenVPN 或者 WireGuard 直连——特征太明显，容易被识别封端口。</p>
+<h2>场景二：个人网站 / 博客</h2>
+<p>用 VPS 搭博客和用 GitHub Pages / Vercel 的区别在于：<strong>控制权更大，但维护工作也更多</strong>。</p>
+<h3>配置建议</h3>
+<table>
+<thead>
+<tr>
+<th>用户量级</th>
+<th>配置</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>日 IP &lt; 500</td>
+<td>1C1G + Nginx + SQLite</td>
+</tr>
+<tr>
+<td>日 IP 500-5000</td>
+<td>2C2G + Nginx + MySQL + PHP/Python</td>
+</tr>
+<tr>
+<td>日 IP &gt; 5000</td>
+<td>考虑 CDN + 对象存储，单 VPS 顶不住</td>
+</tr>
+</tbody>
+</table>
+<h3>用 VPS 跑博客 vs 静态托管</h3>
+<p>多数个人博客用静态站点生成器（Hugo / Zola / Astro）+ GitHub Pages 就行了。非要 VPS 的场景一般是：</p>
+<ul>
+<li>需要跑 WordPress 等动态程序</li>
+<li>有后台管理需求（不想纯静态）</li>
+<li>要自定义 Nginx 配置（重定向、反向代理、缓存策略）</li>
+</ul>
+<p>如果你的博客是纯静态的，别买 VPS。GitHub Pages / Cloudflare Pages / Netlify 都是免费的，用的 CDN 节点比你买的 VPS 快得多。</p>
+<h3>安全兜底</h3>
+<p>开放 80/443 端口的 VPS 每天会被各种扫描器光顾几百次。最低限度要做三件事：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 1. 改 SSH 端口，禁止密码登录</span>
+sed<span class="w"> </span>-i<span class="w"> </span><span class="s1">&#39;s/#Port 22/Port 2222/&#39;</span><span class="w"> </span>/etc/ssh/sshd_config
+sed<span class="w"> </span>-i<span class="w"> </span><span class="s1">&#39;s/#PasswordAuthentication yes/PasswordAuthentication no/&#39;</span><span class="w"> </span>/etc/ssh/sshd_config
+
+<span class="c1"># 2. 装 fail2ban</span>
+apt<span class="w"> </span>install<span class="w"> </span>fail2ban
+
+<span class="c1"># 3. 配 ufw / iptables，只开放需要的端口</span>
+ufw<span class="w"> </span>default<span class="w"> </span>deny<span class="w"> </span>incoming
+ufw<span class="w"> </span>allow<span class="w"> </span><span class="m">80</span>,443/tcp
+ufw<span class="w"> </span>allow<span class="w"> </span><span class="m">2222</span>
+</code></pre></div>
+
+<p>就这三步，挡住 99% 的基础扫描攻击。</p>
+<h2>场景三：个人开发测试环境</h2>
+<p>这是最容易<strong>过度配置</strong>的场景。很多开发者的第一台 VPS 买来就跑了几个 Docker 容器测试，却选了 4C8G 的配置——多半是因为"反正也才几十块钱"。</p>
+<h3>实际需要的配置</h3>
+<ul>
+<li>跑 1-2 个测试服务（API + 数据库）：1C2G 绰绰有余</li>
+<li>跑 CI runner / 构建环境：2C4G 比较舒服</li>
+<li>跑 K3s / 微服务测试集群：3 台 2C4G</li>
+</ul>
+<h3>Docker 踩坑</h3>
+<div class="codehilite"><pre><span></span><code><span class="c1"># docker-compose.yml 常见陷阱</span>
+<span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;3&#39;</span>
+<span class="nt">services</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">postgres</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres:16</span>
+<span class="w">    </span><span class="c1"># ❌ 不要这样</span>
+<span class="w">    </span><span class="c1"># volumes:</span>
+<span class="w">    </span><span class="c1">#   - /var/lib/postgresql/data</span>
+<span class="w">    </span><span class="c1"># ✅ 应该显式指定命名卷</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres_data:/var/lib/postgresql/data</span>
+</code></pre></div>
+
+<p>一个常见的坑是 MySQL / PostgreSQL 的默认配置在 1C2G 的机器上跑不起来——它们默认分配的 buffer pool 和 shared buffers 是机器内存的 25%，在 2GB 内存上就是 512MB，没毛病。但如果是内存 512MB 的机器，数据库会频繁 OOM。</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># MySQL 5.7+ 在 1C1G 上的安全配置</span>
+<span class="na">innodb_buffer_pool_size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">256M</span>
+<span class="na">innodb_log_file_size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">64M</span>
+<span class="na">max_connections</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">50</span>
+</code></pre></div>
+
+<h3>用快照备份</h3>
+<p>这是 VPS 比物理服务器方便的地方。在控制面板点一下快照（Snapshot），整个系统状态就保存下来了。开发测试时先打快照，搞坏了恢复就是几秒钟的事。</p>
+<p>但要注意：不是所有商家都免费提供快照。便宜的 VPS 通常快照要额外收费，或者限制了每日次数。</p>
+<h2>场景四：离线下载 / NAS 杂务</h2>
+<p>这个场景下硬盘大小是第一位的。下载、转码、存储，这些任务对 CPU 和内存需求其实不高，但对 I/O 敏感。</p>
+<h3>配置建议</h3>
+<ul>
+<li><strong>CPU</strong>：1-2 核</li>
+<li><strong>内存</strong>：1-2GB（transmission/qBittorrent 本身不占多少）</li>
+<li><strong>硬盘</strong>：看需求，建议 100GB+</li>
+<li><strong>带宽</strong>：下载需要大带宽，上传看需求</li>
+</ul>
+<h3>注意硬盘 IO</h3>
+<p>很多便宜的 VPS 用的是<strong>共享硬盘</strong>（比如 OpenVZ 架构或者某些 KVM 超售严重的商家），IO 性能很差。你用 DD 命令测试一下：</p>
+<div class="codehilite"><pre><span></span><code>dd<span class="w"> </span><span class="k">if</span><span class="o">=</span>/dev/zero<span class="w"> </span><span class="nv">of</span><span class="o">=</span><span class="nb">test</span><span class="w"> </span><span class="nv">bs</span><span class="o">=</span>64k<span class="w"> </span><span class="nv">count</span><span class="o">=</span>16k<span class="w"> </span><span class="nv">conv</span><span class="o">=</span>fdatasync
+</code></pre></div>
+
+<p>如果顺序写入速度低于 100MB/s，或者 4K 随机写入低于 5MB/s，这台 VPS 就不适合做下载/NAS 用途。</p>
+<h3>rclone + 云盘方案</h3>
+<p>如果 VPS 硬盘不够大，可以用 rclone 挂载 Google Drive / OneDrive / 阿里云盘：</p>
+<div class="codehilite"><pre><span></span><code>rclone<span class="w"> </span>mount<span class="w"> </span>remote:path<span class="w"> </span>/mnt/cloud<span class="w"> </span>--daemon
+</code></pre></div>
+
+<p>好处是无限存储，坏处是带宽限制和 API 配额。一天下载超过 750GB 会被 Google 限速。如果不考虑这个限制，这个方案对个人用户已经足够用了。</p>
+<h2>场景五：生产级的小型业务服务</h2>
+<p>如果是面向真实用户的服务，底线要求完全不同。</p>
+<h3>配置底线</h3>
+<ul>
+<li><strong>高可用</strong>：至少 2 台，避免单点</li>
+<li><strong>负载均衡</strong>：前面放一层 Nginx / HAProxy 或者云厂商的 LB</li>
+<li><strong>数据库单独部署</strong>：不要和应用混在一台机器上</li>
+<li><strong>监控告警</strong>：Prometheus + Grafana 或者直接买商业监控</li>
+</ul>
+<h3>一台还是多台</h3>
+<p>个人开发者做小业务，最划算的方案其实是：</p>
+<ol>
+<li>一台 2C4G 跑应用 + Nginx + Redis</li>
+<li>数据库用托管服务（比如 PlanetScale / Supabase 免费层或者 RDS 最低配）</li>
+<li>对象存储用 S3 / 兼容服务（MinIO / Backblaze B2）</li>
+</ol>
+<p>这样比全自建稳定得多，而且数据库运维不需要你操心。</p>
+<h3>SLA 的理解</h3>
+<p>很多低价 VPS 的 SLA 写的是 99.9%，对应的宕机时间每年不超过 8.7 小时。但要注意 SLA 的<strong>赔付条件</strong>：</p>
+<ul>
+<li>大部分商家要求你自己发现宕机 → 提交工单 → 确认故障</li>
+<li>大多数商家对"硬件故障"和"网络攻击"免责</li>
+<li>SLA 赔付通常只退当月费用的 5%-10%，不是全额</li>
+</ul>
+<p>换句话说，SLA 在低价 VPS 上几乎等于没有。如果业务不能容忍停机，要么买高价有保障的商家，要么做多活架构。</p>
+<h2>选商家前先问自己六个问题</h2>
+<p>在比较商家之前，先想清楚这六个问题，能帮你省下很多被坑的钱：</p>
+<ol>
+<li><strong>我最核心的需求是什么？</strong>（扶墙 / 建站 / 编译 / 下载 / 生产服务）——这个决定了你应该关注什么指标（线路 / IO / 带宽 / 稳定性）</li>
+<li><strong>我能接受多高的月费？</strong>（&lt;$5 的只能碰运气，$10-20 有正常体验，$50+ 保障好）</li>
+<li><strong>我需要客服响应多快？</strong>（大部分低价 VPS 只有工单，回复速度 24-72 小时不等）</li>
+<li><strong>我有没有备份习惯？</strong>（没有的话至少买有自动备份的商家）</li>
+<li><strong>我在哪个时区？</strong>（时差导致工单回复更慢，亚洲时区的商家更合适）</li>
+<li><strong>我会跑什么系统？</strong>（CentOS 已经停更，推荐 Ubuntu 24.04 LTS 或 Debian 12）</li>
+</ol>
+<h2>关于价格的一些实话</h2>
+<p>写这篇文章的时候（2026 年），VPS 市场的价格分布大概是这样：</p>
+<table>
+<thead>
+<tr>
+<th>价格区间</th>
+<th>典型配置</th>
+<th>适合场景</th>
+<th>风险点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$2-5/月</td>
+<td>1C512M-1C1G</td>
+<td>扶墙、玩具项目</td>
+<td>超售、邻居挖矿、随时跑路</td>
+</tr>
+<tr>
+<td>$5-15/月</td>
+<td>1C1G-2C2G</td>
+<td>个人网站、开发测试</td>
+<td>大部分够用</td>
+</tr>
+<tr>
+<td>$15-30/月</td>
+<td>2C4G-4C8G</td>
+<td>生产级小服务</td>
+<td>性价比不错</td>
+</tr>
+<tr>
+<td>$30+/月</td>
+<td>4C8G+</td>
+<td>高负载业务</td>
+<td>可以考虑云厂商了</td>
+</tr>
+</tbody>
+</table>
+<p>低于 $5/月的 VPS，建议做好随时数据丢失的心理准备。不是说不能用，而是不要对它有任何不切实际的期待。超过 $30/月的 VPS，不如直接用云厂商的轻量服务器，稳定性和售后都好得多。</p>
+<h2>总结一下</h2>
+<p>VPS 的选购没有万能的推荐，因为每个人的场景不同。但不管你是扶墙、建站、开发还是跑业务，问清楚这几个问题就不会选错：</p>
+<ul>
+<li><strong>我的需求到底是什么？</strong> 找到核心场景</li>
+<li><strong>我最不能妥协的指标是什么？</strong> 线路、IO、稳定性还是价格？</li>
+<li><strong>我最容易踩的坑在哪？</strong> 配置不够、超售严重、售后不行</li>
+</ul>
+<p>如果还是不确定，选一个<strong>口碑好、默认配置不超售、有月付选项</strong>的商家，先用一个月试试。不合适就换——VPS 市场的好处是切换成本很低。</p>
+<p>最后一句掏心窝的话：<strong>别为"可能以后用得上"多花钱</strong>。你永远不会因为"以后可能用得上"去用那些资源——VPS 就像买相机，大部分人最后用的还是自动档。</p>
+      </article>
+    </div>
+  </main>
+
+  <!-- Related Posts / Navigation -->
+  <section class="section" style="padding-top: 0;">
+    <div class="container container-narrow">
+      <hr style="border: none; border-top: 1px solid var(--color-border); margin: var(--space-3xl) 0;">
+      
+      <div class="blog-topics" style="margin-bottom: var(--space-xl);">
+        <span class="topic-label">读完之后：</span>
+        <a href="../index.html" class="topic-tag">返回博客列表</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <p class="footer-signature">写代码，做产品，也认真生活。</p>
+      <div class="footer-social">
+        <a href="https://github.com/zzdbilly" class="footer-social-link" target="_blank" rel="noopener" aria-label="GitHub">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+        </a>
+        <a href="../../rss.xml" class="footer-social-link" aria-label="RSS">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+      </div>
+      <div class="footer-links">
+        <a href="../../index.html" class="footer-link">首页</a>
+        <a href="../../projects/index.html" class="footer-link">项目</a>
+        <a href="../../about/index.html" class="footer-link">关于</a>
+      </div>
+      <p class="footer-copyright">
+        &copy; 2026 张小猛
+      </p>
+    </div>
+  </footer>
+
+  
+  <script defer src="../../assets/js/related-posts.js"></script>
+  <script defer src="../../assets/js/main.js"></script>
+  <script defer src="../../assets/js/article.js"></script>
+  <script defer src="../../assets/js/share.js"></script>
+  <script defer src="../../assets/js/back-to-top.js"></script>
+
+  <!-- Back to Top & Reading Progress -->
+  <button class="back-to-top" id="backToTop" aria-label="回到顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
+  <div class="reading-progress" id="readingProgress"></div>
+
+  <!-- Post TOC -->
+  <div class="post-toc-container" id="postToc">
+    <nav class="post-toc">
+      <div class="post-toc-title">目录</div>
+      <ul class="post-toc-list" id="tocList">
+      </ul>
+    </nav>
+  </div>
+<script defer src="../../assets/js/particles.js"></script>
+
+  <!-- highlight.js for code syntax highlighting -->
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // 只对没有 codehilite 的代码块应用 highlight.js
+      document.querySelectorAll('pre code').forEach(function(block) {
+        // 跳过已经有 Pygments 高亮的块
+        if (!block.closest('.codehilite') && !block.classList.contains('hljs')) {
+          hljs.highlightElement(block);
+        }
+      });
+    });
+  </script>
+
+  <!-- Mobile TOC Button & Drawer -->
+  <button class="mobile-toc-btn" id="mobileTocBtn" aria-label="目录">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <line x1="4" y1="6" x2="20" y2="6"/>
+      <line x1="4" y1="12" x2="20" y2="12"/>
+      <line x1="4" y1="18" x2="20" y2="18"/>
+    </svg>
+  </button>
+  <div class="toc-drawer-overlay" id="tocDrawerOverlay"></div>
+  <div class="toc-drawer" id="tocDrawer">
+    <div class="toc-drawer-header">
+      <span class="toc-drawer-title">目录</span>
+      <button class="toc-drawer-close" id="tocDrawerClose" aria-label="关闭目录">&times;</button>
+    </div>
+    <div id="tocDrawerContent" class="post-toc-list"></div>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var btn = document.getElementById('mobileTocBtn');
+      var drawer = document.getElementById('tocDrawer');
+      var overlay = document.getElementById('tocDrawerOverlay');
+      var close = document.getElementById('tocDrawerClose');
+      var content = document.getElementById('tocDrawerContent');
+      var desktopToc = document.querySelector('.post-toc-list');
+
+      function openDrawer() {
+        drawer.classList.add('open');
+        overlay.classList.add('open');
+        document.body.style.overflow = 'hidden';
+        // 复制桌面端 TOC 链接到抽屉
+        if (content && desktopToc) {
+          content.innerHTML = desktopToc.innerHTML;
+        }
+      }
+
+      function closeDrawer() {
+        drawer.classList.remove('open');
+        overlay.classList.remove('open');
+        document.body.style.overflow = '';
+      }
+
+      if (btn) btn.addEventListener('click', openDrawer);
+      if (close) close.addEventListener('click', closeDrawer);
+      if (overlay) overlay.addEventListener('click', closeDrawer);
+
+      // ESC key
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && drawer && drawer.classList.contains('open')) {
+          closeDrawer();
+        }
+      });
+
+      // 桌面端 TOC 更新时（article.js 填充后）同步到抽屉
+      if (desktopToc) {
+        var observer = new MutationObserver(function() {
+          if (content && drawer.classList.contains('open')) {
+            content.innerHTML = desktopToc.innerHTML;
+          }
+        });
+        observer.observe(desktopToc, { childList: true, subtree: true });
+      }
+    });
+  </script>
+
+  <!-- Cloudflare Web Analytics -->
+  <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "29e7cff6f37448989538e2165cb79187"}'></script>
+</body>
+</html>

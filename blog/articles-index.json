@@ -1,6 +1,34 @@
 {
   "posts": [
     {
+      "slug": "vps-选购与使用指南五个常见场景的配置与避坑",
+      "title": "VPS 选购与使用指南：五个常见场景的配置与避坑",
+      "date": "2026-07-05",
+      "category": "技术",
+      "tags": [
+        "VPS",
+        "服务器",
+        "运维",
+        "DevOps"
+      ],
+      "excerpt": "从扶墙线路到生产环境部署，不同场景下 VPS 怎么选、怎么配、怎么不踩坑",
+      "url": "blog/posts/vps-选购与使用指南五个常见场景的配置与避坑.html"
+    },
+    {
+      "slug": "mysql-索引优化实战从慢查询到最佳实践",
+      "title": "MySQL 索引优化实战：从慢查询到最佳实践",
+      "date": "2026-07-05",
+      "category": "技术",
+      "tags": [
+        "MySQL",
+        "数据库",
+        "索引",
+        "性能优化"
+      ],
+      "excerpt": "从 EXPLAIN 认识索引失效到复合索引设计，一个慢查询从 2 秒优化到 12 毫秒的完整过程",
+      "url": "blog/posts/mysql-索引优化实战从慢查询到最佳实践.html"
+    },
+    {
       "slug": "ai-编程助手进化论从结对编程到自主编程团队-2026",
       "title": "AI 编程助手进化论：从结对编程到自主编程团队 (2026)",
       "date": "2026-07-04",
@@ -1071,12 +1099,12 @@
       "count": 19
     },
     {
-      "tag": "AI",
+      "tag": "DevOps",
       "count": 10
     },
     {
-      "tag": "DevOps",
-      "count": 9
+      "tag": "AI",
+      "count": 10
     },
     {
       "tag": "Kotlin",
@@ -1091,6 +1119,10 @@
       "count": 5
     },
     {
+      "tag": "性能优化",
+      "count": 4
+    },
+    {
       "tag": "Agent",
       "count": 4
     },
@@ -1103,6 +1135,10 @@
       "count": 4
     },
     {
+      "tag": "数据库",
+      "count": 3
+    },
+    {
       "tag": "系统编程",
       "count": 3
     },
@@ -1112,10 +1148,6 @@
     },
     {
       "tag": "自动化",
-      "count": 3
-    },
-    {
-      "tag": "性能优化",
       "count": 3
     },
     {
@@ -1141,6 +1173,10 @@
     {
       "tag": "Gemini",
       "count": 3
+    },
+    {
+      "tag": "运维",
+      "count": 2
     },
     {
       "tag": "AI Agent",
@@ -1239,10 +1275,6 @@
       "count": 2
     },
     {
-      "tag": "数据库",
-      "count": 2
-    },
-    {
       "tag": "Live Updates",
       "count": 2
     },
@@ -1291,6 +1323,22 @@
       "count": 2
     },
     {
+      "tag": "VPS",
+      "count": 1
+    },
+    {
+      "tag": "服务器",
+      "count": 1
+    },
+    {
+      "tag": "MySQL",
+      "count": 1
+    },
+    {
+      "tag": "索引",
+      "count": 1
+    },
+    {
       "tag": "编程",
       "count": 1
     },
@@ -1308,10 +1356,6 @@
     },
     {
       "tag": "ext4",
-      "count": 1
-    },
-    {
-      "tag": "运维",
       "count": 1
     },
     {
@@ -2022,8 +2066,18 @@
   "archives": [
     {
       "month": "2026-07",
-      "count": 14,
+      "count": 16,
       "posts": [
+        {
+          "title": "VPS 选购与使用指南：五个常见场景的配置与避坑",
+          "date": "2026-07-05",
+          "url": "blog/posts/vps-选购与使用指南五个常见场景的配置与避坑.html"
+        },
+        {
+          "title": "MySQL 索引优化实战：从慢查询到最佳实践",
+          "date": "2026-07-05",
+          "url": "blog/posts/mysql-索引优化实战从慢查询到最佳实践.html"
+        },
         {
           "title": "AI 编程助手进化论：从结对编程到自主编程团队 (2026)",
           "date": "2026-07-04",
@@ -2416,8 +2470,13 @@
     {
       "id": "devops",
       "name": "DevOps 实战",
-      "count": 9,
+      "count": 10,
       "posts": [
+        {
+          "title": "VPS 选购与使用指南：五个常见场景的配置与避坑",
+          "date": "2026-07-05",
+          "url": "blog/posts/vps-选购与使用指南五个常见场景的配置与避坑.html"
+        },
         {
           "title": "GitHub Actions 自动索引：我的静态博客 CI/CD 进化之路",
           "date": "2026-07-04",
@@ -2670,9 +2729,9 @@
     "AI Agent"
   ],
   "stats": {
-    "totalPosts": 71,
-    "totalTags": 238,
-    "latestDate": "2026-07-04",
+    "totalPosts": 73,
+    "totalTags": 242,
+    "latestDate": "2026-07-05",
     "oldestDate": "2026-02-15"
   }
 }
