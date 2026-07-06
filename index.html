@@ -401,29 +401,50 @@
       
       <div class="blog-grid">
         <!-- 代表文章大卡 -->
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <article class="blog-card-featured animate-on-scroll" id="home-featured-post" style="display: block;">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <article class="blog-card-featured animate-on-scroll" id="home-featured-post" style="display: block;">
           <div class="blog-card-header">
             <div class="blog-card-meta">
               <span class="blog-date">2026-07-06</span>
               <span>·</span>
               <span class="blog-read-time">5 min</span>
             </div>
-            <span class="blog-list-tag">思考</span>
+            <span class="blog-list-tag">前端</span>
           </div>
           <h3 class="blog-card-title">
-            <a href="blog/posts/这些年我攒下来的生活小技巧.html">这些年我攒下来的生活小技巧</a>
+            <a href="blog/posts/当-ai-编程-agent-有了眼睛safari-mcp-server-深度解读.html">当 AI 编程 Agent 有了&quot;眼睛&quot;：Safari MCP Server 深度解读</a>
           </h3>
-          <p class="blog-card-excerpt">从厨房到居家，从时间管理到数字生活，分享一套经过实践验证的生活小窍门，帮你少踩坑、少浪费时间。...</p>
+          <p class="blog-card-excerpt">2026年7月，Apple 发布了 Safari MCP Server，让 AI 编程 Agent 可以直接连接浏览器调试页面。本文深入解读其原理、安装配置、四个实战场景，以及与 Chrome MCP 的全方位对比。...</p>
           <div class="blog-card-tags">
-            <span class="tech-tag">生活技巧</span>
-            <span class="tech-tag">效率</span>
-            <span class="tech-tag">极简主义</span>
-            <span class="tech-tag">个人管理</span>
+            <span class="tech-tag">AI</span>
+            <span class="tech-tag">MCP</span>
+            <span class="tech-tag">WebKit</span>
+            <span class="tech-tag">Safari</span>
+            <span class="tech-tag">前端开发</span>
+            <span class="tech-tag">调试</span>
           </div>
         </article>
         
         <!-- 最新文章列表 -->
                 <div class="blog-list">
+        <article class="blog-mini-card animate-on-scroll" data-category="思考" data-page="1">
+          <div class="blog-mini-card-header">
+            <div class="blog-list-meta">
+              <span class="blog-date">2026-07-06</span>
+              <span>·</span>
+              <span class="blog-read-time">5 min</span>
+            </div>
+            <span class="blog-list-tag">思考</span>
+          </div>
+          <h3 class="blog-mini-card-title">
+            <a href="blog/posts/这些年我攒下来的生活小技巧.html">这些年我攒下来的生活小技巧</a>
+          </h3>
+          <p class="blog-mini-card-excerpt">从厨房到居家，从时间管理到数字生活，分享一套经过实践验证的生活小窍门，帮你少踩坑、少浪费时间。</p>
+          <div class="blog-mini-card-tags">
+            <span class="tech-tag">生活技巧</span>
+            <span class="tech-tag">效率</span>
+            <span class="tech-tag">极简主义</span>
+          </div>
+        </article>
         <article class="blog-mini-card animate-on-scroll" data-category="Android" data-page="1">
           <div class="blog-mini-card-header">
             <div class="blog-list-meta">
@@ -441,25 +462,6 @@
             <span class="tech-tag">Gradle</span>
             <span class="tech-tag">Android</span>
             <span class="tech-tag">构建优化</span>
-          </div>
-        </article>
-        <article class="blog-mini-card animate-on-scroll" data-category="Kotlin" data-page="1">
-          <div class="blog-mini-card-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-07-05</span>
-              <span>·</span>
-              <span class="blog-read-time">5 min</span>
-            </div>
-            <span class="blog-list-tag">Kotlin</span>
-          </div>
-          <h3 class="blog-mini-card-title">
-            <a href="blog/posts/kotlin-scope-functions-实战选择五个函数一个决策树.html">Kotlin Scope Functions 实战选择：五个函数一个决策树</a>
-          </h3>
-          <p class="blog-mini-card-excerpt">别再纠结 let 和 apply 的区别了——从 this/it 和返回值两个维度理清 Kotlin 的五个 Scope Functions，附反模式和团队规范</p>
-          <div class="blog-mini-card-tags">
-            <span class="tech-tag">Kotlin</span>
-            <span class="tech-tag">Android</span>
-            <span class="tech-tag">最佳实践</span>
           </div>
         </article>
         </div>
@@ -554,6 +556,15 @@
     // 首页随机选择代表文章
     const posts = [
       {
+        url: 'blog/posts/当-ai-编程-agent-有了眼睛safari-mcp-server-深度解读.html',
+        title: '当 AI 编程 Agent 有了"眼睛"：Safari MCP Server 深度解读',
+        date: '2026-07-06',
+        readTime: '5 min',
+        category: '前端',
+        category2: '前端',
+        desc: '2026年7月，Apple 发布了 Safari MCP Server，让 AI 编程 Agent 可以直接连接浏览器调试页面。本文深入解读其原理、安装配置、四个实战场景，以及与 Chrome MCP 的全方位对比。'
+      },
+      {
         url: 'blog/posts/这些年我攒下来的生活小技巧.html',
         title: '这些年我攒下来的生活小技巧',
         date: '2026-07-06',
@@ -633,15 +644,6 @@
         category: '思考',
         category2: '思考',
         desc: '不会关机的程序员不是在拼事业，而是在慢性消耗自己。聊聊为什么下班后的大脑还在 debug，以及如何真正停下来。'
-      },
-      {
-        url: 'blog/posts/static-blog-performance-optimization-59mb.html',
-        title: '静态博客性能优化实战：从 59MB 到精简高效',
-        date: '2026-07-03',
-        readTime: '5 min',
-        category: '前端',
-        category2: '前端',
-        desc: '66篇文章4KB重复内联样式、4.4MB死文件、404幽灵引用——一次完整的静态博客性能优化记录'
       }
     ];
     
