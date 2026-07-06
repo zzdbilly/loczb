@@ -7,6 +7,14 @@
     <language>zh-CN</language>
     <atom:link href="https://709527.xyz/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>这些年我攒下来的生活小技巧</title>
+      <link>https://709527.xyz/blog/posts/这些年我攒下来的生活小技巧.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/这些年我攒下来的生活小技巧.html</guid>
+      <description>从厨房到居家，从时间管理到数字生活，分享一套经过实践验证的生活小窍门，帮你少踩坑、少浪费时间。</description>
+      <category>思考</category>
+      <pubDate>Mon, 06 Jul 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
       <title>Gradle 构建加速全攻略：从 5 分钟到 30 秒</title>
       <link>https://709527.xyz/blog/posts/gradle-构建加速全攻略从-5-分钟到-30-秒.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/gradle-构建加速全攻略从-5-分钟到-30-秒.html</guid>
@@ -156,14 +164,6 @@
       <guid isPermaLink="true">https://709527.xyz/blog/posts/why-i-started-blogging.html</guid>
       <description>一个普通工程师的写作心路 — 为什么要开始写博客，写作如何改变了我的学习方式，以及我对个人品牌的理解</description>
       <category>思考</category>
-      <pubDate>Tue, 30 Jun 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>Android 16 前台服务类型全新限制：类型强制匹配与迁移指南</title>
-      <link>https://709527.xyz/blog/posts/android-16-foreground-service-constraints.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/android-16-foreground-service-constraints.html</guid>
-      <description>Android 16 前台服务类型强制约束详解，涵盖 shortService、specialUse、类型匹配规则和迁移适配方案</description>
-      <category>Android</category>
       <pubDate>Tue, 30 Jun 2026 00:00:00 +0800</pubDate>
     </item>
   </channel>

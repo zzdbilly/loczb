@@ -4,6 +4,7 @@
 
 // Article index with tags
 const ARTICLE_INDEX = [
+  { slug: "这些年我攒下来的生活小技巧", tags: ["生活技巧", "效率", "极简主义", "个人管理"], title: "这些年我攒下来的生活小技巧" },
   { slug: "测试文章", tags: ["test"], title: "测试文章" },
   { slug: "gradle-构建加速全攻略从-5-分钟到-30-秒", tags: ["Gradle", "Android", "构建优化", "性能优化"], title: "Gradle 构建加速全攻略：从 5 分钟到 30 秒" },
   { slug: "kotlin-scope-functions-实战选择五个函数一个决策树", tags: ["Kotlin", "Android", "最佳实践"], title: "Kotlin Scope Functions 实战选择：五个函数一个决策树" },
