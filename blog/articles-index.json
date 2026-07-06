@@ -1,6 +1,22 @@
 {
   "posts": [
     {
+      "slug": "打工人理财第一课从看懂钱去哪了到让钱自己长大",
+      "title": "打工人理财第一课：从看懂钱去哪了到让钱自己长大",
+      "date": "2026-07-06",
+      "category": "思考",
+      "tags": [
+        "理财",
+        "打工人",
+        "程序员",
+        "投资",
+        "省钱",
+        "保险"
+      ],
+      "excerpt": "面向程序员的实用理财入门指南——四个账户法、极简记账、常见金融坑、可执行的起步计划。不折腾、不焦虑，让钱安静地替你打工。",
+      "url": "blog/posts/打工人理财第一课从看懂钱去哪了到让钱自己长大.html"
+    },
+    {
       "slug": "当-ai-编程-agent-有了眼睛safari-mcp-server-深度解读",
       "title": "当 AI 编程 Agent 有了\"眼睛\"：Safari MCP Server 深度解读",
       "date": "2026-07-06",
@@ -1294,6 +1310,30 @@
       "count": 2
     },
     {
+      "tag": "理财",
+      "count": 1
+    },
+    {
+      "tag": "打工人",
+      "count": 1
+    },
+    {
+      "tag": "程序员",
+      "count": 1
+    },
+    {
+      "tag": "投资",
+      "count": 1
+    },
+    {
+      "tag": "省钱",
+      "count": 1
+    },
+    {
+      "tag": "保险",
+      "count": 1
+    },
+    {
       "tag": "WebKit",
       "count": 1
     },
@@ -1973,8 +2013,13 @@
   "archives": [
     {
       "month": "2026-07",
-      "count": 20,
+      "count": 21,
       "posts": [
+        {
+          "title": "打工人理财第一课：从看懂钱去哪了到让钱自己长大",
+          "date": "2026-07-06",
+          "url": "blog/posts/打工人理财第一课从看懂钱去哪了到让钱自己长大.html"
+        },
         {
           "title": "当 AI 编程 Agent 有了\"眼睛\"：Safari MCP Server 深度解读",
           "date": "2026-07-06",
@@ -2394,8 +2439,8 @@
     }
   ],
   "categories": [
-    "前端",
     "思考",
+    "前端",
     "Android",
     "Kotlin",
     "DevOps",
@@ -2406,8 +2451,8 @@
     "安全"
   ],
   "stats": {
-    "totalPosts": 77,
-    "totalTags": 221,
+    "totalPosts": 78,
+    "totalTags": 227,
     "latestDate": "2026-07-06",
     "oldestDate": "2026-02-15"
   }
