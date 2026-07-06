@@ -1,17 +1,6 @@
 {
   "posts": [
     {
-      "slug": "测试文章",
-      "title": "测试文章",
-      "date": "2026-07-06",
-      "category": "开发",
-      "tags": [
-        "test"
-      ],
-      "excerpt": "测试",
-      "url": "blog/posts/测试文章.html"
-    },
-    {
       "slug": "gradle-构建加速全攻略从-5-分钟到-30-秒",
       "title": "Gradle 构建加速全攻略：从 5 分钟到 30 秒",
       "date": "2026-07-05",
@@ -1267,10 +1256,6 @@
       "count": 2
     },
     {
-      "tag": "test",
-      "count": 1
-    },
-    {
       "tag": "工作方法",
       "count": 1
     },
@@ -1934,13 +1919,8 @@
   "archives": [
     {
       "month": "2026-07",
-      "count": 19,
+      "count": 18,
       "posts": [
-        {
-          "title": "测试文章",
-          "date": "2026-07-06",
-          "url": "blog/posts/测试文章.html"
-        },
         {
           "title": "Gradle 构建加速全攻略：从 5 分钟到 30 秒",
           "date": "2026-07-05",
@@ -2350,7 +2330,6 @@
     }
   ],
   "categories": [
-    "开发",
     "Android",
     "Kotlin",
     "DevOps",
@@ -2359,12 +2338,13 @@
     "系统编程",
     "思考",
     "前端",
+    "开发",
     "安全"
   ],
   "stats": {
-    "totalPosts": 76,
-    "totalTags": 216,
-    "latestDate": "2026-07-06",
+    "totalPosts": 75,
+    "totalTags": 215,
+    "latestDate": "2026-07-05",
     "oldestDate": "2026-02-15"
   }
 }
