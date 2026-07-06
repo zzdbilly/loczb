@@ -7,6 +7,14 @@
     <language>zh-CN</language>
     <atom:link href="https://709527.xyz/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>技术人员转行指南：当写代码不再是你想做的事</title>
+      <link>https://709527.xyz/blog/posts/技术人员转行指南当写代码不再是你想做的事.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/技术人员转行指南当写代码不再是你想做的事.html</guid>
+      <description>深入分析技术人员转行的原因、方向和策略——不想写代码了，接下来该怎么办？</description>
+      <category>思考</category>
+      <pubDate>Mon, 06 Jul 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
       <title>打工人理财第一课：从看懂钱去哪了到让钱自己长大</title>
       <link>https://709527.xyz/blog/posts/打工人理财第一课从看懂钱去哪了到让钱自己长大.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/打工人理财第一课从看懂钱去哪了到让钱自己长大.html</guid>
@@ -156,14 +164,6 @@
       <guid isPermaLink="true">https://709527.xyz/blog/posts/android-15-privacy-media-visual-permission.html</guid>
       <description>详解 Android 15 引入的媒体权限重大变更，以及从 MediaStore 迁移到 Photo Picker 的完整指南</description>
       <category>Android</category>
-      <pubDate>Wed, 01 Jul 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>少即是多：信息过载时代的专注力修炼</title>
-      <link>https://709527.xyz/blog/posts/less-is-more-focus-in-information-age.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/less-is-more-focus-in-information-age.html</guid>
-      <description>信息爆炸不是问题，问题是我们在海量输入中丧失了深度思考的能力。本文分享我在信息筛选、注意力管理和深度工作方面的实践经验与反思。</description>
-      <category>思考</category>
       <pubDate>Wed, 01 Jul 2026 00:00:00 +0800</pubDate>
     </item>
   </channel>

@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>技术人员转行指南：当写代码不再是你想做的事 | 张小猛 - loczb</title>
+    <meta name="description" content="深入分析技术人员转行的原因、方向和策略——不想写代码了，接下来该怎么办？">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="技术人员转行指南：当写代码不再是你想做的事 | 张小猛 - loczb">
+    <meta property="og:description" content="深入分析技术人员转行的原因、方向和策略——不想写代码了，接下来该怎么办？">
+    <meta property="og:url" content="https://709527.xyz/blog/posts/技术人员转行指南当写代码不再是你想做的事.html">
+    <meta property="og:type" content="article">
+        <meta property="og:image" content="../../assets/images/og-image.png">
+    <meta property="og:site_name" content="loczb">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="技术人员转行指南：当写代码不再是你想做的事 | 张小猛 - loczb">
+    <meta name="twitter:description" content="深入分析技术人员转行的原因、方向和策略——不想写代码了，接下来该怎么办？">
+
+    
+        <script type="application/ld+json">
+{
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "技术人员转行指南：当写代码不再是你想做的事",
+      "description": "深入分析技术人员转行的原因、方向和策略——不想写代码了，接下来该怎么办？",
+      "image": "https://709527.xyz/assets/images/og-image.png",
+      "author": {
+            "@type": "Person",
+            "name": "张小猛",
+            "url": "https://709527.xyz/about/"
+      },
+      "publisher": {
+            "@type": "Organization",
+            "name": "loczb",
+            "logo": {
+                  "@type": "ImageObject",
+                  "url": "https://709527.xyz/assets/images/favicon.svg"
+            }
+      },
+      "datePublished": "2026-07-06 20:34:54T00:00:00+08:00",
+      "dateModified": "2026-07-06 20:34:54T00:00:00+08:00",
+      "url": "https://709527.xyz/blog/posts/技术人员转行指南当写代码不再是你想做的事.html",
+      "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://709527.xyz/blog/posts/技术人员转行指南当写代码不再是你想做的事.html"
+      },
+      "keywords": "转行, 职业选择, 思考, 程序员",
+      "articleSection": "思考",
+      "timeRequired": "PT5M",
+      "inLanguage": "zh-CN"
+}
+    </script>
+    
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&family=Noto+Sans+SC:wght@500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500&display=swap" media="print" onload="this.media='all'">
+    <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
+    <link rel="alternate icon" href="../../assets/images/favicon.ico">
+</head>
+<body>
+  <!-- Loading -->
+  <div class="loading">
+    <div class="loading-spinner"></div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../../index.html" class="nav-logo">
+        loc<span>zb</span>
+      </a>
+      <button class="nav-toggle" aria-label="打开菜单" aria-expanded="false" aria-controls="nav-links-menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <div class="nav-overlay"></div>
+      <ul class="nav-links" id="nav-links-menu">
+        <li><a href="../../index.html" class="nav-link">首页</a></li>
+        <li><a href="../../projects/index.html" class="nav-link">项目</a></li>
+        <li><a href="../index.html" class="nav-link active">博客</a></li>
+        <li><a href="../../about/index.html" class="nav-link">关于</a></li>
+      </ul>
+      <button class="theme-toggle" aria-label="切换主题" title="切换亮/暗模式">
+        <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+        <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+      </button>
+    </div>
+  </nav>
+  <!-- Particle Canvas Background -->
+  <canvas id="particle-canvas" class="particle-canvas"></canvas>
+
+  <div class="scroll-progress"></div>
+
+  <main class="section" style="padding-bottom: 0; padding-top: var(--space-4xl);">
+    <div class="container container-narrow">
+      <a href="../index.html" class="back-link">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        返回博客列表
+      </a>
+
+      <article class="post-content">
+        <h1>技术人员转行指南：当写代码不再是你想做的事</h1>
+        
+        <div class="post-meta">
+          <span>📅 2026-07-06 20:34:54</span>
+          <span>⏱️ 5 min read</span>
+          <span>👤 张小猛</span>
+        </div>
+        
+        <div class="post-tags">
+          <span class="tag">转行</span>
+          <span class="tag">职业选择</span>
+          <span class="tag">思考</span>
+          <span class="tag">程序员</span>
+        </div>
+        
+        <h2>前言：我也想过转行</h2>
+<p>前几天和几个老朋友吃饭，席间聊到一个沉重的话题——35 岁的程序员都去哪了？</p>
+<p>老张，干了十年后端，去年终于受不了了，跑去开了个烧烤店。他说现在每天凌晨三点收摊，比写代码还累，但睡觉踏实了，不用半夜被 on-call 电话吵醒。老李，美团 P7，今年裸辞去云南做了一个民宿，朋友圈里每天都是苍山洱海的照片。还有一个前同事，考了公务员，现在在街道办事处写材料，工资少了一半，但头发慢慢长回来了。</p>
+<p>这些故事听多了，难免让人心里犯嘀咕：我们到底是在写代码，还是在燃烧青春？</p>
+<p>作为一个在技术圈摸爬滚打了这些年的人，我不敢说自己看透了什么，但身边人来人往，各种转行的案例见得多了。今天就聊聊这个话题——技术人员转行，到底值不值得，该往哪转，又该怎么转。</p>
+<hr />
+<h2>为什么想转行？先承认这不是矫情</h2>
+<p>想转行这件事，我懂不是一时冲动。能做技术的人，逻辑思维都不差，不会因为"今天写了个 Bug"就拍桌子走人。真正让人动念头的，往往是那些日积月累的疲惫。</p>
+<h3>技术焦虑：永远追不上的新框架</h3>
+<p>前端圈流传着一张经典图：2010 年到现在，JavaScript 框架的进化史就像一场龙卷风——jQuery → Backbone → Angular → React → Vue → Svelte → Solid → Qwik……每两年一个新宠儿，每个都说自己是未来。你刚把 Vue 2 吃透，人家出 Vue 3 了；你刚学完 React Hooks，人家推 Server Components 了。</p>
+<p>后端也一样。Spring Boot 还在用，Spring Cloud 又来了；微服务还没玩明白，服务网格又普及了；Docker 刚熟练，Kubernetes 又成了标配。更不用说每年的新语言——Rust、Go、Zig 轮番登场，每一个都说自己快如闪电。</p>
+<p>你不是不想学，是学不动了。人的精力是有限的，当学习变成一种被迫的生存游戏，任何人都会累。</p>
+<h3>35 岁魔咒：不是危言耸听</h3>
+<p>关于 35 岁这道坎，网上吵得不可开交。有人说这是谣言，有人说这是真实存在的玻璃天花板。我的观察是：35 岁危机不是年龄本身的问题，而是<strong>价格与价值的错位</strong>。</p>
+<p>一个 25 岁的年轻人，月薪 15K，一天能写 100 行代码。一个 35 岁的资深工程师，月薪 40K，一天也能写 100 行代码。老板算账的时候会怎么看？除非这个资深工程师能创造超过那 25K 差价的额外价值——比如架构能力、项目管理能力、技术决策能力——否则他就是个"贵了的普通码农"。</p>
+<p>现实的残酷在于：很多公司并没有给资深工程师留出足够的上升空间。管理岗就那些坑，技术专家岗也有上限。当你爬到天花板，发现上面已经堵死了，这时候不是你愿不愿意的问题，是环境在逼你做出选择。</p>
+<h3>健康代价：用命换来的工资条</h3>
+<p>我在上一家公司有个同事，二十六岁，体检报告三个箭头——脂肪肝、尿酸高、颈椎曲度变直。他不是个例，隔壁工位的哥们腰间盘突出，站着写代码已经一年了。</p>
+<p>程序员这个职业有几个天然的"健康杀手"：</p>
+<ul>
+<li><strong>久坐</strong>：每天坐 10 小时以上，脊椎、腰椎、颈椎一起抗议</li>
+<li><strong>作息不规律</strong>：项目上线前的通宵，周末的临时修复，凌晨的 on-call</li>
+<li><strong>眼睛</strong>：盯着屏幕十几个小时，眼干、视力下降是标配</li>
+<li><strong>精神压力</strong>：Bug 改不完、需求变不停、Owner 甩不掉的焦虑感</li>
+</ul>
+<p>有研究说程序员平均只有 37 年寿命，这个数据未必准确，但圈子里猝死的新闻，每隔几个月就会看到一条。每次看到都会脊背发凉，然后继续加班。</p>
+<h3>成就感递减：从热爱到麻木</h3>
+<p>刚开始写代码的时候，一个 Hello World 都能让人兴奋半天。后来做了一个完整的项目上线了，那种成就感无与伦比。但随着年头增长，你会发现大部分工作其实是 90% 的重复劳动加上 10% 的新东西：</p>
+<ul>
+<li>业务逻辑永远是对增删改查的包装</li>
+<li>需求文档永远是"照这个做，但风格跟那个一样"</li>
+<li>排期永远是"这周五能搞定吗？我知道时间紧了点"</li>
+</ul>
+<p>当工作变成流水线，当初的热爱就会被一点点消耗殆尽。</p>
+<hr />
+<h2>转行去哪？五个真实方向</h2>
+<p>好，承认了想转，那往哪转？我大致把身边转行成功的人分成了五类，各有各的得失。</p>
+<h3>方向一：非技术管理岗位</h3>
+<p>这是最常见的转型路径。从纯技术转到项目管理、产品经理、技术运营、技术售前等岗位。优势是技术背景可以成为壁垒——你懂技术，跟开发沟通没有障碍，这是纯管理出身的人最大的短板。</p>
+<p><strong>小案例</strong>：之前认识一个架构师，四十岁转了技术总监。他没变，还是那些人，还是那些系统，只是他的 KPI 从代码质量变成了团队交付。他说最大的变化是：以前只需要对自己负责，现在要对团队负责。</p>
+<p><strong>优点</strong>：薪资不会大幅下降，地位相对稳定。
+<strong>缺点</strong>：需要补足管理和沟通能力；事情变得很杂，不是所有人喜欢这种感觉。</p>
+<h3>方向二：独立开发者 / 自由职业</h3>
+<p>这是很有吸引力的一条路——给自己打工，时间自由，地点自由。不用早高峰挤地铁，不用看老板脸色。</p>
+<p><strong>真实情况</strong>：听起来很美好，实际上这是一条更难走的路。自由职业意味着你要搞定三件事：找活儿、干活儿、收款。找活儿是大部分人不擅长的——你不光要做技术，还要做销售、做客服、做财务、做法务。很多自由开发者死于"有一顿没一顿"的现金流问题。</p>
+<p><strong>想清楚了再走</strong>：如果你有一定积蓄（至少够撑半年），有稳定的客户来源（而不是临时去找），有较强的自驱力（没人管你也能干活），独立开发是一条不错的路。否则建议先拿副业试试水，不要一上来就全职。</p>
+<h3>方向三：转行互联网其他领域</h3>
+<p>技术背景是很好的跳板，可以转到很多相关领域：</p>
+<ul>
+<li><strong>产品经理</strong>：懂技术懂开发周期懂实现成本，做产品有天然优势</li>
+<li><strong>技术写作</strong>：写技术文档、技术博客、写书，需要的就是你的技术积累</li>
+<li><strong>技术销售</strong>：ToB 的大客户纯销售不懂产品，技术人员去讲能直击痛点</li>
+<li><strong>数据科学家 / 数据分析</strong>：技术人的编程和分析能力是基础</li>
+</ul>
+<p><strong>优势</strong>：这些岗位很多属于"交叉领域"，纯技术人转过去反而有差异化竞争力。
+<strong>劣势</strong>：都要重新积累行业经验，前 1-2 年会比较难受。</p>
+<h3>方向四：考公 / 考编</h3>
+<p>"宇宙的尽头是考编"，这句话在 2023、2024 年成了事实。程序员考公也不是新鲜事。</p>
+<p><strong>好处</strong>：稳定、福利好、不敢裁你、不用追新技术。据说程序员在体制内还算"技术人才"，有些岗位还有特殊通道。
+<strong>坏处</strong>：薪资断崖式下跌（可能只有原来的 1/3 到 1/2）；工作方式完全不同，需要适应体制内的游戏规则；有些岗位其实也需要写代码，不过是写 Excel 宏或者低代码平台。</p>
+<h3>方向五：完全脱离 IT 行业</h3>
+<p>回老家开个店、跑滴滴、送外卖、做民宿、养鸡种菜——这些听起来像段子，但每年都有人在践行。</p>
+<p><strong>不是开玩笑</strong>：身边真有人回去开了咖啡馆，有人回老家包了几十亩地种草莓。他们说虽然收入少了，但生活节奏变了，幸福感反而提高了。</p>
+<p><strong>现实的一面</strong>：这些行业也有自己的苦——餐饮的起早贪黑、外卖的烈日暴雨、农业的看天吃饭。转行者往往只看到了"做腻了的样子"的另一面，而忽略了各行各业都有自己的压力。</p>
+<hr />
+<h2>转行的正确姿势：什么时候转，怎么转</h2>
+<p>如果你真的动了转行的念头，我的建议是：<strong>理性决策，留好退路</strong>。</p>
+<h3>转行的最佳时机</h3>
+<p>转行有三个时间窗口特别值得把握：</p>
+<table>
+<thead>
+<tr>
+<th>时间窗口</th>
+<th>优势</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>30 岁前</td>
+<td>试错成本低，还有大把时间折腾</td>
+</tr>
+<tr>
+<td>攒够半年生活费后</td>
+<td>即使转不成功也有退路，心态不一样</td>
+</tr>
+<tr>
+<td>被裁拿到 N+1 后</td>
+<td>既然已经被迫离开，不如就彻底换个赛道</td>
+</tr>
+</tbody>
+</table>
+<p>反之，<strong>最差的转行时机</strong>是：
+- 手里一分钱存款没有
+- 房贷车贷压身
+- 家庭负担重（上有老下有小）
+- 刚买完房或孩子刚出生</p>
+<p>不是不能转，而是风险太大，一旦翻船后果很严重。</p>
+<h3>三步走的转型策略</h3>
+<p>如果你已经在考虑转行，不妨按这三步走：</p>
+<p><strong>第一步：小规模试水（0-3个月）</strong>
+不用辞职。先在业余时间试试你想转的方向。想当产品经理？尝试帮朋友做个小产品的需求分析。想开店？先去周末摆摆摊感受一下。想考公？买套题先刷一个月的感受一下。这个阶段的核心是：<strong>低成本验证</strong>，不要一上来就 All in。</p>
+<p><strong>第二步：积累资本（3-12个月）</strong>
+验证方向可行之后，开始系统性地积累转行所需的资本：
+- 存钱：至少保证 6 个月无收入的生存资金
+- 攒作品：转到产品经理需要作品集，转到自由职业需要客户案例
+- 建人脉：去认识新行业里的人，了解行业潜规则</p>
+<p><strong>第三步：平稳切换（12-24个月）</strong>
+等前面两步都准备好了，再考虑辞职。最理想的切换方式是：<strong>斜杠过渡</strong>——白天干老本行，晚上/周末做新方向的事，直到新方向的收入能覆盖基本支出，再正式放手。</p>
+<hr />
+<h2>不转行怎么办？除了离开，还有别的选择</h2>
+<p>我知道不是每个人都想转。有些人确实热爱技术，只是被现实磨得不想干了。如果你属于"不想走，但也不想这么痛苦"，那还有几条路：</p>
+<h3>深耕技术成为专家</h3>
+<p>不是所有技术岗位都没有出路。真正的技术专家，到了 40、50 岁也是一砖一瓦垒出来的。关键是选择正确的深耕方向：</p>
+<ul>
+<li><strong>基础设施 / 底层技术</strong>：Linux 内核、数据库内核、容器运行时——这类岗位门槛高、人才稀缺、不太受年龄歧视</li>
+<li><strong>架构师</strong>：从"写的人"变成"帮别人设计怎么写"的人</li>
+<li><strong>技术顾问</strong>：有了十年以上的积累，可以做独立顾问帮企业做技术决策</li>
+</ul>
+<h3>转型技术教练 / 导师</h3>
+<p>大公司有 Mentor 机制，很多资深工程师转型做内部技术教练。帮新人成长、做代码审查、做技术分享，既脱离了边角料的编码工作，又还能保持技术敏感度。</p>
+<h3>发展一个技术副业</h3>
+<p>有时候不是职业本身有问题，而是这份工作没有提供足够的外部认可和收入匹配。如果能利用技术做一个副业：</p>
+<ul>
+<li>一个不怎么赚钱但很有成就感的开源项目</li>
+<li>一个能带来稳定被动收入的小工具或 SaaS 服务</li>
+<li>技术付费咨询或在行做一对一指导</li>
+</ul>
+<p>当副业带来的收入和成就感超过主业，你面对主业的心态就会完全不一样了。<strong>工作的本质是对老板交付价值，而生活的意义需要自己找</strong>。</p>
+<hr />
+<h2>几个值得想透的问题</h2>
+<p>在最后，我列几个问题，如果你正在被"要不要转行"这个问题困扰，不妨先静下来问问自己：</p>
+<h3>你是不喜欢技术，还是不喜欢现在这份工作？</h3>
+<p>这两个问题的答案完全不同。如果你只是讨厌现在的业务方向、团队氛围或者公司文化，换个环境也许就能解决问题。但如果一想到写代码就心累了，看见新技术文档就厌烦了，那确实是时候考虑别的事情了。</p>
+<h3>你的技能可迁移吗？</h3>
+<p>技术能力里面有很大一部分是通用的：逻辑思维、问题拆解、信息检索、英语文档阅读能力、项目推进能力。这些东西不是你换行就会消失的，它们是你的底层竞争力。</p>
+<h3>你理想的生活状态是什么样的？</h3>
+<p>这个问题最关键。很多人转行转了半天，发现自己从一个坑跳进了另一个坑。明确你真正想要的东西——是更多的自由时间？更高的收入？更低的压力？还是更明确的成长路径？然后拿着这个目标去匹配新赛道，而不是为了转行而转行。</p>
+<hr />
+<h2>一些过来人的建议</h2>
+<p>如果你还在犹豫，我根据身边转型成功和失败的案例，总结了几条可能对你有用的建议。</p>
+<h3>不要裸辞，不要裸辞，不要裸辞</h3>
+<p>重要的事情说三遍。裸辞转行的成功率很低，因为一旦断了收入来源，你的每一个决策都会受到经济压力的影响，更容易做出短视的选择。继续上班意味着你有一个稳定的现金流，你的试错成本是可控的。</p>
+<h3>给自己一年的缓冲期</h3>
+<p>不要说"我下个月就不干了"这样的话——给自己 12 个月的缓冲期。前 3 个月确认方向，中间 6 个月积累资源和技能，最后 3 个月尝试轻量级过渡。12 个月后，你会感激当初没有冲动的自己。</p>
+<h3>不要在低谷期做决定</h3>
+<p>人在低谷时最容易想转行——项目延期被骂了、跟领导闹矛盾了、刚发现新来的同事工资比你高。这些时候做的决定，跟分手后就剪头发是一个道理。先冷静一周，等情绪过去再回头看，很多问题其实没那么严重。</p>
+<h3>去做喜欢的事，而不是逃离讨厌的事</h3>
+<p>转行的逻辑应该是"去追求"而不是"去逃避"。你是真的喜欢种花养草，还是只是不想开会改需求了？如果是后者，转行也解决不了问题——每个行业都有让人头疼的部分。如果想到新方向就兴奋，那才值得冒险。</p>
+<h3>你的技术积累是财富</h3>
+<p>打了这么多年交道的能力不会白费：逻辑思维、学习方法论、解决复杂问题的拆解能力、对系统和流程的理解力——这些在任何行业都是稀缺的。很多转行成功的人回过头来看，做技术的那几年恰恰是成长最快的几年。</p>
+<h2>最后的思考</h2>
+<p>写到这里，我也没有一个标准答案。写代码已经不是能吃到老的铁饭碗了。技术迭代太快，市场风向又反复无常，裁员阴云总能精准地飘过头顶。但转行也不是一个"逃"字——换了赛道还得重新努力，每个行业都有自己的修罗场。</p>
+<p>我觉得最好的状态是：<strong>不把"转行"当成一个非此即彼的二元选择</strong>。你可以一边做技术一边给自己铺后路。不把所有鸡蛋放在一个篮子里，就是对自己最好的保护。</p>
+<p>不管最后选了哪条路，别让恐惧替你做决定。这句话是我想对所有正在纠结中的朋友们说的。</p>
+      </article>
+    </div>
+  </main>
+
+  <!-- Related Posts / Navigation -->
+  <section class="section" style="padding-top: 0;">
+    <div class="container container-narrow">
+      <hr style="border: none; border-top: 1px solid var(--color-border); margin: var(--space-3xl) 0;">
+      
+      <div class="blog-topics" style="margin-bottom: var(--space-xl);">
+        <span class="topic-label">读完之后：</span>
+        <a href="../index.html" class="topic-tag">返回博客列表</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <p class="footer-signature">写代码，做产品，也认真生活。</p>
+      <div class="footer-social">
+        <a href="https://github.com/zzdbilly" class="footer-social-link" target="_blank" rel="noopener" aria-label="GitHub">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+        </a>
+        <a href="../../rss.xml" class="footer-social-link" aria-label="RSS">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+      </div>
+      <div class="footer-links">
+        <a href="../../index.html" class="footer-link">首页</a>
+        <a href="../../projects/index.html" class="footer-link">项目</a>
+        <a href="../../about/index.html" class="footer-link">关于</a>
+      </div>
+      <p class="footer-copyright">
+        &copy; 2026 张小猛
+      </p>
+    </div>
+  </footer>
+
+  
+  <script defer src="../../assets/js/related-posts.js"></script>
+  <script defer src="../../assets/js/main.js"></script>
+  <script defer src="../../assets/js/article.js"></script>
+  <script defer src="../../assets/js/share.js"></script>
+  <script defer src="../../assets/js/back-to-top.js"></script>
+
+  <!-- Back to Top & Reading Progress -->
+  <button class="back-to-top" id="backToTop" aria-label="回到顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
+  <div class="reading-progress" id="readingProgress"></div>
+
+  <!-- Post TOC -->
+  <div class="post-toc-container" id="postToc">
+    <nav class="post-toc">
+      <div class="post-toc-title">目录</div>
+      <ul class="post-toc-list" id="tocList">
+      </ul>
+    </nav>
+  </div>
+<script defer src="../../assets/js/particles.js"></script>
+
+  <!-- highlight.js for code syntax highlighting -->
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // 只对没有 codehilite 的代码块应用 highlight.js
+      document.querySelectorAll('pre code').forEach(function(block) {
+        // 跳过已经有 Pygments 高亮的块
+        if (!block.closest('.codehilite') && !block.classList.contains('hljs')) {
+          hljs.highlightElement(block);
+        }
+      });
+    });
+  </script>
+
+  <!-- Cloudflare Web Analytics -->
+  <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "29e7cff6f37448989538e2165cb79187"}'></script>
+</body>
+</html>
