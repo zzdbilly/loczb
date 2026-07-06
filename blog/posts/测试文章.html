@@ -4,22 +4,54 @@
   <script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{TITLE}}</title>
-    <meta name="description" content="{{DESCRIPTION}}">
+    <title>测试文章 | 张小猛 - loczb</title>
+    <meta name="description" content="测试">
     
     <!-- Open Graph -->
-    <meta property="og:title" content="{{TITLE}}">
-    <meta property="og:description" content="{{DESCRIPTION}}">
-    <meta property="og:url" content="{{OG_URL}}">
+    <meta property="og:title" content="测试文章 | 张小猛 - loczb">
+    <meta property="og:description" content="测试">
+    <meta property="og:url" content="https://709527.xyz/blog/posts/测试文章.html">
     <meta property="og:type" content="article">
         <meta property="og:image" content="../../assets/images/og-image.png">
     <meta property="og:site_name" content="loczb">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="{{TITLE}}">
-    <meta name="twitter:description" content="{{DESCRIPTION}}">
+    <meta name="twitter:title" content="测试文章 | 张小猛 - loczb">
+    <meta name="twitter:description" content="测试">
 
     
-    {{JSON_LD}}
+        <script type="application/ld+json">
+{
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "测试文章",
+      "description": "测试",
+      "image": "https://709527.xyz/assets/images/og-image.png",
+      "author": {
+            "@type": "Person",
+            "name": "张小猛",
+            "url": "https://709527.xyz/about/"
+      },
+      "publisher": {
+            "@type": "Organization",
+            "name": "loczb",
+            "logo": {
+                  "@type": "ImageObject",
+                  "url": "https://709527.xyz/assets/images/favicon.svg"
+            }
+      },
+      "datePublished": "2026-07-06 10:27:36T00:00:00+08:00",
+      "dateModified": "2026-07-06 10:27:36T00:00:00+08:00",
+      "url": "https://709527.xyz/blog/posts/测试文章.html",
+      "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://709527.xyz/blog/posts/测试文章.html"
+      },
+      "keywords": "test",
+      "articleSection": "开发",
+      "timeRequired": "PT5M",
+      "inLanguage": "zh-CN"
+}
+    </script>
     
     <link rel="stylesheet" href="../../assets/css/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -73,19 +105,19 @@
       </a>
 
       <article class="post-content">
-        <h1>{{ARTICLE_TITLE}}</h1>
+        <h1>测试文章</h1>
         
         <div class="post-meta">
-          <span>📅 {{ARTICLE_DATE}}</span>
-          <span>⏱️ {{ARTICLE_READ_TIME}}</span>
+          <span>📅 2026-07-06 10:27:36</span>
+          <span>⏱️ 5 min read</span>
           <span>👤 张小猛</span>
         </div>
         
         <div class="post-tags">
-          {{ARTICLE_TAGS}}
+          <span class="tag">test</span>
         </div>
         
-        {{ARTICLE_CONTENT}}
+        <p>文章内容...</p>
       </article>
     </div>
   </main>
