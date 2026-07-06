@@ -70,12 +70,12 @@
   <nav class="nav">
     <div class="nav-inner">
       <a href="../../index.html" class="nav-logo">
-        loczb
+        loc<span>zb</span>
       </a>
       <button class="nav-toggle" aria-label="打开菜单" aria-expanded="false" aria-controls="nav-links-menu">
-        
-        
-        
+        <span></span>
+        <span></span>
+        <span></span>
       </button>
       <div class="nav-overlay"></div>
       <ul class="nav-links" id="nav-links-menu">
@@ -95,7 +95,7 @@
 
   <div class="scroll-progress"></div>
 
-  <main class="section" style="padding-bottom: 0;">
+  <main class="section" style="padding-bottom: 0; padding-top: calc(var(--space-4xl) + 64px);">
     <div class="container container-narrow">
       <a href="../index.html" class="back-link">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -109,15 +109,12 @@
         
         <div class="post-meta">
           <span>📅 2026-07-04 16:55:32</span>
-          ⏱️ 18 min read
-          👤 张小猛
+          <span>⏱️ 5 min read</span>
+          <span>👤 张小猛</span>
         </div>
         
         <div class="post-tags">
-          AI 工具
-          AI Agent
-          Agent
-          编程
+          
         </div>
         
         <h2>写在前面：2026 年的程序员，已经不是两年前的那个程序员了</h2>
@@ -383,7 +380,7 @@
       <hr style="border: none; border-top: 1px solid var(--color-border); margin: var(--space-3xl) 0;">
       
       <div class="blog-topics" style="margin-bottom: var(--space-xl);">
-        读完之后：
+        <span class="topic-label">读完之后：</span>
         <a href="../index.html" class="topic-tag">返回博客列表</a>
       </div>
     </div>
@@ -448,70 +445,6 @@
           hljs.highlightElement(block);
         }
       });
-    });
-  </script>
-
-  <!-- Mobile TOC Button & Drawer -->
-  <button class="mobile-toc-btn" id="mobileTocBtn" aria-label="目录">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <line x1="4" y1="6" x2="20" y2="6"/>
-      <line x1="4" y1="12" x2="20" y2="12"/>
-      <line x1="4" y1="18" x2="20" y2="18"/>
-    </svg>
-  </button>
-  <div class="toc-drawer-overlay" id="tocDrawerOverlay"></div>
-  <div class="toc-drawer" id="tocDrawer">
-    <div class="toc-drawer-header">
-      目录
-      <button class="toc-drawer-close" id="tocDrawerClose" aria-label="关闭目录">&times;</button>
-    </div>
-    <div id="tocDrawerContent" class="post-toc-list"></div>
-  </div>
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      var btn = document.getElementById('mobileTocBtn');
-      var drawer = document.getElementById('tocDrawer');
-      var overlay = document.getElementById('tocDrawerOverlay');
-      var close = document.getElementById('tocDrawerClose');
-      var content = document.getElementById('tocDrawerContent');
-      var desktopToc = document.querySelector('.post-toc-list');
-
-      function openDrawer() {
-        drawer.classList.add('open');
-        overlay.classList.add('open');
-        document.body.style.overflow = 'hidden';
-        // 复制桌面端 TOC 链接到抽屉
-        if (content && desktopToc) {
-          content.innerHTML = desktopToc.innerHTML;
-        }
-      }
-
-      function closeDrawer() {
-        drawer.classList.remove('open');
-        overlay.classList.remove('open');
-        document.body.style.overflow = '';
-      }
-
-      if (btn) btn.addEventListener('click', openDrawer);
-      if (close) close.addEventListener('click', closeDrawer);
-      if (overlay) overlay.addEventListener('click', closeDrawer);
-
-      // ESC key
-      document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape' && drawer && drawer.classList.contains('open')) {
-          closeDrawer();
-        }
-      });
-
-      // 桌面端 TOC 更新时（article.js 填充后）同步到抽屉
-      if (desktopToc) {
-        var observer = new MutationObserver(function() {
-          if (content && drawer.classList.contains('open')) {
-            content.innerHTML = desktopToc.innerHTML;
-          }
-        });
-        observer.observe(desktopToc, { childList: true, subtree: true });
-      }
     });
   </script>
 
