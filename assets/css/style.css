@@ -3845,14 +3845,14 @@ pre code {
 
 /* Level-specific styles (higher specificity to override .toc-drawer .post-toc-list a) */
 body .toc-drawer .toc-h3 {
-  padding: 0.5rem 0.75rem 0.5rem 2.5rem;
-  font-size: 0.78rem;
+  padding: 0.5rem 0.75rem 0.5rem 1.25rem;
+  font-size: 0.82rem;
   font-weight: 400;
   color: var(--color-text-muted);
 }
 
 body .toc-drawer .toc-h2 {
-  font-weight: 600;
+  font-weight: 500;
   font-size: 0.85rem;
   color: var(--color-text-primary);
 }
