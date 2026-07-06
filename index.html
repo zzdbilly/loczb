@@ -401,7 +401,7 @@
       
       <div class="blog-grid">
         <!-- 代表文章大卡 -->
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <article class="blog-card-featured animate-on-scroll" id="home-featured-post" style="display: block;">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <article class="blog-card-featured animate-on-scroll" id="home-featured-post" style="display: block;">
           <div class="blog-card-header">
             <div class="blog-card-meta">
               <span class="blog-date">2026-07-06</span>
@@ -411,21 +411,38 @@
             <span class="blog-list-tag">思考</span>
           </div>
           <h3 class="blog-card-title">
-            <a href="blog/posts/打工人理财第一课从看懂钱去哪了到让钱自己长大.html">打工人理财第一课：从看懂钱去哪了到让钱自己长大</a>
+            <a href="blog/posts/技术人员转行指南当写代码不再是你想做的事.html">技术人员转行指南：当写代码不再是你想做的事</a>
           </h3>
-          <p class="blog-card-excerpt">面向程序员的实用理财入门指南——四个账户法、极简记账、常见金融坑、可执行的起步计划。不折腾、不焦虑，让钱安静地替你打工。...</p>
+          <p class="blog-card-excerpt">深入分析技术人员转行的原因、方向和策略——不想写代码了，接下来该怎么办？...</p>
           <div class="blog-card-tags">
-            <span class="tech-tag">理财</span>
-            <span class="tech-tag">打工人</span>
+            <span class="tech-tag">转行</span>
+            <span class="tech-tag">职业选择</span>
+            <span class="tech-tag">思考</span>
             <span class="tech-tag">程序员</span>
-            <span class="tech-tag">投资</span>
-            <span class="tech-tag">省钱</span>
-            <span class="tech-tag">保险</span>
           </div>
         </article>
         
         <!-- 最新文章列表 -->
                 <div class="blog-list">
+        <article class="blog-mini-card animate-on-scroll" data-category="思考" data-page="1">
+          <div class="blog-mini-card-header">
+            <div class="blog-list-meta">
+              <span class="blog-date">2026-07-06</span>
+              <span>·</span>
+              <span class="blog-read-time">5 min</span>
+            </div>
+            <span class="blog-list-tag">思考</span>
+          </div>
+          <h3 class="blog-mini-card-title">
+            <a href="blog/posts/打工人理财第一课从看懂钱去哪了到让钱自己长大.html">打工人理财第一课：从看懂钱去哪了到让钱自己长大</a>
+          </h3>
+          <p class="blog-mini-card-excerpt">面向程序员的实用理财入门指南——四个账户法、极简记账、常见金融坑、可执行的起步计划。不折腾、不焦虑，让钱安静地替你打工。</p>
+          <div class="blog-mini-card-tags">
+            <span class="tech-tag">理财</span>
+            <span class="tech-tag">打工人</span>
+            <span class="tech-tag">程序员</span>
+          </div>
+        </article>
         <article class="blog-mini-card animate-on-scroll" data-category="前端" data-page="1">
           <div class="blog-mini-card-header">
             <div class="blog-list-meta">
@@ -443,25 +460,6 @@
             <span class="tech-tag">AI</span>
             <span class="tech-tag">MCP</span>
             <span class="tech-tag">WebKit</span>
-          </div>
-        </article>
-        <article class="blog-mini-card animate-on-scroll" data-category="思考" data-page="1">
-          <div class="blog-mini-card-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-07-06</span>
-              <span>·</span>
-              <span class="blog-read-time">5 min</span>
-            </div>
-            <span class="blog-list-tag">思考</span>
-          </div>
-          <h3 class="blog-mini-card-title">
-            <a href="blog/posts/这些年我攒下来的生活小技巧.html">这些年我攒下来的生活小技巧</a>
-          </h3>
-          <p class="blog-mini-card-excerpt">从厨房到居家，从时间管理到数字生活，分享一套经过实践验证的生活小窍门，帮你少踩坑、少浪费时间。</p>
-          <div class="blog-mini-card-tags">
-            <span class="tech-tag">生活技巧</span>
-            <span class="tech-tag">效率</span>
-            <span class="tech-tag">极简主义</span>
           </div>
         </article>
         </div>
@@ -556,6 +554,15 @@
     // 首页随机选择代表文章
     const posts = [
       {
+        url: 'blog/posts/技术人员转行指南当写代码不再是你想做的事.html',
+        title: '技术人员转行指南：当写代码不再是你想做的事',
+        date: '2026-07-06',
+        readTime: '5 min',
+        category: '思考',
+        category2: '思考',
+        desc: '深入分析技术人员转行的原因、方向和策略——不想写代码了，接下来该怎么办？'
+      },
+      {
         url: 'blog/posts/打工人理财第一课从看懂钱去哪了到让钱自己长大.html',
         title: '打工人理财第一课：从看懂钱去哪了到让钱自己长大',
         date: '2026-07-06',
@@ -635,15 +642,6 @@
         category: '系统编程',
         category2: '系统编程',
         desc: 'inode 是 Linux 文件系统的核心概念。本文从 ext4 inode 数据结构、硬链接软链接原理、文件删除机制到 inode 耗尽排查，全面解析 inode 工作原理。'
-      },
-      {
-        url: 'blog/posts/github-actions-auto-index-blog-cicd.html',
-        title: 'GitHub Actions 自动索引：我的静态博客 CI/CD 进化之路',
-        date: '2026-07-04',
-        readTime: '5 min',
-        category: 'DevOps',
-        category2: 'DevOps',
-        desc: '68篇技术博客的索引更新从手动7文件到CI全量自动重建——聊聊全量vs增量的取舍、HTML解析技巧、RSS日期格式化踩坑，以及为什么应该让CI管索引'
       }
     ];
     
