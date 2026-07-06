@@ -3844,11 +3844,18 @@ pre code {
 }
 
 .toc-drawer .toc-h3 {
-  padding-left: 2rem;
-  font-size: 0.8rem;
+  padding-left: 2.5rem;
+  font-size: 0.78rem;
   font-weight: 400;
-  opacity: 0.85;
+  color: var(--color-text-muted);
 }
+
+.toc-drawer .toc-h2 {
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--color-text-primary);
+}
+
 
 /* ===================================
    Timeline (About page)
