@@ -4,6 +4,7 @@
 
 // Article index with tags
 const ARTICLE_INDEX = [
+  { slug: "当-ai-编程-agent-有了眼睛safari-mcp-server-深度解读", tags: ["AI", "MCP", "WebKit", "Safari", "前端开发", "调试"], title: "当 AI 编程 Agent 有了\"眼睛\"：Safari MCP Server 深度解读" },
   { slug: "这些年我攒下来的生活小技巧", tags: ["生活技巧", "效率", "极简主义", "个人管理"], title: "这些年我攒下来的生活小技巧" },
   { slug: "测试文章", tags: ["test"], title: "测试文章" },
   { slug: "gradle-构建加速全攻略从-5-分钟到-30-秒", tags: ["Gradle", "Android", "构建优化", "性能优化"], title: "Gradle 构建加速全攻略：从 5 分钟到 30 秒" },
