@@ -401,29 +401,45 @@
       
       <div class="blog-grid">
         <!-- 代表文章大卡 -->
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <article class="blog-card-featured animate-on-scroll" id="home-featured-post" style="display: block;">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <article class="blog-card-featured animate-on-scroll" id="home-featured-post" style="display: block;">
           <div class="blog-card-header">
             <div class="blog-card-meta">
+              <span class="blog-date">2026-07-06</span>
+              <span>·</span>
+              <span class="blog-read-time">5 min</span>
+            </div>
+            <span class="blog-list-tag">开发</span>
+          </div>
+          <h3 class="blog-card-title">
+            <a href="blog/posts/测试文章.html">测试文章</a>
+          </h3>
+          <p class="blog-card-excerpt">测试...</p>
+          <div class="blog-card-tags">
+            <span class="tech-tag">test</span>
+          </div>
+        </article>
+        
+        <!-- 最新文章列表 -->
+                <div class="blog-list">
+        <article class="blog-mini-card animate-on-scroll" data-category="Android" data-page="1">
+          <div class="blog-mini-card-header">
+            <div class="blog-list-meta">
               <span class="blog-date">2026-07-05</span>
               <span>·</span>
               <span class="blog-read-time">5 min</span>
             </div>
             <span class="blog-list-tag">Android</span>
           </div>
-          <h3 class="blog-card-title">
+          <h3 class="blog-mini-card-title">
             <a href="blog/posts/gradle-构建加速全攻略从-5-分钟到-30-秒.html">Gradle 构建加速全攻略：从 5 分钟到 30 秒</a>
           </h3>
-          <p class="blog-card-excerpt">从 Profile 找到瓶颈到 Configuration Cache，一步步把 Android 项目构建从 5 分钟优化到 30 秒的完整方案...</p>
-          <div class="blog-card-tags">
+          <p class="blog-mini-card-excerpt">从 Profile 找到瓶颈到 Configuration Cache，一步步把 Android 项目构建从 5 分钟优化到 30 秒的完整方案</p>
+          <div class="blog-mini-card-tags">
             <span class="tech-tag">Gradle</span>
             <span class="tech-tag">Android</span>
             <span class="tech-tag">构建优化</span>
-            <span class="tech-tag">性能优化</span>
           </div>
         </article>
-        
-        <!-- 最新文章列表 -->
-                <div class="blog-list">
         <article class="blog-mini-card animate-on-scroll" data-category="Kotlin" data-page="1">
           <div class="blog-mini-card-header">
             <div class="blog-list-meta">
@@ -441,23 +457,6 @@
             <span class="tech-tag">Kotlin</span>
             <span class="tech-tag">Android</span>
             <span class="tech-tag">最佳实践</span>
-          </div>
-        </article>
-        <article class="blog-mini-card animate-on-scroll" data-category="DevOps" data-page="1">
-          <div class="blog-mini-card-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-07-05</span>
-              <span>·</span>
-              <span class="blog-read-time">5 min</span>
-            </div>
-            <span class="blog-list-tag">DevOps</span>
-          </div>
-          <h3 class="blog-mini-card-title">
-            <a href="blog/posts/vps-选购与使用指南五个常见场景的配置与避坑.html">VPS 选购与使用指南：五个常见场景的配置与避坑</a>
-          </h3>
-          <p class="blog-mini-card-excerpt">从扶墙线路到生产环境部署，不同场景下 VPS 怎么选、怎么配、怎么不踩坑</p>
-          <div class="blog-mini-card-tags">
-            
           </div>
         </article>
         </div>
@@ -552,6 +551,15 @@
     // 首页随机选择代表文章
     const posts = [
       {
+        url: 'blog/posts/测试文章.html',
+        title: '测试文章',
+        date: '2026-07-06',
+        readTime: '5 min',
+        category: '开发',
+        category2: '开发',
+        desc: '测试'
+      },
+      {
         url: 'blog/posts/gradle-构建加速全攻略从-5-分钟到-30-秒.html',
         title: 'Gradle 构建加速全攻略：从 5 分钟到 30 秒',
         date: '2026-07-05',
@@ -631,15 +639,6 @@
         category: '前端',
         category2: '前端',
         desc: '66篇文章4KB重复内联样式、4.4MB死文件、404幽灵引用——一次完整的静态博客性能优化记录'
-      },
-      {
-        url: 'blog/posts/gradle-build-acceleration-5min-to-30sec.html',
-        title: 'Gradle 构建加速全攻略：从 5 分钟到 30 秒',
-        date: '2026-07-02',
-        readTime: '5 min',
-        category: 'Android',
-        category2: 'Android',
-        desc: '系统梳理 Gradle 构建加速的完整方法论——配置调优、KAPT迁移KSP、增量编译、模块化拆分、远程缓存、CI优化，附真实项目优化案例，构建时间减少85%'
       }
     ];
     
