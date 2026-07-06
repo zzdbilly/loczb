@@ -3752,6 +3752,7 @@ pre code {
 }
 
 .toc-drawer.open {
+  display: block;
   right: 0;
 }
 
