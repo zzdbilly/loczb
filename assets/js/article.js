@@ -126,7 +126,8 @@
       const drawerList = drawer.querySelector('.post-toc-list');
       const originalItems = tocList.querySelectorAll('li');
       originalItems.forEach(item => {
-        drawerList.appendChild(item.cloneNode(true));
+        var clone = item.cloneNode(true);
+        drawerList.appendChild(clone);
       });
 
       // 添加到页面
