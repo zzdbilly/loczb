@@ -1960,11 +1960,14 @@ pre code {
 
 .projects-grid .projects-subgrid {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: 1fr 1fr;
   gap: var(--space-xl);
 }
 
-@media (min-width: 768px) {
+@media (max-width: 768px) {
+  .projects-grid {
+    grid-template-columns: 1fr;
+  }
   .projects-grid .projects-subgrid {
     grid-template-columns: 1fr;
   }
