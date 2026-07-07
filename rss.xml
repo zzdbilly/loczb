@@ -7,6 +7,14 @@
     <language>zh-CN</language>
     <atom:link href="https://709527.xyz/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>Prisma ORM 完全指南：从入门到实战</title>
+      <link>https://709527.xyz/blog/posts/prisma-orm-完全指南从入门到实战.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/prisma-orm-完全指南从入门到实战.html</guid>
+      <description>从 Prisma 的基础概念到项目实战，涵盖 Schema 设计、CRUD 操作、迁移管理、性能优化等核心话题，带你全面掌握 TypeScript 生态最流行的数据库 ORM。</description>
+      <category>数据库</category>
+      <pubDate>Tue, 07 Jul 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
       <title>技术人员转行指南：当写代码不再是你想做的事</title>
       <link>https://709527.xyz/blog/posts/技术人员转行指南当写代码不再是你想做的事.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/技术人员转行指南当写代码不再是你想做的事.html</guid>
@@ -156,14 +164,6 @@
       <guid isPermaLink="true">https://709527.xyz/blog/posts/kotlin-coroutine-exception-handling.html</guid>
       <description>全面解析 Kotlin 协程异常处理机制，涵盖 launch/async 异常传播差异、SupervisorJob、结构化并发、CoroutineExceptionHandler、Android 最佳实践等核心内容</description>
       <category>Kotlin</category>
-      <pubDate>Wed, 01 Jul 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>Android 15 隐私新特性：所有文件都需要 MEDIA_VISUAL_PERMISSION</title>
-      <link>https://709527.xyz/blog/posts/android-15-privacy-media-visual-permission.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/android-15-privacy-media-visual-permission.html</guid>
-      <description>详解 Android 15 引入的媒体权限重大变更，以及从 MediaStore 迁移到 Photo Picker 的完整指南</description>
-      <category>Android</category>
       <pubDate>Wed, 01 Jul 2026 00:00:00 +0800</pubDate>
     </item>
   </channel>

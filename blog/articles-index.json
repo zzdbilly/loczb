@@ -1,6 +1,22 @@
 {
   "posts": [
     {
+      "slug": "prisma-orm-完全指南从入门到实战",
+      "title": "Prisma ORM 完全指南：从入门到实战",
+      "date": "2026-07-07",
+      "category": "数据库",
+      "tags": [
+        "Prisma",
+        "TypeScript",
+        "PostgreSQL",
+        "ORM",
+        "数据库",
+        "Next.js"
+      ],
+      "excerpt": "从 Prisma 的基础概念到项目实战，涵盖 Schema 设计、CRUD 操作、迁移管理、性能优化等核心话题，带你全面掌握 TypeScript 生态最流行的数据库 ORM。",
+      "url": "blog/posts/prisma-orm-完全指南从入门到实战.html"
+    },
+    {
       "slug": "技术人员转行指南当写代码不再是你想做的事",
       "title": "技术人员转行指南：当写代码不再是你想做的事",
       "date": "2026-07-06",
@@ -1144,6 +1160,14 @@
       "count": 4
     },
     {
+      "tag": "数据库",
+      "count": 3
+    },
+    {
+      "tag": "Next.js",
+      "count": 3
+    },
+    {
       "tag": "MCP",
       "count": 3
     },
@@ -1178,6 +1202,14 @@
     {
       "tag": "Agent",
       "count": 3
+    },
+    {
+      "tag": "TypeScript",
+      "count": 2
+    },
+    {
+      "tag": "PostgreSQL",
+      "count": 2
     },
     {
       "tag": "程序员",
@@ -1276,10 +1308,6 @@
       "count": 2
     },
     {
-      "tag": "数据库",
-      "count": 2
-    },
-    {
       "tag": "Live Updates",
       "count": 2
     },
@@ -1304,10 +1332,6 @@
       "count": 2
     },
     {
-      "tag": "Next.js",
-      "count": 2
-    },
-    {
       "tag": "NotebookLM",
       "count": 2
     },
@@ -1326,6 +1350,14 @@
     {
       "tag": "OpenClaw",
       "count": 2
+    },
+    {
+      "tag": "Prisma",
+      "count": 1
+    },
+    {
+      "tag": "ORM",
+      "count": 1
     },
     {
       "tag": "转行",
@@ -1589,10 +1621,6 @@
     },
     {
       "tag": "Context",
-      "count": 1
-    },
-    {
-      "tag": "PostgreSQL",
       "count": 1
     },
     {
@@ -1872,10 +1900,6 @@
       "count": 1
     },
     {
-      "tag": "TypeScript",
-      "count": 1
-    },
-    {
       "tag": "类型体操",
       "count": 1
     },
@@ -2035,8 +2059,13 @@
   "archives": [
     {
       "month": "2026-07",
-      "count": 22,
+      "count": 23,
       "posts": [
+        {
+          "title": "Prisma ORM 完全指南：从入门到实战",
+          "date": "2026-07-07",
+          "url": "blog/posts/prisma-orm-完全指南从入门到实战.html"
+        },
         {
           "title": "技术人员转行指南：当写代码不再是你想做的事",
           "date": "2026-07-06",
@@ -2466,21 +2495,21 @@
     }
   ],
   "categories": [
+    "数据库",
     "思考",
     "前端",
     "Android",
     "Kotlin",
     "DevOps",
-    "数据库",
     "AI",
     "系统编程",
     "开发",
     "安全"
   ],
   "stats": {
-    "totalPosts": 79,
-    "totalTags": 229,
-    "latestDate": "2026-07-06",
+    "totalPosts": 80,
+    "totalTags": 231,
+    "latestDate": "2026-07-07",
     "oldestDate": "2026-02-15"
   }
 }
