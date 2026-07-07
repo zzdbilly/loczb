@@ -23,7 +23,7 @@ const SITE_CONTEXT = `
 
 主要项目：
 1. loczb 个人网站 - https://709527.xyz
-2. NoFap Tracker Web - 一个帮助追踪习惯的 Web 应用
+2. Zest - 习惯养成追踪 Web 应用（Next.js + Prisma + PostgreSQL）
 3. OpenClaw 实践 - 基于 OpenClaw 的自动化工作流
 
 博客分类（共 70 篇）：
