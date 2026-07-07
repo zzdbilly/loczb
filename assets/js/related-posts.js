@@ -4,6 +4,7 @@
 
 // Article index with tags
 const ARTICLE_INDEX = [
+  { slug: "prisma-orm-完全指南从入门到实战", tags: ["Prisma", "TypeScript", "PostgreSQL", "ORM", "数据库", "Next.js"], title: "Prisma ORM 完全指南：从入门到实战" },
   { slug: "技术人员转行指南当写代码不再是你想做的事", tags: ["转行", "职业选择", "思考", "程序员"], title: "技术人员转行指南：当写代码不再是你想做的事" },
   { slug: "打工人理财第一课从看懂钱去哪了到让钱自己长大", tags: ["理财", "打工人", "程序员", "投资", "省钱", "保险"], title: "打工人理财第一课：从看懂钱去哪了到让钱自己长大" },
   { slug: "当-ai-编程-agent-有了眼睛safari-mcp-server-深度解读", tags: ["AI", "MCP", "WebKit", "Safari", "前端开发", "调试"], title: "当 AI 编程 Agent 有了\"眼睛\"：Safari MCP Server 深度解读" },
