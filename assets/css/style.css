@@ -1514,9 +1514,10 @@ pre code {
 
 .hero-left {
   text-align: left;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+}
+
+.hero-left > *:first-child {
+  margin-top: 0;
 }
 
 .hero-right {
@@ -1612,8 +1613,6 @@ pre code {
   display: flex;
   flex-direction: column;
   gap: var(--space-lg);
-  flex: 1;
-  justify-content: flex-start;
 }
 
 .now-item {
