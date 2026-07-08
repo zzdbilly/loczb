@@ -1507,7 +1507,7 @@ pre code {
   display: grid;
   grid-template-columns: 1.2fr 0.8fr;
   gap: var(--space-4xl);
-  align-items: stretch;
+  align-items: start;
   max-width: 1200px;
   margin: 0 auto;
 }
@@ -1516,13 +1516,9 @@ pre code {
   text-align: left;
 }
 
-.hero-left > *:first-child {
-  margin-top: 0;
-}
-
 .hero-right {
-  display: flex;
-  flex-direction: column;
+  position: sticky;
+  top: 2rem;
 }
 
 .hero-description {
@@ -1568,11 +1564,9 @@ pre code {
   border: 1px solid var(--color-border);
   border-radius: var(--radius-2xl);
   padding: var(--space-xl);
+  padding-bottom: calc(var(--space-xl) * 1.5);
   position: relative;
   overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
 }
 
 .now-panel::before {
