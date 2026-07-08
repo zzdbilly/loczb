@@ -1,4 +1,10 @@
-<!DOCTYPE html>
+#!/usr/bin/env python3
+"""Generate projects/index.html with filter bar, data-category, and inline filter JS."""
+from pathlib import Path
+
+OUTPUT = Path(__file__).resolve().parent.parent / "projects" / "index.html"
+
+HTML = r'''<!DOCTYPE html>
 <html lang="zh-CN" data-theme="dark">
 <head>
   <script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
@@ -353,3 +359,8 @@
 
 </body>
 </html>
+'''
+
+OUTPUT.parent.mkdir(parents=True, exist_ok=True)
+OUTPUT.write_text(HTML, encoding='utf-8')
+print(f"Written: {OUTPUT} ({len(HTML)} bytes)")
