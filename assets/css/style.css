@@ -1507,7 +1507,7 @@ pre code {
   display: grid;
   grid-template-columns: 1.1fr 0.9fr;
   gap: var(--space-3xl);
-  align-items: stretch;
+  align-items: start;
   max-width: 1200px;
   margin: 0 auto;
 }
@@ -1568,9 +1568,6 @@ pre code {
   padding: var(--space-xl);
   position: relative;
   overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
 }
 
 .now-panel::before {
