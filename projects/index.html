@@ -36,10 +36,10 @@
   <link rel="apple-touch-icon" sizes="180x180" href="../assets/images/apple-touch-icon.png">
   <link rel="manifest" href="../site.webmanifest">
   <meta name="theme-color" content="#3b82f6">
-  <link rel="stylesheet" href="../assets/css/style.css?v=6b86d688">
+  <link rel="stylesheet" href="../assets/css/style.css?v=proj-filter-v1">
   <style>
-    .case-card { background: var(--color-bg-secondary); border-radius: 16px; overflow: hidden; margin-bottom: 2rem; border: 1px solid var(--color-border); transition: all var(--transition-base); }
-    .case-card:hover { border-color: var(--color-accent-primary); transform: translateY(-2px); box-shadow: var(--shadow-xl); }
+    .case-card { background: var(--color-bg-secondary); border-radius: 16px; overflow: hidden; margin-bottom: 2rem; border: 1px solid var(--color-border); transition: all 0.35s cubic-bezier(0.4,0,0.2,1); }
+    .case-card:hover { border-color: var(--color-accent-primary); transform: translateY(-6px); box-shadow: 0 16px 48px rgba(0,0,0,0.18), 0 0 0 1px rgba(99,102,241,0.15); }
     .case-card-header { padding: 2rem; border-bottom: 1px solid var(--color-border); }
     .case-card-badge { display: inline-block; background: var(--color-accent-primary); color: white; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; margin-bottom: 1rem; }
     .case-card-title { font-size: 1.75rem; margin-bottom: 0.5rem; }
@@ -92,7 +92,7 @@
   <canvas id="particle-canvas" class="particle-canvas"></canvas>
 
   <main id="main-content">
-    <section class="projects-hero" >
+    <section class="projects-hero">
       <div class="container">
         <div class="section-header">
           <div class="section-label">Case Studies</div>
@@ -104,9 +104,17 @@
 
     <section class="section section-narrow" style="padding: 1rem var(--space-lg);">
       <div class="container">
-        
+
+        <!-- Filter Bar -->
+        <div class="projects-filter-bar" id="projects-filter-bar">
+          <button class="projects-filter-btn projects-filter-btn--active" data-filter="all">全部</button>
+          <button class="projects-filter-btn" data-filter="website">网站</button>
+          <button class="projects-filter-btn" data-filter="app">应用</button>
+          <button class="projects-filter-btn" data-filter="tool">工具</button>
+        </div>
+
         <!-- Case 1: loczb 个人品牌网站 -->
-        <article class="case-card animate-on-scroll">
+        <article class="case-card animate-on-scroll" data-category="website" data-tech="html css javascript cloudflare pwa">
           <div class="case-card-header">
             <span class="case-card-badge">代表案例</span>
             <h2 class="case-card-title">loczb 个人品牌网站</h2>
@@ -161,7 +169,7 @@
         </article>
 
         <!-- Case 2: Zest 习惯追踪器 -->
-        <article class="case-card animate-on-scroll">
+        <article class="case-card animate-on-scroll" data-category="app" data-tech="nextjs prisma postgresql tailwind vercel">
           <div class="case-card-header">
             <span class="case-card-badge">Web App</span>
             <h2 class="case-card-title">Zest</h2>
@@ -210,7 +218,7 @@
         </article>
 
         <!-- Case 3: PasteBin 便利贴 -->
-        <article class="case-card animate-on-scroll">
+        <article class="case-card animate-on-scroll" data-category="tool" data-tech="cloudflare kv highlightjs crypto">
           <div class="case-card-header">
             <span class="case-card-badge">Web App</span>
             <h2 class="case-card-title">PasteBin</h2>
@@ -258,6 +266,11 @@
           </div>
         </article>
 
+        <!-- Empty state -->
+        <div class="projects-empty" id="projects-empty" style="display:none;">
+          <p class="blog-empty-text">该分类下暂无项目</p>
+        </div>
+
       </div>
     </section>
 
@@ -286,6 +299,54 @@
   <script defer src="../assets/js/main.js"></script>
   <script defer src="../assets/js/search.js"></script>
   <script defer src="../assets/js/particles.js"></script>
+
+  <!-- Projects Filter Logic -->
+  <script>
+  (function() {
+    const filterBar = document.getElementById('projects-filter-bar');
+    if (!filterBar) return;
+    const buttons = filterBar.querySelectorAll('.projects-filter-btn');
+    const cards = document.querySelectorAll('.case-card[data-category]');
+    const emptyState = document.getElementById('projects-empty');
+
+    buttons.forEach(btn => {
+      btn.addEventListener('click', function() {
+        const filter = this.getAttribute('data-filter');
+
+        // Update active button
+        buttons.forEach(b => b.classList.remove('projects-filter-btn--active'));
+        this.classList.add('projects-filter-btn--active');
+
+        // Filter cards with smooth transition
+        let visibleCount = 0;
+        cards.forEach(card => {
+          const cat = card.getAttribute('data-category');
+          const show = (filter === 'all' || cat === filter);
+
+          if (show) {
+            card.style.display = '';
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(12px)';
+            requestAnimationFrame(() => {
+              card.style.opacity = '1';
+              card.style.transform = 'translateY(0)';
+            });
+            visibleCount++;
+          } else {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(8px)';
+            setTimeout(() => { card.style.display = 'none'; }, 200);
+          }
+        });
+
+        // Toggle empty state
+        if (emptyState) {
+          emptyState.style.display = visibleCount === 0 ? '' : 'none';
+        }
+      });
+    });
+  })();
+  </script>
 
   <!-- Cloudflare Web Analytics -->
   <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "29e7cff6f37448989538e2165cb79187"}'></script>

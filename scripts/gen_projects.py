@@ -1,0 +1,366 @@
+#!/usr/bin/env python3
+"""Generate projects/index.html with filter bar, data-category, and inline filter JS."""
+from pathlib import Path
+
+OUTPUT = Path(__file__).resolve().parent.parent / "projects" / "index.html"
+
+HTML = r'''<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- SEO Basic -->
+  <meta name="description" content="张小猛的项目案例 - 个人品牌网站、习惯追踪器 Zest、PasteBin 便利贴工具。从想法到落地的完整案例。">
+  <meta name="keywords" content="项目案例, loczb, Zest, PasteBin, 便利贴, 张小猛">
+  <meta name="author" content="张小猛">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://709527.xyz/projects/">
+  
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://709527.xyz/projects/">
+  <meta property="og:title" content="项目案例 | 张小猛 - loczb">
+  <meta property="og:description" content="张小猛的项目案例 - 个人品牌网站、习惯追踪器、PasteBin 便利贴。">
+  <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
+  <meta property="og:locale" content="zh_CN">
+  
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="项目案例 | 张小猛 - loczb">
+  <meta name="twitter:description" content="张小猛的项目案例 - 个人品牌网站、习惯追踪器、PasteBin 便利贴。">
+  <meta name="twitter:image" content="https://709527.xyz/assets/images/og-image.png">
+  
+  <title>项目案例 | 张小猛 - loczb</title>
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="../assets/images/favicon.ico">
+  <link rel="icon" type="image/svg+xml" href="../assets/images/favicon.svg">
+  <link rel="icon" type="image/png" sizes="16x16" href="../assets/images/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/images/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="../assets/images/apple-touch-icon.png">
+  <link rel="manifest" href="../site.webmanifest">
+  <meta name="theme-color" content="#3b82f6">
+  <link rel="stylesheet" href="../assets/css/style.css?v=proj-filter-v1">
+  <style>
+    .case-card { background: var(--color-bg-secondary); border-radius: 16px; overflow: hidden; margin-bottom: 2rem; border: 1px solid var(--color-border); transition: all 0.35s cubic-bezier(0.4,0,0.2,1); }
+    .case-card:hover { border-color: var(--color-accent-primary); transform: translateY(-6px); box-shadow: 0 16px 48px rgba(0,0,0,0.18), 0 0 0 1px rgba(99,102,241,0.15); }
+    .case-card-header { padding: 2rem; border-bottom: 1px solid var(--color-border); }
+    .case-card-badge { display: inline-block; background: var(--color-accent-primary); color: white; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; margin-bottom: 1rem; }
+    .case-card-title { font-size: 1.75rem; margin-bottom: 0.5rem; }
+    .case-card-subtitle { color: var(--color-text-secondary); font-size: 1rem; }
+    .case-card-body { padding: 2rem; }
+    .case-section { margin-bottom: 1.5rem; }
+    .case-section:last-child { margin-bottom: 0; }
+    .case-section-title { font-size: 0.875rem; font-weight: 600; color: var(--color-accent-primary); margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    .case-section-content { color: var(--color-text-secondary); line-height: 1.7; }
+    .case-metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 1rem; margin-top: 1rem; }
+    .case-metric { background: var(--color-bg-tertiary); padding: 1rem; border-radius: 8px; text-align: center; }
+    .case-metric-value { font-size: 1.5rem; font-weight: 700; color: var(--color-text-primary); }
+    .case-metric-label { font-size: 0.75rem; color: var(--color-text-secondary); margin-top: 0.25rem; }
+    .case-links { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.5rem; }
+    .tech-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    @media (max-width: 640px) {
+      .case-card-header, .case-card-body { padding: 1.5rem; }
+      .case-card-title { font-size: 1.5rem; }
+    }
+  </style>
+  <!-- Preconnect to Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&family=Noto+Sans+SC:wght@500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500&display=swap" media="print" onload="this.media='all'">
+  <noscript>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&family=Noto+Sans+SC:wght@500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500&display=swap">
+  </noscript>
+</head>
+<body>
+  <div class="loading"><div class="loading-spinner"></div></div>
+
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../index.html" class="nav-logo">loc<span>zb</span></a>
+      <button class="nav-toggle" aria-label="打开菜单" aria-expanded="false"><span></span><span></span><span></span></button>
+      <div class="nav-overlay"></div>
+      <ul class="nav-links" id="nav-links-menu">
+        <li><a href="../index.html" class="nav-link">首页</a></li>
+        <li><a href="index.html" class="nav-link active">项目</a></li>
+        <li><a href="../blog/index.html" class="nav-link">博客</a></li>
+        <li><a href="../about/index.html" class="nav-link">关于</a></li>
+      </ul>
+      <button class="theme-toggle" aria-label="切换主题">
+        <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/></svg>
+        <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+    </div>
+  </nav>
+  <!-- Particle Canvas Background -->
+  <canvas id="particle-canvas" class="particle-canvas"></canvas>
+
+  <main id="main-content">
+    <section class="projects-hero">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-label">Case Studies</div>
+          <h1 class="section-title">项目案例</h1>
+          <p class="section-desc">从想法到落地，每个项目都是一次技术与产品的探索</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-narrow" style="padding: 1rem var(--space-lg);">
+      <div class="container">
+
+        <!-- Filter Bar -->
+        <div class="projects-filter-bar" id="projects-filter-bar">
+          <button class="projects-filter-btn projects-filter-btn--active" data-filter="all">全部</button>
+          <button class="projects-filter-btn" data-filter="website">网站</button>
+          <button class="projects-filter-btn" data-filter="app">应用</button>
+          <button class="projects-filter-btn" data-filter="tool">工具</button>
+        </div>
+
+        <!-- Case 1: loczb 个人品牌网站 -->
+        <article class="case-card animate-on-scroll" data-category="website" data-tech="html css javascript cloudflare pwa">
+          <div class="case-card-header">
+            <span class="case-card-badge">代表案例</span>
+            <h2 class="case-card-title">loczb 个人品牌网站</h2>
+            <p class="case-card-subtitle">从零打造个人技术品牌，统一展示能力、项目和内容</p>
+          </div>
+          <div class="case-card-body">
+            <div class="case-section">
+              <h3 class="case-section-title">项目背景</h3>
+              <p class="case-section-content">需要一个统一的地方展示技术能力、项目经验和博客内容，让潜在合作方快速了解我能提供什么价值。同时作为个人品牌的数字名片。</p>
+            </div>
+            <div class="case-section">
+              <h3 class="case-section-title">我的角色</h3>
+              <p class="case-section-content">全栈独立开发 — 从信息架构、UI 设计、前端开发到部署运维，全流程负责。</p>
+            </div>
+            <div class="case-section">
+              <h3 class="case-section-title">技术方案</h3>
+              <div class="tech-tags">
+                <span class="tech-tag">HTML/CSS</span>
+                <span class="tech-tag">JavaScript</span>
+                <span class="tech-tag">GitHub Pages</span>
+                <span class="tech-tag">Cloudflare Workers</span>
+                <span class="tech-tag">PWA</span>
+                <span class="tech-tag">GitHub Actions CI</span>
+              </div>
+            </div>
+            <div class="case-section">
+              <h3 class="case-section-title">亮点能力</h3>
+              <p class="case-section-content">• 暗色科技风设计 + 精致动效 + 完整响应式<br>• 博客系统：分类/分页/搜索 + CI 自动化索引 + 70 篇技术博客<br>• AI 助手集成（Cloudflare Worker + 通义千问）<br>• PWA 离线 + RSS / Sitemap / OG 图片</p>
+            </div>
+            <div class="case-section">
+              <h3 class="case-section-title">结果指标</h3>
+              <div class="case-metrics">
+                <div class="case-metric">
+                  <div class="case-metric-value">500+</div>
+                  <div class="case-metric-label">月访问量</div>
+                </div>
+                <div class="case-metric">
+                  <div class="case-metric-value">70</div>
+                  <div class="case-metric-label">博客文章</div>
+                </div>
+                <div class="case-metric">
+                  <div class="case-metric-value">100%</div>
+                  <div class="case-metric-label">独立开发</div>
+                </div>
+              </div>
+            </div>
+            <div class="case-links">
+              <a href="https://709527.xyz" class="btn btn-primary" target="_blank" rel="noopener">在线访问</a>
+              <a href="https://github.com/zzdbilly/loczb" class="btn btn-ghost" target="_blank" rel="noopener">源代码</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Case 2: Zest 习惯追踪器 -->
+        <article class="case-card animate-on-scroll" data-category="app" data-tech="nextjs prisma postgresql tailwind vercel">
+          <div class="case-card-header">
+            <span class="case-card-badge">Web App</span>
+            <h2 class="case-card-title">Zest</h2>
+            <p class="case-card-subtitle">习惯养成追踪应用</p>
+          </div>
+          <div class="case-card-body">
+            <div class="case-section">
+              <h3 class="case-section-title">项目背景</h3>
+              <p class="case-section-content">需要一个简单、隐私友好的习惯追踪工具。从 React + Go 原型起步，现已全面重构为 Next.js + Prisma + PostgreSQL 架构并部署于 Vercel。</p>
+            </div>
+            <div class="case-section">
+              <h3 class="case-section-title">我的角色</h3>
+              <p class="case-section-content">全栈开发 — 架构重设计、数据库迁移、Vercel 部署。</p>
+            </div>
+            <div class="case-section">
+              <h3 class="case-section-title">技术方案</h3>
+              <div class="tech-tags">
+                <span class="tech-tag">Next.js</span>
+                <span class="tech-tag">Prisma</span>
+                <span class="tech-tag">PostgreSQL</span>
+                <span class="tech-tag">Tailwind CSS</span>
+                <span class="tech-tag">Vercel</span>
+              </div>
+            </div>
+            <div class="case-section">
+              <h3 class="case-section-title">功能特性</h3>
+              <p class="case-section-content">• 每日打卡 + 心情记录<br>• 成就徽章系统<br>• 自定义里程碑奖励<br>• 失败复盘 + 触发场景分析<br>• 周回顾 + 智能建议<br>• 日历热力图 + 补卡<br>• 深色主题 + Toast 反馈</p>
+            </div>
+            <div class="case-section">
+              <h3 class="case-section-title">结果指标</h3>
+              <div class="case-metrics">
+                <div class="case-metric">
+                  <div class="case-metric-value">15</div>
+                  <div class="case-metric-label">功能模块</div>
+                </div>
+                <div class="case-metric">
+                  <div class="case-metric-value">Full</div>
+                  <div class="case-metric-label">前后端分离</div>
+                </div>
+              </div>
+            </div>
+            <div class="case-links">
+              <a href="https://github.com/zzdbilly/zest" class="btn btn-ghost" target="_blank" rel="noopener">源代码</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Case 3: PasteBin 便利贴 -->
+        <article class="case-card animate-on-scroll" data-category="tool" data-tech="cloudflare kv highlightjs crypto">
+          <div class="case-card-header">
+            <span class="case-card-badge">Web App</span>
+            <h2 class="case-card-title">PasteBin</h2>
+            <p class="case-card-subtitle">轻量文本分享工具 — 贴文本，一键生成链接分享</p>
+          </div>
+          <div class="case-card-body">
+            <div class="case-section">
+              <h3 class="case-section-title">项目背景</h3>
+              <p class="case-section-content">需要一个极简的文本分享工具，贴代码、日志、配置片段，快速生成链接发给别人。不需要注册登录，用完即走。对标 Pastebin.com，但更轻量、免费。</p>
+            </div>
+            <div class="case-section">
+              <h3 class="case-section-title">我的角色</h3>
+              <p class="case-section-content">全栈独立开发 — 从需求、架构设计、前端到后端逻辑，全流程搞定。</p>
+            </div>
+            <div class="case-section">
+              <h3 class="case-section-title">技术方案</h3>
+              <div class="tech-tags">
+                <span class="tech-tag">Cloudflare Workers</span>
+                <span class="tech-tag">KV</span>
+                <span class="tech-tag">highlight.js</span>
+                <span class="tech-tag">Web Crypto API</span>
+              </div>
+            </div>
+            <div class="case-section">
+              <h3 class="case-section-title">功能特性</h3>
+              <p class="case-section-content">• 一键创建粘贴，生成 6 位短码链接<br>• 过期时间：1小时 / 24小时 / 7天<br>• 阅后即焚：打开一次自动删除<br>• 密码保护：SHA-256 加密 + Token 验证<br>• 语法高亮：自动检测 22 种语言<br>• Raw 模式：纯文本输出<br>• 所有页面暗色主题，移动端适配</p>
+            </div>
+            <div class="case-section">
+              <h3 class="case-section-title">结果指标</h3>
+              <div class="case-metrics">
+                <div class="case-metric">
+                  <div class="case-metric-value">0</div>
+                  <div class="case-metric-label">外部依赖</div>
+                </div>
+                <div class="case-metric">
+                  <div class="case-metric-value">30KB</div>
+                  <div class="case-metric-label">Worker 大小</div>
+                </div>
+              </div>
+            </div>
+            <div class="case-links">
+              <a href="https://pastebin.billycust716.workers.dev" class="btn btn-primary" target="_blank" rel="noopener">在线访问</a>
+              <a href="https://github.com/zzdbilly/pastebin" class="btn btn-ghost" target="_blank" rel="noopener">源代码</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Empty state -->
+        <div class="projects-empty" id="projects-empty" style="display:none;">
+          <p class="blog-empty-text">该分类下暂无项目</p>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <p class="footer-signature">写代码，做产品，也认真生活。</p>
+      <div class="footer-social">
+        <a href="https://github.com/zzdbilly" class="footer-social-link" target="_blank" rel="noopener" aria-label="GitHub">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+        </a>
+        <a href="../rss.xml" class="footer-social-link" aria-label="RSS">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+      </div>
+      <div class="footer-links">
+        <a href="../blog/index.html" class="footer-link">博客</a>
+        <a href="../about/index.html" class="footer-link">关于</a>
+        <a href="../projects/index.html" class="footer-link">项目</a>
+      </div>
+      <p class="footer-copyright">© 2026 张小猛</p>
+    </div>
+  </footer>
+
+  <script defer src="../assets/js/main.js"></script>
+  <script defer src="../assets/js/search.js"></script>
+  <script defer src="../assets/js/particles.js"></script>
+
+  <!-- Projects Filter Logic -->
+  <script>
+  (function() {
+    const filterBar = document.getElementById('projects-filter-bar');
+    if (!filterBar) return;
+    const buttons = filterBar.querySelectorAll('.projects-filter-btn');
+    const cards = document.querySelectorAll('.case-card[data-category]');
+    const emptyState = document.getElementById('projects-empty');
+
+    buttons.forEach(btn => {
+      btn.addEventListener('click', function() {
+        const filter = this.getAttribute('data-filter');
+
+        // Update active button
+        buttons.forEach(b => b.classList.remove('projects-filter-btn--active'));
+        this.classList.add('projects-filter-btn--active');
+
+        // Filter cards with smooth transition
+        let visibleCount = 0;
+        cards.forEach(card => {
+          const cat = card.getAttribute('data-category');
+          const show = (filter === 'all' || cat === filter);
+
+          if (show) {
+            card.style.display = '';
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(12px)';
+            requestAnimationFrame(() => {
+              card.style.opacity = '1';
+              card.style.transform = 'translateY(0)';
+            });
+            visibleCount++;
+          } else {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(8px)';
+            setTimeout(() => { card.style.display = 'none'; }, 200);
+          }
+        });
+
+        // Toggle empty state
+        if (emptyState) {
+          emptyState.style.display = visibleCount === 0 ? '' : 'none';
+        }
+      });
+    });
+  })();
+  </script>
+
+  <!-- Cloudflare Web Analytics -->
+  <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "29e7cff6f37448989538e2165cb79187"}'></script>
+
+</body>
+</html>
+'''
+
+OUTPUT.parent.mkdir(parents=True, exist_ok=True)
+OUTPUT.write_text(HTML, encoding='utf-8')
+print(f"Written: {OUTPUT} ({len(HTML)} bytes)")
