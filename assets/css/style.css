@@ -1495,13 +1495,21 @@ pre code {
   display: grid;
   grid-template-columns: 1.2fr 0.8fr;
   gap: var(--space-4xl);
-  align-items: center;
+  align-items: stretch;
   max-width: 1200px;
   margin: 0 auto;
 }
 
 .hero-left {
   text-align: left;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.hero-right {
+  display: flex;
+  flex-direction: column;
 }
 
 .hero-description {
@@ -1549,6 +1557,9 @@ pre code {
   padding: var(--space-xl);
   position: relative;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .now-panel::before {
@@ -1589,6 +1600,8 @@ pre code {
   display: flex;
   flex-direction: column;
   gap: var(--space-lg);
+  flex: 1;
+  justify-content: space-between;
 }
 
 .now-item {
