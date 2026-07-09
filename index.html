@@ -442,31 +442,48 @@
       
       <div class="blog-grid">
         <!-- 代表文章大卡 -->
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <article class="blog-card-featured animate-on-scroll" id="home-featured-post" style="display: block;">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <article class="blog-card-featured animate-on-scroll" id="home-featured-post" style="display: block;">
           <div class="blog-card-header">
             <div class="blog-card-meta">
+              <span class="blog-date">2026-07-09</span>
+              <span>·</span>
+              <span class="blog-read-time">18 min</span>
+            </div>
+            <span class="blog-list-tag">思考</span>
+          </div>
+          <h3 class="blog-card-title">
+            <a href="blog/posts/医生不会告诉你的健康习惯从睡眠到饮食的系统性方案.html">医生不会告诉你的健康习惯：从睡眠到饮食的系统性方案</a>
+          </h3>
+          <p class="blog-card-excerpt">从睡眠、饮食、运动、数字健康、环境、心理六个维度，建立科学且可执行的健康习惯体系...</p>
+          <div class="blog-card-tags">
+            <span class="tech-tag">健康</span>
+            <span class="tech-tag">生活习惯</span>
+            <span class="tech-tag">效率</span>
+            <span class="tech-tag">心理</span>
+          </div>
+        </article>
+        
+        <!-- 最新文章列表 -->
+                <div class="blog-list">
+        <article class="blog-mini-card animate-on-scroll" data-category="数据库" data-page="1">
+          <div class="blog-mini-card-header">
+            <div class="blog-list-meta">
               <span class="blog-date">2026-07-07</span>
               <span>·</span>
               <span class="blog-read-time">5 min</span>
             </div>
             <span class="blog-list-tag">数据库</span>
           </div>
-          <h3 class="blog-card-title">
+          <h3 class="blog-mini-card-title">
             <a href="blog/posts/prisma-orm-完全指南从入门到实战.html">Prisma ORM 完全指南：从入门到实战</a>
           </h3>
-          <p class="blog-card-excerpt">从 Prisma 的基础概念到项目实战，涵盖 Schema 设计、CRUD 操作、迁移管理、性能优化等核心话题，带你全面掌握 TypeScript 生态最流行的数据库 ORM。...</p>
-          <div class="blog-card-tags">
+          <p class="blog-mini-card-excerpt">从 Prisma 的基础概念到项目实战，涵盖 Schema 设计、CRUD 操作、迁移管理、性能优化等核心话题，带你全面掌握 TypeScript 生态最流行的数据库 ORM。</p>
+          <div class="blog-mini-card-tags">
             <span class="tech-tag">Prisma</span>
             <span class="tech-tag">TypeScript</span>
             <span class="tech-tag">PostgreSQL</span>
-            <span class="tech-tag">ORM</span>
-            <span class="tech-tag">数据库</span>
-            <span class="tech-tag">Next.js</span>
           </div>
         </article>
-        
-        <!-- 最新文章列表 -->
-                <div class="blog-list">
         <article class="blog-mini-card animate-on-scroll" data-category="思考" data-page="1">
           <div class="blog-mini-card-header">
             <div class="blog-list-meta">
@@ -484,25 +501,6 @@
             <span class="tech-tag">转行</span>
             <span class="tech-tag">职业选择</span>
             <span class="tech-tag">思考</span>
-          </div>
-        </article>
-        <article class="blog-mini-card animate-on-scroll" data-category="思考" data-page="1">
-          <div class="blog-mini-card-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-07-06</span>
-              <span>·</span>
-              <span class="blog-read-time">5 min</span>
-            </div>
-            <span class="blog-list-tag">思考</span>
-          </div>
-          <h3 class="blog-mini-card-title">
-            <a href="blog/posts/打工人理财第一课从看懂钱去哪了到让钱自己长大.html">打工人理财第一课：从看懂钱去哪了到让钱自己长大</a>
-          </h3>
-          <p class="blog-mini-card-excerpt">面向程序员的实用理财入门指南——四个账户法、极简记账、常见金融坑、可执行的起步计划。不折腾、不焦虑，让钱安静地替你打工。</p>
-          <div class="blog-mini-card-tags">
-            <span class="tech-tag">理财</span>
-            <span class="tech-tag">打工人</span>
-            <span class="tech-tag">程序员</span>
           </div>
         </article>
         </div>
@@ -597,6 +595,15 @@
     // 首页随机选择代表文章
     const posts = [
       {
+        url: 'blog/posts/医生不会告诉你的健康习惯从睡眠到饮食的系统性方案.html',
+        title: '医生不会告诉你的健康习惯：从睡眠到饮食的系统性方案',
+        date: '2026-07-09',
+        readTime: '18 min',
+        category: '思考',
+        category2: '思考',
+        desc: '从睡眠、饮食、运动、数字健康、环境、心理六个维度，建立科学且可执行的健康习惯体系'
+      },
+      {
         url: 'blog/posts/prisma-orm-完全指南从入门到实战.html',
         title: 'Prisma ORM 完全指南：从入门到实战',
         date: '2026-07-07',
@@ -676,15 +683,6 @@
         category: '数据库',
         category2: '数据库',
         desc: '从 EXPLAIN 认识索引失效到复合索引设计，一个慢查询从 2 秒优化到 12 毫秒的完整过程'
-      },
-      {
-        url: 'blog/posts/ai-编程助手进化论从结对编程到自主编程团队-2026.html',
-        title: 'AI 编程助手进化论：从结对编程到自主编程团队 (2026)',
-        date: '2026-07-04',
-        readTime: '5 min',
-        category: 'AI',
-        category2: 'AI',
-        desc: '2026 年，AI 编程 Agent 跨越了从辅助工具到自主成员的临界点。Cursor 移动端发布、Claude Code 深度推理、Codex CLI 稳定执行、多 Agent 并行协作——本文梳理 AI 编程的三次范式跃迁，分析主流工具，分享落地实践，并展望 2027 年的开发者生态。'
       }
     ];
     
