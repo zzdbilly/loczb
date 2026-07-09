@@ -7,6 +7,14 @@
     <language>zh-CN</language>
     <atom:link href="https://709527.xyz/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>医生不会告诉你的健康习惯：从睡眠到饮食的系统性方案</title>
+      <link>https://709527.xyz/blog/posts/医生不会告诉你的健康习惯从睡眠到饮食的系统性方案.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/医生不会告诉你的健康习惯从睡眠到饮食的系统性方案.html</guid>
+      <description>从睡眠、饮食、运动、数字健康、环境、心理六个维度，建立科学且可执行的健康习惯体系</description>
+      <category>思考</category>
+      <pubDate>Thu, 09 Jul 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
       <title>Prisma ORM 完全指南：从入门到实战</title>
       <link>https://709527.xyz/blog/posts/prisma-orm-完全指南从入门到实战.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/prisma-orm-完全指南从入门到实战.html</guid>
@@ -156,14 +164,6 @@
       <guid isPermaLink="true">https://709527.xyz/blog/posts/why-tech-people-should-write.html</guid>
       <description>写作不仅是最强的学习方式，更能帮助技术人建立个人品牌、打破信息茧房、留下成长痕迹</description>
       <category>思考</category>
-      <pubDate>Wed, 01 Jul 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>Kotlin Coroutine 异常处理机制全面解析</title>
-      <link>https://709527.xyz/blog/posts/kotlin-coroutine-exception-handling.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/kotlin-coroutine-exception-handling.html</guid>
-      <description>全面解析 Kotlin 协程异常处理机制，涵盖 launch/async 异常传播差异、SupervisorJob、结构化并发、CoroutineExceptionHandler、Android 最佳实践等核心内容</description>
-      <category>Kotlin</category>
       <pubDate>Wed, 01 Jul 2026 00:00:00 +0800</pubDate>
     </item>
   </channel>

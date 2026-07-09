@@ -4,6 +4,7 @@
 
 // Article index with tags
 const ARTICLE_INDEX = [
+  { slug: "医生不会告诉你的健康习惯从睡眠到饮食的系统性方案", tags: ["健康", "生活习惯", "效率", "心理"], title: "医生不会告诉你的健康习惯：从睡眠到饮食的系统性方案" },
   { slug: "prisma-orm-完全指南从入门到实战", tags: ["Prisma", "TypeScript", "PostgreSQL", "ORM", "数据库", "Next.js"], title: "Prisma ORM 完全指南：从入门到实战" },
   { slug: "技术人员转行指南当写代码不再是你想做的事", tags: ["转行", "职业选择", "思考", "程序员"], title: "技术人员转行指南：当写代码不再是你想做的事" },
   { slug: "打工人理财第一课从看懂钱去哪了到让钱自己长大", tags: ["理财", "打工人", "程序员", "投资", "省钱", "保险"], title: "打工人理财第一课：从看懂钱去哪了到让钱自己长大" },
