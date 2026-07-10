@@ -207,9 +207,24 @@
     });
   }
 
+  // 全局 Ctrl+K / Cmd+K 快捷键
+  function initShortcut() {
+    document.addEventListener('keydown', (e) => {
+      // Ctrl+K 或 Cmd+K（Mac）
+      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault();
+        if (searchInput) {
+          searchInput.focus();
+          searchInput.select();
+        }
+      }
+    });
+  }
+
   // 初始化
   document.addEventListener('DOMContentLoaded', () => {
     loadSearchData();
     bindEvents();
+    initShortcut();
   });
 })();
