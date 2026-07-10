@@ -38,7 +38,7 @@
       const loaded = await loadFuse();
       if (!loaded) return;
       
-      const resp = await fetch('articles-index.json?t=' + Date.now());
+      const resp = await fetch('/blog/articles-index.json?t=' + Date.now());
       const data = await resp.json();
       searchData = data;
       
@@ -167,7 +167,7 @@
       ).join('');
       
       return `
-      <a href="posts/${(post.url || '').replace('blog/posts/', '')}" class="sr-item">
+      <a href="/blog/posts/${(post.url || '').replace('blog/posts/', '')}" class="sr-item">
         <div class="sr-title">${title}</div>
         <div class="sr-excerpt">${excerpt}</div>
         <div class="sr-meta">
