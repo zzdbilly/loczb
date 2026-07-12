@@ -442,29 +442,48 @@
       
       <div class="blog-grid">
         <!-- 代表文章大卡 -->
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <article class="blog-card-featured animate-on-scroll" id="home-featured-post" style="display: block;">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <article class="blog-card-featured animate-on-scroll" id="home-featured-post" style="display: block;">
           <div class="blog-card-header">
             <div class="blog-card-meta">
+              <span class="blog-date">2026-07-12</span>
+              <span>·</span>
+              <span class="blog-read-time">5 min</span>
+            </div>
+            <span class="blog-list-tag">开发</span>
+          </div>
+          <h3 class="blog-card-title">
+            <a href="blog/posts/从-tdd-到-tdd²测试驱动开发的进阶实践.html">从 TDD 到 TDD²：测试驱动开发的进阶实践</a>
+          </h3>
+          <p class="blog-card-excerpt">打破红-绿-重构的刻板印象，聊聊三角测量、转换优先级、测试替身的正确用法，以及那些让你能在实战中用好 TDD 的经验...</p>
+          <div class="blog-card-tags">
+            <span class="tech-tag">TDD</span>
+            <span class="tech-tag">测试</span>
+            <span class="tech-tag">开发实践</span>
+            <span class="tech-tag">重构</span>
+          </div>
+        </article>
+        
+        <!-- 最新文章列表 -->
+                <div class="blog-list">
+        <article class="blog-mini-card animate-on-scroll" data-category="思考" data-page="1">
+          <div class="blog-mini-card-header">
+            <div class="blog-list-meta">
               <span class="blog-date">2026-07-09</span>
               <span>·</span>
               <span class="blog-read-time">18 min</span>
             </div>
             <span class="blog-list-tag">思考</span>
           </div>
-          <h3 class="blog-card-title">
+          <h3 class="blog-mini-card-title">
             <a href="blog/posts/医生不会告诉你的健康习惯从睡眠到饮食的系统性方案.html">医生不会告诉你的健康习惯：从睡眠到饮食的系统性方案</a>
           </h3>
-          <p class="blog-card-excerpt">从睡眠、饮食、运动、数字健康、环境、心理六个维度，建立科学且可执行的健康习惯体系...</p>
-          <div class="blog-card-tags">
+          <p class="blog-mini-card-excerpt">从睡眠、饮食、运动、数字健康、环境、心理六个维度，建立科学且可执行的健康习惯体系</p>
+          <div class="blog-mini-card-tags">
             <span class="tech-tag">健康</span>
             <span class="tech-tag">生活习惯</span>
             <span class="tech-tag">效率</span>
-            <span class="tech-tag">心理</span>
           </div>
         </article>
-        
-        <!-- 最新文章列表 -->
-                <div class="blog-list">
         <article class="blog-mini-card animate-on-scroll" data-category="数据库" data-page="1">
           <div class="blog-mini-card-header">
             <div class="blog-list-meta">
@@ -482,25 +501,6 @@
             <span class="tech-tag">Prisma</span>
             <span class="tech-tag">TypeScript</span>
             <span class="tech-tag">PostgreSQL</span>
-          </div>
-        </article>
-        <article class="blog-mini-card animate-on-scroll" data-category="思考" data-page="1">
-          <div class="blog-mini-card-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-07-06</span>
-              <span>·</span>
-              <span class="blog-read-time">5 min</span>
-            </div>
-            <span class="blog-list-tag">思考</span>
-          </div>
-          <h3 class="blog-mini-card-title">
-            <a href="blog/posts/技术人员转行指南当写代码不再是你想做的事.html">技术人员转行指南：当写代码不再是你想做的事</a>
-          </h3>
-          <p class="blog-mini-card-excerpt">深入分析技术人员转行的原因、方向和策略——不想写代码了，接下来该怎么办？</p>
-          <div class="blog-mini-card-tags">
-            <span class="tech-tag">转行</span>
-            <span class="tech-tag">职业选择</span>
-            <span class="tech-tag">思考</span>
           </div>
         </article>
         </div>
@@ -595,6 +595,15 @@
     // 首页随机选择代表文章
     const posts = [
       {
+        url: 'blog/posts/从-tdd-到-tdd²测试驱动开发的进阶实践.html',
+        title: '从 TDD 到 TDD²：测试驱动开发的进阶实践',
+        date: '2026-07-12',
+        readTime: '5 min',
+        category: '开发',
+        category2: '开发',
+        desc: '打破红-绿-重构的刻板印象，聊聊三角测量、转换优先级、测试替身的正确用法，以及那些让你能在实战中用好 TDD 的经验'
+      },
+      {
         url: 'blog/posts/医生不会告诉你的健康习惯从睡眠到饮食的系统性方案.html',
         title: '医生不会告诉你的健康习惯：从睡眠到饮食的系统性方案',
         date: '2026-07-09',
@@ -674,15 +683,6 @@
         category: 'DevOps',
         category2: 'DevOps',
         desc: '从扶墙线路到生产环境部署，不同场景下 VPS 怎么选、怎么配、怎么不踩坑'
-      },
-      {
-        url: 'blog/posts/mysql-索引优化实战从慢查询到最佳实践.html',
-        title: 'MySQL 索引优化实战：从慢查询到最佳实践',
-        date: '2026-07-05',
-        readTime: '5 min',
-        category: '数据库',
-        category2: '数据库',
-        desc: '从 EXPLAIN 认识索引失效到复合索引设计，一个慢查询从 2 秒优化到 12 毫秒的完整过程'
       }
     ];
     

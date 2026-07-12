@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>从 TDD 到 TDD²：测试驱动开发的进阶实践 | 张小猛 - loczb</title>
+    <meta name="description" content="打破红-绿-重构的刻板印象，聊聊三角测量、转换优先级、测试替身的正确用法，以及那些让你能在实战中用好 TDD 的经验">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="从 TDD 到 TDD²：测试驱动开发的进阶实践 | 张小猛 - loczb">
+    <meta property="og:description" content="打破红-绿-重构的刻板印象，聊聊三角测量、转换优先级、测试替身的正确用法，以及那些让你能在实战中用好 TDD 的经验">
+    <meta property="og:url" content="https://709527.xyz/blog/posts/从-tdd-到-tdd²测试驱动开发的进阶实践.html">
+    <meta property="og:type" content="article">
+        <meta property="og:image" content="../../assets/images/og-image.png">
+    <meta property="og:site_name" content="loczb">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="从 TDD 到 TDD²：测试驱动开发的进阶实践 | 张小猛 - loczb">
+    <meta name="twitter:description" content="打破红-绿-重构的刻板印象，聊聊三角测量、转换优先级、测试替身的正确用法，以及那些让你能在实战中用好 TDD 的经验">
+
+    
+        <script type="application/ld+json">
+{
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "从 TDD 到 TDD²：测试驱动开发的进阶实践",
+      "description": "打破红-绿-重构的刻板印象，聊聊三角测量、转换优先级、测试替身的正确用法，以及那些让你能在实战中用好 TDD 的经验",
+      "image": "https://709527.xyz/assets/images/og-image.png",
+      "author": {
+            "@type": "Person",
+            "name": "张小猛",
+            "url": "https://709527.xyz/about/"
+      },
+      "publisher": {
+            "@type": "Organization",
+            "name": "loczb",
+            "logo": {
+                  "@type": "ImageObject",
+                  "url": "https://709527.xyz/assets/images/favicon.svg"
+            }
+      },
+      "datePublished": "2026-07-12 19:20:07T00:00:00+08:00",
+      "dateModified": "2026-07-12 19:20:07T00:00:00+08:00",
+      "url": "https://709527.xyz/blog/posts/从-tdd-到-tdd²测试驱动开发的进阶实践.html",
+      "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://709527.xyz/blog/posts/从-tdd-到-tdd²测试驱动开发的进阶实践.html"
+      },
+      "keywords": "TDD, 测试, 开发实践, 重构",
+      "articleSection": "开发",
+      "timeRequired": "PT5M",
+      "inLanguage": "zh-CN"
+}
+    </script>
+    
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&family=Noto+Sans+SC:wght@500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500&display=swap" media="print" onload="this.media='all'">
+    <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
+    <link rel="alternate icon" href="../../assets/images/favicon.ico">
+</head>
+<body>
+  <!-- Loading -->
+  <div class="loading">
+    <div class="loading-spinner"></div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../../index.html" class="nav-logo">
+        loc<span>zb</span>
+      </a>
+      <button class="nav-toggle" aria-label="打开菜单" aria-expanded="false" aria-controls="nav-links-menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <div class="nav-overlay"></div>
+      <ul class="nav-links" id="nav-links-menu">
+        <li><a href="../../index.html" class="nav-link">首页</a></li>
+        <li><a href="../../projects/index.html" class="nav-link">项目</a></li>
+        <li><a href="../index.html" class="nav-link active">博客</a></li>
+        <li><a href="../../about/index.html" class="nav-link">关于</a></li>
+      </ul>
+      <button class="theme-toggle" aria-label="切换主题" title="切换亮/暗模式">
+        <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+        <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+      </button>
+    </div>
+  </nav>
+  <!-- Particle Canvas Background -->
+  <canvas id="particle-canvas" class="particle-canvas"></canvas>
+
+  <div class="scroll-progress"></div>
+
+  <main class="section" style="padding-bottom: 0; padding-top: var(--space-4xl);">
+    <div class="container container-narrow">
+      <a href="../index.html" class="back-link">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        返回博客列表
+      </a>
+
+      <article class="post-content">
+        <h1>从 TDD 到 TDD²：测试驱动开发的进阶实践</h1>
+        
+        <div class="post-meta">
+          <span>📅 2026-07-12 19:20:07</span>
+          <span>⏱️ 5 min read</span>
+          <span>👤 张小猛</span>
+        </div>
+        
+        <div class="post-tags">
+          <span class="tag">TDD</span>
+          <span class="tag">测试</span>
+          <span class="tag">开发实践</span>
+          <span class="tag">重构</span>
+        </div>
+        
+        <p>从 TDD 到 TDD²：测试驱动开发的进阶实践</p>
+<p>很多人知道 TDD（Test-Driven Development），但大部分停留在"红-绿-重构"的表面理解上。真正用 TDD 写过几个项目后，你会发现它远不止三个步骤那么简单。</p>
+<p>这篇博客不是 TDD 入门教程，而是一份实战进阶指南。我会聊聊在实际项目中遇到的坑、总结出来的模式，以及如何让 TDD 真正为你所用，而不是成为负担。</p>
+<h2>为什么大多数 TDD 实践会失败</h2>
+<p>先直面一个现实：很多团队和个人尝试 TDD 后，最终都放弃了。原因不是 TDD 本身不好，而是没有掌握正确的节奏。</p>
+<h3>测试粒度过细</h3>
+<p>最经典的问题：把每一个内部方法都写成测试。</p>
+<pre><code class="language-java">// ❌ 坏的例子：测试私有方法
+public class OrderService {
+    private BigDecimal calculateTax(Order order) { ... }
+    private boolean validateStock(Order order) { ... }
+    private String generateOrderNumber() { ... }
+}
+</code></pre>
+<p>每个私有方法写一个测试类，重构时全得改。正确的做法是测试<strong>公开行为</strong>，不是测试<strong>内部实现</strong>。</p>
+<h3>在错误层级做断言</h3>
+<pre><code class="language-python"># ❌ 太细，绑定实现
+def test_calculate():
+    result = calculator.add(1, 2)
+    assert result == 3
+    assert calculator.history == [3]  # 绑定内部状态
+</code></pre>
+<p>测试应该断言行为的输出，而不是实现细节。改一下：</p>
+<pre><code class="language-python"># ✅ 关注行为
+def test_calculate():
+    result = calculator.add(1, 2)
+    assert result == 3
+</code></pre>
+<h3>一步走太大</h3>
+<p>TDD 的精髓是小步快跑。但很多人在"红"阶段写了太多代码，然后发现测试怎么都过不了。</p>
+<pre><code class="language-python"># ❌ 一步到位，red 阶段写了整个模块
+def test_checkout():
+    cart = Cart()
+    cart.add_item(&quot;book&quot;, 2, 29.9)
+    result = checkout(cart, coupon=&quot;NEW50&quot;, address=&quot;...&quot;)
+    assert result.total == 29.9
+    assert result.tracking_number is not None
+</code></pre>
+<p>这样如果测试失败，你完全不知道是哪一步出错了。应该拆成更小的步骤。</p>
+<h2>第二个 T：三角测量法</h2>
+<p>TDD² 中的第二个 T 来自 <strong>Transformation Priority</strong>（转换优先级）和 <strong>Triangulation</strong>（三角测量）。这是很多 TDD 实践者忽略的精华。</p>
+<h3>三角测量的本质</h3>
+<p>三角测量是通过<strong>多个测试案例</strong>来推导出通用实现，而不是实现完再写第二个用例。</p>
+<pre><code class="language-python">import pytest
+
+# 第一步：最简单的案例
+def test_sum_empty():
+    assert sum_list([]) == 0
+
+# 第二步：单元素列表
+def test_sum_single():
+    assert sum_list([5]) == 5
+
+# 第三步：多元素列表——三角测量点
+def test_sum_multiple():
+    assert sum_list([1, 2, 3]) == 6
+</code></pre>
+<p>实现过程：</p>
+<pre><code class="language-python"># 第一版：硬编码
+def sum_list(nums):
+    return 0
+
+# 第二版：还是硬编码
+def sum_list(nums):
+    return 5 if nums == [5] else 0  # ❌ 这是反面例子，但真实开发中要注意它
+
+# 更好的路径
+def sum_list(nums):
+    if not nums:
+        return 0
+    return nums[0]  # 稍微通用一点
+
+# 最终版：经过三角测量推导出
+def sum_list(nums):
+    return sum(nums)
+</code></pre>
+<p>关键点：三角测量让你<strong>避免过度工程化</strong>。只写刚好能让所有测试通过的代码。</p>
+<h3>转换优先级原则</h3>
+<p>Uncle Bob 提出了一个转换优先级列表，告诉你从"特殊到通用"的转换路径：</p>
+<ol>
+<li><code>nil → constant</code>（空→常量）</li>
+<li><code>constant → constant+</code>（常量→更通用的常量）</li>
+<li><code>constant → scalar</code>（常量→变量）</li>
+<li><code>statement → statements</code>（单语句→多语句）</li>
+<li><code>unconditional → conditional</code>（无条件→条件）</li>
+<li><code>scalar → array</code>（标量→数组）</li>
+<li><code>array → container</code>（数组→容器）</li>
+<li><code>statement → recursion</code>（语句→递归）</li>
+<li><code>conditional → loop</code>（条件→循环）</li>
+<li><code>expression → function</code>（表达式→函数）</li>
+<li><code>variable → assignment</code>（变量→赋值）</li>
+<li><code>case → if/else</code> or <code>case → polymorphism</code>（case→分支/多态）</li>
+</ol>
+<pre><code class="language-python"># 实际例子：猜数字游戏
+def guess_number(secret: int, guess: int) -&gt; str:
+
+# 测试1：猜中
+def test_guess_correct():
+    assert guess_number(5, 5) == &quot;correct&quot;
+
+# 按转换优先级，应该先走 constant → scalar
+def guess_number(secret: int, guess: int) -&gt; str:
+    return &quot;correct&quot;  # nil → constant
+
+# 测试2：猜大了
+def test_guess_too_high():
+    assert guess_number(5, 7) == &quot;too high&quot;
+    assert guess_number(5, 6) == &quot;too high&quot;
+
+# 现在需要 conditional 了（优先级5）
+def guess_number(secret: int, guess: int) -&gt; str:
+    if guess &gt; secret:
+        return &quot;too high&quot;
+    return &quot;correct&quot;
+
+# 测试3：猜小了
+def test_guess_too_low():
+    assert guess_number(5, 3) == &quot;too low&quot;
+
+# 最终
+def guess_number(secret: int, guess: int) -&gt; str:
+    if guess &gt; secret:
+        return &quot;too high&quot;
+    if guess &lt; secret:
+        return &quot;too low&quot;
+    return &quot;correct&quot;
+</code></pre>
+<p>每一步都是最小幅度的转换，让代码自然生长。</p>
+<h2>测试替身的正确用法</h2>
+<p>测试替身（Mock/Stub/Fake）用得好是利器，用不好是累赘。很多人的误区是"只要测试就 mock 数据库"。</p>
+<h3>Stub vs Mock vs Fake</h3>
+<p>先说清楚区别：</p>
+<ul>
+<li><strong>Stub</strong>：提供预设的返回值，不验证交互</li>
+<li><strong>Mock</strong>：验证交互方式（比如有没有调用某个方法）</li>
+<li><strong>Fake</strong>：轻量级实现替代（比如用内存数据库代替真实数据库）</li>
+</ul>
+<pre><code class="language-python">from unittest.mock import Mock, patch
+from dataclasses import dataclass
+
+# Stub：返回固定数据
+class UserServiceStub:
+    def get_user(self, user_id: int):
+        return {&quot;id&quot;: user_id, &quot;name&quot;: &quot;Alice&quot;}
+
+# Fake：真正的替代实现
+class InMemoryUserRepository:
+    def __init__(self):
+        self._users = {}
+
+    def save(self, user):
+        self._users[user.id] = user
+
+    def find_by_id(self, user_id):
+        return self._users.get(user_id)
+
+# 测试时
+def test_create_user():
+    repo = InMemoryUserRepository()
+    service = UserService(repo)
+    user = service.create_user(&quot;Alice&quot;)
+    assert repo.find_by_id(user.id).name == &quot;Alice&quot;
+</code></pre>
+<h3>什么时候用 Mock</h3>
+<p>可以用，但有节制。Mock 应该在以下场景使用：</p>
+<pre><code class="language-python"># ✅ 合理的 Mock：外部系统边界的确认
+@patch(&quot;myapp.services.email_sender&quot;)
+def test_send_welcome_email(mock_sender):
+    service = UserService(email_sender=mock_sender)
+    service.register(&quot;alice@example.com&quot;)
+
+    # 确认调用了外部服务
+    mock_sender.send.assert_called_once_with(
+        to=&quot;alice@example.com&quot;,
+        template=&quot;welcome&quot;
+    )
+</code></pre>
+<pre><code class="language-python"># ❌ 过度 Mock：把内部实现细节全部 Mock
+@patch(&quot;myapp.services.UserService._validate_email&quot;)
+@patch(&quot;myapp.services.UserService._check_username&quot;)
+@patch(&quot;myapp.services.UserService._hash_password&quot;)
+def test_create_user(mock_hash, mock_check, mock_validate):
+    # 把自己内部逻辑全 mock 了还测什么？
+    pass
+</code></pre>
+<h3>一个值得用的模式：Contract Test</h3>
+<p>接口定义好之后，用 Contract Test 保证实现一致性：</p>
+<pre><code class="language-python">from abc import ABC, abstractmethod
+
+class UserRepository(ABC):
+    @abstractmethod
+    def save(self, user): ...
+    @abstractmethod
+    def find_by_id(self, user_id): ...
+
+# Contract Test
+class UserRepositoryContract:
+    def test_save_and_find(self):
+        repo = self.create_repository()
+        user = User(id=1, name=&quot;Alice&quot;)
+        repo.save(user)
+        found = repo.find_by_id(1)
+        assert found.name == &quot;Alice&quot;
+
+    def test_find_nonexistent(self):
+        repo = self.create_repository()
+        assert repo.find_by_id(999) is None
+
+    # 子类实现这个方法来提供不同的实现
+    def create_repository(self) -&gt; UserRepository:
+        raise NotImplementedError
+
+# PostgreSQL 实现
+class TestPostgresUserRepository(UserRepositoryContract):
+    def create_repository(self):
+        return PostgresUserRepository(db_url=&quot;postgresql://test:test@localhost:5432/test&quot;)
+
+# 内存实现
+class TestInMemoryUserRepository(UserRepositoryContract):
+    def create_repository(self):
+        return InMemoryUserRepository()
+</code></pre>
+<p>这样切换实现时，测试也复用。</p>
+<h2>重构的艺术</h2>
+<p>TDD 的第三步"重构"是最容易被跳过的。很多人写完通过后就跑了，留下了大量坏味道。</p>
+<h3>测试本身也需要重构</h3>
+<pre><code class="language-python"># ❌ 测试中有大量重复
+def test_discount_no_coupon():
+    cart = Cart()
+    cart.add_item(&quot;book&quot;, 1, 29.9)
+    result = checkout(cart, coupon=None)
+    assert result.total == 29.9
+
+def test_discount_with_10_percent():
+    cart = Cart()
+    cart.add_item(&quot;book&quot;, 1, 29.9)
+    result = checkout(cart, coupon=&quot;DISCOUNT10&quot;)
+    assert result.total == 26.91
+
+def test_discount_with_20_percent():
+    cart = Cart()
+    cart.add_item(&quot;book&quot;, 1, 29.9)
+    result = checkout(cart, coupon=&quot;DISCOUNT20&quot;)
+    assert result.total == 23.92
+</code></pre>
+<p>提取公共逻辑：</p>
+<pre><code class="language-python">import pytest
+
+@pytest.fixture
+def cart_with_book():
+    cart = Cart()
+    cart.add_item(&quot;book&quot;, 1, 29.9)
+    return cart
+
+def test_discount_no_coupon(cart_with_book):
+    result = checkout(cart_with_book, coupon=None)
+    assert result.total == 29.9
+
+@pytest.mark.parametrize(&quot;coupon,expected&quot;, [
+    (&quot;DISCOUNT10&quot;, 26.91),
+    (&quot;DISCOUNT20&quot;, 23.92),
+    (&quot;DISCOUNT50&quot;, 14.95),
+])
+def test_discount_with_coupon(cart_with_book, coupon, expected):
+    result = checkout(cart_with_book, coupon=coupon)
+    assert result.total == expected
+</code></pre>
+<h3>生产代码重构的保险</h3>
+<p>TDD 的测试集就是重构的安全网。但要让它真正发挥作用：</p>
+<pre><code class="language-python"># ✅ 重构前：先确认测试全部通过
+import subprocess
+
+def run_tests():
+    result = subprocess.run([&quot;pytest&quot;, &quot;-x&quot;, &quot;--tb=short&quot;], capture_output=True, text=True)
+    assert result.returncode == 0, f&quot;Tests failed before refactoring:\n{result.stdout}&quot;
+
+# 然后放心重构
+def calculate_discount(total: float, coupon: str | None) -&gt; float:
+    &quot;&quot;&quot;把分散在各个地方的优惠计算集中到一处&quot;&quot;&quot;
+    if coupon is None:
+        return total
+
+    discounts = {
+        &quot;DISCOUNT10&quot;: 0.9,
+        &quot;DISCOUNT20&quot;: 0.8,
+        &quot;DISCOUNT50&quot;: 0.5,
+    }
+
+    return total * discounts.get(coupon, 1.0)
+</code></pre>
+<p>重构后跑测试，如果全绿，说明重构成功。</p>
+<h2>边界测试：容易被忽略的角落</h2>
+<p>大部分测试覆盖的是"快乐路径"，边界值往往被忽略。但生产环境的 bug 大多出在边界上。</p>
+<h3>数值边界</h3>
+<pre><code class="language-python">import pytest
+
+def test_discount_boundaries():
+    # 零金额
+    assert checkout(Cart(), coupon=&quot;DISCOUNT10&quot;).total == 0
+
+    # 超大金额
+    big_cart = Cart()
+    big_cart.add_item(&quot;expensive_stuff&quot;, 1, 1_000_000)
+    result = checkout(big_cart, coupon=&quot;DISCOUNT50&quot;)
+    assert result.total == 500_000  # 不会溢出
+
+    # 负数金额（异常情况）
+    with pytest.raises(InvalidPriceError):
+        Cart().add_item(&quot;bad&quot;, 1, -100)
+</code></pre>
+<h3>字符串边界</h3>
+<pre><code class="language-python">@pytest.mark.parametrize(&quot;username,expected&quot;, [
+    (&quot;a&quot;, True),          # 最小有效
+    (&quot;a&quot; * 50, True),     # 最大有效
+    (&quot;&quot;, False),          # 空字符串
+    (&quot;a&quot; * 51, False),    # 超长
+    (&quot;user@name&quot;, False), # 特殊字符
+    (None, False),        # None
+])
+def test_username_validation(username, expected):
+    assert validate_username(username) == expected
+</code></pre>
+<h3>并发边界</h3>
+<pre><code class="language-python">import threading
+import time
+
+def test_concurrent_checkout():
+    cart = Cart()
+    cart.add_item(&quot;limited_item&quot;, 1, 99.9)
+
+    # 库存只有1件
+    results = []
+    errors = []
+
+    def try_checkout(user_id):
+        try:
+            result = checkout(cart, user_id=user_id)
+            results.append(result)
+        except OutOfStockError:
+            errors.append(user_id)
+
+    threads = [
+        threading.Thread(target=try_checkout, args=(i,))
+        for i in range(10)
+    ]
+
+    for t in threads:
+        t.start()
+    for t in threads:
+        t.join()
+
+    assert len(results) == 1  # 只有一个人成功
+    assert len(errors) == 9   # 其他人获取&quot;已售罄&quot;
+</code></pre>
+<h2>测试驱动设计：TDD 的真正价值</h2>
+<p>TDD 最大的好处不是"更少的 bug"，而是<strong>更好的设计</strong>。</p>
+<h3>可测试性 = 可维护性</h3>
+<p>如果一个函数很难写测试，往往意味着它的设计有问题。</p>
+<pre><code class="language-python"># ❌ 难以测试：硬编码依赖
+def process_order(order_id):
+    db = Database(&quot;mysql://...&quot;)
+    order = db.query(f&quot;SELECT * FROM orders WHERE id = {order_id}&quot;)
+    email_client = EmailClient(&quot;smtp://...&quot;)
+    email_client.send(order.user_email, &quot;Order processed&quot;)
+    return &quot;OK&quot;
+</code></pre>
+<p>改为依赖注入后，不仅可测试，还更灵活：</p>
+<pre><code class="language-python"># ✅ 可测试设计：依赖注入
+def process_order(
+    order_id: int,
+    db: Database | None = None,
+    email: EmailClient | None = None
+):
+    db = db or Database()
+    email = email or EmailClient()
+
+    order = db.find_order(order_id)
+    email.send(order.user_email, &quot;Order processed&quot;)
+    return &quot;OK&quot;
+
+# 测试中传递 mock
+def test_process_order():
+    mock_db = Mock()
+    mock_db.find_order.return_value = Order(user_email=&quot;test@test.com&quot;)
+    mock_email = Mock()
+
+    result = process_order(1, db=mock_db, email=mock_email)
+
+    assert result == &quot;OK&quot;
+    mock_email.send.assert_called_once()
+</code></pre>
+<h3>测试驱动的 API 设计</h3>
+<p>写客户端代码之前先写测试，逼你从使用者角度思考 API：</p>
+<pre><code class="language-python"># 先写使用场景
+from mylib import DataProcessor
+import pytest
+
+def test_data_processor_pipeline():
+    data = [1, 2, 3, 4, 5]
+    pipeline = DataProcessor()
+
+    result = (
+        pipeline
+        .load(data)
+        .filter(lambda x: x &gt; 2)
+        .map(lambda x: x * 2)
+        .reduce(lambda a, b: a + b)
+    )
+
+    assert result == 28  # (3+4+5) * 2 还是 3*2 + 4*2 + 5*2?
+</code></pre>
+<p>写成这样你才清楚 API 到底要怎样设计才自然。</p>
+<h2>常见误区一览</h2>
+<table>
+<thead>
+<tr>
+<th>误区</th>
+<th>正确做法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>测试私有方法</td>
+<td>只测试公开行为</td>
+</tr>
+<tr>
+<td>一个测试走完整流程</td>
+<td>拆成小步，每个测试只验证一件事</td>
+</tr>
+<tr>
+<td>过度 Mock 一切</td>
+<td>只在外部系统边界用 Mock，内部用 Fake</td>
+</tr>
+<tr>
+<td>测试通过后跳过重构</td>
+<td>红-绿-重构缺一不可</td>
+</tr>
+<tr>
+<td>不测边界值</td>
+<td>边界值是高发 bug 区，必须覆盖</td>
+</tr>
+<tr>
+<td>写代码前不写测试</td>
+<td>TDD 的核心是测试先行，先设计再实现</td>
+</tr>
+</tbody>
+</table>
+<p>上面这些坑我自己都踩过。<strong>TDD 不是死板的流程，而是一套反馈循环</strong>——写测试让你先想清楚要什么，实现让它变绿，重构让代码保持整洁。三者缺一不可。</p>
+<h2>写在最后</h2>
+<p>TDD 不容易，它需要练习和耐心。但一旦掌握了正确的节奏，你会发现：</p>
+<ol>
+<li><strong>编写测试让你先思考设计，而不是一头扎进实现</strong></li>
+<li><strong>三角测量和转换优先级帮你写出刚好够用的代码</strong></li>
+<li><strong>测试替身让你隔离关注点，但不滥用</strong></li>
+<li><strong>重构不是可选项，它是 TDD 的核心环节</strong></li>
+<li><strong>边界测试保护你不在小角落里翻车</strong></li>
+</ol>
+<p>TDD 是一种技能，不是看来的。动手写吧。</p>
+<hr />
+<p>如果你对某一部分特别感兴趣，或者在实际项目中遇到过 TDD 的坑，欢迎留言讨论。</p>
+      </article>
+    </div>
+  </main>
+
+  <!-- Related Posts / Navigation -->
+  <section class="section" style="padding-top: 0;">
+    <div class="container container-narrow">
+      <hr style="border: none; border-top: 1px solid var(--color-border); margin: var(--space-3xl) 0;">
+      
+      <div class="blog-topics" style="margin-bottom: var(--space-xl);">
+        <span class="topic-label">读完之后：</span>
+        <a href="../index.html" class="topic-tag">返回博客列表</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <p class="footer-signature">写代码，做产品，也认真生活。</p>
+      <div class="footer-social">
+        <a href="https://github.com/zzdbilly" class="footer-social-link" target="_blank" rel="noopener" aria-label="GitHub">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+        </a>
+        <a href="../../rss.xml" class="footer-social-link" aria-label="RSS">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+      </div>
+      <div class="footer-links">
+        <a href="../../index.html" class="footer-link">首页</a>
+        <a href="../../projects/index.html" class="footer-link">项目</a>
+        <a href="../../about/index.html" class="footer-link">关于</a>
+      </div>
+      <p class="footer-copyright">
+        &copy; 2026 张小猛
+      </p>
+    </div>
+  </footer>
+
+  
+  <script defer src="../../assets/js/related-posts.js"></script>
+  <script defer src="../../assets/js/main.js"></script>
+  <script defer src="../../assets/js/article.js"></script>
+  <script defer src="../../assets/js/share.js"></script>
+  <script defer src="../../assets/js/back-to-top.js"></script>
+
+  <!-- Back to Top & Reading Progress -->
+  <button class="back-to-top" id="backToTop" aria-label="回到顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
+  <div class="reading-progress" id="readingProgress"></div>
+
+  <!-- Post TOC -->
+  <div class="post-toc-container" id="postToc">
+    <nav class="post-toc">
+      <div class="post-toc-title">目录</div>
+      <ul class="post-toc-list" id="tocList">
+      </ul>
+    </nav>
+  </div>
+<script defer src="../../assets/js/particles.js"></script>
+
+  <!-- highlight.js for code syntax highlighting -->
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // 只对没有 codehilite 的代码块应用 highlight.js
+      document.querySelectorAll('pre code').forEach(function(block) {
+        // 跳过已经有 Pygments 高亮的块
+        if (!block.closest('.codehilite') && !block.classList.contains('hljs')) {
+          hljs.highlightElement(block);
+        }
+      });
+    });
+  </script>
+
+  <!-- Cloudflare Web Analytics -->
+  <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "29e7cff6f37448989538e2165cb79187"}'></script>
+</body>
+</html>
