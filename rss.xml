@@ -7,6 +7,14 @@
     <language>zh-CN</language>
     <atom:link href="https://709527.xyz/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>Rust 在 AI 基础设施中的崛起：为什么大模型框架纷纷拥抱 Rust</title>
+      <link>https://709527.xyz/blog/posts/rust-在-ai-基础设施中的崛起为什么大模型框架纷纷拥抱-rust.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/rust-在-ai-基础设施中的崛起为什么大模型框架纷纷拥抱-rust.html</guid>
+      <description>从 HuggingFace 的 tokenizer 到 LLM 推理引擎，从向量数据库到数据处理管道——Rust 正在改写 AI 基础设施的底层规则。本文深入分析 Rust 为何崛起、谁在用、以及如何融入你的技术栈。</description>
+      <category>开发</category>
+      <pubDate>Tue, 14 Jul 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
       <title>从 TDD 到 TDD²：测试驱动开发的进阶实践</title>
       <link>https://709527.xyz/blog/posts/从-tdd-到-tdd²测试驱动开发的进阶实践.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/从-tdd-到-tdd²测试驱动开发的进阶实践.html</guid>
@@ -157,14 +165,6 @@
       <description>制造业精益思想如何重塑软件开发流程——从丰田生产系统到敏捷开发，从5S方法论到持续交付，跨行业视角下的效率革命</description>
       <category>思考</category>
       <pubDate>Thu, 02 Jul 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>技术人如何学习新技术</title>
-      <link>https://709527.xyz/blog/posts/how-tech-people-learn-new-tech.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/how-tech-people-learn-new-tech.html</guid>
-      <description>从被动输入到主动输出，80/20 法则选技术，知识体系建立，实践驱动学习，构建记忆宫殿，善用 AI 与社群</description>
-      <category>思考</category>
-      <pubDate>Wed, 01 Jul 2026 00:00:00 +0800</pubDate>
     </item>
   </channel>
 </rss>

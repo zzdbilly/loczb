@@ -4,6 +4,7 @@
 
 // Article index with tags
 const ARTICLE_INDEX = [
+  { slug: "rust-在-ai-基础设施中的崛起为什么大模型框架纷纷拥抱-rust", tags: ["Rust", "AI", "大模型", "基础设施", "性能优化"], title: "Rust 在 AI 基础设施中的崛起：为什么大模型框架纷纷拥抱 Rust" },
   { slug: "从-tdd-到-tdd²测试驱动开发的进阶实践", tags: ["TDD", "测试", "开发实践", "重构"], title: "从 TDD 到 TDD²：测试驱动开发的进阶实践" },
   { slug: "医生不会告诉你的健康习惯从睡眠到饮食的系统性方案", tags: ["健康", "生活习惯", "效率", "心理"], title: "医生不会告诉你的健康习惯：从睡眠到饮食的系统性方案" },
   { slug: "prisma-orm-完全指南从入门到实战", tags: ["Prisma", "TypeScript", "PostgreSQL", "ORM", "数据库", "Next.js"], title: "Prisma ORM 完全指南：从入门到实战" },
