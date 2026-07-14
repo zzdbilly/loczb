@@ -1,6 +1,21 @@
 {
   "posts": [
     {
+      "slug": "rust-在-ai-基础设施中的崛起为什么大模型框架纷纷拥抱-rust",
+      "title": "Rust 在 AI 基础设施中的崛起：为什么大模型框架纷纷拥抱 Rust",
+      "date": "2026-07-14",
+      "category": "开发",
+      "tags": [
+        "Rust",
+        "AI",
+        "大模型",
+        "基础设施",
+        "性能优化"
+      ],
+      "excerpt": "从 HuggingFace 的 tokenizer 到 LLM 推理引擎，从向量数据库到数据处理管道——Rust 正在改写 AI 基础设施的底层规则。本文深入分析 Rust 为何崛起、谁在用、以及如何融入你的技术栈。",
+      "url": "blog/posts/rust-在-ai-基础设施中的崛起为什么大模型框架纷纷拥抱-rust.html"
+    },
+    {
       "slug": "从-tdd-到-tdd²测试驱动开发的进阶实践",
       "title": "从 TDD 到 TDD²：测试驱动开发的进阶实践",
       "date": "2026-07-12",
@@ -1165,7 +1180,7 @@
     },
     {
       "tag": "AI",
-      "count": 11
+      "count": 12
     },
     {
       "tag": "Kotlin",
@@ -1180,12 +1195,20 @@
       "count": 5
     },
     {
+      "tag": "性能优化",
+      "count": 4
+    },
+    {
       "tag": "Android 16",
       "count": 4
     },
     {
       "tag": "AI 工具",
       "count": 4
+    },
+    {
+      "tag": "Rust",
+      "count": 3
     },
     {
       "tag": "效率",
@@ -1201,10 +1224,6 @@
     },
     {
       "tag": "MCP",
-      "count": 3
-    },
-    {
-      "tag": "性能优化",
       "count": 3
     },
     {
@@ -1340,10 +1359,6 @@
       "count": 2
     },
     {
-      "tag": "Rust",
-      "count": 2
-    },
-    {
       "tag": "Compose Multiplatform",
       "count": 2
     },
@@ -1378,6 +1393,14 @@
     {
       "tag": "OpenClaw",
       "count": 2
+    },
+    {
+      "tag": "大模型",
+      "count": 1
+    },
+    {
+      "tag": "基础设施",
+      "count": 1
     },
     {
       "tag": "TDD",
@@ -2115,8 +2138,13 @@
   "archives": [
     {
       "month": "2026-07",
-      "count": 25,
+      "count": 26,
       "posts": [
+        {
+          "title": "Rust 在 AI 基础设施中的崛起：为什么大模型框架纷纷拥抱 Rust",
+          "date": "2026-07-14",
+          "url": "blog/posts/rust-在-ai-基础设施中的崛起为什么大模型框架纷纷拥抱-rust.html"
+        },
         {
           "title": "从 TDD 到 TDD²：测试驱动开发的进阶实践",
           "date": "2026-07-12",
@@ -2573,9 +2601,9 @@
     "安全"
   ],
   "stats": {
-    "totalPosts": 82,
-    "totalTags": 238,
-    "latestDate": "2026-07-12",
+    "totalPosts": 83,
+    "totalTags": 240,
+    "latestDate": "2026-07-14",
     "oldestDate": "2026-02-15"
   }
 }

@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rust 在 AI 基础设施中的崛起：为什么大模型框架纷纷拥抱 Rust | 张小猛 - loczb</title>
+    <meta name="description" content="从 HuggingFace 的 tokenizer 到 LLM 推理引擎，从向量数据库到数据处理管道——Rust 正在改写 AI 基础设施的底层规则。本文深入分析 Rust 为何崛起、谁在用、以及如何融入你的技术栈。">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Rust 在 AI 基础设施中的崛起：为什么大模型框架纷纷拥抱 Rust | 张小猛 - loczb">
+    <meta property="og:description" content="从 HuggingFace 的 tokenizer 到 LLM 推理引擎，从向量数据库到数据处理管道——Rust 正在改写 AI 基础设施的底层规则。本文深入分析 Rust 为何崛起、谁在用、以及如何融入你的技术栈。">
+    <meta property="og:url" content="https://709527.xyz/blog/posts/rust-在-ai-基础设施中的崛起为什么大模型框架纷纷拥抱-rust.html">
+    <meta property="og:type" content="article">
+        <meta property="og:image" content="../../assets/images/og-image.png">
+    <meta property="og:site_name" content="loczb">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Rust 在 AI 基础设施中的崛起：为什么大模型框架纷纷拥抱 Rust | 张小猛 - loczb">
+    <meta name="twitter:description" content="从 HuggingFace 的 tokenizer 到 LLM 推理引擎，从向量数据库到数据处理管道——Rust 正在改写 AI 基础设施的底层规则。本文深入分析 Rust 为何崛起、谁在用、以及如何融入你的技术栈。">
+
+    
+        <script type="application/ld+json">
+{
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "Rust 在 AI 基础设施中的崛起：为什么大模型框架纷纷拥抱 Rust",
+      "description": "从 HuggingFace 的 tokenizer 到 LLM 推理引擎，从向量数据库到数据处理管道——Rust 正在改写 AI 基础设施的底层规则。本文深入分析 Rust 为何崛起、谁在用、以及如何融入你的技术栈。",
+      "image": "https://709527.xyz/assets/images/og-image.png",
+      "author": {
+            "@type": "Person",
+            "name": "张小猛",
+            "url": "https://709527.xyz/about/"
+      },
+      "publisher": {
+            "@type": "Organization",
+            "name": "loczb",
+            "logo": {
+                  "@type": "ImageObject",
+                  "url": "https://709527.xyz/assets/images/favicon.svg"
+            }
+      },
+      "datePublished": "2026-07-14 15:19:26T00:00:00+08:00",
+      "dateModified": "2026-07-14 15:19:26T00:00:00+08:00",
+      "url": "https://709527.xyz/blog/posts/rust-在-ai-基础设施中的崛起为什么大模型框架纷纷拥抱-rust.html",
+      "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://709527.xyz/blog/posts/rust-在-ai-基础设施中的崛起为什么大模型框架纷纷拥抱-rust.html"
+      },
+      "keywords": "Rust, AI, 大模型, 基础设施, 性能优化",
+      "articleSection": "开发",
+      "timeRequired": "PT12M",
+      "inLanguage": "zh-CN"
+}
+    </script>
+    
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&family=Noto+Sans+SC:wght@500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500&display=swap" media="print" onload="this.media='all'">
+    <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
+    <link rel="alternate icon" href="../../assets/images/favicon.ico">
+</head>
+<body>
+  <!-- Loading -->
+  <div class="loading">
+    <div class="loading-spinner"></div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../../index.html" class="nav-logo">
+        loc<span>zb</span>
+      </a>
+      <button class="nav-toggle" aria-label="打开菜单" aria-expanded="false" aria-controls="nav-links-menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <div class="nav-overlay"></div>
+      <ul class="nav-links" id="nav-links-menu">
+        <li><a href="../../index.html" class="nav-link">首页</a></li>
+        <li><a href="../../projects/index.html" class="nav-link">项目</a></li>
+        <li><a href="../index.html" class="nav-link active">博客</a></li>
+        <li><a href="../../about/index.html" class="nav-link">关于</a></li>
+      </ul>
+      <button class="theme-toggle" aria-label="切换主题" title="切换亮/暗模式">
+        <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+        <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+      </button>
+    </div>
+  </nav>
+  <!-- Particle Canvas Background -->
+  <canvas id="particle-canvas" class="particle-canvas"></canvas>
+
+  <div class="scroll-progress"></div>
+
+  <main class="section" style="padding-bottom: 0; padding-top: var(--space-4xl);">
+    <div class="container container-narrow">
+      <a href="../index.html" class="back-link">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        返回博客列表
+      </a>
+
+      <article class="post-content">
+        <h1>Rust 在 AI 基础设施中的崛起：为什么大模型框架纷纷拥抱 Rust</h1>
+        
+        <div class="post-meta">
+          <span>📅 2026-07-14 15:19:26</span>
+          <span>⏱️ 12 min read</span>
+          <span>👤 张小猛</span>
+        </div>
+        
+        <div class="post-tags">
+          <span class="tag">Rust</span>
+          <span class="tag">AI</span>
+          <span class="tag">大模型</span>
+          <span class="tag">基础设施</span>
+          <span class="tag">性能优化</span>
+        </div>
+        
+        <p>近年来，AI 基础设施经历了飞速的发展。从早期的 Python 原型验证，到如今的工业级生产部署，对性能、安全性和可维护性的要求不断提升。在这个演进过程中，<strong>Rust</strong> 语言凭借其独特的优势，正在悄然改变 AI 基础设施的底层格局。</p>
+<p>如果你关注 AI 领域的技术趋势，你会发现越来越多的关键项目开始使用 Rust——从 HuggingFace 的 tokenizer 到数百个 PyTorch 的底层依赖，从 LLM 推理引擎到向量数据库。本文将深入分析 Rust 为什么在 AI 基础设施中崛起，以及它正在如何重塑这个领域。</p>
+<h2>Rust 在 AI 领域的现状</h2>
+<h3>谁在使用 Rust？</h3>
+<p>先看几个标志性的 Rust AI 项目：</p>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>领域</th>
+<th>Rust 角色</th>
+<th>GitHub Stars</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Candle</strong></td>
+<td>LLM 推理框架</td>
+<td>纯 Rust 实现</td>
+<td>16k+</td>
+</tr>
+<tr>
+<td><strong>Mistral.rs</strong></td>
+<td>LLM 推理引擎</td>
+<td>纯 Rust 实现</td>
+<td>6k+</td>
+</tr>
+<tr>
+<td><strong>Burn</strong></td>
+<td>深度学习框架</td>
+<td>纯 Rust 实现</td>
+<td>10k+</td>
+</tr>
+<tr>
+<td><strong>Tokenizers</strong></td>
+<td>分词器</td>
+<td>Rust 核心 + Python 绑定</td>
+<td>9k+</td>
+</tr>
+<tr>
+<td><strong>Polars</strong></td>
+<td>数据处理</td>
+<td>Rust 核心引擎</td>
+<td>33k+</td>
+</tr>
+<tr>
+<td><strong>Qdrant</strong></td>
+<td>向量数据库</td>
+<td>纯 Rust 实现</td>
+<td>22k+</td>
+</tr>
+<tr>
+<td><strong>Lance</strong></td>
+<td>列式存储</td>
+<td>Rust 核心</td>
+<td>4k+</td>
+</tr>
+<tr>
+<td><strong>safetensors</strong></td>
+<td>安全张量格式</td>
+<td>Rust 实现</td>
+<td>3k+</td>
+</tr>
+<tr>
+<td><strong>Tract</strong></td>
+<td>ONNX 推理</td>
+<td>纯 Rust 实现</td>
+<td>3k+</td>
+</tr>
+<tr>
+<td><strong>Rerun</strong></td>
+<td>可视化日志</td>
+<td>Rust 核心</td>
+<td>7k+</td>
+</tr>
+</tbody>
+</table>
+<h3>为什么是现在？</h3>
+<p>AI 基础设施正在经历三个关键转变，让 Rust 的时机成熟了：</p>
+<pre><code class="language-rust">// 1. 推理优化需求激增
+// 生产环境中，推理效率和部署简洁性压倒训练灵活性
+// Rust 的零成本抽象 + 无 GC 特性完美匹配
+
+// 2. 边缘设备部署
+// 从手机到嵌入式设备需要无运行时依赖
+// Rust 编译为原生二进制，不依赖 Python runtime
+
+// 3. 安全性和正确性
+// 内存安全 + 类型系统在关键基础设施中至关重要
+// Rust 的所有权系统从编译层面消除了数据竞争
+</code></pre>
+<h2>性能优势：C 和 C++ 的替代者</h2>
+<h3>零成本抽象</h3>
+<p>Rust 对 AI 工作负载最直接的吸引力就是性能。与 C++ 相比，Rust 在绝大多数场景下性能相当甚至更好，同时提供了更高层次的安全保证。</p>
+<pre><code class="language-rust">// Rust 实现矩阵乘法（简化示例）
+fn matmul_f32(a: &amp;[f32], b: &amp;[f32], m: usize, n: usize, k: usize) -&gt; Vec&lt;f32&gt; {
+    let mut c = vec![0.0f32; m * n];
+    for i in 0..m {
+        for j in 0..n {
+            let sum: f32 = (0..k)
+                .map(|l| a[i * k + l] * b[l * n + j])
+                .sum();
+            c[i * n + j] = sum;
+        }
+    }
+    c
+}
+</code></pre>
+<h3>SIMD 和向量化</h3>
+<p>Rust 通过 <code>std::simd</code> 和 <code>portable_simd</code> 提供平台无关的 SIMD 操作：</p>
+<pre><code class="language-rust">use std::simd::f32x8;
+
+// SIMD 优化的向量点积
+fn dot_product_simd(a: &amp;[f32], b: &amp;[f32]) -&gt; f32 {
+    let chunks = a.len() / 8;
+    let mut sum = f32x8::splat(0.0);
+
+    for i in 0..chunks {
+        let va = f32x8::from_slice(&amp;a[i * 8..]);
+        let vb = f32x8::from_slice(&amp;b[i * 8..]);
+        sum += va * vb;
+    }
+
+    // Sum reduction
+    sum.reduce_sum()
+}
+</code></pre>
+<h3>内存效率</h3>
+<p>AI 模型的核心是张量运算，这意味着大量的内存访问。Rust 的所有权系统让开发者能够精确控制内存布局，减少缓存未命中：</p>
+<pre><code class="language-rust">// 连续内存布局：更适合 SIMD 和缓存
+#[repr(C)]
+struct TensorView&lt;'a, T&gt; {
+    data: &amp;'a [T],
+    shape: &amp;'a [usize],
+    strides: &amp;'a [usize],
+}
+
+// 与 PyTorch 的 Tensor 元数据等价
+// 但 Rust 版本零开销，编译时验证
+</code></pre>
+<h2>安全保证：消除内存错误</h2>
+<h3>内存安全的代价</h3>
+<p>AI 框架（尤其是 PyTorch、TensorFlow）C++ 核心中内存安全问题层出不穷。Rust 的所有权模型从根本上解决了这些问题：</p>
+<pre><code class="language-rust">// C++ 中的典型 Bug
+// float* data = new float[size];
+// delete[] data;
+// data[0] = 1.0f;  // Use-after-free!
+
+// Rust 中的等价代码 — 编译失败
+// let data = vec![0.0f32; size];
+// drop(data);
+// data[0] = 1.0;  // ❌ borrow of moved value
+</code></pre>
+<h3>并发安全</h3>
+<p>在 AI 推理中，并行计算是常态。Rust 的 Send + Sync trait 在编译时保证线程安全：</p>
+<pre><code class="language-rust">use std::sync::Arc;
+use std::thread;
+
+// 安全并发：多个线程同时读取模型权重
+struct InferenceEngine {
+    weights: Arc&lt;Vec&lt;f32&gt;&gt;,
+    config: Arc&lt;InferenceConfig&gt;,
+}
+
+impl InferenceEngine {
+    fn parallel_infer(&amp;self, inputs: Vec&lt;Input&gt;) -&gt; Vec&lt;Output&gt; {
+        inputs.into_par_iter()
+            .map(|input| self.forward(&amp;input))
+            .collect()
+    }
+}
+
+// 编译器保证：Arc&lt;T&gt; 是 Send + Sync
+// 数据竞争在编译时就被消除了
+</code></pre>
+<h2>Python 生态的完美互补</h2>
+<h3>PyO3 和 maturin：Rust → Python 绑定</h3>
+<p>Rust 在 AI 领域的崛起不是因为要取代 Python，而是成为 Python 的"性能后盾"。PyO3 + maturin 让这个结合变得异常简单：</p>
+<pre><code class="language-rust">use pyo3::prelude::*;
+
+// 在 Rust 中实现高性能 tokenizer
+#[pyclass]
+struct FastTokenizer {
+    vocab: HashMap&lt;String, u32&gt;,
+}
+
+#[pymethods]
+impl FastTokenizer {
+    #[new]
+    fn new(vocab: HashMap&lt;String, u32&gt;) -&gt; Self {
+        FastTokenizer { vocab }
+    }
+
+    // 比纯 Python 快 10-100x 的方法
+    fn encode(&amp;self, text: &amp;str) -&gt; Vec&lt;u32&gt; {
+        text.split_whitespace()
+            .map(|w| self.vocab.get(w).copied().unwrap_or(0))
+            .collect()
+    }
+}
+
+#[pymodule]
+fn fast_tokenizer(m: &amp;Bound&lt;'_, PyModule&gt;) -&gt; PyResult&lt;()&gt; {
+    m.add_class::&lt;FastTokenizer&gt;()?;
+    Ok(())
+}
+</code></pre>
+<pre><code class="language-bash"># 一行命令构建
+maturin develop
+</code></pre>
+<h3>性能对比</h3>
+<pre><code class="language-python"># Python 实现
+def slow_tokenize(text, vocab):
+    return [vocab.get(w, 0) for w in text.split()]
+
+# 调用 Rust 实现
+from fast_tokenizer import FastTokenizer
+
+tokenizer = FastTokenizer(vocab)
+tokens = tokenizer.encode(&quot;Hello world&quot;)
+
+# 速度对比（100 万次调用）：
+# Python: 12.4s
+# Rust:   0.18s ← 69x 更快
+</code></pre>
+<h3>npy / safetensors：序列化格式</h3>
+<p>HuggingFace 的 safetensors 格式使用 Rust 重写其核心序列化逻辑，实现了比 pickle 更安全、更高效的张量存储：</p>
+<pre><code class="language-rust">// safetensors 核心数据结构
+#[derive(Serialize, Deserialize)]
+struct SafeTensorsHeader {
+    metadata: HashMap&lt;String, String&gt;,
+    tensors: Vec&lt;TensorInfo&gt;,
+}
+
+#[derive(Serialize, Deserialize)]
+struct TensorInfo {
+    name: String,
+    dtype: DType,
+    shape: Vec&lt;usize&gt;,
+    data_offsets: (usize, usize),
+}
+
+// 零拷贝反序列化（mmap 友好）
+fn load_safetensors(path: &amp;Path) -&gt; Result&lt;HashMap&lt;String, Tensor&gt;&gt; {
+    let file = std::fs::File::open(path)?;
+    let mmap = unsafe { memmap2::Mmap::map(&amp;file)? };
+    // ... 直接读取 mmap 数据
+}
+</code></pre>
+<h2>LLM 推理框架的 Rust 实践</h2>
+<h3>Candle：最小化依赖的 LLM 推理</h3>
+<p>Candle 是 HuggingFace 推出的纯 Rust LLM 推理框架，设计目标是无 CUDA 依赖 + 最小化二进制体积：</p>
+<pre><code class="language-rust">use candle_core::{Device, Tensor};
+use candle_nn::{Linear, VarBuilder};
+use candle_transformers::models::llama as model;
+
+// 加载 LLaMA 模型进行推理
+fn main() -&gt; Result&lt;()&gt; {
+    // 使用 CPU（也可指定 CUDA）
+    let device = Device::Cpu;
+
+    // 加载 safetensors 权重
+    let vb = unsafe {
+        VarBuilder::from_mmaped_safetensors(
+            &amp;[&quot;model.safetensors&quot;],
+            DType::F32,
+            &amp;device,
+        )?
+    };
+
+    let config = model::Config::config_7b_v1();
+    let llama = model::Llama::load(vb, &amp;config)?;
+
+    // 推理
+    let input = Tensor::new(&amp;[1u32, 100, 200], &amp;device)?;
+    let output = llama.forward(&amp;input, 0)?;
+
+    println!(&quot;Output shape: {:?}&quot;, output.shape());
+    Ok(())
+}
+</code></pre>
+<p>Candle 的几个关键优势：</p>
+<pre><code class="language-rust">// 1. 无 CUDA 运行时依赖
+// 编译即运行，天然支持 CPU、Metal、Vulkan
+// 二进制体积 &lt; 10MB（不含模型权重）
+
+// 2. 支持 WASM
+// 可在浏览器中运行推理
+// 示例：hf.co/chat 的 Web 版推理就用 Candle WASM
+
+// 3. 量化支持（通过 Candle-quant）
+// #[cfg(feature = &quot;quantized&quot;)]
+// fn load_quantized(path: &amp;str) -&gt; Result&lt;QuantizedModel&gt; {
+//     QMatMul::from_qtensor(&amp;qmatmul)?
+// }
+</code></pre>
+<h3>Mistral.rs：生产级推理引擎</h3>
+<p>Mistral.rs 是一个完全用 Rust 实现的 LLM 推理引擎，支持 GGUF、GGML、Safetensors 格式，以及 ISQ（原位量化）：</p>
+<pre><code class="language-rust">use mistralrs::{
+    IsqType, MistralRs, MistralRsBuilder,
+    ModelSelected, Loader, GGUFLoaderBuilder,
+};
+
+#[tokio::main]
+async fn main() -&gt; Result&lt;()&gt; {
+    // 配置加载器
+    let loader = GGUFLoaderBuilder::new(
+        &quot;models/Phi-3-mini-4k-instruct-q4.gguf&quot;,
+    )
+    .with_isq(IsqType::Q4_0)
+    .build();
+
+    // 初始化引擎
+    let mistralrs = MistralRsBuilder::new(loader, 1)
+        .with_isq(IsqType::Q4K)
+        .build()
+        .await?;
+
+    // 流式推理
+    let mut stream = mistralrs
+        .send(Messages::new(&quot;你是谁?&quot;))
+        .await?;
+
+    // 逐 token 输出
+    while let Some(chunk) = stream.next().await {
+        print!(&quot;{}&quot;, chunk);
+    }
+
+    Ok(())
+}
+</code></pre>
+<h2>向量数据库的 Rust 选择</h2>
+<h3>Qdrant：性能与可靠性的平衡</h3>
+<p>在向量数据库领域，Qdrant 是 Rust 实力的最佳证明。它比 Milvus（Go）和 Pinecone 的底层更高效：</p>
+<pre><code class="language-rust">// Qdrant 核心索引结构
+pub struct HNSWIndex {
+    // 分层可导航小世界图
+    levels: Vec&lt;Vec&lt;Node&gt;&gt;,
+    ef_construction: usize,
+    m: usize,  // 每层最大连接数
+}
+
+impl HNSWIndex {
+    // 近似最近邻搜索
+    pub fn search(&amp;self, query: &amp;[f32], k: usize) -&gt; Vec&lt;ScoredPoint&gt; {
+        let entry = self.levels.last().unwrap()
+            .first().unwrap();
+
+        // 贪婪搜索
+        let mut candidates: Vec&lt;ScoredPoint&gt; = vec![];
+        // ... HNSW 算法实现
+        candidates.truncate(k);
+        candidates
+    }
+}
+</code></pre>
+<pre><code class="language-rust">// Rust 的 match + enum 处理向量距离计算
+#[derive(Clone, Copy)]
+enum Distance {
+    Cosine,
+    Dot,
+    Euclid,
+}
+
+impl Distance {
+    fn compute(&amp;self, a: &amp;[f32], b: &amp;[f32]) -&gt; f32 {
+        match self {
+            Distance::Cosine =&gt; {
+                let dot = dot_product(a, b);
+                let norm_a = norm(a);
+                let norm_b = norm(b);
+                1.0 - dot / (norm_a * norm_b)
+            }
+            Distance::Dot =&gt; -dot_product(a, b),
+            Distance::Euclid =&gt; {
+                a.iter().zip(b)
+                    .map(|(x, y)| (x - y).powi(2))
+                    .sum::&lt;f32&gt;()
+                    .sqrt()
+            }
+        }
+    }
+}
+</code></pre>
+<h2>边缘计算与 WASM 部署</h2>
+<h3>在浏览器中运行 AI</h3>
+<p>Rust 的 WASM 支持让在浏览器中运行 AI 模型变得可行：</p>
+<pre><code class="language-rust">use wasm_bindgen::prelude::*;
+
+#[wasm_bindgen]
+pub struct WasmTokenizer {
+    tokenizer: tokenizers::Tokenizer,
+}
+
+#[wasm_bindgen]
+impl WasmTokenizer {
+    #[wasm_bindgen(constructor)]
+    pub fn new(json: &amp;str) -&gt; Result&lt;WasmTokenizer, JsValue&gt; {
+        let tokenizer = tokenizers::Tokenizer::from_str(json)
+            .map_err(|e| JsValue::from_str(&amp;e.to_string()))?;
+        Ok(WasmTokenizer { tokenizer })
+    }
+
+    pub fn encode(&amp;self, text: &amp;str) -&gt; Result&lt;Vec&lt;u32&gt;, JsValue&gt; {
+        let encoding = self.tokenizer
+            .encode(text, true)
+            .map_err(|e| JsValue::from_str(&amp;e.to_string()))?;
+        Ok(encoding.get_ids().to_vec())
+    }
+}
+</code></pre>
+<pre><code class="language-javascript">// 浏览器端使用
+const response = await fetch('tokenizer.json');
+const json = await response.text();
+const tokenizer = WasmTokenizer.new(json);
+
+// 分词发生在浏览器本地
+const tokens = tokenizer.encode(&quot;Hello from browser!&quot;);
+console.log(tokens);  // Uint32Array
+</code></pre>
+<h3>嵌入式设备推理</h3>
+<pre><code class="language-rust">// 在嵌入式 Linux 设备上运行 tiny model
+// 总二进制大小 &lt; 5MB，无需 Python 运行时
+#![no_std]
+#![no_main]
+
+use cortex_m_rt::entry;
+use embedded_nal::TcpStack;
+
+#[entry]
+fn main() -&gt; ! {
+    // 加载量化后的微型模型
+    let model = TinyLlama::from_bytes(include_bytes!(&quot;model.q4&quot;));
+    let input = b&quot;how are you&quot;;
+
+    // 推理
+    let output = model.predict(input);
+    print_output(&amp;output);
+
+    loop {}
+}
+</code></pre>
+<h2>数据管道：Polars + Lance</h2>
+<h3>Polars：比 Pandas 快 30x</h3>
+<p>Polars 是完全用 Rust 实现的数据框架库，其 API 与 Pandas 相似但性能差一个数量级：</p>
+<pre><code class="language-rust">use polars::prelude::*;
+
+fn process_training_data() -&gt; Result&lt;DataFrame&gt; {
+    // 惰性查询：Polars 自动优化执行计划
+    let df = LazyCsvReader::new(&quot;training_data.csv&quot;)
+        .has_header(true)
+        .finish()?
+        .filter(col(&quot;label&quot;).eq(lit(1)))  // 只处理正样本
+        .group_by([col(&quot;category&quot;)])
+        .agg([
+            col(&quot;features&quot;).apply(|s| {
+                Ok(Some(normalize(s)))
+            }).alias(&quot;normalized&quot;),
+            col(&quot;weight&quot;).sum().alias(&quot;total_weight&quot;),
+        ])
+        .collect()?;  // 在此处统一执行
+
+    // 转换为张量数据
+    let tensor = df_to_tensor(&amp;df)?;
+    Ok(df)
+}
+
+fn normalize(s: &amp;Series) -&gt; Series {
+    let arr = s.f32().unwrap();
+    let mean = arr.mean();
+    let std = arr.std(1);
+    (arr - mean) / std
+}
+</code></pre>
+<pre><code class="language-python"># 等效的 Pandas 代码
+# pandas 要大 10-30x 内存和 3-10x 时间
+import pandas as pd
+df = pd.read_csv(&quot;training_data.csv&quot;)
+df = df[df['label'] == 1]
+# ... 处理慢
+</code></pre>
+<h3>Lance：列式存储的现代选择</h3>
+<pre><code class="language-rust">// Lance 用 Rust 重写了列式存储格式
+// 比 Parquet 快 100x 的随机访问
+use lance::dataset::Dataset;
+
+#[tokio::main]
+async fn main() -&gt; Result&lt;()&gt; {
+    // 创建数据集
+    let dataset = Dataset::write(
+        records,
+        &quot;s3://training-data/embeddings.lance&quot;,
+        None,
+    ).await?;
+
+    // 快速随机访问（无需扫描整个文件）
+    let rows = dataset
+        .take(&amp;[100, 200, 300], None)
+        .await?;
+
+    // 向量相似度搜索
+    let results = dataset
+        .scan()
+        .nearest(&quot;embedding&quot;, &amp;query_embedding, 10)
+        .await?;
+
+    Ok(())
+}
+</code></pre>
+<h2>工具链和生态</h2>
+<h3>Cargo 的包管理优势</h3>
+<p>Rust 的包管理系统对 AI 基础设施开发来说是巨大的生产力提升：</p>
+<pre><code class="language-toml"># Cargo.toml — AI 项目依赖管理
+[package]
+name = &quot;my-inference-engine&quot;
+version = &quot;0.1.0&quot;
+edition = &quot;2024&quot;
+
+[dependencies]
+# 深度学习框架
+candle-core = &quot;0.8&quot;
+candle-nn = &quot;0.8&quot;
+candle-transformers = &quot;0.8&quot;
+
+# 数据处理
+polars = { version = &quot;0.44&quot;, features = [&quot;lazy&quot;, &quot;series&quot;] }
+tokenizers = &quot;0.21&quot;
+
+# 序列化
+safetensors = &quot;0.6&quot;
+serde = { version = &quot;1&quot;, features = [&quot;derive&quot;] }
+
+# 数值计算
+nalgebra = &quot;0.33&quot;
+rand = &quot;0.8&quot;
+
+# 测试
+[dev-dependencies]
+criterion = &quot;0.5&quot;  # 基准测试
+</code></pre>
+<h3>跨平台编译</h3>
+<pre><code class="language-bash"># Rust 的一键交叉编译
+# 对比 Python：每平台都需要单独安装 Python + CUDA toolkit
+
+# 编译到 Linux ARM（树莓派）
+cargo build --target aarch64-unknown-linux-gnu --release
+
+# 编译到 macOS（x86 + ARM 通用）
+cargo build --target universal-apple-darwin --release
+
+# 编译到 WASM
+cargo build --target wasm32-unknown-unknown --release
+
+# 编译到 Windows
+cargo build --target x86_64-pc-windows-gnu --release
+
+# 单条命令 = 完整的跨平台二进制
+</code></pre>
+<h2>挑战与不足</h2>
+<h3>生态系统成熟度</h3>
+<p>Rust 在 AI 领域也有明显的不足，需要客观看待：</p>
+<pre><code class="language-rust">// 1. 缺少成熟的自动微分框架
+// 当前状态：正在发展中，但远不及 PyTorch
+// candle_nn 提供有限的 autograd
+let x = Tensor::new(&amp;[1.0, 2.0, 3.0], &amp;device)?;
+let y = x.sin()?;  // 支持
+// y.backward()?;  // ❌ Candle 不支持自动求导
+
+// 2. GPU 算子支持有限
+// CUDA kernel 需要写 cu 或通过 cuda_std
+// 相比 PyTorch 的数千个算子差距巨大
+
+// 3 编译时间
+// 第一次编译：3-5 分钟
+// 增量编译：30-60 秒
+// 🔄 正在改进（增量编译、并行前端）
+</code></pre>
+<h3>社区和人才储备</h3>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>Python</th>
+<th>Rust</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AI 相关包数量</td>
+<td>50,000+</td>
+<td>500+</td>
+</tr>
+<tr>
+<td>成熟的深度学习框架</td>
+<td>PyTorch / TF / JAX</td>
+<td>Candle / Burn（Beta）</td>
+</tr>
+<tr>
+<td>学习曲线</td>
+<td>低</td>
+<td>高</td>
+</tr>
+<tr>
+<td>AI 开发者占比</td>
+<td>70%+</td>
+<td>&lt;5%</td>
+</tr>
+<tr>
+<td>技术债务风险</td>
+<td>高（代码腐化快）</td>
+<td>低（类型系统强制健壮）</td>
+</tr>
+</tbody>
+</table>
+<h2>未来展望</h2>
+<h3>趋势一：Rust 成为 AI 基础设施的"新 C++"</h3>
+<p>就像操作系统和嵌入式领域从 C 过渡到 C++（再到 Rust），AI 基础设施也会经历类似的演进。预计未来 3-5 年：</p>
+<ul>
+<li>新的推理引擎首选 Rust</li>
+<li>数据管道层全面 Rust 化</li>
+<li>Python 用于顶层编排，Rust 用于底层实现</li>
+</ul>
+<h3>趋势二：WebGPU + WASM 推理</h3>
+<p>Rust 的 WASM 支持 + WebGPU 标准，让在浏览器中运行大模型推理成为现实：</p>
+<pre><code class="language-rust">// 未来的 WebGPU 推理
+// 使用 WGPU（Rust 的 WebGPU 实现）
+async fn run_inference_webgpu(model: &amp;WgpuModel) -&gt; Result&lt;Vec&lt;f32&gt;&gt; {
+    let device = wgpu::Device::request(&amp;wgpu::RequestAdapterOptions {
+        power_preference: wgpu::PowerPreference::HighPerformance,
+        ..Default::default()
+    }).await?;
+
+    // 直接在 GPU 上推理
+    let output = model.forward(&amp;input_tensor).await?;
+    Ok(output)
+}
+</code></pre>
+<h3>趋势三：Candle 生态成熟</h3>
+<p>HuggingFace 正在全力推动 Candle 成为 Rust 领域的 PyTorch：</p>
+<pre><code>Candle + Tokenizers + Safetensors + Diffusers (Rust 版)
+                    ↓
+            完整的 Rust AI 工具链
+                    ↓
+       最终用户：不用碰一行 Python 代码
+</code></pre>
+<h2>总结</h2>
+<p>Rust 在 AI 基础设施中的崛起不是一个偶然事件，而是开发者对性能、安全性和可维护性持续追求的自然结果。它的核心价值不在于发明新的范式，而在于<strong>用更好的工程实现承载已有的 AI 理论</strong>。</p>
+<p>对于团队来说，最佳策略是<strong>混合架构</strong>：
+- <strong>顶层</strong>：Python — 原型开发、实验、数据分析
+- <strong>中间层</strong>：Rust — 高性能核心、推理引擎、数据管道
+- <strong>底层</strong>：CUDA/Metal — GPU 加速计算</p>
+<p>如果你正在构建 AI 基础设施，现在正是认真考虑 Rust 的时候。不需要全盘迁移，但至少可以让它成为你工具箱中的重要一员。</p>
+<blockquote>
+<p><strong>建议</strong>：从 tokenizer 重写或推理引擎加速开始，用 Rust 替换最消耗 CPU 的那几个函数，你的用户会感谢你。</p>
+</blockquote>
+      </article>
+    </div>
+  </main>
+
+  <!-- Related Posts / Navigation -->
+  <section class="section" style="padding-top: 0;">
+    <div class="container container-narrow">
+      <hr style="border: none; border-top: 1px solid var(--color-border); margin: var(--space-3xl) 0;">
+      
+      <div class="blog-topics" style="margin-bottom: var(--space-xl);">
+        <span class="topic-label">读完之后：</span>
+        <a href="../index.html" class="topic-tag">返回博客列表</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <p class="footer-signature">写代码，做产品，也认真生活。</p>
+      <div class="footer-social">
+        <a href="https://github.com/zzdbilly" class="footer-social-link" target="_blank" rel="noopener" aria-label="GitHub">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+        </a>
+        <a href="../../rss.xml" class="footer-social-link" aria-label="RSS">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+      </div>
+      <div class="footer-links">
+        <a href="../../index.html" class="footer-link">首页</a>
+        <a href="../../projects/index.html" class="footer-link">项目</a>
+        <a href="../../about/index.html" class="footer-link">关于</a>
+      </div>
+      <p class="footer-copyright">
+        &copy; 2026 张小猛
+      </p>
+    </div>
+  </footer>
+
+  
+  <script defer src="../../assets/js/related-posts.js"></script>
+  <script defer src="../../assets/js/main.js"></script>
+  <script defer src="../../assets/js/article.js"></script>
+  <script defer src="../../assets/js/share.js"></script>
+  <script defer src="../../assets/js/back-to-top.js"></script>
+
+  <!-- Back to Top & Reading Progress -->
+  <button class="back-to-top" id="backToTop" aria-label="回到顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
+  <div class="reading-progress" id="readingProgress"></div>
+
+  <!-- Post TOC -->
+  <div class="post-toc-container" id="postToc">
+    <nav class="post-toc">
+      <div class="post-toc-title">目录</div>
+      <ul class="post-toc-list" id="tocList">
+      </ul>
+    </nav>
+  </div>
+<script defer src="../../assets/js/particles.js"></script>
+
+  <!-- highlight.js for code syntax highlighting -->
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // 只对没有 codehilite 的代码块应用 highlight.js
+      document.querySelectorAll('pre code').forEach(function(block) {
+        // 跳过已经有 Pygments 高亮的块
+        if (!block.closest('.codehilite') && !block.classList.contains('hljs')) {
+          hljs.highlightElement(block);
+        }
+      });
+    });
+  </script>
+
+  <!-- Cloudflare Web Analytics -->
+  <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "29e7cff6f37448989538e2165cb79187"}'></script>
+</body>
+</html>
