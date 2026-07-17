@@ -1,6 +1,7 @@
 {
   "name": "loczb-comments",
   "version": "1.0.0",
+  "type": "module",
   "description": "Comment system for loczb blog using Cloudflare Workers + D1",
   "scripts": {
     "dev": "wrangler dev",
