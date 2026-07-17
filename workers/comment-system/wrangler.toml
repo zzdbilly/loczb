@@ -1,0 +1,13 @@
+name = "loczb-comments"
+main = "src/worker.js"
+compatibility_date = "2024-12-01"
+
+# D1 数据库配置
+[[d1_databases]]
+binding = "DB"
+database_name = "loczb-comments"
+database_id = ""  # 部署时替换为实际 ID（运行 wrangler d1 create loczb-comments 后获取）
+
+# 环境变量
+[vars]
+SITE_DOMAIN = "709527.xyz"
