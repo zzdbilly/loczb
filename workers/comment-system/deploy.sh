@@ -46,3 +46,4 @@ echo "✅ 部署完成！"
 echo "Worker URL: https://loczb-comments.billycust716.workers.dev"
 echo "========================================="
 
+# deploy script for remote execution
