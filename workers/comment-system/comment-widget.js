@@ -11,7 +11,7 @@
 
   // ========== 配置 ==========
   // 部署后替换为实际 Workers URL
-  const API_BASE = 'https://loczb-comments.709527.workers.dev';
+  const API_BASE = 'https://loczb-comments.billycust716.workers.dev';
   const API_URL = API_BASE + '/api/comments';
   // CSS 路径（相对于站点根目录，GitHub Pages 也能访问）
   const CSS_PATH = '/workers/comment-system/comment-widget.css';
