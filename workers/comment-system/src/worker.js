@@ -8,7 +8,18 @@
  *   GET    /api/comments/:id      - 获取单条评论（编辑用）
  *   PUT    /api/comments/:id      - 编辑评论（需 token）
  *   GET    /api/health            - 健康检查
+ *   
+ * 管理后台路由:
+ *   GET    /admin/login           - 登录页
+ *   POST   /admin/login           - 登录 API
+ *   POST   /admin/logout          - 登出
+ *   GET    /admin/dashboard       - 控制台
+ *   GET    /admin/api/comments    - 评论列表/统计（需认证）
+ *   PUT    /admin/api/comments/:id - 编辑评论（需认证）
+ *   DELETE /admin/api/comments/:id - 删除评论（需认证）
  */
+
+import { handleAdminRoute } from './admin.js';
 
 // CORS 配置
 const ALLOWED_ORIGINS = [
@@ -117,6 +128,11 @@ export default {
     // OPTIONS 预检
     if (method === 'OPTIONS') {
       return new Response(null, { headers: corsHeaders(origin) });
+    }
+
+    // === 管理后台路由 ===
+    if (path.startsWith('/admin')) {
+      return handleAdminRoute(request, env, url, method);
     }
 
     // 健康检查

@@ -11,3 +11,4 @@ database_id = "a443f934-938d-4578-9290-aa30f8b149ba"
 # 环境变量
 [vars]
 SITE_DOMAIN = "709527.xyz"
+ADMIN_PASSWORD = "admin123"
