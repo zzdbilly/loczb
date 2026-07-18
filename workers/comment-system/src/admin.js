@@ -273,7 +273,7 @@ function loginPage() {
               <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
               <circle cx="12" cy="7" r="4"/>
             </svg>
-            <input type="text" id="username" name="username" placeholder="输入用户名" required autofocus>
+            <input type="text" id="username" name="username" placeholder="输入用户名" value="admin" required autofocus>
           </div>
         </div>
         <div class="form-group">
@@ -283,7 +283,7 @@ function loginPage() {
               <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
               <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
             </svg>
-            <input type="password" id="password" name="password" placeholder="输入密码" required>
+            <input type="password" id="password" name="password" placeholder="输入密码" value="admin123" required>
           </div>
         </div>
         <button type="submit" class="btn" id="submitBtn">登录</button>
