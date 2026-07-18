@@ -10,8 +10,9 @@
  *   GET    /api/health            - 健康检查
  *   
  * 管理后台路由:
+ *   GET    /admin                 - 重定向到登录页
  *   GET    /admin/login           - 登录页
- *   POST   /admin/login           - 登录 API
+ *   POST   /admin/login           - 登录 API（用户名+密码）
  *   POST   /admin/logout          - 登出
  *   GET    /admin/dashboard       - 控制台
  *   GET    /admin/api/comments    - 评论列表/统计（需认证）
