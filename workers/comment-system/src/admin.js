@@ -107,6 +107,12 @@ function logoSVG(size = 36) {
   </svg>`;
 }
 
+// === Favicon ===
+// 与 logoSVG 同风格的聊天气泡图标，编码为 data URI
+const FAVICON_SVG = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'><defs><linearGradient id='g' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' stop-color='%237c9eff'/><stop offset='100%' stop-color='%235b7cf5'/></linearGradient></defs><rect width='48' height='48' rx='12' fill='url(%23g)'/><path d='M12 16C12 14.8954 12.8954 14 14 14H34C35.1046 14 36 14.8954 36 16V28C36 29.1046 35.1046 30 34 30H22L16 35V30H14C12.8954 30 12 29.1046 12 28V16Z' fill='white' fill-opacity='0.95'/><circle cx='20' cy='22' r='2' fill='%235b7cf5'/><circle cx='27' cy='22' r='2' fill='%235b7cf5'/><circle cx='24' cy='13' r='1.5' fill='white' fill-opacity='0.6'/></svg>`;
+
+const FAVICON_LINK = `<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,${FAVICON_SVG}">`;
+
 // === HTML 页面 ===
 
 function loginPage() {
@@ -116,6 +122,7 @@ function loginPage() {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Loczb 评论管理 - 登录</title>
+  ${FAVICON_LINK}
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -329,6 +336,7 @@ function dashboardPage() {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Loczb 评论管理 - 控制台</title>
+  ${FAVICON_LINK}
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     :root {
