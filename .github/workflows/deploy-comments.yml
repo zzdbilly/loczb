@@ -28,8 +28,19 @@ jobs:
           set -x
           echo "Token length: ${#CLOUDFLARE_API_TOKEN}"
           npx wrangler d1 list 2>&1 || true
+          # 创建数据库（如果已存在则忽略错误）
           npx wrangler d1 create loczb-comments 2>&1 || true
-          npx wrangler d1 execute loczb-comments --remote --file=schema.sql 2>&1
+          # 等待数据库就绪后执行 schema（重试最多 3 次）
+          for i in 1 2 3; do
+            echo "Attempt $i: applying schema..."
+            npx wrangler d1 execute loczb-comments --remote --file=schema.sql 2>&1 && {
+              echo "Schema applied successfully"
+              exit 0
+            }
+            [ "$i" -lt 3 ] && echo "Retrying in 5s..." && sleep 5
+          done
+          echo "Failed to apply schema after 3 attempts"
+          exit 1
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
 
