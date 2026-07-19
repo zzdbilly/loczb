@@ -250,18 +250,20 @@
       var html = '';
       archiveData.forEach(function(yg) {
         html += '<div class="archive-year">';
-        html += '<div class="archive-year-header">' + yg.year + '年 <span class="archive-count">(' + yg.count + ' 篇)</span></div>';
+        html += '<div class="archive-year-header">' + yg.year + '年 <span class="archive-count">' + yg.count + ' posts</span></div>';
         html += '<div class="archive-year-body">';
         yg.months.forEach(function(m) {
           html += '<div class="archive-month">';
-          html += '<div class="archive-month-header">' + m.month.substring(5) + '月 <span class="archive-count">(' + m.count + ' 篇)</span></div>';
+          html += '<div class="archive-month-header">' + m.month.substring(5) + '月 <span class="archive-count">' + m.count + '</span></div>';
           html += '<div class="archive-month-body">';
           m.posts.forEach(function(p) {
             var dayStr = p.date.substring(5); // MM-DD
             html += '<div class="archive-post">';
             html += '<span class="archive-post-date">' + dayStr + '</span>';
             html += '<span class="archive-post-title"><a href="posts/' + p.url.replace('blog/posts/', '') + '">' + p.title + '</a></span>';
-            html += '<span class="archive-post-cat">' + (p.category || '') + '</span>';
+            if (p.category) {
+              html += '<span class="archive-post-cat">' + p.category + '</span>';
+            }
             html += '</div>';
           });
           html += '</div>'; // archive-month-body
