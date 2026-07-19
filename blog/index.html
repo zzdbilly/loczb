@@ -63,14 +63,32 @@
       .pagination-btn { padding: 0.4rem 0.7rem; font-size: 0.85rem; }
       .pagination-ellipsis { padding: 0 0.15rem; }
     }
-    /* Blog Search Bar */
-    .blog-search-bar { position: relative; width: 100%; max-width: 800px; margin: 0.5rem auto 0; }
-    .blog-search-bar input { width: 100%; padding: 0.75rem 1rem; border-radius: var(--radius-full); border: 1px solid var(--color-border); background: var(--color-bg-secondary); color: var(--color-text-primary); font-size: var(--text-sm); outline: none; transition: border-color 0.2s; }
+    /* Blog Search Bar - inline in hero */
+    .blog-search-bar { position: relative; width: 100%; max-width: 400px; }
+    .blog-search-bar input { width: 100%; padding: 0.6rem 1rem; border-radius: var(--radius-full); border: 1px solid var(--color-border); background: var(--color-bg-secondary); color: var(--color-text-primary); font-size: var(--text-sm); outline: none; transition: border-color 0.2s, box-shadow 0.2s; }
     .blog-search-bar input::placeholder { color: var(--color-text-muted); }
-    .blog-search-bar input:focus { border-color: var(--color-accent-primary); }
-    .blog-search-bar svg, .blog-search-bar .search-clear { display: none; }
+    .blog-search-bar input:focus { border-color: var(--color-accent-primary); box-shadow: 0 0 0 3px var(--color-accent-subtle); }
+    .blog-search-bar > svg { position: absolute; left: 0.75rem; top: 50%; transform: translateY(-50%); color: var(--color-text-muted); pointer-events: none; display: block; }
+    .blog-search-bar input { padding-left: 2.25rem; }
+    .blog-search-bar .search-clear { display: none; }
+    /* Hero Bar - title + search inline */
+    .blog-hero-bar { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--space-lg); margin-bottom: var(--space-lg); flex-wrap: wrap; }
+    .blog-hero-info { flex: 1 1 auto; min-width: 200px; }
+    .blog-hero-title { font-size: var(--text-3xl); font-weight: 700; margin: 0.25rem 0 0.25rem; line-height: 1.2; font-family: var(--font-serif); }
+    .blog-hero-subtitle { font-size: var(--text-sm); color: var(--color-text-secondary); margin: 0; }
+    /* List header bar - title + view toggle inline */
+    .blog-list-header-bar { display: flex; align-items: center; justify-content: space-between; gap: var(--space-md); margin-bottom: var(--space-lg); }
+    .blog-list-heading { font-size: var(--text-xl); font-weight: 600; margin: 0; font-family: var(--font-serif); }
+    /* Desktop grid for blog list */
+    .blog-list-container { display: grid; grid-template-columns: 1fr; gap: var(--space-lg); }
+    @media (min-width: 900px) { .blog-list-container { grid-template-columns: repeat(2, 1fr); } }
+    /* Refined card style */
+    .blog-list-item { position: relative; overflow: hidden; }
+    .blog-list-item::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--gradient-accent); opacity: 0; transition: opacity var(--transition-base); }
+    .blog-list-item:hover::before { opacity: 1; }
+    .blog-list-item:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.25), 0 0 0 1px var(--color-accent-subtle); }
     /* Search Results Overlay */
-    .blog-search-results { display: none; margin-top: 0.5rem; background: var(--color-bg-secondary); border: 1px solid var(--color-border); border-radius: var(--radius-xl); padding: 0.5rem; max-height: 60vh; overflow-y: auto; width: 100%; left: 0; right: 0; }
+    .blog-search-results { display: none; margin-top: 0.5rem; background: var(--color-bg-secondary); border: 1px solid var(--color-border); border-radius: var(--radius-xl); padding: 0.5rem; max-height: 60vh; overflow-y: auto; width: 100%; left: 0; right: 0; position: absolute; top: 100%; z-index: var(--z-elevated); box-shadow: var(--shadow-xl); }
     .blog-search-results.active { display: block; }
     .blog-search-results .sr-item { padding: 1rem 1.25rem; border-radius: var(--radius-md); transition: background 0.15s; text-decoration: none; display: block; }
     .blog-search-results .sr-item:hover { background: var(--color-bg-tertiary); }
@@ -151,12 +169,21 @@
   <section class="blog-hero">
     <div class="hero-glow"></div>
     <div class="container">
-      <div class="section-header" style="margin-bottom: 0.5rem;">
-        <div class="section-label">Blog</div>
-        <h1 class="section-title">技术博客</h1>
-        <p class="section-desc">我的技术文章、学习笔记与思考</p>
+      <!-- Compact Hero: title + search inline -->
+      <div class="blog-hero-bar">
+        <div class="blog-hero-info">
+          <span class="section-label">Posts</span>
+          <h1 class="blog-hero-title">技术博客</h1>
+          <p class="blog-hero-subtitle">文章、学习笔记与思考</p>
+        </div>
+        <div class="blog-search-bar">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+          <input type="text" id="blog-search-input" placeholder="搜索文章...  Ctrl+K" autocomplete="off">
+          <button class="search-clear" aria-label="清除搜索">&times;</button>
+          <div id="blog-search-results" class="blog-search-results"></div>
+        </div>
       </div>
-      <!-- Filters + Search -->
+      <!-- Filters -->
       <div class="blog-filters" role="tablist" aria-label="博客分类筛选">
         <button class="filter-btn filter-btn-active" data-filter="all" role="tab" aria-selected="true">全部</button>
         <button class="filter-btn" data-filter="AI" role="tab" aria-selected="false">AI</button>
@@ -176,22 +203,13 @@
       <!-- Tag Cloud -->
         <!-- 标签云已移除（分类筛选按钮已覆盖功能） -->
       <!-- /Tag Cloud -->
-
-      <!-- Search Bar -->
-      <div class="blog-search-bar">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-        <input type="text" id="blog-search-input" placeholder="搜索文章标题、标签...  Ctrl+K" autocomplete="off">
-        <button class="search-clear" aria-label="清除搜索">&times;</button>
-        <div id="blog-search-results" class="blog-search-results"></div>
-      </div>
     </div>
   </section>
   <!-- Blog Posts List -->
   <section class="section section-narrow" style="padding-top: 0.5rem;">
     <div class="container">
-      <div class="section-header" style="margin-bottom: 0.5rem;">
-        <div class="section-label">Archive</div>
-        <h2 class="section-title" id="blog-filter-title">全部文章</h2>
+      <div class="blog-list-header-bar">
+        <h2 class="blog-list-heading" id="blog-filter-title">全部文章</h2>
         <div class="blog-view-toggle">
           <button class="view-toggle-btn active" data-view="list" onclick="toggleBlogView('list')">文章列表</button>
           <button class="view-toggle-btn" data-view="archive" onclick="toggleBlogView('archive')">归档</button>
