@@ -69,9 +69,31 @@ def generate_article(title, description, article_date, read_time, tags, content_
     if tags:
         tag_list = [t.strip() for t in tags.split(',')]
         tags_html = '\n          '.join([f'<span class="tag">{t}</span>' for t in tag_list])
+        # 左侧面板的标签链接
+        tag_links_html = '\n          '.join([f'<a href="../../blog/index.html?tag={t}" class="post-info-link"># {t}</a>' for t in tag_list])
     else:
         tag_list = []
         tags_html = ''
+        tag_links_html = ''
+    
+    # 计算文章统计
+    # 字数（去掉 HTML 标签后的中文 + 英文单词数）
+    import re as re_count
+    text_only = re_count.sub(r'<[^>]+>', '', content_html) if content_html else ''
+    # 中文字数 + 英文单词数 ≈ 字数
+    chinese_chars = len(re_count.findall(r'[\u4e00-\u9fff]', text_only))
+    words = len(re_count.findall(r'[a-zA-Z]+', text_only))
+    total_word_count = chinese_chars + words
+    
+    # h2/h3 数量
+    h2_count = content_html.count('<h2') if content_html else 0
+    h3_count = content_html.count('<h3') if content_html else 0
+    
+    # 代码块数量
+    code_block_count = content_html.count('<pre') if content_html else 0
+    
+    # 短日期（用于左侧面板）
+    date_short = article_date[:10] if len(article_date) >= 10 else article_date
     
     # 生成 JSON-LD 结构化数据（使用 json.dumps 确保正确转义）
     json_ld_obj = {
@@ -118,6 +140,14 @@ def generate_article(title, description, article_date, read_time, tags, content_
     html = html.replace('{{ARTICLE_READ_TIME}}', f"{read_time} min read")
     html = html.replace('{{ARTICLE_TAGS}}', tags_html)
     html = html.replace('{{ARTICLE_CONTENT}}', content_html or '<p>文章内容...</p>')
+    
+    # 左侧面板统计信息
+    html = html.replace('{{ARTICLE_DATE_SHORT}}', date_short)
+    html = html.replace('{{ARTICLE_WORD_COUNT}}', str(total_word_count))
+    html = html.replace('{{ARTICLE_H2_COUNT}}', str(h2_count))
+    html = html.replace('{{ARTICLE_H3_COUNT}}', str(h3_count))
+    html = html.replace('{{ARTICLE_CODE_BLOCKS}}', str(code_block_count))
+    html = html.replace('{{ARTICLE_TAG_LINKS}}', tag_links_html)
     
     return html, slug, tag_list
 
