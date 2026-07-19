@@ -1306,9 +1306,11 @@ a:hover {
   padding-top: 80px;
   padding-bottom: var(--space-sm);
   position: relative;
-  overflow: hidden;
+  z-index: 2;
+  overflow: visible;
 }
 
+/* Decorative glow (body overflow-x:hidden prevents scrollbar) */
 .blog-hero::after {
   content: '';
   position: absolute;
@@ -1318,6 +1320,13 @@ a:hover {
   height: 600px;
   background: radial-gradient(circle, rgba(99, 102, 241, 0.08), transparent 70%);
   pointer-events: none;
+  z-index: 0;
+}
+
+/* Ensure hero content sits above decorative elements */
+.blog-hero > .container {
+  position: relative;
+  z-index: 1;
 }
 
 /* Blog Hero Bar - title + search inline */
