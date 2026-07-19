@@ -3523,18 +3523,7 @@ pre code {
    Post Sidebar Info - 左侧文章信息面板
    =================================== */
 .post-sidebar-info {
-  position: fixed;
-  left: calc((100% - 800px) / 2 - 240px);
-  top: 180px;
-  width: 200px;
-  display: none;
-  z-index: 50;
-}
-
-@media (min-width: 1366px) {
-  .post-sidebar-info {
-    display: block;
-  }
+  display: none !important;
 }
 
 .post-info-card {
