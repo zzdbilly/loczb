@@ -87,6 +87,32 @@ def render_with_template(template, data):
     html = html.replace('{{ARTICLE_READ_TIME}}', data['read_time'])
     html = html.replace('{{ARTICLE_TAGS}}', data['tags_html'])
     html = html.replace('{{ARTICLE_CONTENT}}', data['content'] or '<p>文章内容...</p>')
+    
+    # 左侧面板统计信息
+    html = html.replace('{{ARTICLE_DATE_SHORT}}', data['article_date'][:10] if len(data['article_date']) >= 10 else data['article_date'])
+    
+    import re as _re
+    text_only = _re.sub(r'<[^>]+>', '', data['content']) if data['content'] else ''
+    chinese_chars = len(_re.findall(r'[\u4e00-\u9fff]', text_only))
+    words = len(_re.findall(r'[a-zA-Z]+', text_only))
+    total_word_count = str(chinese_chars + words)
+    
+    h2_count = str(data['content'].count('<h2')) if data['content'] else '0'
+    h3_count = str(data['content'].count('<h3')) if data['content'] else '0'
+    code_block_count = str(data['content'].count('<pre')) if data['content'] else '0'
+    
+    html = html.replace('{{ARTICLE_WORD_COUNT}}', total_word_count)
+    html = html.replace('{{ARTICLE_H2_COUNT}}', h2_count)
+    html = html.replace('{{ARTICLE_H3_COUNT}}', h3_count)
+    html = html.replace('{{ARTICLE_CODE_BLOCKS}}', code_block_count)
+    
+    # 标签链接
+    tag_links = []
+    for t in data.get('tags', []):
+        safe_t = _re.sub(r'[^\w\u4e00-\u9fff]', '', t)
+        tag_links.append(f'<a href="../../blog/index.html?tag={safe_t}" class="post-info-link"># {t}</a>')
+    html = html.replace('{{ARTICLE_TAG_LINKS}}', '\n          '.join(tag_links))
+    
     return html
 
 def refresh_post(filepath, template, dry_run=False):

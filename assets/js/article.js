@@ -47,64 +47,63 @@
       else if (e.altKey && e.key === 'b') window.location.href = '../index.html';
     });
 
-    // === 左侧文章信息面板 ===
-    (function() {
-      const content = document.querySelector('.post-content');
-      const section = document.querySelector('.post-meta');
-      if (!content || !section) return;
+    // === 左侧面板兜底：旧文章未嵌入模板时 JS 动态生成 ===
+    if (!document.getElementById('postSidebar')) {
+      (function() {
+        const content = document.querySelector('.post-content');
+        if (!content) return;
 
-      const sidebar = document.createElement('aside');
-      sidebar.className = 'post-sidebar-info';
+        const sidebar = document.createElement('aside');
+        sidebar.className = 'post-sidebar-info';
+        sidebar.id = 'postSidebar';
 
-      // 提取文章数据
-      const titleEl = content.querySelector('h1');
-      const articleTitle = titleEl ? titleEl.textContent : '';
-      const dateEl = section.querySelector('span:first-child');
-      const readTimeEl = section.querySelector('span:nth-child(2)');
-      const date = dateEl ? dateEl.textContent.replace('📅 ', '') : '';
-      const readTime = readTimeEl ? readTimeEl.textContent.replace('⏱️ ', '') : '';
+        // 提取文章数据
+        const h2Count = content.querySelectorAll('h2').length;
+        const h3Count = content.querySelectorAll('h3').length;
+        const codeBlocks = content.querySelectorAll('pre code').length;
+        const textLen = content.textContent.replace(/\s+/g, '').length;
 
-      // 统计文章
-      const h2Count = content.querySelectorAll('h2').length;
-      const h3Count = content.querySelectorAll('h3').length;
-      const codeBlocks = content.querySelectorAll('pre code').length;
-      const totalChars = content.textContent.length;
+        // 从 meta 获取日期
+        const dateSpan = document.querySelector('.post-meta span:first-child');
+        const dateStr = dateSpan ? dateSpan.textContent.replace('📅 ', '').split(' ')[0] : '';
+        const readSpan = document.querySelector('.post-meta span:nth-child(2)');
+        const readStr = readSpan ? readSpan.textContent.replace('⏱️ ', '') : '';
 
-      // 获取分类（从URL路径或标签推断）
-      const tags = document.querySelectorAll('.post-tags .tag');
-      const tagsList = Array.from(tags).map(t => t.textContent);
+        const tags = document.querySelectorAll('.post-tags .tag');
+        const tagsList = Array.from(tags).map(t => t.textContent);
 
-      sidebar.innerHTML = `
-        <div class="post-info-card">
-          <div class="post-info-section">
-            <div class="post-info-label">作者</div>
-            <div class="post-info-author">
-              <div class="post-info-avatar">小</div>
-              <div>
-                <div class="post-info-author-name">张小猛</div>
-                <div class="post-info-author-desc">写代码，做产品</div>
+        sidebar.innerHTML = `
+          <div class="post-info-card">
+            <div class="post-info-section">
+              <div class="post-info-label">作者</div>
+              <div class="post-info-author">
+                <div class="post-info-avatar">小</div>
+                <div>
+                  <div class="post-info-author-name">张小猛</div>
+                  <div class="post-info-author-desc">写代码，做产品</div>
+                </div>
+              </div>
+            </div>
+            <div class="post-info-section">
+              <div class="post-info-label">文章信息</div>
+              <div class="post-info-stat"><span class="post-info-stat-label">📅 发布日期</span><span class="post-info-stat-value">${dateStr}</span></div>
+              <div class="post-info-stat"><span class="post-info-stat-label">⏱️ 阅读时间</span><span class="post-info-stat-value">${readStr}</span></div>
+              <div class="post-info-stat"><span class="post-info-stat-label">📝 文章字数</span><span class="post-info-stat-value">${textLen} 字</span></div>
+              <div class="post-info-stat"><span class="post-info-stat-label">📊 章节数</span><span class="post-info-stat-value">${h2Count} 节 · ${h3Count} 子节</span></div>
+              <div class="post-info-stat"><span class="post-info-stat-label">💻 代码块</span><span class="post-info-stat-value">${codeBlocks} 段</span></div>
+            </div>
+            <div class="post-info-section">
+              <div class="post-info-label">标签</div>
+              <div class="post-info-links">
+                ${tagsList.map(t => `<a href="../../blog/index.html?tag=${encodeURIComponent(t)}" class="post-info-link"># ${t}</a>`).join('')}
               </div>
             </div>
           </div>
-          <div class="post-info-section">
-            <div class="post-info-label">文章信息</div>
-            <div class="post-info-stat"><span class="post-info-stat-label">📅 发布日期</span><span class="post-info-stat-value">${date.split(' ')[0]}</span></div>
-            <div class="post-info-stat"><span class="post-info-stat-label">⏱️ 阅读时间</span><span class="post-info-stat-value">${readTime}</span></div>
-            <div class="post-info-stat"><span class="post-info-stat-label">📝 文章字数</span><span class="post-info-stat-value">${(totalChars / 10).toFixed(0)} 字</span></div>
-            <div class="post-info-stat"><span class="post-info-stat-label">📊 章节数</span><span class="post-info-stat-value">${h2Count} 节 · ${h3Count} 子节</span></div>
-            <div class="post-info-stat"><span class="post-info-stat-label">💻 代码块</span><span class="post-info-stat-value">${codeBlocks} 段</span></div>
-          </div>
-          <div class="post-info-section">
-            <div class="post-info-label">标签</div>
-            <div class="post-info-links">
-              ${tagsList.map(t => `<a href="../../blog/index.html?tag=${encodeURIComponent(t)}" class="post-info-link"># ${t}</a>`).join('')}
-            </div>
-          </div>
-        </div>
-      `;
+        `;
 
-      document.body.appendChild(sidebar);
-    })();
+        document.body.appendChild(sidebar);
+      })();
+    }
 
     // === TOC 目录（桌面端） ===
     const tocList = document.getElementById('tocList');
