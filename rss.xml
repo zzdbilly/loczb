@@ -7,6 +7,30 @@
     <language>zh-CN</language>
     <atom:link href="https://709527.xyz/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>PostgreSQL 从 17 到 18：生产环境升级实战</title>
+      <link>https://709527.xyz/blog/posts/postgresql-从-17-到-18生产环境升级实战.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/postgresql-从-17-到-18生产环境升级实战.html</guid>
+      <description>PG 18 带来了哪些实质性改进？增量物化视图、并行查询增强、OAuth 认证……本文用一个完整的升级记录，带你从准备工作到新特性实战，涵盖升级检查清单和常见问题排查。</description>
+      <category>数据库</category>
+      <pubDate>Sun, 19 Jul 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
+      <title>AI 编码代理实战：从 Copilot 到 Agent</title>
+      <link>https://709527.xyz/blog/posts/ai-编码代理实战从-copilot-到-agent.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/ai-编码代理实战从-copilot-到-agent.html</guid>
+      <description>从自动补全到自主编码，2026 年的 AI 编码工具正在经历一次质变。这篇文章用真实场景复盘 Claude Code、Cursor Agent、MCP 协议的实际用法，以及开发者应该怎样调整工作流。</description>
+      <category>开发</category>
+      <pubDate>Sun, 19 Jul 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
+      <title>Rust 入局：2026 年的生态全景</title>
+      <link>https://709527.xyz/blog/posts/rust-入局2026-年的生态全景.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/rust-入局2026-年的生态全景.html</guid>
+      <description>2026年7月，Rust首次杀进TIOBE前十。从语言进化到生态扩张，从行业应用到未来展望，全面复盘Rust凭什么走到这一步。</description>
+      <category>系统编程</category>
+      <pubDate>Sun, 19 Jul 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
       <title>Rust 在 AI 基础设施中的崛起：为什么大模型框架纷纷拥抱 Rust</title>
       <link>https://709527.xyz/blog/posts/rust-在-ai-基础设施中的崛起为什么大模型框架纷纷拥抱-rust.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/rust-在-ai-基础设施中的崛起为什么大模型框架纷纷拥抱-rust.html</guid>
@@ -141,30 +165,6 @@
       <description>66篇文章4KB重复内联样式、4.4MB死文件、404幽灵引用——一次完整的静态博客性能优化记录</description>
       <category>前端</category>
       <pubDate>Fri, 03 Jul 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>Gradle 构建加速全攻略：从 5 分钟到 30 秒</title>
-      <link>https://709527.xyz/blog/posts/gradle-build-acceleration-5min-to-30sec.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/gradle-build-acceleration-5min-to-30sec.html</guid>
-      <description>系统梳理 Gradle 构建加速的完整方法论——配置调优、KAPT迁移KSP、增量编译、模块化拆分、远程缓存、CI优化，附真实项目优化案例，构建时间减少85%</description>
-      <category>Android</category>
-      <pubDate>Thu, 02 Jul 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>像规划城市一样设计系统：城市规划给软件架构的启示</title>
-      <link>https://709527.xyz/blog/posts/urban-planning-inspires-software-architecture.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/urban-planning-inspires-software-architecture.html</guid>
-      <description>城市和软件系统的本质惊人相似——功能分区映射限界上下文、交通网络映射数据流、基础设施先行映射可观测性、有机更新映射演进式架构。从城市规划的百年智慧中，找到软件架构的跨界启发</description>
-      <category>思考</category>
-      <pubDate>Thu, 02 Jul 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>软件工程师能从制造业学到什么：精益思维重塑开发流程</title>
-      <link>https://709527.xyz/blog/posts/software-engineer-learns-from-manufacturing-lean.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/software-engineer-learns-from-manufacturing-lean.html</guid>
-      <description>制造业精益思想如何重塑软件开发流程——从丰田生产系统到敏捷开发，从5S方法论到持续交付，跨行业视角下的效率革命</description>
-      <category>思考</category>
-      <pubDate>Thu, 02 Jul 2026 00:00:00 +0800</pubDate>
     </item>
   </channel>
 </rss>
