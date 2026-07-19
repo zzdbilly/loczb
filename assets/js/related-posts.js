@@ -4,6 +4,9 @@
 
 // Article index with tags
 const ARTICLE_INDEX = [
+  { slug: "postgresql-从-17-到-18生产环境升级实战", tags: ["PostgreSQL", "数据库", "DevOps", "性能优化"], title: "PostgreSQL 从 17 到 18：生产环境升级实战" },
+  { slug: "ai-编码代理实战从-copilot-到-agent", tags: ["AI", "AI编程", "Agent", "开发规范", "效率提升"], title: "AI 编码代理实战：从 Copilot 到 Agent" },
+  { slug: "rust-入局2026-年的生态全景", tags: ["Rust", "TIOBE", "系统编程", "编程语言"], title: "Rust 入局：2026 年的生态全景" },
   { slug: "rust-在-ai-基础设施中的崛起为什么大模型框架纷纷拥抱-rust", tags: ["Rust", "AI", "大模型", "基础设施", "性能优化"], title: "Rust 在 AI 基础设施中的崛起：为什么大模型框架纷纷拥抱 Rust" },
   { slug: "从-tdd-到-tdd²测试驱动开发的进阶实践", tags: ["TDD", "测试", "开发实践", "重构"], title: "从 TDD 到 TDD²：测试驱动开发的进阶实践" },
   { slug: "医生不会告诉你的健康习惯从睡眠到饮食的系统性方案", tags: ["健康", "生活习惯", "效率", "心理"], title: "医生不会告诉你的健康习惯：从睡眠到饮食的系统性方案" },

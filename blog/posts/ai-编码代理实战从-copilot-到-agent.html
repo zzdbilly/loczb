@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 编码代理实战：从 Copilot 到 Agent | 张小猛 - loczb</title>
+    <meta name="description" content="从自动补全到自主编码，2026 年的 AI 编码工具正在经历一次质变。这篇文章用真实场景复盘 Claude Code、Cursor Agent、MCP 协议的实际用法，以及开发者应该怎样调整工作流。">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="AI 编码代理实战：从 Copilot 到 Agent | 张小猛 - loczb">
+    <meta property="og:description" content="从自动补全到自主编码，2026 年的 AI 编码工具正在经历一次质变。这篇文章用真实场景复盘 Claude Code、Cursor Agent、MCP 协议的实际用法，以及开发者应该怎样调整工作流。">
+    <meta property="og:url" content="https://709527.xyz/blog/posts/ai-编码代理实战从-copilot-到-agent.html">
+    <meta property="og:type" content="article">
+        <meta property="og:image" content="../../assets/images/og-image.png">
+    <meta property="og:site_name" content="loczb">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="AI 编码代理实战：从 Copilot 到 Agent | 张小猛 - loczb">
+    <meta name="twitter:description" content="从自动补全到自主编码，2026 年的 AI 编码工具正在经历一次质变。这篇文章用真实场景复盘 Claude Code、Cursor Agent、MCP 协议的实际用法，以及开发者应该怎样调整工作流。">
+
+
+        <script type="application/ld+json">
+{
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "AI 编码代理实战：从 Copilot 到 Agent",
+      "description": "从自动补全到自主编码，2026 年的 AI 编码工具正在经历一次质变。这篇文章用真实场景复盘 Claude Code、Cursor Agent、MCP 协议的实际用法，以及开发者应该怎样调整工作流。",
+      "image": "https://709527.xyz/assets/images/og-image.png",
+      "author": {
+            "@type": "Person",
+            "name": "张小猛",
+            "url": "https://709527.xyz/about/"
+      },
+      "publisher": {
+            "@type": "Organization",
+            "name": "loczb",
+            "logo": {
+                  "@type": "ImageObject",
+                  "url": "https://709527.xyz/assets/images/favicon.svg"
+            }
+      },
+      "datePublished": "2026-07-19 18:50:02T00:00:00+08:00",
+      "dateModified": "2026-07-19 18:50:02T00:00:00+08:00",
+      "url": "https://709527.xyz/blog/posts/ai-编码代理实战从-copilot-到-agent.html",
+      "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://709527.xyz/blog/posts/ai-编码代理实战从-copilot-到-agent.html"
+      },
+      "keywords": "AI, AI编程, Agent, 开发规范, 效率提升",
+      "articleSection": "开发",
+      "timeRequired": "PT5M",
+      "inLanguage": "zh-CN"
+}
+    </script>
+
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&family=Noto+Sans+SC:wght@500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500&display=swap" media="print" onload="this.media='all'">
+    <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
+    <link rel="alternate icon" href="../../assets/images/favicon.ico">
+</head>
+<body>
+  <!-- Loading -->
+  <div class="loading">
+    <div class="loading-spinner"></div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../../index.html" class="nav-logo">
+        loc<span>zb</span>
+      </a>
+      <button class="nav-toggle" aria-label="打开菜单" aria-expanded="false" aria-controls="nav-links-menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <div class="nav-overlay"></div>
+      <ul class="nav-links" id="nav-links-menu">
+        <li><a href="../../index.html" class="nav-link">首页</a></li>
+        <li><a href="../../projects/index.html" class="nav-link">项目</a></li>
+        <li><a href="../index.html" class="nav-link active">博客</a></li>
+        <li><a href="../../about/index.html" class="nav-link">关于</a></li>
+      </ul>
+      <button class="theme-toggle" aria-label="切换主题" title="切换亮/暗模式">
+        <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+        <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+      </button>
+    </div>
+  </nav>
+  <!-- Particle Canvas Background -->
+  <canvas id="particle-canvas" class="particle-canvas"></canvas>
+
+  <div class="scroll-progress"></div>
+
+  <main class="section" style="padding-bottom: 0; padding-top: var(--space-4xl);">
+    <div class="container container-narrow">
+      <a href="../index.html" class="back-link">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        返回博客列表
+      </a>
+
+      <article class="post-content">
+        <h1>AI 编码代理实战：从 Copilot 到 Agent</h1>
+
+        <div class="post-meta">
+          <span>📅 2026-07-19 18:50:02</span>
+          <span>⏱️ 5 min read</span>
+          <span>👤 张小猛</span>
+        </div>
+
+        <div class="post-tags">
+          <span class="tag">AI</span>
+          <span class="tag">AI编程</span>
+          <span class="tag">Agent</span>
+          <span class="tag">开发规范</span>
+          <span class="tag">效率提升</span>
+        </div>
+
+        <h2>AI 编码代理实战：从 Copilot 到 Agent</h2>
+<p>2026 年，AI 编程已经不再是「自动补全」的范畴。</p>
+<p>如果你还停留在「Copilot 帮我补全一行代码」的印象，那你可能错过了过去一年半最剧烈的变化。从 2025 年初的 Claude Code 到 2026 年的多 Agent 协作系统，AI 编码工具正在从补全器进化为自主开发者。</p>
+<p>这篇文章不讲那些「AI 会在 X 年内取代程序员」的宏大叙事——我们来聊真实可用的工具、它们能做什么、以及作为开发者应该怎么调整工作流。</p>
+<h2>2026 年 AI 编程工具的格局</h2>
+<p>先看看当前市场上主要选手的定位：</p>
+<table>
+<thead>
+<tr>
+<th>工具</th>
+<th>定位</th>
+<th>核心能力</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GitHub Copilot</td>
+<td>代码补全 + 内联对话</td>
+<td>VS Code/JetBrains 深度集成</td>
+<td>日常编码</td>
+</tr>
+<tr>
+<td>Claude Code</td>
+<td>终端级编码代理</td>
+<td>全项目理解 + 自主修改</td>
+<td>重构/调试/开发</td>
+</tr>
+<tr>
+<td>Cursor</td>
+<td>AI-First IDE</td>
+<td>多文件编辑 + 上下文感知</td>
+<td>全栈开发</td>
+</tr>
+<tr>
+<td>Codeium (Windsurf)</td>
+<td>智能补全 + 搜索</td>
+<td>企业级本地部署</td>
+<td>隐私敏感场景</td>
+</tr>
+<tr>
+<td>Continue (开源)</td>
+<td>自托管编码助手</td>
+<td>支持多种模型后端</td>
+<td>定制需求</td>
+</tr>
+</tbody>
+</table>
+<h3>从补全到代理的跃迁</h3>
+<p>关键变化是：2025 年之前，主流观点认为「AI 编程就是 Copilot 那种自动补全」。2026 年的现实是，<strong>编码代理（Coding Agent）才是主流叙事</strong>。</p>
+<p>Claude Code 和 Cursor 的 Agent 模式代表了两个不同方向：</p>
+<ul>
+<li>Claude Code：终端工具，类似一个能使用 shell 的 AI 工程师</li>
+<li>Cursor Agent：IDE 内的 AI 代理，能读取、搜索、重写项目文件</li>
+</ul>
+<h3>为什么 Agent 比补全更实用</h3>
+<p>自动补全在你「正在写下代码」时最有用。但大多数开发时间并不是在写代码——是在读代码、搜索文档、调试错误、理解项目结构。编码代理能处理后一类场景，这正是它更有价值的根本原因。</p>
+<h2>Claude Code 的实践</h2>
+<p>Claude Code 是 Anthropic 在 2025 年推出的一款终端工具。它的设计哲学和别人不太一样——它不是 IDE 插件，而是一个终端应用。</p>
+<h3>安装和配置</h3>
+<pre><code class="language-bash"># 安装 Claude Code
+npm install -g @anthropic-ai/claude-code
+
+# 在项目目录中启动
+cd my-project
+claude
+</code></pre>
+<p>启动后，你会获得一个类似于 REPL 的命令行对话界面。它的核心能力包括：</p>
+<ul>
+<li>读取项目文件和目录结构</li>
+<li>搜索代码和生成正则匹配</li>
+<li>创建、编辑、删除文件</li>
+<li>执行 shell 命令并读取输出</li>
+<li>运行测试和检查编译错误</li>
+</ul>
+<h3>真实场景：大规模重构</h3>
+<p>让我用一个真实的例子来说明——将一个 React 组件从 Class Component 迁移到 Function Component：</p>
+<pre><code>claude&gt; 将 src/components/UserProfile.jsx 从 Class Component 重写为 Function Component，
+       使用 React Hooks 替代生命周期方法，保持所有 props 和功能不变
+</code></pre>
+<p>Claude Code 会：</p>
+<ol>
+<li>读取 <code>UserProfile.jsx</code> 和所有依赖的组件</li>
+<li>分析生命周期方法映射到哪个 Hook</li>
+<li>重写文件</li>
+<li>运行测试确认不破坏功能</li>
+<li>输出改动的 diff</li>
+</ol>
+<pre><code class="language-bash"># Claude Code 会先读取文件
+🔍 Reading src/components/UserProfile.jsx
+📄 Found 2 related files: UserProfile.css, UserProfile.test.jsx
+
+# 然后分析
+🔧 Converting componentWillMount → useEffect([], [])
+🔧 Converting componentDidUpdate → useEffect(…, [deps])
+🔧 Converting componentWillUnmount → useEffect cleanup
+
+# 之后修改文件
+✏️ Updated UserProfile.jsx (240 lines → 185 lines)
+✅ Tests passed: 12/12
+
+# 提供 diff 供审查
+</code></pre>
+<p>这不仅仅是一个代码转换器——它理解了项目中的上下文（import 路径、变量引用关系、测试文件位置），然后自主完成了整个转换。</p>
+<h3>调试工作流</h3>
+<p>Claude Code 在调试场景下也表现出色：</p>
+<pre><code>claude&gt; 运行测试时 user.test.js 报错 &quot;Cannot read properties of undefined&quot;
+       (reading 'email')，帮我调试这个错误
+</code></pre>
+<p>它的流程：</p>
+<ol>
+<li>找到测试输出中的错误信息和堆栈</li>
+<li>读取失败测试文件</li>
+<li>追踪到 <code>user.email</code> 的调用链</li>
+<li>发现是 mock 数据中没有 <code>email</code> 字段</li>
+<li>修复测试文件或 mock 数据</li>
+<li>再次运行确认通过</li>
+</ol>
+<pre><code class="language-bash"># Claude Code 的调试流程
+🔍 Error: TypeError: Cannot read properties of undefined (reading 'email')
+   at Object.&lt;anonymous&gt; (src/__tests__/user.test.js:42)
+
+📖 Reading src/__tests__/user.test.js:42
+   expect(user.email).toBe('test@example.com')
+
+🔍 追溯 user 对象来源...
+   → mockUser in src/__mocks__/user.js
+   → 发现 mockUser.email 未定义
+
+✏️ Fixed src/__mocks__/user.js (added email field)
+✅ Tests passed: user.test.js
+</code></pre>
+<p>这个流程的关键是：Claude Code 不需要我手动提供上下文。它自己读文件、搜代码、跑命令，就像是团队里的一个 junior 工程师说「我去查一下」。</p>
+<h2>Cursor Agent 模式</h2>
+<p>Cursor 在 2025 年推出的 Agent 模式是另一个重大进化。与 Claude Code 的终端界面不同，Cursor 的 Agent 直接在编辑器中操作。</p>
+<h3>核心机制</h3>
+<p>Cursor Agent 的工作方式是：</p>
+<ol>
+<li><strong>上下文感知</strong>：自动收集打开的文件、最近的修改、项目结构等信息</li>
+<li><strong>自主搜索</strong>：使用 <code>@file</code>、<code>@folder</code>、<code>@code</code> 等符号在项目中定位目标</li>
+<li><strong>多文件编辑</strong>：一次对话可以修改多个文件</li>
+<li><strong>即时反馈</strong>：修改后可以自动运行 lint 和测试检查</li>
+</ol>
+<pre><code class="language-bash"># Cursor Agent 的典型命令
+&quot;给我的 API 路由添加请求日志中间件，使用现有的 logger 工具&quot;
+&quot;将这个 Electron 项目迁移到 Tauri&quot;
+&quot;为这个 Prisma schema 生成对应的 Zod validation schemas&quot;
+</code></pre>
+<h3>真实场景：API 开发</h3>
+<p>以添加一个用户管理 API 为例：</p>
+<pre><code>用户请求: &quot;添加一个 /api/users/:id 端点，返回用户详情，从 PostgreSQL 查询&quot;
+</code></pre>
+<p>Cursor Agent 的工作链：</p>
+<ol>
+<li>读取当前 API 路由结构，确认代码风格和模式</li>
+<li>检查 Prisma schema 确认 User 模型字段</li>
+<li>编写路由 handler</li>
+<li>添加 error handling</li>
+<li>更新路由器注册新路由</li>
+<li>可选：生成测试文件</li>
+</ol>
+<pre><code class="language-typescript">// Cursor Agent 生成的代码
+import { Router, Request, Response } from 'express';
+import { PrismaClient } from '@prisma/client';
+
+const router = Router();
+const prisma = new PrismaClient();
+
+// GET /api/users/:id
+router.get('/:id', async (req: Request, res: Response) =&gt; {
+  try {
+    const { id } = req.params;
+
+    const user = await prisma.user.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        createdAt: true,
+        // 不返回密码等敏感字段
+      },
+    });
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    return res.json(user);
+  } catch (error) {
+    console.error('Error fetching user:', error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+export default router;
+</code></pre>
+<p>更强大的功能是跨文件上下文。当我请求「将这个 handler 改成使用 Service 层模式」，Cursor 会读取 Service 层的现有代码，理解其模式，然后重构——不是机械替换，而是理解代码库的架构风格。</p>
+<h2>MCP 协议与工具生态</h2>
+<p>如果只有两个工具，那就不成生态了。2026 年 AI 编码代理最关键的底层变化是 <strong>MCP（Model Context Protocol）</strong> 的普及。</p>
+<h3>MCP 是什么</h3>
+<p>MCP 是由 Anthropic 提出的开放协议，定义了 AI 模型与外部工具之间的标准化接口。用一句话说：<strong>MCP 让 AI 能像人一样使用工具</strong>。</p>
+<p>一个 MCP server 暴露一组资源（文件、数据、API）和工具（命令、查询、操作）。AI 客户端通过 MCP 协议发现并使用这些工具。</p>
+<pre><code class="language-typescript">// MCP Server 的简化示意
+const server = new MCPServer({
+  name: &quot;database-tools&quot;,
+  tools: [
+    {
+      name: &quot;query_database&quot;,
+      description: &quot;执行 SQL 查询并返回结果&quot;,
+      params: {
+        query: { type: &quot;string&quot;, description: &quot;SQL 查询语句&quot; },
+      },
+      handler: async ({ query }) =&gt; {
+        const result = await db.execute(query);
+        return result;
+      },
+    },
+    {
+      name: &quot;get_schema&quot;,
+      description: &quot;获取数据库表结构&quot;,
+      params: {
+        table: { type: &quot;string&quot;, description: &quot;表名&quot; },
+      },
+      handler: async ({ table }) =&gt; {
+        const schema = await db.getSchema(table);
+        return schema;
+      },
+    },
+  ],
+});
+</code></pre>
+<h3>2026 年的 MCP 生态</h3>
+<p>2026 年，MCP 已经从边缘协议变成了 AI 开发工具的标准协议之一：</p>
+<table>
+<thead>
+<tr>
+<th>MCP Server</th>
+<th>功能</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>filesystem</td>
+<td>文件读写</td>
+<td>项目文件操作</td>
+</tr>
+<tr>
+<td>sql</td>
+<td>数据库查询</td>
+<td>数据操作和分析</td>
+</tr>
+<tr>
+<td>docker</td>
+<td>Docker 操作</td>
+<td>容器管理</td>
+</tr>
+<tr>
+<td>github/v2</td>
+<td>GitHub API</td>
+<td>PR/Issue 管理</td>
+</tr>
+<tr>
+<td>playwright</td>
+<td>浏览器自动化</td>
+<td>E2E 测试</td>
+</tr>
+<tr>
+<td>linear</td>
+<td>项目任务管理</td>
+<td>Issue 跟踪</td>
+</tr>
+</tbody>
+</table>
+<p>想象一个场景：AI Agent 需要修复一个 bug，它通过 MCP 读取代码、查询数据库定位问题数据、创建 GitHub Issue 跟踪、提交 PR——全部在一个对话中完成。</p>
+<h3>自建 MCP 工具</h3>
+<p>对我们开发者来说，MCP 意味着可以自己写工具让 AI 调用：</p>
+<pre><code class="language-typescript">// 命令行工具的 MCP Server
+const server = new MCPServer({
+  name: &quot;deployment-tools&quot;,
+  tools: [
+    {
+      name: &quot;deploy&quot;,
+      description: &quot;部署到指定环境&quot;,
+      params: {
+        env: { type: &quot;enum&quot;, values: [&quot;staging&quot;, &quot;production&quot;] },
+        tag: { type: &quot;string&quot; },
+      },
+      handler: async ({ env, tag }) =&gt; {
+        const result = await execAsync(`deploy.sh ${env} ${tag}`);
+        return { success: true, output: result.stdout };
+      },
+    },
+  ],
+});
+</code></pre>
+<p>有了这个，AI 就可以在开发完成后一键部署——不再需要人手动切终端打命令。</p>
+<h2>对开发工作流的改变</h2>
+<p>有了这些工具，2026 年的开发流程变成了什么样子？</p>
+<h3>PR 驱动开发</h3>
+<p>我之前写一个功能的工作流是：</p>
+<pre><code>写代码 → 本地测试 → 提交 → PR → 审查 → 部署
+</code></pre>
+<p>现在：</p>
+<pre><code>描述需求（AI 生成代码）→ 审查并调整 → 提交测试 → PR
+</code></pre>
+<p>AI 承担了「写代码」这个环节，而开发者更多地在「描述需求」和「审查代码」之间切换。</p>
+<h3>改变最大的场景</h3>
+<p><strong>场景 1：新项目脚手架</strong></p>
+<pre><code>开发者: &quot;创建一个 Next.js App Router 的项目，配置好 Prisma + Vercel Postgres + Tailwind，
+        加上用户认证（NextAuth），首页放一个 Dashboard&quot;
+</code></pre>
+<p>AI Agent 可以在一分钟内完成之前需要 30 分钟甚至更久的脚手架搭建——创建配置文件、安装依赖、初始化 Prisma schema、编写基础的认证路由。</p>
+<p><strong>场景 2：跨仓库重构</strong></p>
+<pre><code>开发者: &quot;将 shared-components 仓库中的所有 Button 组件改为新设计系统的 TanStack 风格&quot;
+</code></pre>
+<p>AI Agent 可以遍历仓库、找到所有 Button 组件、逐一修改并验证编译。</p>
+<p><strong>场景 3：SQL 优化</strong></p>
+<pre><code>开发者: &quot;这个查询跑了 8 秒，帮我查一下慢在哪并优化&quot;
+</code></pre>
+<p>AI 可以直接连数据库跑 EXPLAIN ANALYZE，分析执行计划，然后调整查询：</p>
+<pre><code class="language-sql">-- 原始查询（8.2 秒）
+SELECT u.*, COUNT(o.id) as order_count
+FROM users u
+LEFT JOIN orders o ON u.id = o.user_id
+WHERE u.created_at &gt; '2025-01-01'
+GROUP BY u.id
+ORDER BY order_count DESC;
+
+-- AI 优化后（0.3 秒）
+SELECT u.*, COALESCE(order_counts.cnt, 0) as order_count
+FROM users u
+LEFT JOIN (
+    SELECT user_id, COUNT(*) as cnt
+    FROM orders
+    WHERE created_at &gt; '2025-01-01'
+    GROUP BY user_id
+) order_counts ON u.id = order_counts.user_id
+WHERE u.created_at &gt; '2025-01-01'
+ORDER BY order_counts.cnt DESC NULLS LAST;
+</code></pre>
+<h3>没有改变的事情</h3>
+<p>然而，有些事情并没有变：</p>
+<ol>
+<li>
+<p><strong>架构决策仍然是人的工作</strong>。AI 能写代码，但不会因为写了代码就对业务理解更深。系统架构、数据库设计、API 约定——这些仍然是需要人来决定的。</p>
+</li>
+<li>
+<p><strong>审查和测试更重要了</strong>。AI 生成的代码看起来合理，但可能有隐性问题——边界条件、并发安全、性能假设。代码审查反而变得更加重要。</p>
+</li>
+<li>
+<p><strong>领域知识才是护城河</strong>。当一个功能涉及「这个退货策略在节假日怎么处理」时，没有领域知识的纯 AI 毫无办法。</p>
+</li>
+</ol>
+<h2>2026 年的工作流建议</h2>
+<p>基于过去一年半的实践，这里有一些具体的建议：</p>
+<h3>把 AI 当作结对编程搭档</h3>
+<p>把它当作一个 junior 搭档——它擅长写样板代码、搜索文档、跑测试和解释错误。但它不擅长架构决策、领域理解和权衡。</p>
+<pre><code class="language-bash"># 好的请求方式
+claude&gt; 帮我写一个 SQLAlchemy 的 User Model，参考项目中现有的 department.py 的代码风格
+
+# 不好的请求方式
+claude&gt; 给我一个用户表
+</code></pre>
+<h3>为 AI 写项目文档</h3>
+<p>就像你为同事写文档一样，在项目根目录维护一个 <code>CONTRIBUTING.md</code> 或 <code>AI_CONTEXT.md</code>：</p>
+<pre><code class="language-markdown"># AI_CONTEXT.md
+
+## 项目结构
+- app/ - Next.js App Router 页面
+- lib/ - 共享工具函数
+- prisma/ - 数据库 schema
+
+## 代码风格
+- 使用 TypeScript strict 模式
+- 函数式组件 + React Hooks
+- 优先使用 Server Components
+- API 路由使用 Zod 做输入校验
+</code></pre>
+<p>很多 Agent 工具（特别是 Claude Code）会自动读取这个文件作为系统提示的一部分。</p>
+<h3>让 AI 做代码预审查</h3>
+<p>在提交 PR 给人类同事之前，先让 AI Agent 审查一遍：</p>
+<pre><code>claude&gt; 审查这个 PR 的变更，检查潜在问题：
+       - 类型安全性
+       - 边界条件处理
+       - 性能问题
+       - 与现有 API 的兼容性
+       - 测试覆盖率
+</code></pre>
+<p>AI 可以在 30 秒内完成一个人类 reviewer 需要 15 分钟的审查。它还能根据项目中已有的模式来验证一致性。</p>
+<h3>构建团队的 MCP 工具集</h3>
+<p>如果你的团队有特定的部署工具、监控系统、数据库管理工具，把它们封装为 MCP Server，让 AI 可以直接调用。开始的方式很简单：</p>
+<ol>
+<li>从 <code>npm create mcp-server</code> 起一个项目</li>
+<li>包装团队现有的 CLI 工具</li>
+<li>添加文档和参数校验</li>
+<li>集成到团队的工具链中</li>
+</ol>
+<h2>未来 12 个月</h2>
+<p>站在 2026 年年中，有几个趋势已经清晰：</p>
+<h3>多 Agent 协作</h3>
+<p>不是单个 AI Agent 做所有事，而是多个 Specialist Agent 协作：
+- 一个 Agent 负责前端 UI
+- 一个 Agent 负责 API 层
+- 一个 Agent 负责数据库迁移
+- 一个 Agent 专门写测试
+- 一个 Agent 做安全审查</p>
+<p>这些 Agent 通过共享的上下文和任务队列协作，就像人的团队一样。</p>
+<h3>审查 Agent 的独立化</h3>
+<p>专门审查 PR 的 AI Agent 会从「写代码的 Agent」中分离出来，形成独立的审查流水线。这种架构的好处是：<strong>写代码的 Agent 可以更激进地尝试，而审查 Agent 作为安全网捕获问题。</strong></p>
+<h3>离线 Agent 的增长</h3>
+<p>企业级的安全需求会推动本地部署的编码代理工具发展。2026 年已经有多个支持全离线运行的 Agent 方案——代码不出公司网络，模型在本地 GPU 或私有云上运行。</p>
+<h3>标准化协议的普及</h3>
+<p>MCP 之类协议会成为 AI 开发工具的「USB 接口」——任何兼容 MCP 的工具都可以和任何 AI Client 协作。这会催生一个 MCP Server 的生态市场，就像 npm 对 JavaScript 的作用一样。</p>
+<h2>结语</h2>
+<p>2026 年的 AI 编码代理已经不是概念验证，而是生产环境工具。它不像 2023-2024 年那样只是更聪明的自动补全——它开始承担编码工作中更复杂的部分。</p>
+<p>但开发者并没有被取代。2026 年，高效的开发者从「写代码的人」变成了「指挥 AI 写代码并对其负责的人」。AI 处理了实现的复杂度，但设计、决策、质量保证的责任仍然在人这一边。</p>
+<p>那些学会和 AI 协作的开发者，生产力确实在翻倍增长。这才是 2026 年的真实技术图景。</p>
+<hr />
+<p><em>发表于 2026-07-19 · 开发 · #AI #AI编程 #Agent #开发规范 #效率提升</em></p>
+      </article>
+    </div>
+  </main>
+
+  <!-- Related Posts / Navigation -->
+  <section class="section" style="padding-top: 0;">
+    <div class="container container-narrow">
+      <hr style="border: none; border-top: 1px solid var(--color-border); margin: var(--space-3xl) 0;">
+
+      <div class="blog-topics" style="margin-bottom: var(--space-xl);">
+        <span class="topic-label">读完之后:</span>
+        <a href="../index.html" class="topic-tag">返回博客列表</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <p class="footer-signature">写代码,做产品,也认真生活。</p>
+      <div class="footer-social">
+        <a href="https://github.com/zzdbilly" class="footer-social-link" target="_blank" rel="noopener" aria-label="GitHub">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+        </a>
+        <a href="../../rss.xml" class="footer-social-link" aria-label="RSS">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+      </div>
+      <div class="footer-links">
+        <a href="../../index.html" class="footer-link">首页</a>
+        <a href="../../projects/index.html" class="footer-link">项目</a>
+        <a href="../../about/index.html" class="footer-link">关于</a>
+      </div>
+      <p class="footer-copyright">
+        &copy; 2026 张小猛
+      </p>
+    </div>
+  </footer>
+
+
+  <script defer src="../../assets/js/related-posts.js"></script>
+  <script defer src="../../assets/js/main.js"></script>
+  <script defer src="../../assets/js/article.js"></script>
+  <script defer src="../../assets/js/share.js"></script>
+  <script defer src="../../assets/js/back-to-top.js"></script>
+  <!-- Back to Top & Reading Progress -->
+  <button class="back-to-top" id="backToTop" aria-label="回到顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
+  <div class="reading-progress" id="readingProgress"></div>
+
+  <!-- Post TOC -->
+  <div class="post-toc-container" id="postToc">
+    <nav class="post-toc">
+      <div class="post-toc-title">目录</div>
+      <ul class="post-toc-list" id="tocList">
+      </ul>
+    </nav>
+  </div>
+<script defer src="../../assets/js/particles.js"></script>
+
+  <!-- Comment System -->
+  <script src="../../workers/comment-system/comment-widget.js"></script>
+
+  <!-- highlight.js for code syntax highlighting -->
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // 只对没有 codehilite 的代码块应用 highlight.js
+      document.querySelectorAll('pre code').forEach(function(block) {
+        // 跳过已经有 Pygments 高亮的块
+        if (!block.closest('.codehilite') && !block.classList.contains('hljs')) {
+          hljs.highlightElement(block);
+        }
+      });
+    });
+  </script>
+
+  <!-- Cloudflare Web Analytics -->
+  <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "29e7cff6f37448989538e2165cb79187"}'></script>
+</body>
+</html>

@@ -1,6 +1,49 @@
 {
   "posts": [
     {
+      "slug": "postgresql-从-17-到-18生产环境升级实战",
+      "title": "PostgreSQL 从 17 到 18：生产环境升级实战",
+      "date": "2026-07-19",
+      "category": "数据库",
+      "tags": [
+        "PostgreSQL",
+        "数据库",
+        "DevOps",
+        "性能优化"
+      ],
+      "excerpt": "PG 18 带来了哪些实质性改进？增量物化视图、并行查询增强、OAuth 认证……本文用一个完整的升级记录，带你从准备工作到新特性实战，涵盖升级检查清单和常见问题排查。",
+      "url": "blog/posts/postgresql-从-17-到-18生产环境升级实战.html"
+    },
+    {
+      "slug": "ai-编码代理实战从-copilot-到-agent",
+      "title": "AI 编码代理实战：从 Copilot 到 Agent",
+      "date": "2026-07-19",
+      "category": "开发",
+      "tags": [
+        "AI",
+        "AI编程",
+        "Agent",
+        "开发规范",
+        "效率提升"
+      ],
+      "excerpt": "从自动补全到自主编码，2026 年的 AI 编码工具正在经历一次质变。这篇文章用真实场景复盘 Claude Code、Cursor Agent、MCP 协议的实际用法，以及开发者应该怎样调整工作流。",
+      "url": "blog/posts/ai-编码代理实战从-copilot-到-agent.html"
+    },
+    {
+      "slug": "rust-入局2026-年的生态全景",
+      "title": "Rust 入局：2026 年的生态全景",
+      "date": "2026-07-19",
+      "category": "系统编程",
+      "tags": [
+        "Rust",
+        "TIOBE",
+        "系统编程",
+        "编程语言"
+      ],
+      "excerpt": "2026年7月，Rust首次杀进TIOBE前十。从语言进化到生态扩张，从行业应用到未来展望，全面复盘Rust凭什么走到这一步。",
+      "url": "blog/posts/rust-入局2026-年的生态全景.html"
+    },
+    {
       "slug": "rust-在-ai-基础设施中的崛起为什么大模型框架纷纷拥抱-rust",
       "title": "Rust 在 AI 基础设施中的崛起：为什么大模型框架纷纷拥抱 Rust",
       "date": "2026-07-14",
@@ -1180,22 +1223,34 @@
     },
     {
       "tag": "AI",
-      "count": 12
+      "count": 13
+    },
+    {
+      "tag": "DevOps",
+      "count": 7
     },
     {
       "tag": "Kotlin",
       "count": 7
     },
     {
-      "tag": "DevOps",
-      "count": 6
+      "tag": "性能优化",
+      "count": 5
     },
     {
       "tag": "思考",
       "count": 5
     },
     {
-      "tag": "性能优化",
+      "tag": "数据库",
+      "count": 4
+    },
+    {
+      "tag": "Agent",
+      "count": 4
+    },
+    {
+      "tag": "Rust",
       "count": 4
     },
     {
@@ -1207,15 +1262,15 @@
       "count": 4
     },
     {
-      "tag": "Rust",
+      "tag": "PostgreSQL",
+      "count": 3
+    },
+    {
+      "tag": "系统编程",
       "count": 3
     },
     {
       "tag": "效率",
-      "count": 3
-    },
-    {
-      "tag": "数据库",
       "count": 3
     },
     {
@@ -1251,15 +1306,23 @@
       "count": 3
     },
     {
-      "tag": "Agent",
-      "count": 3
-    },
-    {
-      "tag": "TypeScript",
+      "tag": "AI编程",
       "count": 2
     },
     {
-      "tag": "PostgreSQL",
+      "tag": "开发规范",
+      "count": 2
+    },
+    {
+      "tag": "效率提升",
+      "count": 2
+    },
+    {
+      "tag": "编程语言",
+      "count": 2
+    },
+    {
+      "tag": "TypeScript",
       "count": 2
     },
     {
@@ -1327,10 +1390,6 @@
       "count": 2
     },
     {
-      "tag": "系统编程",
-      "count": 2
-    },
-    {
       "tag": "RAG",
       "count": 2
     },
@@ -1393,6 +1452,10 @@
     {
       "tag": "OpenClaw",
       "count": 2
+    },
+    {
+      "tag": "TIOBE",
+      "count": 1
     },
     {
       "tag": "大模型",
@@ -1564,14 +1627,6 @@
     },
     {
       "tag": "博客",
-      "count": 1
-    },
-    {
-      "tag": "AI编程",
-      "count": 1
-    },
-    {
-      "tag": "开发规范",
       "count": 1
     },
     {
@@ -1883,10 +1938,6 @@
       "count": 1
     },
     {
-      "tag": "编程语言",
-      "count": 1
-    },
-    {
       "tag": "JetBrains",
       "count": 1
     },
@@ -1908,10 +1959,6 @@
     },
     {
       "tag": "Prompt设计",
-      "count": 1
-    },
-    {
-      "tag": "效率提升",
       "count": 1
     },
     {
@@ -2138,8 +2185,23 @@
   "archives": [
     {
       "month": "2026-07",
-      "count": 26,
+      "count": 29,
       "posts": [
+        {
+          "title": "PostgreSQL 从 17 到 18：生产环境升级实战",
+          "date": "2026-07-19",
+          "url": "blog/posts/postgresql-从-17-到-18生产环境升级实战.html"
+        },
+        {
+          "title": "AI 编码代理实战：从 Copilot 到 Agent",
+          "date": "2026-07-19",
+          "url": "blog/posts/ai-编码代理实战从-copilot-到-agent.html"
+        },
+        {
+          "title": "Rust 入局：2026 年的生态全景",
+          "date": "2026-07-19",
+          "url": "blog/posts/rust-入局2026-年的生态全景.html"
+        },
         {
           "title": "Rust 在 AI 基础设施中的崛起：为什么大模型框架纷纷拥抱 Rust",
           "date": "2026-07-14",
@@ -2589,21 +2651,21 @@
     }
   ],
   "categories": [
-    "开发",
-    "思考",
     "数据库",
+    "开发",
+    "系统编程",
+    "思考",
     "前端",
     "Android",
     "Kotlin",
     "DevOps",
     "AI",
-    "系统编程",
     "安全"
   ],
   "stats": {
-    "totalPosts": 83,
-    "totalTags": 240,
-    "latestDate": "2026-07-14",
+    "totalPosts": 86,
+    "totalTags": 241,
+    "latestDate": "2026-07-19",
     "oldestDate": "2026-02-15"
   }
 }
