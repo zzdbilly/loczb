@@ -667,10 +667,45 @@ a:hover {
   font-size: var(--text-5xl);
   font-weight: 700;
   line-height: 1.1;
-  margin-bottom: var(--space-lg);
+  letter-spacing: -0.02em;
+  margin-bottom: var(--space-xl);
   opacity: 0;
   animation: fadeInUp 0.8s ease forwards;
   animation-delay: 0.4s;
+}
+
+.hero-title .gradient-text {
+  display: inline-block;
+  position: relative;
+}
+
+/* Homepage Hero Label - small tag above title in dual-column layout */
+.hero-left .hero-label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: 0.35rem 0.9rem;
+  background: var(--hero-label-bg);
+  border: 1px solid var(--hero-label-border);
+  border-radius: var(--radius-full);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--hero-label-text);
+  margin-bottom: var(--space-lg);
+  opacity: 0;
+  animation: fadeInUp 0.8s ease forwards;
+  animation-delay: 0.2s;
+  align-self: flex-start;
+  letter-spacing: 0.02em;
+}
+
+.hero-left .hero-label::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  background: var(--hero-label-dot);
+  border-radius: 50%;
+  animation: blink 2s ease-in-out infinite;
 }
 
 .hero-subtitle {
@@ -1582,16 +1617,35 @@ pre code {
   color: var(--color-text-secondary);
   margin-bottom: var(--space-2xl);
   line-height: 1.8;
+  position: relative;
+  padding-left: var(--space-md);
+  border-left: 3px solid transparent;
+  border-image: var(--gradient-accent) 1;
+}
+
+.hero-description::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--gradient-accent);
+  border-radius: 2px;
+  opacity: 0.7;
 }
 
 .hero-stats {
   display: flex;
   gap: var(--space-3xl);
   margin-top: var(--space-3xl);
+  padding-top: var(--space-2xl);
+  border-top: 1px solid var(--color-border);
 }
 
 .stat {
-  text-align: center;
+  text-align: left;
+  position: relative;
 }
 
 .stat-value {
@@ -1602,14 +1656,27 @@ pre code {
   -webkit-text-fill-color: transparent;
   background-clip: text;
   font-family: var(--font-serif);
+  line-height: 1.2;
+}
+
+.stat-value::after {
+  content: '';
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: var(--gradient-accent);
+  margin-top: var(--space-xs);
+  border-radius: 1px;
+  opacity: 0.6;
 }
 
 .stat-label {
   font-size: var(--text-xs);
   color: var(--color-text-tertiary);
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.08em;
   margin-top: var(--space-xs);
+  font-family: var(--font-mono);
 }
 
 /* Now Panel */
@@ -2688,9 +2755,31 @@ pre code {
     text-align: center;
   }
   
+  .hero-left .hero-label {
+    align-self: center;
+  }
+  
+  .hero-description {
+    padding-left: 0;
+    border-left: none;
+  }
+  
+  .hero-description::before {
+    display: none;
+  }
+  
   .hero-stats {
     justify-content: center;
     margin-top: var(--space-3xl);
+  }
+  
+  .stat {
+    text-align: center;
+  }
+  
+  .stat-value::after {
+    margin-left: auto;
+    margin-right: auto;
   }
   
   .focus-grid {
@@ -2745,8 +2834,17 @@ pre code {
   .hero-stats {
     flex-direction: row;
     justify-content: center;
-    gap: var(--space-xl);
-    margin-top: var(--space-3xl);
+    gap: var(--space-lg);
+    margin-top: var(--space-2xl);
+  }
+  
+  .stat {
+    text-align: center;
+  }
+  
+  .stat-value::after {
+    margin-left: auto;
+    margin-right: auto;
   }
   
   .stat-value {
