@@ -38,26 +38,234 @@
   <meta name="theme-color" content="#3b82f6">
   <link rel="stylesheet" href="../assets/css/style.css?v=proj-filter-v1">
   <style>
-    .case-card { background: var(--color-bg-secondary); border-radius: 16px; overflow: hidden; margin-bottom: 2rem; border: 1px solid var(--color-border); transition: all 0.35s cubic-bezier(0.4,0,0.2,1); }
-    .case-card:hover { border-color: var(--color-accent-primary); transform: translateY(-6px); box-shadow: 0 16px 48px rgba(0,0,0,0.18), 0 0 0 1px rgba(99,102,241,0.15); }
-    .case-card-header { padding: 2rem; border-bottom: 1px solid var(--color-border); }
-    .case-card-badge { display: inline-block; background: var(--color-accent-primary); color: white; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; margin-bottom: 1rem; }
-    .case-card-title { font-size: 1.75rem; margin-bottom: 0.5rem; }
-    .case-card-subtitle { color: var(--color-text-secondary); font-size: 1rem; }
-    .case-card-body { padding: 2rem; }
+    /* ===================================
+       Projects Page - Hero Stats
+       =================================== */
+    .projects-hero { padding-top: 80px; padding-bottom: 0.5rem; position: relative; overflow: hidden; }
+    .projects-hero::after {
+      content: ''; position: absolute; top: -200px; left: -300px;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(99, 102, 241, 0.08), transparent 70%);
+      pointer-events: none;
+    }
+    .projects-hero .section-header { margin-bottom: 0; }
+
+    .projects-stats {
+      display: flex; flex-wrap: wrap; gap: 2rem; margin-top: 2rem;
+      padding: 1.5rem 0; border-top: 1px solid var(--color-border);
+      border-bottom: 1px solid var(--color-border);
+    }
+    .projects-stat { display: flex; flex-direction: column; gap: 0.25rem; }
+    .projects-stat-value {
+      font-family: var(--font-mono); font-size: 2rem; font-weight: 700;
+      background: var(--gradient-text); -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent; background-clip: text;
+      line-height: 1.2;
+    }
+    .projects-stat-label {
+      font-size: var(--text-xs); color: var(--color-text-tertiary);
+      text-transform: uppercase; letter-spacing: 0.08em;
+      font-family: var(--font-mono);
+    }
+    @media (max-width: 640px) {
+      .projects-stats { gap: 1.5rem; }
+      .projects-stat-value { font-size: 1.5rem; }
+    }
+
+    /* ===================================
+       Projects Filter Bar
+       =================================== */
+    .projects-filter-bar {
+      display: flex; flex-wrap: wrap; gap: 0.5rem;
+      margin-bottom: 2.5rem; padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--color-border);
+    }
+    .projects-filter-btn {
+      display: inline-flex; align-items: center; gap: 0.35rem;
+      padding: 0.5rem 1.2rem; background: var(--color-bg-tertiary);
+      border: 1px solid var(--color-border); border-radius: var(--radius-full);
+      font-family: var(--font-mono); font-size: var(--text-xs);
+      color: var(--color-text-secondary); cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
+    }
+    .projects-filter-btn::before {
+      content: ''; width: 6px; height: 6px; border-radius: 50%;
+      background: var(--color-text-tertiary); transition: all 0.25s;
+    }
+    .projects-filter-btn:hover {
+      border-color: var(--color-accent-primary);
+      color: var(--color-accent-primary);
+      background: var(--color-accent-subtle);
+      transform: translateY(-1px);
+    }
+    .projects-filter-btn:hover::before { background: var(--color-accent-primary); }
+    .projects-filter-btn--active {
+      background: var(--color-accent-subtle);
+      border-color: rgba(99,102,241,0.25);
+      color: var(--color-accent-primary);
+      font-weight: 600;
+    }
+    .projects-filter-btn--active::before { background: var(--color-accent-primary); box-shadow: 0 0 8px var(--color-accent-glow); }
+    .projects-empty { text-align: center; padding: 3rem 1rem; color: var(--color-text-secondary); }
+
+    /* ===================================
+       Case Cards Grid
+       =================================== */
+    .case-grid {
+      display: grid; grid-template-columns: 1fr; gap: 2rem;
+    }
+    @media (min-width: 900px) {
+      .case-grid { grid-template-columns: repeat(2, 1fr); }
+      .case-card--featured { grid-column: 1 / -1; }
+    }
+
+    /* ===================================
+       Case Card Base
+       =================================== */
+    .case-card {
+      background: var(--color-bg-secondary); border-radius: 16px; overflow: hidden;
+      margin-bottom: 0; border: 1px solid var(--color-border);
+      transition: opacity 0.35s ease, transform 0.35s ease, border-color 0.35s cubic-bezier(0.4,0,0.2,1), box-shadow 0.35s cubic-bezier(0.4,0,0.2,1);
+      display: flex; flex-direction: column;
+      position: relative;
+    }
+    .case-card:hover {
+      border-color: var(--color-accent-primary);
+      transform: translateY(-6px);
+      box-shadow: 0 16px 48px rgba(0,0,0,0.18), 0 0 0 1px rgba(99,102,241,0.15);
+    }
+
+    /* Featured card (first) - gradient border + glow */
+    .case-card--featured {
+      border: 1px solid transparent;
+      background:
+        linear-gradient(var(--color-bg-secondary), var(--color-bg-secondary)) padding-box,
+        linear-gradient(135deg, rgba(99,102,241,0.5), rgba(139,92,246,0.3), rgba(99,102,241,0.5)) border-box;
+      box-shadow: 0 0 40px rgba(99,102,241,0.08), 0 4px 24px rgba(0,0,0,0.12);
+    }
+    .case-card--featured:hover {
+      border-color: transparent;
+      box-shadow: 0 0 60px rgba(99,102,241,0.18), 0 16px 48px rgba(0,0,0,0.18);
+    }
+    .case-card--featured .case-card-header {
+      background: linear-gradient(135deg, rgba(99,102,241,0.06), transparent 60%);
+    }
+
+    /* ===================================
+       Case Card Header
+       =================================== */
+    .case-card-header {
+      padding: 2rem; border-bottom: 1px solid var(--color-border);
+    }
+    .case-card-badge {
+      display: inline-flex; align-items: center; gap: 0.3rem;
+      background: var(--color-accent-primary); color: white;
+      padding: 0.3rem 0.85rem; border-radius: 9999px;
+      font-size: 0.75rem; font-weight: 600; margin-bottom: 1rem;
+      font-family: var(--font-mono); letter-spacing: 0.02em;
+    }
+    .case-card--featured .case-card-badge {
+      background: var(--gradient-accent);
+      box-shadow: 0 0 16px rgba(99,102,241,0.3);
+    }
+    .case-card-title {
+      font-size: 1.75rem; margin-bottom: 0.5rem; font-weight: 700;
+    }
+    .case-card-subtitle {
+      color: var(--color-text-secondary); font-size: 1rem; line-height: 1.6;
+    }
+    @media (max-width: 640px) {
+      .case-card-header { padding: 1.5rem; }
+      .case-card-title { font-size: 1.4rem; }
+    }
+
+    /* ===================================
+       Case Card Body
+       =================================== */
+    .case-card-body {
+      padding: 2rem; flex: 1; display: flex; flex-direction: column;
+    }
+    @media (max-width: 640px) {
+      .case-card-body { padding: 1.5rem; }
+    }
     .case-section { margin-bottom: 1.5rem; }
     .case-section:last-child { margin-bottom: 0; }
-    .case-section-title { font-size: 0.875rem; font-weight: 600; color: var(--color-accent-primary); margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; }
-    .case-section-content { color: var(--color-text-secondary); line-height: 1.7; }
-    .case-metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 1rem; margin-top: 1rem; }
-    .case-metric { background: var(--color-bg-tertiary); padding: 1rem; border-radius: 8px; text-align: center; }
-    .case-metric-value { font-size: 1.5rem; font-weight: 700; color: var(--color-text-primary); }
-    .case-metric-label { font-size: 0.75rem; color: var(--color-text-secondary); margin-top: 0.25rem; }
-    .case-links { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.5rem; }
-    .tech-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
-    @media (max-width: 640px) {
-      .case-card-header, .case-card-body { padding: 1.5rem; }
-      .case-card-title { font-size: 1.5rem; }
+    .case-section-title {
+      font-size: 0.8rem; font-weight: 600;
+      color: var(--color-accent-primary);
+      margin-bottom: 0.75rem;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      font-family: var(--font-mono);
+      display: flex; align-items: center; gap: 0.4rem;
+    }
+    .case-section-title::before {
+      content: ''; width: 3px; height: 14px; border-radius: 2px;
+      background: var(--gradient-accent); flex-shrink: 0;
+    }
+    .case-section-content {
+      color: var(--color-text-secondary); line-height: 1.75; font-size: 0.95rem;
+    }
+
+    /* ===================================
+       Tech Tags - Color Coded
+       =================================== */
+    .tech-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.25rem; }
+    .tech-tag {
+      display: inline-flex; align-items: center;
+      padding: 0.3rem 0.7rem; border-radius: var(--radius-sm);
+      font-size: 0.75rem; font-weight: 500;
+      font-family: var(--font-mono);
+      border: 1px solid var(--color-border);
+      transition: all 0.2s;
+    }
+    .tech-tag--frontend { background: rgba(59,130,246,0.12); color: #60a5fa; border-color: rgba(59,130,246,0.2); }
+    .tech-tag--framework { background: rgba(168,85,247,0.12); color: #c084fc; border-color: rgba(168,85,247,0.2); }
+    .tech-tag--backend { background: rgba(34,197,94,0.12); color: #4ade80; border-color: rgba(34,197,94,0.2); }
+    .tech-tag--infra { background: rgba(249,115,22,0.12); color: #fb923c; border-color: rgba(249,115,22,0.2); }
+    .tech-tag--feature { background: rgba(236,72,153,0.12); color: #f472b6; border-color: rgba(236,72,153,0.2); }
+    .tech-tag:hover { transform: translateY(-1px); filter: brightness(1.15); }
+
+    /* ===================================
+       Case Metrics - Enhanced
+       =================================== */
+    .case-metrics {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+      gap: 0.75rem; margin-top: 1rem;
+    }
+    .case-metric {
+      background: var(--color-bg-tertiary);
+      padding: 1.1rem 0.75rem; border-radius: 10px; text-align: center;
+      border: 1px solid var(--color-border);
+      transition: all 0.25s;
+      position: relative; overflow: hidden;
+    }
+    .case-metric::before {
+      content: ''; position: absolute; bottom: 0; left: 20%; right: 20%; height: 2px;
+      background: var(--gradient-accent); border-radius: 1px;
+      opacity: 0.7; transition: all 0.3s;
+    }
+    .case-metric:hover {
+      transform: translateY(-3px); border-color: rgba(99,102,241,0.25);
+    }
+    .case-metric:hover::before { left: 10%; right: 10%; opacity: 1; }
+    .case-metric-value {
+      font-size: 1.85rem; font-weight: 700; color: var(--color-text-primary);
+      line-height: 1.2; font-family: var(--font-mono);
+      background: var(--gradient-text); -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .case-metric-label {
+      font-size: 0.7rem; color: var(--color-text-tertiary);
+      margin-top: 0.4rem; text-transform: uppercase; letter-spacing: 0.04em;
+    }
+
+    /* ===================================
+       Case Links
+       =================================== */
+    .case-links {
+      display: flex; flex-wrap: wrap; gap: 0.75rem;
+      margin-top: auto; padding-top: 1.5rem;
     }
   </style>
   <!-- Preconnect to Google Fonts -->
@@ -99,6 +307,24 @@
           <h1 class="section-title">项目案例</h1>
           <p class="section-desc">从想法到落地，每个项目都是一次技术与产品的探索</p>
         </div>
+        <div class="projects-stats">
+          <div class="projects-stat">
+            <span class="projects-stat-value">3</span>
+            <span class="projects-stat-label">Projects</span>
+          </div>
+          <div class="projects-stat">
+            <span class="projects-stat-value">15+</span>
+            <span class="projects-stat-label">Tech Stack</span>
+          </div>
+          <div class="projects-stat">
+            <span class="projects-stat-value">20+</span>
+            <span class="projects-stat-label">Features</span>
+          </div>
+          <div class="projects-stat">
+            <span class="projects-stat-value">100%</span>
+            <span class="projects-stat-label">Solo Dev</span>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -113,158 +339,160 @@
           <button class="projects-filter-btn" data-filter="tool">工具</button>
         </div>
 
-        <!-- Case 1: loczb 个人品牌网站 -->
-        <article class="case-card animate-on-scroll" data-category="website" data-tech="html css javascript cloudflare pwa">
-          <div class="case-card-header">
-            <span class="case-card-badge">代表案例</span>
-            <h2 class="case-card-title">loczb 个人品牌网站</h2>
-            <p class="case-card-subtitle">从零打造个人技术品牌，统一展示能力、项目和内容</p>
-          </div>
-          <div class="case-card-body">
-            <div class="case-section">
-              <h3 class="case-section-title">项目背景</h3>
-              <p class="case-section-content">需要一个统一的地方展示技术能力、项目经验和博客内容，让潜在合作方快速了解我能提供什么价值。同时作为个人品牌的数字名片。</p>
+        <div class="case-grid">
+          <!-- Case 1: loczb 个人品牌网站 -->
+          <article class="case-card case-card--featured animate-on-scroll" data-category="website" data-tech="html css javascript cloudflare pwa">
+            <div class="case-card-header">
+              <span class="case-card-badge">⭐ 代表案例</span>
+              <h2 class="case-card-title">loczb 个人品牌网站</h2>
+              <p class="case-card-subtitle">从零打造个人技术品牌，统一展示能力、项目和内容</p>
             </div>
-            <div class="case-section">
-              <h3 class="case-section-title">我的角色</h3>
-              <p class="case-section-content">全栈独立开发 — 从信息架构、UI 设计、前端开发到部署运维，全流程负责。</p>
-            </div>
-            <div class="case-section">
-              <h3 class="case-section-title">技术方案</h3>
-              <div class="tech-tags">
-                <span class="tech-tag">HTML/CSS</span>
-                <span class="tech-tag">JavaScript</span>
-                <span class="tech-tag">GitHub Pages</span>
-                <span class="tech-tag">Cloudflare Workers</span>
-                <span class="tech-tag">PWA</span>
-                <span class="tech-tag">GitHub Actions CI</span>
+            <div class="case-card-body">
+              <div class="case-section">
+                <h3 class="case-section-title">项目背景</h3>
+                <p class="case-section-content">需要一个统一的地方展示技术能力、项目经验和博客内容，让潜在合作方快速了解我能提供什么价值。同时作为个人品牌的数字名片。</p>
               </div>
-            </div>
-            <div class="case-section">
-              <h3 class="case-section-title">亮点能力</h3>
-              <p class="case-section-content">• 暗色科技风设计 + 精致动效 + 完整响应式<br>• 博客系统：分类/分页/搜索 + CI 自动化索引 + 70 篇技术博客<br>• AI 助手集成（Cloudflare Worker + 通义千问）<br>• PWA 离线 + RSS / Sitemap / OG 图片</p>
-            </div>
-            <div class="case-section">
-              <h3 class="case-section-title">结果指标</h3>
-              <div class="case-metrics">
-                <div class="case-metric">
-                  <div class="case-metric-value">500+</div>
-                  <div class="case-metric-label">月访问量</div>
-                </div>
-                <div class="case-metric">
-                  <div class="case-metric-value">70</div>
-                  <div class="case-metric-label">博客文章</div>
-                </div>
-                <div class="case-metric">
-                  <div class="case-metric-value">100%</div>
-                  <div class="case-metric-label">独立开发</div>
+              <div class="case-section">
+                <h3 class="case-section-title">我的角色</h3>
+                <p class="case-section-content">全栈独立开发 - 从信息架构、UI 设计、前端开发到部署运维，全流程负责。</p>
+              </div>
+              <div class="case-section">
+                <h3 class="case-section-title">技术方案</h3>
+                <div class="tech-tags">
+                  <span class="tech-tag tech-tag--frontend">HTML/CSS</span>
+                  <span class="tech-tag tech-tag--frontend">JavaScript</span>
+                  <span class="tech-tag tech-tag--infra">GitHub Pages</span>
+                  <span class="tech-tag tech-tag--infra">Cloudflare Workers</span>
+                  <span class="tech-tag tech-tag--feature">PWA</span>
+                  <span class="tech-tag tech-tag--infra">GitHub Actions CI</span>
                 </div>
               </div>
+              <div class="case-section">
+                <h3 class="case-section-title">亮点能力</h3>
+                <p class="case-section-content">• 暗色科技风设计 + 精致动效 + 完整响应式<br>• 博客系统：分类/分页/搜索 + CI 自动化索引 + 70 篇技术博客<br>• AI 助手集成（Cloudflare Worker + 通义千问）<br>• PWA 离线 + RSS / Sitemap / OG 图片</p>
+              </div>
+              <div class="case-section">
+                <h3 class="case-section-title">结果指标</h3>
+                <div class="case-metrics">
+                  <div class="case-metric">
+                    <div class="case-metric-value">500+</div>
+                    <div class="case-metric-label">月访问量</div>
+                  </div>
+                  <div class="case-metric">
+                    <div class="case-metric-value">70</div>
+                    <div class="case-metric-label">博客文章</div>
+                  </div>
+                  <div class="case-metric">
+                    <div class="case-metric-value">100%</div>
+                    <div class="case-metric-label">独立开发</div>
+                  </div>
+                </div>
+              </div>
+              <div class="case-links">
+                <a href="https://709527.xyz" class="btn btn-primary" target="_blank" rel="noopener">在线访问</a>
+                <a href="https://github.com/zzdbilly/loczb" class="btn btn-ghost" target="_blank" rel="noopener">源代码</a>
+              </div>
             </div>
-            <div class="case-links">
-              <a href="https://709527.xyz" class="btn btn-primary" target="_blank" rel="noopener">在线访问</a>
-              <a href="https://github.com/zzdbilly/loczb" class="btn btn-ghost" target="_blank" rel="noopener">源代码</a>
-            </div>
-          </div>
-        </article>
+          </article>
 
-        <!-- Case 2: Zest 习惯追踪器 -->
-        <article class="case-card animate-on-scroll" data-category="app" data-tech="nextjs prisma postgresql tailwind vercel">
-          <div class="case-card-header">
-            <span class="case-card-badge">Web App</span>
-            <h2 class="case-card-title">Zest</h2>
-            <p class="case-card-subtitle">习惯养成追踪应用</p>
-          </div>
-          <div class="case-card-body">
-            <div class="case-section">
-              <h3 class="case-section-title">项目背景</h3>
-              <p class="case-section-content">需要一个简单、隐私友好的习惯追踪工具。从 React + Go 原型起步，现已全面重构为 Next.js + Prisma + PostgreSQL 架构并部署于 Vercel。</p>
+          <!-- Case 2: Zest 习惯追踪器 -->
+          <article class="case-card animate-on-scroll" data-category="app" data-tech="nextjs prisma postgresql tailwind vercel">
+            <div class="case-card-header">
+              <span class="case-card-badge">Web App</span>
+              <h2 class="case-card-title">Zest</h2>
+              <p class="case-card-subtitle">习惯养成追踪应用</p>
             </div>
-            <div class="case-section">
-              <h3 class="case-section-title">我的角色</h3>
-              <p class="case-section-content">全栈开发 — 架构重设计、数据库迁移、Vercel 部署。</p>
-            </div>
-            <div class="case-section">
-              <h3 class="case-section-title">技术方案</h3>
-              <div class="tech-tags">
-                <span class="tech-tag">Next.js</span>
-                <span class="tech-tag">Prisma</span>
-                <span class="tech-tag">PostgreSQL</span>
-                <span class="tech-tag">Tailwind CSS</span>
-                <span class="tech-tag">Vercel</span>
+            <div class="case-card-body">
+              <div class="case-section">
+                <h3 class="case-section-title">项目背景</h3>
+                <p class="case-section-content">需要一个简单、隐私友好的习惯追踪工具。从 React + Go 原型起步，现已全面重构为 Next.js + Prisma + PostgreSQL 架构并部署于 Vercel。</p>
               </div>
-            </div>
-            <div class="case-section">
-              <h3 class="case-section-title">功能特性</h3>
-              <p class="case-section-content">• 每日打卡 + 心情记录<br>• 成就徽章系统<br>• 自定义里程碑奖励<br>• 失败复盘 + 触发场景分析<br>• 周回顾 + 智能建议<br>• 日历热力图 + 补卡<br>• 深色主题 + Toast 反馈</p>
-            </div>
-            <div class="case-section">
-              <h3 class="case-section-title">结果指标</h3>
-              <div class="case-metrics">
-                <div class="case-metric">
-                  <div class="case-metric-value">15</div>
-                  <div class="case-metric-label">功能模块</div>
-                </div>
-                <div class="case-metric">
-                  <div class="case-metric-value">Full</div>
-                  <div class="case-metric-label">前后端分离</div>
+              <div class="case-section">
+                <h3 class="case-section-title">我的角色</h3>
+                <p class="case-section-content">全栈开发 - 架构重设计、数据库迁移、Vercel 部署。</p>
+              </div>
+              <div class="case-section">
+                <h3 class="case-section-title">技术方案</h3>
+                <div class="tech-tags">
+                  <span class="tech-tag tech-tag--framework">Next.js</span>
+                  <span class="tech-tag tech-tag--framework">Prisma</span>
+                  <span class="tech-tag tech-tag--backend">PostgreSQL</span>
+                  <span class="tech-tag tech-tag--frontend">Tailwind CSS</span>
+                  <span class="tech-tag tech-tag--infra">Vercel</span>
                 </div>
               </div>
+              <div class="case-section">
+                <h3 class="case-section-title">功能特性</h3>
+                <p class="case-section-content">• 每日打卡 + 心情记录<br>• 成就徽章系统<br>• 自定义里程碑奖励<br>• 失败复盘 + 触发场景分析<br>• 周回顾 + 智能建议<br>• 日历热力图 + 补卡<br>• 深色主题 + Toast 反馈</p>
+              </div>
+              <div class="case-section">
+                <h3 class="case-section-title">结果指标</h3>
+                <div class="case-metrics">
+                  <div class="case-metric">
+                    <div class="case-metric-value">15</div>
+                    <div class="case-metric-label">功能模块</div>
+                  </div>
+                  <div class="case-metric">
+                    <div class="case-metric-value">Full</div>
+                    <div class="case-metric-label">前后端分离</div>
+                  </div>
+                </div>
+              </div>
+              <div class="case-links">
+                <a href="https://github.com/zzdbilly/zest" class="btn btn-ghost" target="_blank" rel="noopener">源代码</a>
+              </div>
             </div>
-            <div class="case-links">
-              <a href="https://github.com/zzdbilly/zest" class="btn btn-ghost" target="_blank" rel="noopener">源代码</a>
-            </div>
-          </div>
-        </article>
+          </article>
 
-        <!-- Case 3: PasteBin 便利贴 -->
-        <article class="case-card animate-on-scroll" data-category="tool" data-tech="cloudflare kv highlightjs crypto">
-          <div class="case-card-header">
-            <span class="case-card-badge">Web App</span>
-            <h2 class="case-card-title">PasteBin</h2>
-            <p class="case-card-subtitle">轻量文本分享工具 — 贴文本，一键生成链接分享</p>
-          </div>
-          <div class="case-card-body">
-            <div class="case-section">
-              <h3 class="case-section-title">项目背景</h3>
-              <p class="case-section-content">需要一个极简的文本分享工具，贴代码、日志、配置片段，快速生成链接发给别人。不需要注册登录，用完即走。对标 Pastebin.com，但更轻量、免费。</p>
+          <!-- Case 3: PasteBin 便利贴 -->
+          <article class="case-card animate-on-scroll" data-category="tool" data-tech="cloudflare kv highlightjs crypto">
+            <div class="case-card-header">
+              <span class="case-card-badge">Web App</span>
+              <h2 class="case-card-title">PasteBin</h2>
+              <p class="case-card-subtitle">轻量文本分享工具 - 贴文本，一键生成链接分享</p>
             </div>
-            <div class="case-section">
-              <h3 class="case-section-title">我的角色</h3>
-              <p class="case-section-content">全栈独立开发 — 从需求、架构设计、前端到后端逻辑，全流程搞定。</p>
-            </div>
-            <div class="case-section">
-              <h3 class="case-section-title">技术方案</h3>
-              <div class="tech-tags">
-                <span class="tech-tag">Cloudflare Workers</span>
-                <span class="tech-tag">KV</span>
-                <span class="tech-tag">highlight.js</span>
-                <span class="tech-tag">Web Crypto API</span>
+            <div class="case-card-body">
+              <div class="case-section">
+                <h3 class="case-section-title">项目背景</h3>
+                <p class="case-section-content">需要一个极简的文本分享工具，贴代码、日志、配置片段，快速生成链接发给别人。不需要注册登录，用完即走。对标 Pastebin.com，但更轻量、免费。</p>
               </div>
-            </div>
-            <div class="case-section">
-              <h3 class="case-section-title">功能特性</h3>
-              <p class="case-section-content">• 一键创建粘贴，生成 6 位短码链接<br>• 过期时间：1小时 / 24小时 / 7天<br>• 阅后即焚：打开一次自动删除<br>• 密码保护：SHA-256 加密 + Token 验证<br>• 语法高亮：自动检测 22 种语言<br>• Raw 模式：纯文本输出<br>• 所有页面暗色主题，移动端适配</p>
-            </div>
-            <div class="case-section">
-              <h3 class="case-section-title">结果指标</h3>
-              <div class="case-metrics">
-                <div class="case-metric">
-                  <div class="case-metric-value">0</div>
-                  <div class="case-metric-label">外部依赖</div>
-                </div>
-                <div class="case-metric">
-                  <div class="case-metric-value">30KB</div>
-                  <div class="case-metric-label">Worker 大小</div>
+              <div class="case-section">
+                <h3 class="case-section-title">我的角色</h3>
+                <p class="case-section-content">全栈独立开发 - 从需求、架构设计、前端到后端逻辑，全流程搞定。</p>
+              </div>
+              <div class="case-section">
+                <h3 class="case-section-title">技术方案</h3>
+                <div class="tech-tags">
+                  <span class="tech-tag tech-tag--infra">Cloudflare Workers</span>
+                  <span class="tech-tag tech-tag--backend">KV</span>
+                  <span class="tech-tag tech-tag--feature">highlight.js</span>
+                  <span class="tech-tag tech-tag--backend">Web Crypto API</span>
                 </div>
               </div>
+              <div class="case-section">
+                <h3 class="case-section-title">功能特性</h3>
+                <p class="case-section-content">• 一键创建粘贴，生成 6 位短码链接<br>• 过期时间：1小时 / 24小时 / 7天<br>• 阅后即焚：打开一次自动删除<br>• 密码保护：SHA-256 加密 + Token 验证<br>• 语法高亮：自动检测 22 种语言<br>• Raw 模式：纯文本输出<br>• 所有页面暗色主题，移动端适配</p>
+              </div>
+              <div class="case-section">
+                <h3 class="case-section-title">结果指标</h3>
+                <div class="case-metrics">
+                  <div class="case-metric">
+                    <div class="case-metric-value">0</div>
+                    <div class="case-metric-label">外部依赖</div>
+                  </div>
+                  <div class="case-metric">
+                    <div class="case-metric-value">30KB</div>
+                    <div class="case-metric-label">Worker 大小</div>
+                  </div>
+                </div>
+              </div>
+              <div class="case-links">
+                <a href="https://pastebin.billycust716.workers.dev" class="btn btn-primary" target="_blank" rel="noopener">在线访问</a>
+                <a href="https://github.com/zzdbilly/pastebin" class="btn btn-ghost" target="_blank" rel="noopener">源代码</a>
+              </div>
             </div>
-            <div class="case-links">
-              <a href="https://pastebin.billycust716.workers.dev" class="btn btn-primary" target="_blank" rel="noopener">在线访问</a>
-              <a href="https://github.com/zzdbilly/pastebin" class="btn btn-ghost" target="_blank" rel="noopener">源代码</a>
-            </div>
-          </div>
-        </article>
+          </article>
+        </div>
 
         <!-- Empty state -->
         <div class="projects-empty" id="projects-empty" style="display:none;">
