@@ -109,22 +109,38 @@
     .view-toggle-btn.active { background: var(--color-accent-primary); border-color: var(--color-accent-primary); color: #fff; }
     /* Archive View */
     .archive-view { display: none; }
-    .archive-view.active { display: block; }
-    .archive-year { margin-bottom: 2.5rem; }
-    .archive-year-header { font-size: var(--text-2xl); font-weight: 700; color: var(--color-text-primary); margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid var(--color-border); }
-    .archive-year-header .archive-count { font-weight: 400; font-size: var(--text-sm); color: var(--color-text-muted); margin-left: 0.5rem; }
-    .archive-year-body { padding-left: 0.5rem; }
-    .archive-month { margin-bottom: 1.5rem; }
-    .archive-month-header { font-size: var(--text-base); font-weight: 600; color: var(--color-accent-primary); margin-bottom: 0.5rem; padding-bottom: 0.25rem; border-bottom: 1px solid var(--color-border); display: flex; align-items: center; gap: 0.4rem; }
-    .archive-month-header .archive-count { font-weight: 400; font-size: var(--text-sm); color: var(--color-text-muted); margin-left: 0.5rem; }
-    .archive-post { display: flex; align-items: center; gap: 1rem; padding: 0.5rem 0.75rem; border-bottom: 1px solid rgba(0,0,0,0.04); transition: background 0.15s; border-radius: var(--radius-sm); }
+    .archive-view.active { display: block; animation: archiveFadeIn 0.4s ease; }
+    @keyframes archiveFadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+    /* Year */
+    .archive-year { margin-bottom: 2.5rem; position: relative; }
+    .archive-year-header { display: flex; align-items: baseline; gap: 0.75rem; font-size: var(--text-3xl); font-weight: 700; font-family: var(--font-serif); color: var(--color-text-primary); margin-bottom: 1.25rem; padding-bottom: 0.75rem; position: relative; }
+    .archive-year-header::before { content: ''; position: absolute; left: 0; bottom: 0; width: 64px; height: 3px; border-radius: 2px; background: var(--gradient-accent); }
+    .archive-year-header .archive-count { font-weight: 500; font-size: var(--text-sm); color: var(--color-text-muted); font-family: var(--font-mono); }
+    .archive-year-body { padding-left: 1rem; }
+    /* Month card */
+    .archive-month { margin-bottom: 1.25rem; background: var(--color-bg-secondary); border: 1px solid var(--color-border); border-radius: var(--radius-lg); overflow: hidden; transition: border-color 0.2s; }
+    .archive-month:hover { border-color: var(--color-border-hover); }
+    .archive-month-header { font-size: var(--text-base); font-weight: 600; color: var(--color-accent-primary); padding: 0.75rem 1.25rem; display: flex; align-items: center; gap: 0.5rem; background: var(--color-bg-tertiary); border-bottom: 1px solid var(--color-border); }
+    .archive-month-header::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--color-accent-primary); opacity: 0.7; }
+    .archive-month-header .archive-count { font-weight: 400; font-size: var(--text-xs); color: var(--color-text-muted); margin-left: auto; font-family: var(--font-mono); padding: 0.1rem 0.5rem; border-radius: var(--radius-full); background: var(--color-bg-elevated); }
+    .archive-month-body { padding: 0.5rem 0; }
+    /* Post row */
+    .archive-post { display: flex; align-items: center; gap: 1rem; padding: 0.6rem 1.25rem; border-bottom: 1px solid var(--color-border); transition: all 0.2s; }
     .archive-post:last-child { border-bottom: none; }
-    .archive-post:hover { background: var(--color-bg-tertiary); }
-    .archive-post-date { font-family: var(--font-mono); font-size: var(--text-xs); color: var(--color-text-muted); white-space: nowrap; min-width: 3.5rem; }
+    .archive-post:hover { background: var(--color-accent-subtle); }
+    .archive-post-date { font-family: var(--font-mono); font-size: var(--text-xs); color: var(--color-text-secondary); white-space: nowrap; min-width: 3.5rem; padding: 0.2rem 0.55rem; border-radius: var(--radius-sm); background: var(--color-bg-tertiary); text-align: center; border: 1px solid var(--color-border); }
     .archive-post-title { flex: 1; }
-    .archive-post-title a { color: var(--color-text-primary); text-decoration: none; font-size: var(--text-sm); transition: color 0.15s; }
+    .archive-post-title a { color: var(--color-text-primary); text-decoration: none; font-size: var(--text-sm); transition: color 0.15s; display: block; }
     .archive-post-title a:hover { color: var(--color-accent-primary); }
-    .archive-post-cat { font-size: 0.7rem; padding: 0.15rem 0.5rem; border-radius: var(--radius-full); background: var(--color-bg-tertiary); color: var(--color-text-muted); white-space: nowrap; }
+    .archive-post-cat { font-size: 0.7rem; padding: 0.2rem 0.65rem; border-radius: var(--radius-full); background: var(--color-accent-subtle); color: var(--color-accent-primary); white-space: nowrap; font-weight: 500; border: 1px solid rgba(99, 102, 241, 0.15); }
+    /* Mobile */
+    @media (max-width: 640px) {
+      .archive-year-body { padding-left: 0; }
+      .archive-post { gap: 0.75rem; padding: 0.6rem 1rem; }
+      .archive-post-date { font-size: 0.65rem; min-width: 3rem; padding: 0.15rem 0.4rem; }
+      .archive-post-cat { font-size: 0.65rem; padding: 0.15rem 0.5rem; }
+      .archive-year-header { font-size: var(--text-2xl); }
+    }
     /* Hide list view when archive active */
     .blog-list-container.hidden { display: none; }
     .pagination.hidden { display: none; }
