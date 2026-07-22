@@ -7,6 +7,14 @@
     <language>zh-CN</language>
     <atom:link href="https://709527.xyz/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>Agentic AI 架构演进：从 Chatbot 到自主 Agent</title>
+      <link>https://709527.xyz/blog/posts/agentic-ai-架构演进从-chatbot-到自主-agent.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/agentic-ai-架构演进从-chatbot-到自主-agent.html</guid>
+      <description>从 Function Calling、MCP 到 Multi-Agent，梳理 AI Agent 架构的进化路径，以及当前面临的挑战和未来方向。</description>
+      <category>AI</category>
+      <pubDate>Wed, 22 Jul 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
       <title>PostgreSQL 从 17 到 18：生产环境升级实战</title>
       <link>https://709527.xyz/blog/posts/postgresql-从-17-到-18生产环境升级实战.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/postgresql-从-17-到-18生产环境升级实战.html</guid>
@@ -157,14 +165,6 @@
       <description>不会关机的程序员不是在拼事业，而是在慢性消耗自己。聊聊为什么下班后的大脑还在 debug，以及如何真正停下来。</description>
       <category>思考</category>
       <pubDate>Sat, 04 Jul 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>静态博客性能优化实战：从 59MB 到精简高效</title>
-      <link>https://709527.xyz/blog/posts/static-blog-performance-optimization-59mb.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/static-blog-performance-optimization-59mb.html</guid>
-      <description>66篇文章4KB重复内联样式、4.4MB死文件、404幽灵引用——一次完整的静态博客性能优化记录</description>
-      <category>前端</category>
-      <pubDate>Fri, 03 Jul 2026 00:00:00 +0800</pubDate>
     </item>
   </channel>
 </rss>

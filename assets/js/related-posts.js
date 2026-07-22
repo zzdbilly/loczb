@@ -4,6 +4,7 @@
 
 // Article index with tags
 const ARTICLE_INDEX = [
+  { slug: "agentic-ai-架构演进从-chatbot-到自主-agent", tags: ["AI", "Agent", "架构"], title: "Agentic AI 架构演进：从 Chatbot 到自主 Agent" },
   { slug: "postgresql-从-17-到-18生产环境升级实战", tags: ["PostgreSQL", "数据库", "DevOps", "性能优化"], title: "PostgreSQL 从 17 到 18：生产环境升级实战" },
   { slug: "ai-编码代理实战从-copilot-到-agent", tags: ["AI", "AI编程", "Agent", "开发规范", "效率提升"], title: "AI 编码代理实战：从 Copilot 到 Agent" },
   { slug: "rust-入局2026-年的生态全景", tags: ["Rust", "TIOBE", "系统编程", "编程语言"], title: "Rust 入局：2026 年的生态全景" },
