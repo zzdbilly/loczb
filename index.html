@@ -444,29 +444,47 @@
       
       <div class="blog-grid">
         <!-- 代表文章大卡 -->
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <article class="blog-card-featured animate-on-scroll" id="home-featured-post" style="display: block;">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <article class="blog-card-featured animate-on-scroll" id="home-featured-post" style="display: block;">
           <div class="blog-card-header">
             <div class="blog-card-meta">
+              <span class="blog-date">2026-07-22</span>
+              <span>·</span>
+              <span class="blog-read-time">5 min</span>
+            </div>
+            <span class="blog-list-tag">AI</span>
+          </div>
+          <h3 class="blog-card-title">
+            <a href="blog/posts/agentic-ai-架构演进从-chatbot-到自主-agent.html">Agentic AI 架构演进：从 Chatbot 到自主 Agent</a>
+          </h3>
+          <p class="blog-card-excerpt">从 Function Calling、MCP 到 Multi-Agent，梳理 AI Agent 架构的进化路径，以及当前面临的挑战和未来方向。...</p>
+          <div class="blog-card-tags">
+            <span class="tech-tag">AI</span>
+            <span class="tech-tag">Agent</span>
+            <span class="tech-tag">架构</span>
+          </div>
+        </article>
+        
+        <!-- 最新文章列表 -->
+                <div class="blog-list">
+        <article class="blog-mini-card animate-on-scroll" data-category="数据库" data-page="1">
+          <div class="blog-mini-card-header">
+            <div class="blog-list-meta">
               <span class="blog-date">2026-07-19</span>
               <span>·</span>
               <span class="blog-read-time">5 min</span>
             </div>
             <span class="blog-list-tag">数据库</span>
           </div>
-          <h3 class="blog-card-title">
+          <h3 class="blog-mini-card-title">
             <a href="blog/posts/postgresql-从-17-到-18生产环境升级实战.html">PostgreSQL 从 17 到 18：生产环境升级实战</a>
           </h3>
-          <p class="blog-card-excerpt">PG 18 带来了哪些实质性改进？增量物化视图、并行查询增强、OAuth 认证……本文用一个完整的升级记录，带你从准备工作到新特性实战，涵盖升级检查清单和常见问题排查。...</p>
-          <div class="blog-card-tags">
+          <p class="blog-mini-card-excerpt">PG 18 带来了哪些实质性改进？增量物化视图、并行查询增强、OAuth 认证……本文用一个完整的升级记录，带你从准备工作到新特性实战，涵盖升级检查清单和常见问题排查。</p>
+          <div class="blog-mini-card-tags">
             <span class="tech-tag">PostgreSQL</span>
             <span class="tech-tag">数据库</span>
             <span class="tech-tag">DevOps</span>
-            <span class="tech-tag">性能优化</span>
           </div>
         </article>
-        
-        <!-- 最新文章列表 -->
-                <div class="blog-list">
         <article class="blog-mini-card animate-on-scroll" data-category="开发" data-page="1">
           <div class="blog-mini-card-header">
             <div class="blog-list-meta">
@@ -484,25 +502,6 @@
             <span class="tech-tag">AI</span>
             <span class="tech-tag">AI编程</span>
             <span class="tech-tag">Agent</span>
-          </div>
-        </article>
-        <article class="blog-mini-card animate-on-scroll" data-category="系统编程" data-page="1">
-          <div class="blog-mini-card-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-07-19</span>
-              <span>·</span>
-              <span class="blog-read-time">5 min</span>
-            </div>
-            <span class="blog-list-tag">系统编程</span>
-          </div>
-          <h3 class="blog-mini-card-title">
-            <a href="blog/posts/rust-入局2026-年的生态全景.html">Rust 入局：2026 年的生态全景</a>
-          </h3>
-          <p class="blog-mini-card-excerpt">2026年7月，Rust首次杀进TIOBE前十。从语言进化到生态扩张，从行业应用到未来展望，全面复盘Rust凭什么走到这一步。</p>
-          <div class="blog-mini-card-tags">
-            <span class="tech-tag">Rust</span>
-            <span class="tech-tag">TIOBE</span>
-            <span class="tech-tag">系统编程</span>
           </div>
         </article>
         </div>
@@ -597,6 +596,15 @@
     // 首页随机选择代表文章
     const posts = [
       {
+        url: 'blog/posts/agentic-ai-架构演进从-chatbot-到自主-agent.html',
+        title: 'Agentic AI 架构演进：从 Chatbot 到自主 Agent',
+        date: '2026-07-22',
+        readTime: '5 min',
+        category: 'AI',
+        category2: 'AI',
+        desc: '从 Function Calling、MCP 到 Multi-Agent，梳理 AI Agent 架构的进化路径，以及当前面临的挑战和未来方向。'
+      },
+      {
         url: 'blog/posts/postgresql-从-17-到-18生产环境升级实战.html',
         title: 'PostgreSQL 从 17 到 18：生产环境升级实战',
         date: '2026-07-19',
@@ -676,15 +684,6 @@
         category: '思考',
         category2: '思考',
         desc: '面向程序员的实用理财入门指南——四个账户法、极简记账、常见金融坑、可执行的起步计划。不折腾、不焦虑，让钱安静地替你打工。'
-      },
-      {
-        url: 'blog/posts/当-ai-编程-agent-有了眼睛safari-mcp-server-深度解读.html',
-        title: '当 AI 编程 Agent 有了"眼睛"：Safari MCP Server 深度解读',
-        date: '2026-07-06',
-        readTime: '5 min',
-        category: '前端',
-        category2: '前端',
-        desc: '2026年7月，Apple 发布了 Safari MCP Server，让 AI 编程 Agent 可以直接连接浏览器调试页面。本文深入解读其原理、安装配置、四个实战场景，以及与 Chrome MCP 的全方位对比。'
       }
     ];
     

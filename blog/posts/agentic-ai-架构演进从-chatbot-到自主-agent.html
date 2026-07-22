@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agentic AI 架构演进：从 Chatbot 到自主 Agent | 张小猛 - loczb</title>
+    <meta name="description" content="从 Function Calling、MCP 到 Multi-Agent，梳理 AI Agent 架构的进化路径，以及当前面临的挑战和未来方向。">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Agentic AI 架构演进：从 Chatbot 到自主 Agent | 张小猛 - loczb">
+    <meta property="og:description" content="从 Function Calling、MCP 到 Multi-Agent，梳理 AI Agent 架构的进化路径，以及当前面临的挑战和未来方向。">
+    <meta property="og:url" content="https://709527.xyz/blog/posts/agentic-ai-架构演进从-chatbot-到自主-agent.html">
+    <meta property="og:type" content="article">
+        <meta property="og:image" content="../../assets/images/og-image.png">
+    <meta property="og:site_name" content="loczb">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Agentic AI 架构演进：从 Chatbot 到自主 Agent | 张小猛 - loczb">
+    <meta name="twitter:description" content="从 Function Calling、MCP 到 Multi-Agent，梳理 AI Agent 架构的进化路径，以及当前面临的挑战和未来方向。">
+
+
+        <script type="application/ld+json">
+{
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "Agentic AI 架构演进：从 Chatbot 到自主 Agent",
+      "description": "从 Function Calling、MCP 到 Multi-Agent，梳理 AI Agent 架构的进化路径，以及当前面临的挑战和未来方向。",
+      "image": "https://709527.xyz/assets/images/og-image.png",
+      "author": {
+            "@type": "Person",
+            "name": "张小猛",
+            "url": "https://709527.xyz/about/"
+      },
+      "publisher": {
+            "@type": "Organization",
+            "name": "loczb",
+            "logo": {
+                  "@type": "ImageObject",
+                  "url": "https://709527.xyz/assets/images/favicon.svg"
+            }
+      },
+      "datePublished": "2026-07-22 17:02:29T00:00:00+08:00",
+      "dateModified": "2026-07-22 17:02:29T00:00:00+08:00",
+      "url": "https://709527.xyz/blog/posts/agentic-ai-架构演进从-chatbot-到自主-agent.html",
+      "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://709527.xyz/blog/posts/agentic-ai-架构演进从-chatbot-到自主-agent.html"
+      },
+      "keywords": "AI, Agent, 架构",
+      "articleSection": "AI",
+      "timeRequired": "PT5M",
+      "inLanguage": "zh-CN"
+}
+    </script>
+
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&family=Noto+Sans+SC:wght@500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500&display=swap" media="print" onload="this.media='all'">
+    <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
+    <link rel="alternate icon" href="../../assets/images/favicon.ico">
+</head>
+<body>
+  <!-- Loading -->
+  <div class="loading">
+    <div class="loading-spinner"></div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../../index.html" class="nav-logo">
+        loc<span>zb</span>
+      </a>
+      <button class="nav-toggle" aria-label="打开菜单" aria-expanded="false" aria-controls="nav-links-menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <div class="nav-overlay"></div>
+      <ul class="nav-links" id="nav-links-menu">
+        <li><a href="../../index.html" class="nav-link">首页</a></li>
+        <li><a href="../../projects/index.html" class="nav-link">项目</a></li>
+        <li><a href="../index.html" class="nav-link active">博客</a></li>
+        <li><a href="../../about/index.html" class="nav-link">关于</a></li>
+      </ul>
+      <button class="theme-toggle" aria-label="切换主题" title="切换亮/暗模式">
+        <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+        <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+      </button>
+    </div>
+  </nav>
+  <!-- Particle Canvas Background -->
+  <canvas id="particle-canvas" class="particle-canvas"></canvas>
+
+  <div class="scroll-progress"></div>
+
+  <main class="section" style="padding-bottom: 0; padding-top: var(--space-4xl);">
+    <div class="container container-narrow">
+      <a href="../index.html" class="back-link">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        返回博客列表
+      </a>
+
+      <article class="post-content">
+        <h1>Agentic AI 架构演进：从 Chatbot 到自主 Agent</h1>
+
+        <div class="post-meta">
+          <span>📅 2026-07-22 17:02:29</span>
+          <span>⏱️ 5 min read</span>
+          <span>👤 张小猛</span>
+        </div>
+
+        <div class="post-tags">
+          <span class="tag">AI</span>
+          <span class="tag">Agent</span>
+          <span class="tag">架构</span>
+        </div>
+
+        <h2>引言：Chatbot 还不够</h2>
+<p>2022 年底 ChatGPT 横空出世，全世界都在惊叹"AI 终于能正常聊天了"。但很快人们发现，纯对话模型有两个硬伤：</p>
+<p><strong>知识截止</strong> — 模型训练完后，世界继续运转，它不知道今天发生了什么。<br />
+<strong>无法行动</strong> — 你让 AI 帮你订机票、查天气、发邮件，它只能告诉你"我帮你写了个模板，你自己去操作"。</p>
+<p>这种"只说不做"的 AI 能解决的问题很有限。于是行业开始思考：怎么让 AI 不只 talk，还能 act？</p>
+<h2>第一阶段：Function Calling — 给 AI 装上手</h2>
+<h3>什么是 Function Calling</h3>
+<p>2023 年 6 月，OpenAI 发布了 GPT-4 的 <code>function_call</code> 能力。这不是说 AI 能直接执行代码，而是它学会了：</p>
+<ol>
+<li>听懂用户的意图</li>
+<li>从一堆预定义的 API 描述里选出合适的工具</li>
+<li>生成结构化的参数，交给外部系统执行</li>
+</ol>
+<pre><code>用户: &quot;帮我查一下北京到上海的机票&quot;
+
+AI 判断: 需要调用 search_flights API
+→ 返回 { &quot;function&quot;: &quot;search_flights&quot;, &quot;params&quot;: { &quot;from&quot;: &quot;北京&quot;, &quot;to&quot;: &quot;上海&quot; } }
+
+系统执行 API, 返回结果给 AI
+AI 用结果组织成自然语言回复用户
+</code></pre>
+<h3>实际效果</h3>
+<p>Function Calling 是第一个真正让 AI 对接现实世界的方案。它的核心价值在于：</p>
+<ul>
+<li><strong>确定性</strong> — API 调用由外部系统执行，结果可靠，解决了模型"胡编乱造"的问题</li>
+<li><strong>可审计</strong> — 每次工具调用都有完整日志，用户可以追溯</li>
+<li><strong>可扩展</strong> — 加一个接口就是加一个能力，不需要重新训练模型</li>
+</ul>
+<p>我自己的项目里就用这个模式做过一个简单的 AI 助手（loczb 博客的 AI 助手），本质上就是 Function Calling + 知识库检索。</p>
+<pre><code class="language-python"># 一个简化的 Function Calling 实现
+class FunctionCallingAgent:
+    def __init__(self, model, tools):
+        self.model = model
+        self.tools = {t[&quot;name&quot;]: t[&quot;handler&quot;] for t in tools}
+        self.tool_defs = [{k: v for k, v in t.items() if k != &quot;handler&quot;} for t in tools]
+
+    def chat(self, user_message):
+        response = self.model.chat(
+            messages=[{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: user_message}],
+            tools=self.tool_defs
+        )
+        if response.tool_calls:
+            for call in response.tool_calls:
+                fn = self.tools[call.function.name]
+                result = fn(**json.loads(call.function.arguments))
+                response = self.model.chat(
+                    messages=[...] + [{&quot;role&quot;: &quot;tool&quot;, &quot;content&quot;: result}]
+                )
+        return response.content
+</code></pre>
+<h3>局限</h3>
+<p>Function Calling 本质上还是一个<strong>一问一答</strong>的模式。每个请求都是独立的，AI 没有"记忆"，不会主动规划。你问它"北京的天气怎么样？顺便帮我推荐适合的穿搭"，它得分成两步走，但当前的框架设计上就没有"先查天气再推荐穿搭"这种串联逻辑。</p>
+<h2>第二阶段：Tool Use &amp; MCP — 标准化工具协议</h2>
+<h3>百花齐放的 Tool Use</h3>
+<p>Function Calling 发布后，各大模型厂商纷纷跟进。Claude 推出了 Tool Use API，Google 的 Gemini 也支持了 Function Calling。但问题来了：每家定义工具的方式不一样。</p>
+<table>
+<thead>
+<tr>
+<th>平台</th>
+<th>工具定义方式</th>
+<th>请求格式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>OpenAI</td>
+<td>JSON Schema function definition</td>
+<td>Chat Completion API</td>
+</tr>
+<tr>
+<td>Anthropic</td>
+<td>Tool Use block</td>
+<td>Messages API</td>
+</tr>
+<tr>
+<td>Google</td>
+<td>FunctionDeclaration</td>
+<td>Generative AI API</td>
+</tr>
+</tbody>
+</table>
+<p>这意味着开发者每适配一个模型商，就要重写一套工具调用逻辑。</p>
+<h3>MCP 的诞生</h3>
+<p>2025 年初，Anthropic 推出了 <strong>MCP（Model Context Protocol）</strong>，试图解决这个碎片化问题。MCP 的思路很聪明：</p>
+<ol>
+<li><strong>定义一套标准协议</strong> — 工具的描述格式、调用方式、结果返回都统一了</li>
+<li><strong>Server-Client 架构</strong> — AI 应用作为 Client，通过 MCP 连接各种工具 Server</li>
+<li><strong>动态发现</strong> — Server 可以广播自己有哪些工具，Client 动态加载</li>
+</ol>
+<pre><code>┌─────────────┐     ┌──────────────┐     ┌──────────────┐
+│  AI 应用     │────▶│  MCP Client  │────▶│  MCP Server  │
+│  (Claude)    │     │              │     │  (日历/邮件)  │
+└─────────────┘     └──────────────┘     └──────────────┘
+                          │
+                    ┌─────┴──────┐
+                    │ MCP Server │
+                    │ (文件系统)  │
+                    └────────────┘
+</code></pre>
+<p>MCP 的最大贡献是让工具生态变得可插拔。以前你要给 AI 加个日历功能，得自己写代码对接 API；现在只需要找个 MCP Server 连上就行，就跟装个 VS Code 插件一样简单。</p>
+<pre><code class="language-typescript">// MCP Client 连接示例（简化版）
+import { Client } from &quot;@modelcontextprotocol/sdk&quot;;
+const client = new Client({ name: &quot;my-ai-app&quot;, version: &quot;1.0.0&quot; });
+await client.connect(new StdioServerProcess({
+  command: &quot;npx&quot;,
+  args: [&quot;-y&quot;, &quot;@modelcontextprotocol/server-calendar&quot;],
+}));
+const tools = await client.listTools();
+// → [{ name: &quot;create_event&quot;, schema: {...} }, { name: &quot;list_events&quot;, ... }]
+const result = await client.callTool({
+  name: &quot;list_events&quot;,
+  arguments: { date: &quot;2026-07-22&quot; },
+});
+</code></pre>
+<pre><code class="language-bash"># 安装一个 MCP Server 就像装 npm 包
+npx @modelcontextprotocol/server-filesystem ./my-data
+npx @modelcontextprotocol/server-github
+npx @modelcontextprotocol/server-browser
+# VS Code 里直接用 MCP 配置 (.vscode/mcp.json)
+{
+  &quot;servers&quot;: {
+    &quot;git&quot;: { &quot;command&quot;: &quot;npx&quot;, &quot;args&quot;: [&quot;mcp-git&quot;] },
+    &quot;db&quot;: { &quot;command&quot;: &quot;node&quot;, &quot;args&quot;: [&quot;./mcp-db.mjs&quot;] }
+  }
+}
+</code></pre>
+<h2>第三阶段：Agentic Workflow — 让 AI 学会规划</h2>
+<h3>ReAct 模式</h3>
+<p>有了工具，还需要工具调度策略。2023 年的一篇论文 <strong>ReAct（Reasoning + Acting）</strong> 提出了一个关键 idea：让模型交替进行"思考"和"行动"。</p>
+<p>传统做法：思考 → 行动 → 结束<br />
+ReAct 模式：思考 → 行动 → 观察结果 → 再思考 → 再行动 → ... → 达成目标</p>
+<pre><code>用户: &quot;帮我订一张下周三北京到上海的高铁票&quot;
+
+AI 思考: &quot;我需要先查询下周三北京到上海的高铁班次&quot;
+AI 行动: query_trains(&quot;北京&quot;, &quot;上海&quot;, &quot;2026-07-29&quot;)
+AI 观察: 返回了 20 个车次，G15 次 08:00-12:23 是最早的
+
+AI 思考: &quot;用户没说要几点，先推荐最合适的时间段&quot;
+AI 行动: search(&quot;G15 次座位信息&quot;)
+AI 观察: 商务座 1200 元，一等座 650 元，二等座 420 元
+
+AI 思考: &quot;信息收集完毕，展示给用户选择&quot;
+AI 回复: &quot;下周三北京到上海推荐 G15 次...&quot;
+</code></pre>
+<p>这种"思考-行动-观察"的循环，让 AI 从一个被动回答者变成了主动信息收集者。</p>
+<h3>Agent 的循环结构</h3>
+<p>一个典型的 Agent 架构包含以下组件：</p>
+<pre><code>┌─────────────────────────────────────────┐
+│                Agent                     │
+│  ┌─────────┐   ┌──────────┐             │
+│  │  LLM     │   │ Memory   │             │
+│  │ (大脑)   │   │ (记忆)   │             │
+│  └────┬────┘   └──────────┘             │
+│       │                                  │
+│  ┌────▼──────────────────────────────┐  │
+│  │         Planner (规划器)           │  │
+│  │   ReAct / Plan-and-Execute / ...  │  │
+│  └───────────────────────────────────┘  │
+│       │                                  │
+│  ┌────▼──────────────────────────────┐  │
+│  │      Tool Executor (工具执行器)    │  │
+│  │   ┌─────┐ ┌─────┐ ┌─────┐        │  │
+│  │   │ API │ │ DB  │ │ MCP │        │  │
+│  │   └─────┘ └─────┘ └─────┘        │  │
+│  └───────────────────────────────────┘  │
+└─────────────────────────────────────────┘
+</code></pre>
+<h3>实际应用</h3>
+<p>2025 年，Agent 已经开始进入生产环境：</p>
+<pre><code class="language-python"># 一个简单的 ReAct Agent 实现
+class ReActAgent:
+    def __init__(self, llm, tools: list[Tool]):
+        self.llm = llm
+        self.tools = {t.name: t for t in tools}
+
+    def run(self, task: str, max_steps=10):
+        messages = [{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: task}]
+        for step in range(max_steps):
+            response = self.llm.chat(messages)
+            action = self._parse_action(response)
+            if action is None:
+                return response.content
+            result = self.tools[action.name].execute(**action.args)
+            messages.append({&quot;role&quot;: &quot;assistant&quot;, &quot;content&quot;: response.content})
+            messages.append({&quot;role&quot;: &quot;tool&quot;, &quot;content&quot;: json.dumps(result)})
+        return &quot;已达最大步数&quot;
+</code></pre>
+<ul>
+<li><strong>代码开发 Agent</strong> — Claude Code / Cursor Agent 可以在代码库中自主导航、阅读文件、编辑代码、运行测试</li>
+<li><strong>数据分析 Agent</strong> — 自动连接数据库、写 SQL、分析结果、画图表</li>
+<li><strong>浏览器 Agent</strong> — 可以自主浏览网页、填写表单、提取信息</li>
+</ul>
+<h2>第四阶段：Multi-Agent — 让 AI 协作</h2>
+<h3>为什么需要多个 Agent</h3>
+<p>一个 Agent 的能力终究有限。想想一个真实的软件开发团队：</p>
+<ul>
+<li>产品经理负责理解需求</li>
+<li>架构师负责设计方案</li>
+<li>前端开发者写 UI</li>
+<li>后端开发者写 API</li>
+<li>QA 测试</li>
+</ul>
+<p>如果你用一个超级 Agent 做所有事，它会变得笨重、上下文窗口爆破、出错成本极高。把不同职责拆给不同的 Agent，每个 Agent 专注一个领域，效果往往更好。</p>
+<pre><code class="language-python"># Multi-Agent Supervisor 模式示例
+class Supervisor:
+    def __init__(self):
+        self.agents = {
+            &quot;planner&quot;: Agent(system_prompt=&quot;你负责拆解任务&quot;),
+            &quot;coder&quot;: Agent(system_prompt=&quot;你负责编码&quot;),
+            &quot;reviewer&quot;: Agent(system_prompt=&quot;你负责代码审查&quot;),
+        }
+
+    async def execute(self, task: str):
+        plan = await self.agents[&quot;planner&quot;].run(task)
+        code = await self.agents[&quot;coder&quot;].run(plan)
+        review = await self.agents[&quot;reviewer&quot;].run(code)
+        if &quot;需要修改&quot; in review:
+            code = await self.agents[&quot;coder&quot;].run(review)
+        return code
+</code></pre>
+<h3>协作模式</h3>
+<h4>模式一：Supervisor（主管模式）</h4>
+<p>一个主管 Agent 负责拆分任务、分配给子 Agent、汇总结果。这是目前最成熟的模式。</p>
+<pre><code>         ┌────────────┐
+         │ Supervisor │
+         └─────┬──────┘
+     ┌─────────┼─────────┐
+     │         │         │
+  ┌──▼──┐  ┌──▼──┐  ┌──▼──┐
+  │Agent│  │Agent│  │Agent│
+  │  A  │  │  B  │  │  C  │
+  └─────┘  └─────┘  └─────┘
+</code></pre>
+<h4>模式二：Debate（辩论模式）</h4>
+<p>多个 Agent 对同一个问题进行辩论，互相质疑、补充。用于提高决策质量。</p>
+<p>典型场景：代码审查。一个 Agent 写代码，另一个 Agent 审查，审查意见反馈给写代码的 Agent 修改。</p>
+<h4>模式三：Pipeline（流水线模式）</h4>
+<p>任务按顺序经过多个 Agent，每个 Agent 只处理自己擅长的环节。</p>
+<pre><code>用户请求 → 理解需求 Agent → 设计方案 Agent → 编码 Agent → 测试 Agent → 部署 Agent
+</code></pre>
+<h3>现实案例</h3>
+<p>我现在的工作流本质上就是 Multi-Agent 的一种形式：主 Agent 负责统筹，需要编码时派 subagent 去执行。subagent 跑在独立上下文中，完成后汇报结果。这比让一个 Agent 从需求做到部署要稳定得多。</p>
+<h4>模式四：Orchestrator（编排模式）</h4>
+<p>一个 Orchestrator 负责编排多个 Agent 的协作流程。与 Supervisor 不同的是，Orchestrator 不直接干预 Agent 的输出内容，而是定义工作流、管理状态、处理错误。</p>
+<pre><code>┌──────────────┐
+│ Orchestrator  │── 定义工作流 + 管理状态
+└──────┬───────┘
+       │
+  ┌────┴───────────────────┐
+  │ State Machine / DAG    │
+  │ step1 → step2 → step3  │
+  └────┬───────────────────┘
+       │
+  ┌────┴────┐  ┌────┴────┐  ┌────┴────┐
+  │ Agent A │  │ Agent B │  │ Agent C │
+  │ 翻译任务 │  │ 审查任务 │  │ 润色任务 │
+  └─────────┘  └─────────┘  └─────────┘
+</code></pre>
+<h2>第五阶段：MCP 驱动的 Agent 生态</h2>
+<h3>MCP 的进化</h3>
+<p>MCP 协议一直在演进。最新版本（MCP v2.x）支持了：</p>
+<ul>
+<li><strong>Tool Discovery</strong> — 服务端可以动态注册和注销工具</li>
+<li><strong>Resource Access</strong> — Agent 可以直接读取远程文件、数据库表</li>
+<li><strong>Prompt Templates</strong> — 预定义的提示模板，减少重复构造</li>
+<li><strong>Streaming</strong> — 支持长耗时任务的实时进度反馈</li>
+</ul>
+<h3>生态现状</h3>
+<p>截至 2026 年中，MCP 生态已经相当丰富：</p>
+<ul>
+<li><strong>官方 SDK</strong> — Python、TypeScript、Java、Go</li>
+<li><strong>社区 MCP Servers</strong> — 超过 500 个，覆盖浏览器、文件系统、GitHub、数据库、Slack、邮件等</li>
+<li><strong>企业支持</strong> — 多家公司的产品原生支持 MCP：Cursor、VS Code、JetBrains 等</li>
+</ul>
+<h3>Agent Market</h3>
+<p>一个有意思的趋势是 <strong>Agent Market</strong>（Agent 市场）的出现。与 App Store 类似但架构不同：</p>
+<ul>
+<li>App Store：用户下载的是固定功能的 App</li>
+<li>Agent Market：用户下载的是 Agent 的<strong>能力组合</strong>（skills + tools + prompts）</li>
+</ul>
+<p>你下载一个"旅行规划 Agent"，它可能包含：
+- 航班查询工具（搜索 MCP Server）
+- 酒店比价工具
+- 天气查询工具
+- 行程规划的工作流定义</p>
+<p>这种模式让 Agent 不再是 monolithic 的黑盒，而是可组合、可重用的能力单元。</p>
+<h2>当前的挑战与局限</h2>
+<h3>可靠性问题</h3>
+<p>Agent 的可信赖度还不够。目前最头疼的问题：</p>
+<ul>
+<li><strong>幻觉依旧存在</strong> — Agent 在规划时可能编造不存在的环境信息</li>
+<li><strong>错误累积</strong> — 多步 Agent 中，前面一步的误差会在后续步骤中被放大</li>
+<li><strong>回滚困难</strong> — 一旦 Agent 执行的副作用不可逆转（比如发了邮件、改了数据库），恢复成本很高</li>
+</ul>
+<h3>成本问题</h3>
+<p>Agent 的成本比单纯的 Chat Completion 高很多：</p>
+<pre><code>一次 Chat Completion: 1 次调用 ≈ $0.01
+一次 Agent 任务: 5-20 次调用 + 工具执行 ≈ $0.05-$0.5
+Multi-Agent 任务: 几十到上百次调用 ≈ $1-$10
+</code></pre>
+<p>对于生产级的 Agent 应用，成本控制是一个绕不开的话题。</p>
+<h3>安全与治理</h3>
+<p>当 Agent 有了"行动能力"，安全问题就凸显了：</p>
+<ul>
+<li><strong>Prompt Injection</strong> — 恶意用户可以通过工具输出注入指令，操控 Agent</li>
+<li><strong>权限越界</strong> — Agent 可能访问未授权的数据或执行危险操作</li>
+<li><strong>审计困难</strong> — 复杂的 Agent 调用链使得问题溯源变得困难</li>
+</ul>
+<p>好消息是行业已经在制定对应的安全规范，比如 <strong>OWASP Top 10 for LLM Agents</strong> 和 <strong>Anthropic 的安全评估框架</strong>。</p>
+<h2>未来展望</h2>
+<h3>从 Agent 到 Agentic OS</h3>
+<p>一个值得关注的方向是 Agent 操作系统化。就像操作系统管理进程和资源一样，未来可能会出现专门的 Agent 运行时：</p>
+<ul>
+<li><strong>Agent Scheduler</strong> — 管理 Agent 的生命周期、优先级、资源分配</li>
+<li><strong>Shared Memory</strong> — 多个 Agent 共享上下文状态</li>
+<li><strong>Events &amp; Webhooks</strong> — Agent 之间的消息通知机制</li>
+</ul>
+<h3>端侧 Agent</h3>
+<p>端侧大模型的进步使得 Agent 可以本地运行。高通、联发科、Apple 都在推端侧 Agent：</p>
+<pre><code class="language-kotlin">// Android 端侧 Agent 思路示例
+class OnDeviceAgent(context: Context) {
+    private val llm = NanoLLM(context)  // 端侧小模型
+    private val toolRegistry = ToolRegistry()
+
+    init {
+        toolRegistry.register(CalendarTool(context))
+        toolRegistry.register(LocationTool(context))
+        toolRegistry.register(NotificationTool(context))
+    }
+
+    suspend fun process(context: UserContext): Action? {
+        val intent = llm.analyze(context.sensors, context.schedule)
+        return when (intent) {
+            Intent.GO_TO_METRO -&gt; Actions.openMetroCard()
+            Intent.MEETING_SOON -&gt; Actions.silencePhone()
+            else -&gt; null
+        }
+    }
+}
+</code></pre>
+<pre><code class="language-bash"># 端侧模型部署工具链
+# MediaPipe 部署 LLM 到 Android
+bazel build -c opt mediapipe/examples/android/llm_inference
+# Qualcomm SNPE 量化模型
+snpe-net-run --container model.dlc --input_raw input.raw
+</code></pre>
+<ul>
+<li>隐私 — 敏感数据不上云</li>
+<li>离线 — 无网络也能工作</li>
+<li>实时 — 低延迟响应</li>
+</ul>
+<p>作为一个 Android 开发者，我对这个方向特别感兴趣。可以想象一个手机的 Agent 能：</p>
+<ol>
+<li>读取你的日程安排</li>
+<li>了解你的出行习惯</li>
+<li>在你到地铁站时自动打开乘车码</li>
+<li>在会议前 5 分钟提醒并自动静音手机</li>
+<li>检测到你有未读消息时，根据上下文决定是否通知你</li>
+</ol>
+<p>这些功能靠传统的 App + Rule Based 能实现一部分，但 Agent 的泛化能力和上下文理解让体验提升了一个维度。</p>
+<pre><code class="language-javascript">// 端侧 Agent 的实时响应示例
+// 检测用户到达地铁站时自动弹出乘车码
+const metroAgent = new OnDeviceAgent({
+  location: { lat: 39.9042, lng: 116.4074 },
+  schedule: [&quot;10:00 会议&quot;, &quot;12:00 午餐&quot;],
+  lastAction: &quot;正在通勤&quot;,
+});
+
+metroAgent.on(&quot;arrived_at_metro&quot;, async (ctx) =&gt; {
+  if (ctx.isCommuteTime &amp;&amp; ctx.nfcEnabled) {
+    await ctx.showQuickAction(&quot;打开乘车码&quot;, {
+      icon: &quot;metro&quot;,
+      dismissAfter: 30000,
+    });
+  }
+});
+</code></pre>
+<h2>写代码的 Agent 已经来了</h2>
+<p>回到开头的问题：为什么我写这些文章、做这些项目，很多时候是通过 subagent 完成的？</p>
+<p>因为 Agentic 工作流已经从实验室走进了生产环境。对我来说，subagent 不是玩具，是每天使用的工具。我给它一个任务，它去读文件、分析代码、写实现、跑测试。我在主对话里统筹规划和审阅结果。</p>
+<p>这种模式刚用的时候可能觉得多此一举，但用习惯后回不去了。就像从手写代码到用版本控制，从手动部署到 CI/CD 一样。</p>
+<p>Agentic AI 还在快速演进中，从 Function Calling 到 MCP 到 Multi-Agent 再到 Agent 市场，这条路远没到终点。但有一点是确定的：<strong>AI 不能只 talk，还得能 act。</strong> 能行动、能执行、能交付价值的 AI 才是有意义的。</p>
+<p>你有开始用 Agent 做实际工作了吗？如果还没有，动手写一个简单的 Tool Use 应用试试，感受一下那种"AI 真的在帮你做事"的体验。</p>
+      </article>
+    </div>
+  </main>
+
+  <!-- Related Posts / Navigation -->
+  <section class="section" style="padding-top: 0;">
+    <div class="container container-narrow">
+      <hr style="border: none; border-top: 1px solid var(--color-border); margin: var(--space-3xl) 0;">
+
+      <div class="blog-topics" style="margin-bottom: var(--space-xl);">
+        <span class="topic-label">读完之后:</span>
+        <a href="../index.html" class="topic-tag">返回博客列表</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <p class="footer-signature">写代码,做产品,也认真生活。</p>
+      <div class="footer-social">
+        <a href="https://github.com/zzdbilly" class="footer-social-link" target="_blank" rel="noopener" aria-label="GitHub">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+        </a>
+        <a href="../../rss.xml" class="footer-social-link" aria-label="RSS">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+      </div>
+      <div class="footer-links">
+        <a href="../../index.html" class="footer-link">首页</a>
+        <a href="../../projects/index.html" class="footer-link">项目</a>
+        <a href="../../about/index.html" class="footer-link">关于</a>
+      </div>
+      <p class="footer-copyright">
+        &copy; 2026 张小猛
+      </p>
+    </div>
+  </footer>
+
+
+  <script defer src="../../assets/js/related-posts.js"></script>
+  <script defer src="../../assets/js/main.js"></script>
+  <script defer src="../../assets/js/article.js"></script>
+  <script defer src="../../assets/js/share.js"></script>
+  <script defer src="../../assets/js/back-to-top.js"></script>
+  <!-- Back to Top & Reading Progress -->
+  <button class="back-to-top" id="backToTop" aria-label="回到顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
+  <div class="reading-progress" id="readingProgress"></div>
+
+  <!-- Post Sidebar Info（左侧） -->
+  <div class="post-sidebar-info" id="postSidebar">
+    <div class="post-info-card">
+      <div class="post-info-section">
+        <div class="post-info-label">作者</div>
+        <div class="post-info-author">
+          <div class="post-info-avatar">小</div>
+          <div>
+            <div class="post-info-author-name">张小猛</div>
+            <div class="post-info-author-desc">写代码，做产品</div>
+          </div>
+        </div>
+      </div>
+      <div class="post-info-section">
+        <div class="post-info-label">文章信息</div>
+        <div class="post-info-stat"><span class="post-info-stat-label">📅 发布日期</span><span class="post-info-stat-value">2026-07-22</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label">⏱️ 阅读时间</span><span class="post-info-stat-value">5 min read</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label">📝 文章字数</span><span class="post-info-stat-value">3601 字</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label">📊 章节数</span><span class="post-info-stat-value">9 节 · 19 子节</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label">💻 代码块</span><span class="post-info-stat-value">16 段</span></div>
+      </div>
+      <div class="post-info-section" id="postSidebarTags">
+        <div class="post-info-label">标签</div>
+        <div class="post-info-links">
+          <a href="../../blog/index.html?tag=AI" class="post-info-link"># AI</a>
+          <a href="../../blog/index.html?tag=Agent" class="post-info-link"># Agent</a>
+          <a href="../../blog/index.html?tag=架构" class="post-info-link"># 架构</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Post TOC -->
+  <div class="post-toc-container" id="postToc">
+    <nav class="post-toc">
+      <div class="post-toc-title">目录</div>
+      <ul class="post-toc-list" id="tocList">
+      </ul>
+    </nav>
+  </div>
+<script defer src="../../assets/js/particles.js"></script>
+
+  <!-- Comment System -->
+  <script src="../../workers/comment-system/comment-widget.js"></script>
+
+  <!-- highlight.js for code syntax highlighting -->
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // 只对没有 codehilite 的代码块应用 highlight.js
+      document.querySelectorAll('pre code').forEach(function(block) {
+        // 跳过已经有 Pygments 高亮的块
+        if (!block.closest('.codehilite') && !block.classList.contains('hljs')) {
+          hljs.highlightElement(block);
+        }
+      });
+    });
+  </script>
+
+  <!-- Cloudflare Web Analytics -->
+  <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "29e7cff6f37448989538e2165cb79187"}'></script>
+</body>
+</html>

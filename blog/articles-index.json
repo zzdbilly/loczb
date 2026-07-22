@@ -1,6 +1,19 @@
 {
   "posts": [
     {
+      "slug": "agentic-ai-架构演进从-chatbot-到自主-agent",
+      "title": "Agentic AI 架构演进：从 Chatbot 到自主 Agent",
+      "date": "2026-07-22",
+      "category": "AI",
+      "tags": [
+        "AI",
+        "Agent",
+        "架构"
+      ],
+      "excerpt": "从 Function Calling、MCP 到 Multi-Agent，梳理 AI Agent 架构的进化路径，以及当前面临的挑战和未来方向。",
+      "url": "blog/posts/agentic-ai-架构演进从-chatbot-到自主-agent.html"
+    },
+    {
       "slug": "postgresql-从-17-到-18生产环境升级实战",
       "title": "PostgreSQL 从 17 到 18：生产环境升级实战",
       "date": "2026-07-19",
@@ -1223,7 +1236,7 @@
     },
     {
       "tag": "AI",
-      "count": 13
+      "count": 14
     },
     {
       "tag": "DevOps",
@@ -1232,6 +1245,10 @@
     {
       "tag": "Kotlin",
       "count": 7
+    },
+    {
+      "tag": "Agent",
+      "count": 5
     },
     {
       "tag": "性能优化",
@@ -1243,10 +1260,6 @@
     },
     {
       "tag": "数据库",
-      "count": 4
-    },
-    {
-      "tag": "Agent",
       "count": 4
     },
     {
@@ -1452,6 +1465,10 @@
     {
       "tag": "OpenClaw",
       "count": 2
+    },
+    {
+      "tag": "架构",
+      "count": 1
     },
     {
       "tag": "TIOBE",
@@ -2185,8 +2202,13 @@
   "archives": [
     {
       "month": "2026-07",
-      "count": 29,
+      "count": 30,
       "posts": [
+        {
+          "title": "Agentic AI 架构演进：从 Chatbot 到自主 Agent",
+          "date": "2026-07-22",
+          "url": "blog/posts/agentic-ai-架构演进从-chatbot-到自主-agent.html"
+        },
         {
           "title": "PostgreSQL 从 17 到 18：生产环境升级实战",
           "date": "2026-07-19",
@@ -2651,6 +2673,7 @@
     }
   ],
   "categories": [
+    "AI",
     "数据库",
     "开发",
     "系统编程",
@@ -2659,13 +2682,12 @@
     "Android",
     "Kotlin",
     "DevOps",
-    "AI",
     "安全"
   ],
   "stats": {
-    "totalPosts": 86,
-    "totalTags": 241,
-    "latestDate": "2026-07-19",
+    "totalPosts": 87,
+    "totalTags": 242,
+    "latestDate": "2026-07-22",
     "oldestDate": "2026-02-15"
   }
 }
