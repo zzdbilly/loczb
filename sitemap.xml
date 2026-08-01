@@ -21,6 +21,18 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://709527.xyz/blog/posts/nextjs-prisma-部署-vercel-常见踩坑外键约束与构建时数据修复.html</loc>
+    <lastmod>2026-08-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://709527.xyz/blog/posts/ai-agent-实战用子代理并行驱动多项目开发.html</loc>
+    <lastmod>2026-08-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://709527.xyz/blog/posts/agentic-ai-架构演进从-chatbot-到自主-agent.html</loc>
     <lastmod>2026-08-01</lastmod>
     <changefreq>monthly</changefreq>
