@@ -166,30 +166,37 @@ class ParticleConstellation {
 // Auto-initialize
 document.addEventListener('DOMContentLoaded', () => {
   const canvas = document.getElementById('particle-canvas');
-  if (canvas) {
-    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-    const particle = new ParticleConstellation(canvas, {
-      particleColor: isDark ? 'rgba(100, 150, 255, 0.6)' : 'rgba(59, 130, 246, 0.5)',
-      lineColor: isDark ? 'rgba(100, 150, 255, 0.12)' : 'rgba(59, 130, 246, 0.1)',
-      particleCount: Math.min(80, Math.floor(window.innerWidth / 15))
-    });
-    particle.start();
-    
-    // Re-initialize on theme change
-    const observer = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
-        if (mutation.attributeName === 'data-theme') {
-          particle.destroy();
-          const newIsDark = document.documentElement.getAttribute('data-theme') === 'dark';
-          const newParticle = new ParticleConstellation(canvas, {
-            particleColor: newIsDark ? 'rgba(100, 150, 255, 0.6)' : 'rgba(59, 130, 246, 0.5)',
-            lineColor: newIsDark ? 'rgba(100, 150, 255, 0.12)' : 'rgba(59, 130, 246, 0.1)',
-            particleCount: Math.min(80, Math.floor(window.innerWidth / 15))
-          });
-          newParticle.start();
-        }
-      });
-    });
-    observer.observe(document.documentElement, { attributes: true });
+  if (!canvas) return;
+
+  // 检测 prefers-reduced-motion，如果用户要求减少动画则不启动粒子效果
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  if (prefersReducedMotion.matches) {
+    canvas.style.display = 'none';
+    return;
   }
+
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  const particle = new ParticleConstellation(canvas, {
+    particleColor: isDark ? 'rgba(100, 150, 255, 0.6)' : 'rgba(59, 130, 246, 0.5)',
+    lineColor: isDark ? 'rgba(100, 150, 255, 0.12)' : 'rgba(59, 130, 246, 0.1)',
+    particleCount: Math.min(80, Math.floor(window.innerWidth / 15))
+  });
+  particle.start();
+
+  // Re-initialize on theme change
+  const observer = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+      if (mutation.attributeName === 'data-theme') {
+        particle.destroy();
+        const newIsDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        const newParticle = new ParticleConstellation(canvas, {
+          particleColor: newIsDark ? 'rgba(100, 150, 255, 0.6)' : 'rgba(59, 130, 246, 0.5)',
+          lineColor: newIsDark ? 'rgba(100, 150, 255, 0.12)' : 'rgba(59, 130, 246, 0.1)',
+          particleCount: Math.min(80, Math.floor(window.innerWidth / 15))
+        });
+        newParticle.start();
+      }
+    });
+  });
+  observer.observe(document.documentElement, { attributes: true });
 });

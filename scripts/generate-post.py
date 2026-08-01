@@ -148,6 +148,7 @@ def generate_article(title, description, article_date, read_time, tags, content_
     html = html.replace('{{ARTICLE_H3_COUNT}}', str(h3_count))
     html = html.replace('{{ARTICLE_CODE_BLOCKS}}', str(code_block_count))
     html = html.replace('{{ARTICLE_TAG_LINKS}}', tag_links_html)
+    html = html.replace('{{POST_SLUG}}', slug)
     
     return html, slug, tag_list
 
