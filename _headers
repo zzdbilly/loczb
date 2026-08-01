@@ -1,0 +1,33 @@
+# Static asset caching
+/assets/css/*
+  Cache-Control: public, max-age=31536000, immutable
+/assets/js/*
+  Cache-Control: public, max-age=31536000, immutable
+/assets/images/*
+  Cache-Control: public, max-age=31536000, immutable
+/assets/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+/workers/comment-system/comment-widget.js
+  Cache-Control: public, max-age=31536000, immutable
+/workers/comment-system/comment-widget.css
+  Cache-Control: public, max-age=31536000, immutable
+
+# HTML files - no caching
+/*.html
+  Cache-Control: public, max-age=0, must-revalidate
+/blog/*.html
+  Cache-Control: public, max-age=0, must-revalidate
+/blog/posts/*.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+# JSON data - short cache
+/blog/articles-index.json
+  Cache-Control: public, max-age=300
+
+# Security headers for all responses
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: SAMEORIGIN
+  Referrer-Policy: strict-origin-when-cross-origin
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://static.cloudflareinsights.com https://loczb-comments.billycust716.workers.dev; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https:; connect-src 'self' https://loczb-comments.billycust716.workers.dev https://dashscope.aliyuncs.com https://709527.xyz https://www.709527.xyz; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'
+  Permissions-Policy: geolocation=(), microphone=(), camera=()

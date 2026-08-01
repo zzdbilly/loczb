@@ -3,6 +3,10 @@
 回刷脚本：用最新模板重新渲染所有文章的骨架（head/nav/footer/scripts），
 只保留每篇文章的内容数据（标题、描述、日期、标签、正文），重新套模板。
 
+注意：元数据（标题、描述、日期、标签）从 HTML 正则提取。
+虽然 articles-index.json 包含部分元数据，但正文内容只存在于 HTML 中，
+因此仍需从 HTML 解析。如需增强可考虑在文章 HTML 中嵌入 JSON-LD metadata block。
+
 用法:
   python3 scripts/refresh-posts.py              # 回刷所有文章
   python3 scripts/refresh-posts.py --dry-run     # 只检查不写入
@@ -75,7 +79,7 @@ def extract_post_data(html):
     
     return data
 
-def render_with_template(template, data):
+def render_with_template(template, data, slug=''):
     """用模板渲染文章"""
     html = template
     html = html.replace('{{TITLE}}', f"{data['title']} | 张小猛 - loczb")
@@ -112,6 +116,7 @@ def render_with_template(template, data):
         safe_t = _re.sub(r'[^\w\u4e00-\u9fff]', '', t)
         tag_links.append(f'<a href="../../blog/index.html?tag={safe_t}" class="post-info-link"># {t}</a>')
     html = html.replace('{{ARTICLE_TAG_LINKS}}', '\n          '.join(tag_links))
+    html = html.replace('{{POST_SLUG}}', slug)
     
     return html
 
@@ -145,7 +150,7 @@ def refresh_post(filepath, template, dry_run=False):
         return False
     
     # 用模板重新渲染
-    new_html = render_with_template(template, data)
+    new_html = render_with_template(template, data, slug)
     
     # 检查是否有变化
     if new_html == original:
