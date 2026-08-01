@@ -176,6 +176,22 @@ python3 scripts/refresh-posts.py --post slug
 node scripts/generate-index.js
 ```
 
+### 生成项目页
+
+```bash
+python3 scripts/gen_projects.py
+```
+
+生成 `/projects/index.html` 项目展示页，从配置文件读取项目信息并渲染为 HTML。
+
+### 注入评论组件
+
+```bash
+python3 scripts/inject-comments.py
+```
+
+批量为博客文章 HTML 注入评论系统前端组件（`comment-widget.js` + `comment-widget.css`）。新增文章或更新评论组件后运行。
+
 ### 写作规范
 
 - ✅ 从 `## h2` 开始写，不写 `# h1`（模板已包含）
