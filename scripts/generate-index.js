@@ -339,11 +339,18 @@ function generateSitemap() {
     lines.push('  </url>');
   });
 
-  // 文章页面
+  // 文章页面 - lastmod 使用文件修改时间（CI 环境中为 commit 时间）
   posts.forEach(p => {
+    const filename = p.slug + '.html';
+    const fileMtime = fileDates[filename];
+    let lastmod = p.date; // 默认用发布日期
+    if (fileMtime) {
+      const mdate = new Date(fileMtime);
+      lastmod = mdate.toISOString().split('T')[0]; // YYYY-MM-DD
+    }
     lines.push('  <url>');
     lines.push(`    <loc>${BASE_URL}/blog/posts/${p.slug}.html</loc>`);
-    if (p.date) lines.push(`    <lastmod>${p.date}</lastmod>`);
+    lines.push(`    <lastmod>${lastmod}</lastmod>`);
     lines.push('    <changefreq>monthly</changefreq>');
     lines.push('    <priority>0.6</priority>');
     lines.push('  </url>');

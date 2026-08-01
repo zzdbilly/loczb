@@ -7,6 +7,23 @@ const API_KEY = ''; // 在 Cloudflare Workers 环境变量中设置 DASHSCOPE_AP
 const API_URL = 'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions';
 const MODEL = 'qwen3.5-plus';
 
+// CORS 允许的来源
+const ALLOWED_ORIGINS = [
+  'https://709527.xyz',
+  'https://www.709527.xyz',
+];
+
+function getCorsHeaders(origin) {
+  const headers = {
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type',
+  };
+  if (origin && ALLOWED_ORIGINS.includes(origin)) {
+    headers['Access-Control-Allow-Origin'] = origin;
+  }
+  return headers;
+}
+
 // 站点信息，用于 RAG 上下文
 const SITE_CONTEXT = `
 你是张小猛（loczb）的个人网站 AI 助手。
@@ -48,14 +65,12 @@ const SITE_CONTEXT = `
 
 export default {
   async fetch(request, env, ctx) {
+    const origin = request.headers.get('Origin');
+
     // 处理 CORS
     if (request.method === 'OPTIONS') {
       return new Response(null, {
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Methods': 'POST, OPTIONS',
-          'Access-Control-Allow-Headers': 'Content-Type',
-        },
+        headers: getCorsHeaders(origin),
       });
     }
 
@@ -89,7 +104,7 @@ export default {
           status: 500,
           headers: {
             'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*',
+            ...getCorsHeaders(origin),
           },
         });
       }
@@ -109,7 +124,7 @@ export default {
       return new Response(JSON.stringify(data), {
         headers: {
           'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
+          ...getCorsHeaders(origin),
         },
       });
     } catch (error) {
@@ -119,7 +134,7 @@ export default {
         status: 500,
         headers: {
           'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
+          ...getCorsHeaders(origin),
         },
       });
     }

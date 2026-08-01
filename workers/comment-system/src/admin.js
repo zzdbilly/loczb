@@ -65,12 +65,21 @@ async function verifyAuthToken(token, secret) {
   }
 }
 
+// HMAC 密钥：优先使用 ADMIN_SECRET，未配置则从 ADMIN_PASSWORD 派生（向后兼容）
+// 建议在 Cloudflare Workers 中单独配置 ADMIN_SECRET 环境变量
+function getHmacSecret(env) {
+  if (env.ADMIN_SECRET) return env.ADMIN_SECRET;
+  // 向后兼容：从密码派生密钥（不直接用密码做密钥）
+  const password = env.ADMIN_PASSWORD || '';
+  return 'loczb-hmac:' + password;
+}
+
 // 从请求中提取并验证 token，返回用户名或 null
 async function getAuthUser(request, env) {
   const cookie = request.headers.get('Cookie') || '';
   const match = cookie.match(/admin_token=([^;]+)/);
   if (!match) return null;
-  const secret = env.ADMIN_PASSWORD;
+  const secret = getHmacSecret(env);
   return verifyAuthToken(match[1], secret);
 }
 
@@ -1118,7 +1127,7 @@ export async function handleAdminRoute(request, env, url, method) {
       return Response.json({ error: '用户名或密码错误' }, { status: 401 });
     }
 
-    const token = await generateAuthToken(adminPassword, adminUsername);
+    const token = await generateAuthToken(getHmacSecret(env), adminUsername);
     return new Response(JSON.stringify({ ok: true, username: adminUsername }), {
       status: 200,
       headers: {

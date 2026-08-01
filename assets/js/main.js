@@ -3,9 +3,7 @@
  * 精致动画效果与交互
  */
 
-// ===================================
 // Page Loading Animation
-// ===================================
 document.addEventListener('DOMContentLoaded', () => {
   const loading = document.querySelector('.loading');
   
@@ -26,9 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initThemeToggle();
 });
 
-// ===================================
 // Scroll-triggered Animations
-// ===================================
 function initScrollAnimations() {
   const observerOptions = {
     root: null,
@@ -49,9 +45,7 @@ function initScrollAnimations() {
   animateElements.forEach(el => observer.observe(el));
 }
 
-// ===================================
 // Navigation Scroll Effect
-// ===================================
 function initNavScroll() {
   const nav = document.querySelector('.nav');
   if (!nav) return;
@@ -72,9 +66,7 @@ function initNavScroll() {
   }, { passive: true });
 }
 
-// ===================================
 // Mobile Menu
-// ===================================
 function initMobileMenu() {
   const toggle = document.querySelector('.nav-toggle');
   const links = document.querySelector('.nav-links');
@@ -127,9 +119,7 @@ function initMobileMenu() {
   });
 }
 
-// ===================================
 // Typing Effect
-// ===================================
 function initTypingEffect() {
   const typingElements = document.querySelectorAll('[data-typing]');
   
@@ -152,9 +142,7 @@ function initTypingEffect() {
   });
 }
 
-// ===================================
 // Parallax Effect
-// ===================================
 function initParallax() {
   const parallaxElements = document.querySelectorAll('[data-parallax]');
   
@@ -177,9 +165,7 @@ function initParallax() {
   }, { passive: true });
 }
 
-// ===================================
 // Smooth Scroll
-// ===================================
 function initSmoothScroll() {
   const links = document.querySelectorAll('a[href^="#"]');
   
@@ -204,9 +190,7 @@ function initSmoothScroll() {
   });
 }
 
-// ===================================
 // Active Nav Link
-// ===================================
 function setActiveNavLink() {
   const sections = document.querySelectorAll('section[id]');
   const navLinks = document.querySelectorAll('.nav-link');
@@ -271,9 +255,7 @@ function setActiveNavLink() {
   }
 }
 
-// ===================================
 // Intersection Observer for Stats
-// ===================================
 function initCountUp() {
   const stats = document.querySelectorAll('[data-count]');
   
@@ -309,9 +291,7 @@ function initCountUp() {
   stats.forEach(stat => observer.observe(stat));
 }
 
-// ===================================
 // Copy to Clipboard
-// ===================================
 function copyToClipboard(text) {
   return navigator.clipboard.writeText(text).then(() => {
     return true;
@@ -321,9 +301,7 @@ function copyToClipboard(text) {
   });
 }
 
-// ===================================
 // Theme Toggle with View Transition
-// ===================================
 function initThemeToggle() {
   const toggle = document.querySelector('.theme-toggle');
   if (!toggle) return;
@@ -377,9 +355,7 @@ function initThemeToggle() {
   });
 }
 
-// ===================================
 // Lazy Load Images
-// ===================================
 function initLazyLoad() {
   const lazyImages = document.querySelectorAll('[data-src]');
   
@@ -399,9 +375,7 @@ function initLazyLoad() {
   lazyImages.forEach(img => imageObserver.observe(img));
 }
 
-// ===================================
 // Scroll Progress Indicator
-// ===================================
 function initScrollProgress() {
   const progressBar = document.querySelector('.scroll-progress');
   if (!progressBar) return;
@@ -414,9 +388,7 @@ function initScrollProgress() {
   }, { passive: true });
 }
 
-// ===================================
 // Back to Top Button
-// ===================================
 function initBackToTop() {
   const btn = document.createElement('button');
   btn.className = 'back-to-top';
@@ -437,9 +409,7 @@ function initBackToTop() {
   });
 }
 
-// ===================================
 // Cursor Effect (Optional)
-// ===================================
 function initCursorEffect() {
   const cursor = document.querySelector('.cursor');
   if (!cursor) return;
@@ -462,9 +432,7 @@ function initCursorEffect() {
   });
 }
 
-// ===================================
 // Form Validation
-// ===================================
 function validateEmail(email) {
   const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return re.test(email);
@@ -491,9 +459,7 @@ function validateForm(form) {
   return isValid;
 }
 
-// ===================================
 // Blog Filters
-// ===================================
 // Blog filtering, pagination, and tag cloud are fully handled by blog-list.js.
 // This function is kept as a no-op stub for backward compatibility.
 function initBlogFilters() {
@@ -501,9 +467,7 @@ function initBlogFilters() {
   return;
 }
 
-// ===================================
 // Code Block Copy Button + Language Label
-// ===================================
 function initCodeCopy() {
   const codeBlocks = document.querySelectorAll('.post-content pre');
 
@@ -590,9 +554,7 @@ function initCodeCopy() {
   });
 }
 
-// ===================================
 // Image Lightbox (click to enlarge)
-// ===================================
 function initLightbox() {
   const images = document.querySelectorAll('.post-content img');
   if (images.length === 0) return;
@@ -632,9 +594,7 @@ function initLightbox() {
   });
 }
 
-// ===================================
 // Initialize Everything
-// ===================================
 document.addEventListener('DOMContentLoaded', () => {
   initCountUp();
   initLazyLoad();

@@ -5,5 +5,68 @@ Allow: /
 # Disallow non-content paths
 Disallow: /node_modules/
 
+# === AI 爬虫规则 ===
+# 允许搜索引擎索引，但限制 AI 训练爬虫
+
+# GPTBot (OpenAI)
+User-agent: GPTBot
+Disallow: /
+
+# OAI-SearchBot (OpenAI Search)
+User-agent: OAI-SearchBot
+Disallow: /
+
+# ClaudeBot (Anthropic)
+User-agent: ClaudeBot
+Disallow: /
+
+# Claude-Web (Anthropic)
+User-agent: Claude-Web
+Disallow: /
+
+# CCBot (Common Crawl - 多个 AI 公司的数据源)
+User-agent: CCBot
+Disallow: /
+
+# Google-Extended (Google AI 训练)
+User-agent: Google-Extended
+Disallow: /
+
+# PerplexityBot (Perplexity AI)
+User-agent: PerplexityBot
+Disallow: /
+
+# Bytespider (字节跳动 AI)
+User-agent: Bytespider
+Disallow: /
+
+# Amazonbot (Amazon AI)
+User-agent: Amazonbot
+Disallow: /
+
+# FacebookBot / Meta-ExternalAgent (Meta AI)
+User-agent: FacebookBot
+Disallow: /
+
+User-agent: Meta-ExternalAgent
+Disallow: /
+
+# ImagesiftBot
+User-agent: ImagesiftBot
+Disallow: /
+
+# === 通用搜索引擎（允许） ===
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Baiduspider
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
 # Sitemap
 Sitemap: https://709527.xyz/sitemap.xml

@@ -18,6 +18,11 @@
  *   GET    /admin/api/comments    - 评论列表/统计（需认证）
  *   PUT    /admin/api/comments/:id - 编辑评论（需认证）
  *   DELETE /admin/api/comments/:id - 删除评论（需认证）
+ *
+ * TODO: 邮件通知功能 - 需要接入第三方服务（如 Resend、Mailgun）
+ *   - 新评论时发送邮件通知博主
+ *   - 需要配置 RESEND_API_KEY 等环境变量
+ *   - 暂未实现，待小猛配置 API key 后补充
  */
 
 import { handleAdminRoute } from './admin.js';
