@@ -57,7 +57,25 @@ wrangler d1 execute loczb-comments --local --file=schema.sql
 wrangler d1 execute loczb-comments --remote --file=schema.sql
 ```
 
-### 4. 部署 Worker
+### 4. 设置管理员密钥（Secrets）
+
+⚠️ **重要**：管理员密码必须通过 Cloudflare Secrets 设置，**不要**写在 `wrangler.toml` 中。
+
+```bash
+# 设置管理员密码
+wrangler secret put ADMIN_PASSWORD
+# 按提示输入密码（如：your-strong-password-here）
+```
+
+也可以通过 Cloudflare Dashboard 设置：
+1. 进入 Workers & Pages → loczb-comments
+2. Settings → Variables and Secrets
+3. 添加 `ADMIN_PASSWORD`，类型选择 **Secret**
+
+> `ADMIN_USERNAME` 已在 `wrangler.toml` 的 `[vars]` 中设为 `admin`，
+> 如需修改也可通过 Secret 覆盖。
+
+### 5. 部署 Worker
 
 ```bash
 wrangler deploy
@@ -66,7 +84,7 @@ wrangler deploy
 部署成功后，你会得到一个 Worker URL，类似：
 `https://loczb-comments.709527.workers.dev`
 
-### 5. 更新前端配置
+### 6. 更新前端配置
 
 在 `comment-widget.js` 的顶部，将 `API_BASE` 替换为你的实际 Worker URL：
 
@@ -74,7 +92,7 @@ wrangler deploy
 const API_BASE = 'https://loczb-comments.709527.workers.dev';
 ```
 
-### 6. 验证
+### 7. 验证
 
 ```bash
 # 健康检查
@@ -83,7 +101,7 @@ curl https://loczb-comments.709527.workers.dev/api/health
 # 应返回: {"ok":true,"timestamp":...}
 ```
 
-### 7. 推送前端代码
+### 8. 推送前端代码
 
 ```bash
 cd ../../  # 回到 loczb 根目录
@@ -112,6 +130,7 @@ GitHub Pages 部署后，访问任意博客文章即可看到评论区。
 - **垃圾过滤**：URL 数量限制、内容长度限制、重复字符检测
 - **XSS 防护**：前端使用 DOMPurify 对 Markdown 渲染结果进行消毒
 - **Token 认证**：编辑/删除评论需要 localStorage 中的 edit_token
+- **管理后台**：HMAC-SHA256 签名的 session token，密码通过 Cloudflare Secrets 存储，不明文暴露在代码或配置文件中
 
 ## 数据库管理
 

@@ -70,7 +70,7 @@ async function getAuthUser(request, env) {
   const cookie = request.headers.get('Cookie') || '';
   const match = cookie.match(/admin_token=([^;]+)/);
   if (!match) return null;
-  const secret = env.ADMIN_PASSWORD || 'admin123';
+  const secret = env.ADMIN_PASSWORD;
   return verifyAuthToken(match[1], secret);
 }
 
@@ -273,7 +273,7 @@ function loginPage() {
               <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
               <circle cx="12" cy="7" r="4"/>
             </svg>
-            <input type="text" id="username" name="username" placeholder="输入用户名" value="admin" required autofocus>
+            <input type="text" id="username" name="username" placeholder="输入用户名" required autofocus>
           </div>
         </div>
         <div class="form-group">
@@ -283,7 +283,7 @@ function loginPage() {
               <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
               <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
             </svg>
-            <input type="password" id="password" name="password" placeholder="输入密码" value="admin123" required>
+            <input type="password" id="password" name="password" placeholder="输入密码" required>
           </div>
         </div>
         <button type="submit" class="btn" id="submitBtn">登录</button>
@@ -1107,8 +1107,12 @@ export async function handleAdminRoute(request, env, url, method) {
       return Response.json({ error: '无效的请求' }, { status: 400 });
     }
 
-    const adminUsername = env.ADMIN_USERNAME || 'admin';
-    const adminPassword = env.ADMIN_PASSWORD || 'admin123';
+    const adminUsername = env.ADMIN_USERNAME;
+    const adminPassword = env.ADMIN_PASSWORD;
+
+    if (!adminUsername || !adminPassword) {
+      return Response.json({ error: '服务器未配置管理员凭据' }, { status: 500 });
+    }
 
     if (body.username !== adminUsername || body.password !== adminPassword) {
       return Response.json({ error: '用户名或密码错误' }, { status: 401 });
