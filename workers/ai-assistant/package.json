@@ -1,0 +1,13 @@
+{
+  "name": "loczb-ai-assistant",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "AI assistant for loczb blog using Cloudflare Workers + DashScope",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy"
+  },
+  "devDependencies": {
+    "wrangler": "^4.112.0"
+  }
+}

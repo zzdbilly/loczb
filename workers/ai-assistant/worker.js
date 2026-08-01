@@ -26,7 +26,7 @@ const SITE_CONTEXT = `
 2. Zest - 习惯养成追踪 Web 应用（Next.js + Prisma + PostgreSQL）
 3. OpenClaw 实践 - 基于 OpenClaw 的自动化工作流
 
-博客分类（共 70 篇）：
+博客分类（共 84 篇）：
 - Android (16篇)：Gradle 构建、Jetpack Compose、Hilt 依赖注入、Gemini Nano 集成、Android 16 新特性、性能优化
 - AI (14篇)：AI 编程工具横评、Prompt 设计、Agent 工作流、RAG、MCP 协议、本地大模型
 - 前端 (10篇)：React Server Components、TypeScript、CSS、PWA、WebAssembly
