@@ -1,6 +1,35 @@
 {
   "posts": [
     {
+      "slug": "nextjs-prisma-部署-vercel-常见踩坑外键约束与构建时数据修复",
+      "title": "Next.js + Prisma 部署 Vercel 常见踩坑：外键约束与构建时数据修复",
+      "date": "2026-08-01",
+      "category": "DevOps",
+      "tags": [
+        "Next.js",
+        "Prisma",
+        "Vercel",
+        "部署",
+        "DevOps"
+      ],
+      "excerpt": "Vercel 构建时 prisma db push 失败，外键约束报错怎么办？本文完整复盘一次真实的部署失败案例，从根因分析到构建时数据修复方案。",
+      "url": "blog/posts/nextjs-prisma-部署-vercel-常见踩坑外键约束与构建时数据修复.html"
+    },
+    {
+      "slug": "ai-agent-实战用子代理并行驱动多项目开发",
+      "title": "AI Agent 实战：用子代理并行驱动多项目开发",
+      "date": "2026-08-01",
+      "category": "前端",
+      "tags": [
+        "AI",
+        "Agent",
+        "工程实践",
+        "并行开发"
+      ],
+      "excerpt": "子代理并行调度是 AI 辅助开发的高效模式。本文分享一套经过实战验证的调度策略，涵盖任务拆分、并行执行、结果汇总和验证闭环。",
+      "url": "blog/posts/ai-agent-实战用子代理并行驱动多项目开发.html"
+    },
+    {
       "slug": "agentic-ai-架构演进从-chatbot-到自主-agent",
       "title": "Agentic AI 架构演进：从 Chatbot 到自主 Agent",
       "date": "2026-07-22",
@@ -1236,11 +1265,11 @@
     },
     {
       "tag": "AI",
-      "count": 14
+      "count": 15
     },
     {
       "tag": "DevOps",
-      "count": 7
+      "count": 8
     },
     {
       "tag": "Kotlin",
@@ -1248,7 +1277,7 @@
     },
     {
       "tag": "Agent",
-      "count": 5
+      "count": 6
     },
     {
       "tag": "性能优化",
@@ -1257,6 +1286,10 @@
     {
       "tag": "思考",
       "count": 5
+    },
+    {
+      "tag": "Next.js",
+      "count": 4
     },
     {
       "tag": "数据库",
@@ -1287,10 +1320,6 @@
       "count": 3
     },
     {
-      "tag": "Next.js",
-      "count": 3
-    },
-    {
       "tag": "MCP",
       "count": 3
     },
@@ -1317,6 +1346,10 @@
     {
       "tag": "Gemini",
       "count": 3
+    },
+    {
+      "tag": "Prisma",
+      "count": 2
     },
     {
       "tag": "AI编程",
@@ -1467,6 +1500,22 @@
       "count": 2
     },
     {
+      "tag": "Vercel",
+      "count": 1
+    },
+    {
+      "tag": "部署",
+      "count": 1
+    },
+    {
+      "tag": "工程实践",
+      "count": 1
+    },
+    {
+      "tag": "并行开发",
+      "count": 1
+    },
+    {
       "tag": "架构",
       "count": 1
     },
@@ -1508,10 +1557,6 @@
     },
     {
       "tag": "心理",
-      "count": 1
-    },
-    {
-      "tag": "Prisma",
       "count": 1
     },
     {
@@ -2201,6 +2246,22 @@
   ],
   "archives": [
     {
+      "month": "2026-08",
+      "count": 2,
+      "posts": [
+        {
+          "title": "Next.js + Prisma 部署 Vercel 常见踩坑：外键约束与构建时数据修复",
+          "date": "2026-08-01",
+          "url": "blog/posts/nextjs-prisma-部署-vercel-常见踩坑外键约束与构建时数据修复.html"
+        },
+        {
+          "title": "AI Agent 实战：用子代理并行驱动多项目开发",
+          "date": "2026-08-01",
+          "url": "blog/posts/ai-agent-实战用子代理并行驱动多项目开发.html"
+        }
+      ]
+    },
+    {
       "month": "2026-07",
       "count": 30,
       "posts": [
@@ -2673,21 +2734,21 @@
     }
   ],
   "categories": [
+    "DevOps",
+    "前端",
     "AI",
     "数据库",
     "开发",
     "系统编程",
     "思考",
-    "前端",
     "Android",
     "Kotlin",
-    "DevOps",
     "安全"
   ],
   "stats": {
-    "totalPosts": 87,
-    "totalTags": 242,
-    "latestDate": "2026-07-22",
+    "totalPosts": 89,
+    "totalTags": 246,
+    "latestDate": "2026-08-01",
     "oldestDate": "2026-02-15"
   }
 }
