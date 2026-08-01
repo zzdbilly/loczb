@@ -4,6 +4,8 @@
 
 // Article index with tags
 const ARTICLE_INDEX = [
+  { slug: "nextjs-prisma-部署-vercel-常见踩坑外键约束与构建时数据修复", tags: ["Next.js", "Prisma", "Vercel", "部署", "DevOps"], title: "Next.js + Prisma 部署 Vercel 常见踩坑：外键约束与构建时数据修复" },
+  { slug: "ai-agent-实战用子代理并行驱动多项目开发", tags: ["AI", "Agent", "工程实践", "并行开发"], title: "AI Agent 实战：用子代理并行驱动多项目开发" },
   { slug: "agentic-ai-架构演进从-chatbot-到自主-agent", tags: ["AI", "Agent", "架构"], title: "Agentic AI 架构演进：从 Chatbot 到自主 Agent" },
   { slug: "postgresql-从-17-到-18生产环境升级实战", tags: ["PostgreSQL", "数据库", "DevOps", "性能优化"], title: "PostgreSQL 从 17 到 18：生产环境升级实战" },
   { slug: "ai-编码代理实战从-copilot-到-agent", tags: ["AI", "AI编程", "Agent", "开发规范", "效率提升"], title: "AI 编码代理实战：从 Copilot 到 Agent" },
