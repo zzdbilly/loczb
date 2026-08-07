@@ -1,6 +1,38 @@
 {
   "posts": [
     {
+      "slug": "jetpack-compose-性能优化实战从卡顿到丝滑的-12-个技巧",
+      "title": "Jetpack Compose 性能优化实战：从卡顿到丝滑的 12 个技巧",
+      "date": "2026-08-07",
+      "category": "Android",
+      "tags": [
+        "Jetpack Compose",
+        "Android",
+        "性能优化",
+        "Compose",
+        "UI",
+        "重组"
+      ],
+      "excerpt": "全面梳理 Jetpack Compose 性能优化的核心技巧，涵盖重组优化、状态管理、延迟布局、图片加载、基线配置文件等实战经验",
+      "url": "blog/posts/jetpack-compose-性能优化实战从卡顿到丝滑的-12-个技巧.html"
+    },
+    {
+      "slug": "web-worker-与前端多线程开发把主线程从繁重计算中解放出来",
+      "title": "Web Worker 与前端多线程开发：把主线程从繁重计算中解放出来",
+      "date": "2026-08-07",
+      "category": "前端",
+      "tags": [
+        "前端",
+        "前端开发",
+        "JavaScript",
+        "Web Worker",
+        "性能优化",
+        "多线程"
+      ],
+      "excerpt": "深入解析 Web Worker 的原理与实践，涵盖 Dedicated Worker、Shared Worker、Service Worker 的区别与使用场景，以及 Comlink、Worker 池、Transferable Objects 等进阶技巧",
+      "url": "blog/posts/web-worker-与前端多线程开发把主线程从繁重计算中解放出来.html"
+    },
+    {
       "slug": "nextjs-prisma-部署-vercel-常见踩坑外键约束与构建时数据修复",
       "title": "Next.js + Prisma 部署 Vercel 常见踩坑：外键约束与构建时数据修复",
       "date": "2026-08-01",
@@ -1261,7 +1293,7 @@
   "tagCloud": [
     {
       "tag": "Android",
-      "count": 19
+      "count": 20
     },
     {
       "tag": "AI",
@@ -1272,6 +1304,10 @@
       "count": 8
     },
     {
+      "tag": "性能优化",
+      "count": 7
+    },
+    {
       "tag": "Kotlin",
       "count": 7
     },
@@ -1280,12 +1316,16 @@
       "count": 6
     },
     {
-      "tag": "性能优化",
+      "tag": "思考",
       "count": 5
     },
     {
-      "tag": "思考",
-      "count": 5
+      "tag": "Jetpack Compose",
+      "count": 4
+    },
+    {
+      "tag": "前端",
+      "count": 4
     },
     {
       "tag": "Next.js",
@@ -1306,6 +1346,14 @@
     {
       "tag": "AI 工具",
       "count": 4
+    },
+    {
+      "tag": "UI",
+      "count": 3
+    },
+    {
+      "tag": "前端开发",
+      "count": 3
     },
     {
       "tag": "PostgreSQL",
@@ -1332,20 +1380,16 @@
       "count": 3
     },
     {
-      "tag": "前端",
-      "count": 3
-    },
-    {
       "tag": "安全",
-      "count": 3
-    },
-    {
-      "tag": "Jetpack Compose",
       "count": 3
     },
     {
       "tag": "Gemini",
       "count": 3
+    },
+    {
+      "tag": "JavaScript",
+      "count": 2
     },
     {
       "tag": "Prisma",
@@ -1373,10 +1417,6 @@
     },
     {
       "tag": "程序员",
-      "count": 2
-    },
-    {
-      "tag": "前端开发",
       "count": 2
     },
     {
@@ -1468,10 +1508,6 @@
       "count": 2
     },
     {
-      "tag": "UI",
-      "count": 2
-    },
-    {
       "tag": "端侧AI",
       "count": 2
     },
@@ -1498,6 +1534,22 @@
     {
       "tag": "OpenClaw",
       "count": 2
+    },
+    {
+      "tag": "Compose",
+      "count": 1
+    },
+    {
+      "tag": "重组",
+      "count": 1
+    },
+    {
+      "tag": "Web Worker",
+      "count": 1
+    },
+    {
+      "tag": "多线程",
+      "count": 1
     },
     {
       "tag": "Vercel",
@@ -2224,10 +2276,6 @@
       "count": 1
     },
     {
-      "tag": "JavaScript",
-      "count": 1
-    },
-    {
       "tag": "计算机视觉",
       "count": 1
     },
@@ -2247,8 +2295,18 @@
   "archives": [
     {
       "month": "2026-08",
-      "count": 2,
+      "count": 4,
       "posts": [
+        {
+          "title": "Jetpack Compose 性能优化实战：从卡顿到丝滑的 12 个技巧",
+          "date": "2026-08-07",
+          "url": "blog/posts/jetpack-compose-性能优化实战从卡顿到丝滑的-12-个技巧.html"
+        },
+        {
+          "title": "Web Worker 与前端多线程开发：把主线程从繁重计算中解放出来",
+          "date": "2026-08-07",
+          "url": "blog/posts/web-worker-与前端多线程开发把主线程从繁重计算中解放出来.html"
+        },
         {
           "title": "Next.js + Prisma 部署 Vercel 常见踩坑：外键约束与构建时数据修复",
           "date": "2026-08-01",
@@ -2734,21 +2792,21 @@
     }
   ],
   "categories": [
-    "DevOps",
+    "Android",
     "前端",
+    "DevOps",
     "AI",
     "数据库",
     "开发",
     "系统编程",
     "思考",
-    "Android",
     "Kotlin",
     "安全"
   ],
   "stats": {
-    "totalPosts": 89,
-    "totalTags": 246,
-    "latestDate": "2026-08-01",
+    "totalPosts": 91,
+    "totalTags": 250,
+    "latestDate": "2026-08-07",
     "oldestDate": "2026-02-15"
   }
 }

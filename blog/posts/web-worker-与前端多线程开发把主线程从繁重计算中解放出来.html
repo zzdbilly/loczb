@@ -1,0 +1,1857 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Worker 与前端多线程开发：把主线程从繁重计算中解放出来 | 张小猛 - loczb</title>
+    <meta name="description" content="深入解析 Web Worker 的原理与实践，涵盖 Dedicated Worker、Shared Worker、Service Worker 的区别与使用场景，以及 Comlink、Worker 池、Transferable Objects 等进阶技巧">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Web Worker 与前端多线程开发：把主线程从繁重计算中解放出来 | 张小猛 - loczb">
+    <meta property="og:description" content="深入解析 Web Worker 的原理与实践，涵盖 Dedicated Worker、Shared Worker、Service Worker 的区别与使用场景，以及 Comlink、Worker 池、Transferable Objects 等进阶技巧">
+    <meta property="og:url" content="https://709527.xyz/blog/posts/web-worker-与前端多线程开发把主线程从繁重计算中解放出来.html">
+    <meta property="og:type" content="article">
+        <meta property="og:image" content="../../assets/images/og-image.png">
+    <meta property="og:site_name" content="loczb">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Web Worker 与前端多线程开发：把主线程从繁重计算中解放出来 | 张小猛 - loczb">
+    <meta name="twitter:description" content="深入解析 Web Worker 的原理与实践，涵盖 Dedicated Worker、Shared Worker、Service Worker 的区别与使用场景，以及 Comlink、Worker 池、Transferable Objects 等进阶技巧">
+
+
+        <script type="application/ld+json">
+{
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "Web Worker 与前端多线程开发：把主线程从繁重计算中解放出来",
+      "description": "深入解析 Web Worker 的原理与实践，涵盖 Dedicated Worker、Shared Worker、Service Worker 的区别与使用场景，以及 Comlink、Worker 池、Transferable Objects 等进阶技巧",
+      "image": "https://709527.xyz/assets/images/og-image.png",
+      "author": {
+            "@type": "Person",
+            "name": "张小猛",
+            "url": "https://709527.xyz/about/"
+      },
+      "publisher": {
+            "@type": "Organization",
+            "name": "loczb",
+            "logo": {
+                  "@type": "ImageObject",
+                  "url": "https://709527.xyz/assets/images/favicon.svg"
+            }
+      },
+      "datePublished": "2026-08-07 17:57:38T00:00:00+08:00",
+      "dateModified": "2026-08-07 17:57:38T00:00:00+08:00",
+      "url": "https://709527.xyz/blog/posts/web-worker-与前端多线程开发把主线程从繁重计算中解放出来.html",
+      "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://709527.xyz/blog/posts/web-worker-与前端多线程开发把主线程从繁重计算中解放出来.html"
+      },
+      "keywords": "前端, 前端开发, JavaScript, Web Worker, 性能优化, 多线程",
+      "articleSection": "前端",
+      "timeRequired": "PT10M",
+      "inLanguage": "zh-CN"
+}
+    </script>
+
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&family=Noto+Sans+SC:wght@500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500&display=swap" media="print" onload="this.media='all'">
+    <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
+    <link rel="alternate icon" href="../../assets/images/favicon.ico">
+    <link rel="canonical" href="https://709527.xyz/blog/posts/web-worker-与前端多线程开发把主线程从繁重计算中解放出来.html">
+</head>
+<body>
+  <!-- Loading -->
+  <div class="loading">
+    <div class="loading-spinner"></div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../../index.html" class="nav-logo">
+        loc<span>zb</span>
+      </a>
+      <button class="nav-toggle" aria-label="打开菜单" aria-expanded="false" aria-controls="nav-links-menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <div class="nav-overlay"></div>
+      <ul class="nav-links" id="nav-links-menu">
+        <li><a href="../../index.html" class="nav-link">首页</a></li>
+        <li><a href="../../projects/index.html" class="nav-link">项目</a></li>
+        <li><a href="../index.html" class="nav-link active">博客</a></li>
+        <li><a href="../../about/index.html" class="nav-link">关于</a></li>
+      </ul>
+      <button class="theme-toggle" aria-label="切换主题" title="切换亮/暗模式">
+        <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+        <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+      </button>
+    </div>
+  </nav>
+  <!-- Particle Canvas Background -->
+  <canvas id="particle-canvas" class="particle-canvas"></canvas>
+
+  <div class="scroll-progress"></div>
+
+  <main class="section" style="padding-bottom: 0; padding-top: var(--space-4xl);">
+    <div class="container container-narrow">
+      <a href="../index.html" class="back-link">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        返回博客列表
+      </a>
+
+      <article class="post-content">
+        <h1>Web Worker 与前端多线程开发：把主线程从繁重计算中解放出来</h1>
+
+        <div class="post-meta">
+          <span>📅 2026-08-07 17:57:38</span>
+          <span>⏱️ 10 min read</span>
+          <span>👤 张小猛</span>
+        </div>
+
+        <div class="post-tags">
+          <span class="tag">前端</span>
+          <span class="tag">前端开发</span>
+          <span class="tag">JavaScript</span>
+          <span class="tag">Web Worker</span>
+          <span class="tag">性能优化</span>
+          <span class="tag">多线程</span>
+        </div>
+
+        <p>JavaScript 从诞生之初就被设计为单线程语言，这在当时是合理的——浏览器的页面交互逻辑并不需要多线程的复杂性。然而，随着 Web 应用变得越来越复杂，Canvas 动画、大数据处理、密码学运算、音视频编码等计算密集型任务不断涌现，"单线程"这把双刃剑开始显露出它的另一面：一个长任务就能让整个页面卡死，用户的点击、滚动、输入全都得不到响应。</p>
+<p>Web Worker 正是浏览器为应对这一困境提供的解决方案。它允许开发者在后台线程中运行 JavaScript，让主线程专注于 UI 渲染和用户交互，把繁重的计算任务交给 Worker 线程去处理。本文将从基础概念到进阶实践，全面解析 Web Worker 在前端开发中的应用。</p>
+<h2>为什么前端需要多线程</h2>
+<h3>JavaScript 单线程的限制</h3>
+<p>JavaScript 的"单线程"特性源于它的设计初衷：操作 DOM。如果允许多个线程同时操作 DOM，就会出现竞态条件——一个线程在删除节点，另一个线程同时在修改该节点的属性，结果将不可预测。为了避免这种复杂性，浏览器选择了单线程模型，通过事件循环（Event Loop）来调度所有任务。</p>
+<pre><code class="language-javascript">// 这段代码会阻塞主线程约 5 秒
+function blockingTask() {
+  const start = performance.now();
+  while (performance.now() - start &lt; 5000) {
+    // 模拟繁重计算
+    Math.sqrt(Math.random());
+  }
+  console.log('阻塞结束');
+}
+
+document.getElementById('btn').addEventListener('click', () =&gt; {
+  blockingTask(); // 点击按钮后，页面卡死 5 秒
+  console.log('按钮点击处理完成');
+});
+</code></pre>
+<p>在这个例子中，当用户点击按钮后，整个页面会冻结 5 秒。期间用户无法滚动、无法输入、无法点击其他按钮——因为主线程被 <code>while</code> 循环完全占用了。</p>
+<h3>主线程阻塞的真实代价</h3>
+<p>主线程阻塞的代价远不止"卡顿"这么简单。从用户体验和业务指标来看，影响是全方位的：</p>
+<p><strong>性能指标恶化</strong>：Google 的 Core Web Vitals 中，INP（Interaction to Next Paint）直接衡量页面响应用户交互的速度。主线程长任务会严重拖累 INP 分数，影响 SEO 排名。</p>
+<p><strong>交互反馈延迟</strong>：用户点击后超过 50ms 没有视觉反馈，就会产生"延迟"感；超过 100ms 会感到"卡顿"；超过 1000ms，用户很可能认为页面已经崩溃。</p>
+<pre><code class="language-javascript">// 使用 PerformanceObserver 检测长任务
+const observer = new PerformanceObserver((list) =&gt; {
+  for (const entry of list.getEntries()) {
+    if (entry.duration &gt; 50) {
+      console.warn(`长任务警告: ${entry.duration.toFixed(2)}ms`, entry);
+    }
+  }
+});
+
+observer.observe({ type: 'longtask', buffered: true });
+</code></pre>
+<p><strong>浏览器无响应警告</strong>：Chromium 内核浏览器对长时间阻塞的主线程有"页面无响应"对话框。当脚本连续运行超过一定时间，浏览器会弹出警告，用户可能选择直接关闭页面。</p>
+<pre><code class="language-javascript">// 模拟触发浏览器无响应警告的场景
+// 在循环中不加任何 yield，纯计算数百万次
+function fibonacci(n) {
+  if (n &lt;= 1) return n;
+  return fibonacci(n - 1) + fibonacci(n - 2);
+}
+
+// 计算 fib(45) 在主线程可能耗时数十秒
+console.time('fib(45) main-thread');
+fibonacci(45);
+console.timeEnd('fib(45) main-thread');
+// 期间页面完全冻结，浏览器可能弹出&quot;页面无响应&quot;警告
+</code></pre>
+<h3>Web Worker 的基本概念</h3>
+<p>Web Worker 是浏览器提供的在后台线程中运行脚本的机制。它运行在独立于主线程的上下文中，有自己的事件循环，通过消息传递与主线程通信。</p>
+<pre><code class="language-javascript">// 主线程 (main.js)
+const worker = new Worker('worker.js');
+
+// 向 Worker 发送消息
+worker.postMessage({ type: 'fibonacci', data: 45 });
+
+// 接收 Worker 返回的结果
+worker.onmessage = (event) =&gt; {
+  console.log('计算结果:', event.data.result);
+  console.timeEnd('fib-calculation');
+};
+
+worker.onerror = (error) =&gt; {
+  console.error('Worker 错误:', error.message);
+};
+
+console.time('fib-calculation');
+// 主线程不会被阻塞，UI 保持响应
+document.getElementById('loading').textContent = '计算中...';
+</code></pre>
+<pre><code class="language-javascript">// Worker 线程 (worker.js)
+self.onmessage = (event) =&gt; {
+  const { type, data } = event.data;
+
+  if (type === 'fibonacci') {
+    const result = fibonacci(data);
+    // 将结果发送回主线程
+    self.postMessage({ type: 'fibonacci', result });
+  }
+};
+
+function fibonacci(n) {
+  if (n &lt;= 1) return n;
+  return fibonacci(n - 1) + fibonacci(n - 2);
+}
+</code></pre>
+<p>Worker 线程是一个独立的全局上下文，不是 <code>window</code> 的子集。在 Worker 中可以访问：</p>
+<table>
+<thead>
+<tr>
+<th>可用</th>
+<th>不可用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>navigator</code>、<code>location</code>（只读）</td>
+<td><code>window</code>、<code>document</code></td>
+</tr>
+<tr>
+<td><code>fetch</code>、<code>XMLHttpRequest</code></td>
+<td>DOM 操作相关 API</td>
+</tr>
+<tr>
+<td><code>setTimeout</code>、<code>setInterval</code></td>
+<td><code>localStorage</code>（部分浏览器支持 <code>navigator.storage</code>）</td>
+</tr>
+<tr>
+<td><code>importScripts()</code></td>
+<td><code>alert</code>、<code>confirm</code> 等对话框</td>
+</tr>
+</tbody>
+</table>
+<h2>Worker 类型全解析</h2>
+<h3>Dedicated Worker：一对一的专用线程</h3>
+<p>Dedicated Worker 是最基本的 Worker 类型，由单个页面创建和使用。它的生命周期与创建它的页面绑定——页面关闭后，Worker 也会被终止。</p>
+<pre><code class="language-javascript">// 创建 Dedicated Worker 的几种方式
+
+// 1. 从外部脚本文件创建（最常用）
+const worker = new Worker('/workers/heavy-task.js');
+
+// 2. 从 Blob URL 创建（适合内联脚本）
+const blob = new Blob([`
+  self.onmessage = function(e) {
+    const result = e.data.map(x =&gt; x * 2);
+    self.postMessage(result);
+  };
+`], { type: 'application/javascript' });
+
+const blobUrl = URL.createObjectURL(blob);
+const inlineWorker = new Worker(blobUrl);
+URL.revokeObjectURL(blobUrl); // 释放 Blob URL
+
+// 3. 使用 { type: 'module' } 选项支持 ES Module
+const moduleWorker = new Worker('/workers/compute.js', { type: 'module' });
+// 在 worker.js 中可以使用 import 语句
+// import { heavyCalculation } from './utils.js';
+
+// 终止 Worker
+worker.terminate();
+</code></pre>
+<p>Dedicated Worker 的特点：</p>
+<ul>
+<li><strong>一对一绑定</strong>：每个 Worker 实例只服务于创建它的页面</li>
+<li><strong>双向通信</strong>：通过 <code>postMessage</code> 和 <code>onmessage</code> 收发数据</li>
+<li><strong>可主动终止</strong>：调用 <code>terminate()</code> 立即结束 Worker</li>
+<li><strong>内存独立</strong>：每个 Worker 有自己的堆内存，不共享变量</li>
+</ul>
+<h3>Shared Worker：多页面共享的线程</h3>
+<p>Shared Worker 允许多个页面（同源）共享同一个 Worker 实例，非常适合需要跨标签页同步数据或共享连接的场景，比如 WebSocket 连接的复用。</p>
+<pre><code class="language-javascript">// main.js（主线程，可在多个同源页面中运行）
+const sharedWorker = new SharedWorker('/workers/shared-ws.js');
+
+// Shared Worker 通过 port 通信
+sharedWorker.port.start(); // 必须先调用 start()
+
+// 发送消息
+sharedWorker.port.postMessage({
+  action: 'subscribe',
+  channel: 'chat-room-1'
+});
+
+// 接收消息
+sharedWorker.port.onmessage = (e) =&gt; {
+  const { action, data } = e.data;
+  if (action === 'message') {
+    console.log('收到消息:', data);
+    appendMessage(data);
+  }
+};
+
+// 页面关闭时通知 Worker
+window.addEventListener('beforeunload', () =&gt; {
+  sharedWorker.port.postMessage({ action: 'close' });
+});
+</code></pre>
+<pre><code class="language-javascript">// workers/shared-ws.js（Shared Worker 内部）
+const connections = new Map();
+let ws = null;
+
+// 使用 onconnect 处理新连接
+self.onconnect = (e) =&gt; {
+  const port = e.ports[0];
+  const clientId = Date.now().toString(36) + Math.random().toString(36).slice(2);
+
+  connections.set(clientId, port);
+  console.log(`新连接: ${clientId}，当前连接数: ${connections.size}`);
+
+  port.onmessage = (event) =&gt; {
+    const { action, channel, data } = event.data;
+
+    switch (action) {
+      case 'subscribe':
+        if (!ws) {
+          initializeWebSocket(channel);
+        }
+        break;
+      case 'send':
+        if (ws &amp;&amp; ws.readyState === WebSocket.OPEN) {
+          ws.send(JSON.stringify(data));
+        }
+        break;
+      case 'close':
+        connections.delete(clientId);
+        if (connections.size === 0 &amp;&amp; ws) {
+          ws.close();
+          ws = null;
+        }
+        break;
+    }
+  };
+
+  port.start();
+
+  // 向新加入的客户端广播当前连接数
+  port.postMessage({ action: 'status', data: `当前 ${connections.size} 个标签页已连接` });
+};
+
+function initializeWebSocket(channel) {
+  ws = new WebSocket(`wss://example.com/ws/${channel}`);
+
+  ws.onmessage = (event) =&gt; {
+    const msg = JSON.parse(event.data);
+    // 向所有连接的页面广播消息
+    connections.forEach((port) =&gt; {
+      port.postMessage({ action: 'message', data: msg });
+    });
+  };
+
+  ws.onclose = () =&gt; {
+    ws = null;
+    connections.forEach((port) =&gt; {
+      port.postMessage({ action: 'status', data: '连接已断开' });
+    });
+  };
+}
+</code></pre>
+<h3>Service Worker：不只是多线程</h3>
+<p>Service Worker 虽然名字里有 "Worker"，但它的定位和 Dedicated/Shared Worker 完全不同。它是一个位于浏览器与服务器之间的<strong>可编程网络代理</strong>，核心价值是离线缓存和后台同步，而非纯粹的计算。</p>
+<pre><code class="language-javascript">// sw.js（Service Worker 文件）
+const CACHE_NAME = 'my-app-v2';
+const urlsToCache = [
+  '/',
+  '/index.html',
+  '/styles/main.css',
+  '/scripts/app.js',
+  '/images/logo.png'
+];
+
+// 安装阶段：预缓存关键资源
+self.addEventListener('install', (event) =&gt; {
+  console.log('Service Worker 安装中...');
+  event.waitUntil(
+    caches.open(CACHE_NAME).then((cache) =&gt; {
+      console.log('预缓存资源');
+      return cache.addAll(urlsToCache);
+    }).then(() =&gt; {
+      // 强制新 SW 立即接管（跳过 waiting 状态）
+      return self.skipWaiting();
+    })
+  );
+});
+
+// 激活阶段：清理旧缓存
+self.addEventListener('activate', (event) =&gt; {
+  console.log('Service Worker 已激活');
+  event.waitUntil(
+    caches.keys().then((cacheNames) =&gt; {
+      return Promise.all(
+        cacheNames
+          .filter((name) =&gt; name !== CACHE_NAME)
+          .map((name) =&gt; caches.delete(name))
+      );
+    }).then(() =&gt; {
+      // 立即接管所有页面
+      return self.clients.claim();
+    })
+  );
+});
+
+// 拦截请求：实现缓存策略（Stale-While-Revalidate）
+self.addEventListener('fetch', (event) =&gt; {
+  event.respondWith(
+    caches.match(event.request).then((cachedResponse) =&gt; {
+      // 并行发起网络请求
+      const networkFetch = fetch(event.request).then((response) =&gt; {
+        // 将新响应存入缓存
+        const responseClone = response.clone();
+        caches.open(CACHE_NAME).then((cache) =&gt; {
+          cache.put(event.request, responseClone);
+        });
+        return response;
+      });
+
+      // 立即返回缓存（如果存在），同时刷新缓存
+      return cachedResponse || networkFetch;
+    })
+  );
+});
+</code></pre>
+<pre><code class="language-javascript">// 主线程注册 Service Worker
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () =&gt; {
+    navigator.serviceWorker.register('/sw.js', {
+      scope: '/'
+    }).then((registration) =&gt; {
+      console.log('Service Worker 注册成功，scope:', registration.scope);
+
+      // 监听更新
+      registration.addEventListener('updatefound', () =&gt; {
+        const newWorker = registration.installing;
+        newWorker.addEventListener('statechange', () =&gt; {
+          if (newWorker.state === 'installed' &amp;&amp; navigator.serviceWorker.controller) {
+            console.log('新版本可用！');
+            // 提示用户刷新
+            showUpdateBanner();
+          }
+        });
+      });
+    }).catch((error) =&gt; {
+      console.error('Service Worker 注册失败:', error);
+    });
+  });
+}
+</code></pre>
+<h3>三种 Worker 对比总结</h3>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>Dedicated Worker</th>
+<th>Shared Worker</th>
+<th>Service Worker</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>作用域</strong></td>
+<td>单页面</td>
+<td>同源多页面</td>
+<td>同源多页面（含未打开的页面）</td>
+</tr>
+<tr>
+<td><strong>生命周期</strong></td>
+<td>随页面销毁</td>
+<td>所有关联页面关闭后</td>
+<td>独立于页面，浏览器管理</td>
+</tr>
+<tr>
+<td><strong>DOM 访问</strong></td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><strong>通信方式</strong></td>
+<td><code>postMessage</code> 双向</td>
+<td><code>port.postMessage</code> 双向</td>
+<td><code>postMessage</code> + <code>MessageChannel</code></td>
+</tr>
+<tr>
+<td><strong>典型场景</strong></td>
+<td>计算密集型任务</td>
+<td>WebSocket 共享、状态同步</td>
+<td>离线缓存、推送通知、后台同步</td>
+</tr>
+<tr>
+<td><strong>调试入口</strong></td>
+<td>DevTools → Sources → Workers</td>
+<td>DevTools → Sources → Workers</td>
+<td>DevTools → Application → Service Workers</td>
+</tr>
+<tr>
+<td><strong>内存模型</strong></td>
+<td>独立堆</td>
+<td>共享堆</td>
+<td>独立堆</td>
+</tr>
+</tbody>
+</table>
+<h2>Worker 通信机制深入</h2>
+<h3>postMessage 与结构化克隆</h3>
+<p>主线程与 Worker 之间的通信依赖 <code>postMessage</code> 方法。当数据被发送时，浏览器会执行<strong>结构化克隆算法</strong>（Structured Clone Algorithm）来复制数据。</p>
+<pre><code class="language-javascript">// 主线程
+const worker = new Worker('worker.js');
+
+// 可以传递多种数据类型
+worker.postMessage({
+  array: [1, 2, 3],
+  map: new Map([['key', 'value']]),
+  set: new Set([1, 2, 3]),
+  date: new Date(),
+  regexp: /hello/gi,
+  buffer: new ArrayBuffer(16),
+  typedArray: new Uint8Array([1, 2, 3]),
+  // ❌ 不能传递：函数、DOM 节点、Error 对象（部分）
+});
+
+// Worker 线程
+self.onmessage = (e) =&gt; {
+  console.log(e.data.map instanceof Map); // true
+  // 注意：这是副本，修改不会影响主线程
+  e.data.map.set('new', 'value');
+  console.log(e.data.map.size); // 2
+};
+</code></pre>
+<p>结构化克隆的特点：</p>
+<ul>
+<li>✅ <strong>支持的类型</strong>：基本类型、Array、Object、Date、RegExp、Map、Set、ArrayBuffer、TypedArray、Blob、File</li>
+<li>❌ <strong>不支持的类型</strong>：Function、DOM 节点、Error 对象、Symbol、WeakMap/WeakSet</li>
+<li>⚠️ <strong>注意</strong>：克隆的是<strong>深拷贝</strong>副本，Worker 修改数据不会影响主线程中的原始数据</li>
+</ul>
+<h3>Transferable Objects：零拷贝传递</h3>
+<p>对于大数据（尤其是 <code>ArrayBuffer</code>），结构化克隆的开销很大。<code>postMessage</code> 提供了 <code>transfer</code> 选项，可以<strong>转移所有权</strong>而非复制，实现零拷贝传递。</p>
+<pre><code class="language-javascript">// 主线程
+const worker = new Worker('image-processor.js');
+
+// 创建一个大缓冲区（模拟图片数据）
+const pixelData = new Uint8Array(10 * 1024 * 1024); // 10MB
+// 填充模拟数据
+for (let i = 0; i &lt; pixelData.length; i++) {
+  pixelData[i] = i % 256;
+}
+
+console.log('转移前 buffer 长度:', pixelData.buffer.byteLength); // 10485760
+
+// 使用 transfer 转移所有权
+worker.postMessage(
+  { pixelData }, 
+  [pixelData.buffer] // 第二个参数：要转移所有权的对象列表
+);
+
+// 转移后，原 buffer 被置零
+console.log('转移后 buffer 长度:', pixelData.buffer.byteLength); // 0
+console.log('原始数组长度:', pixelData.length); // 0
+// ⚠️ 转移后主线程不能再使用该数据
+</code></pre>
+<pre><code class="language-javascript">// Worker 线程 (image-processor.js)
+self.onmessage = (e) =&gt; {
+  const { pixelData } = e.data;
+
+  console.log('收到数据大小:', pixelData.length); // 10485760
+  console.log('开始处理图像...');
+
+  // 在 Worker 中处理像素数据（例如应用滤镜）
+  for (let i = 0; i &lt; pixelData.length; i += 4) {
+    // 灰度化：R = G = B = 加权平均值
+    const gray = pixelData[i] * 0.299 + pixelData[i + 1] * 0.587 + pixelData[i + 2] * 0.114;
+    pixelData[i] = gray;     // R
+    pixelData[i + 1] = gray; // G
+    pixelData[i + 2] = gray; // B
+  }
+
+  // 处理完成后，将结果转移回主线程
+  self.postMessage(
+    { processedData: pixelData, status: 'done' },
+    [pixelData.buffer]
+  );
+};
+</code></pre>
+<p>Transferable 对象的优势：</p>
+<table>
+<thead>
+<tr>
+<th>传递方式</th>
+<th>10MB ArrayBuffer</th>
+<th>100MB ArrayBuffer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>结构化克隆（复制）</td>
+<td>~15-30ms</td>
+<td>~150-300ms</td>
+</tr>
+<tr>
+<td>Transfer（转移）</td>
+<td>&lt; 1ms</td>
+<td>&lt; 1ms</td>
+</tr>
+<tr>
+<td>结果</td>
+<td>主线程仍可用</td>
+<td>主线程数据被"清空"</td>
+</tr>
+</tbody>
+</table>
+<h3>MessageChannel 与广播通信</h3>
+<p><code>MessageChannel</code> 提供了一对一的双向通信管道，非常适合在复杂的多 Worker 场景中建立精确的点对点连接。</p>
+<pre><code class="language-javascript">// 主线程
+const worker1 = new Worker('worker-a.js');
+const worker2 = new Worker('worker-b.js');
+
+// 创建 MessageChannel
+const channel = new MessageChannel();
+
+// worker1 使用 port1，worker2 使用 port2
+worker1.postMessage({ type: 'connect', port: channel.port1 }, [channel.port1]);
+worker2.postMessage({ type: 'connect', port: channel.port2 }, [channel.port2]);
+
+// 现在 worker1 和 worker2 可以互相直接通信，无需经过主线程中转
+</code></pre>
+<pre><code class="language-javascript">// worker-a.js
+let peerPort = null;
+
+self.onmessage = (e) =&gt; {
+  if (e.data.type === 'connect') {
+    peerPort = e.data.port;
+
+    peerPort.onmessage = (event) =&gt; {
+      console.log('worker-a 收到来自 worker-b 的直接消息:', event.data);
+    };
+
+    // 向 worker-b 发送消息
+    peerPort.postMessage({ greeting: '你好，我是 Worker A！' });
+  }
+};
+</code></pre>
+<pre><code class="language-javascript">// worker-b.js
+let peerPort = null;
+
+self.onmessage = (e) =&gt; {
+  if (e.data.type === 'connect') {
+    peerPort = e.data.port;
+
+    peerPort.onmessage = (event) =&gt; {
+      console.log('worker-b 收到来自 worker-a 的直接消息:', event.data);
+      // 回复
+      peerPort.postMessage({ reply: '你好 Worker A，消息已收到！' });
+    };
+  }
+};
+</code></pre>
+<p>如果需要一对多的广播模式，可以利用 <code>BroadcastChannel</code> API（在 Worker 中同样可用）：</p>
+<pre><code class="language-javascript">// 可在主线程或任一 Worker 中使用
+const bc = new BroadcastChannel('global-state');
+
+// 发送广播
+bc.postMessage({ type: 'theme-changed', theme: 'dark' });
+
+// 接收广播
+bc.onmessage = (event) =&gt; {
+  console.log('收到广播:', event.data);
+  if (event.data.type === 'theme-changed') {
+    // 更新主题
+  }
+};
+
+// 关闭频道
+bc.close();
+</code></pre>
+<h2>Comlink：让 Worker 通信像调用函数</h2>
+<h3>Comlink 的基本用法</h3>
+<p>原生的 <code>postMessage</code> 回调模式在复杂场景下容易产生"回调地狱"，类型也很难保证。Google Chrome 团队开源的 Comlink 库通过 Proxy 代理，让跨线程通信变得像是普通的函数调用。</p>
+<pre><code class="language-bash">npm install comlink
+</code></pre>
+<pre><code class="language-javascript">// math.worker.js
+import { expose } from 'comlink';
+
+const mathAPI = {
+  add(a, b) {
+    return a + b;
+  },
+
+  factorial(n) {
+    if (n &lt;= 1) return 1n;
+    let result = 1n;
+    for (let i = 2n; i &lt;= n; i++) {
+      result *= i;
+    }
+    return result;
+  },
+
+  async processLargeArray(data) {
+    // 模拟耗时计算
+    const result = data.map(x =&gt; x * x).filter(x =&gt; x % 2 === 0);
+    return result;
+  },
+
+  // 支持事件回调
+  onProgress: null,
+
+  async longRunningTask(nums) {
+    const results = [];
+    for (let i = 0; i &lt; nums.length; i++) {
+      results.push(await this.compute(nums[i]));
+      // 通过回调报告进度
+      if (this.onProgress) {
+        this.onProgress(i + 1, nums.length);
+      }
+    }
+    return results;
+  },
+
+  compute(n) {
+    // 模拟耗时计算
+    let sum = 0;
+    for (let i = 0; i &lt; n * 1000000; i++) {
+      sum += Math.sqrt(i);
+    }
+    return sum;
+  }
+};
+
+expose(mathAPI);
+</code></pre>
+<pre><code class="language-javascript">// main.js（主线程）
+import { wrap } from 'comlink';
+
+const worker = new Worker(new URL('./math.worker.js', import.meta.url), {
+  type: 'module'
+});
+
+// wrap 让 worker 的方法调用看起来是普通的异步函数
+const mathAPI = wrap(worker);
+
+async function main() {
+  // 像调用本地函数一样使用 Worker 中的方法
+  const sum = await mathAPI.add(10, 20);
+  console.log('加法结果:', sum); // 30
+
+  const fact = await mathAPI.factorial(50n);
+  console.log('阶乘结果:', fact.toString());
+
+  // 设置进度回调
+  mathAPI.onProgress = (current, total) =&gt; {
+    console.log(`计算进度: ${current}/${total}`);
+  };
+
+  const results = await mathAPI.longRunningTask([1, 2, 3, 4, 5]);
+  console.log('任务完成:', results);
+}
+
+main();
+</code></pre>
+<h3>使用 TypeScript 保证类型安全</h3>
+<p>Comlink 的另一个重要优势是类型安全——如果你使用 TypeScript，可以定义共享接口，获得完整的类型检查和智能提示。</p>
+<pre><code class="language-typescript">// types/worker-api.ts
+export interface MathWorkerAPI {
+  add(a: number, b: number): Promise&lt;number&gt;;
+  factorial(n: bigint): Promise&lt;bigint&gt;;
+  processLargeArray(data: number[]): Promise&lt;number[]&gt;;
+
+  // 回调属性
+  onProgress: ((current: number, total: number) =&gt; void) | null;
+
+  longRunningTask(nums: number[]): Promise&lt;number[]&gt;;
+  compute(n: number): Promise&lt;number&gt;;
+}
+</code></pre>
+<pre><code class="language-typescript">// math.worker.ts
+import { expose } from 'comlink';
+import type { MathWorkerAPI } from './types/worker-api';
+
+const mathAPI: MathWorkerAPI &amp; { 
+  compute(n: number): number  // 内部实现是非异步的
+} = {
+  add(a: number, b: number): number {
+    return a + b;
+  },
+
+  factorial(n: bigint): bigint {
+    if (n &lt;= 1n) return 1n;
+    let result = 1n;
+    for (let i = 2n; i &lt;= n; i++) {
+      result *= i;
+    }
+    return result;
+  },
+
+  async processLargeArray(data: number[]): Promise&lt;number[]&gt; {
+    return data.map(x =&gt; x * x).filter(x =&gt; x % 2 === 0);
+  },
+
+  onProgress: null,
+
+  async longRunningTask(nums: number[]): Promise&lt;number[]&gt; {
+    const results: number[] = [];
+    for (let i = 0; i &lt; nums.length; i++) {
+      results.push(this.compute(nums[i]));
+      this.onProgress?.(i + 1, nums.length);
+    }
+    return results;
+  },
+
+  compute(n: number): number {
+    let sum = 0;
+    for (let i = 0; i &lt; n * 1000000; i++) {
+      sum += Math.sqrt(i);
+    }
+    return sum;
+  }
+};
+
+expose(mathAPI);
+</code></pre>
+<pre><code class="language-typescript">// main.ts（主线程，完整类型检查）
+import { wrap, Remote } from 'comlink';
+import type { MathWorkerAPI } from './types/worker-api';
+
+const worker = new Worker(
+  new URL('./math.worker.ts', import.meta.url),
+  { type: 'module' }
+);
+
+const mathAPI = wrap&lt;MathWorkerAPI&gt;(worker);
+
+async function main() {
+  // ✅ 完整的类型安全和智能提示
+  const result = await mathAPI.add(1, 2);
+  // ✅ 编译时报错：参数类型不匹配
+  // const error = await mathAPI.add(&quot;1&quot;, &quot;2&quot;); ❌
+}
+</code></pre>
+<h3>Comlink 的原理简析</h3>
+<p>Comlink 的核心原理并不复杂，可以分为几层：</p>
+<p><strong>1. Proxy 拦截</strong>：<code>wrap()</code> 返回的 Proxy 对象会拦截所有属性访问和方法调用，将其转换为 RPC（Remote Procedure Call）消息。</p>
+<p><strong>2. 请求-响应模式</strong>：每次方法调用生成一个唯一 ID，通过 <code>postMessage</code> 发送到 Worker 侧执行，Worker 完成后再将结果通过消息返回。</p>
+<p><strong>3. Transfer 自动识别</strong>：Comlink 会自动识别 Transferable 对象并使用 <code>transfer</code> 参数传递，避免不必要的复制。</p>
+<pre><code class="language-javascript">// Comlink 核心原理的精简实现（不是完整代码，仅示意）
+function wrap(worker) {
+  const pending = new Map();
+  let uid = 0;
+
+  worker.onmessage = (e) =&gt; {
+    const { id, result, error } = e.data;
+    const { resolve, reject } = pending.get(id);
+    pending.delete(id);
+    if (error) reject(new Error(error));
+    else resolve(result);
+  };
+
+  const handler = {
+    get(target, prop) {
+      return (...args) =&gt; {
+        return new Promise((resolve, reject) =&gt; {
+          const id = ++uid;
+          pending.set(id, { resolve, reject });
+
+          worker.postMessage({
+            id,
+            call: prop,
+            args
+          });
+        });
+      };
+    }
+  };
+
+  return new Proxy({}, handler);
+}
+</code></pre>
+<h2>Worker 池与任务调度</h2>
+<h3>为什么需要 Worker 池</h3>
+<p>单个 Worker 仍然是单线程的——如果提交给 Worker 的任务是串行处理的，大量任务会排队等待。而创建和销毁 Worker 的开销也不小（内存、线程创建）。</p>
+<p>Worker 池解决两个核心问题：</p>
+<ol>
+<li><strong>并行处理</strong>：利用多个 Worker 实例并行执行任务，充分利用多核 CPU</li>
+<li><strong>资源复用</strong>：避免频繁创建/销毁 Worker，池化管理复用实例</li>
+</ol>
+<pre><code class="language-javascript">// 理想并行度：取 CPU 核心数和任务数的较小值
+const idealConcurrency = Math.min(
+  navigator.hardwareConcurrency || 4,
+  tasks.length
+);
+console.log(`使用 ${idealConcurrency} 个 Worker 并行处理`);
+</code></pre>
+<h3>实现一个简单的 Worker 池</h3>
+<pre><code class="language-javascript">// worker-pool.js
+class WorkerPool {
+  constructor(workerScript, poolSize = navigator.hardwareConcurrency || 4) {
+    this.workerScript = workerScript;
+    this.poolSize = poolSize;
+    this.workers = [];
+    this.taskQueue = [];
+    this.availableWorkers = [];
+
+    this._initialize();
+  }
+
+  _initialize() {
+    for (let i = 0; i &lt; this.poolSize; i++) {
+      const worker = new Worker(this.workerScript, { type: 'module' });
+      const workerId = i;
+
+      worker.onmessage = (e) =&gt; {
+        // Worker 完成任务，归还到可用池
+        this.availableWorkers.push(workerId);
+
+        // 执行任务回调
+        const task = this.workers[workerId].currentTask;
+        if (task) {
+          task.resolve(e.data);
+          this.workers[workerId].currentTask = null;
+        }
+
+        // 如果有排队任务，立即分派
+        if (this.taskQueue.length &gt; 0) {
+          this._dispatch(this.taskQueue.shift());
+        }
+      };
+
+      worker.onerror = (e) =&gt; {
+        const task = this.workers[i].currentTask;
+        if (task) {
+          task.reject(new Error(e.message));
+          this.workers[i].currentTask = null;
+        }
+        this.availableWorkers.push(i);
+      };
+
+      this.workers.push({ worker, currentTask: null });
+      this.availableWorkers.push(i);
+    }
+  }
+
+  exec(data, transferables) {
+    return new Promise((resolve, reject) =&gt; {
+      const task = { data, transferables, resolve, reject };
+      // 取消令牌
+      task.cancelled = false;
+      task.abort = () =&gt; { task.cancelled = true; };
+
+      if (this.availableWorkers.length &gt; 0) {
+        this._dispatch(task);
+      } else {
+        this.taskQueue.push(task);
+      }
+    });
+  }
+
+  _dispatch(task) {
+    if (task.cancelled) return;
+
+    const workerId = this.availableWorkers.shift();
+    const { worker } = this.workers[workerId];
+    this.workers[workerId].currentTask = task;
+
+    worker.postMessage(task.data, task.transferables || []);
+  }
+
+  // 批量处理：自动分配任务到空闲 Worker
+  async execAll(tasks) {
+    const results = await Promise.all(
+      tasks.map(task =&gt; this.exec(task.data, task.transferables))
+    );
+    return results;
+  }
+
+  // 终止所有 Worker
+  terminate() {
+    this.workers.forEach(({ worker }) =&gt; worker.terminate());
+    this.workers = [];
+    this.availableWorkers = [];
+    this.taskQueue = [];
+  }
+}
+
+export default WorkerPool;
+</code></pre>
+<p>使用 Worker 池的示例：</p>
+<pre><code class="language-javascript">// main.js
+import WorkerPool from './worker-pool.js';
+
+// 创建一个包含 4 个 Worker 的池
+const pool = new WorkerPool(
+  new URL('./heavy-task.worker.js', import.meta.url),
+  4
+);
+
+// 假设有 100 个文件需要哈希计算
+const files = Array.from({ length: 100 }, (_, i) =&gt; ({
+  id: i,
+  data: crypto.getRandomValues(new Uint8Array(1024 * 1024)) // 1MB 随机数据
+}));
+
+console.time('parallel-processing');
+
+const tasks = files.map((file, idx) =&gt; ({
+  data: { id: file.id, data: file.data.buffer },
+  transferables: [file.data.buffer]
+}));
+
+// 提交所有任务，池自动调度
+await pool.execAll(tasks);
+
+console.timeEnd('parallel-processing');
+
+// 清理
+pool.terminate();
+</code></pre>
+<h3>任务优先级与取消</h3>
+<p>真实的业务场景中，并非所有任务都同等重要。为 Worker 池添加优先级和取消机制非常必要：</p>
+<pre><code class="language-javascript">// priority-worker-pool.js
+class PriorityWorkerPool extends WorkerPool {
+  constructor(workerScript, poolSize) {
+    super(workerScript, poolSize);
+    this.taskQueue = []; 
+    // 任务队列现在按优先级排序
+  }
+
+  exec(data, transferables, priority = 0) {
+    return new Promise((resolve, reject) =&gt; {
+      const task = { 
+        data, transferables, resolve, reject, 
+        priority, cancelled: false,
+        id: `task-${Date.now()}-${Math.random().toString(36)}`
+      };
+
+      // 注册取消令牌
+      task.abort = () =&gt; { 
+        task.cancelled = true;
+        // 从队列中移除
+        this.taskQueue = this.taskQueue.filter(t =&gt; t.id !== task.id);
+      };
+
+      if (this.availableWorkers.length &gt; 0) {
+        this._dispatch(task);
+      } else {
+        // 按优先级插入队列（高优先级在前）
+        this.taskQueue.push(task);
+        this.taskQueue.sort((a, b) =&gt; b.priority - a.priority);
+      }
+    });
+  }
+
+  // 可取消的任务包装器
+  execWithTimeout(data, transferables, timeoutMs, priority = 0) {
+    const task = this.exec(data, transferables, priority);
+
+    const timeout = new Promise((_, reject) =&gt; {
+      setTimeout(() =&gt; {
+        task.then(t =&gt; t.abort?.());
+        reject(new Error(`任务超时 (${timeoutMs}ms)`));
+      }, timeoutMs);
+    });
+
+    return Promise.race([task, timeout]);
+  }
+}
+</code></pre>
+<h2>实战场景</h2>
+<h3>场景一：图片处理与压缩</h3>
+<p>图片上传是前端最常见的计算密集型场景之一。在 Worker 中处理图片可以避免阻塞 UI。</p>
+<pre><code class="language-javascript">// image-compress.worker.js
+self.onmessage = async (e) =&gt; {
+  const { imageData, quality = 0.7, maxWidth = 1920, maxHeight = 1080 } = e.data;
+
+  try {
+    // 从 ArrayBuffer 创建 ImageBitmap
+    const bitmap = await createImageBitmap(
+      new Blob([imageData])
+    );
+
+    // 计算缩放比例（保持宽高比）
+    let { width, height } = bitmap;
+    if (width &gt; maxWidth || height &gt; maxHeight) {
+      const ratio = Math.min(maxWidth / width, maxHeight / height);
+      width = Math.round(width * ratio);
+      height = Math.round(height * ratio);
+    }
+
+    // 使用 OffscreenCanvas 在 Worker 中处理图片
+    const canvas = new OffscreenCanvas(width, height);
+    const ctx = canvas.getContext('2d');
+
+    // 绘制缩放后的图片
+    ctx.drawImage(bitmap, 0, 0, width, height);
+
+    // 导出为压缩后的 Blob
+    const blob = await canvas.convertToBlob({
+      type: 'image/jpeg',
+      quality: quality
+    });
+
+    // 将压缩结果返回主线程
+    const resultBuffer = await blob.arrayBuffer();
+    self.postMessage(
+      { 
+        success: true, 
+        buffer: resultBuffer,
+        originalSize: imageData.byteLength,
+        compressedSize: resultBuffer.byteLength,
+        dimensions: { width, height }
+      },
+      [resultBuffer] // 使用 Transferable 避免复制
+    );
+
+    bitmap.close();
+
+  } catch (error) {
+    self.postMessage({ success: false, error: error.message });
+  }
+};
+</code></pre>
+<pre><code class="language-javascript">// main.js（主线程使用示例）
+const compressWorker = new Worker(
+  new URL('./image-compress.worker.js', import.meta.url),
+  { type: 'module' }
+);
+
+async function compressImage(file) {
+  return new Promise((resolve, reject) =&gt; {
+    const reader = new FileReader();
+
+    reader.onload = () =&gt; {
+      const arrayBuffer = reader.result;
+
+      compressWorker.onmessage = (e) =&gt; {
+        if (e.data.success) {
+          console.log(
+            `压缩完成: ${(e.data.originalSize / 1024).toFixed(1)}KB → ` +
+            `${(e.data.compressedSize / 1024).toFixed(1)}KB ` +
+            `(${(e.data.compressedSize / e.data.originalSize * 100).toFixed(1)}%)`
+          );
+          resolve(e.data);
+        } else {
+          reject(new Error(e.data.error));
+        }
+      };
+
+      compressWorker.postMessage(
+        { imageData: arrayBuffer, quality: 0.6, maxWidth: 1280 },
+        [arrayBuffer]
+      );
+    };
+
+    reader.onerror = reject;
+    reader.readAsArrayBuffer(file);
+  });
+}
+
+// 批量压缩（利用 Worker 池并行，每张图用独立的 Worker 调用）
+document.getElementById('upload').addEventListener('change', async (e) =&gt; {
+  const files = Array.from(e.target.files);
+  const results = await Promise.all(files.map(compressImage));
+  console.log(`${results.length} 张图片压缩完成`);
+});
+</code></pre>
+<h3>场景二：大数据 JSON 解析</h3>
+<p>当 JSON 数据量很大（比如几 MB 以上的 API 响应），在主线程中解析会阻塞渲染。<code>JSON.parse</code> 虽然很快，但几 MB 的数据仍然可能需要十几毫秒甚至更多，更重要的是解析后的对象会占用大量堆内存，触发 GC 暂停。</p>
+<pre><code class="language-javascript">// json-parse.worker.js
+self.onmessage = (e) =&gt; {
+  const { rawText, options } = e.data;
+
+  try {
+    console.time('worker-json-parse');
+    const parsed = JSON.parse(rawText);
+    console.timeEnd('worker-json-parse');
+
+    // 可选：只提取需要的字段，减小返回数据量
+    let result = parsed;
+    if (options &amp;&amp; options.fields) {
+      result = applyFieldFilter(parsed, options.fields);
+    }
+
+    self.postMessage({ success: true, data: result });
+  } catch (error) {
+    self.postMessage({ 
+      success: false, 
+      error: error.message,
+      position: extractErrorPosition(error.message, rawText)
+    });
+  }
+};
+
+function applyFieldFilter(obj, fields) {
+  if (Array.isArray(obj)) {
+    return obj.map(item =&gt; applyFieldFilter(item, fields));
+  }
+  if (typeof obj === 'object' &amp;&amp; obj !== null) {
+    const filtered = {};
+    for (const key of fields) {
+      if (obj.hasOwnProperty(key)) {
+        filtered[key] = obj[key];
+      }
+    }
+    return filtered;
+  }
+  return obj;
+}
+
+function extractErrorPosition(message, text) {
+  const match = message.match(/position (\d+)/);
+  if (match) {
+    const pos = parseInt(match[1]);
+    const start = Math.max(0, pos - 50);
+    const end = Math.min(text.length, pos + 50);
+    return text.slice(start, end).replace(/\n/g, '\\n');
+  }
+  return null;
+}
+</code></pre>
+<pre><code class="language-javascript">// main.js
+const jsonWorker = new Worker(
+  new URL('./json-parse.worker.js', import.meta.url)
+);
+
+async function parseLargeJSON(url, options) {
+  // 先异步获取文本（不阻塞主线程）
+  const response = await fetch(url);
+  const rawText = await response.text();
+
+  console.log(`JSON 文本大小: ${(rawText.length / 1024 / 1024).toFixed(2)}MB`);
+
+  return new Promise((resolve, reject) =&gt; {
+    jsonWorker.onmessage = (e) =&gt; {
+      if (e.data.success) {
+        resolve(e.data.data);
+      } else {
+        console.error('JSON 解析错误位置:', e.data.position);
+        reject(new Error(e.data.error));
+      }
+    };
+
+    jsonWorker.postMessage({ rawText, options });
+  });
+}
+
+// 使用示例：解析大型 API 响应，仅保留必要字段
+const data = await parseLargeJSON('/api/large-dataset.json', {
+  fields: ['id', 'name', 'price', 'stock', 'category']
+});
+</code></pre>
+<h3>场景三：实时搜索与过滤</h3>
+<p>对于实时搜索功能，当数据集很大时，需要在 Worker 中进行过滤和排序，保持输入框的流畅响应。</p>
+<pre><code class="language-javascript">// search.worker.js
+let documents = [];
+let searchIndex = new Map(); // 简单的倒排索引
+
+self.onmessage = (e) =&gt; {
+  const { type, payload } = e.data;
+
+  switch (type) {
+    case 'init':
+      documents = payload.documents;
+      buildIndex(documents, payload.searchFields);
+      self.postMessage({ type: 'ready', count: documents.length });
+      break;
+
+    case 'search':
+      const results = search(payload.query, payload.options);
+      self.postMessage({ 
+        type: 'results', 
+        query: payload.query,
+        results: results.slice(0, payload.options?.limit || 50),
+        total: results.length
+      });
+      break;
+
+    case 'add':
+      documents.push(payload.document);
+      addToIndex(payload.document, documents.length - 1, payload.fields);
+      break;
+  }
+};
+
+function buildIndex(docs, fields) {
+  searchIndex.clear();
+
+  docs.forEach((doc, id) =&gt; {
+    for (const field of fields) {
+      const text = String(doc[field] || '').toLowerCase();
+      const tokens = tokenize(text);
+
+      for (const token of tokens) {
+        if (!searchIndex.has(token)) {
+          searchIndex.set(token, new Set());
+        }
+        searchIndex.get(token).add(id);
+      }
+    }
+  });
+}
+
+function tokenize(text) {
+  // 中文按单个字+双字组合，英文按单词
+  const segments = [];
+
+  // 提取英文单词
+  const words = text.match(/[a-zA-Z]+/g) || [];
+  segments.push(...words.map(w =&gt; w.toLowerCase()));
+
+  // 中文分词（简单的二元组+单元）
+  const chinese = text.replace(/[^\\u4e00-\\u9fff]/g, '');
+  for (let i = 0; i &lt; chinese.length; i++) {
+    segments.push(chinese[i]); // 单字
+    if (i &lt; chinese.length - 1) {
+      segments.push(chinese[i] + chinese[i + 1]); // 双字
+    }
+  }
+
+  return segments;
+}
+
+function search(query, options = {}) {
+  if (!query || query.trim() === '') {
+    return documents.map((doc, id) =&gt; ({ ...doc, _id: id, _score: 0 }));
+  }
+
+  const tokens = tokenize(query.toLowerCase());
+  const scores = new Map();
+
+  for (const token of tokens) {
+    const matchedIds = searchIndex.get(token);
+    if (matchedIds) {
+      for (const id of matchedIds) {
+        scores.set(id, (scores.get(id) || 0) + 1);
+      }
+    }
+  }
+
+  // 转换为结果数组并排序
+  const results = Array.from(scores.entries())
+    .map(([id, score]) =&gt; ({
+      ...documents[id],
+      _id: id,
+      _score: score
+    }))
+    .sort((a, b) =&gt; b._score - a._score);
+
+  // 添加模糊匹配（包含查询字符串但未被分词的文档）
+  if (options.fuzzy !== false &amp;&amp; results.length &lt; 10) {
+    const queryLower = query.toLowerCase();
+    const existing = new Set(results.map(r =&gt; r._id));
+
+    for (let i = 0; i &lt; documents.length; i++) {
+      if (!existing.has(i)) {
+        const text = options.searchFields
+          .map(f =&gt; String(documents[i][f] || '').toLowerCase())
+          .join(' ');
+        if (text.includes(queryLower)) {
+          results.push({ ...documents[i], _id: i, _score: 0.5 });
+        }
+      }
+    }
+  }
+
+  return results;
+}
+
+function addToIndex(doc, id, fields) {
+  for (const field of fields) {
+    const text = String(doc[field] || '').toLowerCase();
+    const tokens = tokenize(text);
+
+    for (const token of tokens) {
+      if (!searchIndex.has(token)) {
+        searchIndex.set(token, new Set());
+      }
+      searchIndex.get(token).add(id);
+    }
+  }
+}
+</code></pre>
+<pre><code class="language-javascript">// main.js（主线程实时搜索）
+const searchWorker = new Worker(
+  new URL('./search.worker.js', import.meta.url),
+  { type: 'module' }
+);
+
+let lastQuery = '';
+
+searchWorker.onmessage = (e) =&gt; {
+  if (e.data.type === 'results') {
+    // 忽略过期的搜索结果（用户可能已经输入了新查询）
+    if (e.data.query !== lastQuery) return;
+
+    renderResults(e.data.results, e.data.total);
+  }
+};
+
+// 防抖搜索
+function debouncedSearch(query, delay = 150) {
+  clearTimeout(debouncedSearch.timer);
+  debouncedSearch.timer = setTimeout(() =&gt; {
+    lastQuery = query;
+    searchWorker.postMessage({ 
+      type: 'search', 
+      payload: { 
+        query, 
+        options: { limit: 20, fuzzy: true }
+      } 
+    });
+  }, delay);
+}
+
+// 初始化搜索数据
+async function initializeSearch() {
+  const response = await fetch('/api/products.json');
+  const products = await response.json();
+
+  searchWorker.postMessage({
+    type: 'init',
+    payload: {
+      documents: products,
+      searchFields: ['name', 'description', 'category', 'brand']
+    }
+  });
+}
+
+function renderResults(results, total) {
+  const container = document.getElementById('search-results');
+  container.innerHTML = `
+    &lt;div class=&quot;search-summary&quot;&gt;找到 ${total} 个结果&lt;/div&gt;
+    ${results.map(r =&gt; `
+      &lt;div class=&quot;search-item&quot; data-id=&quot;${r._id}&quot;&gt;
+        &lt;h4&gt;${highlightMatch(r.name, lastQuery)}&lt;/h4&gt;
+        &lt;p&gt;${highlightMatch(r.description?.slice(0, 100), lastQuery)}&lt;/p&gt;
+        &lt;span class=&quot;search-score&quot;&gt;相关性: ${(r._score * 100 / tokens(lastQuery).length).toFixed(0)}%&lt;/span&gt;
+      &lt;/div&gt;
+    `).join('')}
+  `;
+}
+
+function highlightMatch(text, query) {
+  if (!query) return text;
+  const regex = new RegExp(`(${escapeRegex(query)})`, 'gi');
+  return text.replace(regex, '&lt;mark&gt;$1&lt;/mark&gt;');
+}
+
+function escapeRegex(str) {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&amp;');
+}
+
+function tokens(q) { return (q.match(/[^\\s]+/g) || []).length; }
+</code></pre>
+<h2>调试与性能分析</h2>
+<h3>Chrome DevTools 中的 Worker 调试</h3>
+<p>Chrome DevTools 为 Worker 提供了完善的调试支持，但需要知道在哪里找到它们。</p>
+<p><strong>1. Sources 面板中的 Worker 线程</strong></p>
+<p>在 Sources 面板左侧的文件树中，会有一个独立的 "Workers" 部分，列出所有活跃的 Worker 线程。点击 Worker 条目可以打开该线程的调试上下文，可以设置断点、查看调用栈和变量。</p>
+<pre><code>Sources 面板结构：
+📁 Page
+  📄 (index)
+  📄 main.js
+  ...
+📁 Workers
+  📄 DedicatedWorker #1 (worker.js)
+  📄 DedicatedWorker #2 (search.worker.js)
+  📄 SharedWorker #1 (shared-ws.js)
+</code></pre>
+<p><strong>2. Performance 面板分析 Worker 性能</strong></p>
+<p>Performance 面板可以记录 Worker 线程的执行时间，帮助你分析性能瓶颈：</p>
+<pre><code class="language-javascript">// 在代码中标记性能测量点
+// 主线程
+performance.mark('worker-task-start');
+worker.postMessage({ data: largeArray });
+worker.onmessage = () =&gt; {
+  performance.mark('worker-task-end');
+  performance.measure('worker-task', 'worker-task-start', 'worker-task-end');
+
+  const measure = performance.getEntriesByName('worker-task')[0];
+  console.log(`Worker 任务耗时: ${measure.duration.toFixed(2)}ms`);
+};
+</code></pre>
+<p><strong>3. console.log 的线程来源标识</strong></p>
+<pre><code class="language-javascript">// worker.js
+console.log(`[Worker-${self.name || 'anonymous'}] 任务开始处理`);
+// DevTools console 中会显示消息来自哪个 Worker 线程
+</code></pre>
+<h3>性能指标与监控</h3>
+<p>要科学地评估 Worker 的效果，需要建立全面的监控体系：</p>
+<pre><code class="language-javascript">// perf-monitor.js - Worker 性能监控工具
+class WorkerPerfMonitor {
+  constructor(worker, label = 'worker') {
+    this.worker = worker;
+    this.label = label;
+    this.metrics = [];
+
+    // 包装 postMessage 以记录性能
+    const originalPostMessage = worker.postMessage.bind(worker);
+    worker.postMessage = (message, transfer) =&gt; {
+      const taskId = `${label}-${Date.now()}`;
+      const startTime = performance.now();
+
+      // 拦截响应
+      const originalHandler = worker.onmessage;
+      worker.onmessage = (e) =&gt; {
+        const endTime = performance.now();
+        const duration = endTime - startTime;
+
+        this.metrics.push({
+          taskId,
+          startTime,
+          endTime,
+          duration,
+          messageSize: this._estimateSize(message),
+          responseSize: this._estimateSize(e.data),
+          timestamp: new Date()
+        });
+
+        // 保持指标数量在限制内
+        if (this.metrics.length &gt; 1000) {
+          this.metrics.shift();
+        }
+
+        if (originalHandler) {
+          originalHandler.call(worker, e);
+        }
+      };
+
+      originalPostMessage(message, transfer);
+    };
+  }
+
+  _estimateSize(obj) {
+    try {
+      return new Blob([JSON.stringify(obj)]).size;
+    } catch {
+      return 0;
+    }
+  }
+
+  getStats() {
+    if (this.metrics.length === 0) return null;
+
+    const durations = this.metrics.map(m =&gt; m.duration);
+    const avg = durations.reduce((a, b) =&gt; a + b, 0) / durations.length;
+    const max = Math.max(...durations);
+    const min = Math.min(...durations);
+
+    // P50、P95、P99
+    const sorted = [...durations].sort((a, b) =&gt; a - b);
+    const p50 = sorted[Math.floor(sorted.length * 0.5)];
+    const p95 = sorted[Math.floor(sorted.length * 0.95)];
+    const p99 = sorted[Math.floor(sorted.length * 0.99)];
+
+    return {
+      totalTasks: this.metrics.length,
+      avgDuration: avg.toFixed(2),
+      minDuration: min.toFixed(2),
+      maxDuration: max.toFixed(2),
+      p50: p50.toFixed(2),
+      p95: p95.toFixed(2),
+      p99: p99.toFixed(2),
+      totalMsgSizeIn: this.metrics.reduce((s, m) =&gt; s + m.messageSize, 0),
+      totalMsgSizeOut: this.metrics.reduce((s, m) =&gt; s + m.responseSize, 0)
+    };
+  }
+
+  report() {
+    const stats = this.getStats();
+    if (!stats) return '暂无性能数据';
+
+    return [
+      `\n📊 Worker 性能报告 [${this.label}]`,
+      `─────────────────────────────────`,
+      `任务总数:     ${stats.totalTasks}`,
+      `平均耗时:     ${stats.avgDuration}ms`,
+      `最小耗时:     ${stats.minDuration}ms`,
+      `最大耗时:     ${stats.maxDuration}ms`,
+      `P50:          ${stats.p50}ms`,
+      `P95:          ${stats.p95}ms`,
+      `P99:          ${stats.p99}ms`,
+      `入站数据:     ${(stats.totalMsgSizeIn / 1024).toFixed(1)}KB`,
+      `出站数据:     ${(stats.totalMsgSizeOut / 1024).toFixed(1)}KB`,
+    ].join('\n');
+  }
+}
+
+// 使用示例
+// const monitor = new WorkerPerfMonitor(worker, 'image-compress');
+// ... 完成一批任务后 ...
+// console.log(monitor.report());
+</code></pre>
+<h3>常见陷阱与注意事项</h3>
+<p>在真实的项目中使用 Web Worker 时，有一些常见的陷阱需要特别注意：</p>
+<p><strong>1. 避免频繁创建和销毁 Worker</strong></p>
+<pre><code class="language-javascript">// ❌ 错误做法：每次计算都创建新 Worker
+async function badApproach(data) {
+  const worker = new Worker('calc.js');
+  return new Promise(resolve =&gt; {
+    worker.onmessage = (e) =&gt; resolve(e.data);
+    worker.postMessage(data);
+  }).finally(() =&gt; worker.terminate());
+}
+// 每次调用都有线程创建开销（~50-100ms），严重浪费
+
+// ✅ 正确做法：复用 Worker 或使用 Worker 池
+const worker = new Worker('calc.js');
+async function goodApproach(data) {
+  return new Promise(resolve =&gt; {
+    worker.onmessage = (e) =&gt; resolve(e.data);
+    worker.postMessage(data);
+  });
+}
+</code></pre>
+<p><strong>2. 注意数据拷贝开销</strong></p>
+<p>对于小数据，结构化克隆的开销可以忽略。但对于大数据，这种复制成本可能超过计算本身——花了 50ms 传数据，实际计算只用了 20ms，得不偿失。</p>
+<pre><code class="language-javascript">// 权衡何时用 Worker、何时不用
+function shouldOffloadToWorker(dataSize, computationTime) {
+  // 数据传输成本（粗略估算）
+  const transferCost = dataSize / (100 * 1024 * 1024); // ~100MB/s 的序列化速度
+  const estimatedTransferMs = transferCost * 1000;
+
+  // 如果传输成本超过计算时间的一半，不值得
+  if (estimatedTransferMs &gt; computationTime * 0.5) {
+    // 主线程自己算，或使用 Transferable 对象
+    return { shouldOffload: false, useTransferable: true };
+  }
+
+  return { shouldOffload: true };
+}
+</code></pre>
+<p><strong>3. 错误处理不能遗漏</strong></p>
+<pre><code class="language-javascript">// ❌ 遗漏了 onerror 处理
+const worker = new Worker('task.js');
+worker.onmessage = (e) =&gt; {
+  // 只处理了成功情况
+  processResult(e.data);
+};
+
+// ✅ 完善的错误处理
+worker.onerror = (e) =&gt; {
+  console.error('Worker 错误:', {
+    message: e.message,
+    filename: e.filename,
+    lineno: e.lineno,
+    colno: e.colno,
+    error: e.error
+  });
+
+  // 用户友好的错误提示
+  showToast('处理失败，请重试', 'error');
+
+  // 记录到监控系统
+  reportError('worker-error', {
+    message: e.message,
+    stack: e.error?.stack
+  });
+};
+
+// 添加调试日志
+worker.onmessageerror = (e) =&gt; {
+  console.error('无法反序列化的消息:', e.data);
+};
+</code></pre>
+<p><strong>4. Worker 中的异步操作</strong></p>
+<p>Worker 完全支持 <code>fetch</code>、<code>setTimeout</code> 等异步 API，但要注意生命周期管理：</p>
+<pre><code class="language-javascript">// worker.js - 处理可取消的异步操作
+let abortController = null;
+
+self.onmessage = async (e) =&gt; {
+  const { type, url } = e.data;
+
+  if (type === 'fetch-data') {
+    // 取消之前的请求
+    if (abortController) {
+      abortController.abort();
+    }
+
+    abortController = new AbortController();
+
+    try {
+      const response = await fetch(url, {
+        signal: abortController.signal
+      });
+
+      const data = await response.json();
+      self.postMessage({ success: true, data });
+    } catch (error) {
+      if (error.name === 'AbortError') {
+        console.log('请求已取消');
+      } else {
+        self.postMessage({ success: false, error: error.message });
+      }
+    }
+  }
+};
+</code></pre>
+<p><strong>5. importScripts 加载阻塞</strong></p>
+<pre><code class="language-javascript">// ❌ importScripts 是同步的，会阻塞 Worker 线程
+importScripts('/heavy-lib.js', '/utils.js', '/helpers.js');
+// 直到所有脚本加载完成，Worker 才能开始工作
+
+// ✅ 使用 ES Module Worker（如果环境支持）
+// const worker = new Worker('worker.js', { type: 'module' });
+// 然后在 worker.js 中使用 import
+// import { heavyFunction } from './heavy-lib.js';
+</code></pre>
+<h2>总结与最佳实践</h2>
+<p>Web Worker 是前端性能优化中的重要工具，但并非所有场景都需要它。正确使用 Worker 需要遵循以下核心原则：</p>
+<p><strong>何时使用 Worker：</strong></p>
+<ul>
+<li>✅ 计算密集型任务（图像处理、加密、大量数学计算），且计算时间 &gt; 50ms</li>
+<li>✅ 大数据的解析和处理（JSON、CSV、二进制数据）</li>
+<li>✅ 需要并行利用多核 CPU 的场景（Worker 池）</li>
+<li>✅ 共享状态/连接跨多个标签页（Shared Worker）</li>
+<li>✅ 离线缓存和推送通知（Service Worker）</li>
+</ul>
+<p><strong>何时不用 Worker：</strong></p>
+<ul>
+<li>❌ 简单、快速的计算（&lt; 5ms），序列化开销可能更大</li>
+<li>❌ 需要频繁访问 DOM 的任务</li>
+<li>❌ 数据量小但需要频繁通信的场景</li>
+<li>❌ 启动延迟敏感的任务（Worker 创建需要约 50-100ms）</li>
+</ul>
+<p><strong>最佳实践清单：</strong></p>
+<ol>
+<li><strong>复用 Worker</strong>：使用 Worker 池管理生命周期，避免频繁创建/销毁</li>
+<li><strong>大数据用 Transferable</strong>：对于 &gt;100KB 的 ArrayBuffer，始终考虑使用 Transferable 对象</li>
+<li><strong>Comlink 提升开发体验</strong>：在复杂 Worker 通信场景中，Comlink 能大幅简化代码</li>
+<li><strong>做好错误处理</strong>：<code>onerror</code> 和 <code>onmessageerror</code> 缺一不可</li>
+<li><strong>监控性能指标</strong>：建立 Worker 任务的耗时和成功率监控</li>
+<li><strong>合理设置并行度</strong>：Worker 池大小不超过 <code>navigator.hardwareConcurrency - 1</code>（给主线程留一个核心）</li>
+<li><strong>考虑 Worker 启动成本</strong>：首屏关键路径任务不建议交给 Worker（有约 50ms 的冷启动时间）</li>
+<li><strong>TypeScript 保证类型安全</strong>：定义共享接口文件，让主线程和 Worker 线程共用类型定义</li>
+</ol>
+<p>Web Worker 把主线程从繁重计算中解放出来，让前端应用保持流畅的 60fps 体验。随着 WebAssembly 和 OffscreenCanvas 等 API 的成熟，Worker 的能力边界的不断扩展，未来在浏览器中处理更复杂的任务将越来越可行。</p>
+<p>记住：好的用户体验不仅是功能完整，更是丝滑流畅——而这，正是 Web Worker 的用武之地。</p>
+      </article>
+    </div>
+  </main>
+
+  <!-- Related Posts / Navigation -->
+  <section class="section" style="padding-top: 0;">
+    <div class="container container-narrow">
+      <hr style="border: none; border-top: 1px solid var(--color-border); margin: var(--space-3xl) 0;">
+
+      <div class="blog-topics" style="margin-bottom: var(--space-xl);">
+        <span class="topic-label">读完之后:</span>
+        <a href="../index.html" class="topic-tag">返回博客列表</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <p class="footer-signature">写代码,做产品,也认真生活。</p>
+      <div class="footer-social">
+        <a href="https://github.com/zzdbilly" class="footer-social-link" target="_blank" rel="noopener" aria-label="GitHub">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+        </a>
+        <a href="../../rss.xml" class="footer-social-link" aria-label="RSS">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+      </div>
+      <div class="footer-links">
+        <a href="../../index.html" class="footer-link">首页</a>
+        <a href="../../projects/index.html" class="footer-link">项目</a>
+        <a href="../../about/index.html" class="footer-link">关于</a>
+      </div>
+      <p class="footer-copyright">
+        &copy; 2026 张小猛
+      </p>
+    </div>
+  </footer>
+
+
+  <script defer src="../../assets/js/related-posts.js"></script>
+  <script defer src="../../assets/js/main.js"></script>
+  <script defer src="../../assets/js/article.js"></script>
+  <script defer src="../../assets/js/share.js"></script>
+  <script defer src="../../assets/js/back-to-top.js"></script>
+  <!-- Back to Top & Reading Progress -->
+  <button class="back-to-top" id="backToTop" aria-label="回到顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
+  <div class="reading-progress" id="readingProgress"></div>
+
+  <!-- Post Sidebar Info（左侧） -->
+  <div class="post-sidebar-info" id="postSidebar">
+    <div class="post-info-card">
+      <div class="post-info-section">
+        <div class="post-info-label">作者</div>
+        <div class="post-info-author">
+          <div class="post-info-avatar">小</div>
+          <div>
+            <div class="post-info-author-name">张小猛</div>
+            <div class="post-info-author-desc">写代码，做产品</div>
+          </div>
+        </div>
+      </div>
+      <div class="post-info-section">
+        <div class="post-info-label">文章信息</div>
+        <div class="post-info-stat"><span class="post-info-stat-label">📅 发布日期</span><span class="post-info-stat-value">2026-08-07</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label">⏱️ 阅读时间</span><span class="post-info-stat-value">10 min read</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label">📝 文章字数</span><span class="post-info-stat-value">7945 字</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label">📊 章节数</span><span class="post-info-stat-value">8 节 · 22 子节</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label">💻 代码块</span><span class="post-info-stat-value">43 段</span></div>
+      </div>
+      <div class="post-info-section" id="postSidebarTags">
+        <div class="post-info-label">标签</div>
+        <div class="post-info-links">
+          <a href="../../blog/index.html?tag=前端" class="post-info-link"># 前端</a>
+          <a href="../../blog/index.html?tag=前端开发" class="post-info-link"># 前端开发</a>
+          <a href="../../blog/index.html?tag=JavaScript" class="post-info-link"># JavaScript</a>
+          <a href="../../blog/index.html?tag=Web Worker" class="post-info-link"># Web Worker</a>
+          <a href="../../blog/index.html?tag=性能优化" class="post-info-link"># 性能优化</a>
+          <a href="../../blog/index.html?tag=多线程" class="post-info-link"># 多线程</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Post TOC -->
+  <div class="post-toc-container" id="postToc">
+    <nav class="post-toc">
+      <div class="post-toc-title">目录</div>
+      <ul class="post-toc-list" id="tocList">
+      </ul>
+    </nav>
+  </div>
+<script defer src="../../assets/js/particles.js"></script>
+
+  <!-- Comment System -->
+  <script src="../../workers/comment-system/comment-widget.js" defer></script>
+
+  <!-- highlight.js for code syntax highlighting -->
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // 只对没有 codehilite 的代码块应用 highlight.js
+      document.querySelectorAll('pre code').forEach(function(block) {
+        // 跳过已经有 Pygments 高亮的块
+        if (!block.closest('.codehilite') && !block.classList.contains('hljs')) {
+          hljs.highlightElement(block);
+        }
+      });
+    });
+  </script>
+
+  <!-- Cloudflare Web Analytics -->
+  <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "29e7cff6f37448989538e2165cb79187"}'></script>
+</body>
+</html>

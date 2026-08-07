@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jetpack Compose 性能优化实战：从卡顿到丝滑的 12 个技巧 | 张小猛 - loczb</title>
+    <meta name="description" content="全面梳理 Jetpack Compose 性能优化的核心技巧，涵盖重组优化、状态管理、延迟布局、图片加载、基线配置文件等实战经验">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Jetpack Compose 性能优化实战：从卡顿到丝滑的 12 个技巧 | 张小猛 - loczb">
+    <meta property="og:description" content="全面梳理 Jetpack Compose 性能优化的核心技巧，涵盖重组优化、状态管理、延迟布局、图片加载、基线配置文件等实战经验">
+    <meta property="og:url" content="https://709527.xyz/blog/posts/jetpack-compose-性能优化实战从卡顿到丝滑的-12-个技巧.html">
+    <meta property="og:type" content="article">
+        <meta property="og:image" content="../../assets/images/og-image.png">
+    <meta property="og:site_name" content="loczb">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Jetpack Compose 性能优化实战：从卡顿到丝滑的 12 个技巧 | 张小猛 - loczb">
+    <meta name="twitter:description" content="全面梳理 Jetpack Compose 性能优化的核心技巧，涵盖重组优化、状态管理、延迟布局、图片加载、基线配置文件等实战经验">
+
+
+        <script type="application/ld+json">
+{
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "Jetpack Compose 性能优化实战：从卡顿到丝滑的 12 个技巧",
+      "description": "全面梳理 Jetpack Compose 性能优化的核心技巧，涵盖重组优化、状态管理、延迟布局、图片加载、基线配置文件等实战经验",
+      "image": "https://709527.xyz/assets/images/og-image.png",
+      "author": {
+            "@type": "Person",
+            "name": "张小猛",
+            "url": "https://709527.xyz/about/"
+      },
+      "publisher": {
+            "@type": "Organization",
+            "name": "loczb",
+            "logo": {
+                  "@type": "ImageObject",
+                  "url": "https://709527.xyz/assets/images/favicon.svg"
+            }
+      },
+      "datePublished": "2026-08-07 17:58:44T00:00:00+08:00",
+      "dateModified": "2026-08-07 17:58:44T00:00:00+08:00",
+      "url": "https://709527.xyz/blog/posts/jetpack-compose-性能优化实战从卡顿到丝滑的-12-个技巧.html",
+      "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://709527.xyz/blog/posts/jetpack-compose-性能优化实战从卡顿到丝滑的-12-个技巧.html"
+      },
+      "keywords": "Jetpack Compose, Android, 性能优化, Compose, UI, 重组",
+      "articleSection": "Android",
+      "timeRequired": "PT12M",
+      "inLanguage": "zh-CN"
+}
+    </script>
+
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&family=Noto+Sans+SC:wght@500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500&display=swap" media="print" onload="this.media='all'">
+    <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
+    <link rel="alternate icon" href="../../assets/images/favicon.ico">
+    <link rel="canonical" href="https://709527.xyz/blog/posts/jetpack-compose-性能优化实战从卡顿到丝滑的-12-个技巧.html">
+</head>
+<body>
+  <!-- Loading -->
+  <div class="loading">
+    <div class="loading-spinner"></div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../../index.html" class="nav-logo">
+        loc<span>zb</span>
+      </a>
+      <button class="nav-toggle" aria-label="打开菜单" aria-expanded="false" aria-controls="nav-links-menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <div class="nav-overlay"></div>
+      <ul class="nav-links" id="nav-links-menu">
+        <li><a href="../../index.html" class="nav-link">首页</a></li>
+        <li><a href="../../projects/index.html" class="nav-link">项目</a></li>
+        <li><a href="../index.html" class="nav-link active">博客</a></li>
+        <li><a href="../../about/index.html" class="nav-link">关于</a></li>
+      </ul>
+      <button class="theme-toggle" aria-label="切换主题" title="切换亮/暗模式">
+        <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+        <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+      </button>
+    </div>
+  </nav>
+  <!-- Particle Canvas Background -->
+  <canvas id="particle-canvas" class="particle-canvas"></canvas>
+
+  <div class="scroll-progress"></div>
+
+  <main class="section" style="padding-bottom: 0; padding-top: var(--space-4xl);">
+    <div class="container container-narrow">
+      <a href="../index.html" class="back-link">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        返回博客列表
+      </a>
+
+      <article class="post-content">
+        <h1>Jetpack Compose 性能优化实战：从卡顿到丝滑的 12 个技巧</h1>
+
+        <div class="post-meta">
+          <span>📅 2026-08-07 17:58:44</span>
+          <span>⏱️ 12 min read</span>
+          <span>👤 张小猛</span>
+        </div>
+
+        <div class="post-tags">
+          <span class="tag">Jetpack Compose</span>
+          <span class="tag">Android</span>
+          <span class="tag">性能优化</span>
+          <span class="tag">Compose</span>
+          <span class="tag">UI</span>
+          <span class="tag">重组</span>
+        </div>
+
+        <h2>为什么 Compose 需要性能优化</h2>
+<p>Jetpack Compose 自 2021 年稳定版发布以来，已成为 Android UI 开发的主流选择。声明式 UI 范式让代码更简洁、状态管理更清晰，但也带来了新的性能挑战。很多团队在从 XML 迁移到 Compose 后，发现列表滑动偶现掉帧、复杂页面初始化慢、动画不够流畅——这些都是声明式框架特有的性能陷阱。</p>
+<h3>声明式 UI 的性能模型</h3>
+<p>在传统 View 系统中，性能优化聚焦于布局层级扁平化、过度绘制消除、View 复用等经典问题。Compose 的声明式模型完全不同：UI 是状态的函数，框架在状态变化时自动"重组"受影响的 Composable。这个"自动"既是强项也是弱项——框架不知道哪些部分真的需要更新，只能基于智能启发式算法来决定。</p>
+<p>理解 Compose 性能的关键在于三个核心概念：</p>
+<ol>
+<li><strong>组合（Composition）</strong>：首次执行 Composable 函数构建 UI 树的过程</li>
+<li><strong>重组（Recomposition）</strong>：状态变化时重新执行受影响的 Composable</li>
+<li><strong>测量与布局（Measure &amp; Layout）</strong>：确定 UI 元素的尺寸和位置</li>
+</ol>
+<p>大多数性能问题来源于不必要的重组——框架认为需要更新，但实际上界面的视觉输出没有变化。</p>
+<h3>重组（Recomposition）的开销</h3>
+<p>来看一个简单的例子：</p>
+<pre><code class="language-kotlin">@Composable
+fun UserProfile(user: User) {
+    Column {
+        Text(&quot;姓名：${user.name}&quot;)
+        Text(&quot;邮箱：${user.email}&quot;)
+        Text(&quot;积分：${user.points}&quot;)
+        // 头像加载昂贵
+        AsyncImage(
+            model = user.avatarUrl,
+            contentDescription = &quot;头像&quot;,
+            modifier = Modifier.size(48.dp)
+        )
+    }
+}
+</code></pre>
+<p>当 <code>user</code> 对象引用变化时（比如从网络请求获取的新对象），即使 <code>name</code>、<code>email</code>、<code>points</code> 字段完全相同，整个 <code>UserProfile</code> 都会重组——包括重新加载头像。在一次帧内（16ms），如果能完成重组倒也无妨；但如果列表中有 50 个这样的 Composable 同时重组，丢帧几乎是必然的。</p>
+<h3>Compose 编译器的优化边界</h3>
+<p>Compose Compiler 在编译期做了大量优化工作：</p>
+<ul>
+<li><strong>智能跳过（Smart Skipping）</strong>：比较新旧参数，如果相等则跳过重组</li>
+<li><strong>位置记忆（Positional Memoization）</strong>：自动为 <code>remember</code> 调用分配位置</li>
+<li><strong>内联与代码生成</strong>：消除不必要的函数调用</li>
+</ul>
+<p>但这些优化的前提是：<strong>参数类型是稳定的（Stable）</strong>。如果你的数据模型类型不稳定，编译器无能为力。</p>
+<h3>稳定类型的本质</h3>
+<p>什么叫"稳定类型"？Compose 编译器在编译时通过静态分析判断：</p>
+<pre><code class="language-kotlin">// Kotlin 基本类型和 String 都是稳定的
+val name: String       // 稳定
+val count: Int         // 稳定
+val enabled: Boolean   // 稳定
+
+// 不可变的数据类也是稳定的
+data class User(
+    val id: Long,
+    val name: String,
+    val email: String
+) // 所有字段稳定 → User 也稳定
+
+// 但包含了可变集合，就不稳定了
+data class UserGroup(
+    val users: List&lt;User&gt;  // OK
+)
+
+data class UserGroup(     // ❌ 不稳定
+    val users: MutableList&lt;User&gt;  // MutableList 不稳定
+)
+</code></pre>
+<h3>快照状态系统（Snapshot State）与重组</h3>
+<p>Compose 的状态管理基于快照系统（Snapshot System），这是理解性能的关键：</p>
+<pre><code class="language-kotlin">val state = mutableStateOf(0)  // 初始快照
+
+// 在一个事务中批量修改
+Snapshot.withMutableSnapshot {
+    state.value = 1
+    state.value = 2
+    state.value = 3
+}
+// 事务提交后只触发一次重组，value = 3
+</code></pre>
+<p>快照系统会自动合并同一事务内的多次修改，避免不必要的重组。但如果你在多个协程中分散修改状态，每次修改都会触发独立重组。</p>
+<h2>技巧 1-4：减少不必要的重组</h2>
+<h3>1. 使用 remember 和 derivedStateOf</h3>
+<p><code>remember</code> 是 Compose 中最基本的记忆化机制：</p>
+<pre><code class="language-kotlin">@Composable
+fun ExpensiveCalculation(input: Int) {
+    val result = remember(input) {
+        // 只在 input 变化时重新计算
+        performHeavyCalculation(input)
+    }
+    Text(&quot;结果：$result&quot;)
+}
+</code></pre>
+<p><code>derivedStateOf</code> 更进一步——当源状态频繁变化但派生值不变时，它能阻止重组：</p>
+<pre><code class="language-kotlin">@Composable
+fun SearchList(query: String, allItems: List&lt;Item&gt;) {
+    // 只有当过滤结果真正改变时才触发重组
+    val filteredItems by remember {
+        derivedStateOf {
+            allItems.filter { it.name.contains(query, ignoreCase = true) }
+        }
+    }
+
+    LazyColumn {
+        items(filteredItems) { item -&gt;
+            SearchResultItem(item)
+        }
+    }
+}
+</code></pre>
+<p>这里的关键区别：<code>query</code> 每次输入一个字符都会变化，但 <code>derivedStateOf</code> 只在过滤结果的列表引用变化时才通知重组。如果新增字符没有改变过滤结果，就不会触发 <code>LazyColumn</code> 的重组。</p>
+<h3>2. 稳定类型与 @Stable/@Immutable 注解</h3>
+<p>Compose Compiler 在编译期通过稳定性推断决定是否跳过重组。一个类型被视为"稳定"需要满足：</p>
+<ul>
+<li><code>equals</code> 的结果对同一实例始终一致</li>
+<li>当公开属性变化时，Compose 能收到通知（State 类型）</li>
+<li>所有公开属性本身也是稳定的</li>
+</ul>
+<p>看一个典型的不稳定类型：</p>
+<pre><code class="language-kotlin">// ❌ 不稳定：MutableList 可变 + 没有状态通知
+data class UserList(
+    val users: MutableList&lt;User&gt;  // MutableList 被视为不稳定
+)
+
+// ✅ 稳定：不可变列表
+data class UserList(
+    val users: List&lt;User&gt;  // List 被视为稳定
+)
+</code></pre>
+<p>当你使用外部库的数据类时，手动添加注解：</p>
+<pre><code class="language-kotlin">@Immutable
+data class User(
+    val id: Long,
+    val name: String,
+    val avatarUrl: String
+)
+</code></pre>
+<p><code>@Immutable</code> 向编译器承诺：该类型的值一旦创建就永不改变。<code>@Stable</code> 更灵活——允许值变化，但承诺 Compose 能收到通知。</p>
+<h3>3. 合理使用 key 参数</h3>
+<p>在列表中使用 <code>key</code> 是性能优化的基础：</p>
+<pre><code class="language-kotlin">LazyColumn {
+    items(
+        items = userList,
+        key = { user -&gt; user.id }  // 使用稳定的唯一标识
+    ) { user -&gt;
+        UserItem(user)
+    }
+}
+</code></pre>
+<p>没有 key 时，Compose 只能用位置（index）来匹配 item。如果列表头部插入一条新数据，所有 item 都会重组。有了 key，Compose 能精确识别哪些 item 发生了变化。</p>
+<h3>4. 避免在 Composable 中直接读取可变状态</h3>
+<p>一个常见的性能陷阱：</p>
+<pre><code class="language-kotlin">// ❌ 每次 DrawerState 改变都重组整个 Screen
+@Composable
+fun MainScreen(drawerState: DrawerState) {
+    ModalDrawerSheet(
+        drawerState = drawerState,
+        content = {
+            NavigationContent()
+        }
+    )
+}
+
+// ✅ 将状态读取推迟到真正需要的地方
+@Composable
+fun MainScreen(drawerState: DrawerState) {
+    ModalDrawerSheet(
+        drawerState = drawerState,
+        content = {
+            val isOpen by remember { derivedStateOf { drawerState.isOpen } }
+            // 现在重组范围缩小了
+        }
+    )
+}
+</code></pre>
+<p>原则是：<strong>尽可能在状态使用的最深层读取状态</strong>，而不是在顶层传递整个 State 对象。</p>
+<h2>技巧 5-8：延迟布局优化</h2>
+<h3>5. LazyColumn key 与 contentType</h3>
+<p><code>contentType</code> 允许 Compose 按类型复用 Composition：</p>
+<pre><code class="language-kotlin">LazyColumn {
+    items(
+        items = feedItems,
+        key = { it.id },
+        contentType = { it.type }  // &quot;header&quot; / &quot;post&quot; / &quot;ad&quot; / &quot;footer&quot;
+    ) { item -&gt;
+        when (item.type) {
+            &quot;header&quot; -&gt; FeedHeader(item)
+            &quot;post&quot; -&gt; FeedPost(item)
+            &quot;ad&quot; -&gt; FeedAd(item)
+            else -&gt; FeedFooter(item)
+        }
+    }
+}
+</code></pre>
+<p><code>contentType</code> 让 Compose 按类别复用 Composition 槽位，避免不同类型之间适配带来的测量开销。</p>
+<h3>6. 避免 0 尺寸的 item</h3>
+<p>当过滤条件导致某些 item 不需要显示时，不要返回 0 尺寸的空布局：</p>
+<pre><code class="language-kotlin">// ❌ 仍然占用 LazyColumn 的 item 槽位
+LazyColumn {
+    items(allItems) { item -&gt;
+        if (item.isVisible) {
+            ItemContent(item)
+        } else {
+            Box(modifier = Modifier.size(0.dp))  // 浪费
+        }
+    }
+}
+
+// ✅ 在传参前就过滤掉
+val visibleItems = remember(allItems) {
+    allItems.filter { it.isVisible }
+}
+LazyColumn {
+    items(visibleItems) { item -&gt;
+        ItemContent(item)
+    }
+}
+</code></pre>
+<h3>7. 预取策略与 beyondBoundsItemCount</h3>
+<p>LazyColumn 默认在可视区域外预加载一些 item，可以通过 <code>beyondBoundsItemCount</code> 调节：</p>
+<pre><code class="language-kotlin">LazyColumn {
+    items(
+        items = largeList,
+        key = { it.id }
+    ) { item -&gt;
+        ComplicatedItem(item)
+    }
+}
+
+// 增加预取范围，减少滑动时的白屏
+// 但也要权衡——每次预取更多 item 意味着更高的内存和重组开销
+LazyColumn {
+    items(
+        items = largeList,
+        key = { it.id },
+        contentType = { it.type }
+    ) { item -&gt;
+        ComplicatedItem(item)
+    }
+}
+</code></pre>
+<h3>8. 使用 LazyLayout 自定义布局</h3>
+<p>当 LazyColumn/LazyRow 无法满足需求时，可以用 <code>LazyLayout</code> 实现完全自定义的惰性布局：</p>
+<pre><code class="language-kotlin">@Composable
+fun CustomLazyGrid(
+    items: List&lt;GridItem&gt;,
+    columns: Int
+) {
+    LazyLayout(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        items(
+            count = items.size,
+            key = { items[it].id }
+        ) { index -&gt;
+            val item = items[index]
+            GridCell(
+                item = item,
+                measurePolicy = rememberGridMeasurePolicy(columns)
+            )
+        }
+    }
+}
+</code></pre>
+<p><code>LazyLayout</code> 暴露了测量和放置的底层 API，适合瀑布流、交错网格等场景。</p>
+<h2>技巧 9-11：资源与渲染优化</h2>
+<h3>9. 图片加载最佳实践</h3>
+<p>Compose 中图片加载的首选库是 Coil，基于 Kotlin 协程设计，天然适配 Compose：</p>
+<pre><code class="language-kotlin">// ✅ 好的实践
+AsyncImage(
+    model = ImageRequest.Builder(LocalContext.current)
+        .data(url)
+        .crossfade(true)
+        .size(300, 300)            // 明确请求尺寸，避免解码完整大图
+        .memoryCachePolicy(CachePolicy.ENABLED)
+        .diskCachePolicy(CachePolicy.ENABLED)
+        .build(),
+    contentDescription = null,
+    contentScale = ContentScale.Crop,
+    modifier = Modifier.fillMaxWidth()
+)
+
+// ❌ 坏的实践
+AsyncImage(
+    model = &quot;https://example.com/4000x3000.jpg&quot;,  // 原始大图
+    contentDescription = null
+)
+</code></pre>
+<p>关键优化点：</p>
+<ul>
+<li><strong>明确指定 <code>size()</code></strong>：避免加载原始大图到内存</li>
+<li><strong>启用 <code>crossfade()</code></strong>：平滑过渡，改善感知性能</li>
+<li><strong>合理缓存策略</strong>：memoryCachePolicy 减少重复解码，diskCachePolicy 减少网络请求</li>
+<li><strong>内容缩放</strong>：<code>ContentScale.Crop</code> 配合固定尺寸避免额外的布局测量</li>
+</ul>
+<h3>10. Modifier 顺序与布局测量成本</h3>
+<p>Modifier 链的顺序直接影响性能：</p>
+<pre><code class="language-kotlin">// ❌ 坏的顺序：padding 在前，clip 在后
+// 每次重组都重新计算 padding 后的尺寸，然后裁剪
+Modifier
+    .padding(16.dp)
+    .clip(RoundedCornerShape(8.dp))
+    .background(Color.Gray)
+
+// ✅ 好的顺序：background → padding → clip
+// background 在 padding 之前，减少测量开销
+Modifier
+    .background(Color.Gray)
+    .padding(16.dp)
+    .clip(RoundedCornerShape(8.dp))
+</code></pre>
+<p>通用规则：</p>
+<ol>
+<li><code>size</code> / <code>fillMaxSize</code> 最外层</li>
+<li><code>background</code> 在 <code>padding</code> 之前</li>
+<li><code>clip</code> / <code>shadow</code> 在末尾</li>
+<li><code>clickable</code> 等交互 Modifier 放在合适位置以控制点击区域</li>
+</ol>
+<h3>11. 使用 GraphicsLayer 做属性动画</h3>
+<p>对于 alpha、scale、rotation、translation 等属性动画，使用 <code>graphicsLayer</code> 而不是重组：</p>
+<pre><code class="language-kotlin">// ❌ 通过重组改变 alpha（每次值变化都重组整个内容）
+var alpha by remember { mutableFloatStateOf(0f) }
+LaunchedEffect(Unit) {
+    animate(0f, 1f, animationSpec = tween(1000)) { value, _ -&gt;
+        alpha = value  // 触发重组
+    }
+}
+Box(modifier = Modifier.alpha(alpha)) {
+    HeavyContent()  // 每次 alpha 改变都重组
+}
+
+// ✅ 通过 GraphicsLayer 改变 alpha（不重组）
+val alpha = remember { Animatable(0f) }
+LaunchedEffect(Unit) {
+    alpha.animateTo(1f, animationSpec = tween(1000))
+}
+Box(
+    modifier = Modifier.graphicsLayer {
+        alpha = this@...  // 在渲染层处理，不触发重组
+    }
+) {
+    HeavyContent()  // 只组合一次
+}
+</code></pre>
+<p><code>graphicsLayer</code> 是渲染层的变换，不经过测量/布局/重组流程，性能极高。</p>
+<h2>技巧 12：编译期优化</h2>
+<h3>Baseline Profile 与 R8 配置</h3>
+<p>Baseline Profile 能让 ART 在安装时就预编译关键代码路径，避免 JIT 编译带来的启动延迟和运行时性能开销：</p>
+<pre><code class="language-kotlin">// baselines-prof.txt
+HSPLandroidx/compose/runtime/ComposerImpl;-&gt;startRestartGroup
+HSPLandroidx/compose/runtime/RecomposeScopeImpl;-&gt;invalidate
+HSPLandroidx/compose/foundation/lazy/LazyListState$scrollPosition$1
+</code></pre>
+<p>配合 R8 优化：</p>
+<pre><code class="language-kotlin"># proguard-rules.pro
+# 保留 Compose 运行时必要的类
+-keep class androidx.compose.runtime.** { *; }
+-dontwarn androidx.compose.**
+
+# 启用 Compose 特定的 R8 优化
+-optimizations *otheroptimizations*,class/merging/*
+</code></pre>
+<h3>Compose Compiler Metrics 分析</h3>
+<p>启用 Compose Compiler Metrics 生成可跳过的 Composable 报告：</p>
+<pre><code class="language-gradle">// app/build.gradle.kts
+composeCompiler {
+    reportsDestination = layout.buildDirectory.dir(&quot;compose_compiler&quot;)
+    metricsDestination = layout.buildDirectory.dir(&quot;compose_compiler&quot;)
+}
+
+kotlinOptions {
+    freeCompilerArgs += listOf(
+        &quot;-P&quot;,
+        &quot;plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=&quot; +
+                layout.buildDirectory.dir(&quot;compose_compiler&quot;).get().asFile.absolutePath
+    )
+}
+</code></pre>
+<p>生成的报告中可以查看每个 Composable 的稳定性状态，找出哪些函数因为不稳定参数而无法跳过重组。</p>
+<h3>Compose Compiler 1.5.0+ 的新优化</h3>
+<p>Compose Compiler 从 Kotlin 2.0 起合并为 Kotlin 编译器插件，带来了新的优化：</p>
+<pre><code class="language-kotlin">// 强跳过模式（Strong Skipping Mode）默认启用
+// 现在连&quot;参数没变但内部 State 变了&quot;的场景也能跳过
+
+@Composable
+fun Counter(name: String) {
+    var count by remember { mutableIntStateOf(0) }
+    Text(&quot;$name: $count&quot;)
+    Button(onClick = { count++ }) {
+        Text(&quot;+1&quot;)
+    }
+    // 在强跳过模式下，name 不变时点击按钮不会引起上层重组
+}
+</code></pre>
+<h2>性能测量与调试工具</h2>
+<h3>Compose Layout Inspector</h3>
+<p>Android Studio 的 Layout Inspector 专门为 Compose 做了适配：</p>
+<ol>
+<li><strong>重组计数</strong>：每个 Composable 上显示重组次数，一眼找到频繁重组的热点</li>
+<li><strong>跳过统计</strong>：显示被跳过的重组次数</li>
+<li><strong>参数比较</strong>：高亮显示触发重组的参数</li>
+</ol>
+<p>使用方法：Run → Layout Inspector → 选择进程，在 Component Tree 中勾选 "Show Recomposition Counts"。</p>
+<h3>Macrobenchmark 与 Tracing</h3>
+<p>精确量化性能改进需要 Macrobenchmark：</p>
+<pre><code class="language-kotlin">@RunWith(AndroidJUnit4::class)
+class ComposeBenchmark {
+    @get:Rule
+    val benchmarkRule = MacrobenchmarkRule()
+
+    @Test
+    fun scrollList() = benchmarkRule.measureRepeated(
+        packageName = &quot;com.example.app&quot;,
+        metrics = listOf(FrameTimingMetric()),
+        iterations = 10,
+        setupBlock = {
+            pressHome()
+            startActivityAndWait()
+        }
+    ) {
+        val list = device.findObject(By.res(&quot;itemList&quot;))
+        list.setGestureMargin(device.displayMetrics.widthPixels / 5)
+        list.fling(Direction.DOWN)
+        device.waitForIdle()
+    }
+}
+</code></pre>
+<p>关键关注 P50、P90、P99 帧耗时。16ms 是 60fps 的底线，如果 P90 超过 16ms，说明 10% 的帧在掉帧。</p>
+<h3>Android Studio System Trace</h3>
+<p>System Trace 可以深入分析帧耗时：</p>
+<pre><code class="language-bash"># 使用 Perfetto 抓取 trace
+adb shell perfetto \
+  -c - --txt \
+  -o /data/misc/perfetto-traces/trace \
+  &lt;&lt;EOF
+buffers: {
+  size_kb: 65536
+  fill_policy: DISCARD
+}
+duration_ms: 10000
+EOF
+
+# 拉取 trace 文件
+adb pull /data/misc/perfetto-traces/trace
+</code></pre>
+<p>在 Perfetto UI 中可以看到每个帧的测量、布局、绘制耗时，定位瓶颈在哪一环节。</p>
+<h3>常见性能陷阱总结</h3>
+<table>
+<thead>
+<tr>
+<th>陷阱</th>
+<th>症状</th>
+<th>解决方案</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>不稳定的数据类</td>
+<td>列表全部 item 随每次更新而重组</td>
+<td>添加 <code>@Immutable</code> 或 <code>@Stable</code></td>
+</tr>
+<tr>
+<td>缺少 key</td>
+<td>插入/删除/重排序时大面积重组</td>
+<td>提供稳定的 <code>key</code></td>
+</tr>
+<tr>
+<td>在顶层读取 State</td>
+<td>整个页面随微小状态变化重组</td>
+<td>推迟状态读取到最深层</td>
+</tr>
+<tr>
+<td>在 Composable 中创建对象</td>
+<td>每次重组都创建新实例</td>
+<td>使用 <code>remember</code> + lambda</td>
+</tr>
+<tr>
+<td>Modifier 顺序不当</td>
+<td>不必要的测量和布局</td>
+<td>遵循 background → padding → clip 顺序</td>
+</tr>
+<tr>
+<td>大图无尺寸限制</td>
+<td>内存暴涨 + GPU 压力</td>
+<td><code>ImageRequest.Builder.size()</code></td>
+</tr>
+<tr>
+<td>属性动画触发重组</td>
+<td>动画帧率低</td>
+<td><code>graphicsLayer</code></td>
+</tr>
+<tr>
+<td>子 Composable 频繁传递 lambda</td>
+<td>每次重组创建新 lambda，绕过跳过机制</td>
+<td>使用 <code>remember</code> 包装 lambda</td>
+</tr>
+<tr>
+<td>使用 var 而不是 val</td>
+<td>可变状态捕获不明确</td>
+<td>尽量用 <code>val</code> + State</td>
+</tr>
+<tr>
+<td>忘记 LazyColumn 的 key</td>
+<td>滚动时列表闪烁 + 重组风暴</td>
+<td>所有的 items() 都加 key</td>
+</tr>
+</tbody>
+</table>
+<h2>实际案例分析</h2>
+<h3>案例一：列表页从 200ms 到 16ms</h3>
+<p>一个社交 App 的好友列表，每页 20 个 item，每个 item 含头像、姓名、状态标签、最后在线时间。</p>
+<p><strong>优化前（P90 帧耗时 200ms）</strong>：</p>
+<pre><code class="language-kotlin">// 问题代码
+@Composable
+fun FriendList(viewModel: FriendListViewModel) {
+    val friends by viewModel.friends.collectAsState()
+
+    LazyColumn {
+        items(friends) { friend -&gt;  // 无 key，无 contentType
+            FriendItem(friend)
+        }
+    }
+}
+
+@Composable
+fun FriendItem(friend: Friend) {  // Friend 类型不稳定！
+    Row(modifier = Modifier.padding(12.dp)) {
+        AsyncImage(model = friend.avatarUrl)  // 无尺寸限制
+        Text(friend.name)
+        Text(friend.status)
+        Text(friend.lastOnline)
+    }
+}
+</code></pre>
+<p><strong>优化后（P90 帧耗时 16ms）</strong>：</p>
+<pre><code class="language-kotlin">@Immutable
+data class Friend(
+    val id: Long,
+    val name: String,
+    val avatarUrl: String,
+    val status: String,
+    val lastOnline: String
+)
+
+@Composable
+fun FriendList(viewModel: FriendListViewModel) {
+    val friends by viewModel.friends.collectAsState()
+
+    LazyColumn {
+        items(
+            items = friends,
+            key = { it.id },
+            contentType = { &quot;friend&quot; }
+        ) { friend -&gt;
+            FriendItem(friend)
+        }
+    }
+}
+
+@Composable
+fun FriendItem(friend: Friend) {
+    Row(modifier = Modifier.padding(12.dp)) {
+        AsyncImage(
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(friend.avatarUrl)
+                .size(48, 48)
+                .crossfade(true)
+                .build(),
+            contentDescription = null,
+            modifier = Modifier
+                .size(48.dp)
+                .clip(CircleShape)
+        )
+        Text(friend.name)
+        Text(friend.status)
+        Text(friend.lastOnline)
+    }
+}
+</code></pre>
+<p>三项改动：<code>@Immutable</code> 数据类、LazyColumn key + contentType、图片尺寸限制。P90 从 200ms 降到 16ms。</p>
+<h3>案例二：动画帧率从 45fps 到 60fps</h3>
+<p>一个轮播 Banner，半径 300dp 的圆形图片自动旋转。使用 <code>animateFloatAsState</code> 改变 <code>rotation</code> 值导致持续重组。</p>
+<p><strong>优化前</strong>：</p>
+<pre><code class="language-kotlin">var rotation by remember { mutableFloatStateOf(0f) }
+LaunchedEffect(Unit) {
+    while (true) {
+        animate(0f, 360f, infiniteRepeatable(tween(3000))) { value, _ -&gt;
+            rotation = value
+        }
+    }
+}
+Box(modifier = Modifier.rotate(rotation)) {
+    AsyncImage(model = bannerUrl)
+}
+</code></pre>
+<p><strong>优化后</strong>：</p>
+<pre><code class="language-kotlin">val rotation = remember { Animatable(0f) }
+LaunchedEffect(Unit) {
+    rotation.animateTo(
+        targetValue = 360f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(3000),
+            repeatMode = RepeatMode.Restart
+        )
+    )
+}
+Box(
+    modifier = Modifier.graphicsLayer {
+        rotationZ = rotation.value
+    }
+) {
+    AsyncImage(model = bannerUrl)
+}
+</code></pre>
+<p>帧率从 45fps 稳定到 60fps。<code>graphicsLayer.rotationZ</code> 在 GPU 渲染层处理，不经过 Compose 的测量/布局/重组管线。</p>
+<h2>Jetpack Compose 性能优化检查清单</h2>
+<p>在发布前，过一遍这个清单：</p>
+<ol>
+<li>☐ 所有数据类添加了 <code>@Immutable</code> 或 <code>@Stable</code></li>
+<li>☐ LazyColumn/LazyRow 使用了 <code>key</code> 和 <code>contentType</code></li>
+<li>☐ 状态读取推迟到了最深层的 Composable</li>
+<li>☐ 属性动画使用了 <code>graphicsLayer</code></li>
+<li>☐ 图片加载指定了 <code>size()</code></li>
+<li>☐ 启用了 Compose Compiler Metrics 并审查了报告</li>
+<li>☐ 配置了 Baseline Profile</li>
+<li>☐ 运行了 Macrobenchmark 并确认 P90 &lt; 16ms</li>
+<li>☐ Layout Inspector 中重组计数合理</li>
+<li>☐ 大列表的 <code>beyondBoundsItemCount</code> 未过大</li>
+</ol>
+<h2>总结</h2>
+<p>Compose 性能优化的核心思路：<strong>让 Compose Compiler 知道哪些东西不会变，让 Compose Runtime 少做无用功</strong>。具体来说：</p>
+<ol>
+<li><strong>稳定类型是第一防线</strong>：标注 <code>@Immutable</code>，使用不可变集合</li>
+<li><strong>key 和 contentType 是列表必备</strong>：让 Compose 精确识别 item 变化</li>
+<li><strong>derivedStateOf 控制重组范围</strong>：只在派生结果真正变化时才重组</li>
+<li><strong>graphicsLayer 是动画的银弹</strong>：GPU 渲染层变换，零重组开销</li>
+<li><strong>测量先于优化</strong>：用 Layout Inspector + Macrobenchmark 量化问题，再动手</li>
+</ol>
+<p>Compose 的性能模型更接近 React/Vue 而非传统的 Android View，理解"声明式 UI 的性能心智模型"比记住具体 API 更重要。当你掌握了这些技巧，Compose 的 UI 从"能用"变成"丝滑"，用户的感知是直观的——页面"不卡了"、"流畅多了"。</p>
+<p>这些优化不仅适用于 Compose，Compose Multiplatform 在多平台场景下更需要这些实践——因为桌面端用户对卡顿比移动端更敏感。一次优化，全平台受益。</p>
+      </article>
+    </div>
+  </main>
+
+  <!-- Related Posts / Navigation -->
+  <section class="section" style="padding-top: 0;">
+    <div class="container container-narrow">
+      <hr style="border: none; border-top: 1px solid var(--color-border); margin: var(--space-3xl) 0;">
+
+      <div class="blog-topics" style="margin-bottom: var(--space-xl);">
+        <span class="topic-label">读完之后:</span>
+        <a href="../index.html" class="topic-tag">返回博客列表</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <p class="footer-signature">写代码,做产品,也认真生活。</p>
+      <div class="footer-social">
+        <a href="https://github.com/zzdbilly" class="footer-social-link" target="_blank" rel="noopener" aria-label="GitHub">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+        </a>
+        <a href="../../rss.xml" class="footer-social-link" aria-label="RSS">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+      </div>
+      <div class="footer-links">
+        <a href="../../index.html" class="footer-link">首页</a>
+        <a href="../../projects/index.html" class="footer-link">项目</a>
+        <a href="../../about/index.html" class="footer-link">关于</a>
+      </div>
+      <p class="footer-copyright">
+        &copy; 2026 张小猛
+      </p>
+    </div>
+  </footer>
+
+
+  <script defer src="../../assets/js/related-posts.js"></script>
+  <script defer src="../../assets/js/main.js"></script>
+  <script defer src="../../assets/js/article.js"></script>
+  <script defer src="../../assets/js/share.js"></script>
+  <script defer src="../../assets/js/back-to-top.js"></script>
+  <!-- Back to Top & Reading Progress -->
+  <button class="back-to-top" id="backToTop" aria-label="回到顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
+  <div class="reading-progress" id="readingProgress"></div>
+
+  <!-- Post Sidebar Info（左侧） -->
+  <div class="post-sidebar-info" id="postSidebar">
+    <div class="post-info-card">
+      <div class="post-info-section">
+        <div class="post-info-label">作者</div>
+        <div class="post-info-author">
+          <div class="post-info-avatar">小</div>
+          <div>
+            <div class="post-info-author-name">张小猛</div>
+            <div class="post-info-author-desc">写代码，做产品</div>
+          </div>
+        </div>
+      </div>
+      <div class="post-info-section">
+        <div class="post-info-label">文章信息</div>
+        <div class="post-info-stat"><span class="post-info-stat-label">📅 发布日期</span><span class="post-info-stat-value">2026-08-07</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label">⏱️ 阅读时间</span><span class="post-info-stat-value">12 min read</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label">📝 文章字数</span><span class="post-info-stat-value">3866 字</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label">📊 章节数</span><span class="post-info-stat-value">9 节 · 25 子节</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label">💻 代码块</span><span class="post-info-stat-value">26 段</span></div>
+      </div>
+      <div class="post-info-section" id="postSidebarTags">
+        <div class="post-info-label">标签</div>
+        <div class="post-info-links">
+          <a href="../../blog/index.html?tag=Jetpack Compose" class="post-info-link"># Jetpack Compose</a>
+          <a href="../../blog/index.html?tag=Android" class="post-info-link"># Android</a>
+          <a href="../../blog/index.html?tag=性能优化" class="post-info-link"># 性能优化</a>
+          <a href="../../blog/index.html?tag=Compose" class="post-info-link"># Compose</a>
+          <a href="../../blog/index.html?tag=UI" class="post-info-link"># UI</a>
+          <a href="../../blog/index.html?tag=重组" class="post-info-link"># 重组</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Post TOC -->
+  <div class="post-toc-container" id="postToc">
+    <nav class="post-toc">
+      <div class="post-toc-title">目录</div>
+      <ul class="post-toc-list" id="tocList">
+      </ul>
+    </nav>
+  </div>
+<script defer src="../../assets/js/particles.js"></script>
+
+  <!-- Comment System -->
+  <script src="../../workers/comment-system/comment-widget.js" defer></script>
+
+  <!-- highlight.js for code syntax highlighting -->
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // 只对没有 codehilite 的代码块应用 highlight.js
+      document.querySelectorAll('pre code').forEach(function(block) {
+        // 跳过已经有 Pygments 高亮的块
+        if (!block.closest('.codehilite') && !block.classList.contains('hljs')) {
+          hljs.highlightElement(block);
+        }
+      });
+    });
+  </script>
+
+  <!-- Cloudflare Web Analytics -->
+  <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "29e7cff6f37448989538e2165cb79187"}'></script>
+</body>
+</html>

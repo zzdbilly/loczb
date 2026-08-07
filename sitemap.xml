@@ -21,6 +21,18 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://709527.xyz/blog/posts/jetpack-compose-性能优化实战从卡顿到丝滑的-12-个技巧.html</loc>
+    <lastmod>2026-08-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://709527.xyz/blog/posts/web-worker-与前端多线程开发把主线程从繁重计算中解放出来.html</loc>
+    <lastmod>2026-08-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://709527.xyz/blog/posts/nextjs-prisma-部署-vercel-常见踩坑外键约束与构建时数据修复.html</loc>
     <lastmod>2026-08-01</lastmod>
     <changefreq>monthly</changefreq>

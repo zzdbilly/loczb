@@ -4,6 +4,8 @@
 
 // Article index with tags
 const ARTICLE_INDEX = [
+  { slug: "jetpack-compose-性能优化实战从卡顿到丝滑的-12-个技巧", tags: ["Jetpack Compose", "Android", "性能优化", "Compose", "UI", "重组"], title: "Jetpack Compose 性能优化实战：从卡顿到丝滑的 12 个技巧" },
+  { slug: "web-worker-与前端多线程开发把主线程从繁重计算中解放出来", tags: ["前端", "前端开发", "JavaScript", "Web Worker", "性能优化", "多线程"], title: "Web Worker 与前端多线程开发：把主线程从繁重计算中解放出来" },
   { slug: "nextjs-prisma-部署-vercel-常见踩坑外键约束与构建时数据修复", tags: ["Next.js", "Prisma", "Vercel", "部署", "DevOps"], title: "Next.js + Prisma 部署 Vercel 常见踩坑：外键约束与构建时数据修复" },
   { slug: "ai-agent-实战用子代理并行驱动多项目开发", tags: ["AI", "Agent", "工程实践", "并行开发"], title: "AI Agent 实战：用子代理并行驱动多项目开发" },
   { slug: "agentic-ai-架构演进从-chatbot-到自主-agent", tags: ["AI", "Agent", "架构"], title: "Agentic AI 架构演进：从 Chatbot 到自主 Agent" },
