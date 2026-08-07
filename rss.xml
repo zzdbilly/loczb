@@ -7,6 +7,14 @@
     <language>zh-CN</language>
     <atom:link href="https://709527.xyz/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>Kotlin Coroutines 并发实战：从入门到优雅的并发编程</title>
+      <link>https://709527.xyz/blog/posts/kotlin-coroutines-并发实战从入门到优雅的并发编程.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/kotlin-coroutines-并发实战从入门到优雅的并发编程.html</guid>
+      <description>深入掌握 Kotlin 协程：协程与线程的区别、Scope、Dispatcher、结构化并发、取消协作、异常处理与并发控制实战</description>
+      <category>Kotlin</category>
+      <pubDate>Fri, 07 Aug 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
       <title>Jetpack Compose 性能优化实战：从卡顿到丝滑的 12 个技巧</title>
       <link>https://709527.xyz/blog/posts/jetpack-compose-性能优化实战从卡顿到丝滑的-12-个技巧.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/jetpack-compose-性能优化实战从卡顿到丝滑的-12-个技巧.html</guid>
@@ -156,14 +164,6 @@
       <guid isPermaLink="true">https://709527.xyz/blog/posts/vps-选购与使用指南五个常见场景的配置与避坑.html</guid>
       <description>从扶墙线路到生产环境部署，不同场景下 VPS 怎么选、怎么配、怎么不踩坑</description>
       <category>DevOps</category>
-      <pubDate>Sun, 05 Jul 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>MySQL 索引优化实战：从慢查询到最佳实践</title>
-      <link>https://709527.xyz/blog/posts/mysql-索引优化实战从慢查询到最佳实践.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/mysql-索引优化实战从慢查询到最佳实践.html</guid>
-      <description>从 EXPLAIN 认识索引失效到复合索引设计，一个慢查询从 2 秒优化到 12 毫秒的完整过程</description>
-      <category>数据库</category>
       <pubDate>Sun, 05 Jul 2026 00:00:00 +0800</pubDate>
     </item>
   </channel>

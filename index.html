@@ -444,31 +444,48 @@
       
       <div class="blog-grid">
         <!-- 代表文章大卡 -->
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <article class="blog-card-featured animate-on-scroll" id="home-featured-post" style="display: block;">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <article class="blog-card-featured animate-on-scroll" id="home-featured-post" style="display: block;">
           <div class="blog-card-header">
             <div class="blog-card-meta">
+              <span class="blog-date">2026-08-07</span>
+              <span>·</span>
+              <span class="blog-read-time">5 min</span>
+            </div>
+            <span class="blog-list-tag">Kotlin</span>
+          </div>
+          <h3 class="blog-card-title">
+            <a href="blog/posts/kotlin-coroutines-并发实战从入门到优雅的并发编程.html">Kotlin Coroutines 并发实战：从入门到优雅的并发编程</a>
+          </h3>
+          <p class="blog-card-excerpt">深入掌握 Kotlin 协程：协程与线程的区别、Scope、Dispatcher、结构化并发、取消协作、异常处理与并发控制实战...</p>
+          <div class="blog-card-tags">
+            <span class="tech-tag">Kotlin</span>
+            <span class="tech-tag">协程</span>
+            <span class="tech-tag">并发</span>
+            <span class="tech-tag">Android</span>
+          </div>
+        </article>
+        
+        <!-- 最新文章列表 -->
+                <div class="blog-list">
+        <article class="blog-mini-card animate-on-scroll" data-category="Android" data-page="1">
+          <div class="blog-mini-card-header">
+            <div class="blog-list-meta">
               <span class="blog-date">2026-08-07</span>
               <span>·</span>
               <span class="blog-read-time">12 min</span>
             </div>
             <span class="blog-list-tag">Android</span>
           </div>
-          <h3 class="blog-card-title">
+          <h3 class="blog-mini-card-title">
             <a href="blog/posts/jetpack-compose-性能优化实战从卡顿到丝滑的-12-个技巧.html">Jetpack Compose 性能优化实战：从卡顿到丝滑的 12 个技巧</a>
           </h3>
-          <p class="blog-card-excerpt">全面梳理 Jetpack Compose 性能优化的核心技巧，涵盖重组优化、状态管理、延迟布局、图片加载、基线配置文件等实战经验...</p>
-          <div class="blog-card-tags">
+          <p class="blog-mini-card-excerpt">全面梳理 Jetpack Compose 性能优化的核心技巧，涵盖重组优化、状态管理、延迟布局、图片加载、基线配置文件等实战经验</p>
+          <div class="blog-mini-card-tags">
             <span class="tech-tag">Jetpack Compose</span>
             <span class="tech-tag">Android</span>
             <span class="tech-tag">性能优化</span>
-            <span class="tech-tag">Compose</span>
-            <span class="tech-tag">UI</span>
-            <span class="tech-tag">重组</span>
           </div>
         </article>
-        
-        <!-- 最新文章列表 -->
-                <div class="blog-list">
         <article class="blog-mini-card animate-on-scroll" data-category="前端" data-page="1">
           <div class="blog-mini-card-header">
             <div class="blog-list-meta">
@@ -486,25 +503,6 @@
             <span class="tech-tag">前端</span>
             <span class="tech-tag">前端开发</span>
             <span class="tech-tag">JavaScript</span>
-          </div>
-        </article>
-        <article class="blog-mini-card animate-on-scroll" data-category="DevOps" data-page="1">
-          <div class="blog-mini-card-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-08-01</span>
-              <span>·</span>
-              <span class="blog-read-time">5 min</span>
-            </div>
-            <span class="blog-list-tag">DevOps</span>
-          </div>
-          <h3 class="blog-mini-card-title">
-            <a href="blog/posts/nextjs-prisma-部署-vercel-常见踩坑外键约束与构建时数据修复.html">Next.js + Prisma 部署 Vercel 常见踩坑：外键约束与构建时数据修复</a>
-          </h3>
-          <p class="blog-mini-card-excerpt">Vercel 构建时 prisma db push 失败，外键约束报错怎么办？本文完整复盘一次真实的部署失败案例，从根因分析到构建时数据修复方案。</p>
-          <div class="blog-mini-card-tags">
-            <span class="tech-tag">Next.js</span>
-            <span class="tech-tag">Prisma</span>
-            <span class="tech-tag">Vercel</span>
           </div>
         </article>
         </div>
@@ -599,6 +597,15 @@
     // 首页随机选择代表文章
     const posts = [
       {
+        url: 'blog/posts/kotlin-coroutines-并发实战从入门到优雅的并发编程.html',
+        title: 'Kotlin Coroutines 并发实战：从入门到优雅的并发编程',
+        date: '2026-08-07',
+        readTime: '5 min',
+        category: 'Kotlin',
+        category2: 'Kotlin',
+        desc: '深入掌握 Kotlin 协程：协程与线程的区别、Scope、Dispatcher、结构化并发、取消协作、异常处理与并发控制实战'
+      },
+      {
         url: 'blog/posts/jetpack-compose-性能优化实战从卡顿到丝滑的-12-个技巧.html',
         title: 'Jetpack Compose 性能优化实战：从卡顿到丝滑的 12 个技巧',
         date: '2026-08-07',
@@ -678,15 +685,6 @@
         category: '开发',
         category2: '开发',
         desc: '从 HuggingFace 的 tokenizer 到 LLM 推理引擎，从向量数据库到数据处理管道——Rust 正在改写 AI 基础设施的底层规则。本文深入分析 Rust 为何崛起、谁在用、以及如何融入你的技术栈。'
-      },
-      {
-        url: 'blog/posts/从-tdd-到-tdd²测试驱动开发的进阶实践.html',
-        title: '从 TDD 到 TDD²：测试驱动开发的进阶实践',
-        date: '2026-07-12',
-        readTime: '5 min',
-        category: '开发',
-        category2: '开发',
-        desc: '打破红-绿-重构的刻板印象，聊聊三角测量、转换优先级、测试替身的正确用法，以及那些让你能在实战中用好 TDD 的经验'
       }
     ];
     
