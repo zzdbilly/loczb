@@ -1,6 +1,20 @@
 {
   "posts": [
     {
+      "slug": "kotlin-coroutines-并发实战从入门到优雅的并发编程",
+      "title": "Kotlin Coroutines 并发实战：从入门到优雅的并发编程",
+      "date": "2026-08-07",
+      "category": "Kotlin",
+      "tags": [
+        "Kotlin",
+        "协程",
+        "并发",
+        "Android"
+      ],
+      "excerpt": "深入掌握 Kotlin 协程：协程与线程的区别、Scope、Dispatcher、结构化并发、取消协作、异常处理与并发控制实战",
+      "url": "blog/posts/kotlin-coroutines-并发实战从入门到优雅的并发编程.html"
+    },
+    {
       "slug": "jetpack-compose-性能优化实战从卡顿到丝滑的-12-个技巧",
       "title": "Jetpack Compose 性能优化实战：从卡顿到丝滑的 12 个技巧",
       "date": "2026-08-07",
@@ -1293,11 +1307,15 @@
   "tagCloud": [
     {
       "tag": "Android",
-      "count": 20
+      "count": 21
     },
     {
       "tag": "AI",
       "count": 15
+    },
+    {
+      "tag": "Kotlin",
+      "count": 8
     },
     {
       "tag": "DevOps",
@@ -1305,10 +1323,6 @@
     },
     {
       "tag": "性能优化",
-      "count": 7
-    },
-    {
-      "tag": "Kotlin",
       "count": 7
     },
     {
@@ -1386,6 +1400,10 @@
     {
       "tag": "Gemini",
       "count": 3
+    },
+    {
+      "tag": "并发",
+      "count": 2
     },
     {
       "tag": "JavaScript",
@@ -1534,6 +1552,10 @@
     {
       "tag": "OpenClaw",
       "count": 2
+    },
+    {
+      "tag": "协程",
+      "count": 1
     },
     {
       "tag": "Compose",
@@ -1853,10 +1875,6 @@
     },
     {
       "tag": "Golang",
-      "count": 1
-    },
-    {
-      "tag": "并发",
       "count": 1
     },
     {
@@ -2295,8 +2313,13 @@
   "archives": [
     {
       "month": "2026-08",
-      "count": 4,
+      "count": 5,
       "posts": [
+        {
+          "title": "Kotlin Coroutines 并发实战：从入门到优雅的并发编程",
+          "date": "2026-08-07",
+          "url": "blog/posts/kotlin-coroutines-并发实战从入门到优雅的并发编程.html"
+        },
         {
           "title": "Jetpack Compose 性能优化实战：从卡顿到丝滑的 12 个技巧",
           "date": "2026-08-07",
@@ -2792,6 +2815,7 @@
     }
   ],
   "categories": [
+    "Kotlin",
     "Android",
     "前端",
     "DevOps",
@@ -2800,12 +2824,11 @@
     "开发",
     "系统编程",
     "思考",
-    "Kotlin",
     "安全"
   ],
   "stats": {
-    "totalPosts": 91,
-    "totalTags": 250,
+    "totalPosts": 92,
+    "totalTags": 251,
     "latestDate": "2026-08-07",
     "oldestDate": "2026-02-15"
   }
