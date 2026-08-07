@@ -7,6 +7,22 @@
     <language>zh-CN</language>
     <atom:link href="https://709527.xyz/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>Jetpack Compose 性能优化实战：从卡顿到丝滑的 12 个技巧</title>
+      <link>https://709527.xyz/blog/posts/jetpack-compose-性能优化实战从卡顿到丝滑的-12-个技巧.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/jetpack-compose-性能优化实战从卡顿到丝滑的-12-个技巧.html</guid>
+      <description>全面梳理 Jetpack Compose 性能优化的核心技巧，涵盖重组优化、状态管理、延迟布局、图片加载、基线配置文件等实战经验</description>
+      <category>Android</category>
+      <pubDate>Fri, 07 Aug 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
+      <title>Web Worker 与前端多线程开发：把主线程从繁重计算中解放出来</title>
+      <link>https://709527.xyz/blog/posts/web-worker-与前端多线程开发把主线程从繁重计算中解放出来.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/web-worker-与前端多线程开发把主线程从繁重计算中解放出来.html</guid>
+      <description>深入解析 Web Worker 的原理与实践，涵盖 Dedicated Worker、Shared Worker、Service Worker 的区别与使用场景，以及 Comlink、Worker 池、Transferable Objects 等进阶技巧</description>
+      <category>前端</category>
+      <pubDate>Fri, 07 Aug 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
       <title>Next.js + Prisma 部署 Vercel 常见踩坑：外键约束与构建时数据修复</title>
       <link>https://709527.xyz/blog/posts/nextjs-prisma-部署-vercel-常见踩坑外键约束与构建时数据修复.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/nextjs-prisma-部署-vercel-常见踩坑外键约束与构建时数据修复.html</guid>
@@ -149,22 +165,6 @@
       <description>从 EXPLAIN 认识索引失效到复合索引设计，一个慢查询从 2 秒优化到 12 毫秒的完整过程</description>
       <category>数据库</category>
       <pubDate>Sun, 05 Jul 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>AI 编程助手进化论：从结对编程到自主编程团队 (2026)</title>
-      <link>https://709527.xyz/blog/posts/ai-编程助手进化论从结对编程到自主编程团队-2026.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/ai-编程助手进化论从结对编程到自主编程团队-2026.html</guid>
-      <description>2026 年，AI 编程 Agent 跨越了从辅助工具到自主成员的临界点。Cursor 移动端发布、Claude Code 深度推理、Codex CLI 稳定执行、多 Agent 并行协作——本文梳理 AI 编程的三次范式跃迁，分析主流工具，分享落地实践，并展望 2027 年的开发者生态。</description>
-      <category>AI</category>
-      <pubDate>Sat, 04 Jul 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>Linux inode 机制深入理解：从数据结构到实战排查</title>
-      <link>https://709527.xyz/blog/posts/linux-inode-mechanism-deep-dive.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/linux-inode-mechanism-deep-dive.html</guid>
-      <description>inode 是 Linux 文件系统的核心概念。本文从 ext4 inode 数据结构、硬链接软链接原理、文件删除机制到 inode 耗尽排查，全面解析 inode 工作原理。</description>
-      <category>系统编程</category>
-      <pubDate>Sat, 04 Jul 2026 00:00:00 +0800</pubDate>
     </item>
   </channel>
 </rss>
