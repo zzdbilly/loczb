@@ -4,6 +4,7 @@
 
 // Article index with tags
 const ARTICLE_INDEX = [
+  { slug: "如何好好工作从看起来很忙到真正产出", tags: ["工作法", "效率", "深度工作", "个人成长"], title: "如何好好工作：从看起来很忙到真正产出" },
   { slug: "kotlin-coroutines-并发实战从入门到优雅的并发编程", tags: ["Kotlin", "协程", "并发", "Android"], title: "Kotlin Coroutines 并发实战：从入门到优雅的并发编程" },
   { slug: "jetpack-compose-性能优化实战从卡顿到丝滑的-12-个技巧", tags: ["Jetpack Compose", "Android", "性能优化", "Compose", "UI", "重组"], title: "Jetpack Compose 性能优化实战：从卡顿到丝滑的 12 个技巧" },
   { slug: "web-worker-与前端多线程开发把主线程从繁重计算中解放出来", tags: ["前端", "前端开发", "JavaScript", "Web Worker", "性能优化", "多线程"], title: "Web Worker 与前端多线程开发：把主线程从繁重计算中解放出来" },
