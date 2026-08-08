@@ -444,29 +444,48 @@
       
       <div class="blog-grid">
         <!-- 代表文章大卡 -->
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <article class="blog-card-featured animate-on-scroll" id="home-featured-post" style="display: block;">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <article class="blog-card-featured animate-on-scroll" id="home-featured-post" style="display: block;">
           <div class="blog-card-header">
             <div class="blog-card-meta">
+              <span class="blog-date">2026-08-08</span>
+              <span>·</span>
+              <span class="blog-read-time">5 min</span>
+            </div>
+            <span class="blog-list-tag">思考</span>
+          </div>
+          <h3 class="blog-card-title">
+            <a href="blog/posts/如何好好工作从看起来很忙到真正产出.html">如何好好工作：从看起来很忙到真正产出</a>
+          </h3>
+          <p class="blog-card-excerpt">一套经过实践检验的工作方法论：识别重要的事、用系统代替意志力、管理注意力、用健康托底，以及一张可执行的每日清单。...</p>
+          <div class="blog-card-tags">
+            <span class="tech-tag">工作法</span>
+            <span class="tech-tag">效率</span>
+            <span class="tech-tag">深度工作</span>
+            <span class="tech-tag">个人成长</span>
+          </div>
+        </article>
+        
+        <!-- 最新文章列表 -->
+                <div class="blog-list">
+        <article class="blog-mini-card animate-on-scroll" data-category="Kotlin" data-page="1">
+          <div class="blog-mini-card-header">
+            <div class="blog-list-meta">
               <span class="blog-date">2026-08-07</span>
               <span>·</span>
               <span class="blog-read-time">5 min</span>
             </div>
             <span class="blog-list-tag">Kotlin</span>
           </div>
-          <h3 class="blog-card-title">
+          <h3 class="blog-mini-card-title">
             <a href="blog/posts/kotlin-coroutines-并发实战从入门到优雅的并发编程.html">Kotlin Coroutines 并发实战：从入门到优雅的并发编程</a>
           </h3>
-          <p class="blog-card-excerpt">深入掌握 Kotlin 协程：协程与线程的区别、Scope、Dispatcher、结构化并发、取消协作、异常处理与并发控制实战...</p>
-          <div class="blog-card-tags">
+          <p class="blog-mini-card-excerpt">深入掌握 Kotlin 协程：协程与线程的区别、Scope、Dispatcher、结构化并发、取消协作、异常处理与并发控制实战</p>
+          <div class="blog-mini-card-tags">
             <span class="tech-tag">Kotlin</span>
             <span class="tech-tag">协程</span>
             <span class="tech-tag">并发</span>
-            <span class="tech-tag">Android</span>
           </div>
         </article>
-        
-        <!-- 最新文章列表 -->
-                <div class="blog-list">
         <article class="blog-mini-card animate-on-scroll" data-category="Android" data-page="1">
           <div class="blog-mini-card-header">
             <div class="blog-list-meta">
@@ -484,25 +503,6 @@
             <span class="tech-tag">Jetpack Compose</span>
             <span class="tech-tag">Android</span>
             <span class="tech-tag">性能优化</span>
-          </div>
-        </article>
-        <article class="blog-mini-card animate-on-scroll" data-category="前端" data-page="1">
-          <div class="blog-mini-card-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-08-07</span>
-              <span>·</span>
-              <span class="blog-read-time">10 min</span>
-            </div>
-            <span class="blog-list-tag">前端</span>
-          </div>
-          <h3 class="blog-mini-card-title">
-            <a href="blog/posts/web-worker-与前端多线程开发把主线程从繁重计算中解放出来.html">Web Worker 与前端多线程开发：把主线程从繁重计算中解放出来</a>
-          </h3>
-          <p class="blog-mini-card-excerpt">深入解析 Web Worker 的原理与实践，涵盖 Dedicated Worker、Shared Worker、Service Worker 的区别与使用场景，以及 Comlink、Worker 池、Transferable Objects 等进阶技巧</p>
-          <div class="blog-mini-card-tags">
-            <span class="tech-tag">前端</span>
-            <span class="tech-tag">前端开发</span>
-            <span class="tech-tag">JavaScript</span>
           </div>
         </article>
         </div>
@@ -597,6 +597,15 @@
     // 首页随机选择代表文章
     const posts = [
       {
+        url: 'blog/posts/如何好好工作从看起来很忙到真正产出.html',
+        title: '如何好好工作：从看起来很忙到真正产出',
+        date: '2026-08-08',
+        readTime: '5 min',
+        category: '思考',
+        category2: '思考',
+        desc: '一套经过实践检验的工作方法论：识别重要的事、用系统代替意志力、管理注意力、用健康托底，以及一张可执行的每日清单。'
+      },
+      {
         url: 'blog/posts/kotlin-coroutines-并发实战从入门到优雅的并发编程.html',
         title: 'Kotlin Coroutines 并发实战：从入门到优雅的并发编程',
         date: '2026-08-07',
@@ -676,15 +685,6 @@
         category: '系统编程',
         category2: '系统编程',
         desc: '2026年7月，Rust首次杀进TIOBE前十。从语言进化到生态扩张，从行业应用到未来展望，全面复盘Rust凭什么走到这一步。'
-      },
-      {
-        url: 'blog/posts/rust-在-ai-基础设施中的崛起为什么大模型框架纷纷拥抱-rust.html',
-        title: 'Rust 在 AI 基础设施中的崛起：为什么大模型框架纷纷拥抱 Rust',
-        date: '2026-07-14',
-        readTime: '12 min',
-        category: '开发',
-        category2: '开发',
-        desc: '从 HuggingFace 的 tokenizer 到 LLM 推理引擎，从向量数据库到数据处理管道——Rust 正在改写 AI 基础设施的底层规则。本文深入分析 Rust 为何崛起、谁在用、以及如何融入你的技术栈。'
       }
     ];
     
