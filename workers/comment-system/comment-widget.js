@@ -162,26 +162,6 @@
     return `${y}-${m}-${d}`;
   }
 
-  // ========== 自动增高（textarea 随内容伸缩）==========
-  // 长评论不再固定 100px 内部滚动，文字跑到视野上方去；
-  // 输入时按内容实时增高，超出上限后再内部滚动。
-  const TEXTAREA_MAX_HEIGHT = 320;
-
-  function autoGrow(textarea) {
-    if (!textarea) return;
-    const grow = () => {
-      textarea.style.height = 'auto'; // 重置后 scrollHeight 才反映真实内容高度
-      const target = Math.min(textarea.scrollHeight, TEXTAREA_MAX_HEIGHT);
-      textarea.style.height = target + 'px';
-      textarea.style.overflowY = textarea.scrollHeight > TEXTAREA_MAX_HEIGHT ? 'auto' : 'hidden';
-    };
-    grow();
-    textarea.addEventListener('input', grow);
-    textarea.addEventListener('focus', grow);
-    // 记录原生的绑定，避免重复监听（组件每次 render 会新建 textarea）
-    textarea.__autoGrow = grow;
-  }
-
   // ========== 渲染 ==========
 
   function renderComment(comment, depth) {
@@ -303,9 +283,6 @@
         e.preventDefault();
         this.submitComment();
       });
-
-      // 评论输入框自动增高，避免长评论文字跑到视野上方
-      autoGrow(this.container.querySelector('#comment-content'));
     },
 
     async loadComments() {
@@ -444,9 +421,6 @@
       body.querySelector('[data-action="save-edit"]').addEventListener('click', () => this.saveEdit(commentId));
       body.querySelector('[data-action="cancel-edit"]').addEventListener('click', () => this.cancelEdit());
       body.querySelector(`#edit-content-${commentId}`).focus();
-
-      // 编辑输入框同样自动增高
-      autoGrow(body.querySelector(`#edit-content-${commentId}`));
     },
 
     async saveEdit(commentId) {
