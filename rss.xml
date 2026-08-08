@@ -7,6 +7,14 @@
     <language>zh-CN</language>
     <atom:link href="https://709527.xyz/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>如何好好工作：从看起来很忙到真正产出</title>
+      <link>https://709527.xyz/blog/posts/如何好好工作从看起来很忙到真正产出.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/如何好好工作从看起来很忙到真正产出.html</guid>
+      <description>一套经过实践检验的工作方法论：识别重要的事、用系统代替意志力、管理注意力、用健康托底，以及一张可执行的每日清单。</description>
+      <category>思考</category>
+      <pubDate>Sat, 08 Aug 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
       <title>Kotlin Coroutines 并发实战：从入门到优雅的并发编程</title>
       <link>https://709527.xyz/blog/posts/kotlin-coroutines-并发实战从入门到优雅的并发编程.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/kotlin-coroutines-并发实战从入门到优雅的并发编程.html</guid>
@@ -156,14 +164,6 @@
       <guid isPermaLink="true">https://709527.xyz/blog/posts/kotlin-scope-functions-实战选择五个函数一个决策树.html</guid>
       <description>别再纠结 let 和 apply 的区别了——从 this/it 和返回值两个维度理清 Kotlin 的五个 Scope Functions，附反模式和团队规范</description>
       <category>Kotlin</category>
-      <pubDate>Sun, 05 Jul 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>VPS 选购与使用指南：五个常见场景的配置与避坑</title>
-      <link>https://709527.xyz/blog/posts/vps-选购与使用指南五个常见场景的配置与避坑.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/vps-选购与使用指南五个常见场景的配置与避坑.html</guid>
-      <description>从扶墙线路到生产环境部署，不同场景下 VPS 怎么选、怎么配、怎么不踩坑</description>
-      <category>DevOps</category>
       <pubDate>Sun, 05 Jul 2026 00:00:00 +0800</pubDate>
     </item>
   </channel>

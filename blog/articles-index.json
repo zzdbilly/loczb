@@ -1,6 +1,20 @@
 {
   "posts": [
     {
+      "slug": "如何好好工作从看起来很忙到真正产出",
+      "title": "如何好好工作：从看起来很忙到真正产出",
+      "date": "2026-08-08",
+      "category": "思考",
+      "tags": [
+        "工作法",
+        "效率",
+        "深度工作",
+        "个人成长"
+      ],
+      "excerpt": "一套经过实践检验的工作方法论：识别重要的事、用系统代替意志力、管理注意力、用健康托底，以及一张可执行的每日清单。",
+      "url": "blog/posts/如何好好工作从看起来很忙到真正产出.html"
+    },
+    {
       "slug": "kotlin-coroutines-并发实战从入门到优雅的并发编程",
       "title": "Kotlin Coroutines 并发实战：从入门到优雅的并发编程",
       "date": "2026-08-07",
@@ -1334,6 +1348,14 @@
       "count": 5
     },
     {
+      "tag": "效率",
+      "count": 4
+    },
+    {
+      "tag": "个人成长",
+      "count": 4
+    },
+    {
       "tag": "Jetpack Compose",
       "count": 4
     },
@@ -1378,15 +1400,7 @@
       "count": 3
     },
     {
-      "tag": "效率",
-      "count": 3
-    },
-    {
       "tag": "MCP",
-      "count": 3
-    },
-    {
-      "tag": "个人成长",
       "count": 3
     },
     {
@@ -1400,6 +1414,10 @@
     {
       "tag": "Gemini",
       "count": 3
+    },
+    {
+      "tag": "深度工作",
+      "count": 2
     },
     {
       "tag": "并发",
@@ -1552,6 +1570,10 @@
     {
       "tag": "OpenClaw",
       "count": 2
+    },
+    {
+      "tag": "工作法",
+      "count": 1
     },
     {
       "tag": "协程",
@@ -1731,10 +1753,6 @@
     },
     {
       "tag": "专注力",
-      "count": 1
-    },
-    {
-      "tag": "深度工作",
       "count": 1
     },
     {
@@ -2313,8 +2331,13 @@
   "archives": [
     {
       "month": "2026-08",
-      "count": 5,
+      "count": 6,
       "posts": [
+        {
+          "title": "如何好好工作：从看起来很忙到真正产出",
+          "date": "2026-08-08",
+          "url": "blog/posts/如何好好工作从看起来很忙到真正产出.html"
+        },
         {
           "title": "Kotlin Coroutines 并发实战：从入门到优雅的并发编程",
           "date": "2026-08-07",
@@ -2815,6 +2838,7 @@
     }
   ],
   "categories": [
+    "思考",
     "Kotlin",
     "Android",
     "前端",
@@ -2823,13 +2847,12 @@
     "数据库",
     "开发",
     "系统编程",
-    "思考",
     "安全"
   ],
   "stats": {
-    "totalPosts": 92,
-    "totalTags": 251,
-    "latestDate": "2026-08-07",
+    "totalPosts": 93,
+    "totalTags": 252,
+    "latestDate": "2026-08-08",
     "oldestDate": "2026-02-15"
   }
 }
