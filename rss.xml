@@ -7,6 +7,14 @@
     <language>zh-CN</language>
     <atom:link href="https://709527.xyz/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>300 万能躺平吗</title>
+      <link>https://709527.xyz/blog/posts/300-万能躺平吗.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/300-万能躺平吗.html</guid>
+      <description>一个看似数字、实则是认知与心态的问题：300 万到底够不够躺平？聊透 4% 法则、通胀与黑天鹅、城市差异、心态准备和务实替代路径。</description>
+      <category>思考</category>
+      <pubDate>Sun, 09 Aug 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
       <title>如何好好工作：从看起来很忙到真正产出</title>
       <link>https://709527.xyz/blog/posts/如何好好工作从看起来很忙到真正产出.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/如何好好工作从看起来很忙到真正产出.html</guid>
@@ -156,14 +164,6 @@
       <guid isPermaLink="true">https://709527.xyz/blog/posts/gradle-构建加速全攻略从-5-分钟到-30-秒.html</guid>
       <description>从 Profile 找到瓶颈到 Configuration Cache，一步步把 Android 项目构建从 5 分钟优化到 30 秒的完整方案</description>
       <category>Android</category>
-      <pubDate>Sun, 05 Jul 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>Kotlin Scope Functions 实战选择：五个函数一个决策树</title>
-      <link>https://709527.xyz/blog/posts/kotlin-scope-functions-实战选择五个函数一个决策树.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/kotlin-scope-functions-实战选择五个函数一个决策树.html</guid>
-      <description>别再纠结 let 和 apply 的区别了——从 this/it 和返回值两个维度理清 Kotlin 的五个 Scope Functions，附反模式和团队规范</description>
-      <category>Kotlin</category>
       <pubDate>Sun, 05 Jul 2026 00:00:00 +0800</pubDate>
     </item>
   </channel>
