@@ -444,29 +444,49 @@
       
       <div class="blog-grid">
         <!-- 代表文章大卡 -->
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <article class="blog-card-featured animate-on-scroll" id="home-featured-post" style="display: block;">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <article class="blog-card-featured animate-on-scroll" id="home-featured-post" style="display: block;">
           <div class="blog-card-header">
             <div class="blog-card-meta">
-              <span class="blog-date">2026-08-08</span>
+              <span class="blog-date">2026-08-09</span>
               <span>·</span>
               <span class="blog-read-time">5 min</span>
             </div>
             <span class="blog-list-tag">思考</span>
           </div>
           <h3 class="blog-card-title">
-            <a href="blog/posts/如何好好工作从看起来很忙到真正产出.html">如何好好工作：从看起来很忙到真正产出</a>
+            <a href="blog/posts/300-万能躺平吗.html">300 万能躺平吗</a>
           </h3>
-          <p class="blog-card-excerpt">一套经过实践检验的工作方法论：识别重要的事、用系统代替意志力、管理注意力、用健康托底，以及一张可执行的每日清单。...</p>
+          <p class="blog-card-excerpt">一个看似数字、实则是认知与心态的问题：300 万到底够不够躺平？聊透 4% 法则、通胀与黑天鹅、城市差异、心态准备和务实替代路径。...</p>
           <div class="blog-card-tags">
-            <span class="tech-tag">工作法</span>
-            <span class="tech-tag">效率</span>
-            <span class="tech-tag">深度工作</span>
-            <span class="tech-tag">个人成长</span>
+            <span class="tech-tag">思考</span>
+            <span class="tech-tag">理财</span>
+            <span class="tech-tag">躺平</span>
+            <span class="tech-tag">FIRE</span>
+            <span class="tech-tag">财务自由</span>
           </div>
         </article>
         
         <!-- 最新文章列表 -->
                 <div class="blog-list">
+        <article class="blog-mini-card animate-on-scroll" data-category="思考" data-page="1">
+          <div class="blog-mini-card-header">
+            <div class="blog-list-meta">
+              <span class="blog-date">2026-08-08</span>
+              <span>·</span>
+              <span class="blog-read-time">5 min</span>
+            </div>
+            <span class="blog-list-tag">思考</span>
+          </div>
+          <h3 class="blog-mini-card-title">
+            <a href="blog/posts/如何好好工作从看起来很忙到真正产出.html">如何好好工作：从看起来很忙到真正产出</a>
+          </h3>
+          <p class="blog-mini-card-excerpt">一套经过实践检验的工作方法论：识别重要的事、用系统代替意志力、管理注意力、用健康托底，以及一张可执行的每日清单。</p>
+          <div class="blog-mini-card-tags">
+            <span class="tech-tag">工作法</span>
+            <span class="tech-tag">效率</span>
+            <span class="tech-tag">深度工作</span>
+          </div>
+        </article>
         <article class="blog-mini-card animate-on-scroll" data-category="Kotlin" data-page="1">
           <div class="blog-mini-card-header">
             <div class="blog-list-meta">
@@ -484,25 +504,6 @@
             <span class="tech-tag">Kotlin</span>
             <span class="tech-tag">协程</span>
             <span class="tech-tag">并发</span>
-          </div>
-        </article>
-        <article class="blog-mini-card animate-on-scroll" data-category="Android" data-page="1">
-          <div class="blog-mini-card-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-08-07</span>
-              <span>·</span>
-              <span class="blog-read-time">12 min</span>
-            </div>
-            <span class="blog-list-tag">Android</span>
-          </div>
-          <h3 class="blog-mini-card-title">
-            <a href="blog/posts/jetpack-compose-性能优化实战从卡顿到丝滑的-12-个技巧.html">Jetpack Compose 性能优化实战：从卡顿到丝滑的 12 个技巧</a>
-          </h3>
-          <p class="blog-mini-card-excerpt">全面梳理 Jetpack Compose 性能优化的核心技巧，涵盖重组优化、状态管理、延迟布局、图片加载、基线配置文件等实战经验</p>
-          <div class="blog-mini-card-tags">
-            <span class="tech-tag">Jetpack Compose</span>
-            <span class="tech-tag">Android</span>
-            <span class="tech-tag">性能优化</span>
           </div>
         </article>
         </div>
@@ -597,6 +598,15 @@
     // 首页随机选择代表文章
     const posts = [
       {
+        url: 'blog/posts/300-万能躺平吗.html',
+        title: '300 万能躺平吗',
+        date: '2026-08-09',
+        readTime: '5 min',
+        category: '思考',
+        category2: '思考',
+        desc: '一个看似数字、实则是认知与心态的问题：300 万到底够不够躺平？聊透 4% 法则、通胀与黑天鹅、城市差异、心态准备和务实替代路径。'
+      },
+      {
         url: 'blog/posts/如何好好工作从看起来很忙到真正产出.html',
         title: '如何好好工作：从看起来很忙到真正产出',
         date: '2026-08-08',
@@ -676,15 +686,6 @@
         category: '开发',
         category2: '开发',
         desc: '从自动补全到自主编码，2026 年的 AI 编码工具正在经历一次质变。这篇文章用真实场景复盘 Claude Code、Cursor Agent、MCP 协议的实际用法，以及开发者应该怎样调整工作流。'
-      },
-      {
-        url: 'blog/posts/rust-入局2026-年的生态全景.html',
-        title: 'Rust 入局：2026 年的生态全景',
-        date: '2026-07-19',
-        readTime: '5 min',
-        category: '系统编程',
-        category2: '系统编程',
-        desc: '2026年7月，Rust首次杀进TIOBE前十。从语言进化到生态扩张，从行业应用到未来展望，全面复盘Rust凭什么走到这一步。'
       }
     ];
     
