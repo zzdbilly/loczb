@@ -1,6 +1,22 @@
 {
   "posts": [
     {
+      "slug": "2026-年了ai-编程助手到底能帮你干多少活",
+      "title": "2026 年了，AI 编程助手到底能帮你干多少活？",
+      "date": "2026-08-12",
+      "category": "开发",
+      "tags": [
+        "AI",
+        "前端",
+        "开发",
+        "Agent",
+        "编程助手",
+        "效率"
+      ],
+      "excerpt": "结合当前 Agent 编程趋势，聊聊 AI 助手能做/不能做/边界三层认知、五种实战协作心法，以及开发者如何重新定位自己",
+      "url": "blog/posts/2026-年了ai-编程助手到底能帮你干多少活.html"
+    },
+    {
       "slug": "300-万能躺平吗",
       "title": "300 万能躺平吗",
       "date": "2026-08-09",
@@ -1340,7 +1356,7 @@
     },
     {
       "tag": "AI",
-      "count": 15
+      "count": 16
     },
     {
       "tag": "Kotlin",
@@ -1351,6 +1367,10 @@
       "count": 8
     },
     {
+      "tag": "Agent",
+      "count": 7
+    },
+    {
       "tag": "性能优化",
       "count": 7
     },
@@ -1359,12 +1379,12 @@
       "count": 6
     },
     {
-      "tag": "Agent",
-      "count": 6
+      "tag": "前端",
+      "count": 5
     },
     {
       "tag": "效率",
-      "count": 4
+      "count": 5
     },
     {
       "tag": "个人成长",
@@ -1372,10 +1392,6 @@
     },
     {
       "tag": "Jetpack Compose",
-      "count": 4
-    },
-    {
-      "tag": "前端",
       "count": 4
     },
     {
@@ -1589,6 +1605,14 @@
     {
       "tag": "OpenClaw",
       "count": 2
+    },
+    {
+      "tag": "开发",
+      "count": 1
+    },
+    {
+      "tag": "编程助手",
+      "count": 1
     },
     {
       "tag": "躺平",
@@ -2358,8 +2382,13 @@
   "archives": [
     {
       "month": "2026-08",
-      "count": 7,
+      "count": 8,
       "posts": [
+        {
+          "title": "2026 年了，AI 编程助手到底能帮你干多少活？",
+          "date": "2026-08-12",
+          "url": "blog/posts/2026-年了ai-编程助手到底能帮你干多少活.html"
+        },
         {
           "title": "300 万能躺平吗",
           "date": "2026-08-09",
@@ -2870,6 +2899,7 @@
     }
   ],
   "categories": [
+    "开发",
     "思考",
     "Kotlin",
     "Android",
@@ -2877,14 +2907,13 @@
     "DevOps",
     "AI",
     "数据库",
-    "开发",
     "系统编程",
     "安全"
   ],
   "stats": {
-    "totalPosts": 94,
-    "totalTags": 255,
-    "latestDate": "2026-08-09",
+    "totalPosts": 95,
+    "totalTags": 257,
+    "latestDate": "2026-08-12",
     "oldestDate": "2026-02-15"
   }
 }
