@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026 年了，AI 编程助手到底能帮你干多少活？ | 张小猛 - loczb</title>
+    <meta name="description" content="结合当前 Agent 编程趋势，聊聊 AI 助手能做/不能做/边界三层认知、五种实战协作心法，以及开发者如何重新定位自己">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="2026 年了，AI 编程助手到底能帮你干多少活？ | 张小猛 - loczb">
+    <meta property="og:description" content="结合当前 Agent 编程趋势，聊聊 AI 助手能做/不能做/边界三层认知、五种实战协作心法，以及开发者如何重新定位自己">
+    <meta property="og:url" content="https://709527.xyz/blog/posts/2026-年了ai-编程助手到底能帮你干多少活.html">
+    <meta property="og:type" content="article">
+        <meta property="og:image" content="../../assets/images/og-image.png">
+    <meta property="og:site_name" content="loczb">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="2026 年了，AI 编程助手到底能帮你干多少活？ | 张小猛 - loczb">
+    <meta name="twitter:description" content="结合当前 Agent 编程趋势，聊聊 AI 助手能做/不能做/边界三层认知、五种实战协作心法，以及开发者如何重新定位自己">
+
+
+        <script type="application/ld+json">
+{
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "2026 年了，AI 编程助手到底能帮你干多少活？",
+      "description": "结合当前 Agent 编程趋势，聊聊 AI 助手能做/不能做/边界三层认知、五种实战协作心法，以及开发者如何重新定位自己",
+      "image": "https://709527.xyz/assets/images/og-image.png",
+      "author": {
+            "@type": "Person",
+            "name": "张小猛",
+            "url": "https://709527.xyz/about/"
+      },
+      "publisher": {
+            "@type": "Organization",
+            "name": "loczb",
+            "logo": {
+                  "@type": "ImageObject",
+                  "url": "https://709527.xyz/assets/images/favicon.svg"
+            }
+      },
+      "datePublished": "2026-08-12 16:17:20T00:00:00+08:00",
+      "dateModified": "2026-08-12 16:17:20T00:00:00+08:00",
+      "url": "https://709527.xyz/blog/posts/2026-年了ai-编程助手到底能帮你干多少活.html",
+      "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://709527.xyz/blog/posts/2026-年了ai-编程助手到底能帮你干多少活.html"
+      },
+      "keywords": "AI, 前端, 开发, Agent, 编程助手, 效率",
+      "articleSection": "开发",
+      "timeRequired": "PT5M",
+      "inLanguage": "zh-CN"
+}
+    </script>
+
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&family=Noto+Sans+SC:wght@500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500&display=swap" media="print" onload="this.media='all'">
+    <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
+    <link rel="alternate icon" href="../../assets/images/favicon.ico">
+    <link rel="canonical" href="https://709527.xyz/blog/posts/2026-年了ai-编程助手到底能帮你干多少活.html">
+</head>
+<body>
+  <!-- Loading -->
+  <div class="loading">
+    <div class="loading-spinner"></div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../../index.html" class="nav-logo">
+        loc<span>zb</span>
+      </a>
+      <button class="nav-toggle" aria-label="打开菜单" aria-expanded="false" aria-controls="nav-links-menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <div class="nav-overlay"></div>
+      <ul class="nav-links" id="nav-links-menu">
+        <li><a href="../../index.html" class="nav-link">首页</a></li>
+        <li><a href="../../projects/index.html" class="nav-link">项目</a></li>
+        <li><a href="../index.html" class="nav-link active">博客</a></li>
+        <li><a href="../../about/index.html" class="nav-link">关于</a></li>
+      </ul>
+      <button class="theme-toggle" aria-label="切换主题" title="切换亮/暗模式">
+        <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+        <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+      </button>
+    </div>
+  </nav>
+  <!-- Particle Canvas Background -->
+  <canvas id="particle-canvas" class="particle-canvas"></canvas>
+
+  <div class="scroll-progress"></div>
+
+  <main class="section" style="padding-bottom: 0; padding-top: var(--space-4xl);">
+    <div class="container container-narrow">
+      <a href="../index.html" class="back-link">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        返回博客列表
+      </a>
+
+      <article class="post-content">
+        <h1>2026 年了，AI 编程助手到底能帮你干多少活？</h1>
+
+        <div class="post-meta">
+          <span>📅 2026-08-12 16:17:20</span>
+          <span>⏱️ 5 min read</span>
+          <span>👤 张小猛</span>
+        </div>
+
+        <div class="post-tags">
+          <span class="tag">AI</span>
+          <span class="tag">前端</span>
+          <span class="tag">开发</span>
+          <span class="tag">Agent</span>
+          <span class="tag">编程助手</span>
+          <span class="tag">效率</span>
+        </div>
+
+        <h2>2026 年了，AI 编程助手到底能帮你干多少活？</h2>
+<p>如果说 2024 年是 AI 编程助手的"尝鲜期"，2025 年是"工具期"，那么 2026 年已经彻底进入了"<strong>Agent 期</strong>"。这一年，GPT-5.6 三变体落地、Claude 在 SWE-bench 上持续刷榜、GLM-5.2 把上下文拉到 1M、多智能体协作从实验室走向生产环境。曾经那个"帮你补全代码"的玩具，已经进化成能独立跑测试、改 bug、提交 PR 的"数字同事"。</p>
+<p>但随之而来的焦虑也更真实了：<strong>AI 这么强，程序员是不是要失业了？</strong></p>
+<p>这篇文章不贩卖焦虑，也不灌鸡汤。我想结合 2026 年当前的技术趋势，聊聊 AI 编程助手到底改变了什么、没改变什么，以及开发者该怎么调整工作方式，才能让自己"更难被替代"。</p>
+<h3>免责声明</h3>
+<p>我写这篇文章时（2026-08），主流模型和工具仍在以周为单位迭代。文中提到的具体模型版本、能力指标仅代表写作时点的快照。<strong>技术趋势是稳定的，具体数字是会过期的。</strong> 你真正该带走的，是背后的方法论。</p>
+<hr />
+<h2>2026 年 AI 编程的三件大事</h2>
+<p>先快速盘一盘今年发生了哪些关键变化，这些变化共同构成了开发者必须重新审视工作方式的理由。</p>
+<h3>上下文窗口从"段落"变成"整个仓库"</h3>
+<p>这是今年最被低估的进步。当 GLM-5.2、MiniMax 等模型把上下文窗口推到 <strong>1M tokens</strong> 级别时，机器第一次能"一口气"读完一个中型项目的全部代码、文档和配置。</p>
+<p>作用是什么？过去的 AI 助手像"失忆的实习生"，你每次都要重新告诉它项目背景。现在它像"空降的老员工"，打开仓库就能接上上下文。<strong>这直接改变了人机协作的粒度</strong>——你不用再逐文件喂给它，而是直接说"帮我重构下单模块的错误处理"。</p>
+<h3>Agent 从"问答"走向"闭环执行"</h3>
+<p>早年的 Copilot 只会"接着你写"。2026 年的 Agent（如 Claude Code、GitHub Copilot 的 agent 模式、各种开源 agent 框架）能自主完成一个<strong>完整的任务闭环</strong>：读代码 → 改代码 → 跑测试 → 看报错 → 修 bug → 再跑测试 → 提交。</p>
+<p>「自主编码」从 Demo 变成了日常。这也正是 SWE-bench 这类"真实 GitHub issue 修复"基准成为行业标尺的原因——<strong>能不能独立修好一个真实 bug，比会不会写一段漂亮代码有意义得多。</strong></p>
+<h3>多智能体协作走上台面</h3>
+<p>OpenAI、Anthropic 都在组织多智能体方向探索。不再是"一个万能 Agent"，而是拆成<strong>规划者、编码者、审查者</strong>等多个角色，各司其职、互相校验。</p>
+<p>这对开发者有个很直接的启发：<strong>Agent 生态正在模仿成熟团队的分工结构</strong>。谁更懂"如何把任务拆给合适的角色、如何验收每个角色的产出"，谁就更懂怎么用好这套系统。</p>
+<hr />
+<h2>三层认知：AI 编程的"能做 / 不能做 / 边界"</h2>
+<p>很多讨论之所以鸡同鸭讲，是因为大家把"AI 能不能写代码"混为一谈。我把它拆成三层，会清晰很多。</p>
+<h3>第一层：AI 已经非常擅长的</h3>
+<ul>
+<li><strong>样板代码与 CRUD</strong>：建表格、写 REST 接口、做表单校验，这类高重复度代码，AI 产出又快又稳。</li>
+<li><strong>跨语言翻译与迁移</strong>：Python → TypeScript、老框架 → 新框架，AI 是最强的"翻译官"。</li>
+<li><strong>写测试</strong>：只要业务逻辑清楚，AI 批量生成单元测试的效率远超手写。</li>
+<li><strong>代码解释与文档</strong>：把一团乱麻的遗留代码讲清楚，或自动生成 README，AI 是顶级助手。</li>
+<li><strong>修已知模式的 bug</strong>：空指针、拼写错误、边界条件漏判，这类 bug AI 一找一个准。</li>
+</ul>
+<h3>第二层：AI 能做但需要你"盯"的</h3>
+<ul>
+<li><strong>中等复杂度重构</strong>：AI 能产出方案，但<strong>重构的取舍（保留哪些行为、改哪些调用方）需要人来拍板</strong>。</li>
+<li><strong>跨模块改动</strong>：改一个接口影响几个模块，AI 会改，但容易漏掉隐式依赖。你必须做集成验证。</li>
+<li><strong>性能优化</strong>：AI 能指出瓶颈，但"优化到什么程度、是否值得引入复杂度"，是工程决策，不是代码能力。</li>
+<li><strong>技术选型</strong>：AI 能列出候选方案和对比，但"哪个更适合团队现状"需要结合真实约束。</li>
+</ul>
+<h3>第三层：AI 目前基本做不了的</h3>
+<ul>
+<li><strong>搞清楚"需求到底是什么"</strong>：用户嘴上说的，往往和真正要的不是一回事。这是<strong>沟通与共情</strong>，不是代码。</li>
+<li><strong>承担最终责任</strong>：出事故了，AI 不会背锅，会背锅的是签字的那个人。<strong>责任不可委派</strong>。</li>
+<li><strong>判断"这件事该不该做"</strong>：占资源、压工期、违反合规……这些商业和道德判断，是人的领域。</li>
+<li><strong>处理模糊的业务规则</strong>：当规则本身就是一团浆糊时，AI 无从下手，因为它没有"常识兜底"。</li>
+</ul>
+<p>这一层的本质是：<strong>AI 擅长"把已知问题做对"，但"定义正确的问题、承担后果"永远是人的工作。</strong></p>
+<hr />
+<h2>与 AI 协作的五个实战心法</h2>
+<p>聊完理论，说点能直接上手的。以下是我 2026 年实践中反复验证有效的协作方式。</p>
+<h3>心法一：把需求写"清"而不是写"多"</h3>
+<p>Prompt 的质量决定输出的上限。好的提示词不是"越长越好"，而是<strong>把约束讲清楚</strong>。</p>
+<pre><code class="language-python"># 反例：模糊需求
+请优化这段代码，让它更快
+
+# 正例：清晰需求
+# 请优化 process_items 函数：
+# 1. 输入是 10 万条记录的列表
+# 2. 当前每个元素单独发一次 HTTP 请求
+# 3. 目标是总耗时从 8 分钟降到 1 分钟以内
+# 4. 要求保持接口不变，错误处理逻辑不丢失
+# 5. 完成后用示例数据跑一遍并给出耗时对比
+</code></pre>
+<p>差异巨大。前者 AI 只能猜，后者 AI 能像接真实需求一样干活。</p>
+<h3>心法二：让 AI"先说方案再动手"</h3>
+<p>对于中等以上复杂度任务，不要让 AI 直接改代码，而是<strong>先要方案，你审核后再执行</strong>。</p>
+<pre><code>请先不要写代码。给我 2 个缓存方案（Redis/本地 LRU），
+对比：命中率、实现成本、对现有代码侵入程度、失败兜底。
+我给个结论你再动手。
+</code></pre>
+<p>这一步花 30 秒，能避免 AI 一头扎进错误方向，省下几十分钟返工。</p>
+<h3>心法三：用"测试即契约"来验收</h3>
+<p>AI 改完代码，别只问"改好了吗"。<strong>让它跑测试给你看</strong>，你自己也要跑。最好的协作方式是把需求写成测试，然后让 AI 去"让测试通过"。</p>
+<pre><code class="language-bash"># 把验收标准固化成测试
+pnpm vitest run --reporter=dot
+
+# 让 AI 基于失败测试定位并修复
+# &quot;test/order.test.ts 里有 3 个失败用例，请修复 order-service，不要改测试本身&quot;
+</code></pre>
+<p>测试是人和 AI 之间最清晰的"契约"。<strong>契约清晰，协作才不会扯皮。</strong></p>
+<h3>心法四：分块提交，别让 AI"一口气吃成胖子"</h3>
+<p>把一个大型改动拆成若干<strong>可独立验证的小块</strong>，每块让 AI 完成、你检查、再继续。这既是工程纪律，也是对 AI 能力的诚实认知——<strong>越小的任务，AI 的准确率越高，越好审查。</strong></p>
+<pre><code class="language-bash"># 拆解示例
+step1: 抽出 API 调用层 (review: 接口定义)
+step2: 实现缓存模块  (review: 边界与失效)
+step3: 接入主流程    (review: 集成与回滚)
+</code></pre>
+<h3>心法五：建立"人类复核清单"</h3>
+<p>AI 最擅长在你看不见的地方埋雷。列一个自己的复核清单，每次 AI 提交后过一遍：</p>
+<pre><code class="language-javascript">// 人类复核清单（每次 AI 提交后必查）
+const reviewChecklist = [
+  '1. 权限校验是否被绕过？',       // 安全
+  '2. 敏感信息有没有硬编码/打日志？', // 隐私
+  '3. 异常分支和回滚路径完备吗？',   // 健壮性
+  '4. 边界条件和极端输入覆盖了吗？', // 正确性
+  '5. 有没有引入没必要的复杂度？',   // 可维护性
+];
+</code></pre>
+<p><strong>AI 当加速器，你当质检官。</strong> 这套组合在 2026 年依然是最优解。</p>
+<hr />
+<h2>开发者该如何"重新定位"自己</h2>
+<p>回到最初那个问题：程序员会不会失业？我认为，<strong>"只会写 CRUD 的码农"会越来越难；"会定义问题、做决策、扛责任"的工程师反而会更值钱。</strong> 这不是安慰，是趋势使然。</p>
+<h3>从"生产者"转向"架构师 + 质检官"</h3>
+<p>你的价值不再是"敲代码的速度"，而是：</p>
+<ul>
+<li><strong>定义正确的问题</strong>：把模糊需求翻译成能落地的任务。</li>
+<li><strong>设计合理的架构</strong>：决定模块边界、数据流、技术栈，这些 AI 给不了。</li>
+<li><strong>把控质量与风险</strong>：识别 AI 产出的隐患，守住安全和合规底线。</li>
+<li><strong>整合 AI 工具链</strong>：知道什么时候用哪个 Agent、怎么编排它们协作。</li>
+</ul>
+<h3>领域知识是最后的护城河</h3>
+<p>通用大模型知道所有"通用知识"，但<strong>每个行业的隐性规则、每个公司的历史包袱，只有你手里有。</strong> AI 可以比你更会写 Python，但"你们公司这个支付系统为什么这么设计"这种问题，它答不上来——因为答案不在公开数据集里，在你们的代码历史和业务里。</p>
+<p>深耕一个领域的理解深度，是<strong>无法被通用模型快速复制的资产。</strong></p>
+<h3>学会"骑"而不是"被骑"</h3>
+<p>工具越强，<strong>会用工具的人越值钱，不会用工具的人越危险。</strong> 这句话在 2026 年格外刺耳但格外真实。</p>
+<p>花两周时间，把所有主流 AI 编程工具（IDE 助手、CLI Agent、开源框架）都用一遍，找到最适合你工作流的那套。<strong>然后把它变成你日常肌肉记忆的一部分</strong>，而不是偶尔尝鲜的玩具。</p>
+<hr />
+<h2>实操：用 Agent 跑通一个真实小任务</h2>
+<p>光说不练假把式。我演示一个真实的"AI 闭环执行"流程，你就知道这套协作方式长什么样了。</p>
+<h3>场景</h3>
+<p>给一个用户管理接口加缓存，要求降低数据库压力，同时保证缓存失效即时、热点数据不击穿。</p>
+<h3>第一步：把需求写成清晰的任务</h3>
+<p>我用一个 CLI Agent 示例（概念演示，具体工具可用任意 agent）：</p>
+<pre><code class="language-bash"># 给 agent 下达清晰任务
+agent-cli run \
+  --task &quot;为 UserService.getUser 增加缓存层&quot; \
+  --constraint &quot;数据库是 PostgreSQL;缓存用 Redis;TTL=5min;&quot; \
+  --constraint &quot;用户资料更新时要同步失效缓存&quot; \
+  --constraint &quot;热点用户(如 ID&lt;100)做缓存击穿保护&quot; \
+  --acceptance &quot;跑通 test/cache.test.ts 全部用例&quot;
+</code></pre>
+<p>关键是把<strong>约束</strong>和<strong>验收标准</strong>都写在任务里，而不是只给一句话。</p>
+<h3>第二步：Agent 自主执行并汇报</h3>
+<p>Agent 会读代码、定位、改、跑测试，最后给你一个改动摘要：</p>
+<pre><code>✅ 已完成
+- 在 service/cache.ts 新增 Redis 缓存封装
+- getUser 改为 先查缓存 → 未命中查库 → 回填缓存
+- updateUser 中同步删除对应 key
+- 热点 ID 加了单飞锁(解决击穿)
+- 测试: 8/8 通过, 耗时从 84ms 提到 6ms
+⚠️ 注意
+- 缓存 key 格式用了 user:{id}, 建议确认命名规范
+- updateUser 的失效逻辑依赖事务成功后才执行
+</code></pre>
+<p>看到没——Agent 不仅完成了任务，还主动标出了<strong>它自己觉得值得你复核的两个点</strong>。这就是"好的 Agent 协作"：它把你当成需要汇报的老板，而不是当成可以糊弄过去的人。</p>
+<h3>第三步：你复核，而不是信任</h3>
+<p>你快速过一遍实际改动，重点看 Agent 列的 ⚠️ 部分，自己补一轮边界测试，然后才合并。<strong>信任，但要验证。</strong></p>
+<hr />
+<h2>未来半年值得关注的方向</h2>
+<p>作为收尾，我也给你几个我觉得值得盯的方向，帮助你提前布局：</p>
+<h3>端侧模型 + 本地 Agent</h3>
+<p>随着模型越来越小、越来越强，<strong>"代码不出笔记本"</strong>会成为现实。隐私敏感、离线场景的项目会越来越依赖本地模型。学会在本地跑 agent、调优小模型，会是个加分项。</p>
+<h3>多智能体编排的工程化</h3>
+<p>从"一个 Agent 干到底"到"规划者/编码者/审查者协作"是确定的方向。<strong>懂得如何设计 agent 之间的分工、交接、冲突仲裁</strong>，会成为新的高阶技能。</p>
+<h3>AI 与测试、运维、安全的深度融合</h3>
+<p>AI 写代码只是第一步，<strong>AI 写测试、AI 做 Code Review、AI 发现安全漏洞、AI 排查线上故障</strong>正在快速成熟。能把这些环节串成自动化流水线的团队，会获得指数级效率提升。</p>
+<h3>人机协作标准的建立</h3>
+<p>现在每家公司的"AI 使用规范"都是各搞各的。未来一定会沉淀出行之有效的<strong>协作流程、质量门槛、责任划分标准</strong>。提前参与制定的人，会掌握定义权。</p>
+<hr />
+<h2>结语：别怕被替代，怕的是不进化</h2>
+<p>2026 年的 AI 编程工具，比我 2024 年第一次用 Copilot 时强了不止一个数量级。它确实在做越来越多"看起来像程序员"的事情。</p>
+<p>但请记住这三点：</p>
+<ol>
+<li><strong>AI 消除的是重复劳动，不是创造价值。</strong> 有价值的部分——定义问题、做决策、扛责任——依然牢牢在人类手里。</li>
+<li><strong>工具越强，会用工具的人越值钱。</strong> 这不是鸡汤，是过去每次技术革命的铁律。</li>
+<li><strong>你的护城河是领域理解 + 工程判断 + 责任担当。</strong> 这些东西 AI 通用模型短期学不来，长期也最难被复制。</li>
+</ol>
+<p>所以，与其焦虑"程序员会不会失业"，不如问自己一个更实际的问题：<strong>"我今天有没有比昨天更擅长驾驭这套工具？"</strong> 答案如果是肯定的，那你根本不用担心失业——你正在变得更贵。</p>
+<p>AI 是你的加速器，不是你的掘墓人。前提是——<strong>你得学会骑它，而不是被它拖走。</strong></p>
+      </article>
+    </div>
+  </main>
+
+  <!-- Related Posts / Navigation -->
+  <section class="section" style="padding-top: 0;">
+    <div class="container container-narrow">
+      <hr style="border: none; border-top: 1px solid var(--color-border); margin: var(--space-3xl) 0;">
+
+      <div class="blog-topics" style="margin-bottom: var(--space-xl);">
+        <span class="topic-label">读完之后:</span>
+        <a href="../index.html" class="topic-tag">返回博客列表</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <p class="footer-signature">写代码,做产品,也认真生活。</p>
+      <div class="footer-social">
+        <a href="https://github.com/zzdbilly" class="footer-social-link" target="_blank" rel="noopener" aria-label="GitHub">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+        </a>
+        <a href="../../rss.xml" class="footer-social-link" aria-label="RSS">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+      </div>
+      <div class="footer-links">
+        <a href="../../index.html" class="footer-link">首页</a>
+        <a href="../../projects/index.html" class="footer-link">项目</a>
+        <a href="../../about/index.html" class="footer-link">关于</a>
+      </div>
+      <p class="footer-copyright">
+        &copy; 2026 张小猛
+      </p>
+    </div>
+  </footer>
+
+
+  <script defer src="../../assets/js/related-posts.js"></script>
+  <script defer src="../../assets/js/main.js"></script>
+  <script defer src="../../assets/js/article.js"></script>
+  <script defer src="../../assets/js/share.js"></script>
+  <script defer src="../../assets/js/back-to-top.js"></script>
+  <!-- Back to Top & Reading Progress -->
+  <button class="back-to-top" id="backToTop" aria-label="回到顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
+  <div class="reading-progress" id="readingProgress"></div>
+
+  <!-- Post Sidebar Info（左侧） -->
+  <div class="post-sidebar-info" id="postSidebar">
+    <div class="post-info-card">
+      <div class="post-info-section">
+        <div class="post-info-label">作者</div>
+        <div class="post-info-author">
+          <div class="post-info-avatar">小</div>
+          <div>
+            <div class="post-info-author-name">张小猛</div>
+            <div class="post-info-author-desc">写代码，做产品</div>
+          </div>
+        </div>
+      </div>
+      <div class="post-info-section">
+        <div class="post-info-label">文章信息</div>
+        <div class="post-info-stat"><span class="post-info-stat-label">📅 发布日期</span><span class="post-info-stat-value">2026-08-12</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label">⏱️ 阅读时间</span><span class="post-info-stat-value">5 min read</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label">📝 文章字数</span><span class="post-info-stat-value">3589 字</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label">📊 章节数</span><span class="post-info-stat-value">8 节 · 23 子节</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label">💻 代码块</span><span class="post-info-stat-value">7 段</span></div>
+      </div>
+      <div class="post-info-section" id="postSidebarTags">
+        <div class="post-info-label">标签</div>
+        <div class="post-info-links">
+          <a href="../../blog/index.html?tag=AI" class="post-info-link"># AI</a>
+          <a href="../../blog/index.html?tag=前端" class="post-info-link"># 前端</a>
+          <a href="../../blog/index.html?tag=开发" class="post-info-link"># 开发</a>
+          <a href="../../blog/index.html?tag=Agent" class="post-info-link"># Agent</a>
+          <a href="../../blog/index.html?tag=编程助手" class="post-info-link"># 编程助手</a>
+          <a href="../../blog/index.html?tag=效率" class="post-info-link"># 效率</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Post TOC -->
+  <div class="post-toc-container" id="postToc">
+    <nav class="post-toc">
+      <div class="post-toc-title">目录</div>
+      <ul class="post-toc-list" id="tocList">
+      </ul>
+    </nav>
+  </div>
+<script defer src="../../assets/js/particles.js"></script>
+
+  <!-- Comment System -->
+  <script src="../../workers/comment-system/comment-widget.js" defer></script>
+
+  <!-- highlight.js for code syntax highlighting -->
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // 只对没有 codehilite 的代码块应用 highlight.js
+      document.querySelectorAll('pre code').forEach(function(block) {
+        // 跳过已经有 Pygments 高亮的块
+        if (!block.closest('.codehilite') && !block.classList.contains('hljs')) {
+          hljs.highlightElement(block);
+        }
+      });
+    });
+  </script>
+
+  <!-- Cloudflare Web Analytics -->
+  <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "29e7cff6f37448989538e2165cb79187"}'></script>
+</body>
+</html>

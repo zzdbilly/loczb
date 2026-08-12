@@ -4,6 +4,7 @@
 
 // Article index with tags
 const ARTICLE_INDEX = [
+  { slug: "2026-年了ai-编程助手到底能帮你干多少活", tags: ["AI", "前端", "开发", "Agent", "编程助手", "效率"], title: "2026 年了，AI 编程助手到底能帮你干多少活？" },
   { slug: "300-万能躺平吗", tags: ["思考", "理财", "躺平", "FIRE", "财务自由"], title: "300 万能躺平吗" },
   { slug: "如何好好工作从看起来很忙到真正产出", tags: ["工作法", "效率", "深度工作", "个人成长"], title: "如何好好工作：从看起来很忙到真正产出" },
   { slug: "kotlin-coroutines-并发实战从入门到优雅的并发编程", tags: ["Kotlin", "协程", "并发", "Android"], title: "Kotlin Coroutines 并发实战：从入门到优雅的并发编程" },

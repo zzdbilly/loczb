@@ -7,6 +7,14 @@
     <language>zh-CN</language>
     <atom:link href="https://709527.xyz/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>2026 年了，AI 编程助手到底能帮你干多少活？</title>
+      <link>https://709527.xyz/blog/posts/2026-年了ai-编程助手到底能帮你干多少活.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/2026-年了ai-编程助手到底能帮你干多少活.html</guid>
+      <description>结合当前 Agent 编程趋势，聊聊 AI 助手能做/不能做/边界三层认知、五种实战协作心法，以及开发者如何重新定位自己</description>
+      <category>开发</category>
+      <pubDate>Wed, 12 Aug 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
       <title>300 万能躺平吗</title>
       <link>https://709527.xyz/blog/posts/300-万能躺平吗.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/300-万能躺平吗.html</guid>
@@ -157,14 +165,6 @@
       <description>从厨房到居家，从时间管理到数字生活，分享一套经过实践验证的生活小窍门，帮你少踩坑、少浪费时间。</description>
       <category>思考</category>
       <pubDate>Mon, 06 Jul 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>Gradle 构建加速全攻略：从 5 分钟到 30 秒</title>
-      <link>https://709527.xyz/blog/posts/gradle-构建加速全攻略从-5-分钟到-30-秒.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/gradle-构建加速全攻略从-5-分钟到-30-秒.html</guid>
-      <description>从 Profile 找到瓶颈到 Configuration Cache，一步步把 Android 项目构建从 5 分钟优化到 30 秒的完整方案</description>
-      <category>Android</category>
-      <pubDate>Sun, 05 Jul 2026 00:00:00 +0800</pubDate>
     </item>
   </channel>
 </rss>

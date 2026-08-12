@@ -444,30 +444,50 @@
       
       <div class="blog-grid">
         <!-- 代表文章大卡 -->
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <article class="blog-card-featured animate-on-scroll" id="home-featured-post" style="display: block;">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <article class="blog-card-featured animate-on-scroll" id="home-featured-post" style="display: block;">
           <div class="blog-card-header">
             <div class="blog-card-meta">
+              <span class="blog-date">2026-08-12</span>
+              <span>·</span>
+              <span class="blog-read-time">5 min</span>
+            </div>
+            <span class="blog-list-tag">开发</span>
+          </div>
+          <h3 class="blog-card-title">
+            <a href="blog/posts/2026-年了ai-编程助手到底能帮你干多少活.html">2026 年了，AI 编程助手到底能帮你干多少活？</a>
+          </h3>
+          <p class="blog-card-excerpt">结合当前 Agent 编程趋势，聊聊 AI 助手能做/不能做/边界三层认知、五种实战协作心法，以及开发者如何重新定位自己...</p>
+          <div class="blog-card-tags">
+            <span class="tech-tag">AI</span>
+            <span class="tech-tag">前端</span>
+            <span class="tech-tag">开发</span>
+            <span class="tech-tag">Agent</span>
+            <span class="tech-tag">编程助手</span>
+            <span class="tech-tag">效率</span>
+          </div>
+        </article>
+        
+        <!-- 最新文章列表 -->
+                <div class="blog-list">
+        <article class="blog-mini-card animate-on-scroll" data-category="思考" data-page="1">
+          <div class="blog-mini-card-header">
+            <div class="blog-list-meta">
               <span class="blog-date">2026-08-09</span>
               <span>·</span>
               <span class="blog-read-time">5 min</span>
             </div>
             <span class="blog-list-tag">思考</span>
           </div>
-          <h3 class="blog-card-title">
+          <h3 class="blog-mini-card-title">
             <a href="blog/posts/300-万能躺平吗.html">300 万能躺平吗</a>
           </h3>
-          <p class="blog-card-excerpt">一个看似数字、实则是认知与心态的问题：300 万到底够不够躺平？聊透 4% 法则、通胀与黑天鹅、城市差异、心态准备和务实替代路径。...</p>
-          <div class="blog-card-tags">
+          <p class="blog-mini-card-excerpt">一个看似数字、实则是认知与心态的问题：300 万到底够不够躺平？聊透 4% 法则、通胀与黑天鹅、城市差异、心态准备和务实替代路径。</p>
+          <div class="blog-mini-card-tags">
             <span class="tech-tag">思考</span>
             <span class="tech-tag">理财</span>
             <span class="tech-tag">躺平</span>
-            <span class="tech-tag">FIRE</span>
-            <span class="tech-tag">财务自由</span>
           </div>
         </article>
-        
-        <!-- 最新文章列表 -->
-                <div class="blog-list">
         <article class="blog-mini-card animate-on-scroll" data-category="思考" data-page="1">
           <div class="blog-mini-card-header">
             <div class="blog-list-meta">
@@ -485,25 +505,6 @@
             <span class="tech-tag">工作法</span>
             <span class="tech-tag">效率</span>
             <span class="tech-tag">深度工作</span>
-          </div>
-        </article>
-        <article class="blog-mini-card animate-on-scroll" data-category="Kotlin" data-page="1">
-          <div class="blog-mini-card-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-08-07</span>
-              <span>·</span>
-              <span class="blog-read-time">5 min</span>
-            </div>
-            <span class="blog-list-tag">Kotlin</span>
-          </div>
-          <h3 class="blog-mini-card-title">
-            <a href="blog/posts/kotlin-coroutines-并发实战从入门到优雅的并发编程.html">Kotlin Coroutines 并发实战：从入门到优雅的并发编程</a>
-          </h3>
-          <p class="blog-mini-card-excerpt">深入掌握 Kotlin 协程：协程与线程的区别、Scope、Dispatcher、结构化并发、取消协作、异常处理与并发控制实战</p>
-          <div class="blog-mini-card-tags">
-            <span class="tech-tag">Kotlin</span>
-            <span class="tech-tag">协程</span>
-            <span class="tech-tag">并发</span>
           </div>
         </article>
         </div>
@@ -598,6 +599,15 @@
     // 首页随机选择代表文章
     const posts = [
       {
+        url: 'blog/posts/2026-年了ai-编程助手到底能帮你干多少活.html',
+        title: '2026 年了，AI 编程助手到底能帮你干多少活？',
+        date: '2026-08-12',
+        readTime: '5 min',
+        category: '开发',
+        category2: '开发',
+        desc: '结合当前 Agent 编程趋势，聊聊 AI 助手能做/不能做/边界三层认知、五种实战协作心法，以及开发者如何重新定位自己'
+      },
+      {
         url: 'blog/posts/300-万能躺平吗.html',
         title: '300 万能躺平吗',
         date: '2026-08-09',
@@ -677,15 +687,6 @@
         category: '数据库',
         category2: '数据库',
         desc: 'PG 18 带来了哪些实质性改进？增量物化视图、并行查询增强、OAuth 认证……本文用一个完整的升级记录，带你从准备工作到新特性实战，涵盖升级检查清单和常见问题排查。'
-      },
-      {
-        url: 'blog/posts/ai-编码代理实战从-copilot-到-agent.html',
-        title: 'AI 编码代理实战：从 Copilot 到 Agent',
-        date: '2026-07-19',
-        readTime: '5 min',
-        category: '开发',
-        category2: '开发',
-        desc: '从自动补全到自主编码，2026 年的 AI 编码工具正在经历一次质变。这篇文章用真实场景复盘 Claude Code、Cursor Agent、MCP 协议的实际用法，以及开发者应该怎样调整工作流。'
       }
     ];
     
