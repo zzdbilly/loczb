@@ -832,7 +832,7 @@ Box(
       <div class="post-info-section" id="postSidebarTags">
         <div class="post-info-label">标签</div>
         <div class="post-info-links">
-          <a href="../../blog/index.html?tag=Jetpack Compose" class="post-info-link"># Jetpack Compose</a>
+          <a href="../../blog/index.html?tag=JetpackCompose" class="post-info-link"># Jetpack Compose</a>
           <a href="../../blog/index.html?tag=Android" class="post-info-link"># Android</a>
           <a href="../../blog/index.html?tag=性能优化" class="post-info-link"># 性能优化</a>
           <a href="../../blog/index.html?tag=Compose" class="post-info-link"># Compose</a>
@@ -856,16 +856,15 @@ Box(
   <!-- Comment System -->
   <script src="../../workers/comment-system/comment-widget.js" defer></script>
 
-  <!-- highlight.js for code syntax highlighting -->
-  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <!-- highlight.js 代码语法高亮（本地完整构建，无外部依赖） -->
+  <script defer src="../../assets/vendor/highlight/highlight.min.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       // 只对没有 codehilite 的代码块应用 highlight.js
       document.querySelectorAll('pre code').forEach(function(block) {
         // 跳过已经有 Pygments 高亮的块
-        if (!block.closest('.codehilite') && !block.classList.contains('hljs')) {
-          hljs.highlightElement(block);
-        }
+        if (block.closest('.codehilite') || block.classList.contains('hljs')) return;
+        try { hljs.highlightElement(block); } catch (e) {}
       });
     });
   </script>
