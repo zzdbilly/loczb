@@ -444,31 +444,47 @@
       
       <div class="blog-grid">
         <!-- 代表文章大卡 -->
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <article class="blog-card-featured animate-on-scroll" id="home-featured-post" style="display: block;">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <article class="blog-card-featured animate-on-scroll" id="home-featured-post" style="display: block;">
           <div class="blog-card-header">
             <div class="blog-card-meta">
-              <span class="blog-date">2026-08-12</span>
+              <span class="blog-date">2026-08-14</span>
               <span>·</span>
               <span class="blog-read-time">5 min</span>
             </div>
-            <span class="blog-list-tag">开发</span>
+            <span class="blog-list-tag">思考</span>
           </div>
           <h3 class="blog-card-title">
-            <a href="blog/posts/2026-年了ai-编程助手到底能帮你干多少活.html">2026 年了，AI 编程助手到底能帮你干多少活？</a>
+            <a href="blog/posts/程序员的周五晚上如何有意义地度过.html">程序员的周五晚上，如何有意义地度过</a>
           </h3>
-          <p class="blog-card-excerpt">结合当前 Agent 编程趋势，聊聊 AI 助手能做/不能做/边界三层认知、五种实战协作心法，以及开发者如何重新定位自己...</p>
+          <p class="blog-card-excerpt">周五晚不该是工作的延续，也不该是报复性熬夜。给每一个辛苦了一周的程序员一份可落地的框架：告别、转换、收尾，三件小事让周末真正休息过来。...</p>
           <div class="blog-card-tags">
-            <span class="tech-tag">AI</span>
-            <span class="tech-tag">前端</span>
-            <span class="tech-tag">开发</span>
-            <span class="tech-tag">Agent</span>
-            <span class="tech-tag">编程助手</span>
+            <span class="tech-tag">思考</span>
+            <span class="tech-tag">生活方式</span>
             <span class="tech-tag">效率</span>
           </div>
         </article>
         
         <!-- 最新文章列表 -->
                 <div class="blog-list">
+        <article class="blog-mini-card animate-on-scroll" data-category="开发" data-page="1">
+          <div class="blog-mini-card-header">
+            <div class="blog-list-meta">
+              <span class="blog-date">2026-08-12</span>
+              <span>·</span>
+              <span class="blog-read-time">5 min</span>
+            </div>
+            <span class="blog-list-tag">开发</span>
+          </div>
+          <h3 class="blog-mini-card-title">
+            <a href="blog/posts/2026-年了ai-编程助手到底能帮你干多少活.html">2026 年了，AI 编程助手到底能帮你干多少活？</a>
+          </h3>
+          <p class="blog-mini-card-excerpt">结合当前 Agent 编程趋势，聊聊 AI 助手能做/不能做/边界三层认知、五种实战协作心法，以及开发者如何重新定位自己</p>
+          <div class="blog-mini-card-tags">
+            <span class="tech-tag">AI</span>
+            <span class="tech-tag">前端</span>
+            <span class="tech-tag">开发</span>
+          </div>
+        </article>
         <article class="blog-mini-card animate-on-scroll" data-category="思考" data-page="1">
           <div class="blog-mini-card-header">
             <div class="blog-list-meta">
@@ -486,25 +502,6 @@
             <span class="tech-tag">思考</span>
             <span class="tech-tag">理财</span>
             <span class="tech-tag">躺平</span>
-          </div>
-        </article>
-        <article class="blog-mini-card animate-on-scroll" data-category="思考" data-page="1">
-          <div class="blog-mini-card-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-08-08</span>
-              <span>·</span>
-              <span class="blog-read-time">5 min</span>
-            </div>
-            <span class="blog-list-tag">思考</span>
-          </div>
-          <h3 class="blog-mini-card-title">
-            <a href="blog/posts/如何好好工作从看起来很忙到真正产出.html">如何好好工作：从看起来很忙到真正产出</a>
-          </h3>
-          <p class="blog-mini-card-excerpt">一套经过实践检验的工作方法论：识别重要的事、用系统代替意志力、管理注意力、用健康托底，以及一张可执行的每日清单。</p>
-          <div class="blog-mini-card-tags">
-            <span class="tech-tag">工作法</span>
-            <span class="tech-tag">效率</span>
-            <span class="tech-tag">深度工作</span>
           </div>
         </article>
         </div>
@@ -599,6 +596,15 @@
     // 首页随机选择代表文章
     const posts = [
       {
+        url: 'blog/posts/程序员的周五晚上如何有意义地度过.html',
+        title: '程序员的周五晚上，如何有意义地度过',
+        date: '2026-08-14',
+        readTime: '5 min',
+        category: '思考',
+        category2: '思考',
+        desc: '周五晚不该是工作的延续，也不该是报复性熬夜。给每一个辛苦了一周的程序员一份可落地的框架：告别、转换、收尾，三件小事让周末真正休息过来。'
+      },
+      {
         url: 'blog/posts/2026-年了ai-编程助手到底能帮你干多少活.html',
         title: '2026 年了，AI 编程助手到底能帮你干多少活？',
         date: '2026-08-12',
@@ -678,15 +684,6 @@
         category: 'AI',
         category2: 'AI',
         desc: '从 Function Calling、MCP 到 Multi-Agent，梳理 AI Agent 架构的进化路径，以及当前面临的挑战和未来方向。'
-      },
-      {
-        url: 'blog/posts/postgresql-从-17-到-18生产环境升级实战.html',
-        title: 'PostgreSQL 从 17 到 18：生产环境升级实战',
-        date: '2026-07-19',
-        readTime: '5 min',
-        category: '数据库',
-        category2: '数据库',
-        desc: 'PG 18 带来了哪些实质性改进？增量物化视图、并行查询增强、OAuth 认证……本文用一个完整的升级记录，带你从准备工作到新特性实战，涵盖升级检查清单和常见问题排查。'
       }
     ];
     

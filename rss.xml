@@ -7,6 +7,14 @@
     <language>zh-CN</language>
     <atom:link href="https://709527.xyz/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>程序员的周五晚上，如何有意义地度过</title>
+      <link>https://709527.xyz/blog/posts/程序员的周五晚上如何有意义地度过.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/程序员的周五晚上如何有意义地度过.html</guid>
+      <description>周五晚不该是工作的延续，也不该是报复性熬夜。给每一个辛苦了一周的程序员一份可落地的框架：告别、转换、收尾，三件小事让周末真正休息过来。</description>
+      <category>思考</category>
+      <pubDate>Fri, 14 Aug 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
       <title>2026 年了，AI 编程助手到底能帮你干多少活？</title>
       <link>https://709527.xyz/blog/posts/2026-年了ai-编程助手到底能帮你干多少活.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/2026-年了ai-编程助手到底能帮你干多少活.html</guid>
@@ -156,14 +164,6 @@
       <guid isPermaLink="true">https://709527.xyz/blog/posts/当-ai-编程-agent-有了眼睛safari-mcp-server-深度解读.html</guid>
       <description>2026年7月，Apple 发布了 Safari MCP Server，让 AI 编程 Agent 可以直接连接浏览器调试页面。本文深入解读其原理、安装配置、四个实战场景，以及与 Chrome MCP 的全方位对比。</description>
       <category>前端</category>
-      <pubDate>Mon, 06 Jul 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>这些年我攒下来的生活小技巧</title>
-      <link>https://709527.xyz/blog/posts/这些年我攒下来的生活小技巧.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/这些年我攒下来的生活小技巧.html</guid>
-      <description>从厨房到居家，从时间管理到数字生活，分享一套经过实践验证的生活小窍门，帮你少踩坑、少浪费时间。</description>
-      <category>思考</category>
       <pubDate>Mon, 06 Jul 2026 00:00:00 +0800</pubDate>
     </item>
   </channel>
