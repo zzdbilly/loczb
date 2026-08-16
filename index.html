@@ -419,28 +419,46 @@
       
       <div class="blog-grid">
         <!-- 代表文章大卡 -->
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <article class="blog-card-featured animate-on-scroll" id="home-featured-post" style="display: block;">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <article class="blog-card-featured animate-on-scroll" id="home-featured-post" style="display: block;">
           <div class="blog-card-header">
             <div class="blog-card-meta">
-              <span class="blog-date">2026-08-14</span>
+              <span class="blog-date">2026-08-16</span>
               <span>·</span>
               <span class="blog-read-time">5 min</span>
             </div>
             <span class="blog-list-tag">思考</span>
           </div>
           <h3 class="blog-card-title">
-            <a href="blog/posts/程序员的周五晚上如何有意义地度过.html">程序员的周五晚上，如何有意义地度过</a>
+            <a href="blog/posts/周末如何度过才有意义.html">周末如何度过才有意义</a>
           </h3>
-          <p class="blog-card-excerpt">周五晚不该是工作的延续，也不该是报复性熬夜。给每一个辛苦了一周的程序员一份可落地的框架：告别、转换、收尾，三件小事让周末真正休息过来。...</p>
+          <p class="blog-card-excerpt">恢复与创造并重，让周末不再越休越累——从识别消耗型休息、主动回血，到用小小创造留下属于你的痕迹。...</p>
           <div class="blog-card-tags">
             <span class="tech-tag">思考</span>
             <span class="tech-tag">生活方式</span>
-            <span class="tech-tag">效率</span>
           </div>
         </article>
         
         <!-- 最新文章列表 -->
                 <div class="blog-list">
+        <article class="blog-mini-card animate-on-scroll" data-category="思考" data-page="1">
+          <div class="blog-mini-card-header">
+            <div class="blog-list-meta">
+              <span class="blog-date">2026-08-14</span>
+              <span>·</span>
+              <span class="blog-read-time">5 min</span>
+            </div>
+            <span class="blog-list-tag">思考</span>
+          </div>
+          <h3 class="blog-mini-card-title">
+            <a href="blog/posts/程序员的周五晚上如何有意义地度过.html">程序员的周五晚上，如何有意义地度过</a>
+          </h3>
+          <p class="blog-mini-card-excerpt">周五晚不该是工作的延续，也不该是报复性熬夜。给每一个辛苦了一周的程序员一份可落地的框架：告别、转换、收尾，三件小事让周末真正休息过来。</p>
+          <div class="blog-mini-card-tags">
+            <span class="tech-tag">思考</span>
+            <span class="tech-tag">生活方式</span>
+            <span class="tech-tag">效率</span>
+          </div>
+        </article>
         <article class="blog-mini-card animate-on-scroll" data-category="开发" data-page="1">
           <div class="blog-mini-card-header">
             <div class="blog-list-meta">
@@ -458,25 +476,6 @@
             <span class="tech-tag">AI</span>
             <span class="tech-tag">前端</span>
             <span class="tech-tag">开发</span>
-          </div>
-        </article>
-        <article class="blog-mini-card animate-on-scroll" data-category="思考" data-page="1">
-          <div class="blog-mini-card-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-08-09</span>
-              <span>·</span>
-              <span class="blog-read-time">5 min</span>
-            </div>
-            <span class="blog-list-tag">思考</span>
-          </div>
-          <h3 class="blog-mini-card-title">
-            <a href="blog/posts/300-万能躺平吗.html">300 万能躺平吗</a>
-          </h3>
-          <p class="blog-mini-card-excerpt">一个看似数字、实则是认知与心态的问题：300 万到底够不够躺平？聊透 4% 法则、通胀与黑天鹅、城市差异、心态准备和务实替代路径。</p>
-          <div class="blog-mini-card-tags">
-            <span class="tech-tag">思考</span>
-            <span class="tech-tag">理财</span>
-            <span class="tech-tag">躺平</span>
           </div>
         </article>
         </div>
@@ -571,6 +570,15 @@
     // 首页随机选择代表文章
     const posts = [
       {
+        url: 'blog/posts/周末如何度过才有意义.html',
+        title: '周末如何度过才有意义',
+        date: '2026-08-16',
+        readTime: '5 min',
+        category: '思考',
+        category2: '思考',
+        desc: '恢复与创造并重，让周末不再越休越累——从识别消耗型休息、主动回血，到用小小创造留下属于你的痕迹。'
+      },
+      {
         url: 'blog/posts/程序员的周五晚上如何有意义地度过.html',
         title: '程序员的周五晚上，如何有意义地度过',
         date: '2026-08-14',
@@ -650,15 +658,6 @@
         category: '前端',
         category2: '前端',
         desc: '子代理并行调度是 AI 辅助开发的高效模式。本文分享一套经过实战验证的调度策略，涵盖任务拆分、并行执行、结果汇总和验证闭环。'
-      },
-      {
-        url: 'blog/posts/agentic-ai-架构演进从-chatbot-到自主-agent.html',
-        title: 'Agentic AI 架构演进：从 Chatbot 到自主 Agent',
-        date: '2026-07-22',
-        readTime: '5 min',
-        category: 'AI',
-        category2: 'AI',
-        desc: '从 Function Calling、MCP 到 Multi-Agent，梳理 AI Agent 架构的进化路径，以及当前面临的挑战和未来方向。'
       }
     ];
     

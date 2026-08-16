@@ -7,6 +7,14 @@
     <language>zh-CN</language>
     <atom:link href="https://709527.xyz/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>周末如何度过才有意义</title>
+      <link>https://709527.xyz/blog/posts/周末如何度过才有意义.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/周末如何度过才有意义.html</guid>
+      <description>恢复与创造并重，让周末不再越休越累——从识别消耗型休息、主动回血，到用小小创造留下属于你的痕迹。</description>
+      <category>思考</category>
+      <pubDate>Sun, 16 Aug 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
       <title>程序员的周五晚上，如何有意义地度过</title>
       <link>https://709527.xyz/blog/posts/程序员的周五晚上如何有意义地度过.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/程序员的周五晚上如何有意义地度过.html</guid>
@@ -156,14 +164,6 @@
       <guid isPermaLink="true">https://709527.xyz/blog/posts/打工人理财第一课从看懂钱去哪了到让钱自己长大.html</guid>
       <description>面向程序员的实用理财入门指南——四个账户法、极简记账、常见金融坑、可执行的起步计划。不折腾、不焦虑，让钱安静地替你打工。</description>
       <category>思考</category>
-      <pubDate>Mon, 06 Jul 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>当 AI 编程 Agent 有了&quot;眼睛&quot;：Safari MCP Server 深度解读</title>
-      <link>https://709527.xyz/blog/posts/当-ai-编程-agent-有了眼睛safari-mcp-server-深度解读.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/当-ai-编程-agent-有了眼睛safari-mcp-server-深度解读.html</guid>
-      <description>2026年7月，Apple 发布了 Safari MCP Server，让 AI 编程 Agent 可以直接连接浏览器调试页面。本文深入解读其原理、安装配置、四个实战场景，以及与 Chrome MCP 的全方位对比。</description>
-      <category>前端</category>
       <pubDate>Mon, 06 Jul 2026 00:00:00 +0800</pubDate>
     </item>
   </channel>
