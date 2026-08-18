@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>从 OpenClaw 到 Hermes：AI Agent 工作区迁移完整记录 | 张小猛 - loczb</title>
+    <meta name="description" content="一次真实的 AI Agent 平台迁移复盘：身份、记忆、技能、项目与定时任务的全量迁移方向、踩坑与验证方法">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="从 OpenClaw 到 Hermes：AI Agent 工作区迁移完整记录 | 张小猛 - loczb">
+    <meta property="og:description" content="一次真实的 AI Agent 平台迁移复盘：身份、记忆、技能、项目与定时任务的全量迁移方向、踩坑与验证方法">
+    <meta property="og:url" content="https://709527.xyz/blog/posts/从-openclaw-到-hermesai-agent-工作区迁移完整记录.html">
+    <meta property="og:type" content="article">
+        <meta property="og:image" content="../../assets/images/og-image.png">
+    <meta property="og:site_name" content="loczb">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="从 OpenClaw 到 Hermes：AI Agent 工作区迁移完整记录 | 张小猛 - loczb">
+    <meta name="twitter:description" content="一次真实的 AI Agent 平台迁移复盘：身份、记忆、技能、项目与定时任务的全量迁移方向、踩坑与验证方法">
+
+
+        <script type="application/ld+json">
+{
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "从 OpenClaw 到 Hermes：AI Agent 工作区迁移完整记录",
+      "description": "一次真实的 AI Agent 平台迁移复盘：身份、记忆、技能、项目与定时任务的全量迁移方向、踩坑与验证方法",
+      "image": "https://709527.xyz/assets/images/og-image.png",
+      "author": {
+            "@type": "Person",
+            "name": "张小猛",
+            "url": "https://709527.xyz/about/"
+      },
+      "publisher": {
+            "@type": "Organization",
+            "name": "loczb",
+            "logo": {
+                  "@type": "ImageObject",
+                  "url": "https://709527.xyz/assets/images/favicon.svg"
+            }
+      },
+      "datePublished": "2026-08-18 13:40:41T00:00:00+08:00",
+      "dateModified": "2026-08-18 13:40:41T00:00:00+08:00",
+      "url": "https://709527.xyz/blog/posts/从-openclaw-到-hermesai-agent-工作区迁移完整记录.html",
+      "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://709527.xyz/blog/posts/从-openclaw-到-hermesai-agent-工作区迁移完整记录.html"
+      },
+      "keywords": "OpenClaw, Hermes, AI Agent, 迁移, DevOps",
+      "articleSection": "DevOps",
+      "timeRequired": "PT12M",
+      "inLanguage": "zh-CN"
+}
+    </script>
+
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&family=Noto+Sans+SC:wght@500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500&display=swap" media="print" onload="this.media='all'">
+    <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
+    <link rel="alternate icon" href="../../assets/images/favicon.ico">
+    <link rel="canonical" href="https://709527.xyz/blog/posts/从-openclaw-到-hermesai-agent-工作区迁移完整记录.html">
+</head>
+<body>
+  <!-- Loading -->
+  <div class="loading">
+    <div class="loading-spinner"></div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../../index.html" class="nav-logo">
+        loc<span>zb</span>
+      </a>
+      <button class="nav-toggle" aria-label="打开菜单" aria-expanded="false" aria-controls="nav-links-menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <div class="nav-overlay"></div>
+      <ul class="nav-links" id="nav-links-menu">
+        <li><a href="../../index.html" class="nav-link">首页</a></li>
+        <li><a href="../../projects/index.html" class="nav-link">项目</a></li>
+        <li><a href="../index.html" class="nav-link active">博客</a></li>
+        <li><a href="../../about/index.html" class="nav-link">关于</a></li>
+      </ul>
+      <button class="theme-toggle" aria-label="切换主题" title="切换亮/暗模式">
+        <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+        <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+      </button>
+    </div>
+  </nav>
+  <!-- Particle Canvas Background -->
+  <canvas id="particle-canvas" class="particle-canvas"></canvas>
+
+  <div class="scroll-progress"></div>
+
+  <main class="section" style="padding-bottom: 0; padding-top: var(--space-4xl);">
+    <div class="container container-narrow">
+      <a href="../index.html" class="back-link">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        返回博客列表
+      </a>
+
+      <article class="post-content">
+        <h1>从 OpenClaw 到 Hermes：AI Agent 工作区迁移完整记录</h1>
+
+        <div class="post-meta">
+          <span>📅 2026-08-18 13:40:41</span>
+          <span>⏱️ 12 min read</span>
+          <span>👤 张小猛</span>
+        </div>
+
+        <div class="post-tags">
+          <span class="tag">OpenClaw</span>
+          <span class="tag">Hermes</span>
+          <span class="tag">AI Agent</span>
+          <span class="tag">迁移</span>
+          <span class="tag">DevOps</span>
+        </div>
+
+        <h2>写在前面</h2>
+<p>2026 年年中，我做了一个拖延了很久的决定：把跑了大半年的 AI Agent 工作区，从 OpenClaw 整体迁移到 Hermes Agent。</p>
+<p>这篇文章是这次迁移的完整记录。我尽量把每个环节——为什么迁、迁了什么、踩了什么坑、最终怎么验证——都写清楚，希望能给同样在纠结"要不要换平台"的朋友一些参考。</p>
+<blockquote>
+<p>说明：本文是个人技术复盘，不涉及具体账号、密钥、项目名等敏感信息；涉及内部细节的位置均已脱敏，只保留迁移方向和方法论。</p>
+</blockquote>
+<h2>为什么迁移：告别 OpenClaw</h2>
+<h3>背景：我的 AI Agent 工作区</h3>
+<p>过去大半年，我一直靠一个"常驻式"AI Agent 帮我干活：写代码、写博客、做部署、做定期任务。它跑在一台 Linux 服务器上，有自己的身份设定、长期记忆、一套技能（skills）和几个独立 git 仓库。</p>
+<p>这套体系运转得一直不错，我把它称为我的"第二大脑+第三只手"。但它的底座 OpenClaw 渐渐让我不安：</p>
+<ul>
+<li><strong>维护节奏放缓</strong>：上游更新越来越少，社区讨论冷清，感觉像是项目被半放弃了</li>
+<li><strong>功能天花板明显</strong>：我想要的多模型路由、更细的工具权限、更好的会话记忆，它都给不了</li>
+<li><strong>核心机制依赖</strong>：它的一些"魔法"（比如心跳、自动任务）依赖老旧的进程模型，出问题很难排查</li>
+</ul>
+<h3>Hermes 进入视野</h3>
+<p>接触到 Hermes Agent 之后，几个点立刻打动了我：</p>
+<ul>
+<li><strong>多 Profile 设计</strong>：一个实例可以跑多个"人格"（profile），各自有独立的记忆、技能、工作目录——这正好匹配我"一个开发助手+一个系统助手"的分工需求</li>
+<li><strong>原生记忆系统</strong>：记忆作为一等公民，长期记忆自动注入每一轮对话，而不是靠人肉维护 markdown 文件</li>
+<li><strong>技能体系更规范</strong>：SKILL.md 有标准的前端格式（frontmatter + 正文），还能挂载脚本和模板</li>
+<li><strong>工具集丰富且现代</strong>：浏览器自动化、cron 定时任务、子代理委派（subagent）、图像生成，全都在同一个框架里</li>
+</ul>
+<p>程序员的本能告诉我：<strong>长期看，迁移到活跃维护、架构更现代的底座，比抱着快停更的旧平台死磕更划算</strong>。于是决定搬家。</p>
+<h2>迁移前的资产盘点</h2>
+<h3>先搞清楚自己有多少家当</h3>
+<p>迁移第一步不是动手，而是盘点。我拿一张表列了所有"不可再生资源"：</p>
+<table>
+<thead>
+<tr>
+<th>资产类别</th>
+<th>具体内容</th>
+<th>迁移优先级</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>身份与人格</td>
+<td>各助手的性格设定、沟通规范</td>
+<td>P0，不可再生</td>
+</tr>
+<tr>
+<td>长期记忆</td>
+<td>几年来的用户偏好、项目经验、踩坑教训</td>
+<td>P0，不可再生</td>
+</tr>
+<tr>
+<td>技能</td>
+<td>沉淀下来的各类工作流（博客生成、部署、体检）</td>
+<td>P0，可转换</td>
+</tr>
+<tr>
+<td>项目仓库</td>
+<td>好几个独立 git 仓库</td>
+<td>P1，本质不用迁移</td>
+</tr>
+<tr>
+<td>配置文件</td>
+<td>Git / SSH / 包管理器 / 部署相关配置</td>
+<td>P1，环境重配</td>
+</tr>
+<tr>
+<td>历史日志</td>
+<td>每日记忆、会话记录</td>
+<td>P2，只读参考</td>
+</tr>
+</tbody>
+</table>
+<p>用一句话总结盘点结论：<strong>项目代码不用"迁移"，因为它们本来就在独立的 git 仓库里；真正要迁移的是 Agent 的"灵魂"——身份、记忆、技能。</strong></p>
+<h3>迁移策略：增量还是推倒？</h3>
+<p>我考虑过两种策略：</p>
+<p><strong>方案 A：推倒重来</strong>——在新平台重新写身份、记忆、技能，从零开始。
+<strong>方案 B：数据搬家</strong>——把旧平台的标记文件（身份、记忆、日志）备份出来，分析、提炼、再导入新平台。</p>
+<p>方案 A 干净但丢失巨大，方案 B 复杂但保留了沉淀。我最终选了 <strong>B 为主、A 为辅</strong>：</p>
+<ul>
+<li>身份和规范类文件：基本保留，只做格式适配</li>
+<li>记忆：全部备份，但只把"高价值条目"导入新记忆系统，垃圾信息趁机清理</li>
+<li>技能：保留 SKILL.md，按新平台规范检查一遍，过时的直接改</li>
+</ul>
+<p>这其实是一次<strong>借迁移的机会做的减负</strong>——不是把所有历史都搬过去，而是把有价值的搬过去。</p>
+<h2>目录结构的变化：从 workspace 到 profile</h2>
+<h3>迁移前：单工作区</h3>
+<p>OpenClaw 时代，一切业务文件都堆在一个大工作区里：</p>
+<pre><code class="language-text">~/.openclaw/
+├── workspace-xiaoma/          # 主工作区
+│   ├── SOUL.md                # 助手人格
+│   ├── MEMORY.md              # 长期记忆
+│   ├── IDENTITY.md            # 身份定位
+│   ├── TOOLS.md               # 工具配置说明
+│   ├── skills/                # 技能目录
+│   ├── memory/                # 按日期的记忆归档
+│   └── nook/                  # 项目仓库集合
+│       ├── project-a/         # 项目 A（独立 git）
+│       ├── project-b/         # 项目 B（独立 git）
+│       └── project-c/         # 项目 C（独立 git）
+├── config.yaml                # 全局配置
+└── logs/                      # 运行日志
+</code></pre>
+<p>问题显而易见：<strong>一个工作区塞了所有东西</strong>——人格、记忆、技能、项目、配置混在一起。想开第二个助手？几乎只能复制整个目录。</p>
+<h3>迁移后：多 Profile 结构</h3>
+<p>Hermes 用 Profile（配置文件）隔离一切：</p>
+<pre><code class="language-text">~/.hermes/
+├── workspaces/                # 所有工作区
+│   ├── dev/                   # 开发助手工作区
+│   │   ├── project-a/         # 项目 A
+│   │   ├── project-b/         # 项目 B
+│   │   └── project-c/         # 项目 C
+│   └── ops/                   # 系统助手工作区（全新）
+├── profiles/
+│   ├── dev/                   # 开发助手 profile
+│   │   ├── SOUL.md            # 人格
+│   │   ├── skills/            # 该 profile 的技能
+│   │   └── memories/          # 该 profile 的记忆
+│   └── ops/                   # 系统助手 profile
+└── config.yaml                # 全局配置
+</code></pre>
+<p>变化的核心是<strong>关注点分离</strong>：</p>
+<ul>
+<li>工作区（workspaces）只管"业务文件"：项目代码、草稿、产物</li>
+<li>Profile 只管"人格状态"：身份、记忆、技能、配置</li>
+<li>一个实例可以同时挂多个 Profile，各跑各的，互不干扰</li>
+</ul>
+<p>这带来的直接好处是：<strong>我不用再为第二个助手复制一份工作区</strong>，新建 Profile 就行，工作区可以共享（代码仓库只存在一份）。</p>
+<h2>身份文件的迁移：换格式，不换灵魂</h2>
+<h3>人格文件怎么处理</h3>
+<p>旧的助手人格文件长这样（简化版）：</p>
+<pre><code class="language-markdown">## 身份
+- 名字：小马
+- 角色：开发与写作助手
+
+## 核心原则
+- 先理解需求再动手
+- 重要决策先确认
+</code></pre>
+<p>新平台对"人格"的承载方式不太一样——它主要读 Profile 里的 SOUL.md，而且支持在每轮对话中注入记忆。迁移时我做的是：</p>
+<ol>
+<li><strong>保留核心</strong>：名字、角色、沟通风格、价值观，原样保留</li>
+<li><strong>适配格式</strong>：按新平台的 frontmatter / 分节习惯重新组织</li>
+<li><strong>补充运行规范</strong>：把过去在实践中积累的"硬性规范"（比如：长任务一口气干完、临时服务用完必须清理）写进去</li>
+</ol>
+<p>一个很重要的感悟：<strong>人格文件不是给人看的简历，是给 AI 看的运行手册</strong>。迁移时不要只顾着"忠实还原原文"，要把这一年多"怎么跟它协作最顺"的经验也沉淀进去。</p>
+<h3>用户档案的处理</h3>
+<p>用户档案也一样。旧平台里有一份用户的长期观察记录（技术背景、偏好、工作风格），这属于最不该丢的资产。迁移后直接进入新平台的 user 记忆，保证新底座启动的第一天，AI 就知道我是谁、我喜欢怎么干活。</p>
+<h2>记忆系统的迁移：从文件到原生</h2>
+<h3>旧模式：人肉维护 markdown</h3>
+<p>以前我的记忆是这么管的：</p>
+<pre><code class="language-markdown">## 2026-08-15
+- 用户要求：部署改完验证通过后直接 push
+- 教训：临时服务用完必须清理
+- 项目进展：zest 优化完成
+</code></pre>
+<p>每天一个文件，靠约定维护。问题：</p>
+<ul>
+<li><strong>靠人肉记得"今天该归档了"</strong>，经常忘</li>
+<li><strong>检索靠 grep</strong>，想查半年前的决策效率很低</li>
+<li><strong>信息过载</strong>：流水账记了很多，真正重要的反而淹没</li>
+</ul>
+<h3>新模式：原生记忆系统</h3>
+<p>新平台的记忆机制完全不同：</p>
+<ul>
+<li>记忆分 <code>user</code>（用户画像）和 <code>memory</code>（我的笔记）两类</li>
+<li>每次对话开始，相关记忆自动注入上下文，不用手动翻文件</li>
+<li>记忆有容量上限，逼着你"记高价值的，忘低价值的"</li>
+</ul>
+<p>迁移时我做了一次"记忆断舍离"：</p>
+<pre><code class="language-text">迁移前记忆资产（粗略统计）
+├── 每日记忆文件 约 200 个
+├── 长期记忆文件 1 个（很长）
+└── 项目进展记录 1 个
+
+迁移后（提炼之后）
+├── 用户画像     1 条（精简版）
+├── 环境与规范   5 条（配置、Git、部署要点）
+├── 项目记忆     4 条（每个项目一行踩坑重点）
+└── 关键教训     4 条（协作方式、回合完整性等）
+</code></pre>
+<p><strong>数量从几百条压到十几条，但每条都是"高信号"的。</strong> 这其实是一次很好的记忆卫生——旧文件一个没删，全部备份着，随时可查；但注入到新系统的，只有真正影响未来协作的核心事实。</p>
+<blockquote>
+<p>体会：记忆系统迁移的价值不在于"原样搬走"，而在于<strong>借机提炼</strong>。AI 的记忆容量是稀缺资源，装进低价值流水账才是浪费。</p>
+</blockquote>
+<h2>技能系统的迁移：SKILL.md 标准化</h2>
+<h3>旧技能长什么样</h3>
+<p>旧平台的技能是一堆 markdown 文档，命名看心情：</p>
+<pre><code class="language-text">skills/
+├── 写博客的规范.md
+├── 服务器体检.md
+├── deploy-checks.md
+└── backup-steps.txt
+</code></pre>
+<p>有的有结构，有的没有；有的过时了，有的还引用着已经不存在的目录。迁移时检查了一圈，发现<strong>状态漂移相当严重</strong>——很多技能描述的东西跟现实已经对不上了。</p>
+<h3>新标准：统一的 SKILL.md</h3>
+<p>迁移后，所有技能统一成标准格式：</p>
+<pre><code class="language-markdown">---
+name: blog-post-generator
+description: 博客文章生成规范，确保模板结构正确
+---
+
+# 技能说明
+
+## 正确生成方式
+（具体命令）
+
+## 参数说明
+（参数表）
+
+## 生成后验证
+（验证命令）
+
+## 发布流程
+（发布命令）
+
+## 常见错误
+（避坑清单）
+</code></pre>
+<p>统一的格式带来几个好处：</p>
+<ul>
+<li><strong>触发条件明确</strong>：description 里写清楚"什么时候用"，系统能自动匹配</li>
+<li><strong>流程可执行</strong>：步骤、命令、验证闭环，照着做就不会漏</li>
+<li><strong>可维护</strong>：每次用到发现过时，当场就能用工具更新</li>
+</ul>
+<p>尤其是状态漂移的问题，我在迁移时顺手做了一轮清理：</p>
+<ol>
+<li>删掉引用已不存在目录的技能</li>
+<li>更新版本号、路径、命令</li>
+<li>把"旧经验教训"融进相关技能，而不是单独开一篇</li>
+</ol>
+<h2>配置层迁移：Git 与 SSH</h2>
+<h3>Git 配置重配</h3>
+<p>项目仓库本身不用迁移，但<strong>机器上的 Git 配置是要重配的</strong>。包括：</p>
+<ul>
+<li>全局用户名/邮箱</li>
+<li>SSH 密钥的加载方式（以前是托管在旧平台的密钥管理里）</li>
+<li>推送走哪个通道（普通 22 端口还是 443 端口的 SSH over HTTPS）</li>
+</ul>
+<pre><code class="language-bash"># 迁移后的 Git 全局配置示例
+git config --global user.name &quot;my-name&quot;
+git config --global user.email &quot;my@example.com&quot;
+
+# 让 git 走 443 端口 SSH（某些网络环境必需）
+git config --global url.&quot;ssh://git@ssh.github.com:443/&quot;.insteadOf &quot;git@github.com:&quot;
+</code></pre>
+<p>这里有个细节值得说：<strong>公网服务器上，22 端口经常被墙/被限速，SSH over 443 是更稳的选择</strong>。这一步配置错了，后面 push 会非常痛苦。</p>
+<h3>包管理器版本差异</h3>
+<p>迁移后环境里的包管理器版本也变了（pnpm 从旧版本升到了 11.x），这直接引发了后面最大的一个坑——下一节细说。</p>
+<h2>大坑：pnpm 11 的 build scripts 审批机制</h2>
+<h3>现象：莫名其妙的报错</h3>
+<p>迁移后第一次跑测试，报了个之前从没见过的错：</p>
+<pre><code class="language-text">ERR_PNPM_IGNORED_BUILDS] Ignored build scripts:
+@prisma/client@6.x.x, @prisma/engines@6.x.x,
+esbuild@0.x.x, prisma@6.x.x, sharp@0.x.x, unrs-resolver@1.x.x
+
+Run &quot;pnpm approve-builds&quot; to pick which dependencies
+should be allowed to run scripts.
+</code></pre>
+<p>更诡异的是，工作区里隔三差五冒出一个 <code>pnpm-workspace.yaml</code>，内容还是占位符：</p>
+<pre><code class="language-yaml">allowBuilds:
+  '@prisma/client': set this to true or false
+  '@prisma/engines': set this to true or false
+  esbuild: set this to true or false
+</code></pre>
+<h3>根因分析</h3>
+<p>排查之后搞清楚了机制：</p>
+<ol>
+<li><strong>pnpm 10/11 引入了依赖构建脚本审批</strong>：出于供应链安全考虑，依赖包的 postinstall 脚本默认不执行，必须显式批准</li>
+<li><strong>有未批准构建脚本时，pnpm 执行任何命令都会报错退出</strong>（退出码 1），而不是静默跳过</li>
+<li><strong>非交互环境下，pnpm 会生成一个占位 <code>pnpm-workspace.yaml</code> 模板</strong>，把待批准列表写进去，内容就是 "set this to true or false"，等你手动填</li>
+</ol>
+<p>这个占位文件是"回魂怪"：删了它，下次跑 pnpm 又生成。我一开始的思路是"干脆 gitignore 掉"，但很快发现这治标不治本——<strong>pnpm 每次还是会报错</strong>。</p>
+<h3>正确解法：真实配置 allowBuilds</h3>
+<p>正确的解法是把模板变成真实配置，明确批准这些构建脚本（它们本来就是需要的）：</p>
+<pre><code class="language-yaml"># pnpm-workspace.yaml
+allowBuilds:
+  '@prisma/client': true    # prisma client 生成需要 postinstall
+  '@prisma/engines': true   # prisma 引擎库
+  esbuild: true             # esbuild 二进制
+  prisma: true              # prisma CLI
+  sharp: true               # 图片处理库
+  unrs-resolver: true       # 模块解析
+</code></pre>
+<p>配完之后一切正常：</p>
+<pre><code class="language-text">.../esbuild@0.28.1/node_modules/esbuild postinstall: Done
+.../node_modules/@prisma/client postinstall:
+  ✔ Generated Prisma Client (v6.19.3) in 97ms
+.../node_modules/@prisma/client postinstall: Done
+Done in 8.3s using pnpm v11.21.0
+
+ RUN  v4.1.10
+ Test Files  4 passed (4)
+      Tests  50 passed (50)
+</code></pre>
+<p><strong>这个坑值得单独写出来</strong>：如果你在 pnpm 11 项目里看到 <code>ERR_PNPM_IGNORED_BUILDS</code>，先找 <code>pnpm-workspace.yaml</code> 检查 allowBuilds，而不是瞎删文件。安全策略本身是合理的——postinstall 任意执行确实危险——只是新手上路容易懵。</p>
+<h2>测试兼容性修复：环境变严了</h2>
+<h3>现象：老测试过不去</h3>
+<p>迁移后跑测试套件，有几个文件报类型错误，报错信息大致是：</p>
+<pre><code class="language-text">Property 'updatedAt' is missing in type
+'{ id: string; name: string; ... }'
+but required in type 'Habit'
+</code></pre>
+<p>原因很直接：<strong>新环境的 TypeScript / Prisma 类型更严格，mock 数据少字段直接编译不过</strong>，而且 vitest 的版本也变了，一些旧的写法不被推荐了。</p>
+<h3>修复：三个典型修改</h3>
+<p>我总结了三类典型修复：</p>
+<p><strong>1. mock 数据补全字段</strong>：</p>
+<pre><code class="language-typescript">// 迁移前：缺字段，类型编译不过
+const mock = { id: &quot;habit-1&quot;, name: &quot;Test&quot;, emoji: &quot;🎯&quot; };
+
+// 迁移后：补全必填字段
+const mock = {
+  id: &quot;habit-1&quot;,
+  name: &quot;Test&quot;,
+  emoji: &quot;🎯&quot;,
+  createdAt: &quot;2026-01-01T00:00:00.000Z&quot;,
+  updatedAt: &quot;2026-01-01T00:00:00.000Z&quot;,
+  description: null,
+} as any;
+</code></pre>
+<p><strong>2. 环境变量操作换规范写法</strong>：</p>
+<pre><code class="language-typescript">// 迁移前：直接改 process.env（容易污染其他用例）
+delete process.env.API_TOKEN;
+process.env.NODE_ENV = &quot;production&quot;;
+
+// 迁移后：用 vi.stubEnv（自动清理）
+vi.stubEnv(&quot;API_TOKEN&quot;, &quot;secret-token&quot;);
+vi.stubEnv(&quot;NODE_ENV&quot;, &quot;production&quot;);
+</code></pre>
+<p><strong>3. 类型断言补强</strong>：</p>
+<pre><code class="language-typescript">// 迁移前：find 返回类型不匹配
+Promise.resolve(mockList.find((b) =&gt; b.id === args.where.id)!);
+
+// 迁移后：显式断言
+Promise.resolve(mockList.find((b) =&gt; b.id === args.where.id)! as any);
+</code></pre>
+<p>这些修复本身没有业务逻辑变化，纯粹是适配新环境的类型系统。但从这件事我也得到一个经验：<strong>换环境之后，先跑一遍全量测试再谈其他</strong>——测试是最诚实的"环境变化报告"。</p>
+<h2>定时任务的迁移：从心跳到 cron</h2>
+<h3>旧机制：心跳（Heartbeat）</h3>
+<p>旧平台有个心跳机制：Agent 每隔一段时间自己醒一次，检查有没有该做的事（比如"该提醒用户喝水了""该做每日健康提醒了"）。</p>
+<p>这在设计上很优雅，但问题在于它强依赖平台的进程模型——一旦 Agent 进程不稳，心跳就断，还没法知道断在哪。</p>
+<h3>新机制：显式 cron</h3>
+<p>新平台用标准的 cron 定时任务，语义更清晰：</p>
+<pre><code class="language-text"># 定时任务示例
+- 每天早上 9:00 发日报            -&gt; 0 9 * * *
+- 每 30 分钟检查一次价格变化      -&gt; */30 * * * *
+- 每周一早上清理临时文件          -&gt; 0 8 * * 1
+- 一次性任务：明天 18:00 提醒     -&gt; 2026-08-19T18:00:00
+</code></pre>
+<p>迁移策略很简单：<strong>把旧的"心跳该做的事"全部转成显式 cron</strong>，能定义的都定义出来，不再依赖隐式的"自己醒"。</p>
+<p>这其实是个更工程化的思路：<strong>隐式机制靠猜，显式机制靠看</strong>。出问题的时候，<code>cron list</code> 一眼就知道有没有任务、上次跑没跑。</p>
+<h2>文档的迁移与修订</h2>
+<h3>沿用的文档体系</h3>
+<p>迁移后并不是所有东西都数字化了。我把几类核心文档保留在新的工作区里：</p>
+<table>
+<thead>
+<tr>
+<th>文档</th>
+<th>作用</th>
+<th>迁移方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>用户资料</td>
+<td>用户技术背景、偏好</td>
+<td>内容保留，导入记忆系统</td>
+</tr>
+<tr>
+<td>长期记忆</td>
+<td>历史经验教训</td>
+<td>备份 + 提炼，精简版入新系统</td>
+</tr>
+<tr>
+<td>身份定位</td>
+<td>助手人格说明</td>
+<td>适配新格式</td>
+</tr>
+<tr>
+<td>工具配置</td>
+<td>Git/SSH 配置说明</td>
+<td>全量重写（环境变了）</td>
+</tr>
+<tr>
+<td>项目清单</td>
+<td>各项目状态一览</td>
+<td>全量修订（路径全变）</td>
+</tr>
+<tr>
+<td>健康习惯</td>
+<td>定时提醒的依据</td>
+<td>原样保留</td>
+</tr>
+</tbody>
+</table>
+<h3>路径漂移的修复</h3>
+<p>迁移最烦的一类问题是<strong>文档里的路径全失效了</strong>：</p>
+<pre><code class="language-diff">- 分析范围：/root/.openclaw/workspace-xiaoma/nook/project-a/
++ 分析范围：/root/.hermes/workspaces/dev/project-a/
+</code></pre>
+<p>这种改动本身一行字，但如果文档多、引用深，就是个体力活。我的做法是：<strong>改完一个目录，立刻全局搜索旧路径前缀，批量替换</strong>：</p>
+<pre><code class="language-bash"># 示例：批量替换路径前缀（注意先备份）
+grep -rl &quot;\.openclaw/workspace-xiaoma&quot; docs/ | xargs -I{} sed -i \
+  's|\.openclaw/workspace-xiaoma|.hermes/workspaces/dev|g' {}
+</code></pre>
+<p>改完必须验证：打开文档抽查、跑一遍文档里提到的命令，确认没引到不存在的文件。</p>
+<h2>验证与收尾</h2>
+<h3>迁移完成 checklist</h3>
+<p>我给自己列了一个迁移验收清单，全部打勾才算完成：</p>
+<ul>
+<li>[ ] 新平台能正常对话，人格正确（身份文件生效）</li>
+<li>[ ] 记忆注入正常——问"我讨厌什么"，AI 答得上来（记忆系统生效）</li>
+<li>[ ] 技能能触发——按技能描述执行一遍流程（技能系统生效）</li>
+<li>[ ] 所有项目仓库能 clone/push（Git/SSH 生效）</li>
+<li>[ ] 全量测试通过（依赖与类型适配完成）</li>
+<li>[ ] 定时任务上线，首次触发成功（cron 生效）</li>
+<li>[ ] 旧平台数据完整备份，且新平台有恢复路径</li>
+</ul>
+<h3>迭代式的迁移</h3>
+<p>还有一点很重要：<strong>迁移不是一天完成的，别追求一步到位</strong>。</p>
+<p>我的实际节奏是：</p>
+<ol>
+<li>第一周：新平台跑通开发助手，日常编码任务切过去</li>
+<li>第二周：系统助手 + 定时任务迁移</li>
+<li>第三周：博客发布流程切换，验证新技能链</li>
+<li>全程：旧平台保持可回滚，随时能切回去</li>
+</ol>
+<p><strong>双跑（dual-run）期很关键</strong>：在两个平台都能干活的日子里，你会自然发现哪个更好用、哪些流程该保留、哪些该改。</p>
+<h2>复盘：哪些值得，哪些后悔</h2>
+<h3>值得做的事</h3>
+<ul>
+<li><strong>借机做记忆减负</strong>——这是最大的意外收获，几百条流水账变成几十条高信号记忆</li>
+<li><strong>技能标准化</strong>——借迁移把技能全部格式统一，找起来、用起来都顺了</li>
+<li><strong>定时任务显式化</strong>——从"靠心跳猜"变成"看 cron 清单"，心智负担大降</li>
+<li><strong>文档路径大扫除</strong>——虽然累，但做完整理感极强</li>
+</ul>
+<h3>踩过的坑（如果再迁一次）</h3>
+<ol>
+<li><strong>别急着删旧平台的占位文件</strong>——先搞明白它为什么出现（pnpm 的坑），治本而不是治标</li>
+<li><strong>先跑测试再改代码</strong>——环境变了，测试会告诉你所有差异</li>
+<li><strong>密钥和配置走"重配"而不是"搬运"</strong>——旧配置里可能有过期、有坑，重配一遍反而干净</li>
+<li><strong>文档路径替换要全局搜</strong>——随手改一个，剩下的会在三个月后咬你</li>
+</ol>
+<h2>结语：迁移的本质是升级</h2>
+<p>回头看，这次"OpenClaw 迁移 Hermes"名义上是搬家，实质上是<strong>一次彻底的、被逼着做的架构升级</strong>：</p>
+<ul>
+<li>单工作区 → 多 Profile 隔离</li>
+<li>人肉记忆 → 原生记忆系统</li>
+<li>散装技能文档 → 标准化 SKILL.md</li>
+<li>隐式心跳 → 显式 cron</li>
+<li>旧包管理器行为 → 新安全机制（并学会与它共处）</li>
+</ul>
+<p>整个过程最大的感触是：<strong>平台迁移最大的敌人不是技术，是"以为搬完就完了"的侥幸心理</strong>。真正的迁移，是从验收清单全部打勾那一刻才开始的——之后每一次使用，都在检验迁移的质量。</p>
+<p>如果你也在考虑给 AI Agent 换底座，我的建议是：列清单、做备份、放双跑、留回滚，然后果断开始。迁移本身没有想象中那么可怕，可怕的是带着一屋子旧家具，永远不搬家。</p>
+      </article>
+    </div>
+  </main>
+
+  <!-- Related Posts / Navigation -->
+  <section class="section" style="padding-top: 0;">
+    <div class="container container-narrow">
+      <hr style="border: none; border-top: 1px solid var(--color-border); margin: var(--space-3xl) 0;">
+
+      <div class="blog-topics" style="margin-bottom: var(--space-xl);">
+        <span class="topic-label">读完之后:</span>
+        <a href="../index.html" class="topic-tag">返回博客列表</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <p class="footer-signature">写代码,做产品,也认真生活。</p>
+      <div class="footer-social">
+        <a href="https://github.com/zzdbilly" class="footer-social-link" target="_blank" rel="noopener" aria-label="GitHub">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+        </a>
+        <a href="../../rss.xml" class="footer-social-link" aria-label="RSS">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+      </div>
+      <div class="footer-links">
+        <a href="../../index.html" class="footer-link">首页</a>
+        <a href="../../projects/index.html" class="footer-link">项目</a>
+        <a href="../../about/index.html" class="footer-link">关于</a>
+      </div>
+      <p class="footer-copyright">
+        &copy; 2026 张小猛
+      </p>
+    </div>
+  </footer>
+
+
+  <script defer src="../../assets/js/related-posts.js"></script>
+  <script defer src="../../assets/js/main.js"></script>
+  <script defer src="../../assets/js/article.js"></script>
+  <script defer src="../../assets/js/share.js"></script>
+  <script defer src="../../assets/js/back-to-top.js"></script>
+  <!-- Back to Top & Reading Progress -->
+  <button class="back-to-top" id="backToTop" aria-label="回到顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
+  <div class="reading-progress" id="readingProgress"></div>
+
+  <!-- Post Sidebar Info（左侧） -->
+  <div class="post-sidebar-info" id="postSidebar">
+    <div class="post-info-card">
+      <div class="post-info-section">
+        <div class="post-info-label">作者</div>
+        <div class="post-info-author">
+          <div class="post-info-avatar">小</div>
+          <div>
+            <div class="post-info-author-name">张小猛</div>
+            <div class="post-info-author-desc">写代码，做产品</div>
+          </div>
+        </div>
+      </div>
+      <div class="post-info-section">
+        <div class="post-info-label">文章信息</div>
+        <div class="post-info-stat"><span class="post-info-stat-label">📅 发布日期</span><span class="post-info-stat-value">2026-08-18</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label">⏱️ 阅读时间</span><span class="post-info-stat-value">12 min read</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label">📝 文章字数</span><span class="post-info-stat-value">5100 字</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label">📊 章节数</span><span class="post-info-stat-value">15 节 · 27 子节</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label">💻 代码块</span><span class="post-info-stat-value">19 段</span></div>
+      </div>
+      <div class="post-info-section" id="postSidebarTags">
+        <div class="post-info-label">标签</div>
+        <div class="post-info-links">
+          <a href="../../blog/index.html?tag=OpenClaw" class="post-info-link"># OpenClaw</a>
+          <a href="../../blog/index.html?tag=Hermes" class="post-info-link"># Hermes</a>
+          <a href="../../blog/index.html?tag=AI Agent" class="post-info-link"># AI Agent</a>
+          <a href="../../blog/index.html?tag=迁移" class="post-info-link"># 迁移</a>
+          <a href="../../blog/index.html?tag=DevOps" class="post-info-link"># DevOps</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Post TOC -->
+  <div class="post-toc-container" id="postToc">
+    <nav class="post-toc">
+      <div class="post-toc-title">目录</div>
+      <ul class="post-toc-list" id="tocList">
+      </ul>
+    </nav>
+  </div>
+<script defer src="../../assets/js/particles.js"></script>
+
+  <!-- Comment System -->
+  <script src="../../workers/comment-system/comment-widget.js" defer></script>
+
+  <!-- highlight.js 代码语法高亮（本地完整构建，无外部依赖） -->
+  <script defer src="../../assets/vendor/highlight/highlight.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // 只对没有 codehilite 的代码块应用 highlight.js
+      document.querySelectorAll('pre code').forEach(function(block) {
+        // 跳过已经有 Pygments 高亮的块
+        if (block.closest('.codehilite') || block.classList.contains('hljs')) return;
+        try { hljs.highlightElement(block); } catch (e) {}
+      });
+    });
+  </script>
+
+  <!-- Cloudflare Web Analytics -->
+  <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "29e7cff6f37448989538e2165cb79187"}'></script>
+</body>
+</html>
