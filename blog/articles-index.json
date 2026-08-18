@@ -1,6 +1,21 @@
 {
   "posts": [
     {
+      "slug": "从-openclaw-到-hermesai-agent-工作区迁移完整记录",
+      "title": "从 OpenClaw 到 Hermes：AI Agent 工作区迁移完整记录",
+      "date": "2026-08-18",
+      "category": "DevOps",
+      "tags": [
+        "OpenClaw",
+        "Hermes",
+        "AI Agent",
+        "迁移",
+        "DevOps"
+      ],
+      "excerpt": "一次真实的 AI Agent 平台迁移复盘：身份、记忆、技能、项目与定时任务的全量迁移方向、踩坑与验证方法",
+      "url": "blog/posts/从-openclaw-到-hermesai-agent-工作区迁移完整记录.html"
+    },
+    {
       "slug": "周末如何度过才有意义",
       "title": "周末如何度过才有意义",
       "date": "2026-08-16",
@@ -1384,15 +1399,15 @@
       "count": 16
     },
     {
+      "tag": "DevOps",
+      "count": 9
+    },
+    {
       "tag": "思考",
       "count": 8
     },
     {
       "tag": "Kotlin",
-      "count": 8
-    },
-    {
-      "tag": "DevOps",
       "count": 8
     },
     {
@@ -1440,6 +1455,10 @@
       "count": 4
     },
     {
+      "tag": "OpenClaw",
+      "count": 3
+    },
+    {
       "tag": "生活方式",
       "count": 3
     },
@@ -1474,6 +1493,14 @@
     {
       "tag": "Gemini",
       "count": 3
+    },
+    {
+      "tag": "AI Agent",
+      "count": 2
+    },
+    {
+      "tag": "迁移",
+      "count": 2
     },
     {
       "tag": "理财",
@@ -1632,8 +1659,8 @@
       "count": 2
     },
     {
-      "tag": "OpenClaw",
-      "count": 2
+      "tag": "Hermes",
+      "count": 1
     },
     {
       "tag": "开发",
@@ -1821,10 +1848,6 @@
     },
     {
       "tag": "Photo Picker",
-      "count": 1
-    },
-    {
-      "tag": "迁移",
       "count": 1
     },
     {
@@ -2380,10 +2403,6 @@
       "count": 1
     },
     {
-      "tag": "AI Agent",
-      "count": 1
-    },
-    {
       "tag": "Skill",
       "count": 1
     },
@@ -2407,8 +2426,13 @@
   "archives": [
     {
       "month": "2026-08",
-      "count": 10,
+      "count": 11,
       "posts": [
+        {
+          "title": "从 OpenClaw 到 Hermes：AI Agent 工作区迁移完整记录",
+          "date": "2026-08-18",
+          "url": "blog/posts/从-openclaw-到-hermesai-agent-工作区迁移完整记录.html"
+        },
         {
           "title": "周末如何度过才有意义",
           "date": "2026-08-16",
@@ -2934,21 +2958,21 @@
     }
   ],
   "categories": [
+    "DevOps",
     "思考",
     "开发",
     "Kotlin",
     "Android",
     "前端",
-    "DevOps",
     "AI",
     "数据库",
     "系统编程",
     "安全"
   ],
   "stats": {
-    "totalPosts": 97,
-    "totalTags": 257,
-    "latestDate": "2026-08-16",
+    "totalPosts": 98,
+    "totalTags": 258,
+    "latestDate": "2026-08-18",
     "oldestDate": "2026-02-15"
   }
 }
