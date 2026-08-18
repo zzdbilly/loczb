@@ -4,7 +4,7 @@
 
 set -e
 
-PROJECT_DIR="/root/.openclaw/workspace-xiaoma/nook/loczb"
+PROJECT_DIR="/root/.hermes/workspaces/xiaoma/nook/loczb"
 cd "$PROJECT_DIR"
 
 echo "🔧 开始修复 P0 问题..."

@@ -1,7 +1,7 @@
 # loczb 优化方案
 
 > 审计时间：2026-03-19
-> 项目路径：`/root/.openclaw/workspace-xiaoma/nook/loczb/`
+> 项目路径：`/root/.hermes/workspaces/xiaoma/nook/loczb/`
 
 ---
 
@@ -370,7 +370,7 @@ document.addEventListener('DOMContentLoaded', () => {
 #!/bin/bash
 # quick-fix.sh - P0 批量修复脚本
 
-cd /root/.openclaw/workspace-xiaoma/nook/loczb
+cd /root/.hermes/workspaces/xiaoma/nook/loczb
 
 # 1. 修复 GitHub 链接
 find . -name "*.html" -exec sed -i 's|github.com/billyzl|github.com/zzdbilly|g' {} \;

@@ -419,27 +419,48 @@
       
       <div class="blog-grid">
         <!-- 代表文章大卡 -->
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <article class="blog-card-featured animate-on-scroll" id="home-featured-post" style="display: block;">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <article class="blog-card-featured animate-on-scroll" id="home-featured-post" style="display: block;">
           <div class="blog-card-header">
             <div class="blog-card-meta">
+              <span class="blog-date">2026-08-18</span>
+              <span>·</span>
+              <span class="blog-read-time">12 min</span>
+            </div>
+            <span class="blog-list-tag">DevOps</span>
+          </div>
+          <h3 class="blog-card-title">
+            <a href="blog/posts/从-openclaw-到-hermesai-agent-工作区迁移完整记录.html">从 OpenClaw 到 Hermes：AI Agent 工作区迁移完整记录</a>
+          </h3>
+          <p class="blog-card-excerpt">一次真实的 AI Agent 平台迁移复盘：身份、记忆、技能、项目与定时任务的全量迁移方向、踩坑与验证方法...</p>
+          <div class="blog-card-tags">
+            <span class="tech-tag">OpenClaw</span>
+            <span class="tech-tag">Hermes</span>
+            <span class="tech-tag">AI Agent</span>
+            <span class="tech-tag">迁移</span>
+            <span class="tech-tag">DevOps</span>
+          </div>
+        </article>
+        
+        <!-- 最新文章列表 -->
+                <div class="blog-list">
+        <article class="blog-mini-card animate-on-scroll" data-category="思考" data-page="1">
+          <div class="blog-mini-card-header">
+            <div class="blog-list-meta">
               <span class="blog-date">2026-08-16</span>
               <span>·</span>
               <span class="blog-read-time">5 min</span>
             </div>
             <span class="blog-list-tag">思考</span>
           </div>
-          <h3 class="blog-card-title">
+          <h3 class="blog-mini-card-title">
             <a href="blog/posts/周末如何度过才有意义.html">周末如何度过才有意义</a>
           </h3>
-          <p class="blog-card-excerpt">恢复与创造并重，让周末不再越休越累——从识别消耗型休息、主动回血，到用小小创造留下属于你的痕迹。...</p>
-          <div class="blog-card-tags">
+          <p class="blog-mini-card-excerpt">恢复与创造并重，让周末不再越休越累——从识别消耗型休息、主动回血，到用小小创造留下属于你的痕迹。</p>
+          <div class="blog-mini-card-tags">
             <span class="tech-tag">思考</span>
             <span class="tech-tag">生活方式</span>
           </div>
         </article>
-        
-        <!-- 最新文章列表 -->
-                <div class="blog-list">
         <article class="blog-mini-card animate-on-scroll" data-category="思考" data-page="1">
           <div class="blog-mini-card-header">
             <div class="blog-list-meta">
@@ -457,25 +478,6 @@
             <span class="tech-tag">思考</span>
             <span class="tech-tag">生活方式</span>
             <span class="tech-tag">效率</span>
-          </div>
-        </article>
-        <article class="blog-mini-card animate-on-scroll" data-category="开发" data-page="1">
-          <div class="blog-mini-card-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-08-12</span>
-              <span>·</span>
-              <span class="blog-read-time">5 min</span>
-            </div>
-            <span class="blog-list-tag">开发</span>
-          </div>
-          <h3 class="blog-mini-card-title">
-            <a href="blog/posts/2026-年了ai-编程助手到底能帮你干多少活.html">2026 年了，AI 编程助手到底能帮你干多少活？</a>
-          </h3>
-          <p class="blog-mini-card-excerpt">结合当前 Agent 编程趋势，聊聊 AI 助手能做/不能做/边界三层认知、五种实战协作心法，以及开发者如何重新定位自己</p>
-          <div class="blog-mini-card-tags">
-            <span class="tech-tag">AI</span>
-            <span class="tech-tag">前端</span>
-            <span class="tech-tag">开发</span>
           </div>
         </article>
         </div>
@@ -570,6 +572,15 @@
     // 首页随机选择代表文章
     const posts = [
       {
+        url: 'blog/posts/从-openclaw-到-hermesai-agent-工作区迁移完整记录.html',
+        title: '从 OpenClaw 到 Hermes：AI Agent 工作区迁移完整记录',
+        date: '2026-08-18',
+        readTime: '12 min',
+        category: 'DevOps',
+        category2: 'DevOps',
+        desc: '一次真实的 AI Agent 平台迁移复盘：身份、记忆、技能、项目与定时任务的全量迁移方向、踩坑与验证方法'
+      },
+      {
         url: 'blog/posts/周末如何度过才有意义.html',
         title: '周末如何度过才有意义',
         date: '2026-08-16',
@@ -649,15 +660,6 @@
         category: 'DevOps',
         category2: 'DevOps',
         desc: 'Vercel 构建时 prisma db push 失败，外键约束报错怎么办？本文完整复盘一次真实的部署失败案例，从根因分析到构建时数据修复方案。'
-      },
-      {
-        url: 'blog/posts/ai-agent-实战用子代理并行驱动多项目开发.html',
-        title: 'AI Agent 实战：用子代理并行驱动多项目开发',
-        date: '2026-08-01',
-        readTime: '5 min',
-        category: '前端',
-        category2: '前端',
-        desc: '子代理并行调度是 AI 辅助开发的高效模式。本文分享一套经过实战验证的调度策略，涵盖任务拆分、并行执行、结果汇总和验证闭环。'
       }
     ];
     
