@@ -30,36 +30,36 @@ const SITE_CONTEXT = `
 张小猛的身份：
 - Android 开发工程师，也在探索端侧 + AI 接入
 - 技术栈：Kotlin, Jetpack Compose, Coroutines, Room, Hilt
-- 熟悉大前端（React, Vue.js），了解后端和数据库
+- 熟悉大前端（React, Vue.js, TypeScript），了解后端和数据库
 - 注重效率，实用主义优先
 
 当前重点方向：
-1. AI Agent 开发 - 基于 OpenClaw 搭建个人 AI 工作流
-2. Android + AI 接入 - 关注端侧体验与模型能力结合
+1. AI Agent 开发 - 基于 OpenClaw / Hermes 搭建个人 AI 工作流
+2. Android + AI 接入 - 关注端侧体验与模型能力结合（Gemini Nano、模型量化）
 3. 技术写作 - 持续输出 Android、AI Agent、端侧 AI 和工具实践
 
 主要项目：
 1. loczb 个人网站 - https://709527.xyz
-2. Zest - 习惯养成追踪 Web 应用（Next.js + Prisma + PostgreSQL）
-3. OpenClaw 实践 - 基于 OpenClaw 的自动化工作流
+2. PasteBin - 轻量文本分享工具（Cloudflare Workers + KV）
+3. OpenClaw / Hermes 实践 - AI Agent 工作流与技能开发
 
-博客分类（共 84 篇）：
-- Android (16篇)：Gradle 构建、Jetpack Compose、Hilt 依赖注入、Gemini Nano 集成、Android 16 新特性、性能优化
-- AI (14篇)：AI 编程工具横评、Prompt 设计、Agent 工作流、RAG、MCP 协议、本地大模型
-- 前端 (10篇)：React Server Components、TypeScript、CSS、PWA、WebAssembly
-- 思考 (8篇)：技术人写作、高效学习、软技能、专注力、工作焦虑、软件架构
-- DevOps (7篇)：Docker Compose、GitHub Actions CI/CD、SSH 安全、Tailscale、Nginx
-- Kotlin (4篇)：Kotlin 2.4、Coroutines 最佳实践、Flow 进阶、异常处理机制
-- 安全 (3篇)：App 安全加固、HTTPS/TLS 1.3、SSH 安全
-- 其他 (8篇)：数据库（PostgreSQL/SQLite）、系统编程（eBPF/Inode）、Rust/Zig/Go 入门
+博客分类（共 98 篇）：
+- Android：Gradle 构建、Jetpack Compose、Hilt 依赖注入、Gemini Nano 集成、性能优化等
+- AI：AI 编程工具横评、Agent 工作流、RAG、MCP 协议、端侧大模型等
+- 前端：React、TypeScript、CSS Container Queries、PWA、WebAssembly、Web Worker 等
+- 思考：技术写作、高效工作、生活方式、软技能与认知迭代等
+- DevOps：Docker Compose、GitHub Actions CI/CD、SSH 加固、Tailscale、Nginx 调优等
+- Kotlin：Kotlin 2.4、Coroutines 实战、Flow 进阶、Scope Functions 等
+- 安全：App 加固、HTTPS/TLS 1.3、SSH 加固等
+- 其他：数据库（PostgreSQL/SQLite）、系统编程（eBPF/Inode）、Rust/Zig/Go 等
 
 可以问的问题：
 - 张小猛擅长什么？
-- 有哪些 Android + AI 项目？
+- 有哪些 Android + AI 实践？
 - 推荐几篇 AI Agent 相关文章
-- OpenClaw 实践内容是什么？
+- OpenClaw / Hermes 实践内容是什么？
 - 技术栈是什么？
-- 有关于 Android 16 / Jetpack Compose 的文章吗？
+- 有关于 Android / Jetpack Compose 的文章吗？
 - 最新的文章有哪些？
 `;
 

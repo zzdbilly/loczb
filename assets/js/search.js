@@ -13,16 +13,23 @@
   const searchResults = document.getElementById('blog-search-results');
   const searchClear = document.querySelector('.search-clear');
 
-  // 动态加载 Fuse.js(按需加载,不阻塞首屏)
+  // 动态加载 Fuse.js(优先本地 vendor 按需加载,不阻塞首屏)
   async function loadFuse() {
     if (fuseLoaded) return true;
     if (typeof Fuse !== 'undefined') { fuseLoaded = true; return true; }
     try {
       await new Promise((resolve, reject) => {
         const script = document.createElement('script');
-        script.src = 'https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.js';
+        script.src = '/assets/vendor/fuse/fuse.min.js';
         script.onload = () => { fuseLoaded = true; resolve(); };
-        script.onerror = reject;
+        script.onerror = () => {
+          // CDN 回退
+          const fallback = document.createElement('script');
+          fallback.src = 'https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.js';
+          fallback.onload = () => { fuseLoaded = true; resolve(); };
+          fallback.onerror = reject;
+          document.head.appendChild(fallback);
+        };
         document.head.appendChild(script);
       });
       return true;

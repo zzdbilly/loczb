@@ -2,7 +2,7 @@
 // 版本号规则：修改内容后更新此版本号（格式：loczb-YYYYMMDD-N）
 // 每次部署有实质性变更时递增 N，重大改版更新日期
 // 查看更新日志：https://github.com/zzdbilly/loczb/commits
-const SW_VERSION = '20260819-1';
+const SW_VERSION = '20260819-2';
 const CACHE_NAME = 'loczb-' + SW_VERSION;
 
 // Core pages to cache on install
@@ -16,7 +16,10 @@ const CORE_URLS = [
   '/assets/js/search.js',
   '/assets/js/particles.js',
   '/assets/js/time-progress.js',
-  '/assets/vendor/highlight/highlight.min.js'
+  '/assets/vendor/highlight/highlight.min.js',
+  '/assets/vendor/fuse/fuse.min.js',
+  '/assets/vendor/marked/marked.min.js',
+  '/assets/vendor/dompurify/purify.min.js'
 ];
 
 // Install: cache core pages
