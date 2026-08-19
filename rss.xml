@@ -7,6 +7,14 @@
     <language>zh-CN</language>
     <atom:link href="https://709527.xyz/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>程序员带娃：把养孩子当成一个长期运维的系统工程</title>
+      <link>https://709527.xyz/blog/posts/程序员带娃把养孩子当成一个长期运维的系统工程.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/程序员带娃把养孩子当成一个长期运维的系统工程.html</guid>
+      <description>用工程师的思维看带娃：需求分析、状态监控、容错设计、灰度发布、日志排查——原来养孩子比写代码更像在做系统运维</description>
+      <category>思考</category>
+      <pubDate>Wed, 19 Aug 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
       <title>从 OpenClaw 到 Hermes：AI Agent 工作区迁移完整记录</title>
       <link>https://709527.xyz/blog/posts/从-openclaw-到-hermesai-agent-工作区迁移完整记录.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/从-openclaw-到-hermesai-agent-工作区迁移完整记录.html</guid>
@@ -157,14 +165,6 @@
       <description>从 Prisma 的基础概念到项目实战，涵盖 Schema 设计、CRUD 操作、迁移管理、性能优化等核心话题，带你全面掌握 TypeScript 生态最流行的数据库 ORM。</description>
       <category>数据库</category>
       <pubDate>Tue, 07 Jul 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>技术人员转行指南：当写代码不再是你想做的事</title>
-      <link>https://709527.xyz/blog/posts/技术人员转行指南当写代码不再是你想做的事.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/技术人员转行指南当写代码不再是你想做的事.html</guid>
-      <description>深入分析技术人员转行的原因、方向和策略——不想写代码了，接下来该怎么办？</description>
-      <category>思考</category>
-      <pubDate>Mon, 06 Jul 2026 00:00:00 +0800</pubDate>
     </item>
   </channel>
 </rss>
