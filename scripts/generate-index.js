@@ -170,7 +170,7 @@ function rebuildBlogIndex() {
     const dateStr = p.date;
     // data-tags 用逗号分隔（避免多词标签被空格误拆）
     const dataTags = tagsForArticle.map(t => escapeHtml(t)).join(',');
-    return `        <article class="blog-list-item animate-on-scroll" data-category="${escapeHtml(p.category)}" data-tags="${dataTags}" data-page="1">
+    return `        <article class="blog-list-item spotlight-card animate-on-scroll" data-category="${escapeHtml(p.category)}" data-tags="${dataTags}" data-page="1">
           <div class="blog-list-header">
             <div class="blog-list-meta">
               <span class="blog-date">${escapeHtml(dateStr)}</span>

@@ -27,7 +27,7 @@ def render_case_card(p):
     section_title = "功能特性" if p.get("id") == "pastebin" else "亮点能力"
 
     return f'''        <!-- Case: {p["title"]} -->
-        <article class="case-card animate-on-scroll" data-category="{p["category"]}" data-tech="{tech_classes}">
+        <article class="case-card spotlight-card animate-on-scroll" data-category="{p["category"]}" data-tech="{tech_classes}">
           <div class="case-card-header">
             <span class="case-card-badge">{p["badge"]}</span>
             <h2 class="case-card-title">{p["title"]}</h2>
@@ -111,30 +111,7 @@ def generate():
   <link rel="apple-touch-icon" sizes="180x180" href="../assets/images/apple-touch-icon.png">
   <link rel="manifest" href="../site.webmanifest">
   <meta name="theme-color" content="#3b82f6">
-  <link rel="stylesheet" href="../assets/css/style.css?v=proj-filter-v1">
-  <style>
-    .case-card {{ background: var(--color-bg-secondary); border-radius: 16px; overflow: hidden; margin-bottom: 2rem; border: 1px solid var(--color-border); transition: all 0.35s cubic-bezier(0.4,0,0.2,1); }}
-    .case-card:hover {{ border-color: var(--color-accent-primary); transform: translateY(-6px); box-shadow: 0 16px 48px rgba(0,0,0,0.18), 0 0 0 1px rgba(99,102,241,0.15); }}
-    .case-card-header {{ padding: 2rem; border-bottom: 1px solid var(--color-border); }}
-    .case-card-badge {{ display: inline-block; background: var(--color-accent-primary); color: white; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; margin-bottom: 1rem; }}
-    .case-card-title {{ font-size: 1.75rem; margin-bottom: 0.5rem; }}
-    .case-card-subtitle {{ color: var(--color-text-secondary); font-size: 1rem; }}
-    .case-card-body {{ padding: 2rem; }}
-    .case-section {{ margin-bottom: 1.5rem; }}
-    .case-section:last-child {{ margin-bottom: 0; }}
-    .case-section-title {{ font-size: 0.875rem; font-weight: 600; color: var(--color-accent-primary); margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; }}
-    .case-section-content {{ color: var(--color-text-secondary); line-height: 1.7; }}
-    .case-metrics {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 1rem; margin-top: 1rem; }}
-    .case-metric {{ background: var(--color-bg-tertiary); padding: 1rem; border-radius: 8px; text-align: center; }}
-    .case-metric-value {{ font-size: 1.5rem; font-weight: 700; color: var(--color-text-primary); }}
-    .case-metric-label {{ font-size: 0.75rem; color: var(--color-text-secondary); margin-top: 0.25rem; }}
-    .case-links {{ display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.5rem; }}
-    .tech-tags {{ display: flex; flex-wrap: wrap; gap: 0.5rem; }}
-    @media (max-width: 640px) {{
-      .case-card-header, .case-card-body {{ padding: 1.5rem; }}
-      .case-card-title {{ font-size: 1.5rem; }}
-    }}
-  </style>
+  <link rel="stylesheet" href="../assets/css/style.css?v=spotlight-ui">
   <!-- Preconnect to Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
