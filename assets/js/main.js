@@ -444,10 +444,12 @@ function initCursorEffect() {
 
 // Spotlight Mouse Glow for modern cards
 function initSpotlightCards() {
-  const cards = document.querySelectorAll('.spotlight-card, .project-card, .blog-card-featured, .blog-mini-card, .case-card');
+  const cards = document.querySelectorAll('.spotlight-card, .project-card, .blog-card-featured, .blog-mini-card, .case-card, .archive-month');
   if (!cards.length) return;
 
   cards.forEach(card => {
+    if (card._hasSpotlight) return;
+    card._hasSpotlight = true;
     card.addEventListener('mousemove', (e) => {
       const rect = card.getBoundingClientRect();
       const x = e.clientX - rect.left;
@@ -457,6 +459,7 @@ function initSpotlightCards() {
     }, { passive: true });
   });
 }
+window.initSpotlightCards = initSpotlightCards;
 
 // Form Validation
 function validateEmail(email) {

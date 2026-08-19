@@ -168,21 +168,29 @@ function rebuildBlogIndex() {
     .map(p => {
     const tagsForArticle = p.tags;
     const dateStr = p.date;
-    // data-tags 用逗号分隔（避免多词标签被空格误拆）
     const dataTags = tagsForArticle.map(t => escapeHtml(t)).join(',');
+    const tagsHtml = tagsForArticle.slice(0, 3).map(t => `<span class="tag-pill">#${escapeHtml(t)}</span>`).join(' ');
     return `        <article class="blog-list-item spotlight-card animate-on-scroll" data-category="${escapeHtml(p.category)}" data-tags="${dataTags}" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">${escapeHtml(dateStr)}</span>
-              <span>·</span>
-              <span class="blog-read-time">${p.readTime} min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 ${escapeHtml(dateStr)}</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ ${p.readTime} min</span>
+              </div>
+              <span class="blog-list-tag">${escapeHtml(p.category)}</span>
             </div>
-            <span class="blog-list-tag">${escapeHtml(p.category)}</span>
+            <h3 class="blog-list-title">
+              <a href="posts/${p.slug}.html">${escapeHtml(p.title)}</a>
+            </h3>
+            <p class="blog-list-excerpt">${escapeHtml(p.excerpt)}</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/${p.slug}.html">${escapeHtml(p.title)}</a>
-          </h3>
-          <p class="blog-list-excerpt">${escapeHtml(p.excerpt)}</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              ${tagsHtml}
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>`;
   }).join('\n');
 
