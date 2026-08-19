@@ -57,21 +57,26 @@ class ParticleConstellation {
   }
   
   bindEvents() {
-    window.addEventListener('resize', () => {
+    this._handleResize = () => {
       this.resize();
       this.createParticles();
-    });
+    };
+    window.addEventListener('resize', this._handleResize);
     
-    this.canvas.addEventListener('mousemove', (e) => {
+    this._handleMouseMove = (e) => {
       const rect = this.canvas.getBoundingClientRect();
       this.mouse.x = e.clientX - rect.left;
       this.mouse.y = e.clientY - rect.top;
-    });
+    };
+    window.addEventListener('mousemove', this._handleMouseMove, { passive: true });
     
-    this.canvas.addEventListener('mouseleave', () => {
-      this.mouse.x = null;
-      this.mouse.y = null;
-    });
+    this._handleMouseLeave = (e) => {
+      if (!e.relatedTarget || e.clientX <= 0 || e.clientY <= 0 || e.clientX >= window.innerWidth || e.clientY >= window.innerHeight) {
+        this.mouse.x = null;
+        this.mouse.y = null;
+      }
+    };
+    document.addEventListener('mouseleave', this._handleMouseLeave);
   }
   
   update() {
@@ -159,7 +164,9 @@ class ParticleConstellation {
   
   destroy() {
     this.stop();
-    window.removeEventListener('resize', this.resize);
+    if (this._handleResize) window.removeEventListener('resize', this._handleResize);
+    if (this._handleMouseMove) window.removeEventListener('mousemove', this._handleMouseMove);
+    if (this._handleMouseLeave) document.removeEventListener('mouseleave', this._handleMouseLeave);
   }
 }
 
