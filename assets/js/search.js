@@ -11,7 +11,9 @@
   let fuseLoaded = false;
   const searchInput = document.getElementById('blog-search-input');
   const searchResults = document.getElementById('blog-search-results');
-  const searchClear = document.querySelector('.search-clear');
+  const searchClear = document.getElementById('search-clear-btn') || document.querySelector('.search-clear');
+  const searchKbd = document.getElementById('search-kbd-badge') || document.querySelector('.search-kbd');
+  let selectedIndex = -1;
 
   // 动态加载 Fuse.js(优先本地 vendor 按需加载,不阻塞首屏)
   async function loadFuse() {
@@ -94,59 +96,49 @@
     fuse = new Fuse(searchData.posts, options);
   }
 
-  // 中文分词:将查询拆分为关键词数组
-  // 策略:按空格/标点分词,英文整词保留,中文按字/双字组合
+  // 中文分词
   function tokenizeQuery(query) {
     const tokens = [];
-    // 按空格、逗号、顿号等分隔符拆分
-    const rawTokens = query.split(/[\s,,、;;|]+/).filter(t => t.length > 0);
+    const clean = query.trim().toLowerCase();
+    if (!clean) return tokens;
 
-    rawTokens.forEach(token => {
-      // 英文/数字:整体作为一个 token
-      if (/^[a-zA-Z0-9\-_.]+$/.test(token)) {
-        tokens.push(token);
-      } else {
-        // 中文:把整个 token 作为一个关键词
-        // 同时拆出双字组合和单字,用于高亮匹配
-        tokens.push(token);
-        // 如果中文词超过 2 字,额外添加双字滑窗
-        if (token.length > 2) {
-          for (let i = 0; i < token.length - 1; i++) {
-            const bigram = token.substring(i, i + 2);
-            if (!tokens.includes(bigram)) tokens.push(bigram);
-          }
-        }
-        // 单字也加入,用于短查询高亮
-        if (token.length > 1) {
-          for (let i = 0; i < token.length; i++) {
-            const char = token[i];
-            if (!tokens.includes(char)) tokens.push(char);
-          }
+    const parts = clean.split(/[\s,，、;；|/]+/);
+    for (const part of parts) {
+      if (!part) continue;
+      tokens.push(part);
+      const isChinese = /[\u4e00-\u9fa5]/.test(part);
+      if (isChinese && part.length > 2) {
+        for (let i = 0; i < part.length - 1; i++) {
+          tokens.push(part.substring(i, i + 2));
         }
       }
-    });
-    return tokens;
+    }
+    return [...new Set(tokens)];
   }
 
   // 构建高亮正则:支持多关键词高亮
   function buildHighlightRegex(tokens) {
-    if (!tokens || tokens.length === 0) return null;
+    if (!tokens.length) return null;
     // 按 token 长度降序排列,优先匹配长词
-    const sorted = [...new Set(tokens)].sort((a, b) => b.length - a.length);
+    const sorted = [...tokens].sort((a, b) => b.length - a.length);
     const escaped = sorted.map(t => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
     return new RegExp(`(${escaped.join('|')})`, 'gi');
   }
 
   // 高亮文本:在标题和摘要中高亮匹配的关键词
-  function highlightText(text, highlightRegex) {
-    if (!text || !highlightRegex) return escapeHtml(text);
-    const escaped = escapeHtml(text);
-    return escaped.replace(highlightRegex, '<mark>$1</mark>');
+  function highlightText(text, regex) {
+    if (!text || !regex) return escapeHtml(text || '');
+    const parts = text.split(regex);
+    return parts.map(part => {
+      if (regex.test(part)) {
+        return `<mark>${escapeHtml(part)}</mark>`;
+      }
+      return escapeHtml(part);
+    }).join('');
   }
 
   // HTML 转义
   function escapeHtml(str) {
-    if (!str) return '';
     return String(str)
       .replace(/&/g, '&amp;')
       .replace(/</g, '&lt;')
@@ -156,16 +148,24 @@
 
   // 执行搜索
   function performSearch(query) {
+    selectedIndex = -1;
     if (!query.trim()) {
-      searchResults.classList.remove('active');
-      searchClear.classList.remove('visible');
+      if (searchResults) searchResults.classList.remove('active');
+      if (searchClear) searchClear.classList.remove('visible');
+      if (searchKbd) searchKbd.style.display = '';
       return;
     }
 
-    searchClear.classList.add('visible');
+    if (searchClear) searchClear.classList.add('visible');
+    if (searchKbd) searchKbd.style.display = 'none';
+
+    if (!fuse) {
+      loadSearchData().then(() => performSearch(query));
+      return;
+    }
 
     // 搜索
-    const results = fuse.search(query).slice(0, 10);
+    const results = fuse.search(query).slice(0, 8);
 
     // 构建高亮正则(用分词后的结果)
     const tokens = tokenizeQuery(query);
@@ -179,35 +179,60 @@
     if (!searchResults) return;
 
     if (results.length === 0) {
-      searchResults.innerHTML = `<div class="sr-empty">没有找到 "${escapeHtml(query)}" 相关的文章</div>`;
+      searchResults.innerHTML = `
+        <div class="sr-empty">
+          <div class="sr-empty-icon">🔍</div>
+          <div>未找到包含 <strong>"${escapeHtml(query)}"</strong> 的文章</div>
+          <div style="font-size: 0.75rem; color: var(--color-text-muted); margin-top: 0.25rem;">建议尝试：Android、Kotlin、AI Agent、架构 等关键词</div>
+        </div>`;
       searchResults.classList.add('active');
       return;
     }
 
-    searchResults.innerHTML = results.map(post => {
+    const headerHtml = `
+      <div class="sr-header">
+        <span>找到 ${results.length} 篇相关文章</span>
+        <span>↑↓ 导航 · Enter 确认 · ESC 关闭</span>
+      </div>`;
+
+    const itemsHtml = results.map((post, idx) => {
       const title = highlightText(post.title, highlightRegex);
       const excerpt = highlightText(post.excerpt, highlightRegex);
       const category = escapeHtml(post.category || '');
       const date = escapeHtml(post.date || '');
+      const postUrl = (post.url || '').replace(/^blog\/posts\//, 'posts/').replace(/^\/blog\/posts\//, 'posts/');
 
-      // 显示标签(最多 3 个)
       const tags = (post.tags || []).slice(0, 3).map(tag =>
-        `<span class="sr-tag">${escapeHtml(tag)}</span>`
-      ).join('');
+        `<span style="color: var(--color-text-muted);">#${escapeHtml(tag)}</span>`
+      ).join(' ');
 
       return `
-      <a href="/blog/posts/${(post.url || '').replace('blog/posts/', '')}" class="sr-item">
-        <div class="sr-title">${title}</div>
+      <a href="${postUrl.startsWith('posts/') ? postUrl : 'posts/' + postUrl}" class="sr-item" data-index="${idx}">
+        <div class="sr-title">
+          <span>${title}</span>
+          <span style="font-size: 0.75rem; color: var(--color-accent-primary); opacity: 0.8;">➔</span>
+        </div>
         <div class="sr-excerpt">${excerpt}</div>
         <div class="sr-meta">
-          <span class="sr-date">${date}</span>
+          <span>📅 ${date}</span>
           <span class="sr-category">${category}</span>
-          ${tags ? `<span class="sr-tags">${tags}</span>` : ''}
+          ${tags ? `<span>${tags}</span>` : ''}
         </div>
       </a>`;
     }).join('');
 
+    searchResults.innerHTML = headerHtml + itemsHtml;
     searchResults.classList.add('active');
+  }
+
+  function updateSelected() {
+    const items = searchResults.querySelectorAll('.sr-item');
+    items.forEach((item, idx) => {
+      item.classList.toggle('sr-selected', idx === selectedIndex);
+      if (idx === selectedIndex) {
+        item.scrollIntoView({ block: 'nearest' });
+      }
+    });
   }
 
   // 绑定事件
@@ -216,22 +241,47 @@
       let debounceTimer;
       searchInput.addEventListener('input', (e) => {
         clearTimeout(debounceTimer);
-        debounceTimer = setTimeout(() => performSearch(e.target.value), 200);
+        debounceTimer = setTimeout(() => performSearch(e.target.value), 180);
+      });
+
+      searchInput.addEventListener('keydown', (e) => {
+        if (!searchResults.classList.contains('active')) return;
+        const items = searchResults.querySelectorAll('.sr-item');
+        if (!items.length) return;
+
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          selectedIndex = (selectedIndex + 1) % items.length;
+          updateSelected();
+        } else if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          selectedIndex = (selectedIndex - 1 + items.length) % items.length;
+          updateSelected();
+        } else if (e.key === 'Enter') {
+          if (selectedIndex >= 0 && items[selectedIndex]) {
+            e.preventDefault();
+            items[selectedIndex].click();
+          }
+        } else if (e.key === 'Escape') {
+          searchResults.classList.remove('active');
+        }
       });
     }
 
     if (searchClear) {
       searchClear.addEventListener('click', () => {
-        searchInput.value = '';
-        performSearch('');
-        searchInput.focus();
+        if (searchInput) {
+          searchInput.value = '';
+          performSearch('');
+          searchInput.focus();
+        }
       });
     }
 
     // 点击外部关闭
     document.addEventListener('click', (e) => {
       if (!e.target.closest('.blog-search-bar')) {
-        searchResults.classList.remove('active');
+        if (searchResults) searchResults.classList.remove('active');
       }
     });
   }

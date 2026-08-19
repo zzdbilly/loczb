@@ -214,8 +214,10 @@ function rebuildBlogIndex() {
   const filterButtons = `        <button class="filter-btn filter-btn-active" data-filter="all" role="tab" aria-selected="true">全部</button>\n` +
     sortedCats.map(c => `        <button class="filter-btn" data-filter="${escapeHtml(c)}" role="tab" aria-selected="false">${escapeHtml(c)}</button>`).join('\n');
 
-  const filterPattern = /(<div class="blog-filters"[^>]*>)[\s\S]*?(<\/div>\s*<!-- Search Bar -->)/;
-  html = html.replace(filterPattern, `$1\n${filterButtons}\n      $2`);
+  const filterPattern = /(<div class="blog-filters"[^>]*>)[\s\S]*?(<\/div>\s*<!-- Tag Cloud -->)/;
+  if (filterPattern.test(html)) {
+    html = html.replace(filterPattern, `$1\n${filterButtons}\n      $2`);
+  }
 
   // 移除标签云（功能重复，分类筛选按钮已覆盖）
   const tagCloudPattern = /(<!-- Tag Cloud -->)[\s\S]*?(<!-- \/Tag Cloud -->)/;
