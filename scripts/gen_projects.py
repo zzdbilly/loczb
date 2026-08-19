@@ -1,13 +1,82 @@
 #!/usr/bin/env python3
-"""Generate projects/index.html with filter bar, data-category, and inline filter JS."""
+"""
+Generate projects/index.html dynamically from projects/projects.json data.
+"""
+import json
 from pathlib import Path
 
-OUTPUT = Path(__file__).resolve().parent.parent / "projects" / "index.html"
+ROOT = Path(__file__).resolve().parent.parent
+DATA_FILE = ROOT / "projects" / "projects.json"
+OUTPUT = ROOT / "projects" / "index.html"
 
-HTML = r'''<!DOCTYPE html>
+
+def render_case_card(p):
+    tech_tags = "\n                ".join(f'<span class="tech-tag">{t}</span>' for t in p.get("tech", []))
+    highlights_html = "<br>".join(f"• {h}" for h in p.get("highlights", []))
+    
+    metrics_html = "".join(f'''
+                <div class="case-metric">
+                  <div class="case-metric-value">{m["value"]}</div>
+                  <div class="case-metric-label">{m["label"]}</div>
+                </div>''' for m in p.get("metrics", []))
+    
+    links_html = "".join(f'''
+              <a href="{l["url"]}" class="btn {'btn-primary' if l.get('primary') else 'btn-ghost'}" target="_blank" rel="noopener">{l["label"]}</a>''' for l in p.get("links", []))
+    
+    tech_classes = " ".join(t.lower().replace("/", " ").replace(".", "") for t in p.get("tech", []))
+    section_title = "功能特性" if p.get("id") == "pastebin" else "亮点能力"
+
+    return f'''        <!-- Case: {p["title"]} -->
+        <article class="case-card animate-on-scroll" data-category="{p["category"]}" data-tech="{tech_classes}">
+          <div class="case-card-header">
+            <span class="case-card-badge">{p["badge"]}</span>
+            <h2 class="case-card-title">{p["title"]}</h2>
+            <p class="case-card-subtitle">{p["subtitle"]}</p>
+          </div>
+          <div class="case-card-body">
+            <div class="case-section">
+              <h3 class="case-section-title">项目背景</h3>
+              <p class="case-section-content">{p["background"]}</p>
+            </div>
+            <div class="case-section">
+              <h3 class="case-section-title">我的角色</h3>
+              <p class="case-section-content">{p["role"]}</p>
+            </div>
+            <div class="case-section">
+              <h3 class="case-section-title">技术方案</h3>
+              <div class="tech-tags">
+                {tech_tags}
+              </div>
+            </div>
+            <div class="case-section">
+              <h3 class="case-section-title">{section_title}</h3>
+              <p class="case-section-content">{highlights_html}</p>
+            </div>
+            <div class="case-section">
+              <h3 class="case-section-title">结果指标</h3>
+              <div class="case-metrics">{metrics_html}
+              </div>
+            </div>
+            <div class="case-links">{links_html}
+            </div>
+          </div>
+        </article>'''
+
+
+def generate():
+    if not DATA_FILE.exists():
+        print(f"❌ 数据文件不存在: {DATA_FILE}")
+        return
+
+    with open(DATA_FILE, 'r', encoding='utf-8') as f:
+        projects = json.load(f)
+
+    cards_html = "\n\n".join(render_case_card(p) for p in projects)
+
+    html = f'''<!DOCTYPE html>
 <html lang="zh-CN" data-theme="dark">
 <head>
-  <script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+  <script>try{{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}}catch(e){{}}</script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
@@ -44,27 +113,27 @@ HTML = r'''<!DOCTYPE html>
   <meta name="theme-color" content="#3b82f6">
   <link rel="stylesheet" href="../assets/css/style.css?v=proj-filter-v1">
   <style>
-    .case-card { background: var(--color-bg-secondary); border-radius: 16px; overflow: hidden; margin-bottom: 2rem; border: 1px solid var(--color-border); transition: all 0.35s cubic-bezier(0.4,0,0.2,1); }
-    .case-card:hover { border-color: var(--color-accent-primary); transform: translateY(-6px); box-shadow: 0 16px 48px rgba(0,0,0,0.18), 0 0 0 1px rgba(99,102,241,0.15); }
-    .case-card-header { padding: 2rem; border-bottom: 1px solid var(--color-border); }
-    .case-card-badge { display: inline-block; background: var(--color-accent-primary); color: white; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; margin-bottom: 1rem; }
-    .case-card-title { font-size: 1.75rem; margin-bottom: 0.5rem; }
-    .case-card-subtitle { color: var(--color-text-secondary); font-size: 1rem; }
-    .case-card-body { padding: 2rem; }
-    .case-section { margin-bottom: 1.5rem; }
-    .case-section:last-child { margin-bottom: 0; }
-    .case-section-title { font-size: 0.875rem; font-weight: 600; color: var(--color-accent-primary); margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; }
-    .case-section-content { color: var(--color-text-secondary); line-height: 1.7; }
-    .case-metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 1rem; margin-top: 1rem; }
-    .case-metric { background: var(--color-bg-tertiary); padding: 1rem; border-radius: 8px; text-align: center; }
-    .case-metric-value { font-size: 1.5rem; font-weight: 700; color: var(--color-text-primary); }
-    .case-metric-label { font-size: 0.75rem; color: var(--color-text-secondary); margin-top: 0.25rem; }
-    .case-links { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.5rem; }
-    .tech-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
-    @media (max-width: 640px) {
-      .case-card-header, .case-card-body { padding: 1.5rem; }
-      .case-card-title { font-size: 1.5rem; }
-    }
+    .case-card {{ background: var(--color-bg-secondary); border-radius: 16px; overflow: hidden; margin-bottom: 2rem; border: 1px solid var(--color-border); transition: all 0.35s cubic-bezier(0.4,0,0.2,1); }}
+    .case-card:hover {{ border-color: var(--color-accent-primary); transform: translateY(-6px); box-shadow: 0 16px 48px rgba(0,0,0,0.18), 0 0 0 1px rgba(99,102,241,0.15); }}
+    .case-card-header {{ padding: 2rem; border-bottom: 1px solid var(--color-border); }}
+    .case-card-badge {{ display: inline-block; background: var(--color-accent-primary); color: white; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; margin-bottom: 1rem; }}
+    .case-card-title {{ font-size: 1.75rem; margin-bottom: 0.5rem; }}
+    .case-card-subtitle {{ color: var(--color-text-secondary); font-size: 1rem; }}
+    .case-card-body {{ padding: 2rem; }}
+    .case-section {{ margin-bottom: 1.5rem; }}
+    .case-section:last-child {{ margin-bottom: 0; }}
+    .case-section-title {{ font-size: 0.875rem; font-weight: 600; color: var(--color-accent-primary); margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; }}
+    .case-section-content {{ color: var(--color-text-secondary); line-height: 1.7; }}
+    .case-metrics {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 1rem; margin-top: 1rem; }}
+    .case-metric {{ background: var(--color-bg-tertiary); padding: 1rem; border-radius: 8px; text-align: center; }}
+    .case-metric-value {{ font-size: 1.5rem; font-weight: 700; color: var(--color-text-primary); }}
+    .case-metric-label {{ font-size: 0.75rem; color: var(--color-text-secondary); margin-top: 0.25rem; }}
+    .case-links {{ display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.5rem; }}
+    .tech-tags {{ display: flex; flex-wrap: wrap; gap: 0.5rem; }}
+    @media (max-width: 640px) {{
+      .case-card-header, .case-card-body {{ padding: 1.5rem; }}
+      .case-card-title {{ font-size: 1.5rem; }}
+    }}
   </style>
   <!-- Preconnect to Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -119,109 +188,7 @@ HTML = r'''<!DOCTYPE html>
           <button class="projects-filter-btn" data-filter="tool">工具</button>
         </div>
 
-        <!-- Case 1: loczb 个人品牌网站 -->
-        <article class="case-card animate-on-scroll" data-category="website" data-tech="html css javascript cloudflare pwa">
-          <div class="case-card-header">
-            <span class="case-card-badge">代表案例</span>
-            <h2 class="case-card-title">loczb 个人品牌网站</h2>
-            <p class="case-card-subtitle">从零打造个人技术品牌，统一展示能力、项目和内容</p>
-          </div>
-          <div class="case-card-body">
-            <div class="case-section">
-              <h3 class="case-section-title">项目背景</h3>
-              <p class="case-section-content">需要一个统一的地方展示技术能力、项目经验和博客内容，让潜在合作方快速了解我能提供什么价值。同时作为个人品牌的数字名片。</p>
-            </div>
-            <div class="case-section">
-              <h3 class="case-section-title">我的角色</h3>
-              <p class="case-section-content">全栈独立开发 — 从信息架构、UI 设计、前端开发到部署运维，全流程负责。</p>
-            </div>
-            <div class="case-section">
-              <h3 class="case-section-title">技术方案</h3>
-              <div class="tech-tags">
-                <span class="tech-tag">HTML/CSS</span>
-                <span class="tech-tag">JavaScript</span>
-                <span class="tech-tag">GitHub Pages</span>
-                <span class="tech-tag">Cloudflare Workers</span>
-                <span class="tech-tag">PWA</span>
-                <span class="tech-tag">GitHub Actions CI</span>
-              </div>
-            </div>
-            <div class="case-section">
-              <h3 class="case-section-title">亮点能力</h3>
-              <p class="case-section-content">• 暗色科技风设计 + 精致动效 + 完整响应式<br>• 博客系统：分类/分页/搜索 + CI 自动化索引 + 90+ 篇技术博客<br>• AI 助手集成（Cloudflare Worker + 通义千问）<br>• PWA 离线 + RSS / Sitemap / OG 图片</p>
-            </div>
-            <div class="case-section">
-              <h3 class="case-section-title">结果指标</h3>
-              <div class="case-metrics">
-                <div class="case-metric">
-                  <div class="case-metric-value">500+</div>
-                  <div class="case-metric-label">月访问量</div>
-                </div>
-                <div class="case-metric">
-                  <div class="case-metric-value">90+</div>
-                  <div class="case-metric-label">博客文章</div>
-                </div>
-                <div class="case-metric">
-                  <div class="case-metric-value">100%</div>
-                  <div class="case-metric-label">独立开发</div>
-                </div>
-              </div>
-            </div>
-            <div class="case-links">
-              <a href="https://709527.xyz" class="btn btn-primary" target="_blank" rel="noopener">在线访问</a>
-              <a href="https://github.com/zzdbilly/loczb" class="btn btn-ghost" target="_blank" rel="noopener">源代码</a>
-            </div>
-          </div>
-        </article>
-
-        <!-- Case 3: PasteBin 便利贴 -->
-        <article class="case-card animate-on-scroll" data-category="tool" data-tech="cloudflare kv highlightjs crypto">
-          <div class="case-card-header">
-            <span class="case-card-badge">Web App</span>
-            <h2 class="case-card-title">PasteBin</h2>
-            <p class="case-card-subtitle">轻量文本分享工具 — 贴文本，一键生成链接分享</p>
-          </div>
-          <div class="case-card-body">
-            <div class="case-section">
-              <h3 class="case-section-title">项目背景</h3>
-              <p class="case-section-content">需要一个极简的文本分享工具，贴代码、日志、配置片段，快速生成链接发给别人。不需要注册登录，用完即走。对标 Pastebin.com，但更轻量、免费。</p>
-            </div>
-            <div class="case-section">
-              <h3 class="case-section-title">我的角色</h3>
-              <p class="case-section-content">全栈独立开发 — 从需求、架构设计、前端到后端逻辑，全流程搞定。</p>
-            </div>
-            <div class="case-section">
-              <h3 class="case-section-title">技术方案</h3>
-              <div class="tech-tags">
-                <span class="tech-tag">Cloudflare Workers</span>
-                <span class="tech-tag">KV</span>
-                <span class="tech-tag">highlight.js</span>
-                <span class="tech-tag">Web Crypto API</span>
-              </div>
-            </div>
-            <div class="case-section">
-              <h3 class="case-section-title">功能特性</h3>
-              <p class="case-section-content">• 一键创建粘贴，生成 6 位短码链接<br>• 过期时间：1小时 / 24小时 / 7天<br>• 阅后即焚：打开一次自动删除<br>• 密码保护：SHA-256 加密 + Token 验证<br>• 语法高亮：自动检测 22 种语言<br>• Raw 模式：纯文本输出<br>• 所有页面暗色主题，移动端适配</p>
-            </div>
-            <div class="case-section">
-              <h3 class="case-section-title">结果指标</h3>
-              <div class="case-metrics">
-                <div class="case-metric">
-                  <div class="case-metric-value">0</div>
-                  <div class="case-metric-label">外部依赖</div>
-                </div>
-                <div class="case-metric">
-                  <div class="case-metric-value">30KB</div>
-                  <div class="case-metric-label">Worker 大小</div>
-                </div>
-              </div>
-            </div>
-            <div class="case-links">
-              <a href="https://pastebin.billycust716.workers.dev" class="btn btn-primary" target="_blank" rel="noopener">在线访问</a>
-              <a href="https://github.com/zzdbilly/pastebin" class="btn btn-ghost" target="_blank" rel="noopener">源代码</a>
-            </div>
-          </div>
-        </article>
+{cards_html}
 
         <!-- Empty state -->
         <div class="projects-empty" id="projects-empty" style="display:none;">
@@ -259,15 +226,15 @@ HTML = r'''<!DOCTYPE html>
 
   <!-- Projects Filter Logic -->
   <script>
-  (function() {
+  (function() {{
     const filterBar = document.getElementById('projects-filter-bar');
     if (!filterBar) return;
     const buttons = filterBar.querySelectorAll('.projects-filter-btn');
     const cards = document.querySelectorAll('.case-card[data-category]');
     const emptyState = document.getElementById('projects-empty');
 
-    buttons.forEach(btn => {
-      btn.addEventListener('click', function() {
+    buttons.forEach(btn => {{
+      btn.addEventListener('click', function() {{
         const filter = this.getAttribute('data-filter');
 
         // Update active button
@@ -276,42 +243,46 @@ HTML = r'''<!DOCTYPE html>
 
         // Filter cards with smooth transition
         let visibleCount = 0;
-        cards.forEach(card => {
+        cards.forEach(card => {{
           const cat = card.getAttribute('data-category');
           const show = (filter === 'all' || cat === filter);
 
-          if (show) {
+          if (show) {{
             card.style.display = '';
             card.style.opacity = '0';
             card.style.transform = 'translateY(12px)';
-            requestAnimationFrame(() => {
+            requestAnimationFrame(() => {{
               card.style.opacity = '1';
               card.style.transform = 'translateY(0)';
-            });
+            }});
             visibleCount++;
-          } else {
+          }} else {{
             card.style.opacity = '0';
             card.style.transform = 'translateY(8px)';
-            setTimeout(() => { card.style.display = 'none'; }, 200);
-          }
-        });
+            setTimeout(() => {{ card.style.display = 'none'; }}, 200);
+          }}
+        }});
 
         // Toggle empty state
-        if (emptyState) {
+        if (emptyState) {{
           emptyState.style.display = visibleCount === 0 ? '' : 'none';
-        }
-      });
-    });
-  })();
+        }}
+      }});
+    }});
+  }})();
   </script>
 
   <!-- Cloudflare Web Analytics -->
-  <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "29e7cff6f37448989538e2165cb79187"}'></script>
+  <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{{"token": "29e7cff6f37448989538e2165cb79187"}}'></script>
 
 </body>
 </html>
 '''
 
-OUTPUT.parent.mkdir(parents=True, exist_ok=True)
-OUTPUT.write_text(HTML, encoding='utf-8')
-print(f"Written: {OUTPUT} ({len(HTML)} bytes)")
+    OUTPUT.parent.mkdir(parents=True, exist_ok=True)
+    OUTPUT.write_text(html, encoding='utf-8')
+    print(f"✅ 已成功生成: {OUTPUT} ({len(html)} bytes, {len(projects)} 个项目案例)")
+
+
+if __name__ == '__main__':
+    generate()
