@@ -444,7 +444,7 @@ function initCursorEffect() {
 
 // Spotlight Mouse Glow for modern cards
 function initSpotlightCards() {
-  const cards = document.querySelectorAll('.spotlight-card, .project-card, .blog-card-featured, .case-card');
+  const cards = document.querySelectorAll('.spotlight-card, .project-card, .blog-card-featured, .blog-mini-card, .case-card');
   if (!cards.length) return;
 
   cards.forEach(card => {
