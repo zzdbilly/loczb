@@ -108,7 +108,6 @@ loczb/
 # 工具函数
 slugify(title)                       # 标题→slug（去标点、转小写、空格变连字符）
 load_template()                      # 读取文章模板
-load_default_styles()                # 读取内联样式
 
 # 文章生成
 generate_article(...)                # 替换模板占位符，写出 HTML 文件
@@ -116,22 +115,18 @@ generate_article(...)                # 替换模板占位符，写出 HTML 文�
 # 索引更新
 add_to_index(slug, title, tags)      # 更新 related-posts.js（关联推荐）
 
-# 列表更新
-update_blog_list(...)                # 在 blog/index.html 顶部插入新文章
-update_homepage(...)                 # 更新首页大卡 + 最新文章列表
-update_articles_index(...)           # 更新 articles-index.json（标签云/归档/分类）
-update_homepage_js_array()           # 更新首页 JS posts 数组（大卡用）
+# 触发全量重建（Node.js）
+generate-index.js                    # 重建 articles-index.json / 博客列表 / 首页 / Sitemap / RSS
 
 # 入口
 parse_args(args)                     # 参数解析
-main()                               # 主流程（按顺序调用以上函数）
+main()                               # 主流程（调用生成并触发 generate-index.js）
 ```
 
 ### 发布自动更新流程
 
 ```
-generate_article() → add_to_index() → update_blog_list()
-    → update_articles_index() → update_homepage() → update_homepage_js_array()
+generate_article() → add_to_index() → scripts/generate-index.js
 ```
 
 ### 命令行用法
