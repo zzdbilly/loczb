@@ -2,7 +2,7 @@
 // 版本号规则：修改内容后更新此版本号（格式：loczb-YYYYMMDD-N）
 // 每次部署有实质性变更时递增 N，重大改版更新日期
 // 查看更新日志：https://github.com/zzdbilly/loczb/commits
-const SW_VERSION = '20260801-1';
+const SW_VERSION = '20260819-1';
 const CACHE_NAME = 'loczb-' + SW_VERSION;
 
 // Core pages to cache on install
@@ -13,7 +13,10 @@ const CORE_URLS = [
   '/about/',
   '/assets/css/style.css',
   '/assets/js/main.js',
-  '/assets/js/search.js'
+  '/assets/js/search.js',
+  '/assets/js/particles.js',
+  '/assets/js/time-progress.js',
+  '/assets/vendor/highlight/highlight.min.js'
 ];
 
 // Install: cache core pages
@@ -60,8 +63,8 @@ self.addEventListener('fetch', (event) => {
         return response;
       })
       .catch(() => {
-        // Fallback to cache when offline
-        return caches.match(event.request).then((cached) => {
+        // Fallback to cache when offline (ignore search params like ?v=...)
+        return caches.match(event.request, { ignoreSearch: true }).then((cached) => {
           return cached || new Response('离线不可用', { status: 503 });
         });
       })
