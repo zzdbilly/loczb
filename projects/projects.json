@@ -1,0 +1,54 @@
+[
+  {
+    "id": "loczb",
+    "badge": "代表案例",
+    "title": "loczb 个人品牌网站",
+    "subtitle": "从零打造个人技术品牌，统一展示能力、项目和内容",
+    "category": "website",
+    "tech": ["HTML/CSS", "JavaScript", "GitHub Pages", "Cloudflare Workers", "PWA", "GitHub Actions CI"],
+    "background": "需要一个统一的地方展示技术能力、项目经验和博客内容，让潜在合作方快速了解我能提供什么价值。同时作为个人品牌的数字名片。",
+    "role": "全栈独立开发 — 从信息架构、UI 设计、前端开发到部署运维，全流程负责。",
+    "highlights": [
+      "暗色科技风设计 + 精致动效 + 完整响应式",
+      "博客系统：分类/分页/搜索 + CI 自动化索引 + 90+ 篇技术博客",
+      "AI 助手集成（Cloudflare Worker + 通义千问）",
+      "PWA 离线 + RSS / Sitemap / OG 图片"
+    ],
+    "metrics": [
+      { "value": "500+", "label": "月访问量" },
+      { "value": "90+", "label": "博客文章" },
+      { "value": "100%", "label": "独立开发" }
+    ],
+    "links": [
+      { "label": "在线访问", "url": "https://709527.xyz", "primary": true },
+      { "label": "源代码", "url": "https://github.com/zzdbilly/loczb", "primary": false }
+    ]
+  },
+  {
+    "id": "pastebin",
+    "badge": "Web App",
+    "title": "PasteBin",
+    "subtitle": "轻量文本分享工具 — 贴文本，一键生成链接分享",
+    "category": "tool",
+    "tech": ["Cloudflare Workers", "KV", "highlight.js", "Web Crypto API"],
+    "background": "需要一个极简的文本分享工具，贴代码、日志、配置片段，快速生成链接发给别人。不需要注册登录，用完即走。对标 Pastebin.com，但更轻量、免费。",
+    "role": "全栈独立开发 — 从需求、架构设计、前端到后端逻辑，全流程搞定。",
+    "highlights": [
+      "一键创建粘贴，生成 6 位短码链接",
+      "过期时间：1小时 / 24小时 / 7天",
+      "阅后即焚：打开一次自动删除",
+      "密码保护：SHA-256 加密 + Token 验证",
+      "语法高亮：自动检测 22 种语言",
+      "Raw 模式：纯文本输出",
+      "所有页面暗色主题，移动端适配"
+    ],
+    "metrics": [
+      { "value": "0", "label": "外部依赖" },
+      { "value": "30KB", "label": "Worker 大小" }
+    ],
+    "links": [
+      { "label": "在线访问", "url": "https://pastebin.billycust716.workers.dev", "primary": true },
+      { "label": "源代码", "url": "https://github.com/zzdbilly/pastebin", "primary": false }
+    ]
+  }
+]
