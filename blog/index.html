@@ -101,9 +101,14 @@
           <p class="blog-hero-subtitle">Android、Kotlin、端侧 AI、全栈架构与开发思考</p>
         </div>
         <div class="blog-search-bar">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-          <input type="text" id="blog-search-input" placeholder="搜索文章...  Ctrl+K" autocomplete="off">
-          <button class="search-clear" aria-label="清除搜索">&times;</button>
+          <div class="search-input-wrapper">
+            <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+            <input type="text" id="blog-search-input" placeholder="全站 99 篇博文即时检索..." autocomplete="off">
+            <div class="search-actions">
+              <button class="search-clear" id="search-clear-btn" aria-label="清除搜索" title="清除">&times;</button>
+              <kbd class="search-kbd" id="search-kbd-badge">⌘K</kbd>
+            </div>
+          </div>
           <div id="blog-search-results" class="blog-search-results"></div>
         </div>
       </div>
@@ -120,8 +125,6 @@
         <button class="filter-btn" data-filter="系统编程" role="tab" aria-selected="false">系统编程</button>
         <button class="filter-btn" data-filter="安全" role="tab" aria-selected="false">安全</button>
         <button class="filter-btn" data-filter="开发" role="tab" aria-selected="false">开发</button>
-        <button class="filter-btn" data-filter="技术" role="tab" aria-selected="false">技术</button>
-        <button class="filter-btn" data-filter="AI Agent" role="tab" aria-selected="false">AI Agent</button>
       </div>
 
       <!-- Tag Cloud -->
