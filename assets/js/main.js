@@ -377,24 +377,33 @@ function initLazyLoad() {
 
 // Scroll Progress Indicator
 function initScrollProgress() {
-  const progressBar = document.querySelector('.scroll-progress');
-  if (!progressBar) return;
+  const progressBar = document.querySelector('.scroll-progress, #readingProgress, .reading-progress');
+  if (!progressBar || progressBar._hasProgressInit) return;
+  progressBar._hasProgressInit = true;
   
   window.addEventListener('scroll', () => {
     const scrollTop = window.pageYOffset;
     const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-    const scrollPercent = (scrollTop / docHeight) * 100;
-    progressBar.style.width = `${scrollPercent}%`;
+    if (docHeight > 0) {
+      const scrollPercent = (scrollTop / docHeight) * 100;
+      progressBar.style.width = `${Math.min(100, Math.max(0, scrollPercent))}%`;
+    }
   }, { passive: true });
 }
 
 // Back to Top Button
 function initBackToTop() {
-  const btn = document.createElement('button');
-  btn.className = 'back-to-top';
-  btn.setAttribute('aria-label', '返回顶部');
-  btn.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 15l-6-6-6 6"/></svg>';
-  document.body.appendChild(btn);
+  let btn = document.querySelector('.back-to-top, #backToTop');
+  if (!btn) {
+    btn = document.createElement('button');
+    btn.className = 'back-to-top';
+    btn.setAttribute('aria-label', '返回顶部');
+    btn.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 15l-6-6-6 6"/></svg>';
+    document.body.appendChild(btn);
+  }
+  
+  if (btn._hasBackToTopInit) return;
+  btn._hasBackToTopInit = true;
   
   window.addEventListener('scroll', () => {
     if (window.pageYOffset > 300) {
