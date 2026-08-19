@@ -10,6 +10,9 @@
     // === 返回顶部 & 阅读进度 ===
     const backToTop = document.getElementById('backToTop');
 
+    // === macOS 风格代码块与复制功能 ===
+    initCodeBlocks();
+
     window.addEventListener('scroll', () => {
       if (backToTop) {
         if (window.scrollY > 300) {
@@ -217,4 +220,87 @@
       });
     })();
   });
+
+  // === macOS 风格代码块与一键复制 ===
+  function initCodeBlocks() {
+    const codeBlocks = document.querySelectorAll('.post-content pre');
+    if (!codeBlocks.length) return;
+
+    codeBlocks.forEach(pre => {
+      if (pre.parentElement.classList.contains('code-block-wrapper')) return;
+
+      const code = pre.querySelector('code');
+      const langClass = code ? Array.from(code.classList).find(c => c.startsWith('language-') || c.startsWith('lang-')) : null;
+      const lang = langClass ? langClass.replace(/^(language-|lang-)/, '').toUpperCase() : 'CODE';
+
+      const wrapper = document.createElement('div');
+      wrapper.className = 'code-block-wrapper';
+
+      const header = document.createElement('div');
+      header.className = 'code-block-header';
+      header.innerHTML = `
+        <div class="code-dots">
+          <span class="code-dot code-dot-red"></span>
+          <span class="code-dot code-dot-yellow"></span>
+          <span class="code-dot code-dot-green"></span>
+          <span class="code-lang-badge">${lang}</span>
+        </div>
+        <button class="code-copy-btn" aria-label="复制代码">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+          </svg>
+          <span>复制</span>
+        </button>
+      `;
+
+      pre.parentNode.insertBefore(wrapper, pre);
+      wrapper.appendChild(header);
+      wrapper.appendChild(pre);
+
+      const copyBtn = header.querySelector('.code-copy-btn');
+      copyBtn.addEventListener('click', async () => {
+        const text = code ? code.innerText : pre.innerText;
+        try {
+          await navigator.clipboard.writeText(text);
+          copyBtn.classList.add('copied');
+          copyBtn.innerHTML = `
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+            <span>已复制</span>
+          `;
+          showToast('代码已成功复制到剪贴板');
+          setTimeout(() => {
+            copyBtn.classList.remove('copied');
+            copyBtn.innerHTML = `
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+              </svg>
+              <span>复制</span>
+            `;
+          }, 2000);
+        } catch (err) {
+          console.error('复制失败', err);
+        }
+      });
+    });
+  }
+
+  function showToast(msg) {
+    let toast = document.getElementById('toast-notice');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.id = 'toast-notice';
+      toast.className = 'toast-notice';
+      document.body.appendChild(toast);
+    }
+    toast.innerHTML = `<span>✨</span> <span>${msg}</span>`;
+    toast.classList.add('show');
+    clearTimeout(toast._timer);
+    toast._timer = setTimeout(() => {
+      toast.classList.remove('show');
+    }, 2200);
+  }
 })();

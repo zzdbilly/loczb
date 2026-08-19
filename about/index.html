@@ -94,33 +94,37 @@
   <!-- Main Content -->
   <main id="main-content">
   <!-- About Hero -->
-  <section class="about-hero">
+  <section class="about-hero" style="padding: var(--space-3xl) 0 var(--space-xl);">
     <div class="hero-glow"></div>
-    <div class="container">
+    <div class="container container-wide">
       <div class="about-grid">
-        <div class="animate-on-scroll">
-          <div class="about-avatar">👨‍💻</div>
+        <div class="animate-on-scroll" style="display: flex; justify-content: center;">
+          <div class="about-avatar" style="width: 140px; height: 140px; font-size: 4rem; border-radius: 50%; background: linear-gradient(135deg, rgba(99,102,241,0.2), rgba(139,92,246,0.2)); border: 2px solid rgba(99,102,241,0.4); display: flex; align-items: center; justify-content: center; box-shadow: 0 0 40px rgba(99,102,241,0.25);">
+            👨‍💻
+          </div>
         </div>
 
         <div class="about-info animate-on-scroll">
-          <h1>Hi, I'm <span class="gradient-text">张小猛</span></h1>
-          <p class="about-bio">
-            安卓开发工程师 → 端侧 + AI 接入架构探索者。
-            专注于移动端体验与 AI 落地的结合,基于 OpenClaw 等开源工具搭建个人 AI 工作流。
-            目标:成为"把 AI 模型用好的人",而不是"训练模型的人"。
+          <div class="status-pill" style="margin-bottom: 0.75rem;">
+            <span class="pulse-dot"></span>
+            <span>Software Engineer · Shenzhen</span>
+          </div>
+          <h1 style="font-size: clamp(2rem, 1.8rem + 1.5vw, 3rem); font-family: var(--font-serif); margin-bottom: 1rem;">Hi, I'm <span class="gradient-text">张小猛</span></h1>
+          <p class="about-bio" style="font-size: var(--text-base); color: var(--color-text-secondary); line-height: 1.8; margin-bottom: 1.5rem;">
+            安卓开发工程师 → 端侧 + AI 接入架构探索者。<br>
+            专注于移动端体验与 AI 落地的结合，基于 Hermes / OpenClaw 等开源工具搭建个人 AI 工作流。<br>
+            目标：成为“把 AI 模型用好的人”，而不是“训练模型的人”。
           </p>
 
-          <div class="tech-stack">
-            <span class="tech-tag">Kotlin</span>
-            <span class="tech-tag">Java</span>
-            <span class="tech-tag">React</span>
-            <span class="tech-tag">TypeScript</span>
-            <span class="tech-tag">Python</span>
-            <span class="tech-tag">Go</span>
-            <span class="tech-tag">AI Agent</span>
-            <span class="tech-tag">端侧推理</span>
-            <span class="tech-tag">RAG</span>
-            <span class="tech-tag">OpenClaw</span>
+          <div class="bento-tech-pills">
+            <span class="bento-pill">🤖 Kotlin</span>
+            <span class="bento-pill">📱 Jetpack Compose</span>
+            <span class="bento-pill">🧠 Gemini Nano / LLM</span>
+            <span class="bento-pill">⚡ AI Agent (Hermes)</span>
+            <span class="bento-pill">🌐 TypeScript / React</span>
+            <span class="bento-pill">🐍 Python</span>
+            <span class="bento-pill">🐹 Go</span>
+            <span class="bento-pill">☁️ Cloudflare Workers</span>
           </div>
         </div>
       </div>
@@ -129,31 +133,32 @@
 
   <!-- More About Me -->
   <section class="section section-compact">
-    <div class="container">
+    <div class="container container-wide">
       <h2 class="sr-only">更多关于我</h2>
       <div class="grid grid-2 gap-xl">
         <!-- About Me (merged) -->
-        <div class="card animate-on-scroll">
-          <div class="card-header">
-            <div class="project-icon">👋</div>
-            <h3 class="card-title">关于我</h3>
+        <div class="spotlight-card animate-on-scroll" style="padding: 2.25rem;">
+          <div class="project-card-header">
+            <div class="project-card-icon">👋</div>
+            <div class="project-card-badge">Profile</div>
           </div>
-          <div class="card-body">
-            <p class="card-desc">我是一名安卓开发工程师，目前在深圳工作。天秤座，性格慢热但一旦熟了就很能聊。</p>
-            <p class="card-desc">对 AI 特别感兴趣，尤其是 AI Agent 和自动化工具。2026 年目标：成为端侧 + AI 接入的实战派。</p>
+          <h3 class="project-card-title" style="margin-bottom: 1rem;">关于我</h3>
+          <div class="card-body" style="padding: 0;">
+            <p class="card-desc" style="line-height: 1.75; margin-bottom: 0.75rem;">我是一名安卓开发工程师，目前在深圳工作。天秤座，性格慢热但一旦熟了就很能聊。</p>
+            <p class="card-desc" style="line-height: 1.75; margin-bottom: 1.25rem;">对 AI 特别感兴趣，尤其是 AI Agent 和端侧模型落地。2026 年目标：成为端侧 + AI 接入的实战派。</p>
 
-            <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--color-border);">
-              <div style="font-weight: 600; color: var(--color-accent-primary); font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem;">我在做什么</div>
-              <div style="display: flex; flex-direction: column; gap: 0.75rem;">
-                <p class="card-desc" style="margin: 0;">• <strong>主业</strong> — Android 应用开发，Kotlin + Jetpack Compose</p>
-                <p class="card-desc" style="margin: 0;">• <strong>探索</strong> — OpenClaw AI 工作流、AI 工具实践</p>
-                <p class="card-desc" style="margin: 0;">• <strong>学习</strong> — 端侧 AI、全栈开发、产品思维</p>
+            <div style="margin-top: 1.25rem; padding-top: 1.25rem; border-top: 1px solid var(--color-border);">
+              <div style="font-weight: 700; color: var(--color-accent-primary); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem;">我在做什么</div>
+              <div style="display: flex; flex-direction: column; gap: 0.6rem;">
+                <p class="card-desc" style="margin: 0; font-size: 0.9rem;">• <strong>主业</strong> — Android 应用开发，Kotlin + Jetpack Compose</p>
+                <p class="card-desc" style="margin: 0; font-size: 0.9rem;">• <strong>探索</strong> — Hermes / OpenClaw AI 工作流、AI 工具与端侧推理实践</p>
+                <p class="card-desc" style="margin: 0; font-size: 0.9rem;">• <strong>学习</strong> — 端云混合架构、全栈开发、产品思维</p>
               </div>
             </div>
 
-            <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--color-border);">
-              <div style="font-weight: 600; color: var(--color-accent-primary); font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem;">一点趣事</div>
-              <p class="card-desc" style="margin: 0;">
+            <div style="margin-top: 1.25rem; padding-top: 1.25rem; border-top: 1px solid var(--color-border);">
+              <div style="font-weight: 700; color: var(--color-accent-primary); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">一点趣事</div>
+              <p class="card-desc" style="margin: 0; font-size: 0.9rem; line-height: 1.7;">
                 🎸 会弹一点吉他 · 🎯 追求代码的成就感 · ⚖️ 天秤座，追求平衡 · 🤖 相信 AI 会改变世界
               </p>
             </div>
@@ -161,41 +166,41 @@
         </div>
 
         <!-- My Journey -->
-        <div class="card animate-on-scroll">
-          <div class="card-header">
-            <div class="project-icon">🛤️</div>
-            <h3 class="card-title">我的旅程</h3>
+        <div class="spotlight-card animate-on-scroll" style="padding: 2.25rem;">
+          <div class="project-card-header">
+            <div class="project-card-icon">🛤️</div>
+            <div class="project-card-badge">Timeline</div>
           </div>
-          <div class="card-body">
+          <h3 class="project-card-title" style="margin-bottom: 1rem;">我的旅程</h3>
+          <div class="card-body" style="padding: 0;">
             <div class="timeline">
               <div class="timeline-item">
                 <div class="timeline-dot"></div>
                 <div class="timeline-date">2021 - 至今</div>
-                <div class="timeline-title">Android 开发工程师</div>
-                <div class="timeline-desc">专注于移动端开发，从 Java 到 Kotlin</div>
+                <div class="timeline-title" style="font-weight: 700;">Android 开发工程师</div>
+                <div class="timeline-desc">专注于移动端开发，从 Java 演进到 Kotlin & Jetpack Compose</div>
               </div>
               <div class="timeline-item">
                 <div class="timeline-dot"></div>
                 <div class="timeline-date">2023</div>
-                <div class="timeline-title">探索 AI 领域</div>
-                <div class="timeline-desc">开始学习 LLM、Prompt Engineering、RAG</div>
+                <div class="timeline-title" style="font-weight: 700;">探索 AI 领域</div>
+                <div class="timeline-desc">学习 LLM、Prompt Engineering、RAG 检索增强架构</div>
               </div>
               <div class="timeline-item">
                 <div class="timeline-dot"></div>
-                <div class="timeline-date">2024</div>
-                <div class="timeline-title">AI Agent 实践</div>
-                <div class="timeline-desc">基于 OpenClaw 搭建个人 AI 工作流</div>
+                <div class="timeline-date">2024 - 2025</div>
+                <div class="timeline-title" style="font-weight: 700;">AI Agent 实践</div>
+                <div class="timeline-desc">基于 OpenClaw / Hermes 搭建个人 AI 自动化工作流与技能生态</div>
               </div>
               <div class="timeline-item">
                 <div class="timeline-dot"></div>
                 <div class="timeline-date">2026</div>
-                <div class="timeline-title">端侧 + AI 接入架构探索</div>
-                <div class="timeline-desc">目标：成为“把 AI 模型用好的人”，积累端云混合架构实战经验</div>
+                <div class="timeline-title" style="font-weight: 700;">端侧 + AI 接入架构探索</div>
+                <div class="timeline-desc">目标：成为“把 AI 模型用好的人”，积累端云协同与高性能原生产品实战经验</div>
               </div>
             </div>
           </div>
         </div>
-
 
       </div>
     </div>
