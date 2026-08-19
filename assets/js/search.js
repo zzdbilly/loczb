@@ -1,156 +1,150 @@
 /**
- * Blog Search - Fuse.js powered fuzzy search
- * 搜索文章标题、摘要、标签、分类
- * 支持中文分词、关键词高亮、分类标签显示
+ * Blog Search - High-Performance Command Palette Fuzzy Search
+ * 支持即时多关键词检索、高亮、快捷键与键盘导航，毫秒级响应，零卡顿
  */
 (function() {
   'use strict';
 
-  let fuse;
-  let searchData = { posts: [], archives: [] };
-  let fuseLoaded = false;
+  let fuse = null;
+  let searchData = { posts: [] };
+  let isLoading = false;
+  let isFuseLoading = false;
+  let selectedIndex = -1;
+
   const searchInput = document.getElementById('blog-search-input');
   const searchResults = document.getElementById('blog-search-results');
   const searchClear = document.getElementById('search-clear-btn') || document.querySelector('.search-clear');
   const searchKbd = document.getElementById('search-kbd-badge') || document.querySelector('.search-kbd');
-  let selectedIndex = -1;
 
-  // 动态加载 Fuse.js(优先本地 vendor 按需加载,不阻塞首屏)
-  async function loadFuse() {
-    if (fuseLoaded) return true;
-    if (typeof Fuse !== 'undefined') { fuseLoaded = true; return true; }
-    try {
-      await new Promise((resolve, reject) => {
-        const script = document.createElement('script');
-        script.src = '/assets/vendor/fuse/fuse.min.js';
-        script.onload = () => { fuseLoaded = true; resolve(); };
-        script.onerror = () => {
-          // CDN 回退
-          const fallback = document.createElement('script');
-          fallback.src = 'https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.js';
-          fallback.onload = () => { fuseLoaded = true; resolve(); };
-          fallback.onerror = reject;
-          document.head.appendChild(fallback);
-        };
-        document.head.appendChild(script);
-      });
-      return true;
-    } catch (e) {
-      console.error('Fuse.js 加载失败:', e);
-      return false;
-    }
-  }
-
-  // 加载搜索数据（带 sessionStorage 缓存，5 分钟过期）
-  const CACHE_KEY = 'loczb-search-data';
-  const CACHE_TTL = 5 * 60 * 1000; // 5 分钟
-
-  async function loadSearchData() {
-    try {
-      // 检查 sessionStorage 缓存
-      const cached = sessionStorage.getItem(CACHE_KEY);
-      if (cached) {
-        const parsed = JSON.parse(cached);
-        if (Date.now() - parsed.ts < CACHE_TTL) {
-          searchData = parsed.data;
-          initFuse();
-          return;
-        }
-      }
-
-      const loaded = await loadFuse();
-      if (!loaded) return;
-      
-      const resp = await fetch('/blog/articles-index.json');
-      const data = await resp.json();
-      searchData = data;
-
-      // 写入缓存
-      try {
-        sessionStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), data }));
-      } catch (e) {
-        // sessionStorage 满了或不可用，忽略
-      }
-
+  // 动态按需加载 Fuse.js 增强模糊匹配能力
+  function loadFuse() {
+    if (typeof Fuse !== 'undefined') {
       initFuse();
-    } catch (e) {
-      console.error('加载搜索数据失败:', e);
+      return;
     }
-  }
+    if (isFuseLoading) return;
+    isFuseLoading = true;
 
-  // 初始化 Fuse.js
-  function initFuse() {
-    const options = {
-      keys: [
-        { name: 'title', weight: 0.4 },
-        { name: 'excerpt', weight: 0.25 },
-        { name: 'tags', weight: 0.2 },
-        { name: 'category', weight: 0.15 }
-      ],
-      threshold: 0.35,
-      includeMatches: true,
-      minMatchCharLength: 1,
-      ignoreLocation: true,
-      findAllMatches: true
+    const script = document.createElement('script');
+    script.src = '../assets/vendor/fuse/fuse.min.js';
+    script.onload = () => {
+      isFuseLoading = false;
+      initFuse();
     };
-    fuse = new Fuse(searchData.posts, options);
+    script.onerror = () => {
+      const fallback = document.createElement('script');
+      fallback.src = 'https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.js';
+      fallback.onload = () => {
+        isFuseLoading = false;
+        initFuse();
+      };
+      fallback.onerror = () => { isFuseLoading = false; };
+      document.head.appendChild(fallback);
+    };
+    document.head.appendChild(script);
   }
 
-  // 中文分词
-  function tokenizeQuery(query) {
-    const tokens = [];
-    const clean = query.trim().toLowerCase();
-    if (!clean) return tokens;
+  // 加载文章索引数据
+  async function loadSearchData() {
+    if (searchData.posts && searchData.posts.length > 0) return true;
+    if (isLoading) return false;
+    isLoading = true;
 
-    const parts = clean.split(/[\s,，、;；|/]+/);
-    for (const part of parts) {
-      if (!part) continue;
-      tokens.push(part);
-      const isChinese = /[\u4e00-\u9fa5]/.test(part);
-      if (isChinese && part.length > 2) {
-        for (let i = 0; i < part.length - 1; i++) {
-          tokens.push(part.substring(i, i + 2));
+    const paths = ['articles-index.json', '/blog/articles-index.json', '../blog/articles-index.json'];
+    for (const p of paths) {
+      try {
+        const resp = await fetch(p);
+        if (resp.ok) {
+          const data = await resp.json();
+          if (data && data.posts) {
+            searchData = data;
+            isLoading = false;
+            initFuse();
+            return true;
+          }
         }
-      }
+      } catch (e) {}
     }
-    return [...new Set(tokens)];
+    isLoading = false;
+    return false;
   }
 
-  // 构建高亮正则:支持多关键词高亮
-  function buildHighlightRegex(tokens) {
-    if (!tokens.length) return null;
-    // 按 token 长度降序排列,优先匹配长词
-    const sorted = [...tokens].sort((a, b) => b.length - a.length);
-    const escaped = sorted.map(t => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
-    return new RegExp(`(${escaped.join('|')})`, 'gi');
+  function initFuse() {
+    if (typeof Fuse === 'undefined' || !searchData.posts || !searchData.posts.length) return;
+    try {
+      fuse = new Fuse(searchData.posts, {
+        keys: [
+          { name: 'title', weight: 0.45 },
+          { name: 'category', weight: 0.2 },
+          { name: 'tags', weight: 0.2 },
+          { name: 'excerpt', weight: 0.15 }
+        ],
+        threshold: 0.35,
+        minMatchCharLength: 1,
+        ignoreLocation: true
+      });
+    } catch (e) {
+      fuse = null;
+    }
   }
 
-  // 高亮文本:在标题和摘要中高亮匹配的关键词
-  function highlightText(text, regex) {
-    if (!text || !regex) return escapeHtml(text || '');
-    const parts = text.split(regex);
-    return parts.map(part => {
-      if (regex.test(part)) {
-        return `<mark>${escapeHtml(part)}</mark>`;
-      }
-      return escapeHtml(part);
-    }).join('');
-  }
-
-  // HTML 转义
   function escapeHtml(str) {
+    if (!str) return '';
     return String(str)
       .replace(/&/g, '&amp;')
       .replace(/</g, '&lt;')
       .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;');
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
   }
 
-  // 执行搜索
+  function highlightText(text, query) {
+    if (!text) return '';
+    const safeText = escapeHtml(text);
+    if (!query || !query.trim()) return safeText;
+
+    const terms = query.trim().split(/\s+/).filter(t => t.length > 0);
+    if (!terms.length) return safeText;
+
+    const pattern = terms
+      .map(t => escapeHtml(t).replace(/[.*+?^${}()|[\]\\\/]/g, '\\$&'))
+      .filter(Boolean)
+      .join('|');
+
+    if (!pattern) return safeText;
+
+    try {
+      const regex = new RegExp(`(${pattern})`, 'gi');
+      return safeText.replace(regex, '<mark>$1</mark>');
+    } catch (e) {
+      return safeText;
+    }
+  }
+
+  function nativeSearch(query) {
+    if (!searchData.posts || !searchData.posts.length) return [];
+    const q = query.toLowerCase();
+    const words = q.split(/\s+/).filter(Boolean);
+    if (!words.length) return [];
+
+    return searchData.posts.filter(p => {
+      const title = (p.title || '').toLowerCase();
+      const excerpt = (p.excerpt || '').toLowerCase();
+      const category = (p.category || '').toLowerCase();
+      const tags = (p.tags || []).join(' ').toLowerCase();
+      return words.every(w => title.includes(w) || category.includes(w) || tags.includes(w) || excerpt.includes(w));
+    }).slice(0, 8);
+  }
+
   function performSearch(query) {
     selectedIndex = -1;
-    if (!query.trim()) {
-      if (searchResults) searchResults.classList.remove('active');
+    const q = (query || '').trim();
+
+    if (!q) {
+      if (searchResults) {
+        searchResults.classList.remove('active');
+        searchResults.innerHTML = '';
+      }
       if (searchClear) searchClear.classList.remove('visible');
       if (searchKbd) searchKbd.style.display = '';
       return;
@@ -159,31 +153,42 @@
     if (searchClear) searchClear.classList.add('visible');
     if (searchKbd) searchKbd.style.display = 'none';
 
-    if (!fuse) {
-      loadSearchData().then(() => performSearch(query));
+    if (!searchData.posts || !searchData.posts.length) {
+      loadSearchData().then(() => {
+        if (searchInput && searchInput.value.trim() === q) {
+          executeSearch(q);
+        }
+      });
       return;
     }
 
-    // 搜索
-    const results = fuse.search(query).slice(0, 8);
-
-    // 构建高亮正则(用分词后的结果)
-    const tokens = tokenizeQuery(query);
-    const highlightRegex = buildHighlightRegex(tokens);
-
-    displayResults(results.map(r => r.item), highlightRegex, query);
+    executeSearch(q);
   }
 
-  // 显示结果
-  function displayResults(results, highlightRegex, query) {
+  function executeSearch(query) {
+    let matched = [];
+    if (fuse) {
+      try {
+        matched = fuse.search(query).slice(0, 8).map(r => r.item);
+      } catch (e) {
+        matched = nativeSearch(query);
+      }
+    } else {
+      matched = nativeSearch(query);
+    }
+
+    displayResults(matched, query);
+  }
+
+  function displayResults(results, query) {
     if (!searchResults) return;
 
-    if (results.length === 0) {
+    if (!results || results.length === 0) {
       searchResults.innerHTML = `
         <div class="sr-empty">
           <div class="sr-empty-icon">🔍</div>
           <div>未找到包含 <strong>"${escapeHtml(query)}"</strong> 的文章</div>
-          <div style="font-size: 0.75rem; color: var(--color-text-muted); margin-top: 0.25rem;">建议尝试：Android、Kotlin、AI Agent、架构 等关键词</div>
+          <div style="font-size: 0.75rem; color: var(--color-text-muted); margin-top: 0.25rem;">建议尝试：Android、Kotlin、AI Agent、架构、思考 等关键词</div>
         </div>`;
       searchResults.classList.add('active');
       return;
@@ -196,18 +201,19 @@
       </div>`;
 
     const itemsHtml = results.map((post, idx) => {
-      const title = highlightText(post.title, highlightRegex);
-      const excerpt = highlightText(post.excerpt, highlightRegex);
+      const title = highlightText(post.title, query);
+      const excerpt = highlightText(post.excerpt, query);
       const category = escapeHtml(post.category || '');
       const date = escapeHtml(post.date || '');
-      const postUrl = (post.url || '').replace(/^blog\/posts\//, 'posts/').replace(/^\/blog\/posts\//, 'posts/');
+      const postSlug = post.slug || (post.url || '').replace(/^blog\/posts\//, '').replace(/\.html$/, '');
+      const href = `posts/${postSlug}.html`;
 
       const tags = (post.tags || []).slice(0, 3).map(tag =>
         `<span style="color: var(--color-text-muted);">#${escapeHtml(tag)}</span>`
       ).join(' ');
 
       return `
-      <a href="${postUrl.startsWith('posts/') ? postUrl : 'posts/' + postUrl}" class="sr-item" data-index="${idx}">
+      <a href="${href}" class="sr-item" data-index="${idx}">
         <div class="sr-title">
           <span>${title}</span>
           <span style="font-size: 0.75rem; color: var(--color-accent-primary); opacity: 0.8;">➔</span>
@@ -226,6 +232,7 @@
   }
 
   function updateSelected() {
+    if (!searchResults) return;
     const items = searchResults.querySelectorAll('.sr-item');
     items.forEach((item, idx) => {
       item.classList.toggle('sr-selected', idx === selectedIndex);
@@ -235,17 +242,25 @@
     });
   }
 
-  // 绑定事件
   function bindEvents() {
     if (searchInput) {
-      let debounceTimer;
+      let debounceTimer = null;
       searchInput.addEventListener('input', (e) => {
         clearTimeout(debounceTimer);
-        debounceTimer = setTimeout(() => performSearch(e.target.value), 180);
+        debounceTimer = setTimeout(() => performSearch(e.target.value), 120);
+      });
+
+      searchInput.addEventListener('focus', () => {
+        if (searchInput.value.trim()) {
+          performSearch(searchInput.value);
+        } else {
+          loadSearchData();
+          loadFuse();
+        }
       });
 
       searchInput.addEventListener('keydown', (e) => {
-        if (!searchResults.classList.contains('active')) return;
+        if (!searchResults || !searchResults.classList.contains('active')) return;
         const items = searchResults.querySelectorAll('.sr-item');
         if (!items.length) return;
 
@@ -269,7 +284,8 @@
     }
 
     if (searchClear) {
-      searchClear.addEventListener('click', () => {
+      searchClear.addEventListener('click', (e) => {
+        e.preventDefault();
         if (searchInput) {
           searchInput.value = '';
           performSearch('');
@@ -278,7 +294,6 @@
       });
     }
 
-    // 点击外部关闭
     document.addEventListener('click', (e) => {
       if (!e.target.closest('.blog-search-bar')) {
         if (searchResults) searchResults.classList.remove('active');
@@ -286,11 +301,14 @@
     });
   }
 
-  // 全局 Ctrl+K / Cmd+K 快捷键
   function initShortcut() {
+    const isMac = typeof navigator !== 'undefined' && navigator.platform && navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+    if (searchKbd) {
+      searchKbd.textContent = isMac ? '⌘K' : 'Ctrl K';
+    }
+
     document.addEventListener('keydown', (e) => {
-      // Ctrl+K 或 Cmd+K(Mac)
-      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+      if ((e.ctrlKey || e.metaKey) && e.key && e.key.toLowerCase() === 'k') {
         e.preventDefault();
         if (searchInput) {
           searchInput.focus();
@@ -300,9 +318,9 @@
     });
   }
 
-  // 初始化
   document.addEventListener('DOMContentLoaded', () => {
     loadSearchData();
+    loadFuse();
     bindEvents();
     initShortcut();
   });
