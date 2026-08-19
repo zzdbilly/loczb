@@ -1,279 +1,151 @@
-# loczb - 张小猛的个人博客
+# loczb - 张小猛的个人技术品牌站
 
-> 纯静态个人博客，Python 脚本生成文章，GitHub Pages 托管，Cloudflare Workers 增强。零运行时依赖。
+> 纯静态极客风个人技术品牌与博客，Bento Grid 便当盒架构，Raycast 鼠标聚光灯流光动效，macOS 风格代码块，Python 零依赖脚本构建，GitHub Pages 托管，Cloudflare Workers 增强。
 
-🌐 **https://709527.xyz**
+🌐 **官方网站**: [https://709527.xyz](https://709527.xyz)
 
 ---
 
-## 功能
+## 🌟 核心特性与视觉创新
 
-### 博客
+### 🎨 现代设计与交互系统
+- 🍱 **Bento Grid 便当盒架构** — 模块化信息展示，终端实时状态机、技术栈雷达图、量化影响力数据网格与工程哲学语录。
+- ✨ **Raycast 鼠标聚光灯（`.spotlight-card`）** — 纯 CSS 变量与微光追踪，鼠标划过卡片时产生柔和的渐变微光与边缘流光跟随。
+- 🔮 **全站毛玻璃拟态（Glassmorphism）** — `backdrop-filter: blur(16px - 24px)` 多层深色磨砂质感与发光呼吸状态胶囊。
+- 🖋️ **高雅排版系统** — 中文衬线大标题（`Noto Serif SC`）+ 正文极客等宽/无衬线（`Inter` / `JetBrains Mono`），层次分明。
+- 💻 **macOS 风格代码块** — 自动注入红黄绿三色控制点、编程语言标识徽章、一键复制代码与磨砂 Toast 浮层动画反馈。
+- ⚡ **Command Palette 即时检索** — 全局快捷键 `⌘K`（macOS）/ `Ctrl+K`（Windows）一键唤起，支持键盘上下方向键导航与回车直达。
 
-- 📝 **90+ 篇文章** — 覆盖 AI、Android、Kotlin、前端、DevOps、数据库、系统编程、安全等
-- 🏠 **首页** — 粒子动画背景，最新文章卡片，项目展示
-- 📋 **文章列表** — 标签筛选、分类筛选、客户端静态分页
-- 🏷️ **标签云** — 按标签聚合，点击筛选相关文章
-- 📅 **归档时间线** — 按年月分组浏览全部文章
-- 🔍 **站内搜索** — `Ctrl+K` / `Cmd+K` 唤起，Fuse.js 模糊搜索标题、描述、标签
+---
 
-### 文章页
+### 📝 博客与内容系统
+- 📚 **99 篇全量深度文章** — 深度覆盖 `Android`、`Kotlin`、`AI Agent`、`前端`、`DevOps`、`思考`、`数据库`、`系统编程`、`安全`、`开发` 等 10 大垂直领域。
+- 📰 **双列现代文章流** — 自适应响应式排版，每篇博文卡片整合阅读耗时、分类徽章、摘要截断与技术标签胶囊。
+- 📅 **时间轴月份便当盒归档** — 按年份与月份独立封装的折叠便当盒，带等宽日历徽标与文章总数统计。
+- 📑 **文章阅读增强** — 动态生成 TOC 目录（桌面侧边栏 + 移动端抽屉）、阅读进度条、相关文章智能推荐与图片灯箱。
 
-- 📖 **正文阅读** — Markdown 渲染，highlight.js 语法高亮（客户端）
-- 📑 **目录导航** — 自动生成 TOC，桌面端侧边栏 + 移动端抽屉式
-- 🔗 **相关文章** — 底部按标签相似度智能推荐
-- 🖼️ **图片放大** — 点击图片弹出大图查看
-- ⬆️ **返回顶部** — 滚动超过阈值后出现，阅读进度条
-- 🔗 **分享按钮** — 一键复制文章链接
+---
 
-### 交互体验
+### 🛠️ 基础设施与云端生态
+- 💬 **评论系统** — Cloudflare Workers + Cloudflare D1 边缘数据库，支持嵌套树状回复、Token 鉴权与独立管理后台。
+- 🤖 **AI 问答助手** — Cloudflare Workers 驱动，基于全站 99 篇博文知识库进行 RAG 即时检索问答。
+- 📦 **纯前端离线化与 PWA** — 核心依赖（Fuse.js / marked / DOMPurify）本地化托管，Service Worker 全站静态离线缓存。
+- 📡 **全自动化索引与 SEO** — `sitemap.xml`、`rss.xml`、JSON-LD 结构化数据与 Open Graph 社交分享卡片全自动构建。
 
-- 🌗 **暗色主题** — localStorage 持久化，全站一致切换
-- 📱 **响应式布局** — 移动端、平板、桌面三端适配
-- ⌨️ **键盘快捷键** — 搜索 `Ctrl+K`，关闭 `Esc`
-- ⏱️ **年度时间进度条** — 顶栏显示今年已过百分比
+---
 
-### 评论系统
+## 🛠️ 技术栈一览
 
-- 💬 **嵌套评论** — 支持多级回复，树状展示
-- 🔐 **编辑/删除** — edit_token 验证，仅作者可操作
-- 🛡️ **垃圾过滤** — URL 数量检测、乱码检测、速率限制
-- 🚦 **速率限制** — 每 IP 每 10 分钟最多 5 条评论
-- 📊 **管理后台** — 登录认证，评论列表/搜索/编辑/删除，统计面板
+| 维度 | 技术选型 | 说明 |
+| :--- | :--- | :--- |
+| **托管部署** | GitHub Pages + 自定义域名 (`709527.xyz`) | 零服务器成本，静态即时分发 |
+| **前端架构** | 原生 HTML5 + CSS3 + 现代 JavaScript（ES6+） | 零框架运行时依赖，极速首屏 |
+| **UI 视觉体系** | Bento Grid + Spotlight Glow + Glassmorphism | 衬线标题、macOS 代码块、呼吸状态指示器 |
+| **本地依赖** | Fuse.js / marked / DOMPurify | Vendor 本地化托管，无外链 CDN 阻塞 |
+| **构建脚本** | Python 3 + Node.js | 零第三方依赖标准库解析，PEP 668 环境原生支持 |
+| **边缘计算** | Cloudflare Workers + D1 数据库 | 支撑无服务器评论系统与 AI 知识库问答 |
+| **自动化工作流**| GitHub Actions (CI/CD) | 自动化测试、评论系统部署与全站索引校验 |
 
-### AI 助手
+---
 
-- 🤖 **博客问答** — Cloudflare Workers 驱动，基于全站文章知识库
-- 📚 **知识库覆盖** — 全部 90+ 篇文章内容索引
-- 💬 **对话交互** — 文章页右下角悬浮入口
-
-### 其他
-
-- 📡 **RSS Feed** — `rss.xml` 订阅源
-- 🗺️ **Sitemap** — `sitemap.xml` 搜索引擎友好
-- 🖼️ **OG 图片** — 文章分享卡片自动生成，社交媒体友好
-- 📊 **访问统计** — Cloudflare Web Analytics（无 Cookie）
-- 🤖 **JSON-LD** — 文章页结构化数据，SEO 优化
-- 🔄 **PWA** — Service Worker 离线缓存
-
-## 技术栈
-
-| 层面 | 技术 |
-|------|------|
-| 托管 | GitHub Pages + 自定义域名 |
-| 前端 | 纯 HTML + CSS + JavaScript（零框架） |
-| 文章生成 | Python（`generate-post.py`） |
-| 索引构建 | Node.js（`generate-index.js`） |
-| 样式 | Tailwind CSS → 内联样式 |
-| 语法高亮 | highlight.js（客户端渲染） |
-| 搜索 | Fuse.js（纯前端，`articles-index.json`） |
-| 评论系统 | Cloudflare Workers + D1 |
-| AI 助手 | Cloudflare Workers + 通义千问 |
-| 评论 CI/CD | GitHub Actions（wrangler 4.x + Node 22） |
-| 统计 | Cloudflare Web Analytics |
-
-## 项目结构
+## 📂 项目工程结构
 
 ```
 loczb/
-├── index.html                     # 首页
-├── about/                         # 关于页
-├── projects/                      # 项目展示页
+├── index.html                     # 首页 (Bento Grid 便当盒架构)
+├── about/                         # 关于我 (个人 Profile、技能雷达与职业旅程)
+├── projects/
+│   ├── index.html                 # 项目案例展示页 (Spotlight 卡片)
+│   └── projects.json              # 项目案例结构化数据源 (解耦管理)
 ├── blog/
-│   ├── index.html                 # 博客列表（筛选 + 分页 + 搜索）
-│   ├── articles-index.json        # 搜索索引（自动生成）
-│   └── posts/                     # 所有文章 HTML
+│   ├── index.html                 # 博客列表与归档页 (双列网格 + Command Palette 搜索)
+│   ├── articles-index.json        # 全站 99 篇博文索引与元数据
+│   └── posts/                     # 99 篇博客详情 HTML 正文
 ├── assets/
 │   ├── css/
-│   │   ├── style.css              # 主样式
-│   │   ├── article.css            # 文章页样式
-│   │   ├── syntax-highlight.css   # 代码高亮主题
-│   │   └── ai-assistant.css       # AI 助手样式
+│   │   ├── style.css              # 全局核心样式 (Bento、Spotlight、Codeblock 等)
+│   │   ├── article.css            # 博客正文排版样式
+│   │   ├── syntax-highlight.css   # 代码语法高亮主题
+│   │   └── ai-assistant.css       # AI 助手悬浮窗样式
 │   ├── js/
-│   │   ├── main.js                # 全局逻辑
-│   │   ├── blog-list.js           # 博客列表筛选/分页
-│   │   ├── search.js              # 站内搜索（Ctrl+K）
-│   │   ├── article.js             # 文章页（TOC、进度条、返回顶部）
-│   │   ├── related-posts.js       # 相关文章推荐
-│   │   ├── share.js               # 分享功能
-│   │   ├── back-to-top.js         # 返回顶部
-│   │   ├── time-progress.js       # 年度时间进度
-│   │   └── particles.js           # 首页粒子动画
-│   └── images/                    # 图片资源
+│   │   ├── main.js                # 全局逻辑与 Spotlight 鼠标光标追踪
+│   │   ├── blog-list.js           # 博客分页、分类筛选与归档视图切换
+│   │   ├── search.js              # Command Palette 模糊检索引擎 (支持键盘导航)
+│   │   ├── article.js             # 文章详情页 (macOS 代码块、TOC、Toast、返回顶部)
+│   │   ├── related-posts.js       # 相关文章算法推荐
+│   │   └── particles.js           # 粒子动画背景
+│   └── vendor/                    # 本地化第三方基础库 (Fuse, marked, dompurify)
 ├── scripts/
-│   ├── generate-post.py           # 文章生成脚本（v2）
-│   ├── generate-index.js          # 全量索引重建
-│   ├── refresh-posts.py           # 模板变更后回刷旧文章
-│   └── deploy-check.sh            # 部署状态验证（失败自动重试）
+│   ├── generate-post.py           # Markdown 文章构建器 (支持 YAML Frontmatter & 单文件 CLI)
+│   ├── generate-index.js          # 全站 CI 索引重建 (自动同步首页/博客/sitemap/rss)
+│   ├── gen_projects.py            # 项目案例页生成脚本 (读 projects.json)
+│   ├── refresh-posts.py           # 模板变更后批量刷新旧文章
+│   └── deploy-check.sh            # 部署状态自动验证与重试脚本
 ├── workers/
-│   ├── comment-system/            # 评论系统 Worker
-│   │   ├── src/
-│   │   │   ├── worker.js          # 评论 API 路由
-│   │   │   └── admin.js           # 管理后台
-│   │   ├── comment-widget.js      # 评论前端组件
-│   │   ├── comment-widget.css     # 评论组件样式
-│   │   ├── schema.sql             # D1 数据库表结构
-│   │   ├── wrangler.toml          # CF Workers 配置
-│   │   └── package.json
-│   └── ai-assistant/              # AI 助手 Worker
-│       ├── worker.js              # AI 问答逻辑
-│       └── wrangler.toml
+│   ├── comment-system/            # Cloudflare Workers + D1 评论系统
+│   └── ai-assistant/              # Cloudflare Workers AI 博客知识库助手
 ├── templates/
-│   └── blog-post-template.html    # 文章页面模板
-├── .github/workflows/
-│   └── deploy-comments.yml        # 评论系统自动部署
-├── CNAME                          # 自定义域名 (709527.xyz)
-├── .nojekyll                      # 禁用 Jekyll
-├── _redirects                     # URL 重定向规则
-├── sw.js                          # Service Worker
-├── robots.txt                     # 爬虫规则
-├── sitemap.xml                    # 搜索引擎 sitemap
-├── rss.xml                        # RSS 订阅源
-└── site.webmanifest               # PWA manifest
+│   └── blog-post-template.html    # 文章详情页标准化骨架模板
+├── CNAME                          # 自定义域名配置
+├── sw.js                          # Service Worker 离线缓存
+├── sitemap.xml                    # 99 篇文章搜索引擎站点地图
+└── rss.xml                        # 博客 RSS 订阅源
 ```
 
-## 开发
+---
 
-### 发布新文章
+## 🚀 写作与本地构建工作流
 
-```bash
-# 1. 写 Markdown 文件（从 ## h2 开始，不要写 # h1）
-vim article.md
+### 1. 发布新博文
 
-# 2. 生成文章 HTML
-python3 scripts/generate-post.py "文章标题" "描述" \
-  --tags "标签1,标签2" --category 分类 \
-  --content article.md
+支持直接在 Markdown 头部声明 **YAML Frontmatter**：
 
-# 3. 重建搜索索引
-node scripts/generate-index.js
+```markdown
+---
+title: "文章标题"
+description: "文章摘要与核心观点"
+category: "Android"
+tags: ["Kotlin", "Jetpack Compose", "架构"]
+date: "2026-08-19"
+---
 
-# 4. 推送
-git add -A && git commit -m "feat(blog): 新文章标题" && git push
-
-# 5. 验证部署（GitHub Pages 间歇性失败时自动重试）
-./scripts/deploy-check.sh
+## 1. 章节标题
+正文内容...
 ```
 
-### 模板变更后回刷旧文章
-
-修改 `templates/blog-post-template.html` 后，需要回刷所有已有文章：
-
+**单文件极简生成命令**：
 ```bash
-# 回刷所有文章（保留内容，重新套模板）
-python3 scripts/refresh-posts.py
+# 自动解析 Frontmatter 并生成 blog/posts/xxx.html
+python3 scripts/generate-post.py article.md
 
-# 预览模式（不写入文件）
-python3 scripts/refresh-posts.py --dry-run
-
-# 只回刷指定文章
-python3 scripts/refresh-posts.py --post slug
-```
-
-### 重建搜索索引
-
-```bash
+# 重建全站索引 (自动同步 首页最新推荐、博客列表、sitemap.xml 与 rss.xml)
 node scripts/generate-index.js
 ```
 
-### 生成项目页
+---
 
+### 2. 更新项目案例
+
+修改 `projects/projects.json` 数据文件后，一键重新生成项目展示页：
 ```bash
 python3 scripts/gen_projects.py
 ```
 
-生成 `/projects/index.html` 项目展示页，从配置文件读取项目信息并渲染为 HTML。
+---
 
-### 注入评论组件
-
-```bash
-python3 scripts/inject-comments.py
-```
-
-批量为博客文章 HTML 注入评论系统前端组件（`comment-widget.js` + `comment-widget.css`）。新增文章或更新评论组件后运行。
-
-### 写作规范
-
-- ✅ 从 `## h2` 开始写，不写 `# h1`（模板已包含）
-- ✅ 技术文章目标：8+ h2，15+ h3，10+ 代码块，20KB+
-- ❌ 禁止手动编辑 HTML 文件（必须用脚本生成）
-- ❌ 改动模板后必须运行 `refresh-posts.py` 回刷旧文章
-
-### 分类
-
-`AI` · `Android` · `Kotlin` · `前端` · `DevOps` · `数据库` · `系统编程` · `安全` · `思考` · `开发`
-
-## 评论系统开发
+### 3. 全量索引与多端校验
 
 ```bash
-cd workers/comment-system
-pnpm install
+# 全量构建索引
+node scripts/generate-index.js
 
-# 本地开发
-pnpm dev                         # wrangler dev
-
-# 数据库初始化
-pnpm db:init:local               # 本地 D1
-pnpm db:init:remote              # 远程 D1
-
-# 部署
-pnpm deploy                      # wrangler deploy
+# 推送并上线
+git add -A && git commit -m "feat(blog): 新增博文" && git push origin main
 ```
 
-### 环境变量（Cloudflare Dashboard）
+---
 
-| 变量 | 说明 | 默认值 |
-|------|------|--------|
-| `ADMIN_USERNAME` | 管理后台用户名 | `admin` |
-| `ADMIN_PASSWORD` | 管理后台密码 | `admin123` |
+## 📜 许可证
 
-### 管理后台
-
-`https://loczb-comments.billycust716.workers.dev/admin`
-
-- 评论列表（分页、搜索、按文章筛选）
-- 编辑评论内容
-- 删除评论（级联删除子评论）
-- 统计面板（总评论数、文章数、今日新增）
-
-## 部署
-
-### 博客（GitHub Pages）
-
-推送 `main` 分支即可自动部署：
-
-```bash
-git push origin main
-```
-
-GitHub Pages 通过 Actions 部署，`deploy-check.sh` 可验证部署状态。
-
-### 评论系统（Cloudflare Workers）
-
-修改 `workers/comment-system/` 下的文件并推送后，GitHub Actions 自动部署。
-
-手动部署：
-
-```bash
-cd workers/comment-system
-pnpm deploy
-```
-
-### AI 助手（Cloudflare Workers）
-
-```bash
-cd workers/ai-assistant
-npx wrangler deploy
-```
-
-需在 Cloudflare Dashboard 设置 `DASHSCOPE_API_KEY` 环境变量。
-
-## 已知问题
-
-- GitHub Pages 的 `deploy-pages` 组件存在**间歇性部署失败**
-- 推送后用 `./scripts/deploy-check.sh` 自动检测并重试
-- 不是代码/配置问题，是 GitHub 服务端问题
-
-## 许可证
-
-MIT © [zzdbilly](https://github.com/zzdbilly)
+本项目采用 [MIT License](LICENSE) 开源协议。  
+© 2026 [张小猛 (zzdbilly)](https://github.com/zzdbilly). All rights reserved.
