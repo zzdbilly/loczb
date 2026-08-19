@@ -257,7 +257,7 @@ function rebuildHomePage() {
           </div>
         </article>`;
 
-  const featuredPattern = /<article class="blog-card-featured animate-on-scroll" id="home-featured-post".*?<\/article>/s;
+  const featuredPattern = /[ \t]*<article class="blog-card-featured animate-on-scroll" id="home-featured-post".*?<\/article>/s;
   html = html.replace(featuredPattern, featured);
 
   // 更新最新文章列表 (第2、3篇)

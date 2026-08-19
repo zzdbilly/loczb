@@ -74,15 +74,28 @@
     }
     // 加载 marked
     const s1 = document.createElement('script');
-    s1.src = 'https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js';
+    s1.src = '/assets/vendor/marked/marked.min.js';
     s1.onload = check;
-    s1.onerror = check;
+    s1.onerror = () => {
+      const fb1 = document.createElement('script');
+      fb1.src = 'https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js';
+      fb1.onload = check;
+      fb1.onerror = check;
+      document.head.appendChild(fb1);
+    };
     document.head.appendChild(s1);
+
     // 加载 DOMPurify（XSS 防护）
     const s2 = document.createElement('script');
-    s2.src = 'https://cdn.jsdelivr.net/npm/dompurify@3.1.6/dist/purify.min.js';
+    s2.src = '/assets/vendor/dompurify/purify.min.js';
     s2.onload = check;
-    s2.onerror = check;
+    s2.onerror = () => {
+      const fb2 = document.createElement('script');
+      fb2.src = 'https://cdn.jsdelivr.net/npm/dompurify@3.1.6/dist/purify.min.js';
+      fb2.onload = check;
+      fb2.onerror = check;
+      document.head.appendChild(fb2);
+    };
     document.head.appendChild(s2);
   }
 
