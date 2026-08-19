@@ -49,102 +49,7 @@
   <link rel="manifest" href="../site.webmanifest">
   <link rel="alternate" type="application/rss+xml" title="RSS 订阅" href="../rss.xml">
   <meta name="theme-color" content="#3b82f6">
-  <link rel="stylesheet" href="../assets/css/style.css?v=6b86d688">
-  <style>
-    .pagination { display: flex; justify-content: center; align-items: center; gap: 0.5rem; margin-top: 3rem; padding: 2rem 0; }
-    .pagination-btn { padding: 0.5rem 1rem; border-radius: var(--radius-md); border: 1px solid var(--color-border); background: var(--color-bg-secondary); color: var(--color-text-secondary); text-decoration: none; font-size: 0.9rem; transition: all var(--transition-fast); }
-    .pagination-btn:hover { background: var(--color-accent-subtle); border-color: var(--color-accent-primary); color: var(--color-accent-primary); transform: translateY(-1px); box-shadow: var(--shadow-sm); }
-    .pagination-btn.active { background: var(--color-accent-primary); border-color: var(--color-accent-primary); color: #fff; }
-    .pagination-btn.disabled { opacity: 0.5; pointer-events: none; }
-    .pagination-ellipsis { color: var(--color-text-muted); font-size: 0.9rem; padding: 0 0.25rem; user-select: none; }
-    .pagination-info { color: var(--color-text-secondary); font-size: 0.85rem; margin: 0 1rem; font-family: var(--font-mono); }
-    @media (max-width: 640px) {
-      .pagination { flex-wrap: wrap; gap: 0.3rem; }
-      .pagination-btn { padding: 0.4rem 0.7rem; font-size: 0.85rem; }
-      .pagination-ellipsis { padding: 0 0.15rem; }
-    }
-    /* Blog Search Bar - inline in hero */
-    .blog-search-bar { position: relative; width: 100%; max-width: 400px; z-index: 100; }
-    .blog-search-bar input { width: 100%; padding: 0.6rem 1rem; border-radius: var(--radius-full); border: 1px solid var(--color-border); background: var(--color-bg-secondary); color: var(--color-text-primary); font-size: var(--text-sm); outline: none; transition: border-color 0.2s, box-shadow 0.2s; }
-    .blog-search-bar input::placeholder { color: var(--color-text-muted); }
-    .blog-search-bar input:focus { border-color: var(--color-accent-primary); box-shadow: 0 0 0 3px var(--color-accent-subtle); }
-    .blog-search-bar > svg { position: absolute; left: 0.75rem; top: 50%; transform: translateY(-50%); color: var(--color-text-muted); pointer-events: none; display: block; }
-    .blog-search-bar input { padding-left: 2.25rem; }
-    .blog-search-bar .search-clear { display: none; }
-    /* Hero Bar - title + search inline */
-    .blog-hero-bar { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--space-lg); margin-bottom: var(--space-lg); flex-wrap: wrap; }
-    .blog-hero-info { flex: 1 1 auto; min-width: 200px; }
-    .blog-hero-title { font-size: var(--text-3xl); font-weight: 700; margin: 0.25rem 0 0.25rem; line-height: 1.2; font-family: var(--font-serif); }
-    .blog-hero-subtitle { font-size: var(--text-sm); color: var(--color-text-secondary); margin: 0; }
-    /* List header bar - title + view toggle inline */
-    .blog-list-header-bar { display: flex; align-items: center; justify-content: space-between; gap: var(--space-md); margin-bottom: var(--space-lg); }
-    .blog-list-heading { font-size: var(--text-xl); font-weight: 600; margin: 0; font-family: var(--font-serif); }
-    /* Desktop grid for blog list */
-    .blog-list-container { display: grid; grid-template-columns: 1fr; gap: var(--space-lg); }
-    @media (min-width: 900px) { .blog-list-container { grid-template-columns: repeat(2, 1fr); } }
-    /* Refined card style */
-    .blog-list-item { position: relative; overflow: hidden; }
-    .blog-list-item::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--gradient-accent); opacity: 0; transition: opacity var(--transition-base); }
-    .blog-list-item:hover::before { opacity: 1; }
-    .blog-list-item:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.25), 0 0 0 1px var(--color-accent-subtle); }
-    /* Search Results Overlay */
-    .blog-search-results { display: none; margin-top: 0.5rem; background: var(--color-bg-secondary); border: 1px solid var(--color-border); border-radius: var(--radius-xl); padding: 0.5rem; max-height: 60vh; overflow-y: auto; width: 100%; left: 0; right: 0; position: absolute; top: 100%; z-index: 101; box-shadow: var(--shadow-xl); }
-    .blog-search-results.active { display: block; }
-    .blog-search-results .sr-item { padding: 1rem 1.25rem; border-radius: var(--radius-md); transition: background 0.15s; text-decoration: none; display: block; }
-    .blog-search-results .sr-item:hover { background: var(--color-bg-tertiary); }
-    .blog-search-results .sr-title { font-weight: 600; font-size: 1rem; color: var(--color-text-primary); margin-bottom: 0.4rem; }
-    .blog-search-results .sr-title mark { background: rgba(99,102,241,0.3); color: var(--color-accent-primary); border-radius: 2px; padding: 0 2px; }
-    .blog-search-results .sr-excerpt { font-size: 0.9rem; color: var(--color-text-secondary); line-height: 1.6; margin-bottom: 0.5rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-    .blog-search-results .sr-excerpt mark { background: rgba(99,102,241,0.3); color: var(--color-accent-primary); border-radius: 2px; padding: 0 2px; }
-    .blog-search-results .sr-meta { font-size: 0.8rem; color: var(--color-text-muted); display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
-    .blog-search-results .sr-meta .sr-date { color: var(--color-text-muted); }
-    .blog-search-results .sr-meta .sr-category { font-size: 0.72rem; padding: 0.15rem 0.5rem; border-radius: var(--radius-full); background: var(--color-accent-subtle, rgba(99,102,241,0.1)); color: var(--color-accent-primary); font-weight: 600; white-space: nowrap; }
-    .blog-search-results .sr-meta .sr-tags { display: flex; gap: 0.35rem; flex-wrap: wrap; align-items: center; }
-    .blog-search-results .sr-meta .sr-tag { font-size: 0.68rem; padding: 0.1rem 0.4rem; border-radius: 4px; background: var(--color-bg-tertiary); color: var(--color-text-muted); white-space: nowrap; }
-    .blog-search-results .sr-empty { text-align: center; padding: 2rem; color: var(--color-text-muted); font-size: var(--text-sm); }
-    /* View Toggle */
-    .blog-view-toggle { display: flex; justify-content: flex-end; gap: 0.5rem; margin-bottom: 1.5rem; }
-    .view-toggle-btn { padding: 0.4rem 0.9rem; border-radius: var(--radius-full); border: 1px solid var(--color-border); background: transparent; color: var(--color-text-secondary); font-size: var(--text-xs); cursor: pointer; transition: all 0.2s; }
-    .view-toggle-btn:hover { border-color: var(--color-border-hover); color: var(--color-text-primary); }
-    .view-toggle-btn.active { background: var(--color-accent-primary); border-color: var(--color-accent-primary); color: #fff; }
-    /* Archive View */
-    .archive-view { display: none; }
-    .archive-view.active { display: block; animation: archiveFadeIn 0.4s ease; }
-    @keyframes archiveFadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
-    /* Year */
-    .archive-year { margin-bottom: 2.5rem; position: relative; }
-    .archive-year-header { display: flex; align-items: baseline; gap: 0.75rem; font-size: var(--text-3xl); font-weight: 700; font-family: var(--font-serif); color: var(--color-text-primary); margin-bottom: 1.25rem; padding-bottom: 0.75rem; position: relative; }
-    .archive-year-header::before { content: ''; position: absolute; left: 0; bottom: 0; width: 64px; height: 3px; border-radius: 2px; background: var(--gradient-accent); }
-    .archive-year-header .archive-count { font-weight: 500; font-size: var(--text-sm); color: var(--color-text-muted); font-family: var(--font-mono); }
-    .archive-year-body { padding-left: 1rem; }
-    /* Month card */
-    .archive-month { margin-bottom: 1.25rem; background: var(--color-bg-secondary); border: 1px solid var(--color-border); border-radius: var(--radius-lg); overflow: hidden; transition: border-color 0.2s; }
-    .archive-month:hover { border-color: var(--color-border-hover); }
-    .archive-month-header { font-size: var(--text-base); font-weight: 600; color: var(--color-accent-primary); padding: 0.75rem 1.25rem; display: flex; align-items: center; gap: 0.5rem; background: var(--color-bg-tertiary); border-bottom: 1px solid var(--color-border); }
-    .archive-month-header::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--color-accent-primary); opacity: 0.7; }
-    .archive-month-header .archive-count { font-weight: 400; font-size: var(--text-xs); color: var(--color-text-muted); margin-left: auto; font-family: var(--font-mono); padding: 0.1rem 0.5rem; border-radius: var(--radius-full); background: var(--color-bg-elevated); }
-    .archive-month-body { padding: 0.5rem 0; }
-    /* Post row */
-    .archive-post { display: flex; align-items: center; gap: 1rem; padding: 0.6rem 1.25rem; border-bottom: 1px solid var(--color-border); transition: all 0.2s; }
-    .archive-post:last-child { border-bottom: none; }
-    .archive-post:hover { background: var(--color-accent-subtle); }
-    .archive-post-date { font-family: var(--font-mono); font-size: var(--text-xs); color: var(--color-text-secondary); white-space: nowrap; min-width: 3.5rem; padding: 0.2rem 0.55rem; border-radius: var(--radius-sm); background: var(--color-bg-tertiary); text-align: center; border: 1px solid var(--color-border); }
-    .archive-post-title { flex: 1; }
-    .archive-post-title a { color: var(--color-text-primary); text-decoration: none; font-size: var(--text-sm); transition: color 0.15s; display: block; }
-    .archive-post-title a:hover { color: var(--color-accent-primary); }
-    .archive-post-cat { font-size: 0.7rem; padding: 0.2rem 0.65rem; border-radius: var(--radius-full); background: var(--color-accent-subtle); color: var(--color-accent-primary); white-space: nowrap; font-weight: 500; border: 1px solid rgba(99, 102, 241, 0.15); }
-    /* Mobile */
-    @media (max-width: 640px) {
-      .archive-year-body { padding-left: 0; }
-      .archive-post { gap: 0.75rem; padding: 0.6rem 1rem; }
-      .archive-post-date { font-size: 0.65rem; min-width: 3rem; padding: 0.15rem 0.4rem; }
-      .archive-post-cat { font-size: 0.65rem; padding: 0.15rem 0.5rem; }
-      .archive-year-header { font-size: var(--text-2xl); }
-    }
-    /* Hide list view when archive active */
-    .blog-list-container.hidden { display: none; }
-    .pagination.hidden { display: none; }
-  </style>
+  <link rel="stylesheet" href="../assets/css/style.css?v=spotlight-ui">
   <!-- Preconnect to Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -184,13 +89,16 @@
   <main id="main-content">
   <section class="blog-hero">
     <div class="hero-glow"></div>
-    <div class="container">
+    <div class="container container-wide">
       <!-- Compact Hero: title + search inline -->
       <div class="blog-hero-bar">
         <div class="blog-hero-info">
-          <span class="section-label">Posts</span>
+          <div class="status-pill" style="margin-bottom: 0.5rem;">
+            <span class="pulse-dot"></span>
+            <span>99 篇深度文章 · 持续迭代中</span>
+          </div>
           <h1 class="blog-hero-title">技术博客</h1>
-          <p class="blog-hero-subtitle">文章、学习笔记与思考</p>
+          <p class="blog-hero-subtitle">Android、Kotlin、端侧 AI、全栈架构与开发思考</p>
         </div>
         <div class="blog-search-bar">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
@@ -234,1390 +142,2182 @@
       <div class="blog-list-container" id="blog-list">
         <!-- Post List -->
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="思考" data-tags="程序员,带娃,工程思维,系统思维,DevOps,养育" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-08-19</span>
-              <span>·</span>
-              <span class="blog-read-time">8 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-08-19</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 8 min</span>
+              </div>
+              <span class="blog-list-tag">思考</span>
             </div>
-            <span class="blog-list-tag">思考</span>
+            <h3 class="blog-list-title">
+              <a href="posts/程序员带娃把养孩子当成一个长期运维的系统工程.html">程序员带娃：把养孩子当成一个长期运维的系统工程</a>
+            </h3>
+            <p class="blog-list-excerpt">用工程师的思维看带娃：需求分析、状态监控、容错设计、灰度发布、日志排查——原来养孩子比写代码更像在做系统运维</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/程序员带娃把养孩子当成一个长期运维的系统工程.html">程序员带娃：把养孩子当成一个长期运维的系统工程</a>
-          </h3>
-          <p class="blog-list-excerpt">用工程师的思维看带娃：需求分析、状态监控、容错设计、灰度发布、日志排查——原来养孩子比写代码更像在做系统运维</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#程序员</span> <span class="tag-pill">#带娃</span> <span class="tag-pill">#工程思维</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="DevOps" data-tags="OpenClaw,Hermes,AI Agent,迁移,DevOps" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-08-18</span>
-              <span>·</span>
-              <span class="blog-read-time">12 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-08-18</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 12 min</span>
+              </div>
+              <span class="blog-list-tag">DevOps</span>
             </div>
-            <span class="blog-list-tag">DevOps</span>
+            <h3 class="blog-list-title">
+              <a href="posts/从-openclaw-到-hermesai-agent-工作区迁移完整记录.html">从 OpenClaw 到 Hermes：AI Agent 工作区迁移完整记录</a>
+            </h3>
+            <p class="blog-list-excerpt">一次真实的 AI Agent 平台迁移复盘：身份、记忆、技能、项目与定时任务的全量迁移方向、踩坑与验证方法</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/从-openclaw-到-hermesai-agent-工作区迁移完整记录.html">从 OpenClaw 到 Hermes：AI Agent 工作区迁移完整记录</a>
-          </h3>
-          <p class="blog-list-excerpt">一次真实的 AI Agent 平台迁移复盘：身份、记忆、技能、项目与定时任务的全量迁移方向、踩坑与验证方法</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#OpenClaw</span> <span class="tag-pill">#Hermes</span> <span class="tag-pill">#AI Agent</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="思考" data-tags="思考,生活方式" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-08-16</span>
-              <span>·</span>
-              <span class="blog-read-time">5 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-08-16</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 5 min</span>
+              </div>
+              <span class="blog-list-tag">思考</span>
             </div>
-            <span class="blog-list-tag">思考</span>
+            <h3 class="blog-list-title">
+              <a href="posts/周末如何度过才有意义.html">周末如何度过才有意义</a>
+            </h3>
+            <p class="blog-list-excerpt">恢复与创造并重，让周末不再越休越累——从识别消耗型休息、主动回血，到用小小创造留下属于你的痕迹。</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/周末如何度过才有意义.html">周末如何度过才有意义</a>
-          </h3>
-          <p class="blog-list-excerpt">恢复与创造并重，让周末不再越休越累——从识别消耗型休息、主动回血，到用小小创造留下属于你的痕迹。</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#思考</span> <span class="tag-pill">#生活方式</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="思考" data-tags="思考,生活方式,效率" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-08-14</span>
-              <span>·</span>
-              <span class="blog-read-time">5 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-08-14</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 5 min</span>
+              </div>
+              <span class="blog-list-tag">思考</span>
             </div>
-            <span class="blog-list-tag">思考</span>
+            <h3 class="blog-list-title">
+              <a href="posts/程序员的周五晚上如何有意义地度过.html">程序员的周五晚上，如何有意义地度过</a>
+            </h3>
+            <p class="blog-list-excerpt">周五晚不该是工作的延续，也不该是报复性熬夜。给每一个辛苦了一周的程序员一份可落地的框架：告别、转换、收尾，三件小事让周末真正休息过来。</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/程序员的周五晚上如何有意义地度过.html">程序员的周五晚上，如何有意义地度过</a>
-          </h3>
-          <p class="blog-list-excerpt">周五晚不该是工作的延续，也不该是报复性熬夜。给每一个辛苦了一周的程序员一份可落地的框架：告别、转换、收尾，三件小事让周末真正休息过来。</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#思考</span> <span class="tag-pill">#生活方式</span> <span class="tag-pill">#效率</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="开发" data-tags="AI,前端,开发,Agent,编程助手,效率" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-08-12</span>
-              <span>·</span>
-              <span class="blog-read-time">5 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-08-12</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 5 min</span>
+              </div>
+              <span class="blog-list-tag">开发</span>
             </div>
-            <span class="blog-list-tag">开发</span>
+            <h3 class="blog-list-title">
+              <a href="posts/2026-年了ai-编程助手到底能帮你干多少活.html">2026 年了，AI 编程助手到底能帮你干多少活？</a>
+            </h3>
+            <p class="blog-list-excerpt">结合当前 Agent 编程趋势，聊聊 AI 助手能做/不能做/边界三层认知、五种实战协作心法，以及开发者如何重新定位自己</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/2026-年了ai-编程助手到底能帮你干多少活.html">2026 年了，AI 编程助手到底能帮你干多少活？</a>
-          </h3>
-          <p class="blog-list-excerpt">结合当前 Agent 编程趋势，聊聊 AI 助手能做/不能做/边界三层认知、五种实战协作心法，以及开发者如何重新定位自己</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#AI</span> <span class="tag-pill">#前端</span> <span class="tag-pill">#开发</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="思考" data-tags="思考,理财,躺平,FIRE,财务自由" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-08-09</span>
-              <span>·</span>
-              <span class="blog-read-time">5 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-08-09</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 5 min</span>
+              </div>
+              <span class="blog-list-tag">思考</span>
             </div>
-            <span class="blog-list-tag">思考</span>
+            <h3 class="blog-list-title">
+              <a href="posts/300-万能躺平吗.html">300 万能躺平吗</a>
+            </h3>
+            <p class="blog-list-excerpt">一个看似数字、实则是认知与心态的问题：300 万到底够不够躺平？聊透 4% 法则、通胀与黑天鹅、城市差异、心态准备和务实替代路径。</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/300-万能躺平吗.html">300 万能躺平吗</a>
-          </h3>
-          <p class="blog-list-excerpt">一个看似数字、实则是认知与心态的问题：300 万到底够不够躺平？聊透 4% 法则、通胀与黑天鹅、城市差异、心态准备和务实替代路径。</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#思考</span> <span class="tag-pill">#理财</span> <span class="tag-pill">#躺平</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="思考" data-tags="工作法,效率,深度工作,个人成长" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-08-08</span>
-              <span>·</span>
-              <span class="blog-read-time">5 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-08-08</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 5 min</span>
+              </div>
+              <span class="blog-list-tag">思考</span>
             </div>
-            <span class="blog-list-tag">思考</span>
+            <h3 class="blog-list-title">
+              <a href="posts/如何好好工作从看起来很忙到真正产出.html">如何好好工作：从看起来很忙到真正产出</a>
+            </h3>
+            <p class="blog-list-excerpt">一套经过实践检验的工作方法论：识别重要的事、用系统代替意志力、管理注意力、用健康托底，以及一张可执行的每日清单。</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/如何好好工作从看起来很忙到真正产出.html">如何好好工作：从看起来很忙到真正产出</a>
-          </h3>
-          <p class="blog-list-excerpt">一套经过实践检验的工作方法论：识别重要的事、用系统代替意志力、管理注意力、用健康托底，以及一张可执行的每日清单。</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#工作法</span> <span class="tag-pill">#效率</span> <span class="tag-pill">#深度工作</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="Kotlin" data-tags="Kotlin,协程,并发,Android" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-08-07</span>
-              <span>·</span>
-              <span class="blog-read-time">5 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-08-07</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 5 min</span>
+              </div>
+              <span class="blog-list-tag">Kotlin</span>
             </div>
-            <span class="blog-list-tag">Kotlin</span>
+            <h3 class="blog-list-title">
+              <a href="posts/kotlin-coroutines-并发实战从入门到优雅的并发编程.html">Kotlin Coroutines 并发实战：从入门到优雅的并发编程</a>
+            </h3>
+            <p class="blog-list-excerpt">深入掌握 Kotlin 协程：协程与线程的区别、Scope、Dispatcher、结构化并发、取消协作、异常处理与并发控制实战</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/kotlin-coroutines-并发实战从入门到优雅的并发编程.html">Kotlin Coroutines 并发实战：从入门到优雅的并发编程</a>
-          </h3>
-          <p class="blog-list-excerpt">深入掌握 Kotlin 协程：协程与线程的区别、Scope、Dispatcher、结构化并发、取消协作、异常处理与并发控制实战</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#Kotlin</span> <span class="tag-pill">#协程</span> <span class="tag-pill">#并发</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="Android" data-tags="Jetpack Compose,Android,性能优化,Compose,UI,重组" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-08-07</span>
-              <span>·</span>
-              <span class="blog-read-time">12 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-08-07</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 12 min</span>
+              </div>
+              <span class="blog-list-tag">Android</span>
             </div>
-            <span class="blog-list-tag">Android</span>
+            <h3 class="blog-list-title">
+              <a href="posts/jetpack-compose-性能优化实战从卡顿到丝滑的-12-个技巧.html">Jetpack Compose 性能优化实战：从卡顿到丝滑的 12 个技巧</a>
+            </h3>
+            <p class="blog-list-excerpt">全面梳理 Jetpack Compose 性能优化的核心技巧，涵盖重组优化、状态管理、延迟布局、图片加载、基线配置文件等实战经验</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/jetpack-compose-性能优化实战从卡顿到丝滑的-12-个技巧.html">Jetpack Compose 性能优化实战：从卡顿到丝滑的 12 个技巧</a>
-          </h3>
-          <p class="blog-list-excerpt">全面梳理 Jetpack Compose 性能优化的核心技巧，涵盖重组优化、状态管理、延迟布局、图片加载、基线配置文件等实战经验</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#Jetpack Compose</span> <span class="tag-pill">#Android</span> <span class="tag-pill">#性能优化</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="前端" data-tags="前端,前端开发,JavaScript,Web Worker,性能优化,多线程" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-08-07</span>
-              <span>·</span>
-              <span class="blog-read-time">10 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-08-07</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 10 min</span>
+              </div>
+              <span class="blog-list-tag">前端</span>
             </div>
-            <span class="blog-list-tag">前端</span>
+            <h3 class="blog-list-title">
+              <a href="posts/web-worker-与前端多线程开发把主线程从繁重计算中解放出来.html">Web Worker 与前端多线程开发：把主线程从繁重计算中解放出来</a>
+            </h3>
+            <p class="blog-list-excerpt">深入解析 Web Worker 的原理与实践，涵盖 Dedicated Worker、Shared Worker、Service Worker 的区别与使用场景，以及 Comlink、Worker 池、Transferable Objects 等进阶技巧</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/web-worker-与前端多线程开发把主线程从繁重计算中解放出来.html">Web Worker 与前端多线程开发：把主线程从繁重计算中解放出来</a>
-          </h3>
-          <p class="blog-list-excerpt">深入解析 Web Worker 的原理与实践，涵盖 Dedicated Worker、Shared Worker、Service Worker 的区别与使用场景，以及 Comlink、Worker 池、Transferable Objects 等进阶技巧</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#前端</span> <span class="tag-pill">#前端开发</span> <span class="tag-pill">#JavaScript</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="DevOps" data-tags="Next.js,Prisma,Vercel,部署,DevOps" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-08-01</span>
-              <span>·</span>
-              <span class="blog-read-time">5 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-08-01</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 5 min</span>
+              </div>
+              <span class="blog-list-tag">DevOps</span>
             </div>
-            <span class="blog-list-tag">DevOps</span>
+            <h3 class="blog-list-title">
+              <a href="posts/nextjs-prisma-部署-vercel-常见踩坑外键约束与构建时数据修复.html">Next.js + Prisma 部署 Vercel 常见踩坑：外键约束与构建时数据修复</a>
+            </h3>
+            <p class="blog-list-excerpt">Vercel 构建时 prisma db push 失败，外键约束报错怎么办？本文完整复盘一次真实的部署失败案例，从根因分析到构建时数据修复方案。</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/nextjs-prisma-部署-vercel-常见踩坑外键约束与构建时数据修复.html">Next.js + Prisma 部署 Vercel 常见踩坑：外键约束与构建时数据修复</a>
-          </h3>
-          <p class="blog-list-excerpt">Vercel 构建时 prisma db push 失败，外键约束报错怎么办？本文完整复盘一次真实的部署失败案例，从根因分析到构建时数据修复方案。</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#Next.js</span> <span class="tag-pill">#Prisma</span> <span class="tag-pill">#Vercel</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="前端" data-tags="AI,Agent,工程实践,并行开发" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-08-01</span>
-              <span>·</span>
-              <span class="blog-read-time">5 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-08-01</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 5 min</span>
+              </div>
+              <span class="blog-list-tag">前端</span>
             </div>
-            <span class="blog-list-tag">前端</span>
+            <h3 class="blog-list-title">
+              <a href="posts/ai-agent-实战用子代理并行驱动多项目开发.html">AI Agent 实战：用子代理并行驱动多项目开发</a>
+            </h3>
+            <p class="blog-list-excerpt">子代理并行调度是 AI 辅助开发的高效模式。本文分享一套经过实战验证的调度策略，涵盖任务拆分、并行执行、结果汇总和验证闭环。</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/ai-agent-实战用子代理并行驱动多项目开发.html">AI Agent 实战：用子代理并行驱动多项目开发</a>
-          </h3>
-          <p class="blog-list-excerpt">子代理并行调度是 AI 辅助开发的高效模式。本文分享一套经过实战验证的调度策略，涵盖任务拆分、并行执行、结果汇总和验证闭环。</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#AI</span> <span class="tag-pill">#Agent</span> <span class="tag-pill">#工程实践</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="AI" data-tags="AI,Agent,架构" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-07-22</span>
-              <span>·</span>
-              <span class="blog-read-time">5 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-07-22</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 5 min</span>
+              </div>
+              <span class="blog-list-tag">AI</span>
             </div>
-            <span class="blog-list-tag">AI</span>
+            <h3 class="blog-list-title">
+              <a href="posts/agentic-ai-架构演进从-chatbot-到自主-agent.html">Agentic AI 架构演进：从 Chatbot 到自主 Agent</a>
+            </h3>
+            <p class="blog-list-excerpt">从 Function Calling、MCP 到 Multi-Agent，梳理 AI Agent 架构的进化路径，以及当前面临的挑战和未来方向。</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/agentic-ai-架构演进从-chatbot-到自主-agent.html">Agentic AI 架构演进：从 Chatbot 到自主 Agent</a>
-          </h3>
-          <p class="blog-list-excerpt">从 Function Calling、MCP 到 Multi-Agent，梳理 AI Agent 架构的进化路径，以及当前面临的挑战和未来方向。</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#AI</span> <span class="tag-pill">#Agent</span> <span class="tag-pill">#架构</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="数据库" data-tags="PostgreSQL,数据库,DevOps,性能优化" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-07-19</span>
-              <span>·</span>
-              <span class="blog-read-time">5 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-07-19</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 5 min</span>
+              </div>
+              <span class="blog-list-tag">数据库</span>
             </div>
-            <span class="blog-list-tag">数据库</span>
+            <h3 class="blog-list-title">
+              <a href="posts/postgresql-从-17-到-18生产环境升级实战.html">PostgreSQL 从 17 到 18：生产环境升级实战</a>
+            </h3>
+            <p class="blog-list-excerpt">PG 18 带来了哪些实质性改进？增量物化视图、并行查询增强、OAuth 认证……本文用一个完整的升级记录，带你从准备工作到新特性实战，涵盖升级检查清单和常见问题排查。</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/postgresql-从-17-到-18生产环境升级实战.html">PostgreSQL 从 17 到 18：生产环境升级实战</a>
-          </h3>
-          <p class="blog-list-excerpt">PG 18 带来了哪些实质性改进？增量物化视图、并行查询增强、OAuth 认证……本文用一个完整的升级记录，带你从准备工作到新特性实战，涵盖升级检查清单和常见问题排查。</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#PostgreSQL</span> <span class="tag-pill">#数据库</span> <span class="tag-pill">#DevOps</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="开发" data-tags="AI,AI编程,Agent,开发规范,效率提升" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-07-19</span>
-              <span>·</span>
-              <span class="blog-read-time">5 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-07-19</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 5 min</span>
+              </div>
+              <span class="blog-list-tag">开发</span>
             </div>
-            <span class="blog-list-tag">开发</span>
+            <h3 class="blog-list-title">
+              <a href="posts/ai-编码代理实战从-copilot-到-agent.html">AI 编码代理实战：从 Copilot 到 Agent</a>
+            </h3>
+            <p class="blog-list-excerpt">从自动补全到自主编码，2026 年的 AI 编码工具正在经历一次质变。这篇文章用真实场景复盘 Claude Code、Cursor Agent、MCP 协议的实际用法，以及开发者应该怎样调整工作流。</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/ai-编码代理实战从-copilot-到-agent.html">AI 编码代理实战：从 Copilot 到 Agent</a>
-          </h3>
-          <p class="blog-list-excerpt">从自动补全到自主编码，2026 年的 AI 编码工具正在经历一次质变。这篇文章用真实场景复盘 Claude Code、Cursor Agent、MCP 协议的实际用法，以及开发者应该怎样调整工作流。</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#AI</span> <span class="tag-pill">#AI编程</span> <span class="tag-pill">#Agent</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="系统编程" data-tags="Rust,TIOBE,系统编程,编程语言" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-07-19</span>
-              <span>·</span>
-              <span class="blog-read-time">5 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-07-19</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 5 min</span>
+              </div>
+              <span class="blog-list-tag">系统编程</span>
             </div>
-            <span class="blog-list-tag">系统编程</span>
+            <h3 class="blog-list-title">
+              <a href="posts/rust-入局2026-年的生态全景.html">Rust 入局：2026 年的生态全景</a>
+            </h3>
+            <p class="blog-list-excerpt">2026年7月，Rust首次杀进TIOBE前十。从语言进化到生态扩张，从行业应用到未来展望，全面复盘Rust凭什么走到这一步。</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/rust-入局2026-年的生态全景.html">Rust 入局：2026 年的生态全景</a>
-          </h3>
-          <p class="blog-list-excerpt">2026年7月，Rust首次杀进TIOBE前十。从语言进化到生态扩张，从行业应用到未来展望，全面复盘Rust凭什么走到这一步。</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#Rust</span> <span class="tag-pill">#TIOBE</span> <span class="tag-pill">#系统编程</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="开发" data-tags="Rust,AI,大模型,基础设施,性能优化" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-07-14</span>
-              <span>·</span>
-              <span class="blog-read-time">12 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-07-14</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 12 min</span>
+              </div>
+              <span class="blog-list-tag">开发</span>
             </div>
-            <span class="blog-list-tag">开发</span>
+            <h3 class="blog-list-title">
+              <a href="posts/rust-在-ai-基础设施中的崛起为什么大模型框架纷纷拥抱-rust.html">Rust 在 AI 基础设施中的崛起：为什么大模型框架纷纷拥抱 Rust</a>
+            </h3>
+            <p class="blog-list-excerpt">从 HuggingFace 的 tokenizer 到 LLM 推理引擎，从向量数据库到数据处理管道——Rust 正在改写 AI 基础设施的底层规则。本文深入分析 Rust 为何崛起、谁在用、以及如何融入你的技术栈。</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/rust-在-ai-基础设施中的崛起为什么大模型框架纷纷拥抱-rust.html">Rust 在 AI 基础设施中的崛起：为什么大模型框架纷纷拥抱 Rust</a>
-          </h3>
-          <p class="blog-list-excerpt">从 HuggingFace 的 tokenizer 到 LLM 推理引擎，从向量数据库到数据处理管道——Rust 正在改写 AI 基础设施的底层规则。本文深入分析 Rust 为何崛起、谁在用、以及如何融入你的技术栈。</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#Rust</span> <span class="tag-pill">#AI</span> <span class="tag-pill">#大模型</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="开发" data-tags="TDD,测试,开发实践,重构" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-07-12</span>
-              <span>·</span>
-              <span class="blog-read-time">5 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-07-12</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 5 min</span>
+              </div>
+              <span class="blog-list-tag">开发</span>
             </div>
-            <span class="blog-list-tag">开发</span>
+            <h3 class="blog-list-title">
+              <a href="posts/从-tdd-到-tdd²测试驱动开发的进阶实践.html">从 TDD 到 TDD²：测试驱动开发的进阶实践</a>
+            </h3>
+            <p class="blog-list-excerpt">打破红-绿-重构的刻板印象，聊聊三角测量、转换优先级、测试替身的正确用法，以及那些让你能在实战中用好 TDD 的经验</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/从-tdd-到-tdd²测试驱动开发的进阶实践.html">从 TDD 到 TDD²：测试驱动开发的进阶实践</a>
-          </h3>
-          <p class="blog-list-excerpt">打破红-绿-重构的刻板印象，聊聊三角测量、转换优先级、测试替身的正确用法，以及那些让你能在实战中用好 TDD 的经验</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#TDD</span> <span class="tag-pill">#测试</span> <span class="tag-pill">#开发实践</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="思考" data-tags="健康,生活习惯,效率,心理" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-07-09</span>
-              <span>·</span>
-              <span class="blog-read-time">18 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-07-09</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 18 min</span>
+              </div>
+              <span class="blog-list-tag">思考</span>
             </div>
-            <span class="blog-list-tag">思考</span>
+            <h3 class="blog-list-title">
+              <a href="posts/医生不会告诉你的健康习惯从睡眠到饮食的系统性方案.html">医生不会告诉你的健康习惯：从睡眠到饮食的系统性方案</a>
+            </h3>
+            <p class="blog-list-excerpt">从睡眠、饮食、运动、数字健康、环境、心理六个维度，建立科学且可执行的健康习惯体系</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/医生不会告诉你的健康习惯从睡眠到饮食的系统性方案.html">医生不会告诉你的健康习惯：从睡眠到饮食的系统性方案</a>
-          </h3>
-          <p class="blog-list-excerpt">从睡眠、饮食、运动、数字健康、环境、心理六个维度，建立科学且可执行的健康习惯体系</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#健康</span> <span class="tag-pill">#生活习惯</span> <span class="tag-pill">#效率</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="数据库" data-tags="Prisma,TypeScript,PostgreSQL,ORM,数据库,Next.js" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-07-07</span>
-              <span>·</span>
-              <span class="blog-read-time">5 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-07-07</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 5 min</span>
+              </div>
+              <span class="blog-list-tag">数据库</span>
             </div>
-            <span class="blog-list-tag">数据库</span>
+            <h3 class="blog-list-title">
+              <a href="posts/prisma-orm-完全指南从入门到实战.html">Prisma ORM 完全指南：从入门到实战</a>
+            </h3>
+            <p class="blog-list-excerpt">从 Prisma 的基础概念到项目实战，涵盖 Schema 设计、CRUD 操作、迁移管理、性能优化等核心话题，带你全面掌握 TypeScript 生态最流行的数据库 ORM。</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/prisma-orm-完全指南从入门到实战.html">Prisma ORM 完全指南：从入门到实战</a>
-          </h3>
-          <p class="blog-list-excerpt">从 Prisma 的基础概念到项目实战，涵盖 Schema 设计、CRUD 操作、迁移管理、性能优化等核心话题，带你全面掌握 TypeScript 生态最流行的数据库 ORM。</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#Prisma</span> <span class="tag-pill">#TypeScript</span> <span class="tag-pill">#PostgreSQL</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="思考" data-tags="转行,职业选择,思考,程序员" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-07-06</span>
-              <span>·</span>
-              <span class="blog-read-time">5 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-07-06</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 5 min</span>
+              </div>
+              <span class="blog-list-tag">思考</span>
             </div>
-            <span class="blog-list-tag">思考</span>
+            <h3 class="blog-list-title">
+              <a href="posts/技术人员转行指南当写代码不再是你想做的事.html">技术人员转行指南：当写代码不再是你想做的事</a>
+            </h3>
+            <p class="blog-list-excerpt">深入分析技术人员转行的原因、方向和策略——不想写代码了，接下来该怎么办？</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/技术人员转行指南当写代码不再是你想做的事.html">技术人员转行指南：当写代码不再是你想做的事</a>
-          </h3>
-          <p class="blog-list-excerpt">深入分析技术人员转行的原因、方向和策略——不想写代码了，接下来该怎么办？</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#转行</span> <span class="tag-pill">#职业选择</span> <span class="tag-pill">#思考</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="思考" data-tags="理财,打工人,程序员,投资,省钱,保险" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-07-06</span>
-              <span>·</span>
-              <span class="blog-read-time">5 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-07-06</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 5 min</span>
+              </div>
+              <span class="blog-list-tag">思考</span>
             </div>
-            <span class="blog-list-tag">思考</span>
+            <h3 class="blog-list-title">
+              <a href="posts/打工人理财第一课从看懂钱去哪了到让钱自己长大.html">打工人理财第一课：从看懂钱去哪了到让钱自己长大</a>
+            </h3>
+            <p class="blog-list-excerpt">面向程序员的实用理财入门指南——四个账户法、极简记账、常见金融坑、可执行的起步计划。不折腾、不焦虑，让钱安静地替你打工。</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/打工人理财第一课从看懂钱去哪了到让钱自己长大.html">打工人理财第一课：从看懂钱去哪了到让钱自己长大</a>
-          </h3>
-          <p class="blog-list-excerpt">面向程序员的实用理财入门指南——四个账户法、极简记账、常见金融坑、可执行的起步计划。不折腾、不焦虑，让钱安静地替你打工。</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#理财</span> <span class="tag-pill">#打工人</span> <span class="tag-pill">#程序员</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="前端" data-tags="AI,MCP,WebKit,Safari,前端开发,调试" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-07-06</span>
-              <span>·</span>
-              <span class="blog-read-time">5 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-07-06</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 5 min</span>
+              </div>
+              <span class="blog-list-tag">前端</span>
             </div>
-            <span class="blog-list-tag">前端</span>
+            <h3 class="blog-list-title">
+              <a href="posts/当-ai-编程-agent-有了眼睛safari-mcp-server-深度解读.html">当 AI 编程 Agent 有了&quot;眼睛&quot;：Safari MCP Server 深度解读</a>
+            </h3>
+            <p class="blog-list-excerpt">2026年7月，Apple 发布了 Safari MCP Server，让 AI 编程 Agent 可以直接连接浏览器调试页面。本文深入解读其原理、安装配置、四个实战场景，以及与 Chrome MCP 的全方位对比。</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/当-ai-编程-agent-有了眼睛safari-mcp-server-深度解读.html">当 AI 编程 Agent 有了&quot;眼睛&quot;：Safari MCP Server 深度解读</a>
-          </h3>
-          <p class="blog-list-excerpt">2026年7月，Apple 发布了 Safari MCP Server，让 AI 编程 Agent 可以直接连接浏览器调试页面。本文深入解读其原理、安装配置、四个实战场景，以及与 Chrome MCP 的全方位对比。</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#AI</span> <span class="tag-pill">#MCP</span> <span class="tag-pill">#WebKit</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="思考" data-tags="生活技巧,效率,极简主义,个人管理" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-07-06</span>
-              <span>·</span>
-              <span class="blog-read-time">5 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-07-06</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 5 min</span>
+              </div>
+              <span class="blog-list-tag">思考</span>
             </div>
-            <span class="blog-list-tag">思考</span>
+            <h3 class="blog-list-title">
+              <a href="posts/这些年我攒下来的生活小技巧.html">这些年我攒下来的生活小技巧</a>
+            </h3>
+            <p class="blog-list-excerpt">从厨房到居家，从时间管理到数字生活，分享一套经过实践验证的生活小窍门，帮你少踩坑、少浪费时间。</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/这些年我攒下来的生活小技巧.html">这些年我攒下来的生活小技巧</a>
-          </h3>
-          <p class="blog-list-excerpt">从厨房到居家，从时间管理到数字生活，分享一套经过实践验证的生活小窍门，帮你少踩坑、少浪费时间。</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#生活技巧</span> <span class="tag-pill">#效率</span> <span class="tag-pill">#极简主义</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="Android" data-tags="Gradle,Android,构建优化,性能优化" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-07-05</span>
-              <span>·</span>
-              <span class="blog-read-time">5 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-07-05</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 5 min</span>
+              </div>
+              <span class="blog-list-tag">Android</span>
             </div>
-            <span class="blog-list-tag">Android</span>
+            <h3 class="blog-list-title">
+              <a href="posts/gradle-构建加速全攻略从-5-分钟到-30-秒.html">Gradle 构建加速全攻略：从 5 分钟到 30 秒</a>
+            </h3>
+            <p class="blog-list-excerpt">从 Profile 找到瓶颈到 Configuration Cache，一步步把 Android 项目构建从 5 分钟优化到 30 秒的完整方案</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/gradle-构建加速全攻略从-5-分钟到-30-秒.html">Gradle 构建加速全攻略：从 5 分钟到 30 秒</a>
-          </h3>
-          <p class="blog-list-excerpt">从 Profile 找到瓶颈到 Configuration Cache，一步步把 Android 项目构建从 5 分钟优化到 30 秒的完整方案</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#Gradle</span> <span class="tag-pill">#Android</span> <span class="tag-pill">#构建优化</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="Kotlin" data-tags="Kotlin,Android,最佳实践" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-07-05</span>
-              <span>·</span>
-              <span class="blog-read-time">5 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-07-05</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 5 min</span>
+              </div>
+              <span class="blog-list-tag">Kotlin</span>
             </div>
-            <span class="blog-list-tag">Kotlin</span>
+            <h3 class="blog-list-title">
+              <a href="posts/kotlin-scope-functions-实战选择五个函数一个决策树.html">Kotlin Scope Functions 实战选择：五个函数一个决策树</a>
+            </h3>
+            <p class="blog-list-excerpt">别再纠结 let 和 apply 的区别了——从 this/it 和返回值两个维度理清 Kotlin 的五个 Scope Functions，附反模式和团队规范</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/kotlin-scope-functions-实战选择五个函数一个决策树.html">Kotlin Scope Functions 实战选择：五个函数一个决策树</a>
-          </h3>
-          <p class="blog-list-excerpt">别再纠结 let 和 apply 的区别了——从 this/it 和返回值两个维度理清 Kotlin 的五个 Scope Functions，附反模式和团队规范</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#Kotlin</span> <span class="tag-pill">#Android</span> <span class="tag-pill">#最佳实践</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="DevOps" data-tags="" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-07-05</span>
-              <span>·</span>
-              <span class="blog-read-time">5 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-07-05</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 5 min</span>
+              </div>
+              <span class="blog-list-tag">DevOps</span>
             </div>
-            <span class="blog-list-tag">DevOps</span>
+            <h3 class="blog-list-title">
+              <a href="posts/vps-选购与使用指南五个常见场景的配置与避坑.html">VPS 选购与使用指南：五个常见场景的配置与避坑</a>
+            </h3>
+            <p class="blog-list-excerpt">从扶墙线路到生产环境部署，不同场景下 VPS 怎么选、怎么配、怎么不踩坑</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/vps-选购与使用指南五个常见场景的配置与避坑.html">VPS 选购与使用指南：五个常见场景的配置与避坑</a>
-          </h3>
-          <p class="blog-list-excerpt">从扶墙线路到生产环境部署，不同场景下 VPS 怎么选、怎么配、怎么不踩坑</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="数据库" data-tags="" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-07-05</span>
-              <span>·</span>
-              <span class="blog-read-time">5 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-07-05</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 5 min</span>
+              </div>
+              <span class="blog-list-tag">数据库</span>
             </div>
-            <span class="blog-list-tag">数据库</span>
+            <h3 class="blog-list-title">
+              <a href="posts/mysql-索引优化实战从慢查询到最佳实践.html">MySQL 索引优化实战：从慢查询到最佳实践</a>
+            </h3>
+            <p class="blog-list-excerpt">从 EXPLAIN 认识索引失效到复合索引设计，一个慢查询从 2 秒优化到 12 毫秒的完整过程</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/mysql-索引优化实战从慢查询到最佳实践.html">MySQL 索引优化实战：从慢查询到最佳实践</a>
-          </h3>
-          <p class="blog-list-excerpt">从 EXPLAIN 认识索引失效到复合索引设计，一个慢查询从 2 秒优化到 12 毫秒的完整过程</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="AI" data-tags="" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-07-04</span>
-              <span>·</span>
-              <span class="blog-read-time">5 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-07-04</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 5 min</span>
+              </div>
+              <span class="blog-list-tag">AI</span>
             </div>
-            <span class="blog-list-tag">AI</span>
+            <h3 class="blog-list-title">
+              <a href="posts/ai-编程助手进化论从结对编程到自主编程团队-2026.html">AI 编程助手进化论：从结对编程到自主编程团队 (2026)</a>
+            </h3>
+            <p class="blog-list-excerpt">2026 年，AI 编程 Agent 跨越了从辅助工具到自主成员的临界点。Cursor 移动端发布、Claude Code 深度推理、Codex CLI 稳定执行、多 Agent 并行协作——本文梳理 AI 编程的三次范式跃迁，分析主流工具，分享落地实践，并展望 2027 年的开发者生态。</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/ai-编程助手进化论从结对编程到自主编程团队-2026.html">AI 编程助手进化论：从结对编程到自主编程团队 (2026)</a>
-          </h3>
-          <p class="blog-list-excerpt">2026 年，AI 编程 Agent 跨越了从辅助工具到自主成员的临界点。Cursor 移动端发布、Claude Code 深度推理、Codex CLI 稳定执行、多 Agent 并行协作——本文梳理 AI 编程的三次范式跃迁，分析主流工具，分享落地实践，并展望 2027 年的开发者生态。</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="系统编程" data-tags="" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-07-04</span>
-              <span>·</span>
-              <span class="blog-read-time">5 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-07-04</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 5 min</span>
+              </div>
+              <span class="blog-list-tag">系统编程</span>
             </div>
-            <span class="blog-list-tag">系统编程</span>
+            <h3 class="blog-list-title">
+              <a href="posts/linux-inode-mechanism-deep-dive.html">Linux inode 机制深入理解：从数据结构到实战排查</a>
+            </h3>
+            <p class="blog-list-excerpt">inode 是 Linux 文件系统的核心概念。本文从 ext4 inode 数据结构、硬链接软链接原理、文件删除机制到 inode 耗尽排查，全面解析 inode 工作原理。</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/linux-inode-mechanism-deep-dive.html">Linux inode 机制深入理解：从数据结构到实战排查</a>
-          </h3>
-          <p class="blog-list-excerpt">inode 是 Linux 文件系统的核心概念。本文从 ext4 inode 数据结构、硬链接软链接原理、文件删除机制到 inode 耗尽排查，全面解析 inode 工作原理。</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="DevOps" data-tags="" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-07-04</span>
-              <span>·</span>
-              <span class="blog-read-time">5 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-07-04</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 5 min</span>
+              </div>
+              <span class="blog-list-tag">DevOps</span>
             </div>
-            <span class="blog-list-tag">DevOps</span>
+            <h3 class="blog-list-title">
+              <a href="posts/github-actions-auto-index-blog-cicd.html">GitHub Actions 自动索引：我的静态博客 CI/CD 进化之路</a>
+            </h3>
+            <p class="blog-list-excerpt">68篇技术博客的索引更新从手动7文件到CI全量自动重建——聊聊全量vs增量的取舍、HTML解析技巧、RSS日期格式化踩坑，以及为什么应该让CI管索引</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/github-actions-auto-index-blog-cicd.html">GitHub Actions 自动索引：我的静态博客 CI/CD 进化之路</a>
-          </h3>
-          <p class="blog-list-excerpt">68篇技术博客的索引更新从手动7文件到CI全量自动重建——聊聊全量vs增量的取舍、HTML解析技巧、RSS日期格式化踩坑，以及为什么应该让CI管索引</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="思考" data-tags="工作方法,生活方式,自我管理" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-07-04</span>
-              <span>·</span>
-              <span class="blog-read-time">8 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-07-04</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 8 min</span>
+              </div>
+              <span class="blog-list-tag">思考</span>
             </div>
-            <span class="blog-list-tag">思考</span>
+            <h3 class="blog-list-title">
+              <a href="posts/programmers-should-learn-to-unplug.html">程序员应该学会「关机」：工作焦虑如何侵蚀你的休息时间</a>
+            </h3>
+            <p class="blog-list-excerpt">不会关机的程序员不是在拼事业，而是在慢性消耗自己。聊聊为什么下班后的大脑还在 debug，以及如何真正停下来。</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/programmers-should-learn-to-unplug.html">程序员应该学会「关机」：工作焦虑如何侵蚀你的休息时间</a>
-          </h3>
-          <p class="blog-list-excerpt">不会关机的程序员不是在拼事业，而是在慢性消耗自己。聊聊为什么下班后的大脑还在 debug，以及如何真正停下来。</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#工作方法</span> <span class="tag-pill">#生活方式</span> <span class="tag-pill">#自我管理</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="前端" data-tags="" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-07-03</span>
-              <span>·</span>
-              <span class="blog-read-time">5 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-07-03</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 5 min</span>
+              </div>
+              <span class="blog-list-tag">前端</span>
             </div>
-            <span class="blog-list-tag">前端</span>
+            <h3 class="blog-list-title">
+              <a href="posts/static-blog-performance-optimization-59mb.html">静态博客性能优化实战：从 59MB 到精简高效</a>
+            </h3>
+            <p class="blog-list-excerpt">66篇文章4KB重复内联样式、4.4MB死文件、404幽灵引用——一次完整的静态博客性能优化记录</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/static-blog-performance-optimization-59mb.html">静态博客性能优化实战：从 59MB 到精简高效</a>
-          </h3>
-          <p class="blog-list-excerpt">66篇文章4KB重复内联样式、4.4MB死文件、404幽灵引用——一次完整的静态博客性能优化记录</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="Android" data-tags="" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-07-02</span>
-              <span>·</span>
-              <span class="blog-read-time">5 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-07-02</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 5 min</span>
+              </div>
+              <span class="blog-list-tag">Android</span>
             </div>
-            <span class="blog-list-tag">Android</span>
+            <h3 class="blog-list-title">
+              <a href="posts/gradle-build-acceleration-5min-to-30sec.html">Gradle 构建加速全攻略：从 5 分钟到 30 秒</a>
+            </h3>
+            <p class="blog-list-excerpt">系统梳理 Gradle 构建加速的完整方法论——配置调优、KAPT迁移KSP、增量编译、模块化拆分、远程缓存、CI优化，附真实项目优化案例，构建时间减少85%</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/gradle-build-acceleration-5min-to-30sec.html">Gradle 构建加速全攻略：从 5 分钟到 30 秒</a>
-          </h3>
-          <p class="blog-list-excerpt">系统梳理 Gradle 构建加速的完整方法论——配置调优、KAPT迁移KSP、增量编译、模块化拆分、远程缓存、CI优化，附真实项目优化案例，构建时间减少85%</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="思考" data-tags="" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-07-02</span>
-              <span>·</span>
-              <span class="blog-read-time">5 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-07-02</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 5 min</span>
+              </div>
+              <span class="blog-list-tag">思考</span>
             </div>
-            <span class="blog-list-tag">思考</span>
+            <h3 class="blog-list-title">
+              <a href="posts/urban-planning-inspires-software-architecture.html">像规划城市一样设计系统：城市规划给软件架构的启示</a>
+            </h3>
+            <p class="blog-list-excerpt">城市和软件系统的本质惊人相似——功能分区映射限界上下文、交通网络映射数据流、基础设施先行映射可观测性、有机更新映射演进式架构。从城市规划的百年智慧中，找到软件架构的跨界启发</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/urban-planning-inspires-software-architecture.html">像规划城市一样设计系统：城市规划给软件架构的启示</a>
-          </h3>
-          <p class="blog-list-excerpt">城市和软件系统的本质惊人相似——功能分区映射限界上下文、交通网络映射数据流、基础设施先行映射可观测性、有机更新映射演进式架构。从城市规划的百年智慧中，找到软件架构的跨界启发</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="思考" data-tags="" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-07-02</span>
-              <span>·</span>
-              <span class="blog-read-time">5 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-07-02</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 5 min</span>
+              </div>
+              <span class="blog-list-tag">思考</span>
             </div>
-            <span class="blog-list-tag">思考</span>
+            <h3 class="blog-list-title">
+              <a href="posts/software-engineer-learns-from-manufacturing-lean.html">软件工程师能从制造业学到什么：精益思维重塑开发流程</a>
+            </h3>
+            <p class="blog-list-excerpt">制造业精益思想如何重塑软件开发流程——从丰田生产系统到敏捷开发，从5S方法论到持续交付，跨行业视角下的效率革命</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/software-engineer-learns-from-manufacturing-lean.html">软件工程师能从制造业学到什么：精益思维重塑开发流程</a>
-          </h3>
-          <p class="blog-list-excerpt">制造业精益思想如何重塑软件开发流程——从丰田生产系统到敏捷开发，从5S方法论到持续交付，跨行业视角下的效率革命</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="思考" data-tags="学习方法,个人成长,技术人,效率,知识管理" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-07-01</span>
-              <span>·</span>
-              <span class="blog-read-time">8 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-07-01</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 8 min</span>
+              </div>
+              <span class="blog-list-tag">思考</span>
             </div>
-            <span class="blog-list-tag">思考</span>
+            <h3 class="blog-list-title">
+              <a href="posts/how-tech-people-learn-new-tech.html">技术人如何学习新技术</a>
+            </h3>
+            <p class="blog-list-excerpt">从被动输入到主动输出，80/20 法则选技术，知识体系建立，实践驱动学习，构建记忆宫殿，善用 AI 与社群</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/how-tech-people-learn-new-tech.html">技术人如何学习新技术</a>
-          </h3>
-          <p class="blog-list-excerpt">从被动输入到主动输出，80/20 法则选技术，知识体系建立，实践驱动学习，构建记忆宫殿，善用 AI 与社群</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#学习方法</span> <span class="tag-pill">#个人成长</span> <span class="tag-pill">#技术人</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="思考" data-tags="思考,写作,个人成长,技术人,学习方法,个人品牌" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-07-01</span>
-              <span>·</span>
-              <span class="blog-read-time">8 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-07-01</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 8 min</span>
+              </div>
+              <span class="blog-list-tag">思考</span>
             </div>
-            <span class="blog-list-tag">思考</span>
+            <h3 class="blog-list-title">
+              <a href="posts/why-tech-people-should-write.html">技术人为什么要写作</a>
+            </h3>
+            <p class="blog-list-excerpt">写作不仅是最强的学习方式，更能帮助技术人建立个人品牌、打破信息茧房、留下成长痕迹</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/why-tech-people-should-write.html">技术人为什么要写作</a>
-          </h3>
-          <p class="blog-list-excerpt">写作不仅是最强的学习方式，更能帮助技术人建立个人品牌、打破信息茧房、留下成长痕迹</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#思考</span> <span class="tag-pill">#写作</span> <span class="tag-pill">#个人成长</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="Kotlin" data-tags="" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-07-01</span>
-              <span>·</span>
-              <span class="blog-read-time">5 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-07-01</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 5 min</span>
+              </div>
+              <span class="blog-list-tag">Kotlin</span>
             </div>
-            <span class="blog-list-tag">Kotlin</span>
+            <h3 class="blog-list-title">
+              <a href="posts/kotlin-coroutine-exception-handling.html">Kotlin Coroutine 异常处理机制全面解析</a>
+            </h3>
+            <p class="blog-list-excerpt">全面解析 Kotlin 协程异常处理机制，涵盖 launch/async 异常传播差异、SupervisorJob、结构化并发、CoroutineExceptionHandler、Android 最佳实践等核心内容</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/kotlin-coroutine-exception-handling.html">Kotlin Coroutine 异常处理机制全面解析</a>
-          </h3>
-          <p class="blog-list-excerpt">全面解析 Kotlin 协程异常处理机制，涵盖 launch/async 异常传播差异、SupervisorJob、结构化并发、CoroutineExceptionHandler、Android 最佳实践等核心内容</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="Android" data-tags="Android,隐私,Android 15,权限,适配,Photo Picker,迁移" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-07-01</span>
-              <span>·</span>
-              <span class="blog-read-time">20 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-07-01</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 20 min</span>
+              </div>
+              <span class="blog-list-tag">Android</span>
             </div>
-            <span class="blog-list-tag">Android</span>
+            <h3 class="blog-list-title">
+              <a href="posts/android-15-privacy-media-visual-permission.html">Android 15 隐私新特性：所有文件都需要 MEDIA_VISUAL_PERMISSION</a>
+            </h3>
+            <p class="blog-list-excerpt">详解 Android 15 引入的媒体权限重大变更，以及从 MediaStore 迁移到 Photo Picker 的完整指南</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/android-15-privacy-media-visual-permission.html">Android 15 隐私新特性：所有文件都需要 MEDIA_VISUAL_PERMISSION</a>
-          </h3>
-          <p class="blog-list-excerpt">详解 Android 15 引入的媒体权限重大变更，以及从 MediaStore 迁移到 Photo Picker 的完整指南</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#Android</span> <span class="tag-pill">#隐私</span> <span class="tag-pill">#Android 15</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="思考" data-tags="思考,专注力,深度工作,信息管理,自我管理" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-07-01</span>
-              <span>·</span>
-              <span class="blog-read-time">5 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-07-01</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 5 min</span>
+              </div>
+              <span class="blog-list-tag">思考</span>
             </div>
-            <span class="blog-list-tag">思考</span>
+            <h3 class="blog-list-title">
+              <a href="posts/less-is-more-focus-in-information-age.html">少即是多：信息过载时代的专注力修炼</a>
+            </h3>
+            <p class="blog-list-excerpt">信息爆炸不是问题，问题是我们在海量输入中丧失了深度思考的能力。本文分享我在信息筛选、注意力管理和深度工作方面的实践经验与反思。</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/less-is-more-focus-in-information-age.html">少即是多：信息过载时代的专注力修炼</a>
-          </h3>
-          <p class="blog-list-excerpt">信息爆炸不是问题，问题是我们在海量输入中丧失了深度思考的能力。本文分享我在信息筛选、注意力管理和深度工作方面的实践经验与反思。</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#思考</span> <span class="tag-pill">#专注力</span> <span class="tag-pill">#深度工作</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="思考" data-tags="思考,软技能,职业发展,技术人成长,沟通" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-07-01</span>
-              <span>·</span>
-              <span class="blog-read-time">5 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-07-01</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 5 min</span>
+              </div>
+              <span class="blog-list-tag">思考</span>
             </div>
-            <span class="blog-list-tag">思考</span>
+            <h3 class="blog-list-title">
+              <a href="posts/soft-skills-tech-people-overlook.html">代码之外的竞争力：技术人最容易忽视的软技能</a>
+            </h3>
+            <p class="blog-list-excerpt">技术能力决定了你能走多快，但软技能决定了你能走多远。本文聊聊沟通、表达、影响力等容易被技术人忽视的能力。</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/soft-skills-tech-people-overlook.html">代码之外的竞争力：技术人最容易忽视的软技能</a>
-          </h3>
-          <p class="blog-list-excerpt">技术能力决定了你能走多快，但软技能决定了你能走多远。本文聊聊沟通、表达、影响力等容易被技术人忽视的能力。</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#思考</span> <span class="tag-pill">#软技能</span> <span class="tag-pill">#职业发展</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="思考" data-tags="思考,学习,个人成长,博客" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-06-30</span>
-              <span>·</span>
-              <span class="blog-read-time">4 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-06-30</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 4 min</span>
+              </div>
+              <span class="blog-list-tag">思考</span>
             </div>
-            <span class="blog-list-tag">思考</span>
+            <h3 class="blog-list-title">
+              <a href="posts/why-i-started-blogging.html">为什么我开始写博客：从潜水到发声</a>
+            </h3>
+            <p class="blog-list-excerpt">一个普通工程师的写作心路 — 为什么要开始写博客，写作如何改变了我的学习方式，以及我对个人品牌的理解</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/why-i-started-blogging.html">为什么我开始写博客：从潜水到发声</a>
-          </h3>
-          <p class="blog-list-excerpt">一个普通工程师的写作心路 — 为什么要开始写博客，写作如何改变了我的学习方式，以及我对个人品牌的理解</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#思考</span> <span class="tag-pill">#学习</span> <span class="tag-pill">#个人成长</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="Android" data-tags="Android 16,前台服务,后台任务,WorkManager" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-06-30</span>
-              <span>·</span>
-              <span class="blog-read-time">10 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-06-30</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 10 min</span>
+              </div>
+              <span class="blog-list-tag">Android</span>
             </div>
-            <span class="blog-list-tag">Android</span>
+            <h3 class="blog-list-title">
+              <a href="posts/android-16-foreground-service-constraints.html">Android 16 前台服务类型全新限制：类型强制匹配与迁移指南</a>
+            </h3>
+            <p class="blog-list-excerpt">Android 16 前台服务类型强制约束详解，涵盖 shortService、specialUse、类型匹配规则和迁移适配方案</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/android-16-foreground-service-constraints.html">Android 16 前台服务类型全新限制：类型强制匹配与迁移指南</a>
-          </h3>
-          <p class="blog-list-excerpt">Android 16 前台服务类型强制约束详解，涵盖 shortService、specialUse、类型匹配规则和迁移适配方案</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#Android 16</span> <span class="tag-pill">#前台服务</span> <span class="tag-pill">#后台任务</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="AI" data-tags="Cursor,AI编程,效率工具,开发规范" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-06-30</span>
-              <span>·</span>
-              <span class="blog-read-time">12 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-06-30</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 12 min</span>
+              </div>
+              <span class="blog-list-tag">AI</span>
             </div>
-            <span class="blog-list-tag">AI</span>
+            <h3 class="blog-list-title">
+              <a href="posts/cursor-rules-guide.html">Cursor Rules 实战：自定义 AI 代码助手的进阶指南</a>
+            </h3>
+            <p class="blog-list-excerpt">从零搭建 Cursor Rules 体系，涵盖规则语法、分层架构、真实 Android 项目案例和最佳实践</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/cursor-rules-guide.html">Cursor Rules 实战：自定义 AI 代码助手的进阶指南</a>
-          </h3>
-          <p class="blog-list-excerpt">从零搭建 Cursor Rules 体系，涵盖规则语法、分层架构、真实 Android 项目案例和最佳实践</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#Cursor</span> <span class="tag-pill">#AI编程</span> <span class="tag-pill">#效率工具</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="AI" data-tags="AI,MCP,工具调用,协议" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-06-30</span>
-              <span>·</span>
-              <span class="blog-read-time">14 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-06-30</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 14 min</span>
+              </div>
+              <span class="blog-list-tag">AI</span>
             </div>
-            <span class="blog-list-tag">AI</span>
+            <h3 class="blog-list-title">
+              <a href="posts/mcp-server-deep-dive.html">MCP 协议深入实战：从入门到编写自定义 MCP Server</a>
+            </h3>
+            <p class="blog-list-excerpt">3000字完整教程，从零搭建 MCP Server，涵盖协议核心、SDK 使用、调试技巧和生产部署最佳实践</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/mcp-server-deep-dive.html">MCP 协议深入实战：从入门到编写自定义 MCP Server</a>
-          </h3>
-          <p class="blog-list-excerpt">3000字完整教程，从零搭建 MCP Server，涵盖协议核心、SDK 使用、调试技巧和生产部署最佳实践</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#AI</span> <span class="tag-pill">#MCP</span> <span class="tag-pill">#工具调用</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="AI" data-tags="AI,AI 工具,开发技巧" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-06-28</span>
-              <span>·</span>
-              <span class="blog-read-time">12 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-06-28</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 12 min</span>
+              </div>
+              <span class="blog-list-tag">AI</span>
             </div>
-            <span class="blog-list-tag">AI</span>
+            <h3 class="blog-list-title">
+              <a href="posts/ai-code-editor-review-cursor-windsurf-copilot.html">AI 代码编辑器深度横评：Cursor vs Windsurf vs Copilot</a>
+            </h3>
+            <p class="blog-list-excerpt">三大主流 AI 代码编辑器全方位对比</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/ai-code-editor-review-cursor-windsurf-copilot.html">AI 代码编辑器深度横评：Cursor vs Windsurf vs Copilot</a>
-          </h3>
-          <p class="blog-list-excerpt">三大主流 AI 代码编辑器全方位对比</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#AI</span> <span class="tag-pill">#AI 工具</span> <span class="tag-pill">#开发技巧</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="开发" data-tags="Git,开发技巧,效率工具" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-06-28</span>
-              <span>·</span>
-              <span class="blog-read-time">12 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-06-28</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 12 min</span>
+              </div>
+              <span class="blog-list-tag">开发</span>
             </div>
-            <span class="blog-list-tag">开发</span>
+            <h3 class="blog-list-title">
+              <a href="posts/git-worktree-multi-branch-guide.html">Git Worktree 高效多分支开发指南</a>
+            </h3>
+            <p class="blog-list-excerpt">Git Worktree 让你同时检出多个分支，切换零成本，告别 stash 和冲突的烦恼。本文详解 worktree 的使用场景和最佳实践。</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/git-worktree-multi-branch-guide.html">Git Worktree 高效多分支开发指南</a>
-          </h3>
-          <p class="blog-list-excerpt">Git Worktree 让你同时检出多个分支，切换零成本，告别 stash 和冲突的烦恼。本文详解 worktree 的使用场景和最佳实践。</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#Git</span> <span class="tag-pill">#开发技巧</span> <span class="tag-pill">#效率工具</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="Android" data-tags="Hilt,依赖注入,Android,Dagger,ViewModel,模块化" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-06-27</span>
-              <span>·</span>
-              <span class="blog-read-time">18 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-06-27</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 18 min</span>
+              </div>
+              <span class="blog-list-tag">Android</span>
             </div>
-            <span class="blog-list-tag">Android</span>
+            <h3 class="blog-list-title">
+              <a href="posts/android-hilt-dependency-injection.html">Android Hilt 依赖注入最佳实践：从入门到架构</a>
+            </h3>
+            <p class="blog-list-excerpt">Android Hilt 依赖注入完整指南：核心注解、ViewModel 注入、多模块架构、作用域管理、第三方库集成与测试最佳实践</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/android-hilt-dependency-injection.html">Android Hilt 依赖注入最佳实践：从入门到架构</a>
-          </h3>
-          <p class="blog-list-excerpt">Android Hilt 依赖注入完整指南：核心注解、ViewModel 注入、多模块架构、作用域管理、第三方库集成与测试最佳实践</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#Hilt</span> <span class="tag-pill">#依赖注入</span> <span class="tag-pill">#Android</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="DevOps" data-tags="Nginx,反向代理,性能调优,SSL,负载均衡,DevOps" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-06-27</span>
-              <span>·</span>
-              <span class="blog-read-time">18 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-06-27</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 18 min</span>
+              </div>
+              <span class="blog-list-tag">DevOps</span>
             </div>
-            <span class="blog-list-tag">DevOps</span>
+            <h3 class="blog-list-title">
+              <a href="posts/nginx-reverse-proxy-tuning.html">Nginx 反向代理性能调优：从入门到生产</a>
+            </h3>
+            <p class="blog-list-excerpt">Nginx 反向代理生产级调优指南：worker 配置、SSL 优化、缓存策略、负载均衡、限流与监控完整实践</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/nginx-reverse-proxy-tuning.html">Nginx 反向代理性能调优：从入门到生产</a>
-          </h3>
-          <p class="blog-list-excerpt">Nginx 反向代理生产级调优指南：worker 配置、SSL 优化、缓存策略、负载均衡、限流与监控完整实践</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#Nginx</span> <span class="tag-pill">#反向代理</span> <span class="tag-pill">#性能调优</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="系统编程" data-tags="Zig,系统编程,comptime,Allocator,交叉编译,build.zig,C 互操作" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-06-27</span>
-              <span>·</span>
-              <span class="blog-read-time">16 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-06-27</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 16 min</span>
+              </div>
+              <span class="blog-list-tag">系统编程</span>
             </div>
-            <span class="blog-list-tag">系统编程</span>
+            <h3 class="blog-list-title">
+              <a href="posts/zig-language-introduction.html">Zig 语言入门：比 C 更安全的系统编程</a>
+            </h3>
+            <p class="blog-list-excerpt">Zig 语言入门完整指南：comptime 编译期计算、Allocator 模式、错误处理、C 互操作、交叉编译与构建系统深度解析</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/zig-language-introduction.html">Zig 语言入门：比 C 更安全的系统编程</a>
-          </h3>
-          <p class="blog-list-excerpt">Zig 语言入门完整指南：comptime 编译期计算、Allocator 模式、错误处理、C 互操作、交叉编译与构建系统深度解析</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#Zig</span> <span class="tag-pill">#系统编程</span> <span class="tag-pill">#comptime</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="AI" data-tags="RAG,检索增强生成,LLM,向量数据库,Embedding,LangChain,AI" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-06-27</span>
-              <span>·</span>
-              <span class="blog-read-time">18 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-06-27</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 18 min</span>
+              </div>
+              <span class="blog-list-tag">AI</span>
             </div>
-            <span class="blog-list-tag">AI</span>
+            <h3 class="blog-list-title">
+              <a href="posts/rag-introduction.html">RAG 检索增强生成入门：从理念到落地</a>
+            </h3>
+            <p class="blog-list-excerpt">RAG 检索增强生成完整入门指南：文档分块策略、嵌入模型选型、向量数据库对比、LangChain 实现、HyDE/RAG-Fusion 高级优化与 RAGAS 评估框架</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/rag-introduction.html">RAG 检索增强生成入门：从理念到落地</a>
-          </h3>
-          <p class="blog-list-excerpt">RAG 检索增强生成完整入门指南：文档分块策略、嵌入模型选型、向量数据库对比、LangChain 实现、HyDE/RAG-Fusion 高级优化与 RAGAS 评估框架</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#RAG</span> <span class="tag-pill">#检索增强生成</span> <span class="tag-pill">#LLM</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="Android" data-tags="Android 16,后台任务,WorkManager,前台服务,电池优化" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-06-27</span>
-              <span>·</span>
-              <span class="blog-read-time">16 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-06-27</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 16 min</span>
+              </div>
+              <span class="blog-list-tag">Android</span>
             </div>
-            <span class="blog-list-tag">Android</span>
+            <h3 class="blog-list-title">
+              <a href="posts/android-16-background-tasks.html">Android 16 后台任务新限制：开发者迁移指南</a>
+            </h3>
+            <p class="blog-list-excerpt">Android 16 后台任务新限制完整解读：JobScheduler 强化、前台服务严格限制、WorkManager 迁移策略与兼容性适配指南</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/android-16-background-tasks.html">Android 16 后台任务新限制：开发者迁移指南</a>
-          </h3>
-          <p class="blog-list-excerpt">Android 16 后台任务新限制完整解读：JobScheduler 强化、前台服务严格限制、WorkManager 迁移策略与兼容性适配指南</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#Android 16</span> <span class="tag-pill">#后台任务</span> <span class="tag-pill">#WorkManager</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="DevOps" data-tags="DevOps,GitHub Actions,CI/CD,OIDC,自动化" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-06-27</span>
-              <span>·</span>
-              <span class="blog-read-time">16 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-06-27</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 16 min</span>
+              </div>
+              <span class="blog-list-tag">DevOps</span>
             </div>
-            <span class="blog-list-tag">DevOps</span>
+            <h3 class="blog-list-title">
+              <a href="posts/github-actions-advanced.html">GitHub Actions 高级工作流：CI/CD 最佳实践</a>
+            </h3>
+            <p class="blog-list-excerpt">GitHub Actions 高级工作流实战：矩阵构建、可复用工作流、自定义 Action、OIDC 集成、安全审计与性能优化完整指南</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/github-actions-advanced.html">GitHub Actions 高级工作流：CI/CD 最佳实践</a>
-          </h3>
-          <p class="blog-list-excerpt">GitHub Actions 高级工作流实战：矩阵构建、可复用工作流、自定义 Action、OIDC 集成、安全审计与性能优化完整指南</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#DevOps</span> <span class="tag-pill">#GitHub Actions</span> <span class="tag-pill">#CI/CD</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="前端" data-tags="前端,CSS,View Transitions,页面过渡,SPA" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-06-27</span>
-              <span>·</span>
-              <span class="blog-read-time">14 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-06-27</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 14 min</span>
+              </div>
+              <span class="blog-list-tag">前端</span>
             </div>
-            <span class="blog-list-tag">前端</span>
+            <h3 class="blog-list-title">
+              <a href="posts/css-view-transitions.html">CSS View Transitions API 实战：页面过渡动画新范式</a>
+            </h3>
+            <p class="blog-list-excerpt">CSS View Transitions API 实战：从 document.startViewTransition 到跨页面导航过渡、SPA 集成、列表动画完整指南</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/css-view-transitions.html">CSS View Transitions API 实战：页面过渡动画新范式</a>
-          </h3>
-          <p class="blog-list-excerpt">CSS View Transitions API 实战：从 document.startViewTransition 到跨页面导航过渡、SPA 集成、列表动画完整指南</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#前端</span> <span class="tag-pill">#CSS</span> <span class="tag-pill">#View Transitions</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="开发" data-tags="Go,Golang,并发,Goroutine,Channel,Context" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-06-27</span>
-              <span>·</span>
-              <span class="blog-read-time">18 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-06-27</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 18 min</span>
+              </div>
+              <span class="blog-list-tag">开发</span>
             </div>
-            <span class="blog-list-tag">开发</span>
+            <h3 class="blog-list-title">
+              <a href="posts/go-concurrency-patterns.html">Go 并发模式：Channel 与 Context</a>
+            </h3>
+            <p class="blog-list-excerpt">Go 并发模式深度解析：Goroutine 与 Channel 实战、GMP 调度模型、Context 包详解、Fan-Out/Fan-In 模式、并发测试最佳实践</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/go-concurrency-patterns.html">Go 并发模式：Channel 与 Context</a>
-          </h3>
-          <p class="blog-list-excerpt">Go 并发模式深度解析：Goroutine 与 Channel 实战、GMP 调度模型、Context 包详解、Fan-Out/Fan-In 模式、并发测试最佳实践</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#Go</span> <span class="tag-pill">#Golang</span> <span class="tag-pill">#并发</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="数据库" data-tags="PostgreSQL,索引优化,B-Tree,GIN,EXPLAIN,慢查询,数据库" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-06-27</span>
-              <span>·</span>
-              <span class="blog-read-time">20 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-06-27</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 20 min</span>
+              </div>
+              <span class="blog-list-tag">数据库</span>
             </div>
-            <span class="blog-list-tag">数据库</span>
+            <h3 class="blog-list-title">
+              <a href="posts/postgresql-index-optimization.html">PostgreSQL 索引优化实战</a>
+            </h3>
+            <p class="blog-list-excerpt">PostgreSQL 索引优化实战：B-Tree、GiST、GIN 索引类型对比，复合索引、部分索引设计，EXPLAIN 执行计划分析与慢查询优化</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/postgresql-index-optimization.html">PostgreSQL 索引优化实战</a>
-          </h3>
-          <p class="blog-list-excerpt">PostgreSQL 索引优化实战：B-Tree、GiST、GIN 索引类型对比，复合索引、部分索引设计，EXPLAIN 执行计划分析与慢查询优化</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#PostgreSQL</span> <span class="tag-pill">#索引优化</span> <span class="tag-pill">#B-Tree</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="Android" data-tags="Android 16,通知系统,Live Updates,Notifications,Android 开发" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-06-27</span>
-              <span>·</span>
-              <span class="blog-read-time">16 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-06-27</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 16 min</span>
+              </div>
+              <span class="blog-list-tag">Android</span>
             </div>
-            <span class="blog-list-tag">Android</span>
+            <h3 class="blog-list-title">
+              <a href="posts/android-16-notifications.html">Android 16 通知系统新 API 详解</a>
+            </h3>
+            <p class="blog-list-excerpt">Android 16 通知系统新 API 详解：Live Updates、Rich Ongoing、Bubble API 增强、通知优先级改革与迁移指南</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/android-16-notifications.html">Android 16 通知系统新 API 详解</a>
-          </h3>
-          <p class="blog-list-excerpt">Android 16 通知系统新 API 详解：Live Updates、Rich Ongoing、Bubble API 增强、通知优先级改革与迁移指南</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#Android 16</span> <span class="tag-pill">#通知系统</span> <span class="tag-pill">#Live Updates</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="安全" data-tags="安全,HTTPS,TLS 1.3,Nginx" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-06-27</span>
-              <span>·</span>
-              <span class="blog-read-time">20 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-06-27</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 20 min</span>
+              </div>
+              <span class="blog-list-tag">安全</span>
             </div>
-            <span class="blog-list-tag">安全</span>
+            <h3 class="blog-list-title">
+              <a href="posts/https-tls13-deep-dive.html">HTTPS 与 TLS 1.3 深度解析</a>
+            </h3>
+            <p class="blog-list-excerpt">HTTPS 与 TLS 1.3 深度解析：握手流程、ECDHE 密钥交换、证书体系、性能优化与 Nginx 配置最佳实践</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/https-tls13-deep-dive.html">HTTPS 与 TLS 1.3 深度解析</a>
-          </h3>
-          <p class="blog-list-excerpt">HTTPS 与 TLS 1.3 深度解析：握手流程、ECDHE 密钥交换、证书体系、性能优化与 Nginx 配置最佳实践</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#安全</span> <span class="tag-pill">#HTTPS</span> <span class="tag-pill">#TLS 1.3</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="AI" data-tags="Prompt Engineering,CRISPE,Chain-of-Thought,Function Calling,AI" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-06-27</span>
-              <span>·</span>
-              <span class="blog-read-time">18 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-06-27</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 18 min</span>
+              </div>
+              <span class="blog-list-tag">AI</span>
             </div>
-            <span class="blog-list-tag">AI</span>
+            <h3 class="blog-list-title">
+              <a href="posts/prompt-engineering-systematic.html">Prompt Engineering 系统化方法论</a>
+            </h3>
+            <p class="blog-list-excerpt">Prompt Engineering 系统化方法论：从 CRISPE 框架到思维链、自一致性、Function Calling，覆盖评估与迭代的系统性指南</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/prompt-engineering-systematic.html">Prompt Engineering 系统化方法论</a>
-          </h3>
-          <p class="blog-list-excerpt">Prompt Engineering 系统化方法论：从 CRISPE 框架到思维链、自一致性、Function Calling，覆盖评估与迭代的系统性指南</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#Prompt Engineering</span> <span class="tag-pill">#CRISPE</span> <span class="tag-pill">#Chain-of-Thought</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="Android" data-tags="Kotlin Flow,背压策略,SharedFlow,StateFlow,Android" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-06-27</span>
-              <span>·</span>
-              <span class="blog-read-time">16 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-06-27</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 16 min</span>
+              </div>
+              <span class="blog-list-tag">Android</span>
             </div>
-            <span class="blog-list-tag">Android</span>
+            <h3 class="blog-list-title">
+              <a href="posts/kotlin-flow-advanced.html">Kotlin Flow 进阶：背压策略与共享流</a>
+            </h3>
+            <p class="blog-list-excerpt">Kotlin Flow 进阶实战：背压策略（conflate/buffer/collectLatest）与共享流（shareIn/stateIn）深度解析，附 Android 实际场景</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/kotlin-flow-advanced.html">Kotlin Flow 进阶：背压策略与共享流</a>
-          </h3>
-          <p class="blog-list-excerpt">Kotlin Flow 进阶实战：背压策略（conflate/buffer/collectLatest）与共享流（shareIn/stateIn）深度解析，附 Android 实际场景</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#Kotlin Flow</span> <span class="tag-pill">#背压策略</span> <span class="tag-pill">#SharedFlow</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="系统编程" data-tags="eBPF,Linux 内核,可观测性,bpftrace,云原生" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-06-27</span>
-              <span>·</span>
-              <span class="blog-read-time">18 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-06-27</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 18 min</span>
+              </div>
+              <span class="blog-list-tag">系统编程</span>
             </div>
-            <span class="blog-list-tag">系统编程</span>
+            <h3 class="blog-list-title">
+              <a href="posts/linux-ebpf-getting-started.html">Linux eBPF 入门：内核可观测性新范式</a>
+            </h3>
+            <p class="blog-list-excerpt">Linux eBPF 入门实战：内核可观测性新范式，从 BPF 程序编写到 bpftrace、BCC 工具链使用，覆盖网络、安全、性能分析场景</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/linux-ebpf-getting-started.html">Linux eBPF 入门：内核可观测性新范式</a>
-          </h3>
-          <p class="blog-list-excerpt">Linux eBPF 入门实战：内核可观测性新范式，从 BPF 程序编写到 bpftrace、BCC 工具链使用，覆盖网络、安全、性能分析场景</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#eBPF</span> <span class="tag-pill">#Linux 内核</span> <span class="tag-pill">#可观测性</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="前端" data-tags="WebAssembly,Rust,前端性能,WASM,浏览器" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-06-27</span>
-              <span>·</span>
-              <span class="blog-read-time">16 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-06-27</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 16 min</span>
+              </div>
+              <span class="blog-list-tag">前端</span>
             </div>
-            <span class="blog-list-tag">前端</span>
+            <h3 class="blog-list-title">
+              <a href="posts/webassembly-in-practice.html">WebAssembly 实战：浏览器端高性能计算</a>
+            </h3>
+            <p class="blog-list-excerpt">WebAssembly 实战指南：从 C/Rust 编译到浏览器运行，WASM 与 JS 互操作、内存管理、性能优化与真实应用场景</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/webassembly-in-practice.html">WebAssembly 实战：浏览器端高性能计算</a>
-          </h3>
-          <p class="blog-list-excerpt">WebAssembly 实战指南：从 C/Rust 编译到浏览器运行，WASM 与 JS 互操作、内存管理、性能优化与真实应用场景</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#WebAssembly</span> <span class="tag-pill">#Rust</span> <span class="tag-pill">#前端性能</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="Kotlin" data-tags="Android,Gradle,KTS,Kotlin DSL,构建优化" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-06-24</span>
-              <span>·</span>
-              <span class="blog-read-time">18 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-06-24</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 18 min</span>
+              </div>
+              <span class="blog-list-tag">Kotlin</span>
             </div>
-            <span class="blog-list-tag">Kotlin</span>
+            <h3 class="blog-list-title">
+              <a href="posts/android-gradle-kts-migration.html">Android Gradle 迁移到 KTS 完整指南：从 Groovy 到 Kotlin DSL</a>
+            </h3>
+            <p class="blog-list-excerpt">Android Gradle 从 Groovy 迁移到 Kotlin DSL (KTS) 完整指南 - 语法对比、迁移步骤、踩坑记录与最佳实践</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/android-gradle-kts-migration.html">Android Gradle 迁移到 KTS 完整指南：从 Groovy 到 Kotlin DSL</a>
-          </h3>
-          <p class="blog-list-excerpt">Android Gradle 从 Groovy 迁移到 Kotlin DSL (KTS) 完整指南 - 语法对比、迁移步骤、踩坑记录与最佳实践</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#Android</span> <span class="tag-pill">#Gradle</span> <span class="tag-pill">#KTS</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="Kotlin" data-tags="Kotlin Multiplatform,KMP,Android,iOS,跨平台,Ktor" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-06-24</span>
-              <span>·</span>
-              <span class="blog-read-time">22 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-06-24</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 22 min</span>
+              </div>
+              <span class="blog-list-tag">Kotlin</span>
             </div>
-            <span class="blog-list-tag">Kotlin</span>
+            <h3 class="blog-list-title">
+              <a href="posts/kotlin-multiplatform-practice.html">Kotlin Multiplatform 实战：共享业务逻辑到 iOS</a>
+            </h3>
+            <p class="blog-list-excerpt">Kotlin Multiplatform 实战：将 Android 业务逻辑共享到 iOS - 架构设计、expect/actual、网络层、数据层完整实现</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/kotlin-multiplatform-practice.html">Kotlin Multiplatform 实战：共享业务逻辑到 iOS</a>
-          </h3>
-          <p class="blog-list-excerpt">Kotlin Multiplatform 实战：将 Android 业务逻辑共享到 iOS - 架构设计、expect/actual、网络层、数据层完整实现</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#Kotlin Multiplatform</span> <span class="tag-pill">#KMP</span> <span class="tag-pill">#Android</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="Android" data-tags="Android,性能优化,启动优化,内存优化,渲染优化" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-06-22</span>
-              <span>·</span>
-              <span class="blog-read-time">18 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-06-22</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 18 min</span>
+              </div>
+              <span class="blog-list-tag">Android</span>
             </div>
-            <span class="blog-list-tag">Android</span>
+            <h3 class="blog-list-title">
+              <a href="posts/android-performance-optimization.html">Android 性能优化完整实战：从启动到渲染</a>
+            </h3>
+            <p class="blog-list-excerpt">Android 性能优化完整实战指南 - 从启动优化、内存管理到渲染调优，涵盖 Baseline Profiles、R8、App Startup、LeakCanary 等工具和最佳实践</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/android-performance-optimization.html">Android 性能优化完整实战：从启动到渲染</a>
-          </h3>
-          <p class="blog-list-excerpt">Android 性能优化完整实战指南 - 从启动优化、内存管理到渲染调优，涵盖 Baseline Profiles、R8、App Startup、LeakCanary 等工具和最佳实践</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#Android</span> <span class="tag-pill">#性能优化</span> <span class="tag-pill">#启动优化</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="Android" data-tags="Jetpack Compose,Android,Navigation,Kotlin,DeepLink" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-06-22</span>
-              <span>·</span>
-              <span class="blog-read-time">16 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-06-22</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 16 min</span>
+              </div>
+              <span class="blog-list-tag">Android</span>
             </div>
-            <span class="blog-list-tag">Android</span>
+            <h3 class="blog-list-title">
+              <a href="posts/compose-navigation-guide.html">Jetpack Compose Navigation 进阶指南：从路由设计到深层链接</a>
+            </h3>
+            <p class="blog-list-excerpt">Jetpack Compose Navigation 进阶指南 - 路由设计、参数传递、深层链接、类型安全导航、动画过渡等实战技巧</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/compose-navigation-guide.html">Jetpack Compose Navigation 进阶指南：从路由设计到深层链接</a>
-          </h3>
-          <p class="blog-list-excerpt">Jetpack Compose Navigation 进阶指南 - 路由设计、参数传递、深层链接、类型安全导航、动画过渡等实战技巧</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#Jetpack Compose</span> <span class="tag-pill">#Android</span> <span class="tag-pill">#Navigation</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="Android" data-tags="Android,Android 16,Live Updates,AICore,大屏适配" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-06-19</span>
-              <span>·</span>
-              <span class="blog-read-time">16 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-06-19</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 16 min</span>
+              </div>
+              <span class="blog-list-tag">Android</span>
             </div>
-            <span class="blog-list-tag">Android</span>
+            <h3 class="blog-list-title">
+              <a href="posts/android-16-features.html">Android 16 新特性详解：开发者需要知道的 8 件事</a>
+            </h3>
+            <p class="blog-list-excerpt">Android 16 新特性详解 - Live Updates、大屏强制适配、AICore 增强、APV 编码支持等开发者必知内容</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/android-16-features.html">Android 16 新特性详解：开发者需要知道的 8 件事</a>
-          </h3>
-          <p class="blog-list-excerpt">Android 16 新特性详解 - Live Updates、大屏强制适配、AICore 增强、APV 编码支持等开发者必知内容</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#Android</span> <span class="tag-pill">#Android 16</span> <span class="tag-pill">#Live Updates</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="Android" data-tags="Android,安全,签名,混淆,Play Integrity" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-06-19</span>
-              <span>·</span>
-              <span class="blog-read-time">16 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-06-19</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 16 min</span>
+              </div>
+              <span class="blog-list-tag">Android</span>
             </div>
-            <span class="blog-list-tag">Android</span>
+            <h3 class="blog-list-title">
+              <a href="posts/android-app-security-hardening.html">Android 应用签名与安全加固完整指南</a>
+            </h3>
+            <p class="blog-list-excerpt">Android 应用签名与安全加固完整指南 - 签名机制、加固方案、完整性校验、混淆策略等</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/android-app-security-hardening.html">Android 应用签名与安全加固完整指南</a>
-          </h3>
-          <p class="blog-list-excerpt">Android 应用签名与安全加固完整指南 - 签名机制、加固方案、完整性校验、混淆策略等</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#Android</span> <span class="tag-pill">#安全</span> <span class="tag-pill">#签名</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="Android" data-tags="Jetpack Compose,Android,Compose Multiplatform,UI,Kotlin" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-06-19</span>
-              <span>·</span>
-              <span class="blog-read-time">12 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-06-19</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 12 min</span>
+              </div>
+              <span class="blog-list-tag">Android</span>
             </div>
-            <span class="blog-list-tag">Android</span>
+            <h3 class="blog-list-title">
+              <a href="posts/compose-april-2026-update.html">Jetpack Compose April 2026 Update 深度解读</a>
+            </h3>
+            <p class="blog-list-excerpt">Jetpack Compose April 2026 Update 完整解读 — BOM 2026.04.01、Compose 1.11、共享元素过渡调试工具、触控板事件、Testing v2 默认启用、Navigation3 1.1.1 等全解析</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/compose-april-2026-update.html">Jetpack Compose April 2026 Update 深度解读</a>
-          </h3>
-          <p class="blog-list-excerpt">Jetpack Compose April 2026 Update 完整解读 — BOM 2026.04.01、Compose 1.11、共享元素过渡调试工具、触控板事件、Testing v2 默认启用、Navigation3 1.1.1 等全解析</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#Jetpack Compose</span> <span class="tag-pill">#Android</span> <span class="tag-pill">#Compose Multiplatform</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="AI" data-tags="AI,Android,Google I/O,Gemini,Agent" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-06-19</span>
-              <span>·</span>
-              <span class="blog-read-time">20 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-06-19</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 20 min</span>
+              </div>
+              <span class="blog-list-tag">AI</span>
             </div>
-            <span class="blog-list-tag">AI</span>
+            <h3 class="blog-list-title">
+              <a href="posts/google-io-2026-recap.html">Google I/O 2026 完整回顾：AI 重塑一切</a>
+            </h3>
+            <p class="blog-list-excerpt">Google I/O 2026 完整回顾 - Gemini 3.5 Flash、Android 17、Android XR、Managed Agents 等重大发布全解析</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/google-io-2026-recap.html">Google I/O 2026 完整回顾：AI 重塑一切</a>
-          </h3>
-          <p class="blog-list-excerpt">Google I/O 2026 完整回顾 - Gemini 3.5 Flash、Android 17、Android XR、Managed Agents 等重大发布全解析</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#AI</span> <span class="tag-pill">#Android</span> <span class="tag-pill">#Google I/O</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="Kotlin" data-tags="Kotlin,编程语言,JetBrains,JVM,Kotlin 2.4.0,Context Parameters,Compose Multiplatform" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-06-19</span>
-              <span>·</span>
-              <span class="blog-read-time">14 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-06-19</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 14 min</span>
+              </div>
+              <span class="blog-list-tag">Kotlin</span>
             </div>
-            <span class="blog-list-tag">Kotlin</span>
+            <h3 class="blog-list-title">
+              <a href="posts/kotlin-240-features.html">Kotlin 2.4.0 重磅发布：Context Parameters 稳定、Destructuring 升级、Lombok 插件进入 Alpha</a>
+            </h3>
+            <p class="blog-list-excerpt">Kotlin 2.4.0 正式发布——Context Parameters 稳定、Name-based Destructuring、Lombok 编译器插件 Alpha、Compose Multiplatform 1.11 等重磅特性详解</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/kotlin-240-features.html">Kotlin 2.4.0 重磅发布：Context Parameters 稳定、Destructuring 升级、Lombok 插件进入 Alpha</a>
-          </h3>
-          <p class="blog-list-excerpt">Kotlin 2.4.0 正式发布——Context Parameters 稳定、Name-based Destructuring、Lombok 编译器插件 Alpha、Compose Multiplatform 1.11 等重磅特性详解</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#Kotlin</span> <span class="tag-pill">#编程语言</span> <span class="tag-pill">#JetBrains</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="AI" data-tags="Android,MCP,AI,Agent,Kotlin" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-06-19</span>
-              <span>·</span>
-              <span class="blog-read-time">14 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-06-19</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 14 min</span>
+              </div>
+              <span class="blog-list-tag">AI</span>
             </div>
-            <span class="blog-list-tag">AI</span>
+            <h3 class="blog-list-title">
+              <a href="posts/mcp-android-integration.html">MCP 协议在 Android 端的应用：AI 工具调用新范式</a>
+            </h3>
+            <p class="blog-list-excerpt">MCP (Model Context Protocol) 协议在 Android 端的集成实战 - 从概念到手写实现，构建 AI 驱动的 Android 应用</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/mcp-android-integration.html">MCP 协议在 Android 端的应用：AI 工具调用新范式</a>
-          </h3>
-          <p class="blog-list-excerpt">MCP (Model Context Protocol) 协议在 Android 端的集成实战 - 从概念到手写实现，构建 AI 驱动的 Android 应用</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#Android</span> <span class="tag-pill">#MCP</span> <span class="tag-pill">#AI</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="AI" data-tags="AI,工作流,Prompt设计,效率提升" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-05-08</span>
-              <span>·</span>
-              <span class="blog-read-time">12 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-05-08</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 12 min</span>
+              </div>
+              <span class="blog-list-tag">AI</span>
             </div>
-            <span class="blog-list-tag">AI</span>
+            <h3 class="blog-list-title">
+              <a href="posts/ai-coding-workflow-optimization.html">AI 编程工作流优化：从 Prompt 设计到上下文管理</a>
+            </h3>
+            <p class="blog-list-excerpt">AI 编程工作流优化 - 从 Prompt 设计到上下文管理的实战指南，提升 AI 辅助编程效率</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/ai-coding-workflow-optimization.html">AI 编程工作流优化：从 Prompt 设计到上下文管理</a>
-          </h3>
-          <p class="blog-list-excerpt">AI 编程工作流优化 - 从 Prompt 设计到上下文管理的实战指南，提升 AI 辅助编程效率</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#AI</span> <span class="tag-pill">#工作流</span> <span class="tag-pill">#Prompt设计</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="AI" data-tags="Android,AI,Gemini Nano,端侧AI,ML Kit" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-05-07</span>
-              <span>·</span>
-              <span class="blog-read-time">15 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-05-07</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 15 min</span>
+              </div>
+              <span class="blog-list-tag">AI</span>
             </div>
-            <span class="blog-list-tag">AI</span>
+            <h3 class="blog-list-title">
+              <a href="posts/android-gemini-nano-integration.html">Android 端侧 AI 实战：Gemini Nano 集成指南</a>
+            </h3>
+            <p class="blog-list-excerpt">Android 端侧 AI 实战：Gemini Nano 集成指南 - 深入解析 AICore 架构与 ML Kit GenAI API 实战</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/android-gemini-nano-integration.html">Android 端侧 AI 实战：Gemini Nano 集成指南</a>
-          </h3>
-          <p class="blog-list-excerpt">Android 端侧 AI 实战：Gemini Nano 集成指南 - 深入解析 AICore 架构与 ML Kit GenAI API 实战</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#Android</span> <span class="tag-pill">#AI</span> <span class="tag-pill">#Gemini Nano</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="前端" data-tags="CSS,Container Queries,响应式设计,前端开发" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-04-26</span>
-              <span>·</span>
-              <span class="blog-read-time">12 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-04-26</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 12 min</span>
+              </div>
+              <span class="blog-list-tag">前端</span>
             </div>
-            <span class="blog-list-tag">前端</span>
+            <h3 class="blog-list-title">
+              <a href="posts/css-container-queries.html">CSS Container Queries 实战</a>
+            </h3>
+            <p class="blog-list-excerpt">CSS Container Queries 实战：基于容器尺寸的响应式设计，比媒体查询更灵活的组件级响应式方案</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/css-container-queries.html">CSS Container Queries 实战</a>
-          </h3>
-          <p class="blog-list-excerpt">CSS Container Queries 实战：基于容器尺寸的响应式设计，比媒体查询更灵活的组件级响应式方案</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#CSS</span> <span class="tag-pill">#Container Queries</span> <span class="tag-pill">#响应式设计</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="DevOps" data-tags="Docker,Docker Compose,容器化,DevOps" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-04-26</span>
-              <span>·</span>
-              <span class="blog-read-time">16 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-04-26</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 16 min</span>
+              </div>
+              <span class="blog-list-tag">DevOps</span>
             </div>
-            <span class="blog-list-tag">DevOps</span>
+            <h3 class="blog-list-title">
+              <a href="posts/docker-compose-best-practices.html">Docker Compose 最佳实践</a>
+            </h3>
+            <p class="blog-list-excerpt">Docker Compose 最佳实践：多容器编排、网络配置、数据持久化、环境变量管理、健康检查等实战技巧</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/docker-compose-best-practices.html">Docker Compose 最佳实践</a>
-          </h3>
-          <p class="blog-list-excerpt">Docker Compose 最佳实践：多容器编排、网络配置、数据持久化、环境变量管理、健康检查等实战技巧</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#Docker</span> <span class="tag-pill">#Docker Compose</span> <span class="tag-pill">#容器化</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="前端" data-tags="React,Server Components,Next.js,前端架构" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-04-26</span>
-              <span>·</span>
-              <span class="blog-read-time">15 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-04-26</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 15 min</span>
+              </div>
+              <span class="blog-list-tag">前端</span>
             </div>
-            <span class="blog-list-tag">前端</span>
+            <h3 class="blog-list-title">
+              <a href="posts/react-server-components.html">React Server Components 深入解析</a>
+            </h3>
+            <p class="blog-list-excerpt">React Server Components 深入解析：理解服务端组件的工作原理、数据获取方式、与客户端组件的交互，以及最佳实践</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/react-server-components.html">React Server Components 深入解析</a>
-          </h3>
-          <p class="blog-list-excerpt">React Server Components 深入解析：理解服务端组件的工作原理、数据获取方式、与客户端组件的交互，以及最佳实践</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#React</span> <span class="tag-pill">#Server Components</span> <span class="tag-pill">#Next.js</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="系统编程" data-tags="Rust,系统编程,所有权,内存安全" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-04-26</span>
-              <span>·</span>
-              <span class="blog-read-time">20 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-04-26</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 20 min</span>
+              </div>
+              <span class="blog-list-tag">系统编程</span>
             </div>
-            <span class="blog-list-tag">系统编程</span>
+            <h3 class="blog-list-title">
+              <a href="posts/rust-getting-started.html">Rust 入门：从零到生产</a>
+            </h3>
+            <p class="blog-list-excerpt">Rust 入门指南：从零开始学习 Rust，掌握所有权、借用、生命周期等核心概念，构建高性能安全程序</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/rust-getting-started.html">Rust 入门：从零到生产</a>
-          </h3>
-          <p class="blog-list-excerpt">Rust 入门指南：从零开始学习 Rust，掌握所有权、借用、生命周期等核心概念，构建高性能安全程序</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#Rust</span> <span class="tag-pill">#系统编程</span> <span class="tag-pill">#所有权</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="数据库" data-tags="SQLite,数据库,WAL,性能优化" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-04-26</span>
-              <span>·</span>
-              <span class="blog-read-time">14 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-04-26</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 14 min</span>
+              </div>
+              <span class="blog-list-tag">数据库</span>
             </div>
-            <span class="blog-list-tag">数据库</span>
+            <h3 class="blog-list-title">
+              <a href="posts/sqlite-wal-performance.html">SQLite 进阶：WAL 模式与性能优化</a>
+            </h3>
+            <p class="blog-list-excerpt">SQLite 进阶：WAL 模式原理、性能优化技巧、并发处理、索引策略、PRAGMA 配置详解</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/sqlite-wal-performance.html">SQLite 进阶：WAL 模式与性能优化</a>
-          </h3>
-          <p class="blog-list-excerpt">SQLite 进阶：WAL 模式原理、性能优化技巧、并发处理、索引策略、PRAGMA 配置详解</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#SQLite</span> <span class="tag-pill">#数据库</span> <span class="tag-pill">#WAL</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="开发" data-tags="Git,版本控制,开发技巧,团队协作" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-04-25</span>
-              <span>·</span>
-              <span class="blog-read-time">18 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-04-25</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 18 min</span>
+              </div>
+              <span class="blog-list-tag">开发</span>
             </div>
-            <span class="blog-list-tag">开发</span>
+            <h3 class="blog-list-title">
+              <a href="posts/git-advanced-techniques.html">Git 高级技巧：变基、挑拣和交互式暂存</a>
+            </h3>
+            <p class="blog-list-excerpt">Git 高级技巧：掌握变基、挑拣、交互式暂存等进阶操作，提升代码管理效率</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/git-advanced-techniques.html">Git 高级技巧：变基、挑拣和交互式暂存</a>
-          </h3>
-          <p class="blog-list-excerpt">Git 高级技巧：掌握变基、挑拣、交互式暂存等进阶操作，提升代码管理效率</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#Git</span> <span class="tag-pill">#版本控制</span> <span class="tag-pill">#开发技巧</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="Android" data-tags="Jetpack Compose,Android,动画,Kotlin,UI" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-04-25</span>
-              <span>·</span>
-              <span class="blog-read-time">15 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-04-25</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 15 min</span>
+              </div>
+              <span class="blog-list-tag">Android</span>
             </div>
-            <span class="blog-list-tag">Android</span>
+            <h3 class="blog-list-title">
+              <a href="posts/jetpack-compose-animation.html">Jetpack Compose 动画实战</a>
+            </h3>
+            <p class="blog-list-excerpt">Jetpack Compose 动画实战：掌握声明式 UI 动画的核心技巧，打造流畅的用户体验</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/jetpack-compose-animation.html">Jetpack Compose 动画实战</a>
-          </h3>
-          <p class="blog-list-excerpt">Jetpack Compose 动画实战：掌握声明式 UI 动画的核心技巧，打造流畅的用户体验</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#Jetpack Compose</span> <span class="tag-pill">#Android</span> <span class="tag-pill">#动画</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="前端" data-tags="TypeScript,类型体操,前端,类型安全" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-04-25</span>
-              <span>·</span>
-              <span class="blog-read-time">20 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-04-25</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 20 min</span>
+              </div>
+              <span class="blog-list-tag">前端</span>
             </div>
-            <span class="blog-list-tag">前端</span>
+            <h3 class="blog-list-title">
+              <a href="posts/typescript-type-gymnastics.html">TypeScript 类型体操指南</a>
+            </h3>
+            <p class="blog-list-excerpt">TypeScript 类型体操指南：从基础到高级，掌握条件类型、映射类型、模板字面量类型等核心技巧</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/typescript-type-gymnastics.html">TypeScript 类型体操指南</a>
-          </h3>
-          <p class="blog-list-excerpt">TypeScript 类型体操指南：从基础到高级，掌握条件类型、映射类型、模板字面量类型等核心技巧</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#TypeScript</span> <span class="tag-pill">#类型体操</span> <span class="tag-pill">#前端</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="前端" data-tags="Next.js,React,全栈开发,App Router,Server Actions" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-04-20</span>
-              <span>·</span>
-              <span class="blog-read-time">20 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-04-20</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 20 min</span>
+              </div>
+              <span class="blog-list-tag">前端</span>
             </div>
-            <span class="blog-list-tag">前端</span>
+            <h3 class="blog-list-title">
+              <a href="posts/nextjs-16-tutorial.html">Next.js 16 实战：App Router + Server Actions + Turbopack</a>
+            </h3>
+            <p class="blog-list-excerpt">Next.js 16 实战指南：App Router、Server Actions、Turbopack 完整教程与最佳实践</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/nextjs-16-tutorial.html">Next.js 16 实战：App Router + Server Actions + Turbopack</a>
-          </h3>
-          <p class="blog-list-excerpt">Next.js 16 实战指南：App Router、Server Actions、Turbopack 完整教程与最佳实践</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#Next.js</span> <span class="tag-pill">#React</span> <span class="tag-pill">#全栈开发</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="AI" data-tags="AI 工具,Cursor,Claude Code,GitHub Copilot,编程效率" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-04-19</span>
-              <span>·</span>
-              <span class="blog-read-time">18 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-04-19</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 18 min</span>
+              </div>
+              <span class="blog-list-tag">AI</span>
             </div>
-            <span class="blog-list-tag">AI</span>
+            <h3 class="blog-list-title">
+              <a href="posts/ai-coding-tools-comparison.html">主流 AI 编程工具深度对比：Cursor、Claude Code、OpenCode、GitHub Copilot</a>
+            </h3>
+            <p class="blog-list-excerpt">主流 AI 编程工具深度对比：Cursor、Claude Code、OpenCode、GitHub Copilot 选型指南</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/ai-coding-tools-comparison.html">主流 AI 编程工具深度对比：Cursor、Claude Code、OpenCode、GitHub Copilot</a>
-          </h3>
-          <p class="blog-list-excerpt">主流 AI 编程工具深度对比：Cursor、Claude Code、OpenCode、GitHub Copilot 选型指南</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#AI 工具</span> <span class="tag-pill">#Cursor</span> <span class="tag-pill">#Claude Code</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="AI" data-tags="AI 工具,Gemini,NotebookLM,Notebooks,生产力,Google AI" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-04-11</span>
-              <span>·</span>
-              <span class="blog-read-time">12 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-04-11</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 12 min</span>
+              </div>
+              <span class="blog-list-tag">AI</span>
             </div>
-            <span class="blog-list-tag">AI</span>
+            <h3 class="blog-list-title">
+              <a href="posts/gemini-notebooklm-integration.html">Gemini Notebooks 深度体验：与 NotebookLM 无缝整合后的全新 AI 工作流</a>
+            </h3>
+            <p class="blog-list-excerpt">Gemini Notebooks 深度体验：与 NotebookLM 无缝整合后的全新 AI 工作流</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/gemini-notebooklm-integration.html">Gemini Notebooks 深度体验：与 NotebookLM 无缝整合后的全新 AI 工作流</a>
-          </h3>
-          <p class="blog-list-excerpt">Gemini Notebooks 深度体验：与 NotebookLM 无缝整合后的全新 AI 工作流</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#AI 工具</span> <span class="tag-pill">#Gemini</span> <span class="tag-pill">#NotebookLM</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="AI" data-tags="AI 工具,Gemini,NotebookLM,生产力,知识管理" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-04-10</span>
-              <span>·</span>
-              <span class="blog-read-time">15 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-04-10</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 15 min</span>
+              </div>
+              <span class="blog-list-tag">AI</span>
             </div>
-            <span class="blog-list-tag">AI</span>
+            <h3 class="blog-list-title">
+              <a href="posts/gemini-notebooklm-workflow.html">Gemini + NotebookLM 结合使用指南</a>
+            </h3>
+            <p class="blog-list-excerpt">Gemini + NotebookLM 结合使用指南：打造个人 AI 知识工作流</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/gemini-notebooklm-workflow.html">Gemini + NotebookLM 结合使用指南</a>
-          </h3>
-          <p class="blog-list-excerpt">Gemini + NotebookLM 结合使用指南：打造个人 AI 知识工作流</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#AI 工具</span> <span class="tag-pill">#Gemini</span> <span class="tag-pill">#NotebookLM</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="DevOps" data-tags="GitHub Pages,博客系统,自动化部署,CI/CD,静态网站" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-04-09</span>
-              <span>·</span>
-              <span class="blog-read-time">20 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-04-09</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 20 min</span>
+              </div>
+              <span class="blog-list-tag">DevOps</span>
             </div>
-            <span class="blog-list-tag">DevOps</span>
+            <h3 class="blog-list-title">
+              <a href="posts/github-pages-blog-setup.html">从零搭建个人博客系统（GitHub Pages + 自定义域名 + 自动化部署）</a>
+            </h3>
+            <p class="blog-list-excerpt">从零搭建个人博客系统：GitHub Pages + 自定义域名 + 自动化部署完整指南</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/github-pages-blog-setup.html">从零搭建个人博客系统（GitHub Pages + 自定义域名 + 自动化部署）</a>
-          </h3>
-          <p class="blog-list-excerpt">从零搭建个人博客系统：GitHub Pages + 自定义域名 + 自动化部署完整指南</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#GitHub Pages</span> <span class="tag-pill">#博客系统</span> <span class="tag-pill">#自动化部署</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="Kotlin" data-tags="Kotlin,Coroutines,异步编程,Android,最佳实践" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-04-08</span>
-              <span>·</span>
-              <span class="blog-read-time">18 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-04-08</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 18 min</span>
+              </div>
+              <span class="blog-list-tag">Kotlin</span>
             </div>
-            <span class="blog-list-tag">Kotlin</span>
+            <h3 class="blog-list-title">
+              <a href="posts/kotlin-coroutines-best-practices.html">Kotlin Coroutines 最佳实践</a>
+            </h3>
+            <p class="blog-list-excerpt">Kotlin Coroutines 最佳实践：从入门到精通，掌握异步编程的核心技巧与常见陷阱</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/kotlin-coroutines-best-practices.html">Kotlin Coroutines 最佳实践</a>
-          </h3>
-          <p class="blog-list-excerpt">Kotlin Coroutines 最佳实践：从入门到精通，掌握异步编程的核心技巧与常见陷阱</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#Kotlin</span> <span class="tag-pill">#Coroutines</span> <span class="tag-pill">#异步编程</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="AI" data-tags="RAG,Ollama,LLM,向量数据库,本地部署" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-04-07</span>
-              <span>·</span>
-              <span class="blog-read-time">15 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-04-07</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 15 min</span>
+              </div>
+              <span class="blog-list-tag">AI</span>
             </div>
-            <span class="blog-list-tag">AI</span>
+            <h3 class="blog-list-title">
+              <a href="posts/local-rag-ollama.html">RAG 本地实践：用 Ollama + Embedding 搭建私有知识库</a>
+            </h3>
+            <p class="blog-list-excerpt">RAG 本地实践：用 Ollama + Embedding 搭建私有知识库，实现完全离线的智能问答</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/local-rag-ollama.html">RAG 本地实践：用 Ollama + Embedding 搭建私有知识库</a>
-          </h3>
-          <p class="blog-list-excerpt">RAG 本地实践：用 Ollama + Embedding 搭建私有知识库，实现完全离线的智能问答</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#RAG</span> <span class="tag-pill">#Ollama</span> <span class="tag-pill">#LLM</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="Android" data-tags="Android,离线语音识别,Sherpa ONNX,Whisper,端侧AI" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-04-03</span>
-              <span>·</span>
-              <span class="blog-read-time">10 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-04-03</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 10 min</span>
+              </div>
+              <span class="blog-list-tag">Android</span>
             </div>
-            <span class="blog-list-tag">Android</span>
+            <h3 class="blog-list-title">
+              <a href="posts/android-offline-speech-input.html">Android 离线语音输入实现方案</a>
+            </h3>
+            <p class="blog-list-excerpt">Android 离线语音输入实现方案：Sherpa ONNX、Whisper、Vosk 三大主流方案深度对比</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/android-offline-speech-input.html">Android 离线语音输入实现方案</a>
-          </h3>
-          <p class="blog-list-excerpt">Android 离线语音输入实现方案：Sherpa ONNX、Whisper、Vosk 三大主流方案深度对比</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#Android</span> <span class="tag-pill">#离线语音识别</span> <span class="tag-pill">#Sherpa ONNX</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="AI" data-tags="ONNX,移动端AI,模型量化,Android,端侧推理" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-03-30</span>
-              <span>·</span>
-              <span class="blog-read-time">5 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-03-30</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 5 min</span>
+              </div>
+              <span class="blog-list-tag">AI</span>
             </div>
-            <span class="blog-list-tag">AI</span>
+            <h3 class="blog-list-title">
+              <a href="posts/onnx-mobile-deployment.html">ONNX 移动端侧模型实践：从转换到部署</a>
+            </h3>
+            <p class="blog-list-excerpt">ONNX 移动端侧模型实践：从模型转换到端侧部署的完整指南，涵盖模型优化、量化压缩、多框架推理对比</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/onnx-mobile-deployment.html">ONNX 移动端侧模型实践：从转换到部署</a>
-          </h3>
-          <p class="blog-list-excerpt">ONNX 移动端侧模型实践：从模型转换到端侧部署的完整指南，涵盖模型优化、量化压缩、多框架推理对比</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#ONNX</span> <span class="tag-pill">#移动端AI</span> <span class="tag-pill">#模型量化</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="前端" data-tags="PWA,Service Worker,前端,离线应用" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-03-22</span>
-              <span>·</span>
-              <span class="blog-read-time">5 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-03-22</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 5 min</span>
+              </div>
+              <span class="blog-list-tag">前端</span>
             </div>
-            <span class="blog-list-tag">前端</span>
+            <h3 class="blog-list-title">
+              <a href="posts/pwa-offline-web-app.html">PWA 实战：从零打造离线可用 Web 应用</a>
+            </h3>
+            <p class="blog-list-excerpt">PWA 实战：从零开始打造离线可用的 Web 应用，详解 Service Worker、manifest.json 配置与缓存策略</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/pwa-offline-web-app.html">PWA 实战：从零打造离线可用 Web 应用</a>
-          </h3>
-          <p class="blog-list-excerpt">PWA 实战：从零开始打造离线可用的 Web 应用，详解 Service Worker、manifest.json 配置与缓存策略</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#PWA</span> <span class="tag-pill">#Service Worker</span> <span class="tag-pill">#前端</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="安全" data-tags="DevOps,安全,SSH,云服务器" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-03-18</span>
-              <span>·</span>
-              <span class="blog-read-time">15 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-03-18</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 15 min</span>
+              </div>
+              <span class="blog-list-tag">安全</span>
             </div>
-            <span class="blog-list-tag">安全</span>
+            <h3 class="blog-list-title">
+              <a href="posts/ssh-security-hardening.html">云服务器 SSH 安全加固完整指南</a>
+            </h3>
+            <p class="blog-list-excerpt">云服务器 SSH 安全加固完整指南 - 从端口修改到密钥认证，全方位提升 Linux VPS 安全性。适用于 AWS、阿里云、腾讯云、DigitalOcean 等主流云服务商</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/ssh-security-hardening.html">云服务器 SSH 安全加固完整指南</a>
-          </h3>
-          <p class="blog-list-excerpt">云服务器 SSH 安全加固完整指南 - 从端口修改到密钥认证，全方位提升 Linux VPS 安全性。适用于 AWS、阿里云、腾讯云、DigitalOcean 等主流云服务商</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#DevOps</span> <span class="tag-pill">#安全</span> <span class="tag-pill">#SSH</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="DevOps" data-tags="DevOps,Tailscale,网络,VPN" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-03-17</span>
-              <span>·</span>
-              <span class="blog-read-time">15 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-03-17</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 15 min</span>
+              </div>
+              <span class="blog-list-tag">DevOps</span>
             </div>
-            <span class="blog-list-tag">DevOps</span>
+            <h3 class="blog-list-title">
+              <a href="posts/tailscale-derp-server.html">自建 Tailscale DERP 中继服务器完整指南</a>
+            </h3>
+            <p class="blog-list-excerpt">自建 Tailscale DERP 中继服务器完整指南 - 从原理到实战，掌握私有 DERP 服务器搭建</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/tailscale-derp-server.html">自建 Tailscale DERP 中继服务器完整指南</a>
-          </h3>
-          <p class="blog-list-excerpt">自建 Tailscale DERP 中继服务器完整指南 - 从原理到实战，掌握私有 DERP 服务器搭建</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#DevOps</span> <span class="tag-pill">#Tailscale</span> <span class="tag-pill">#网络</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="DevOps" data-tags="DevOps,SSH,VS Code,网络" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-03-17</span>
-              <span>·</span>
-              <span class="blog-read-time">10 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-03-17</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 10 min</span>
+              </div>
+              <span class="blog-list-tag">DevOps</span>
             </div>
-            <span class="blog-list-tag">DevOps</span>
+            <h3 class="blog-list-title">
+              <a href="posts/vscode-port-forward.html">VS Code 端口转发原理详解</a>
+            </h3>
+            <p class="blog-list-excerpt">VS Code 端口转发原理详解：SSH 隧道工作机制与实战应用 - 张小猛的技术博客</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/vscode-port-forward.html">VS Code 端口转发原理详解</a>
-          </h3>
-          <p class="blog-list-excerpt">VS Code 端口转发原理详解：SSH 隧道工作机制与实战应用 - 张小猛的技术博客</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#DevOps</span> <span class="tag-pill">#SSH</span> <span class="tag-pill">#VS Code</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="AI" data-tags="AI Agent,OpenClaw,Skill,JavaScript" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-03-14</span>
-              <span>·</span>
-              <span class="blog-read-time">15 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-03-14</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 15 min</span>
+              </div>
+              <span class="blog-list-tag">AI</span>
             </div>
-            <span class="blog-list-tag">AI</span>
+            <h3 class="blog-list-title">
+              <a href="posts/ai-agent-skill-development.html">AI Agent 技能开发实战：从需求到上线的完整流程</a>
+            </h3>
+            <p class="blog-list-excerpt">AI Agent 技能开发实战：从需求到上线的完整流程 - 张小猛的技术博客</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/ai-agent-skill-development.html">AI Agent 技能开发实战：从需求到上线的完整流程</a>
-          </h3>
-          <p class="blog-list-excerpt">AI Agent 技能开发实战：从需求到上线的完整流程 - 张小猛的技术博客</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#AI Agent</span> <span class="tag-pill">#OpenClaw</span> <span class="tag-pill">#Skill</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="AI" data-tags="AI,OpenClaw,Agent,自动化" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-03-13</span>
-              <span>·</span>
-              <span class="blog-read-time">12 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-03-13</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 12 min</span>
+              </div>
+              <span class="blog-list-tag">AI</span>
             </div>
-            <span class="blog-list-tag">AI</span>
+            <h3 class="blog-list-title">
+              <a href="posts/openclaw-guide.html">OpenClaw 深度使用指南：从 0 到 1 构建个人 AI Agent</a>
+            </h3>
+            <p class="blog-list-excerpt">OpenClaw 深度使用指南：从 0 到 1 构建个人 AI Agent - 张小猛的技术博客</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/openclaw-guide.html">OpenClaw 深度使用指南：从 0 到 1 构建个人 AI Agent</a>
-          </h3>
-          <p class="blog-list-excerpt">OpenClaw 深度使用指南：从 0 到 1 构建个人 AI Agent - 张小猛的技术博客</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#AI</span> <span class="tag-pill">#OpenClaw</span> <span class="tag-pill">#Agent</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="AI" data-tags="计算机视觉,3D渲染,移动端,AI,论文解读" data-page="1">
-          <div class="blog-list-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-02-15</span>
-              <span>·</span>
-              <span class="blog-read-time">10 min</span>
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-02-15</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 10 min</span>
+              </div>
+              <span class="blog-list-tag">AI</span>
             </div>
-            <span class="blog-list-tag">AI</span>
+            <h3 class="blog-list-title">
+              <a href="posts/mobile-gs-paper-review.html">Mobile-GS：让 3D 高斯泼溅在移动端实时渲染</a>
+            </h3>
+            <p class="blog-list-excerpt">Mobile-GS：让 3D 高斯泼溅在移动端实时渲染 - 论文解读，ICLR 2026，移动端 3D 渲染新突破</p>
           </div>
-          <h3 class="blog-list-title">
-            <a href="posts/mobile-gs-paper-review.html">Mobile-GS：让 3D 高斯泼溅在移动端实时渲染</a>
-          </h3>
-          <p class="blog-list-excerpt">Mobile-GS：让 3D 高斯泼溅在移动端实时渲染 - 论文解读，ICLR 2026，移动端 3D 渲染新突破</p>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#计算机视觉</span> <span class="tag-pill">#3D渲染</span> <span class="tag-pill">#移动端</span>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+          </div>
         </article>
       <!-- /Post List -->
       </div>
