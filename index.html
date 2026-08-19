@@ -422,27 +422,47 @@
         <article class="blog-card-featured animate-on-scroll" id="home-featured-post" style="display: block;">
           <div class="blog-card-header">
             <div class="blog-card-meta">
+              <span class="blog-date">2026-08-19</span>
+              <span>·</span>
+              <span class="blog-read-time">8 min</span>
+            </div>
+            <span class="blog-list-tag">思考</span>
+          </div>
+          <h3 class="blog-card-title">
+            <a href="blog/posts/程序员带娃把养孩子当成一个长期运维的系统工程.html">程序员带娃：把养孩子当成一个长期运维的系统工程</a>
+          </h3>
+          <p class="blog-card-excerpt">用工程师的思维看带娃：需求分析、状态监控、容错设计、灰度发布、日志排查——原来养孩子比写代码更像在做系统运维...</p>
+          <div class="blog-card-tags">
+            <span class="tech-tag">程序员</span>
+            <span class="tech-tag">带娃</span>
+            <span class="tech-tag">工程思维</span>
+            <span class="tech-tag">系统思维</span>
+            <span class="tech-tag">DevOps</span>
+            <span class="tech-tag">养育</span>
+          </div>
+        </article>
+        
+        <!-- 最新文章列表 -->
+                <div class="blog-list">
+        <article class="blog-mini-card animate-on-scroll" data-category="DevOps" data-page="1">
+          <div class="blog-mini-card-header">
+            <div class="blog-list-meta">
               <span class="blog-date">2026-08-18</span>
               <span>·</span>
               <span class="blog-read-time">12 min</span>
             </div>
             <span class="blog-list-tag">DevOps</span>
           </div>
-          <h3 class="blog-card-title">
+          <h3 class="blog-mini-card-title">
             <a href="blog/posts/从-openclaw-到-hermesai-agent-工作区迁移完整记录.html">从 OpenClaw 到 Hermes：AI Agent 工作区迁移完整记录</a>
           </h3>
-          <p class="blog-card-excerpt">一次真实的 AI Agent 平台迁移复盘：身份、记忆、技能、项目与定时任务的全量迁移方向、踩坑与验证方法...</p>
-          <div class="blog-card-tags">
+          <p class="blog-mini-card-excerpt">一次真实的 AI Agent 平台迁移复盘：身份、记忆、技能、项目与定时任务的全量迁移方向、踩坑与验证方法</p>
+          <div class="blog-mini-card-tags">
             <span class="tech-tag">OpenClaw</span>
             <span class="tech-tag">Hermes</span>
             <span class="tech-tag">AI Agent</span>
-            <span class="tech-tag">迁移</span>
-            <span class="tech-tag">DevOps</span>
           </div>
         </article>
-        
-        <!-- 最新文章列表 -->
-                <div class="blog-list">
         <article class="blog-mini-card animate-on-scroll" data-category="思考" data-page="1">
           <div class="blog-mini-card-header">
             <div class="blog-list-meta">
@@ -459,25 +479,6 @@
           <div class="blog-mini-card-tags">
             <span class="tech-tag">思考</span>
             <span class="tech-tag">生活方式</span>
-          </div>
-        </article>
-        <article class="blog-mini-card animate-on-scroll" data-category="思考" data-page="1">
-          <div class="blog-mini-card-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-08-14</span>
-              <span>·</span>
-              <span class="blog-read-time">5 min</span>
-            </div>
-            <span class="blog-list-tag">思考</span>
-          </div>
-          <h3 class="blog-mini-card-title">
-            <a href="blog/posts/程序员的周五晚上如何有意义地度过.html">程序员的周五晚上，如何有意义地度过</a>
-          </h3>
-          <p class="blog-mini-card-excerpt">周五晚不该是工作的延续，也不该是报复性熬夜。给每一个辛苦了一周的程序员一份可落地的框架：告别、转换、收尾，三件小事让周末真正休息过来。</p>
-          <div class="blog-mini-card-tags">
-            <span class="tech-tag">思考</span>
-            <span class="tech-tag">生活方式</span>
-            <span class="tech-tag">效率</span>
           </div>
         </article>
         </div>
@@ -572,6 +573,15 @@
     // 首页随机选择代表文章
     const posts = [
       {
+        url: 'blog/posts/程序员带娃把养孩子当成一个长期运维的系统工程.html',
+        title: '程序员带娃：把养孩子当成一个长期运维的系统工程',
+        date: '2026-08-19',
+        readTime: '8 min',
+        category: '思考',
+        category2: '思考',
+        desc: '用工程师的思维看带娃：需求分析、状态监控、容错设计、灰度发布、日志排查——原来养孩子比写代码更像在做系统运维'
+      },
+      {
         url: 'blog/posts/从-openclaw-到-hermesai-agent-工作区迁移完整记录.html',
         title: '从 OpenClaw 到 Hermes：AI Agent 工作区迁移完整记录',
         date: '2026-08-18',
@@ -651,15 +661,6 @@
         category: '前端',
         category2: '前端',
         desc: '深入解析 Web Worker 的原理与实践，涵盖 Dedicated Worker、Shared Worker、Service Worker 的区别与使用场景，以及 Comlink、Worker 池、Transferable Objects 等进阶技巧'
-      },
-      {
-        url: 'blog/posts/nextjs-prisma-部署-vercel-常见踩坑外键约束与构建时数据修复.html',
-        title: 'Next.js + Prisma 部署 Vercel 常见踩坑：外键约束与构建时数据修复',
-        date: '2026-08-01',
-        readTime: '5 min',
-        category: 'DevOps',
-        category2: 'DevOps',
-        desc: 'Vercel 构建时 prisma db push 失败，外键约束报错怎么办？本文完整复盘一次真实的部署失败案例，从根因分析到构建时数据修复方案。'
       }
     ];
     

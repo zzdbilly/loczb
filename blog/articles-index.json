@@ -1,6 +1,22 @@
 {
   "posts": [
     {
+      "slug": "程序员带娃把养孩子当成一个长期运维的系统工程",
+      "title": "程序员带娃：把养孩子当成一个长期运维的系统工程",
+      "date": "2026-08-19",
+      "category": "思考",
+      "tags": [
+        "程序员",
+        "带娃",
+        "工程思维",
+        "系统思维",
+        "DevOps",
+        "养育"
+      ],
+      "excerpt": "用工程师的思维看带娃：需求分析、状态监控、容错设计、灰度发布、日志排查——原来养孩子比写代码更像在做系统运维",
+      "url": "blog/posts/程序员带娃把养孩子当成一个长期运维的系统工程.html"
+    },
+    {
       "slug": "从-openclaw-到-hermesai-agent-工作区迁移完整记录",
       "title": "从 OpenClaw 到 Hermes：AI Agent 工作区迁移完整记录",
       "date": "2026-08-18",
@@ -1400,7 +1416,7 @@
     },
     {
       "tag": "DevOps",
-      "count": 9
+      "count": 10
     },
     {
       "tag": "思考",
@@ -1453,6 +1469,10 @@
     {
       "tag": "AI 工具",
       "count": 4
+    },
+    {
+      "tag": "程序员",
+      "count": 3
     },
     {
       "tag": "OpenClaw",
@@ -1540,10 +1560,6 @@
     },
     {
       "tag": "TypeScript",
-      "count": 2
-    },
-    {
-      "tag": "程序员",
       "count": 2
     },
     {
@@ -1657,6 +1673,22 @@
     {
       "tag": "网络",
       "count": 2
+    },
+    {
+      "tag": "带娃",
+      "count": 1
+    },
+    {
+      "tag": "工程思维",
+      "count": 1
+    },
+    {
+      "tag": "系统思维",
+      "count": 1
+    },
+    {
+      "tag": "养育",
+      "count": 1
     },
     {
       "tag": "Hermes",
@@ -2426,8 +2458,13 @@
   "archives": [
     {
       "month": "2026-08",
-      "count": 11,
+      "count": 12,
       "posts": [
+        {
+          "title": "程序员带娃：把养孩子当成一个长期运维的系统工程",
+          "date": "2026-08-19",
+          "url": "blog/posts/程序员带娃把养孩子当成一个长期运维的系统工程.html"
+        },
         {
           "title": "从 OpenClaw 到 Hermes：AI Agent 工作区迁移完整记录",
           "date": "2026-08-18",
@@ -2958,8 +2995,8 @@
     }
   ],
   "categories": [
-    "DevOps",
     "思考",
+    "DevOps",
     "开发",
     "Kotlin",
     "Android",
@@ -2970,9 +3007,9 @@
     "安全"
   ],
   "stats": {
-    "totalPosts": 98,
-    "totalTags": 258,
-    "latestDate": "2026-08-18",
+    "totalPosts": 99,
+    "totalTags": 262,
+    "latestDate": "2026-08-19",
     "oldestDate": "2026-02-15"
   }
 }
