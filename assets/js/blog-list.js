@@ -182,11 +182,11 @@
     var html = '';
     archiveData.forEach(function(yg) {
       html += '<div class="archive-year">';
-      html += '<div class="archive-year-header">' + yg.year + '年 <span class="archive-count">' + yg.count + ' posts</span></div>';
+      html += '<div class="archive-year-header">' + yg.year + ' <span class="archive-count">· ' + yg.count + ' 篇</span></div>';
       html += '<div class="archive-year-body">';
       yg.months.forEach(function(m) {
-        html += '<div class="archive-month">';
-        html += '<div class="archive-month-header">' + m.month.substring(5) + '月 <span class="archive-count">' + m.count + '</span></div>';
+        html += '<div class="archive-month spotlight-card">';
+        html += '<div class="archive-month-header"><span class="month-pill">' + parseInt(m.month.substring(5)) + ' 月</span> <span class="archive-count">' + m.count + ' 篇文章</span></div>';
         html += '<div class="archive-month-body">';
         m.posts.forEach(function(p) {
           var dayStr = p.date.substring(5);
@@ -203,6 +203,7 @@
       html += '</div></div>';
     });
     container.innerHTML = html;
+    if (window.initSpotlightCards) window.initSpotlightCards();
   }
 
   function toggleBlogView(view) {
