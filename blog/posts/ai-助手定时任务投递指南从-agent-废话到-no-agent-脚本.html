@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 助手定时任务投递指南：从 Agent 废话到 No-Agent 脚本 | 张小猛 - loczb</title>
+    <meta name="description" content="一份基于真实踩坑经验的定时任务投递实战：LLM 生成 vs 脚本直投，如何让机器人每天准时、干净、以「回复」样式把日报送到你面前。">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="AI 助手定时任务投递指南：从 Agent 废话到 No-Agent 脚本 | 张小猛 - loczb">
+    <meta property="og:description" content="一份基于真实踩坑经验的定时任务投递实战：LLM 生成 vs 脚本直投，如何让机器人每天准时、干净、以「回复」样式把日报送到你面前。">
+    <meta property="og:url" content="https://709527.xyz/blog/posts/ai-助手定时任务投递指南从-agent-废话到-no-agent-脚本.html">
+    <meta property="og:type" content="article">
+        <meta property="og:image" content="../../assets/images/og-image.png">
+    <meta property="og:site_name" content="loczb">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="AI 助手定时任务投递指南：从 Agent 废话到 No-Agent 脚本 | 张小猛 - loczb">
+    <meta name="twitter:description" content="一份基于真实踩坑经验的定时任务投递实战：LLM 生成 vs 脚本直投，如何让机器人每天准时、干净、以「回复」样式把日报送到你面前。">
+
+
+        <script type="application/ld+json">
+{
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "AI 助手定时任务投递指南：从 Agent 废话到 No-Agent 脚本",
+      "description": "一份基于真实踩坑经验的定时任务投递实战：LLM 生成 vs 脚本直投，如何让机器人每天准时、干净、以「回复」样式把日报送到你面前。",
+      "image": "https://709527.xyz/assets/images/og-image.png",
+      "author": {
+            "@type": "Person",
+            "name": "张小猛",
+            "url": "https://709527.xyz/about/"
+      },
+      "publisher": {
+            "@type": "Organization",
+            "name": "loczb",
+            "logo": {
+                  "@type": "ImageObject",
+                  "url": "https://709527.xyz/assets/images/favicon.svg"
+            }
+      },
+      "datePublished": "2026-08-20T00:00:00+08:00",
+      "dateModified": "2026-08-20T00:00:00+08:00",
+      "url": "https://709527.xyz/blog/posts/ai-助手定时任务投递指南从-agent-废话到-no-agent-脚本.html",
+      "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://709527.xyz/blog/posts/ai-助手定时任务投递指南从-agent-废话到-no-agent-脚本.html"
+      },
+      "keywords": "AI, DevOps, 前端, 开发",
+      "articleSection": "开发",
+      "timeRequired": "PT18M",
+      "inLanguage": "zh-CN"
+}
+    </script>
+
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&family=Noto+Sans+SC:wght@500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500&display=swap" media="print" onload="this.media='all'">
+    <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
+    <link rel="alternate icon" href="../../assets/images/favicon.ico">
+    <link rel="canonical" href="https://709527.xyz/blog/posts/ai-助手定时任务投递指南从-agent-废话到-no-agent-脚本.html">
+</head>
+<body>
+  <!-- Loading -->
+  <div class="loading">
+    <div class="loading-spinner"></div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../../index.html" class="nav-logo">
+        loc<span>zb</span>
+      </a>
+      <button class="nav-toggle" aria-label="打开菜单" aria-expanded="false" aria-controls="nav-links-menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <div class="nav-overlay"></div>
+      <ul class="nav-links" id="nav-links-menu">
+        <li><a href="../../index.html" class="nav-link">首页</a></li>
+        <li><a href="../../projects/index.html" class="nav-link">项目</a></li>
+        <li><a href="../index.html" class="nav-link active">博客</a></li>
+        <li><a href="../../about/index.html" class="nav-link">关于</a></li>
+      </ul>
+      <button class="theme-toggle" aria-label="切换主题" title="切换亮/暗模式">
+        <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+        <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+      </button>
+    </div>
+  </nav>
+  <!-- Particle Canvas Background -->
+  <canvas id="particle-canvas" class="particle-canvas"></canvas>
+
+  <div class="scroll-progress"></div>
+
+  <main class="section" style="padding-bottom: 0; padding-top: var(--space-4xl);">
+    <div class="container container-narrow">
+      <a href="../index.html" class="back-link">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        返回博客列表
+      </a>
+
+      <article class="post-content">
+        <h1>AI 助手定时任务投递指南：从 Agent 废话到 No-Agent 脚本</h1>
+
+        <div class="post-meta">
+          <span>📅 2026-08-20</span>
+          <span>⏱️ 18 min read</span>
+          <span>👤 张小猛</span>
+        </div>
+
+        <div class="post-tags">
+          <span class="tag">AI</span>
+          <span class="tag">DevOps</span>
+          <span class="tag">前端</span>
+          <span class="tag">开发</span>
+        </div>
+
+        <blockquote>
+<p>如果要说这一年里 AI 助手给我带来最大「日用价值」的功能，定时任务绝对排前三：每天早上准时把项目状态、服务器健康、待办提醒推到我手机上。但真正让这套体系从「能用」进化到「好用」，中间踩了不少坑。这篇文章把完整链路拆开讲清楚：从 LLM 生成内容的 Agent 模式，到纯脚本直投的 No-Agent 模式，再到如何让机器人在聊天软件里以「回复」样式投递，以及过程中所有值得记住的坑。</p>
+</blockquote>
+<h2>背景：定时任务为什么会「吵」</h2>
+<p>一切的起点是一个很朴素的需求：让 AI 助手每天早晨九点，自动把「项目状态日报」送到聊天软件里。项目有五个，需要汇总每个仓库的 git 状态、最近提交、线上地址，最好还能给出「哪个项目最久没动了」这种洞察。</p>
+<p>听起来很简单，对吧？让机器人每天跑一次脚本，读数据，生成报告，发出来。但实际做起来，第一版就撞上了三个问题：</p>
+<h3>问题一：模型会「自言自语」</h3>
+<p>机器人确实每天九点准时发日报了，但消息开头经常带着这样一句：</p>
+<pre><code class="language-text">I have all the data needed. Let me compute days since last update...
+</code></pre>
+<p>然后才是正文。这句「自言自语」是模型在工具调用结束后、正式写报告之前，习惯性输出的过渡叙述。它不丑，但很烦——你每天早上收到的第一条消息，开头是英文废话。</p>
+<h3>问题二：中间过程会「漏」出来</h3>
+<p>工具调用之间有大量中间输出：「正在检查 git 状态…」「已获取数据…」「让我计算一下…」。在交互式对话里这些无伤大雅，但在「每日投递」场景里，它们让消息显得很脏。</p>
+<h3>问题三：内容不稳定</h3>
+<p>同样的任务，今天日报长这样，明天可能换一种结构。模型每次都在「自由发挥」，格式一致性全靠运气。</p>
+<h2>第一轮：试图用「约束」解决模型问题</h2>
+<p>面对模型的自言自语和中间输出，第一反应自然是加约束。</p>
+<h3>软约束：改提示词</h3>
+<p>在任务提示词里加一条：「最终回复必须以日报正文直接开头，禁止任何过渡性叙述」。效果如何？<strong>时灵时不灵</strong>。模型大部分时候遵守，但偶尔还是会犯。提示词是「软约束」——它靠模型自觉，而模型不是每次都会自觉。</p>
+<h3>硬约束：系统配置</h3>
+<p>我们用的助手框架（Hermes Agent）有一个配置项，可以在系统层面拦截「工具调用之间的中间消息」，只保留最终回复：</p>
+<pre><code class="language-yaml">display:
+  interim_assistant_messages: false
+</code></pre>
+<p>这个配置是「硬拦截」——不是靠模型自觉，而是系统直接不发。实时对话里的中间消息确实被拦住了。</p>
+<h3>但配置拦不住「写进最终回复的废话」</h3>
+<p>关键发现来了：上面那句 <code>I have all the data needed...</code> <strong>根本不是中间消息</strong>——它是模型在写最终回复时，把过渡叙述和正文拼在了同一条消息里。系统拦截的是「独立中间消息」，拦不住「最终回复文本里自带的废话」。配置管机制，管不了内容。</p>
+<pre><code class="language-python"># 投递层只认 final_response，这条消息就是最终回复本身
+# &quot;I have all the data needed...&quot; + 日报正文 = 被原样投递
+deliver_content = final_response if success else failure_summary
+</code></pre>
+<p>结论：<strong>想根治内容层面的废话，不能靠配置，要么靠更强的提示词约束，要么换一条不经过模型的链路。</strong></p>
+<h2>第二轮：No-Agent 脚本模式</h2>
+<p>与其和模型的不确定性搏斗，不如换思路：<strong>内容固定、格式稳定的任务，根本不需要模型参与。</strong></p>
+<h3>两种模式对比</h3>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>Agent 模式（LLM）</th>
+<th>No-Agent 模式（脚本）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>执行方式</td>
+<td>启动模型，读提示词、调工具、生成回复</td>
+<td>直接跑脚本，stdout 即输出</td>
+</tr>
+<tr>
+<td>成本</td>
+<td>每次消耗 token</td>
+<td>零 token</td>
+</tr>
+<tr>
+<td>稳定性</td>
+<td>模型可能发挥失常</td>
+<td>输出 100% 确定</td>
+</tr>
+<tr>
+<td>废话风险</td>
+<td>存在（自言自语）</td>
+<td>物理不存在</td>
+</tr>
+<tr>
+<td>适用场景</td>
+<td>需要推理、总结、判断</td>
+<td>固定格式：日报、监控、提醒</td>
+</tr>
+</tbody>
+</table>
+<h3>脚本的基本结构</h3>
+<p>一个「内容生成 + 投递一体」的脚本，核心就三部分：</p>
+<pre><code class="language-python">#!/usr/bin/env python3
+import sys
+
+def build_content() -&gt; str:
+    &quot;&quot;&quot;生成要投递的正文（模板化，无废话）&quot;&quot;&quot;
+    lines = [&quot;**项目状态日报 · 今日**&quot;, &quot;&quot;]
+    for project in collect_git_status():
+        lines.append(f&quot;**{project['name']}**&quot;)
+        lines.append(f&quot;- 最近提交：{project['last_commit']}&quot;)
+        lines.append(f&quot;- 线上：{project['url']}&quot;)
+    return &quot;\n&quot;.join(lines)
+
+def main():
+    content = build_content()
+    if &quot;--print&quot; in sys.argv:
+        print(content)          # 调试模式：只打印
+        return
+    result = send(content)      # 默认：发送模式（cron 调用时无参数）
+    if not result.get(&quot;ok&quot;):
+        print(f&quot;发送失败: {result['error']}&quot;, file=sys.stderr)
+        sys.exit(1)             # 非零退出 → 调度器会告警
+    print(&quot;&quot;)                   # 空 stdout → 调度器静默，不重复投递
+
+if __name__ == &quot;__main__&quot;:
+    main()
+</code></pre>
+<p>注意一个关键约定：<strong>stdout 空 = 静默，stdout 非空 = 会被投递</strong>。所以脚本自己完成发送后，必须输出空字符串，否则会出现「脚本发了一条，调度器又投递一条」的双重消息。</p>
+<h3>任务配置</h3>
+<p>定时任务本身也切换成「纯脚本」模式：</p>
+<pre><code class="language-python">cronjob(
+    schedule=&quot;0 9 * * *&quot;,   # 每天早上 9 点
+    script=&quot;daily_report.py&quot;,  # 注意：相对路径，只写文件名
+    no_agent=True,             # 纯脚本模式
+)
+</code></pre>
+<p><code>no_agent=True</code> 意味着调度器不再启动模型，到点直接执行脚本。<strong>零 token、零废话、输出稳定</strong>——三个问题一次性解决。</p>
+<h3>完整示例：git 状态日报脚本</h3>
+<p>下面是一个真实可用的完整脚本（脱敏后），它做的事情是：遍历五个 git 仓库，采集分支、最近提交、未提交变更，生成日报正文，然后以「回复用户最近消息」的样式发到 Discord：</p>
+<pre><code class="language-python">#!/usr/bin/env python3
+&quot;&quot;&quot;项目状态日报：git 采集 + 内容生成 + Discord 回复样式投递&quot;&quot;&quot;
+import datetime
+import json
+import os
+import re
+import subprocess
+import sys
+import urllib.request
+
+NOOK = &quot;/path/to/projects&quot;            # 各仓库的父目录
+CHANNEL_ID = &quot;&lt;discord_channel_id&gt;&quot;   # 目标频道
+USER_ID = &quot;&lt;discord_user_id&gt;&quot;         # 引用锚点：用户
+ENV_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), &quot;.env&quot;)
+
+PROJECTS = [&quot;loczb&quot;, &quot;pastebin&quot;, &quot;zest&quot;, &quot;sansi-sanxing&quot;, &quot;baobaogu&quot;]
+
+
+def git_info(proj_dir):
+    &quot;&quot;&quot;返回 {branch, hash, date, subject, dirty_count}&quot;&quot;&quot;
+    def run(args):
+        try:
+            r = subprocess.run(args, capture_output=True, text=True,
+                               cwd=proj_dir, timeout=15)
+            return r.stdout.strip()
+        except Exception:
+            return &quot;&quot;
+    branch = run([&quot;git&quot;, &quot;rev-parse&quot;, &quot;--abbrev-ref&quot;, &quot;HEAD&quot;])
+    last = run([&quot;git&quot;, &quot;log&quot;, &quot;-1&quot;, &quot;--format=%h|%ci|%s&quot;])
+    dirty = run([&quot;git&quot;, &quot;status&quot;, &quot;--porcelain&quot;])
+    hash_, date_str, subject = &quot;&quot;, &quot;&quot;, &quot;&quot;
+    if last and &quot;|&quot; in last:
+        hash_, date_str, subject = last.split(&quot;|&quot;, 2)
+    return {
+        &quot;branch&quot;: branch,
+        &quot;hash&quot;: hash_,
+        &quot;date&quot;: date_str,
+        &quot;subject&quot;: subject,
+        &quot;dirty_count&quot;: len([l for l in dirty.splitlines() if l.strip()]),
+    }
+
+
+def build_report():
+    today = datetime.date.today().isoformat()
+    lines = [f&quot;**项目状态日报 · {today}**&quot;, &quot;&quot;]
+    for p in PROJECTS:
+        info = git_info(os.path.join(NOOK, p))
+        clean = &quot;仓库干净&quot; if info[&quot;dirty_count&quot;] == 0 \
+            else f&quot;⚠️ {info['dirty_count']} 个未提交变更&quot;
+        lines.append(f&quot;**{p}**&quot;)
+        lines.append(f&quot;- 状态：{clean}&quot;)
+        if info[&quot;hash&quot;]:
+            lines.append(f&quot;- 最近提交：`{info['hash']}` {info['subject'][:50]}&quot;)
+        lines.append(&quot;&quot;)
+    return &quot;\n&quot;.join(lines)
+
+
+def send_discord_reply(content):
+    &quot;&quot;&quot;绕过代理 + 带 UA + 回复用户最近消息（踩坑全处理）&quot;&quot;&quot;
+    token = load_token(ENV_FILE)
+    headers = {
+        &quot;Authorization&quot;: f&quot;Bot {token}&quot;,
+        &quot;Content-Type&quot;: &quot;application/json&quot;,
+        &quot;User-Agent&quot;: &quot;curl/8.5.0&quot;,   # 坑一：非 urllib UA
+    }
+    opener = urllib.request.build_opener(  # 坑二：绕过代理
+        urllib.request.ProxyHandler({}))
+    anchor = find_user_anchor(opener, headers)  # 坑三：锚点=用户消息
+    payload = {&quot;content&quot;: content,
+               &quot;message_reference&quot;: {&quot;message_id&quot;: anchor}}
+    req = urllib.request.Request(
+        f&quot;https://discord.com/api/v10/channels/{CHANNEL_ID}/messages&quot;,
+        data=json.dumps(payload).encode(), headers=headers, method=&quot;POST&quot;)
+    with opener.open(req, timeout=15) as resp:
+        return json.loads(resp.read().decode())
+
+
+def main():
+    content = build_report()
+    if &quot;--print&quot; in sys.argv:
+        print(content)
+        return
+    result = send_discord_reply(content)   # 默认：发送模式
+    if &quot;id&quot; not in result:
+        print(f&quot;发送失败: {result}&quot;, file=sys.stderr)
+        sys.exit(1)
+    print(&quot;&quot;)                              # 静默协议
+
+
+if __name__ == &quot;__main__&quot;:
+    main()
+</code></pre>
+<p>这个脚本基本就是日报任务的完整实现。<code>find_user_anchor</code> 和 <code>load_token</code> 两个辅助函数在上一节和踩坑部分有说明，这里不再重复贴。</p>
+<h3>日报正文的 markdown 细节</h3>
+<p>Discord 的 markdown 支持和网页 markdown 有差异，生成内容时要注意：</p>
+<pre><code class="language-markdown"># ❌ 不渲染 / 不推荐
+• 列表符号（Discord 不认）
+| 表格（Discord 不渲染表格）
+# ✅ 正常渲染
+**加粗**       # 标题分组
+`code`         # 提交 hash、命令
+- 列表         # 项目明细
+&gt; 引用         # 备注、AI 点评
+</code></pre>
+<p>一个实用技巧：<strong>标题用加粗而非 heading</strong>。Discord 不支持 <code>##</code> 标题，但 <code>**粗体**</code> 单独成行时视觉上就是标题。日报的每个项目组，都用一行 <code>**项目名**</code> 开头，下面跟 <code>-</code> 明细，段落间空一行——渲染出来就是干净的分组列表。</p>
+<h2>第三轮：Discord 回复样式投递</h2>
+<p>脚本模式解决的是「内容」，下一个需求是关于「形式」的：希望日报在聊天软件里以「回复消息」的样式展示——消息下方带着引用条，看起来就像机器人正在回复你的上一条消息，而不是一条从天而降的广播。</p>
+<h3>系统投递的限制</h3>
+<p>助手框架的定时任务投递层，默认只支持三种形态：独立消息、带 header/footer 的包装消息、进专属线程。<strong>不支持「引用某条消息」的回复样式</strong>——架构上没有这个能力。</p>
+<h3>绕行：直接调用平台 API</h3>
+<p>既然系统投递不支持，就让脚本自己发。Discord 的 REST API 支持通过 <code>message_reference</code> 参数指定「这条消息回复谁」：</p>
+<pre><code class="language-python">import urllib.request, json
+
+def send_discord_reply(content, channel_id, anchor_message_id, token):
+    payload = {
+        &quot;content&quot;: content,
+        &quot;message_reference&quot;: {&quot;message_id&quot;: anchor_message_id},
+    }
+    req = urllib.request.Request(
+        f&quot;https://discord.com/api/v10/channels/{channel_id}/messages&quot;,
+        data=json.dumps(payload).encode(),
+        headers={
+            &quot;Authorization&quot;: f&quot;Bot {token}&quot;,
+            &quot;Content-Type&quot;: &quot;application/json&quot;,
+        },
+        method=&quot;POST&quot;,
+    )
+    with urllib.request.urlopen(req, timeout=15) as resp:
+        return json.loads(resp.read().decode())
+</code></pre>
+<p>发送成功后，消息在 Discord 里长这样：</p>
+<pre><code class="language-text">┌─────────────────────────────────────┐
+│ billyzl  昨天 22:32                 │
+│ 明天 9 点别忘了看日报效果            │
+└─────────────────────────────────────┘
+  ⤷ 小马 APP  今天 09:00
+     **项目状态日报 · 今日**
+     - loczb：线上 709527.xyz，96+ 篇
+     ...
+</code></pre>
+<h3>引用锚点：回复谁？</h3>
+<p>定时任务没有「触发消息」，那回复谁？这里有一个反直觉的坑：</p>
+<p><strong>不要回复机器人自己的上一条消息。</strong> 如果日报回复的是上一条日报，Discord 的引用条会显示「回复 小马 APP」——看起来像机器人在自说自话，非常奇怪。</p>
+<p>正确做法是：<strong>回复「用户最近的一条消息」</strong>。取频道最近 100 条消息，找到作者是用户的那条，作为引用锚点：</p>
+<pre><code class="language-python">def find_user_anchor(messages, user_id):
+    for m in messages:
+        if str(m.get(&quot;author&quot;, {}).get(&quot;id&quot;, &quot;&quot;)) == user_id:
+            return m[&quot;id&quot;]
+    return None  # 兜底：没有用户消息就取最近一条
+</code></pre>
+<p>这样引用条显示的是「回复 billyzl」，看起来就像机器人正常回你的消息——自然、有对话感。</p>
+<h2>实战踩坑清单</h2>
+<p>这一段是全文的精华。所有坑都是真实踩过的，按「症状 → 原因 → 解法」记录。</p>
+<h3>坑一：urllib 请求 Discord 返回 403</h3>
+<p><strong>症状</strong>：同样的 token、同样的接口，用 <code>curl</code> 请求一切正常，换成 Python <code>urllib</code> 就 403 Forbidden。</p>
+<p><strong>原因</strong>：Discord API 拒绝 <code>urllib</code> 的默认 User-Agent（<code>Python-urllib/3.x</code>）。这不是权限问题，是 UA 识别。</p>
+<p><strong>解法</strong>：显式带上合法的 User-Agent：</p>
+<pre><code class="language-python">headers = {
+    &quot;Authorization&quot;: f&quot;Bot {token}&quot;,
+    &quot;User-Agent&quot;: &quot;curl/8.5.0&quot;,  # 任意非 urllib 的 UA 都行
+}
+</code></pre>
+<h3>坑二：环境代理导致 403</h3>
+<p><strong>症状</strong>：脚本在本地手动跑正常，但在服务器上跑就 403。curl 也是好的。</p>
+<p><strong>原因</strong>：服务器有全局代理环境变量（<code>HTTPS_PROXY=http://127.0.0.1:7890</code>，很多翻墙机器都这样），Python 的 <code>urllib</code> 默认读取环境变量走代理，而代理对 Discord API 的请求被拒绝。</p>
+<p><strong>解法</strong>：绕过代理直连：</p>
+<pre><code class="language-python">opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))
+# 之后所有请求都用 opener.open()，不再用 urlopen()
+</code></pre>
+<h3>坑三：cron 脚本路径必须是相对路径</h3>
+<p><strong>症状</strong>：给任务配置脚本时传了绝对路径 <code>/root/xxx/scripts/daily_report.py</code>，直接被拒绝。</p>
+<p><strong>原因</strong>：调度器的脚本参数约定是「相对路径，相对于脚本目录」，只接受文件名。</p>
+<p><strong>解法</strong>：脚本放在约定的 scripts 目录下，配置里只写文件名：</p>
+<pre><code class="language-python">script=&quot;daily_report.py&quot;   # ✅
+script=&quot;/root/.../daily_report.py&quot;  # ❌ 报错
+</code></pre>
+<h3>坑四：双重投递</h3>
+<p><strong>症状</strong>：频道里每天出现两条日报——一条带引用样式，一条裸消息。</p>
+<p><strong>原因</strong>：脚本自己调 API 发了一条，然后 stdout 又打印了日报内容，调度器把 stdout 当投递内容又发了一条。</p>
+<p><strong>解法</strong>：发送成功后 stdout 输出空字符串，让调度器静默。失败则输出到 stderr 并 <code>sys.exit(1)</code>，让调度器发告警：</p>
+<pre><code class="language-python">if not result.get(&quot;ok&quot;):
+    print(f&quot;发送失败: {result['error']}&quot;, file=sys.stderr)
+    sys.exit(1)
+print(&quot;&quot;)  # 静默
+</code></pre>
+<h3>坑五：手动触发测试时任务「没反应」</h3>
+<p><strong>症状</strong>：手动触发一次任务，结果什么都没收到。</p>
+<p><strong>原因</strong>：Agent 模式的任务在「没有新内容」时会返回 <code>[SILENT]</code> 标记，调度器据此<strong>抑制投递</strong>——这是防骚扰设计，但调试时很困惑。</p>
+<p><strong>解法</strong>：触发时注入临时提示词强制输出：</p>
+<pre><code class="language-python">cronjob(action=&quot;run&quot;, job_id=&quot;xxx&quot;, prompt=&quot;【测试】本次必须输出完整日报，禁止 [SILENT]&quot;)
+</code></pre>
+<h3>坑六：Discord 不渲染 <code>•</code> 列表</h3>
+<p><strong>症状</strong>：生成的日报用了 <code>•</code> 做列表符号，在 Discord 里显示为纯文本，没有渲染成列表。</p>
+<p><strong>原因</strong>：Discord 的 markdown 只认 <code>-</code> 或 <code>1.</code> 做列表，<code>•</code> 是普通字符。</p>
+<p><strong>解法</strong>：生成内容时用 <code>-</code> 前缀：</p>
+<pre><code class="language-markdown">- 最近提交：2 天前（8-18）`b83027b`
+- 线上：https://sansi-sanxing.vercel.app
+</code></pre>
+<h2>模式选择：什么时候用哪个</h2>
+<p>沉淀下来一个简单的决策规则：</p>
+<h3>用 No-Agent（脚本）的场景</h3>
+<ul>
+<li>输出格式固定（日报、周报、监控告警、价格提醒）</li>
+<li>数据来源是确定的（git、API、数据库查询）</li>
+<li>内容不需要「智能解读」，规则能表达</li>
+<li>每天都要跑，token 成本敏感</li>
+</ul>
+<h3>用 Agent（模型）的场景</h3>
+<ul>
+<li>需要总结、提炼、判断（「今天有什么值得关注的」）</li>
+<li>数据是结构化的但结论需要推理</li>
+<li>输出质量比成本重要</li>
+<li>任务逻辑会频繁变化，脚本维护成本高</li>
+</ul>
+<p>一个实用的混合策略：<strong>脚本负责采集和投递，模型负责点评</strong>。日报正文由脚本生成（稳定、零成本），最后一行可以额外调用一次模型生成一句「AI 观察」——这样既有稳定性，又有智能感。</p>
+<pre><code class="language-python"># 混合模式示例：脚本生成主体，模型补一句点评
+content = build_report_body()          # 脚本生成，100% 稳定
+if args.include_ai_note:
+    content += &quot;\n\n&gt; 💡 &quot; + call_llm(summarize(content))
+</code></pre>
+<h2>验证与上线流程</h2>
+<p>一个定时任务从写好到放心交给它「天天跑」，至少要经过四步验证。</p>
+<h3>第一步：本地调试</h3>
+<p>先看内容对不对：</p>
+<pre><code class="language-bash">python3 scripts/daily_report.py --print
+</code></pre>
+<p>确认格式、数据、渲染效果都对了，再进入下一步。<code>--print</code> 模式不发送任何消息，可以反复跑。</p>
+<h3>第二步：真实发送测试</h3>
+<p>直接跑一次发送模式，在频道里看真实效果——markdown 渲染、引用样式、锚点选择，全部以实际结果为准：</p>
+<pre><code class="language-bash">python3 scripts/daily_report.py
+</code></pre>
+<p>发完立刻查一下 API，确认 <code>message_reference</code> 指向了正确的消息：</p>
+<pre><code class="language-bash">curl -H &quot;Authorization: Bot $TOKEN&quot; \
+  &quot;https://discord.com/api/v10/channels/$CHANNEL/messages?limit=1&quot; \
+  | jq '.[0].message_reference'
+</code></pre>
+<h3>第三步：调度器预演</h3>
+<p>配置好 cron 后，手动触发一次，确认整条链路（调度器 → 脚本 → 发送 → 静默）通畅：</p>
+<pre><code class="language-text">Cron job finished.
+Mode: no_agent (script)
+Status: silent (empty output)
+</code></pre>
+<p><code>silent</code> 正是预期结果——脚本自己发完了，调度器没有重复投递。</p>
+<h3>第四步：真实定时验证</h3>
+<p>最后一步很关键：<strong>临时把调度时间改到几分钟后</strong>，等它真实触发一次，让用户亲眼看到「定时路径」的效果（而不是手动触发）：</p>
+<pre><code class="language-python">cronjob(action=&quot;update&quot;, job_id=&quot;xxx&quot;, schedule=&quot;49 12 * * *&quot;)  # 临时 12:49
+</code></pre>
+<p>用户确认效果 OK 后，立刻改回正式时间：</p>
+<pre><code class="language-python">cronjob(action=&quot;update&quot;, job_id=&quot;xxx&quot;, schedule=&quot;0 9 * * *&quot;)    # 正式 9:00
+</code></pre>
+<p>一个任务验证通过后，再推广到其他任务——<strong>先单点验证，再批量复制</strong>，避免一次引入多个变量。</p>
+<h2>常见问题 FAQ</h2>
+<h3>为什么不直接用现有的 cron 投递系统，要自己写脚本？</h3>
+<p>现有的投递系统只支持三种形态：独立消息、带 header/footer 的包装消息、进专属线程。<strong>不支持「回复某条消息」的引用样式</strong>，这是架构上的限制——投递层没有 <code>message_reference</code> 参数。如果这个限制对你不重要，用系统投递就够了，省心。</p>
+<h3>脚本模式会不会丢了「智能总结」能力？</h3>
+<p>会，但这是设计取舍。日报的「智能总结」本质上是模型把已经有的数据重述一遍——「最久未动的是 pastebin，6 天没更新了」——这个规则脚本也能算出来，只不过写死逻辑而不是靠模型推理。如果确实需要 AI 点评，可以用混合模式：脚本生成主体，调一次模型补一句「AI 观察」，成本可控。</p>
+<h3>如果我想在其他平台（Telegram、Slack）也实现回复样式？</h3>
+<p>原理是一样的：找该平台的消息 API 文档，看是否有 <code>reply_to</code> 或 <code>message_reference</code> 或 <code>thread_ts</code> 之类的参数。Telegram 用 <code>reply_to_message_id</code>，Slack 用 <code>thread_ts</code>。核心逻辑不变——脚本采集数据 → 生成内容 → 调 API 带引用参数发送。踩坑可能不同，但思路通用。</p>
+<h3>每天九点跑，万一那会儿服务器网络波动怎么办？</h3>
+<p>脚本模式的任务如果失败（网络超时、API 错误），<code>sys.exit(1)</code> 会让调度器记录为一次失败，并发送告警消息。调度器不会自动重试当次运行（定时任务错过就错过了），但下一轮（明天九点）会正常执行。如果担心错过，可以加一个「失败后 5 分钟重试」的机制——不过对我们来说，每天一次的日报，偶发失败远没有「每天收到废话」烦人，所以选择了简单模式。</p>
+<h3>怎么验证消息确实以「回复」样式发出去了？</h3>
+<p>用 API 查最新消息的 <code>message_reference</code>：</p>
+<pre><code class="language-bash">curl -s -H &quot;Authorization: Bot $TOKEN&quot; \
+  &quot;https://discord.com/api/v10/channels/$CHANNEL_ID/messages?limit=1&quot; \
+  | jq '.[0].message_reference'
+</code></pre>
+<p>输出应该是 <code>{"message_id": "xxx"}</code>，其中 <code>message_id</code> 指向用户的消息 ID。如果指向 bot 自己的消息，就是引用错了。</p>
+<h3>我只有一个脚本，但想做多个定时任务怎么办？</h3>
+<p>模板脚本已经设计为可复用：<code>send_discord_reply</code> 函数是通用的，<code>build_content</code> 函数替换成你自己的内容生成逻辑就行。每个定时任务对应一个脚本文件，各自的 <code>build_content</code> 不同，但发送函数可以共享。我甚至把发送函数放在了一个单独的模块里，所有脚本 <code>import</code> 它——改一次 UA、代理处理，所有任务都受益。</p>
+<h2>沉淀：把经验变成可复用资产</h2>
+<p>这套流程最终沉淀成了两个资产，下次再做定时任务直接复用：</p>
+<h3>资产一：模板脚本</h3>
+<p>一个「内容生成 + Discord 回复样式发送」一体的模板，改几个变量就能用：</p>
+<pre><code class="language-python"># 需要改的只有三个常量
+CHANNEL_ID = &quot;&lt;频道ID&gt;&quot;
+USER_ID = &quot;&lt;用户ID&gt;&quot;        # 引用锚点：该用户最近一条消息
+ENV_FILE = &quot;.../.env&quot;       # 放 DISCORD_BOT_TOKEN 的文件
+</code></pre>
+<p>模板自带所有踩坑处理：UA 头、代理绕过、锚点选择、静默协议。</p>
+<h3>资产二：技能文档</h3>
+<p>把完整流程（写脚本 → 本地调试 → 配 cron → 预演 → 正式上线）和九条踩坑清单写成了团队的技能文档，加载即用。以后不管是加监控任务、周报任务、还是提醒任务，都按同一套流程走。</p>
+<h2>总结</h2>
+<p>回顾整个演进过程，本质是三个认知的升级：</p>
+<ol>
+<li><strong>约束模型不如换掉模型</strong>：内容固定、格式稳定的任务，不该让 LLM 参与。No-Agent 脚本模式零成本、零废话、零波动——它不是「退步」，而是把模型用在它该用的地方。</li>
+<li><strong>系统能力不够就绕行</strong>：框架不支持「回复样式投递」，那就让脚本直接调用平台 API。架构限制不等于业务限制，绕过一层往往更灵活。</li>
+<li><strong>经验要沉淀</strong>：六个坑、四条验证步骤、两个资产——这些东西一次踩过，就要让它变成下次的「默认正确」。</li>
+</ol>
+<p>如果你也在给 AI 助手配置定时任务，希望这份实战经验能让你少踩一半的坑。最核心的一句话送给你：<strong>定时任务里，模型不是必需品，稳定的输出才是。</strong></p>
+      </article>
+    </div>
+  </main>
+
+  <!-- Related Posts / Navigation -->
+  <section class="section" style="padding-top: 0;">
+    <div class="container container-narrow">
+      <hr style="border: none; border-top: 1px solid var(--color-border); margin: var(--space-3xl) 0;">
+
+      <div class="blog-topics" style="margin-bottom: var(--space-xl);">
+        <span class="topic-label">读完之后:</span>
+        <a href="../index.html" class="topic-tag">返回博客列表</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <p class="footer-signature">写代码,做产品,也认真生活。</p>
+      <div class="footer-social">
+        <a href="https://github.com/zzdbilly" class="footer-social-link" target="_blank" rel="noopener" aria-label="GitHub">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+        </a>
+        <a href="../../rss.xml" class="footer-social-link" aria-label="RSS">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+      </div>
+      <div class="footer-links">
+        <a href="../../index.html" class="footer-link">首页</a>
+        <a href="../../projects/index.html" class="footer-link">项目</a>
+        <a href="../../blog/index.html" class="footer-link">博客</a>
+        <a href="../../about/index.html" class="footer-link">关于</a>
+      </div>
+      <p class="footer-copyright">
+        &copy; 2026 张小猛
+      </p>
+    </div>
+  </footer>
+
+
+  <script defer src="../../assets/js/related-posts.js"></script>
+  <script defer src="../../assets/js/main.js"></script>
+  <script defer src="../../assets/js/article.js"></script>
+  <script defer src="../../assets/js/share.js"></script>
+  <script defer src="../../assets/js/back-to-top.js"></script>
+  <!-- Back to Top & Reading Progress -->
+  <button class="back-to-top" id="backToTop" aria-label="回到顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
+  <div class="reading-progress" id="readingProgress"></div>
+
+  <!-- Post Sidebar Info（左侧） -->
+  <div class="post-sidebar-info" id="postSidebar">
+    <div class="post-info-card">
+      <div class="post-info-section">
+        <div class="post-info-label">作者</div>
+        <div class="post-info-author">
+          <div class="post-info-avatar">小</div>
+          <div>
+            <div class="post-info-author-name">张小猛</div>
+            <div class="post-info-author-desc">写代码，做产品</div>
+          </div>
+        </div>
+      </div>
+      <div class="post-info-section">
+        <div class="post-info-label">文章信息</div>
+        <div class="post-info-stat"><span class="post-info-stat-label">📅 发布日期</span><span class="post-info-stat-value">2026-08-20</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label">⏱️ 阅读时间</span><span class="post-info-stat-value">18 min read</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label">📝 文章字数</span><span class="post-info-stat-value">5342 字</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label">📊 章节数</span><span class="post-info-stat-value">10 节 · 34 子节</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label">💻 代码块</span><span class="post-info-stat-value">25 段</span></div>
+      </div>
+      <div class="post-info-section" id="postSidebarTags">
+        <div class="post-info-label">标签</div>
+        <div class="post-info-links">
+          <a href="../../blog/index.html?tag=AI" class="post-info-link"># AI</a>
+          <a href="../../blog/index.html?tag=DevOps" class="post-info-link"># DevOps</a>
+          <a href="../../blog/index.html?tag=前端" class="post-info-link"># 前端</a>
+          <a href="../../blog/index.html?tag=开发" class="post-info-link"># 开发</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Post TOC -->
+  <div class="post-toc-container" id="postToc">
+    <nav class="post-toc">
+      <div class="post-toc-title">目录</div>
+      <ul class="post-toc-list" id="tocList">
+      </ul>
+    </nav>
+  </div>
+<script defer src="../../assets/js/particles.js"></script>
+
+  <!-- Comment System -->
+  <script src="../../workers/comment-system/comment-widget.js" defer></script>
+
+  <!-- highlight.js 代码语法高亮（本地完整构建，无外部依赖） -->
+  <script defer src="../../assets/vendor/highlight/highlight.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // 只对没有 codehilite 的代码块应用 highlight.js
+      document.querySelectorAll('pre code').forEach(function(block) {
+        // 跳过已经有 Pygments 高亮的块
+        if (block.closest('.codehilite') || block.classList.contains('hljs')) return;
+        try { hljs.highlightElement(block); } catch (e) {}
+      });
+    });
+  </script>
+
+  <!-- Cloudflare Web Analytics -->
+  <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "29e7cff6f37448989538e2165cb79187"}'></script>
+</body>
+</html>

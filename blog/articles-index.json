@@ -1,6 +1,20 @@
 {
   "posts": [
     {
+      "slug": "ai-助手定时任务投递指南从-agent-废话到-no-agent-脚本",
+      "title": "AI 助手定时任务投递指南：从 Agent 废话到 No-Agent 脚本",
+      "date": "2026-08-20",
+      "category": "开发",
+      "tags": [
+        "AI",
+        "DevOps",
+        "前端",
+        "开发"
+      ],
+      "excerpt": "一份基于真实踩坑经验的定时任务投递实战：LLM 生成 vs 脚本直投，如何让机器人每天准时、干净、以「回复」样式把日报送到你面前。",
+      "url": "blog/posts/ai-助手定时任务投递指南从-agent-废话到-no-agent-脚本.html"
+    },
+    {
       "slug": "程序员带娃把养孩子当成一个长期运维的系统工程",
       "title": "程序员带娃：把养孩子当成一个长期运维的系统工程",
       "date": "2026-08-19",
@@ -1412,11 +1426,11 @@
     },
     {
       "tag": "AI",
-      "count": 16
+      "count": 17
     },
     {
       "tag": "DevOps",
-      "count": 10
+      "count": 11
     },
     {
       "tag": "思考",
@@ -1435,12 +1449,12 @@
       "count": 7
     },
     {
-      "tag": "效率",
+      "tag": "前端",
       "count": 6
     },
     {
-      "tag": "前端",
-      "count": 5
+      "tag": "效率",
+      "count": 6
     },
     {
       "tag": "个人成长",
@@ -1513,6 +1527,10 @@
     {
       "tag": "Gemini",
       "count": 3
+    },
+    {
+      "tag": "开发",
+      "count": 2
     },
     {
       "tag": "AI Agent",
@@ -1692,10 +1710,6 @@
     },
     {
       "tag": "Hermes",
-      "count": 1
-    },
-    {
-      "tag": "开发",
       "count": 1
     },
     {
@@ -2458,8 +2472,13 @@
   "archives": [
     {
       "month": "2026-08",
-      "count": 12,
+      "count": 13,
       "posts": [
+        {
+          "title": "AI 助手定时任务投递指南：从 Agent 废话到 No-Agent 脚本",
+          "date": "2026-08-20",
+          "url": "blog/posts/ai-助手定时任务投递指南从-agent-废话到-no-agent-脚本.html"
+        },
         {
           "title": "程序员带娃：把养孩子当成一个长期运维的系统工程",
           "date": "2026-08-19",
@@ -2995,9 +3014,9 @@
     }
   ],
   "categories": [
+    "开发",
     "思考",
     "DevOps",
-    "开发",
     "Kotlin",
     "Android",
     "前端",
@@ -3007,9 +3026,9 @@
     "安全"
   ],
   "stats": {
-    "totalPosts": 99,
+    "totalPosts": 100,
     "totalTags": 262,
-    "latestDate": "2026-08-19",
+    "latestDate": "2026-08-20",
     "oldestDate": "2026-02-15"
   }
 }
