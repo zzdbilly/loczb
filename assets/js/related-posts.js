@@ -4,6 +4,7 @@
 
 // Article index with tags
 const ARTICLE_INDEX = [
+  { slug: "ai-助手定时任务投递指南从-agent-废话到-no-agent-脚本", tags: ["AI", "DevOps", "前端", "开发"], title: "AI 助手定时任务投递指南：从 Agent 废话到 No-Agent 脚本" },
   { slug: "程序员带娃把养孩子当成一个长期运维的系统工程", tags: ["程序员", "带娃", "工程思维", "系统思维", "DevOps", "养育"], title: "程序员带娃：把养孩子当成一个长期运维的系统工程" },
   { slug: "从-openclaw-到-hermesai-agent-工作区迁移完整记录", tags: ["OpenClaw", "Hermes", "AI Agent", "迁移", "DevOps"], title: "从 OpenClaw 到 Hermes：AI Agent 工作区迁移完整记录" },
   { slug: "周末如何度过才有意义", tags: ["思考", "生活方式"], title: "周末如何度过才有意义" },
