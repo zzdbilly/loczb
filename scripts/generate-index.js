@@ -198,7 +198,7 @@ function rebuildBlogIndex() {
             <div class="blog-list-tags">
               ${tagsHtml}
             </div>
-            <span style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600;">阅读全文 ➔</span>
+            <a href="posts/${p.slug}.html" style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600; text-decoration: none;">阅读全文 ➔</a>
           </div>
         </article>`;
   }).join('\n');
