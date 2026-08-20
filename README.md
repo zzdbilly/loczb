@@ -19,7 +19,7 @@
 ---
 
 ### 📝 博客与内容系统
-- 📚 **99 篇全量深度文章** — 深度覆盖 `Android`、`Kotlin`、`AI Agent`、`前端`、`DevOps`、`思考`、`数据库`、`系统编程`、`安全`、`开发` 等 10 大垂直领域。
+- 📚 **100+ 篇全量深度文章** — 深度覆盖 `Android`、`Kotlin`、`AI Agent`、`前端`、`DevOps`、`思考`、`数据库`、`系统编程`、`安全`、`开发` 等 10 大垂直领域。
 - 📰 **双列现代文章流** — 自适应响应式排版，每篇博文卡片整合阅读耗时、分类徽章、摘要截断与技术标签胶囊。
 - 📅 **时间轴月份便当盒归档** — 按年份与月份独立封装的折叠便当盒，带等宽日历徽标与文章总数统计。
 - 📑 **文章阅读增强** — 动态生成 TOC 目录（桌面侧边栏 + 移动端抽屉）、阅读进度条、相关文章智能推荐与图片灯箱。
@@ -28,7 +28,7 @@
 
 ### 🛠️ 基础设施与云端生态
 - 💬 **评论系统** — Cloudflare Workers + Cloudflare D1 边缘数据库，支持嵌套树状回复、Token 鉴权与独立管理后台。
-- 🤖 **AI 问答助手** — Cloudflare Workers 驱动，基于全站 99 篇博文知识库进行 RAG 即时检索问答。
+- 🤖 **AI 问答助手** — Cloudflare Workers 驱动，基于全站 100+ 篇博文知识库进行 RAG 即时检索问答。
 - 📦 **纯前端离线化与 PWA** — 核心依赖（Fuse.js / marked / DOMPurify）本地化托管，Service Worker 全站静态离线缓存。
 - 📡 **全自动化索引与 SEO** — `sitemap.xml`、`rss.xml`、JSON-LD 结构化数据与 Open Graph 社交分享卡片全自动构建。
 
@@ -59,8 +59,8 @@ loczb/
 │   └── projects.json              # 项目案例结构化数据源 (解耦管理)
 ├── blog/
 │   ├── index.html                 # 博客列表与归档页 (双列网格 + Command Palette 搜索)
-│   ├── articles-index.json        # 全站 99 篇博文索引与元数据
-│   └── posts/                     # 99 篇博客详情 HTML 正文
+│   ├── articles-index.json        # 全站博文索引与元数据
+│   └── posts/                     # 博客详情 HTML 正文
 ├── assets/
 │   ├── css/
 │   │   ├── style.css              # 全局核心样式 (Bento、Spotlight、Codeblock 等)
@@ -88,7 +88,7 @@ loczb/
 │   └── blog-post-template.html    # 文章详情页标准化骨架模板
 ├── CNAME                          # 自定义域名配置
 ├── sw.js                          # Service Worker 离线缓存
-├── sitemap.xml                    # 99 篇文章搜索引擎站点地图
+├── sitemap.xml                    # 全量文章搜索引擎站点地图
 └── rss.xml                        # 博客 RSS 订阅源
 ```
 

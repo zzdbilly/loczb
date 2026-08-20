@@ -152,6 +152,15 @@ fs.writeFileSync(OUTPUT_FILE, JSON.stringify(indexData, null, 2));
 console.log(`✅ articles-index.json: ${indexData.stats.totalPosts} posts, ${indexData.stats.totalTags} tags, ${archiveList.length} months`);
 
 // ═══════════════════════════════════════════════
+// 数量同步：替换 HTML 里的 <!-- POSTS_COUNT -->N<!-- /POSTS_COUNT --> 锚点
+// ═══════════════════════════════════════════════
+
+function syncPostCount(html) {
+  return html.replace(/<!-- POSTS_COUNT -->[\s\S]*?<!-- \/POSTS_COUNT -->/g,
+    `<!-- POSTS_COUNT -->${posts.length}<!-- /POSTS_COUNT -->`);
+}
+
+// ═══════════════════════════════════════════════
 // Phase 3: 重建 blog/index.html 列表
 // ═══════════════════════════════════════════════
 
@@ -224,6 +233,9 @@ function rebuildBlogIndex() {
   if (tagCloudPattern.test(html)) {
     html = html.replace(tagCloudPattern, `$1\n        <!-- 标签云已移除（分类筛选按钮已覆盖功能） -->\n      $2`);
   }
+
+  // 数量同步：替换 <!-- POSTS_COUNT --> 锚点
+  html = syncPostCount(html);
 
   fs.writeFileSync(BLOG_INDEX, html);
   console.log(`✅ blog/index.html: ${posts.length} articles, ${sortedCats.length} categories`);
@@ -321,6 +333,9 @@ function rebuildHomePage() {
 
   const postsArrayPattern = /const posts = \[[\s\S]*?\];/;
   html = html.replace(postsArrayPattern, 'const posts = ' + postsJsArray + ';');
+
+  // 数量同步：替换 <!-- POSTS_COUNT --> 锚点
+  html = syncPostCount(html);
 
   fs.writeFileSync(HOME_INDEX, html);
   console.log(`✅ index.html: featured="${latest.title}", list=${listArticles.length} posts, JS array=${topPosts.length} posts`);
