@@ -43,7 +43,7 @@ const SITE_CONTEXT = `
 2. PasteBin - 轻量文本分享工具（Cloudflare Workers + KV）
 3. OpenClaw / Hermes 实践 - AI Agent 工作流与技能开发
 
-博客分类（共 98 篇）：
+博客分类：
 - Android：Gradle 构建、Jetpack Compose、Hilt 依赖注入、Gemini Nano 集成、性能优化等
 - AI：AI 编程工具横评、Agent 工作流、RAG、MCP 协议、端侧大模型等
 - 前端：React、TypeScript、CSS Container Queries、PWA、WebAssembly、Web Worker 等
