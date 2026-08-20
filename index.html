@@ -367,28 +367,45 @@
         <article class="blog-card-featured animate-on-scroll" id="home-featured-post" style="display: block;">
           <div class="blog-card-header">
             <div class="blog-card-meta">
+              <span class="blog-date">2026-08-20</span>
+              <span>·</span>
+              <span class="blog-read-time">18 min</span>
+            </div>
+            <span class="blog-list-tag">开发</span>
+          </div>
+          <h3 class="blog-card-title">
+            <a href="blog/posts/ai-助手定时任务投递指南从-agent-废话到-no-agent-脚本.html">AI 助手定时任务投递指南：从 Agent 废话到 No-Agent 脚本</a>
+          </h3>
+          <p class="blog-card-excerpt">一份基于真实踩坑经验的定时任务投递实战：LLM 生成 vs 脚本直投，如何让机器人每天准时、干净、以「回复」样式把日报送到你面前。...</p>
+          <div class="blog-card-tags">
+            <span class="tech-tag">AI</span>
+            <span class="tech-tag">DevOps</span>
+            <span class="tech-tag">前端</span>
+            <span class="tech-tag">开发</span>
+          </div>
+        </article>
+        
+        <!-- 最新文章列表 -->
+                <div class="blog-list">
+        <article class="blog-mini-card animate-on-scroll" data-category="思考" data-page="1">
+          <div class="blog-mini-card-header">
+            <div class="blog-list-meta">
               <span class="blog-date">2026-08-19</span>
               <span>·</span>
               <span class="blog-read-time">8 min</span>
             </div>
             <span class="blog-list-tag">思考</span>
           </div>
-          <h3 class="blog-card-title">
+          <h3 class="blog-mini-card-title">
             <a href="blog/posts/程序员带娃把养孩子当成一个长期运维的系统工程.html">程序员带娃：把养孩子当成一个长期运维的系统工程</a>
           </h3>
-          <p class="blog-card-excerpt">用工程师的思维看带娃：需求分析、状态监控、容错设计、灰度发布、日志排查——原来养孩子比写代码更像在做系统运维...</p>
-          <div class="blog-card-tags">
+          <p class="blog-mini-card-excerpt">用工程师的思维看带娃：需求分析、状态监控、容错设计、灰度发布、日志排查——原来养孩子比写代码更像在做系统运维</p>
+          <div class="blog-mini-card-tags">
             <span class="tech-tag">程序员</span>
             <span class="tech-tag">带娃</span>
             <span class="tech-tag">工程思维</span>
-            <span class="tech-tag">系统思维</span>
-            <span class="tech-tag">DevOps</span>
-            <span class="tech-tag">养育</span>
           </div>
         </article>
-        
-        <!-- 最新文章列表 -->
-                <div class="blog-list">
         <article class="blog-mini-card animate-on-scroll" data-category="DevOps" data-page="1">
           <div class="blog-mini-card-header">
             <div class="blog-list-meta">
@@ -406,24 +423,6 @@
             <span class="tech-tag">OpenClaw</span>
             <span class="tech-tag">Hermes</span>
             <span class="tech-tag">AI Agent</span>
-          </div>
-        </article>
-        <article class="blog-mini-card animate-on-scroll" data-category="思考" data-page="1">
-          <div class="blog-mini-card-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-08-16</span>
-              <span>·</span>
-              <span class="blog-read-time">5 min</span>
-            </div>
-            <span class="blog-list-tag">思考</span>
-          </div>
-          <h3 class="blog-mini-card-title">
-            <a href="blog/posts/周末如何度过才有意义.html">周末如何度过才有意义</a>
-          </h3>
-          <p class="blog-mini-card-excerpt">恢复与创造并重，让周末不再越休越累——从识别消耗型休息、主动回血，到用小小创造留下属于你的痕迹。</p>
-          <div class="blog-mini-card-tags">
-            <span class="tech-tag">思考</span>
-            <span class="tech-tag">生活方式</span>
           </div>
         </article>
         </div>
@@ -518,6 +517,15 @@
     // 首页随机选择代表文章
     const posts = [
       {
+        url: 'blog/posts/ai-助手定时任务投递指南从-agent-废话到-no-agent-脚本.html',
+        title: 'AI 助手定时任务投递指南：从 Agent 废话到 No-Agent 脚本',
+        date: '2026-08-20',
+        readTime: '18 min',
+        category: '开发',
+        category2: '开发',
+        desc: '一份基于真实踩坑经验的定时任务投递实战：LLM 生成 vs 脚本直投，如何让机器人每天准时、干净、以「回复」样式把日报送到你面前。'
+      },
+      {
         url: 'blog/posts/程序员带娃把养孩子当成一个长期运维的系统工程.html',
         title: '程序员带娃：把养孩子当成一个长期运维的系统工程',
         date: '2026-08-19',
@@ -597,15 +605,6 @@
         category: 'Android',
         category2: 'Android',
         desc: '全面梳理 Jetpack Compose 性能优化的核心技巧，涵盖重组优化、状态管理、延迟布局、图片加载、基线配置文件等实战经验'
-      },
-      {
-        url: 'blog/posts/web-worker-与前端多线程开发把主线程从繁重计算中解放出来.html',
-        title: 'Web Worker 与前端多线程开发：把主线程从繁重计算中解放出来',
-        date: '2026-08-07',
-        readTime: '10 min',
-        category: '前端',
-        category2: '前端',
-        desc: '深入解析 Web Worker 的原理与实践，涵盖 Dedicated Worker、Shared Worker、Service Worker 的区别与使用场景，以及 Comlink、Worker 池、Transferable Objects 等进阶技巧'
       }
     ];
     

@@ -7,6 +7,14 @@
     <language>zh-CN</language>
     <atom:link href="https://709527.xyz/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>AI 助手定时任务投递指南：从 Agent 废话到 No-Agent 脚本</title>
+      <link>https://709527.xyz/blog/posts/ai-助手定时任务投递指南从-agent-废话到-no-agent-脚本.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/ai-助手定时任务投递指南从-agent-废话到-no-agent-脚本.html</guid>
+      <description>一份基于真实踩坑经验的定时任务投递实战：LLM 生成 vs 脚本直投，如何让机器人每天准时、干净、以「回复」样式把日报送到你面前。</description>
+      <category>开发</category>
+      <pubDate>Thu, 20 Aug 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
       <title>程序员带娃：把养孩子当成一个长期运维的系统工程</title>
       <link>https://709527.xyz/blog/posts/程序员带娃把养孩子当成一个长期运维的系统工程.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/程序员带娃把养孩子当成一个长期运维的系统工程.html</guid>
@@ -157,14 +165,6 @@
       <description>从睡眠、饮食、运动、数字健康、环境、心理六个维度，建立科学且可执行的健康习惯体系</description>
       <category>思考</category>
       <pubDate>Thu, 09 Jul 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>Prisma ORM 完全指南：从入门到实战</title>
-      <link>https://709527.xyz/blog/posts/prisma-orm-完全指南从入门到实战.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/prisma-orm-完全指南从入门到实战.html</guid>
-      <description>从 Prisma 的基础概念到项目实战，涵盖 Schema 设计、CRUD 操作、迁移管理、性能优化等核心话题，带你全面掌握 TypeScript 生态最流行的数据库 ORM。</description>
-      <category>数据库</category>
-      <pubDate>Tue, 07 Jul 2026 00:00:00 +0800</pubDate>
     </item>
   </channel>
 </rss>
