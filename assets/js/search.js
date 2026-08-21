@@ -11,8 +11,8 @@
   let isFuseLoading = false;
   let selectedIndex = -1;
 
-  const searchInput = document.getElementById('blog-search-input');
-  const searchResults = document.getElementById('blog-search-results');
+  const searchInput = document.getElementById('home-search-input') || document.getElementById('blog-search-input');
+  const searchResults = document.getElementById('home-search-results') || document.getElementById('blog-search-results');
   const searchClear = document.getElementById('search-clear-btn') || document.querySelector('.search-clear');
   const searchKbd = document.getElementById('search-kbd-badge') || document.querySelector('.search-kbd');
 
@@ -25,8 +25,12 @@
     if (isFuseLoading) return;
     isFuseLoading = true;
 
+    const fuseSrc = window.location.pathname.includes('/blog/')
+      ? '../assets/vendor/fuse/fuse.min.js'
+      : 'assets/vendor/fuse/fuse.min.js';
+
     const script = document.createElement('script');
-    script.src = '../assets/vendor/fuse/fuse.min.js';
+    script.src = fuseSrc;
     script.onload = () => {
       isFuseLoading = false;
       initFuse();
@@ -50,7 +54,11 @@
     if (isLoading) return false;
     isLoading = true;
 
-    const paths = ['articles-index.json', '/blog/articles-index.json', '../blog/articles-index.json'];
+    const isSubDir = window.location.pathname.includes('/blog/') || window.location.pathname.includes('/projects/') || window.location.pathname.includes('/about/');
+    const paths = isSubDir 
+      ? ['articles-index.json', '../blog/articles-index.json', '/blog/articles-index.json']
+      : ['blog/articles-index.json', '/blog/articles-index.json'];
+
     for (const p of paths) {
       try {
         const resp = await fetch(p);
@@ -59,7 +67,7 @@
           if (data && data.posts) {
             searchData = data;
             isLoading = false;
-            initFuse();
+            if (typeof Fuse !== 'undefined') initFuse();
             return true;
           }
         }
@@ -70,22 +78,18 @@
   }
 
   function initFuse() {
-    if (typeof Fuse === 'undefined' || !searchData.posts || !searchData.posts.length) return;
-    try {
-      fuse = new Fuse(searchData.posts, {
-        keys: [
-          { name: 'title', weight: 0.45 },
-          { name: 'category', weight: 0.2 },
-          { name: 'tags', weight: 0.2 },
-          { name: 'excerpt', weight: 0.15 }
-        ],
-        threshold: 0.35,
-        minMatchCharLength: 1,
-        ignoreLocation: true
-      });
-    } catch (e) {
-      fuse = null;
-    }
+    if (!searchData.posts || !searchData.posts.length || typeof Fuse === 'undefined') return;
+    fuse = new Fuse(searchData.posts, {
+      keys: [
+        { name: 'title', weight: 0.5 },
+        { name: 'category', weight: 0.2 },
+        { name: 'tags', weight: 0.2 },
+        { name: 'excerpt', weight: 0.1 }
+      ],
+      threshold: 0.35,
+      ignoreLocation: true,
+      minMatchCharLength: 2
+    });
   }
 
   function escapeHtml(str) {
@@ -122,31 +126,41 @@
   }
 
   function nativeSearch(query) {
-    if (!searchData.posts || !searchData.posts.length) return [];
-    const q = query.toLowerCase();
-    const words = q.split(/\s+/).filter(Boolean);
-    if (!words.length) return [];
+    const q = query.toLowerCase().trim();
+    if (!q || !searchData.posts) return [];
 
-    return searchData.posts.filter(p => {
-      const title = (p.title || '').toLowerCase();
-      const excerpt = (p.excerpt || '').toLowerCase();
-      const category = (p.category || '').toLowerCase();
-      const tags = (p.tags || []).join(' ').toLowerCase();
-      return words.every(w => title.includes(w) || category.includes(w) || tags.includes(w) || excerpt.includes(w));
-    }).slice(0, 8);
+    const terms = q.split(/\s+/).filter(Boolean);
+
+    const scored = searchData.posts.map(post => {
+      let score = 0;
+      const titleLower = (post.title || '').toLowerCase();
+      const excerptLower = (post.excerpt || '').toLowerCase();
+      const catLower = (post.category || '').toLowerCase();
+      const tagsLower = (post.tags || []).join(' ').toLowerCase();
+
+      for (const term of terms) {
+        if (titleLower.includes(term)) score += 10;
+        if (catLower.includes(term)) score += 5;
+        if (tagsLower.includes(term)) score += 4;
+        if (excerptLower.includes(term)) score += 2;
+      }
+
+      return { post, score };
+    }).filter(item => item.score > 0);
+
+    scored.sort((a, b) => b.score - a.score);
+    return scored.slice(0, 8).map(s => s.post);
   }
 
-  function performSearch(query) {
-    selectedIndex = -1;
-    const q = (query || '').trim();
-
-    if (!q) {
+  async function performSearch(query) {
+    if (!query || !query.trim()) {
       if (searchResults) {
         searchResults.classList.remove('active');
         searchResults.innerHTML = '';
       }
       if (searchClear) searchClear.classList.remove('visible');
       if (searchKbd) searchKbd.style.display = '';
+      selectedIndex = -1;
       return;
     }
 
@@ -154,18 +168,9 @@
     if (searchKbd) searchKbd.style.display = 'none';
 
     if (!searchData.posts || !searchData.posts.length) {
-      loadSearchData().then(() => {
-        if (searchInput && searchInput.value.trim() === q) {
-          executeSearch(q);
-        }
-      });
-      return;
+      await loadSearchData();
     }
 
-    executeSearch(q);
-  }
-
-  function executeSearch(query) {
     let matched = [];
     if (fuse) {
       try {
@@ -200,13 +205,14 @@
         <span>↑↓ 导航 · Enter 确认 · ESC 关闭</span>
       </div>`;
 
+    const isBlogDir = window.location.pathname.includes('/blog/');
     const itemsHtml = results.map((post, idx) => {
       const title = highlightText(post.title, query);
       const excerpt = highlightText(post.excerpt, query);
       const category = escapeHtml(post.category || '');
       const date = escapeHtml(post.date || '');
       const postSlug = post.slug || (post.url || '').replace(/^blog\/posts\//, '').replace(/\.html$/, '');
-      const href = `posts/${postSlug}.html`;
+      const href = isBlogDir ? `posts/${postSlug}.html` : `blog/posts/${postSlug}.html`;
 
       const tags = (post.tags || []).slice(0, 3).map(tag =>
         `<span style="color: var(--color-text-muted);">#${escapeHtml(tag)}</span>`

@@ -122,8 +122,47 @@ function initMobileMenu() {
 
 // Typing Effect
 function initTypingEffect() {
+  // Hero dynamic typewriter loop
+  const heroTypewriter = document.getElementById('hero-typewriter');
+  if (heroTypewriter) {
+    const phrases = [
+      'Android 16 极致体验',
+      '生产级 AI Agent 架构',
+      '端侧端云协同实操',
+      '实实在在的工程价值'
+    ];
+    let phraseIdx = 0;
+    let charIdx = 0;
+    let isDeleting = false;
+    let typingSpeed = 100;
+
+    function typeLoop() {
+      const currentPhrase = phrases[phraseIdx];
+      if (isDeleting) {
+        heroTypewriter.textContent = currentPhrase.substring(0, charIdx - 1);
+        charIdx--;
+        typingSpeed = 35;
+      } else {
+        heroTypewriter.textContent = currentPhrase.substring(0, charIdx + 1);
+        charIdx++;
+        typingSpeed = 85;
+      }
+
+      if (!isDeleting && charIdx === currentPhrase.length) {
+        typingSpeed = 2000;
+        isDeleting = true;
+      } else if (isDeleting && charIdx === 0) {
+        isDeleting = false;
+        phraseIdx = (phraseIdx + 1) % phrases.length;
+        typingSpeed = 350;
+      }
+
+      setTimeout(typeLoop, typingSpeed);
+    }
+    setTimeout(typeLoop, 600);
+  }
+
   const typingElements = document.querySelectorAll('[data-typing]');
-  
   typingElements.forEach(el => {
     const text = el.getAttribute('data-typing');
     const speed = parseInt(el.getAttribute('data-typing-speed')) || 100;
