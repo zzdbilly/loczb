@@ -121,9 +121,9 @@
     }
     var html = '';
     if (page > 1) {
-      html += '<a href="#" class="pagination-btn pagination-prev" data-page="' + (page - 1) + '">← 上一页</a>';
+      html += '<a href="#" class="pagination-btn pagination-prev" data-page="' + (page - 1) + '" aria-label="上一页"><span class="pagination-arrow">←</span><span class="pagination-label">上一页</span></a>';
     } else {
-      html += '<span class="pagination-btn pagination-prev disabled">← 上一页</span>';
+      html += '<span class="pagination-btn pagination-prev disabled" aria-disabled="true"><span class="pagination-arrow">←</span><span class="pagination-label">上一页</span></span>';
     }
     var pageNumbersHtml = '';
     var pageNumbers = generatePageNumbers(page, totalPages);
@@ -131,16 +131,16 @@
       if (item === '...') {
         pageNumbersHtml += '<span class="pagination-ellipsis">···</span>';
       } else if (item === page) {
-        pageNumbersHtml += '<span class="pagination-btn active">' + item + '</span>';
+        pageNumbersHtml += '<span class="pagination-btn active" aria-current="page">' + item + '</span>';
       } else {
         pageNumbersHtml += '<a href="#" class="pagination-btn" data-page="' + item + '">' + item + '</a>';
       }
     });
     html += '<div class="pagination-pages">' + pageNumbersHtml + '</div>';
     if (page < totalPages) {
-      html += '<a href="#" class="pagination-btn pagination-next" data-page="' + (page + 1) + '">下一页 -></a>';
+      html += '<a href="#" class="pagination-btn pagination-next" data-page="' + (page + 1) + '" aria-label="下一页"><span class="pagination-label">下一页</span><span class="pagination-arrow">→</span></a>';
     } else {
-      html += '<span class="pagination-btn pagination-next disabled">下一页 -></span>';
+      html += '<span class="pagination-btn pagination-next disabled" aria-disabled="true"><span class="pagination-label">下一页</span><span class="pagination-arrow">→</span></span>';
     }
     container.innerHTML = html;
   }
