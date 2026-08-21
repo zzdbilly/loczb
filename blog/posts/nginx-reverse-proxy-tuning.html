@@ -122,6 +122,31 @@
           <span class="tag">DevOps</span>
         </div>
 
+        <!-- Series Card Widget -->
+        <div class="series-card spotlight-card">
+          <div class="series-header">
+            <div class="series-badge">
+              <span class="pulse-dot"></span>
+              <span>专题专栏</span>
+            </div>
+            <span class="series-progress">第 6 篇 · 共 6 篇</span>
+          </div>
+          <div class="series-name">《全栈工程化与高性能架构》</div>
+          <div class="series-desc">聚焦构建提速、静态化极致性能、容器化运维、数据库 WAL 索引优化与高可用网关设计。</div>
+          <details class="series-accordion">
+            <summary class="series-summary">查看专栏全集目录 (6 篇文章) ▾</summary>
+            <ol class="series-list">
+            <li class="series-item"><a href="static-blog-performance-optimization-59mb.html">[1/6] 静态博客性能优化实战：从 59MB 到精简高效</a></li>
+            <li class="series-item"><a href="gradle-build-acceleration-5min-to-30sec.html">[2/6] Gradle 构建加速全攻略：从 5 分钟到 30 秒</a></li>
+            <li class="series-item"><a href="docker-compose-best-practices.html">[3/6] Docker Compose 最佳实践</a></li>
+            <li class="series-item"><a href="sqlite-wal-performance.html">[4/6] SQLite 进阶：WAL 模式与性能优化</a></li>
+            <li class="series-item"><a href="postgresql-index-optimization.html">[5/6] PostgreSQL 索引优化实战</a></li>
+            <li class="series-item current-article"><span>[6/6] Nginx 反向代理性能调优：从入门到生产 (当前阅读)</span></li>
+            </ol>
+          </details>
+        </div>
+        <!-- /Series Card Widget -->
+
         <p>Nginx 作为反向代理几乎是现代 Web 架构的标配。但很多人止步于 <code>proxy_pass</code> 的基本配置，默认参数跑起来能工作，一上量就出问题——502 频发、SSL 握手拖慢首字节、缓存没命中反而多了一跳、限流太粗暴误杀正常用户。</p>
 
       <p>本文从反向代理基础概念出发，逐层深入到 worker 调优、负载均衡、SSL 加速、缓存策略、压缩传输、限流安全和监控体系，最后给出一份可直接用于生产环境的检查清单。</p>
@@ -984,6 +1009,19 @@ scrape_configs:
     </div>
   </main>
 
+  
+      
+      
+      <!-- Series Nav Widget -->
+      <div class="series-nav">
+        
+        <a href="postgresql-index-optimization.html" class="series-nav-btn series-nav-prev">
+          <span class="series-nav-sub">← 专栏上一篇 (5/6)</span>
+          <span class="series-nav-title">PostgreSQL 索引优化实战</span>
+        </a>
+        <div></div>
+      </div>
+      <!-- /Series Nav Widget -->
   <!-- Related Posts / Navigation -->
   <section class="section" style="padding-top: 0;">
     <div class="container container-narrow">

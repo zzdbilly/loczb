@@ -120,6 +120,31 @@
           <span class="tag">WorkManager</span>
         </div>
 
+        <!-- Series Card Widget -->
+        <div class="series-card spotlight-card">
+          <div class="series-header">
+            <div class="series-badge">
+              <span class="pulse-dot"></span>
+              <span>专题专栏</span>
+            </div>
+            <span class="series-progress">第 4 篇 · 共 6 篇</span>
+          </div>
+          <div class="series-name">《Android 16 深度演进与系统适配》</div>
+          <div class="series-desc">系统梳理 Android 16 核心新特性、前台服务与后台任务约束、通知系统重构与性能深度调优。</div>
+          <details class="series-accordion">
+            <summary class="series-summary">查看专栏全集目录 (6 篇文章) ▾</summary>
+            <ol class="series-list">
+            <li class="series-item"><a href="android-16-features.html">[1/6] Android 16 新特性详解：开发者需要知道的 8 件事</a></li>
+            <li class="series-item"><a href="android-16-notifications.html">[2/6] Android 16 通知系统新 API 详解</a></li>
+            <li class="series-item"><a href="android-16-background-tasks.html">[3/6] Android 16 后台任务新限制：开发者迁移指南</a></li>
+            <li class="series-item current-article"><span>[4/6] Android 16 前台服务类型全新限制：类型强制匹配与迁移指南 (当前阅读)</span></li>
+            <li class="series-item"><a href="android-15-privacy-media-visual-permission.html">[5/6] Android 15 隐私新特性：所有文件都需要 MEDIA_VISUAL_PERMISSION</a></li>
+            <li class="series-item"><a href="android-performance-optimization.html">[6/6] Android 性能优化完整实战：从启动到渲染</a></li>
+            </ol>
+          </details>
+        </div>
+        <!-- /Series Card Widget -->
+
         <section>
 <h2>引言</h2>
 <p>Android 16 对前台服务（Foreground Service）进行了近几年来最严格的限制。以前只要在 Manifest 声明 <code>foregroundServiceType</code> 就能启动前台服务，但现在系统会强制检查你的服务类型是否匹配实际行为，不匹配就直接 Crash。</p>
@@ -329,6 +354,23 @@ WorkManager.getInstance(context).enqueue(uploadWork)</code></pre>
     </div>
   </main>
 
+  
+      
+      
+      <!-- Series Nav Widget -->
+      <div class="series-nav">
+        
+        <a href="android-16-background-tasks.html" class="series-nav-btn series-nav-prev">
+          <span class="series-nav-sub">← 专栏上一篇 (3/6)</span>
+          <span class="series-nav-title">Android 16 后台任务新限制：开发者迁移指南</span>
+        </a>
+        
+        <a href="android-15-privacy-media-visual-permission.html" class="series-nav-btn series-nav-next">
+          <span class="series-nav-sub">专栏下一篇 (5/6) →</span>
+          <span class="series-nav-title">Android 15 隐私新特性：所有文件都需要 MEDIA_VISUAL_PERMISSION</span>
+        </a>
+      </div>
+      <!-- /Series Nav Widget -->
   <!-- Related Posts / Navigation -->
   <section class="section" style="padding-top: 0;">
     <div class="container container-narrow">

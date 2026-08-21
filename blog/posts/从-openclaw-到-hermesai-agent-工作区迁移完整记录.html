@@ -122,6 +122,34 @@
           <span class="tag">DevOps</span>
         </div>
 
+        <!-- Series Card Widget -->
+        <div class="series-card spotlight-card">
+          <div class="series-header">
+            <div class="series-badge">
+              <span class="pulse-dot"></span>
+              <span>专题专栏</span>
+            </div>
+            <span class="series-progress">第 2 篇 · 共 9 篇</span>
+          </div>
+          <div class="series-name">《AI Agent 与本地大模型实战》</div>
+          <div class="series-desc">从平台工作区迁移、定时自动化脚本投递，到 MCP 协议集成、本地 RAG 知识库与端侧大模型落地实录。</div>
+          <details class="series-accordion">
+            <summary class="series-summary">查看专栏全集目录 (9 篇文章) ▾</summary>
+            <ol class="series-list">
+            <li class="series-item"><a href="ai-助手定时任务投递指南从-agent-废话到-no-agent-脚本.html">[1/9] AI 助手定时任务投递指南：从 Agent 废话到 No-Agent 脚本</a></li>
+            <li class="series-item current-article"><span>[2/9] 从 OpenClaw 到 Hermes：AI Agent 工作区迁移完整记录 (当前阅读)</span></li>
+            <li class="series-item"><a href="openclaw-guide.html">[3/9] OpenClaw 深度使用指南：从 0 到 1 构建个人 AI Agent</a></li>
+            <li class="series-item"><a href="local-rag-ollama.html">[4/9] RAG 本地实践：用 Ollama + Embedding 搭建私有知识库</a></li>
+            <li class="series-item"><a href="rag-introduction.html">[5/9] RAG 检索增强生成入门：从理念到落地</a></li>
+            <li class="series-item"><a href="ai-agent-skill-development.html">[6/9] AI Agent 技能开发实战：从需求到上线的完整流程</a></li>
+            <li class="series-item"><a href="mcp-server-deep-dive.html">[7/9] MCP 协议深入实战：从入门到编写自定义 MCP Server</a></li>
+            <li class="series-item"><a href="mcp-android-integration.html">[8/9] MCP 协议在 Android 端的应用：AI 工具调用新范式</a></li>
+            <li class="series-item"><a href="android-gemini-nano-integration.html">[9/9] Android 端侧 AI 实战：Gemini Nano 集成指南</a></li>
+            </ol>
+          </details>
+        </div>
+        <!-- /Series Card Widget -->
+
         <h2>写在前面</h2>
 <p>2026 年年中，我做了一个拖延了很久的决定：把跑了大半年的 AI Agent 工作区，从 OpenClaw 整体迁移到 Hermes Agent。</p>
 <p>这篇文章是这次迁移的完整记录。我尽量把每个环节——为什么迁、迁了什么、踩了什么坑、最终怎么验证——都写清楚，希望能给同样在纠结"要不要换平台"的朋友一些参考。</p>
@@ -575,6 +603,23 @@ grep -rl &quot;\.openclaw/workspace-xiaoma&quot; docs/ | xargs -I{} sed -i \
     </div>
   </main>
 
+  
+      
+      
+      <!-- Series Nav Widget -->
+      <div class="series-nav">
+        
+        <a href="ai-助手定时任务投递指南从-agent-废话到-no-agent-脚本.html" class="series-nav-btn series-nav-prev">
+          <span class="series-nav-sub">← 专栏上一篇 (1/9)</span>
+          <span class="series-nav-title">AI 助手定时任务投递指南：从 Agent 废话到 No-Agent 脚本</span>
+        </a>
+        
+        <a href="openclaw-guide.html" class="series-nav-btn series-nav-next">
+          <span class="series-nav-sub">专栏下一篇 (3/9) →</span>
+          <span class="series-nav-title">OpenClaw 深度使用指南：从 0 到 1 构建个人 AI Agent</span>
+        </a>
+      </div>
+      <!-- /Series Nav Widget -->
   <!-- Related Posts / Navigation -->
   <section class="section" style="padding-top: 0;">
     <div class="container container-narrow">
