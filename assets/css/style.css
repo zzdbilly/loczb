@@ -4346,6 +4346,7 @@ pre code.hljs {
   text-decoration: none;
   font-size: 0.9rem;
   font-weight: 600;
+  white-space: nowrap;
   transition: all var(--transition-fast);
 }
 
@@ -4382,21 +4383,43 @@ pre code.hljs {
   font-family: var(--font-mono);
 }
 
-/* 移动端分页：防止多个按钮被 flex 挤成竖排细长胶囊 */
-.pagination-btn {
-  white-space: nowrap;
+/* 分页数字容器：桌面端透明参与 .pagination flex（保持单行），移动端单独成行 */
+.pagination-pages {
+  display: contents;
 }
 
 @media (max-width: 640px) {
   .pagination {
-    flex-wrap: wrap;
-    gap: 0.4rem;
+    display: grid;
+    grid-template-areas:
+      "prev . next"
+      ". pages .";
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 0.75rem 0.5rem;
     margin-top: 2rem;
     padding: 1.25rem 0;
+  }
+  .pagination-prev {
+    grid-area: prev;
+    justify-self: start;
+  }
+  .pagination-next {
+    grid-area: next;
+    justify-self: end;
+  }
+  .pagination-pages {
+    grid-area: pages;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 0.4rem;
   }
   .pagination-btn {
     padding: 0.4rem 0.75rem;
     font-size: 0.82rem;
+    white-space: nowrap;
   }
   /* 数字按钮做成均匀小圆，与上一页/下一页区分 */
   .pagination-btn:not(.pagination-prev):not(.pagination-next) {
