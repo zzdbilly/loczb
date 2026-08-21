@@ -137,14 +137,26 @@
           <span>Available for Native Android & AI Engineering</span>
         </div>
 
-        <h1 class="hero-title" style="font-size: clamp(2.5rem, 2rem + 3.5vw, 4.5rem); margin-bottom: 1.25rem;">
-          Mobile + AI, <span class="gradient-text">built for real</span>
+        <h1 class="hero-title" style="font-size: clamp(2.3rem, 1.8rem + 3.2vw, 4.4rem); margin-bottom: 1.25rem; line-height: 1.2;">
+          Mobile + AI, <br class="hero-br-sm"><span class="gradient-text hero-typewriter" id="hero-typewriter">Android 16 极致体验</span><span class="typewriter-cursor">|</span>
         </h1>
         
-        <p class="hero-description" style="font-size: clamp(1.05rem, 0.95rem + 0.5vw, 1.35rem); max-width: 680px; margin: 0 auto 2.25rem;">
+        <p class="hero-description" style="font-size: clamp(1.05rem, 0.95rem + 0.5vw, 1.35rem); max-width: 680px; margin: 0 auto 1.5rem;">
           专注原生 Android 架构与端侧 AI 落地。<br>
           把 AI Agent、端侧推理与实用工程做成真正丝滑、能用、有价值的产品。
         </p>
+
+        <!-- Hero Spotlight Quick Search Bar -->
+        <div class="hero-search-wrapper animate-on-scroll">
+          <div class="hero-search-bar" id="hero-search-trigger">
+            <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
+            </svg>
+            <input type="text" id="home-search-input" placeholder="即时检索 100 篇博文、6 大专栏、项目..." autocomplete="off">
+            <kbd class="search-kbd" id="search-kbd-badge">⌘K</kbd>
+          </div>
+          <div id="home-search-results" class="blog-search-results hero-search-dropdown"></div>
+        </div>
         
         <div class="hero-actions" style="justify-content: center; gap: 1rem; margin-bottom: 1rem;">
           <a href="projects/index.html" class="btn btn-primary">
@@ -183,21 +195,21 @@
             <div class="terminal-body">
               <div class="terminal-line">
                 <span class="terminal-prompt">➜</span>
-                <span class="terminal-text"><span class="terminal-highlight">whoami</span> — 张小猛 (loczb)，资深 Android & 全栈探索者</span>
+                <span class="terminal-text"><span class="terminal-highlight">whoami</span> — 张小猛 (loczb)，资深 Android 架构师 & 全栈探索者</span>
               </div>
               <div class="terminal-line">
                 <span class="terminal-prompt">➜</span>
-                <span class="terminal-text"><span class="terminal-highlight">current_focus</span> — Android 16, Jetpack Compose, 端侧 Gemini Nano, Hermes Agent 架构</span>
+                <span class="terminal-text"><span class="terminal-highlight">current_focus</span> — Android 16 系统演进 · Hermes Agent 工作区 · 端侧 Gemini Nano</span>
               </div>
               <div class="terminal-line">
                 <span class="terminal-prompt">➜</span>
-                <span class="terminal-text"><span class="terminal-highlight">engineering_motto</span> — 实用主义优先，拒绝空中楼阁，做好每一个微小交互与性能边界</span>
+                <span class="terminal-text"><span class="terminal-highlight">live_pulse</span> — 🟢 100 篇博文 · 6 大专栏 · 0ms 预加载 · Cloudflare 边缘秒开</span>
               </div>
             </div>
           </div>
 
           <div style="margin-top: 1.5rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem; border-top: 1px solid var(--color-border); padding-top: 1.25rem;">
-            <span style="font-size: var(--text-xs); color: var(--color-text-muted); font-family: var(--font-mono);">📍 深圳 · 持续探索与创作中</span>
+            <span style="font-size: var(--text-xs); color: var(--color-text-muted); font-family: var(--font-mono);">📍 深圳 · 持续探索与构建中</span>
             <a href="about/index.html" class="topic-tag" style="margin: 0; font-size: var(--text-xs);">了解完整背景 →</a>
           </div>
         </div>
@@ -210,10 +222,10 @@
             <p style="font-size: var(--text-xs); color: var(--color-text-secondary); line-height: 1.6;">原生底座 + 端云协同全栈赋能</p>
             
             <div class="bento-tech-pills">
-              <span class="bento-pill">🤖 Kotlin</span>
+              <span class="bento-pill">🤖 Kotlin 2.4+</span>
               <span class="bento-pill">📱 Jetpack Compose</span>
               <span class="bento-pill">🧠 Gemini Nano / LLM</span>
-              <span class="bento-pill">⚡ AI Agent (Hermes/OpenClaw)</span>
+              <span class="bento-pill">⚡ Hermes / OpenClaw</span>
               <span class="bento-pill">🌐 TypeScript / React</span>
               <span class="bento-pill">☁️ Cloudflare Workers</span>
               <span class="bento-pill">🛠️ DevOps & CI/CD</span>
@@ -221,7 +233,78 @@
           </div>
         </div>
 
-        <!-- Bento 3: Quantified Impact & Metrics (span 5) -->
+        <!-- Bento 3: 6 大旗舰专题专栏 (span 7) -->
+        <div class="spotlight-card bento-card-series animate-on-scroll">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem;">
+            <div style="font-size: var(--text-xs); font-weight: 700; color: var(--color-accent-primary); text-transform: uppercase; letter-spacing: 0.05em;">Curated Series</div>
+            <a href="blog/index.html?view=series" style="font-size: var(--text-xs); color: var(--color-accent-primary); text-decoration: none; font-weight: 600;">全部 6 大专栏 ➔</a>
+          </div>
+          <h3 style="font-size: var(--text-lg); font-weight: 700; margin-bottom: 0.5rem;">精选专题专栏</h3>
+          <p style="font-size: var(--text-xs); color: var(--color-text-secondary); line-height: 1.6; margin-bottom: 1rem;">系统化知识复利与硬核实战体系</p>
+          
+          <div class="bento-series-pills">
+            <a href="blog/posts/ai-助手定时任务投递指南从-agent-废话到-no-agent-脚本.html" class="bento-series-chip">
+              <span class="bento-series-icon">🤖</span>
+              <div class="bento-series-info">
+                <span class="bento-series-title">AI Agent 与本地大模型</span>
+                <span class="bento-series-meta">9 篇深度实战</span>
+              </div>
+            </a>
+            <a href="blog/posts/android-16-features.html" class="bento-series-chip">
+              <span class="bento-series-icon">📱</span>
+              <div class="bento-series-info">
+                <span class="bento-series-title">Android 16 演进与适配</span>
+                <span class="bento-series-meta">6 篇核心演进</span>
+              </div>
+            </a>
+            <a href="blog/posts/kotlin-coroutines-best-practices.html" class="bento-series-chip">
+              <span class="bento-series-icon">⚡</span>
+              <div class="bento-series-info">
+                <span class="bento-series-title">Kotlin 现代并发与架构</span>
+                <span class="bento-series-meta">7 篇协程 Flow</span>
+              </div>
+            </a>
+            <a href="blog/posts/程序员带娃把养孩子当成一个长期运维的系统工程.html" class="bento-series-chip">
+              <span class="bento-series-icon">💡</span>
+              <div class="bento-series-info">
+                <span class="bento-series-title">程序员的工程思维与成长</span>
+                <span class="bento-series-meta">6 篇深度思考</span>
+              </div>
+            </a>
+          </div>
+        </div>
+
+        <!-- Bento 4: 工程哲学与原则 (span 5) -->
+        <div class="spotlight-card bento-card-principles animate-on-scroll">
+          <div style="font-size: var(--text-xs); font-weight: 700; color: var(--color-accent-primary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">Engineering Principles</div>
+          <h3 style="font-size: var(--text-lg); font-weight: 700; margin-bottom: 0.75rem;">工程技术原则</h3>
+          
+          <div class="principles-list">
+            <div class="principle-item">
+              <span class="principle-bullet">🎯</span>
+              <div>
+                <strong>实用主义优先</strong>
+                <p>没有真实业务场景的架构是过度设计，解决真问题才产生价值。</p>
+              </div>
+            </div>
+            <div class="principle-item">
+              <span class="principle-bullet">⚡</span>
+              <div>
+                <strong>毫秒级极致体验</strong>
+                <p>响应速度与流畅手势是对用户的最高尊重，做好每一个交互边界。</p>
+              </div>
+            </div>
+            <div class="principle-item">
+              <span class="principle-bullet">🤖</span>
+              <div>
+                <strong>AI 实用化赋能</strong>
+                <p>从 Agent 废话到工具化闭环，让大模型真正嵌入日常生产力流。</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bento 5: Quantified Impact & Metrics (span 5) -->
         <div class="spotlight-card bento-card-metrics animate-on-scroll">
           <div style="font-size: var(--text-xs); font-weight: 700; color: var(--color-accent-primary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">Track Record</div>
           <h3 style="font-size: var(--text-lg); font-weight: 700;">量化产出与积累</h3>
@@ -232,8 +315,8 @@
               <div class="bento-metric-title">篇技术与思考博文</div>
             </div>
             <div class="bento-metric-item">
-              <div class="bento-metric-num">10</div>
-              <div class="bento-metric-title">大垂直技术分类</div>
+              <div class="bento-metric-num">6</div>
+              <div class="bento-metric-title">大体系化专题专栏</div>
             </div>
             <div class="bento-metric-item">
               <div class="bento-metric-num">5+</div>
@@ -246,7 +329,7 @@
           </div>
         </div>
 
-        <!-- Bento 4: Philosophy Quote (span 7) -->
+        <!-- Bento 6: Philosophy Quote (span 7) -->
         <div class="spotlight-card bento-card-quote animate-on-scroll">
           <div class="bento-quote-text">
             “写代码，做产品，也认真生活。<br>
@@ -474,6 +557,7 @@
 
   <!-- Scripts -->
   <script defer src="assets/js/main.js"></script>
+  <script defer src="assets/js/search.js"></script>
   <script defer src="assets/js/particles.js"></script>
   <script defer src="assets/js/time-progress.js"></script>
   <script>
