@@ -5,89 +5,72 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="robots" content="noindex">
-  <title>404 - 页面走丢了 | loczb</title>
+  <title>404 - 页面未找到 | 张小猛 - loczb</title>
   <link rel="icon" type="image/x-icon" href="/assets/images/favicon.ico">
   <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg">
   <meta name="theme-color" content="#3b82f6">
   <link rel="stylesheet" href="/assets/css/style.css">
-  <style>
-    .error-page {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 2rem;
-    }
-    .error-content { max-width: 480px; }
-    .error-code {
-      font-size: clamp(6rem, 20vw, 10rem);
-      font-weight: 800;
-      line-height: 1;
-      background: linear-gradient(135deg, var(--color-accent-primary), #8b5cf6);
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-      margin-bottom: 1rem;
-    }
-    .error-title {
-      font-size: 1.5rem;
-      font-weight: 600;
-      color: var(--color-text-primary);
-      margin-bottom: 0.5rem;
-    }
-    .error-desc {
-      color: var(--color-text-secondary);
-      margin-bottom: 2rem;
-      line-height: 1.6;
-    }
-    .error-actions {
-      display: flex;
-      gap: 1rem;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-    .error-actions a {
-      padding: 0.75rem 1.5rem;
-      border-radius: var(--radius-full);
-      font-size: 0.95rem;
-      font-weight: 500;
-      transition: all 0.2s;
-    }
-    .error-actions .btn-primary {
-      background: var(--color-accent-primary);
-      color: #fff;
-    }
-    .error-actions .btn-primary:hover {
-      background: var(--color-accent-hover, #2563eb);
-      transform: translateY(-1px);
-    }
-    .error-actions .btn-secondary {
-      border: 1px solid var(--color-border);
-      color: var(--color-text-secondary);
-      background: var(--color-bg-secondary);
-    }
-    .error-actions .btn-secondary:hover {
-      border-color: var(--color-border-hover);
-      color: var(--color-text-primary);
-    }
-  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&family=Noto+Sans+SC:wght@500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500&display=swap" media="print" onload="this.media='all'">
 </head>
 <body>
-  <div class="error-page">
-    <div class="error-content">
-      <div class="error-code">404</div>
-      <h1 class="error-title">页面走丢了</h1>
-      <p class="error-desc">你访问的页面不存在，可能已被移动或删除。<br>不如看看我写的博客吧。</p>
-      <div class="error-actions">
-        <a href="/blog/" class="btn-primary">浏览博客</a>
-        <a href="/" class="btn-secondary">回到首页</a>
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="/" class="nav-logo">loc<span>zb</span></a>
+      <div class="nav-links">
+        <a href="/" class="nav-link">首页</a>
+        <a href="/projects/" class="nav-link">项目</a>
+        <a href="/blog/" class="nav-link">博客</a>
+        <a href="/about/" class="nav-link">关于</a>
+      </div>
+      <button class="theme-toggle" aria-label="切换主题">
+        <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Particle Canvas Background -->
+  <canvas id="particle-canvas" class="particle-canvas"></canvas>
+
+  <main style="min-height: 85vh; display: flex; align-items: center; justify-content: center; padding: 4rem 1.5rem;">
+    <div class="container container-narrow" style="text-align: center;">
+      <div class="spotlight-card animate-on-scroll" style="padding: 3rem 2rem; max-width: 580px; margin: 0 auto;">
+        <div style="font-size: clamp(5rem, 15vw, 7.5rem); font-weight: 800; font-family: var(--font-mono); line-height: 1; background: var(--gradient-accent); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 1rem;">404</div>
+        <h1 style="font-size: 1.5rem; font-weight: 700; color: var(--color-text-primary); margin-bottom: 0.75rem;">页面未找到</h1>
+        <p style="color: var(--color-text-secondary); font-size: 0.95rem; line-height: 1.6; margin-bottom: 2rem;">
+          你访问的路径可能已被重构或迁移。<br>
+          不妨探索精选专题专栏或回到首页。
+        </p>
+
+        <div style="display: flex; gap: 0.85rem; justify-content: center; flex-wrap: wrap; margin-bottom: 2rem;">
+          <a href="/blog/" class="btn btn-primary">浏览 100 篇博客</a>
+          <a href="/blog/?view=series" class="btn btn-secondary" style="border-color: rgba(99, 102, 241, 0.4); color: var(--color-accent-primary);">📚 6 大专题专栏</a>
+          <a href="/" class="btn btn-ghost">回到首页</a>
+        </div>
+
+        <div style="border-top: 1px solid var(--color-border); padding-top: 1.25rem;">
+          <div style="font-size: 0.78rem; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem;">热门专题推荐</div>
+          <div style="display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap;">
+            <a href="/blog/posts/android-16-features.html" class="bento-pill" style="font-size: 0.78rem;">📱 Android 16 演进</a>
+            <a href="/blog/posts/从-openclaw-到-hermesai-agent-工作区迁移完整记录.html" class="bento-pill" style="font-size: 0.78rem;">🤖 AI Agent 实战</a>
+            <a href="/blog/posts/kotlin-coroutines-best-practices.html" class="bento-pill" style="font-size: 0.78rem;">⚡ Kotlin 协程</a>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
+  </main>
 
-  <!-- Cloudflare Web Analytics -->
-  <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "29e7cff6f37448989538e2165cb79187"}'></script>
+  <footer class="footer">
+    <div class="footer-inner">
+      <p class="footer-signature">写代码，做产品，也认真生活。</p>
+      <p class="footer-copyright">© 2026 张小猛</p>
+    </div>
+  </footer>
 
+  <script defer src="/assets/js/main.js"></script>
+  <script defer src="/assets/js/particles.js"></script>
 </body>
 </html>
