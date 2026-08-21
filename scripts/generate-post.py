@@ -248,7 +248,7 @@ def markdown_to_html(md_text):
         return pure_python_markdown_to_html(md_text)
 
 
-def generate_article(title, description, article_date, read_time, tags, content_html, category, custom_slug=None):
+def generate_article(title, description, article_date, read_time, tags, content_html, category, custom_slug=None, series=None):
     """生成文章 HTML"""
     template = load_template()
     slug = custom_slug if custom_slug else slugify(title)
@@ -319,6 +319,9 @@ def generate_article(title, description, article_date, read_time, tags, content_
     json_ld_str = json.dumps(json_ld_obj, ensure_ascii=False, indent=6)
     json_ld = f'    <script type="application/ld+json">\n{json_ld_str}\n    </script>'
     
+    # 专栏 Banner
+    series_html = f'<div class="series-banner spotlight-card"><div class="series-badge">📌 专栏收录</div><div class="series-title">{series}</div></div>' if series else ''
+    
     html = template
     html = html.replace('{{TITLE}}', f"{title} | 张小猛 - loczb")
     html = html.replace('{{DESCRIPTION}}', description)
@@ -328,6 +331,7 @@ def generate_article(title, description, article_date, read_time, tags, content_
     html = html.replace('{{ARTICLE_DATE}}', article_date)
     html = html.replace('{{ARTICLE_READ_TIME}}', f"{read_time} min read")
     html = html.replace('{{ARTICLE_TAGS}}', tags_html)
+    html = html.replace('{{SERIES_BANNER}}', series_html)
     html = html.replace('{{ARTICLE_CONTENT}}', content_html or '<p>文章内容...</p>')
     
     # 左侧面板统计信息
@@ -376,6 +380,7 @@ def parse_args(args):
         'read_time': None,
         'tags': None,
         'category': None,
+        'series': None,
         'slug': None,
         'content_file': None,
         'text': None,
@@ -390,7 +395,7 @@ def parse_args(args):
     while i < len(args):
         if args[i].startswith('--'):
             key = args[i][2:]
-            if key in ('date', 'read-time', 'tags', 'category', 'content', 'text', 'slug'):
+            if key in ('date', 'read-time', 'tags', 'category', 'series', 'content', 'text', 'slug'):
                 i += 1
                 if i < len(args):
                     if key == 'content':
@@ -398,19 +403,16 @@ def parse_args(args):
                     else:
                         mapped_key = key.replace('-', '_')
                     params[mapped_key] = args[i]
-            else:
-                print(f"❌ 未知参数: --{key}")
-                sys.exit(1)
+            i += 1
+        elif params['title'] is None:
+            params['title'] = args[i]
+            i += 1
+        elif not params['description']:
+            params['description'] = args[i]
+            i += 1
         else:
-            if params['title'] is None:
-                params['title'] = args[i]
-            elif params['description'] == '':
-                params['description'] = args[i]
-            else:
-                print(f"❌ 多余参数: {args[i]}")
-                sys.exit(1)
-        i += 1
-    
+            i += 1
+            
     return params
 
 
@@ -456,6 +458,7 @@ def main():
     read_time = params['read_time'] or frontmatter.get('read_time') or frontmatter.get('readtime')
     tags = params['tags'] or frontmatter.get('tags') or []
     category = params['category'] or frontmatter.get('category') or frontmatter.get('categories') or '开发'
+    series = params['series'] or frontmatter.get('series')
     custom_slug = params['slug'] or frontmatter.get('slug')
 
     if not title:
@@ -470,7 +473,7 @@ def main():
     print(f"   标签: {tags}")
 
     html, slug, tag_list, read_time = generate_article(
-        title, description, str(article_date), read_time, tags, content_html, category, custom_slug
+        title, description, str(article_date), read_time, tags, content_html, category, custom_slug, series
     )
 
     # 写入文件
