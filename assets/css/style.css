@@ -2633,8 +2633,9 @@ pre code {
   top: 0;
   left: 0;
   width: 0%;
-  height: 2.5px;
-  background: linear-gradient(90deg, var(--color-accent-primary), var(--color-accent-secondary));
+  height: 3px;
+  background: linear-gradient(90deg, #6366f1, #a855f7 50%, #38bdf8 100%);
+  box-shadow: 0 0 10px rgba(99, 102, 241, 0.5);
   z-index: 1001;
   transition: width 50ms ease-out;
   will-change: width;
