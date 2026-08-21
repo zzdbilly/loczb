@@ -121,6 +121,32 @@
           <span class="tag">Android</span>
         </div>
 
+        <!-- Series Card Widget -->
+        <div class="series-card spotlight-card">
+          <div class="series-header">
+            <div class="series-badge">
+              <span class="pulse-dot"></span>
+              <span>专题专栏</span>
+            </div>
+            <span class="series-progress">第 6 篇 · 共 7 篇</span>
+          </div>
+          <div class="series-name">《Kotlin 现代并发与响应式架构》</div>
+          <div class="series-desc">深入剖析 Kotlin 协程最佳实践、异常处理机制、Flow 背压策略、KMP 跨端与现代语言演进。</div>
+          <details class="series-accordion">
+            <summary class="series-summary">查看专栏全集目录 (7 篇文章) ▾</summary>
+            <ol class="series-list">
+            <li class="series-item"><a href="kotlin-coroutines-best-practices.html">[1/7] Kotlin Coroutines 最佳实践</a></li>
+            <li class="series-item"><a href="kotlin-coroutine-exception-handling.html">[2/7] Kotlin Coroutine 异常处理机制全面解析</a></li>
+            <li class="series-item"><a href="kotlin-flow-advanced.html">[3/7] Kotlin Flow 进阶：背压策略与共享流</a></li>
+            <li class="series-item"><a href="kotlin-240-features.html">[4/7] Kotlin 2.4.0 重磅发布：Context Parameters 稳定、Destructuring 升级、Lombok 插件进入 Alpha</a></li>
+            <li class="series-item"><a href="kotlin-multiplatform-practice.html">[5/7] Kotlin Multiplatform 实战：共享业务逻辑到 iOS</a></li>
+            <li class="series-item current-article"><span>[6/7] Kotlin Coroutines 并发实战：从入门到优雅的并发编程 (当前阅读)</span></li>
+            <li class="series-item"><a href="kotlin-scope-functions-实战选择五个函数一个决策树.html">[7/7] Kotlin Scope Functions 实战选择：五个函数一个决策树</a></li>
+            </ol>
+          </details>
+        </div>
+        <!-- /Series Card Widget -->
+
         <h2>引言：为什么并发编程这么难又这么重要</h2>
 <p>在移动端和服务器端开发里，并发几乎是绕不开的话题。网络请求、数据库读写、图片加载、复杂的计算任务……只要涉及异步，就必然要和并发打交道。而并发之所以难，是因为它把"顺序执行"这个我们大脑最习惯的模型打破了——你不再能确定哪一行代码先跑、哪一行后跑，数据共享时的竞争条件、死锁、资源泄漏等问题也随之而来。</p>
 <p>Java 时代我们靠线程池 + 回调处理异步，代码很快会陷入"回调地狱"；RxJava 用响应式流解决了回调嵌套，但学习曲线陡峭，且容易过度设计。而 Kotlin 推出的 <strong>Coroutines（协程）</strong> 则给出了一套更轻量、更贴近顺序代码心智模型的并发方案——你几乎可以像写同步代码一样写异步代码，同时性能和可读性兼得。</p>
@@ -755,6 +781,21 @@ class ApiClient(private val scope: CoroutineScope) {
     </div>
   </main>
 
+  
+      <!-- Series Nav Widget -->
+      <div class="series-nav">
+        
+        <a href="kotlin-multiplatform-practice.html" class="series-nav-btn series-nav-prev">
+          <span class="series-nav-sub">← 专栏上一篇 (5/7)</span>
+          <span class="series-nav-title">Kotlin Multiplatform 实战：共享业务逻辑到 iOS</span>
+        </a>
+        
+        <a href="kotlin-scope-functions-实战选择五个函数一个决策树.html" class="series-nav-btn series-nav-next">
+          <span class="series-nav-sub">专栏下一篇 (7/7) →</span>
+          <span class="series-nav-title">Kotlin Scope Functions 实战选择：五个函数一个决策树</span>
+        </a>
+      </div>
+      <!-- /Series Nav Widget -->
   <!-- Related Posts / Navigation -->
   <section class="section" style="padding-top: 0;">
     <div class="container container-narrow">
