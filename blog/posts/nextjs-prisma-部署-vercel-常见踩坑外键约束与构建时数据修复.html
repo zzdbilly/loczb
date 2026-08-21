@@ -325,7 +325,7 @@ INSERT INTO &quot;habits&quot; (...) SELECT ... WHERE NOT EXISTS (...);
 <h4>构建日志</h4>
 <p>Vercel 的构建日志只能通过 Dashboard 查看，如果 <code>prisma db push</code> 失败，日志会显示完整的 Prisma 错误信息（包括 Rust 源码的 stack trace），这对定位问题很有帮助。</p>
 <h4>部署目标</h4>
-<p>Vercel 部署的 URL 不是固定的。<code>zest.vercel.app</code> 是 production URL，但每次构建后的 preview URL 不同。验证生产环境时用 <code>zest.vercel.app</code> 而不是 preview URL。</p>
+<p>Vercel 部署的 URL 不是固定的。production URL 与每次构建生成的 preview URL 不同，验证生产环境时要用 production URL 而不是 preview URL。</p>
 <h2>更深层的问题</h2>
 <p>虽然外键约束问题解决了，但 <code>habitId = "default"</code> 本身是一个技术债。理想情况应该：</p>
 <h3>1. 数据迁移</h3>
