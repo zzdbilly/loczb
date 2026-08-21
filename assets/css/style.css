@@ -4382,6 +4382,31 @@ pre code.hljs {
   font-family: var(--font-mono);
 }
 
+/* 移动端分页：防止多个按钮被 flex 挤成竖排细长胶囊 */
+.pagination-btn {
+  white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  .pagination {
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 2rem;
+    padding: 1.25rem 0;
+  }
+  .pagination-btn {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.82rem;
+  }
+  /* 数字按钮做成均匀小圆，与上一页/下一页区分 */
+  .pagination-btn:not(.pagination-prev):not(.pagination-next) {
+    min-width: 2.1rem;
+    padding-left: 0;
+    padding-right: 0;
+    text-align: center;
+  }
+}
+
 /* ========================================================
    MODERN TIMELINE ARCHIVE VIEW
    ======================================================== */
