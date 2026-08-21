@@ -623,6 +623,59 @@ function initLightbox() {
   });
 }
 
+// Instant Page Prefetch: Zero-dependency Hover & Touch preloader for 0ms page navigation
+function initInstantPrefetch() {
+  if (navigator.connection && (navigator.connection.saveData || /(2|3)g/.test(navigator.connection.effectiveType))) {
+    return;
+  }
+
+  const prefetchedUrls = new Set();
+  let hoverTimer = null;
+
+  function isEligible(anchor) {
+    if (!anchor || !anchor.href) return false;
+    if (anchor.origin !== window.location.origin) return false;
+    if (anchor.hash && anchor.pathname === window.location.pathname) return false;
+    if (anchor.hasAttribute('download') || anchor.getAttribute('rel') === 'external' || anchor.dataset.noInstant) return false;
+    if (/\.(pdf|zip|tar|gz|apk|dmg|iso|mp4|mp3|png|jpg|jpeg|gif|webp|svg|xml|json)$/i.test(anchor.pathname)) return false;
+    return true;
+  }
+
+  function prefetch(url) {
+    if (prefetchedUrls.has(url)) return;
+    prefetchedUrls.add(url);
+
+    const link = document.createElement('link');
+    link.rel = 'prefetch';
+    link.href = url;
+    link.as = 'document';
+    document.head.appendChild(link);
+  }
+
+  document.addEventListener('mouseover', (e) => {
+    const anchor = e.target.closest('a');
+    if (!anchor || !isEligible(anchor)) return;
+
+    const url = anchor.href;
+    hoverTimer = setTimeout(() => {
+      prefetch(url);
+    }, 65);
+  }, { passive: true });
+
+  document.addEventListener('mouseout', (e) => {
+    if (hoverTimer) {
+      clearTimeout(hoverTimer);
+      hoverTimer = null;
+    }
+  }, { passive: true });
+
+  document.addEventListener('touchstart', (e) => {
+    const anchor = e.target.closest('a');
+    if (!anchor || !isEligible(anchor)) return;
+    prefetch(anchor.href);
+  }, { passive: true });
+}
+
 // Initialize Everything
 document.addEventListener('DOMContentLoaded', () => {
   initCountUp();
@@ -630,9 +683,9 @@ document.addEventListener('DOMContentLoaded', () => {
   initScrollProgress();
   initBackToTop();
   setActiveNavLink();
-  // Blog filters are fully handled by blog-list.js — no action needed here.
   initCodeCopy();
   initLightbox();
+  initInstantPrefetch();
   
   // Add loading animation to page
   document.body.classList.add('loaded');
