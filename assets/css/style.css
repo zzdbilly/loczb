@@ -4929,6 +4929,79 @@ pre code.hljs {
   border-top: 1px solid var(--color-border);
 }
 
+/* Hero Dynamic Typewriter */
+.typewriter-cursor {
+  display: inline-block;
+  font-weight: 300;
+  color: var(--color-accent-primary);
+  animation: blinkCursor 0.9s infinite;
+  margin-left: 2px;
+}
+
+@keyframes blinkCursor {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* Hero Spotlight Quick Search */
+.hero-search-wrapper {
+  position: relative;
+  max-width: 580px;
+  margin: 1.75rem auto 2rem;
+  width: 100%;
+}
+
+.hero-search-bar {
+  display: flex;
+  align-items: center;
+  background: rgba(24, 24, 27, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-full);
+  padding: 0.65rem 1.25rem;
+  gap: 0.75rem;
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: text;
+}
+
+[data-theme="light"] .hero-search-bar {
+  background: rgba(255, 255, 255, 0.85);
+  border-color: rgba(0, 0, 0, 0.12);
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.1);
+}
+
+.hero-search-bar:focus-within, .hero-search-bar:hover {
+  border-color: var(--color-accent-primary);
+  box-shadow: 0 15px 35px -10px rgba(99, 102, 241, 0.35), 0 0 0 1px var(--color-accent-primary);
+  transform: translateY(-2px);
+}
+
+.hero-search-bar input {
+  flex: 1;
+  background: none;
+  border: none;
+  outline: none;
+  color: var(--color-text-primary);
+  font-size: 0.95rem;
+  font-family: inherit;
+}
+
+.hero-search-bar input::placeholder {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+.hero-search-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  z-index: 100;
+  text-align: left;
+}
+
 /* ========================================================
    BENTO GRID & SPOTLIGHT MODERN UI
    ======================================================== */
@@ -5004,6 +5077,108 @@ pre code.hljs {
   justify-content: space-between;
 }
 
+.bento-card-series {
+  grid-column: span 7;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.bento-series-pills {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.85rem;
+}
+
+@media (max-width: 640px) {
+  .bento-series-pills {
+    grid-template-columns: 1fr;
+  }
+}
+
+.bento-series-chip {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-xl);
+  background: var(--color-bg-tertiary);
+  border: 1px solid var(--color-border);
+  text-decoration: none;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.bento-series-chip:hover {
+  background: var(--color-accent-subtle);
+  border-color: var(--color-accent-primary);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px var(--color-accent-glow);
+}
+
+.bento-series-icon {
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.bento-series-info {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.bento-series-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bento-series-meta {
+  font-size: 0.72rem;
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+  margin-top: 0.15rem;
+}
+
+.bento-card-principles {
+  grid-column: span 5;
+}
+
+.principles-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  margin-top: 0.5rem;
+}
+
+.principle-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  font-size: 0.85rem;
+}
+
+.principle-bullet {
+  font-size: 1.1rem;
+  line-height: 1.2;
+}
+
+.principle-item strong {
+  color: var(--color-text-primary);
+  display: block;
+  font-size: 0.85rem;
+  margin-bottom: 0.15rem;
+}
+
+.principle-item p {
+  color: var(--color-text-secondary);
+  font-size: 0.78rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
 .bento-card-metrics {
   grid-column: span 5;
 }
@@ -5014,6 +5189,17 @@ pre code.hljs {
   flex-direction: column;
   justify-content: center;
   background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(17, 17, 19, 0.9) 100%);
+}
+
+@media (max-width: 1024px) {
+  .bento-card-main,
+  .bento-card-radar,
+  .bento-card-series,
+  .bento-card-principles,
+  .bento-card-metrics,
+  .bento-card-quote {
+    grid-column: span 12;
+  }
 }
 
 /* Status Pill with Pulsing Dot */
