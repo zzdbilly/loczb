@@ -17,9 +17,13 @@
     var params = new URLSearchParams(window.location.search);
     var pageParam = params.get('page');
     var filterParam = params.get('filter');
+    var viewParam = params.get('view');
     if (filterParam) currentFilter = filterParam;
     if (pageParam && !isNaN(pageParam)) {
       currentPage = Math.max(1, parseInt(pageParam));
+    }
+    if (viewParam === 'series' || viewParam === 'archive') {
+      setTimeout(function() { toggleBlogView(viewParam); }, 10);
     }
   }
 
@@ -178,6 +182,113 @@
       .catch(e => console.error('加载归档失败:', e));
   }
 
+  const SERIES_DATA = [
+    {
+      icon: '🤖',
+      title: 'AI Agent 与本地大模型实战',
+      desc: '从平台工作区迁移、定时自动化脚本投递，到 MCP 协议集成、本地 RAG 知识库与端侧大模型落地实录。',
+      articles: [
+        { url: 'posts/ai-助手定时任务投递指南从-agent-废话到-no-agent-脚本.html', title: 'AI 助手定时任务投递指南：从 Agent 废话到 No-Agent 脚本' },
+        { url: 'posts/从-openclaw-到-hermesai-agent-工作区迁移完整记录.html', title: '从 OpenClaw 到 Hermes：AI Agent 工作区迁移完整记录' },
+        { url: 'posts/openclaw-guide.html', title: 'OpenClaw 从入门到进阶实战指南' },
+        { url: 'posts/local-rag-ollama.html', title: '基于 Ollama 构建本地 RAG 检索增强系统' },
+        { url: 'posts/mcp-server-deep-dive.html', title: 'Model Context Protocol (MCP) 架构与服务端实战' }
+      ],
+      totalCount: 9
+    },
+    {
+      icon: '📱',
+      title: 'Android 16 深度演进与系统适配',
+      desc: '系统梳理 Android 16 核心新特性、前台服务与后台任务约束、通知系统重构与性能深度调优。',
+      articles: [
+        { url: 'posts/android-16-features.html', title: 'Android 16 新特性详解：开发者需要知道的 8 件事' },
+        { url: 'posts/android-16-notifications.html', title: 'Android 16 通知系统新 API 详解' },
+        { url: 'posts/android-16-background-tasks.html', title: 'Android 16 后台任务新限制：开发者迁移指南' },
+        { url: 'posts/android-16-foreground-service-constraints.html', title: 'Android 16 前台服务类型与约束详解' },
+        { url: 'posts/android-performance-optimization.html', title: 'Android 性能优化实战：从卡顿分析到内存泄漏排查' }
+      ],
+      totalCount: 6
+    },
+    {
+      icon: '⚡',
+      title: 'Kotlin 现代并发与响应式架构',
+      desc: '深入剖析 Kotlin 协程最佳实践、异常处理机制、Flow 背压策略、KMP 跨端与现代语言演进。',
+      articles: [
+        { url: 'posts/kotlin-coroutines-best-practices.html', title: 'Kotlin Coroutines 协程最佳实践' },
+        { url: 'posts/kotlin-coroutine-exception-handling.html', title: 'Kotlin Coroutine 异常处理机制全面解析' },
+        { url: 'posts/kotlin-flow-advanced.html', title: 'Kotlin Flow 进阶：背压策略与共享流' },
+        { url: 'posts/kotlin-240-features.html', title: 'Kotlin 2.4.0 新特性全景' },
+        { url: 'posts/kotlin-multiplatform-practice.html', title: 'Kotlin Multiplatform 实战：共享业务逻辑到 iOS' }
+      ],
+      totalCount: 7
+    },
+    {
+      icon: '🎨',
+      title: 'Jetpack Compose 现代 UI 实战',
+      desc: '掌握 Compose 动画体系、Navigation 路由解耦与最新版本特性，构建高性能声明式 UI。',
+      articles: [
+        { url: 'posts/compose-april-2026-update.html', title: 'Jetpack Compose April 2026 Update 深度解读' },
+        { url: 'posts/compose-navigation-guide.html', title: 'Jetpack Compose Navigation 进阶指南：从路由设计到深层链接' },
+        { url: 'posts/jetpack-compose-animation.html', title: 'Jetpack Compose 动画系统实战：从基础到复杂手势联动' }
+      ],
+      totalCount: 3
+    },
+    {
+      icon: '🛠️',
+      title: '全栈工程化与高性能架构',
+      desc: '聚焦构建提速、静态化极致性能、容器化运维、数据库 WAL 索引优化与高可用网关设计。',
+      articles: [
+        { url: 'posts/static-blog-performance-optimization-59mb.html', title: '纯静态个人博客性能调优实录：从 5.9MB 到 320KB' },
+        { url: 'posts/gradle-build-acceleration-5min-to-30sec.html', title: 'Gradle 构建加速实战：从 5 分钟到 30 秒' },
+        { url: 'posts/docker-compose-best-practices.html', title: 'Docker Compose 生产级多容器编排最佳实践' },
+        { url: 'posts/sqlite-wal-performance.html', title: 'SQLite WAL 模式深度解析与性能调优' },
+        { url: 'posts/postgresql-index-optimization.html', title: 'PostgreSQL 索引优化实战：从慢查询排查到复合索引设计' }
+      ],
+      totalCount: 6
+    },
+    {
+      icon: '💡',
+      title: '程序员的工程思维与成长',
+      desc: '将系统工程思维融入带娃、技术写作、认知进阶与生活节奏，构建可持续的长期复利成长模式。',
+      articles: [
+        { url: 'posts/程序员带娃把养孩子当成一个长期运维的系统工程.html', title: '程序员带娃：把养孩子当成一个长期运维的系统工程' },
+        { url: 'posts/why-tech-people-should-write.html', title: '技术人为什么要坚持写技术博客' },
+        { url: 'posts/how-tech-people-learn-new-tech.html', title: '技术人如何高效学习一门全新技术栈' },
+        { url: 'posts/programmers-should-learn-to-unplug.html', title: '程序员要学会「断联」：信息过载时代的注意力保卫战' },
+        { url: 'posts/soft-skills-tech-people-overlook.html', title: '技术人最容易忽视的 5 项软技能' }
+      ],
+      totalCount: 6
+    }
+  ];
+
+  function renderSeries() {
+    var container = document.getElementById('series-view');
+    if (!container) return;
+    var html = '';
+    SERIES_DATA.forEach(function(series) {
+      var linksHtml = series.articles.map(function(a, idx) {
+        return '<div class="series-bento-link-item"><span style="color: var(--color-accent-primary); font-weight:600;">' + (idx + 1) + '.</span> <a href="' + a.url + '">' + a.title + '</a></div>';
+      }).join('');
+
+      html += '<div class="series-bento-card spotlight-card">';
+      html += '  <div>';
+      html += '    <div class="series-bento-header">';
+      html += '      <span class="series-bento-icon">' + series.icon + '</span>';
+      html += '      <span class="series-bento-count">共 ' + series.totalCount + ' 篇</span>';
+      html += '    </div>';
+      html += '    <h3 class="series-bento-title">' + series.title + '</h3>';
+      html += '    <p class="series-bento-desc">' + series.desc + '</p>';
+      html += '    <div class="series-bento-articles">' + linksHtml + '</div>';
+      html += '  </div>';
+      html += '  <div class="series-bento-footer">';
+      html += '    <a href="' + series.articles[0].url + '">开始阅读专栏 ➔</a>';
+      html += '  </div>';
+      html += '</div>';
+    });
+    container.innerHTML = html;
+    if (window.initSpotlightCards) window.initSpotlightCards();
+  }
+
   function renderArchive() {
     var container = document.getElementById('archive-view');
     if (!container || !archiveData) return;
@@ -212,22 +323,40 @@
     var listContainer = document.querySelector('.blog-list-container');
     var pagination = document.getElementById('pagination');
     var archiveView = document.getElementById('archive-view');
+    var seriesView = document.getElementById('series-view');
+    var heading = document.getElementById('blog-filter-title');
+
     var listBtn = document.querySelector('[data-view="list"]');
+    var seriesBtn = document.querySelector('[data-view="series"]');
     var archiveBtn = document.querySelector('[data-view="archive"]');
+
     if (listContainer) listContainer.classList.remove('hidden');
     if (pagination) pagination.classList.remove('hidden');
     if (archiveView) archiveView.classList.remove('active');
+    if (seriesView) seriesView.classList.remove('active');
+
     if (listBtn) listBtn.classList.remove('active');
+    if (seriesBtn) seriesBtn.classList.remove('active');
     if (archiveBtn) archiveBtn.classList.remove('active');
+
     if (view === 'archive') {
       if (listContainer) listContainer.classList.add('hidden');
       if (pagination) pagination.classList.add('hidden');
       if (archiveView) archiveView.classList.add('active');
       if (archiveBtn) archiveBtn.classList.add('active');
+      if (heading) heading.textContent = '时间归档';
       if (!archiveData) loadArchive().then(renderArchive).catch(function(e) { console.error(e); });
       else renderArchive();
+    } else if (view === 'series') {
+      if (listContainer) listContainer.classList.add('hidden');
+      if (pagination) pagination.classList.add('hidden');
+      if (seriesView) seriesView.classList.add('active');
+      if (seriesBtn) seriesBtn.classList.add('active');
+      if (heading) heading.textContent = '专题专栏 (6)';
+      renderSeries();
     } else {
       if (listBtn) listBtn.classList.add('active');
+      if (heading) heading.textContent = currentFilter === 'all' ? '全部文章' : currentFilter;
     }
   }
 

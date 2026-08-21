@@ -138,8 +138,9 @@
       <div class="blog-list-header-bar">
         <h2 class="blog-list-heading" id="blog-filter-title">全部文章</h2>
         <div class="blog-view-toggle">
-          <button class="view-toggle-btn active" data-view="list" onclick="toggleBlogView('list')">文章列表</button>
-          <button class="view-toggle-btn" data-view="archive" onclick="toggleBlogView('archive')">归档</button>
+          <button class="view-toggle-btn active" data-view="list" onclick="toggleBlogView('list')">全部文章</button>
+          <button class="view-toggle-btn" data-view="series" onclick="toggleBlogView('series')">📚 专题专栏</button>
+          <button class="view-toggle-btn" data-view="archive" onclick="toggleBlogView('archive')">时间归档</button>
         </div>
       </div>
       <div class="blog-list-container" id="blog-list">
@@ -2350,6 +2351,8 @@
       <div class="pagination" id="pagination"></div>
       <!-- Archive View -->
       <div id="archive-view" class="archive-view"></div>
+      <!-- Series View -->
+      <div id="series-view" class="series-view"></div>
     </div>
   </section>
   </main>

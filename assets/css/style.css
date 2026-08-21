@@ -4627,6 +4627,127 @@ pre code.hljs {
 }
 
 /* ========================================================
+   SERIES VIEW BENTO GRID (BLOG LIST)
+   ======================================================== */
+.series-view {
+  display: none;
+}
+
+.series-view.active {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+  animation: fadeIn 0.3s ease;
+}
+
+@media (max-width: 640px) {
+  .series-view.active {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+}
+
+.series-bento-card {
+  padding: 1.5rem;
+  border-radius: var(--radius-2xl);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+}
+
+.series-bento-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.85rem;
+}
+
+.series-bento-icon {
+  font-size: 1.75rem;
+  line-height: 1;
+}
+
+.series-bento-count {
+  font-size: 0.78rem;
+  font-family: var(--font-mono);
+  color: var(--color-accent-primary);
+  background: var(--color-accent-subtle);
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--radius-full);
+  border: 1px solid rgba(99, 102, 241, 0.2);
+}
+
+.series-bento-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  font-family: var(--font-serif);
+  color: var(--color-text-primary);
+  margin-bottom: 0.5rem;
+  line-height: 1.35;
+}
+
+.series-bento-desc {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  margin-bottom: 1.25rem;
+}
+
+.series-bento-articles {
+  border-top: 1px solid var(--color-border);
+  padding-top: 0.85rem;
+  margin-bottom: 1rem;
+}
+
+.series-bento-link-item {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  margin-bottom: 0.45rem;
+  font-size: 0.82rem;
+  color: var(--color-text-secondary);
+}
+
+.series-bento-link-item a {
+  color: var(--color-text-primary);
+  text-decoration: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition: color 0.2s;
+}
+
+.series-bento-link-item a:hover {
+  color: var(--color-accent-primary);
+  text-decoration: underline;
+}
+
+.series-bento-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-accent-primary);
+  padding-top: 0.5rem;
+}
+
+.series-bento-footer a {
+  color: inherit;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.series-bento-footer a:hover {
+  text-decoration: underline;
+}
+
+/* ========================================================
    MODERN TIMELINE ARCHIVE VIEW
    ======================================================== */
 .archive-view {
