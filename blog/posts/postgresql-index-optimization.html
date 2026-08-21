@@ -123,6 +123,31 @@
           <span class="tag">数据库</span>
         </div>
 
+        <!-- Series Card Widget -->
+        <div class="series-card spotlight-card">
+          <div class="series-header">
+            <div class="series-badge">
+              <span class="pulse-dot"></span>
+              <span>专题专栏</span>
+            </div>
+            <span class="series-progress">第 5 篇 · 共 6 篇</span>
+          </div>
+          <div class="series-name">《全栈工程化与高性能架构》</div>
+          <div class="series-desc">聚焦构建提速、静态化极致性能、容器化运维、数据库 WAL 索引优化与高可用网关设计。</div>
+          <details class="series-accordion">
+            <summary class="series-summary">查看专栏全集目录 (6 篇文章) ▾</summary>
+            <ol class="series-list">
+            <li class="series-item"><a href="static-blog-performance-optimization-59mb.html">[1/6] 静态博客性能优化实战：从 59MB 到精简高效</a></li>
+            <li class="series-item"><a href="gradle-build-acceleration-5min-to-30sec.html">[2/6] Gradle 构建加速全攻略：从 5 分钟到 30 秒</a></li>
+            <li class="series-item"><a href="docker-compose-best-practices.html">[3/6] Docker Compose 最佳实践</a></li>
+            <li class="series-item"><a href="sqlite-wal-performance.html">[4/6] SQLite 进阶：WAL 模式与性能优化</a></li>
+            <li class="series-item current-article"><span>[5/6] PostgreSQL 索引优化实战 (当前阅读)</span></li>
+            <li class="series-item"><a href="nginx-reverse-proxy-tuning.html">[6/6] Nginx 反向代理性能调优：从入门到生产</a></li>
+            </ol>
+          </details>
+        </div>
+        <!-- /Series Card Widget -->
+
         <p>数据库性能优化中，索引是最重要的手段——没有之一。PostgreSQL 提供了丰富的索引类型和灵活的索引策略，但用错了比不用更糟：不仅查询没变快，写入还变慢了，磁盘空间也白白浪费。</p>
 
       <p>本文从索引类型对比开始，逐步深入复合索引设计、部分索引、覆盖索引、执行计划分析，最后通过真实慢查询案例串联全部知识。</p>
@@ -1161,6 +1186,23 @@ SELECT * FROM orders WHERE id &gt; 999980 ORDER BY id LIMIT 21;
     </div>
   </main>
 
+  
+      
+      
+      <!-- Series Nav Widget -->
+      <div class="series-nav">
+        
+        <a href="sqlite-wal-performance.html" class="series-nav-btn series-nav-prev">
+          <span class="series-nav-sub">← 专栏上一篇 (4/6)</span>
+          <span class="series-nav-title">SQLite 进阶：WAL 模式与性能优化</span>
+        </a>
+        
+        <a href="nginx-reverse-proxy-tuning.html" class="series-nav-btn series-nav-next">
+          <span class="series-nav-sub">专栏下一篇 (6/6) →</span>
+          <span class="series-nav-title">Nginx 反向代理性能调优：从入门到生产</span>
+        </a>
+      </div>
+      <!-- /Series Nav Widget -->
   <!-- Related Posts / Navigation -->
   <section class="section" style="padding-top: 0;">
     <div class="container container-narrow">

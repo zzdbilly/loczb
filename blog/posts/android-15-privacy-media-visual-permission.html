@@ -123,6 +123,31 @@
           <span class="tag">迁移</span>
         </div>
 
+        <!-- Series Card Widget -->
+        <div class="series-card spotlight-card">
+          <div class="series-header">
+            <div class="series-badge">
+              <span class="pulse-dot"></span>
+              <span>专题专栏</span>
+            </div>
+            <span class="series-progress">第 5 篇 · 共 6 篇</span>
+          </div>
+          <div class="series-name">《Android 16 深度演进与系统适配》</div>
+          <div class="series-desc">系统梳理 Android 16 核心新特性、前台服务与后台任务约束、通知系统重构与性能深度调优。</div>
+          <details class="series-accordion">
+            <summary class="series-summary">查看专栏全集目录 (6 篇文章) ▾</summary>
+            <ol class="series-list">
+            <li class="series-item"><a href="android-16-features.html">[1/6] Android 16 新特性详解：开发者需要知道的 8 件事</a></li>
+            <li class="series-item"><a href="android-16-notifications.html">[2/6] Android 16 通知系统新 API 详解</a></li>
+            <li class="series-item"><a href="android-16-background-tasks.html">[3/6] Android 16 后台任务新限制：开发者迁移指南</a></li>
+            <li class="series-item"><a href="android-16-foreground-service-constraints.html">[4/6] Android 16 前台服务类型全新限制：类型强制匹配与迁移指南</a></li>
+            <li class="series-item current-article"><span>[5/6] Android 15 隐私新特性：所有文件都需要 MEDIA_VISUAL_PERMISSION (当前阅读)</span></li>
+            <li class="series-item"><a href="android-performance-optimization.html">[6/6] Android 性能优化完整实战：从启动到渲染</a></li>
+            </ol>
+          </details>
+        </div>
+        <!-- /Series Card Widget -->
+
         <p>Android 15 引入了一个影响深远的隐私变更：<strong>所有访问用户媒体文件的操作都必须通过新的权限模型和系统选择器</strong>。这不仅仅是增加了一个权限声明那么简单，而是从根本上改变了应用访问媒体文件的方式——从「应用主动扫描」变成了「用户主动选择」。</p>
 
 <p>如果你的应用涉及相册、文件选择、图片上传等功能，这个变更将直接影响你。本文从原理到实战，完整拆解这次变更的来龙去脉和适配方案。</p>
@@ -694,6 +719,23 @@ fun PhotoPickerScreen() {
     </div>
   </main>
 
+  
+      
+      
+      <!-- Series Nav Widget -->
+      <div class="series-nav">
+        
+        <a href="android-16-foreground-service-constraints.html" class="series-nav-btn series-nav-prev">
+          <span class="series-nav-sub">← 专栏上一篇 (4/6)</span>
+          <span class="series-nav-title">Android 16 前台服务类型全新限制：类型强制匹配与迁移指南</span>
+        </a>
+        
+        <a href="android-performance-optimization.html" class="series-nav-btn series-nav-next">
+          <span class="series-nav-sub">专栏下一篇 (6/6) →</span>
+          <span class="series-nav-title">Android 性能优化完整实战：从启动到渲染</span>
+        </a>
+      </div>
+      <!-- /Series Nav Widget -->
   <!-- Related Posts / Navigation -->
   <section class="section" style="padding-top: 0;">
     <div class="container container-narrow">

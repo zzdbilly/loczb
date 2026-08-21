@@ -470,12 +470,24 @@ function updateServiceWorker() {
   console.log(`✅ sw.js: updated cache version to ${newSwVersion}`);
 }
 
+function buildSeries() {
+  const seriesScript = path.join(__dirname, 'build-series.js');
+  if (fs.existsSync(seriesScript)) {
+    try {
+      require('child_process').execSync(`node "${seriesScript}"`, { stdio: 'inherit' });
+    } catch (e) {
+      console.error('构建专栏失败:', e);
+    }
+  }
+}
+
 // ═══════════════════════════════════════════════
 // Execute all phases
 // ═══════════════════════════════════════════════
 
 console.log('\n🔨 CI 全量索引重建开始...\n');
 
+buildSeries();
 rebuildBlogIndex();
 rebuildHomePage();
 generateSitemap();

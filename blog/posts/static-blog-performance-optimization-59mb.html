@@ -118,6 +118,31 @@
           
         </div>
 
+        <!-- Series Card Widget -->
+        <div class="series-card spotlight-card">
+          <div class="series-header">
+            <div class="series-badge">
+              <span class="pulse-dot"></span>
+              <span>专题专栏</span>
+            </div>
+            <span class="series-progress">第 1 篇 · 共 6 篇</span>
+          </div>
+          <div class="series-name">《全栈工程化与高性能架构》</div>
+          <div class="series-desc">聚焦构建提速、静态化极致性能、容器化运维、数据库 WAL 索引优化与高可用网关设计。</div>
+          <details class="series-accordion">
+            <summary class="series-summary">查看专栏全集目录 (6 篇文章) ▾</summary>
+            <ol class="series-list">
+            <li class="series-item current-article"><span>[1/6] 静态博客性能优化实战：从 59MB 到精简高效 (当前阅读)</span></li>
+            <li class="series-item"><a href="gradle-build-acceleration-5min-to-30sec.html">[2/6] Gradle 构建加速全攻略：从 5 分钟到 30 秒</a></li>
+            <li class="series-item"><a href="docker-compose-best-practices.html">[3/6] Docker Compose 最佳实践</a></li>
+            <li class="series-item"><a href="sqlite-wal-performance.html">[4/6] SQLite 进阶：WAL 模式与性能优化</a></li>
+            <li class="series-item"><a href="postgresql-index-optimization.html">[5/6] PostgreSQL 索引优化实战</a></li>
+            <li class="series-item"><a href="nginx-reverse-proxy-tuning.html">[6/6] Nginx 反向代理性能调优：从入门到生产</a></li>
+            </ol>
+          </details>
+        </div>
+        <!-- /Series Card Widget -->
+
         <h2>为什么需要性能优化</h2>
 <p>很多人觉得静态网站（如 GitHub Pages）天然就快，不需要优化。但实际情况是，随着内容增长，没有维护的静态站会积累大量问题：死文件占空间、内联样式膨胀、缓存策略缺失、404 错误拖慢加载……</p>
 <p>我的博客运行在 GitHub Pages 上，经过半年的内容积累，仓库膨胀到 59MB，66 篇文章每篇都带着 4KB 重复的内联样式，文章页引用着不存在的 JS 文件，社交分享图指向 404 图片。这些问题单个看起来不大，但叠加起来严重影响用户体验和 SEO。</p>
@@ -623,6 +648,19 @@ lines.append(f&#39;      &lt;description&gt;{xml_escape(description)}&lt;/descri
     </div>
   </main>
 
+  
+      
+      
+      <!-- Series Nav Widget -->
+      <div class="series-nav">
+        <div></div>
+        
+        <a href="gradle-build-acceleration-5min-to-30sec.html" class="series-nav-btn series-nav-next">
+          <span class="series-nav-sub">专栏下一篇 (2/6) →</span>
+          <span class="series-nav-title">Gradle 构建加速全攻略：从 5 分钟到 30 秒</span>
+        </a>
+      </div>
+      <!-- /Series Nav Widget -->
   <!-- Related Posts / Navigation -->
   <section class="section" style="padding-top: 0;">
     <div class="container container-narrow">
