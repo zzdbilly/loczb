@@ -455,6 +455,21 @@ function xmlEscape(str) {
     .replace(/'/g, '&apos;');
 }
 
+function updateServiceWorker() {
+  const SW_PATH = path.join(CWD, 'sw.js');
+  if (!fs.existsSync(SW_PATH)) return;
+  let swCode = fs.readFileSync(SW_PATH, 'utf-8');
+  const now = new Date();
+  const yyyy = now.getFullYear();
+  const mm = String(now.getMonth() + 1).padStart(2, '0');
+  const dd = String(now.getDate()).padStart(2, '0');
+  const dateStr = `${yyyy}${mm}${dd}`;
+  const newSwVersion = `${dateStr}-${Math.floor(Date.now() / 1000).toString().slice(-4)}`;
+  swCode = swCode.replace(/const SW_VERSION = '[^']+';/, `const SW_VERSION = '${newSwVersion}';`);
+  fs.writeFileSync(SW_PATH, swCode, 'utf-8');
+  console.log(`✅ sw.js: updated cache version to ${newSwVersion}`);
+}
+
 // ═══════════════════════════════════════════════
 // Execute all phases
 // ═══════════════════════════════════════════════
@@ -465,5 +480,6 @@ rebuildBlogIndex();
 rebuildHomePage();
 generateSitemap();
 generateRSS();
+updateServiceWorker();
 
 console.log('\n🎉 完成！');
