@@ -15,6 +15,14 @@
       <pubDate>Sun, 23 Aug 2026 00:00:00 +0800</pubDate>
     </item>
     <item>
+      <title>程序员的注意力管理：比时间更稀缺的资源</title>
+      <link>https://709527.xyz/blog/posts/程序员的注意力管理比时间更稀缺的资源.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/程序员的注意力管理比时间更稀缺的资源.html</guid>
+      <description>时间对人人平等，注意力的质量却天差地别。把注意力当作可管理的系统资源：看清泄漏点，用深度时段、批处理、通知分级和精力匹配拿回有效算力。</description>
+      <category>思考</category>
+      <pubDate>Sun, 23 Aug 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
       <title>AI 助手定时任务投递指南：从 Agent 废话到 No-Agent 脚本</title>
       <link>https://709527.xyz/blog/posts/ai-助手定时任务投递指南从-agent-废话到-no-agent-脚本.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/ai-助手定时任务投递指南从-agent-废话到-no-agent-脚本.html</guid>
@@ -157,14 +165,6 @@
       <description>从 HuggingFace 的 tokenizer 到 LLM 推理引擎，从向量数据库到数据处理管道——Rust 正在改写 AI 基础设施的底层规则。本文深入分析 Rust 为何崛起、谁在用、以及如何融入你的技术栈。</description>
       <category>开发</category>
       <pubDate>Tue, 14 Jul 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>从 TDD 到 TDD²：测试驱动开发的进阶实践</title>
-      <link>https://709527.xyz/blog/posts/从-tdd-到-tdd²测试驱动开发的进阶实践.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/从-tdd-到-tdd²测试驱动开发的进阶实践.html</guid>
-      <description>打破红-绿-重构的刻板印象，聊聊三角测量、转换优先级、测试替身的正确用法，以及那些让你能在实战中用好 TDD 的经验</description>
-      <category>开发</category>
-      <pubDate>Sun, 12 Jul 2026 00:00:00 +0800</pubDate>
     </item>
   </channel>
 </rss>
