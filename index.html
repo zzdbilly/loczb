@@ -170,7 +170,7 @@
               <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
               <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
             </svg>
-            阅读 <!-- POSTS_COUNT -->100<!-- /POSTS_COUNT --> 篇博文
+            阅读 <!-- POSTS_COUNT -->101<!-- /POSTS_COUNT --> 篇博文
           </a>
         </div>
       </div>
@@ -311,7 +311,7 @@
           
           <div class="bento-metrics-grid">
             <div class="bento-metric-item">
-              <div class="bento-metric-num"><!-- POSTS_COUNT -->100<!-- /POSTS_COUNT --></div>
+              <div class="bento-metric-num"><!-- POSTS_COUNT -->101<!-- /POSTS_COUNT --></div>
               <div class="bento-metric-title">篇技术与思考博文</div>
             </div>
             <div class="bento-metric-item">
@@ -450,26 +450,44 @@
         <article class="blog-card-featured animate-on-scroll" id="home-featured-post" style="display: block;">
           <div class="blog-card-header">
             <div class="blog-card-meta">
+              <span class="blog-date">2026-08-23</span>
+              <span>·</span>
+              <span class="blog-read-time">14 min</span>
+            </div>
+            <span class="blog-list-tag">思考</span>
+          </div>
+          <h3 class="blog-card-title">
+            <a href="blog/posts/如何维持好自己的健康写给程序员的长期运维指南.html">如何维持好自己的健康：写给程序员的长期运维指南</a>
+          </h3>
+          <p class="blog-card-excerpt">久坐、熬夜、高压是程序员的职业三件套，但健康和代码一样可以工程化管理。从颈椎腰椎到睡眠饮食，从运动体检到心理减压，一份可以直接落地的健康维护方案。...</p>
+          <div class="blog-card-tags">
+            <span class="tech-tag">健康</span>
+            <span class="tech-tag">生活方式</span>
+            <span class="tech-tag">程序员</span>
+          </div>
+        </article>
+        
+        <!-- 最新文章列表 -->
+                <div class="blog-list">
+        <article class="blog-mini-card animate-on-scroll" data-category="开发" data-page="1">
+          <div class="blog-mini-card-header">
+            <div class="blog-list-meta">
               <span class="blog-date">2026-08-20</span>
               <span>·</span>
               <span class="blog-read-time">18 min</span>
             </div>
             <span class="blog-list-tag">开发</span>
           </div>
-          <h3 class="blog-card-title">
+          <h3 class="blog-mini-card-title">
             <a href="blog/posts/ai-助手定时任务投递指南从-agent-废话到-no-agent-脚本.html">AI 助手定时任务投递指南：从 Agent 废话到 No-Agent 脚本</a>
           </h3>
-          <p class="blog-card-excerpt">一份基于真实踩坑经验的定时任务投递实战：LLM 生成 vs 脚本直投，如何让机器人每天准时、干净、以「回复」样式把日报送到你面前。...</p>
-          <div class="blog-card-tags">
+          <p class="blog-mini-card-excerpt">一份基于真实踩坑经验的定时任务投递实战：LLM 生成 vs 脚本直投，如何让机器人每天准时、干净、以「回复」样式把日报送到你面前。</p>
+          <div class="blog-mini-card-tags">
             <span class="tech-tag">AI</span>
             <span class="tech-tag">DevOps</span>
             <span class="tech-tag">前端</span>
-            <span class="tech-tag">开发</span>
           </div>
         </article>
-        
-        <!-- 最新文章列表 -->
-                <div class="blog-list">
         <article class="blog-mini-card animate-on-scroll" data-category="思考" data-page="1">
           <div class="blog-mini-card-header">
             <div class="blog-list-meta">
@@ -487,25 +505,6 @@
             <span class="tech-tag">程序员</span>
             <span class="tech-tag">带娃</span>
             <span class="tech-tag">工程思维</span>
-          </div>
-        </article>
-        <article class="blog-mini-card animate-on-scroll" data-category="DevOps" data-page="1">
-          <div class="blog-mini-card-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-08-18</span>
-              <span>·</span>
-              <span class="blog-read-time">12 min</span>
-            </div>
-            <span class="blog-list-tag">DevOps</span>
-          </div>
-          <h3 class="blog-mini-card-title">
-            <a href="blog/posts/从-openclaw-到-hermesai-agent-工作区迁移完整记录.html">从 OpenClaw 到 Hermes：AI Agent 工作区迁移完整记录</a>
-          </h3>
-          <p class="blog-mini-card-excerpt">一次真实的 AI Agent 平台迁移复盘：身份、记忆、技能、项目与定时任务的全量迁移方向、踩坑与验证方法</p>
-          <div class="blog-mini-card-tags">
-            <span class="tech-tag">OpenClaw</span>
-            <span class="tech-tag">Hermes</span>
-            <span class="tech-tag">AI Agent</span>
           </div>
         </article>
         </div>
@@ -608,6 +607,15 @@
     // 首页随机选择代表文章
     const posts = [
       {
+        url: 'blog/posts/如何维持好自己的健康写给程序员的长期运维指南.html',
+        title: '如何维持好自己的健康：写给程序员的长期运维指南',
+        date: '2026-08-23',
+        readTime: '14 min',
+        category: '思考',
+        category2: '思考',
+        desc: '久坐、熬夜、高压是程序员的职业三件套，但健康和代码一样可以工程化管理。从颈椎腰椎到睡眠饮食，从运动体检到心理减压，一份可以直接落地的健康维护方案。'
+      },
+      {
         url: 'blog/posts/ai-助手定时任务投递指南从-agent-废话到-no-agent-脚本.html',
         title: 'AI 助手定时任务投递指南：从 Agent 废话到 No-Agent 脚本',
         date: '2026-08-20',
@@ -687,15 +695,6 @@
         category: 'Kotlin',
         category2: 'Kotlin',
         desc: '深入掌握 Kotlin 协程：协程与线程的区别、Scope、Dispatcher、结构化并发、取消协作、异常处理与并发控制实战'
-      },
-      {
-        url: 'blog/posts/jetpack-compose-性能优化实战从卡顿到丝滑的-12-个技巧.html',
-        title: 'Jetpack Compose 性能优化实战：从卡顿到丝滑的 12 个技巧',
-        date: '2026-08-07',
-        readTime: '12 min',
-        category: 'Android',
-        category2: 'Android',
-        desc: '全面梳理 Jetpack Compose 性能优化的核心技巧，涵盖重组优化、状态管理、延迟布局、图片加载、基线配置文件等实战经验'
       }
     ];
     
