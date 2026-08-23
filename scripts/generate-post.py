@@ -376,7 +376,7 @@ def parse_args(args):
     params = {
         'title': None,
         'description': '',
-        'article_date': datetime.now().strftime('%Y-%m-%d'),
+        'article_date': None,  # 保持 None：无指定时回退到 Frontmatter date，最后才是今天
         'read_time': None,
         'tags': None,
         'category': None,
@@ -398,10 +398,8 @@ def parse_args(args):
             if key in ('date', 'read-time', 'tags', 'category', 'series', 'content', 'text', 'slug'):
                 i += 1
                 if i < len(args):
-                    if key == 'content':
-                        mapped_key = 'content_file'
-                    else:
-                        mapped_key = key.replace('-', '_')
+                    # --date 写入 article_date（main() 读取的键）；其余按 - 转 _ 映射
+                    mapped_key = 'article_date' if key == 'date' else key.replace('-', '_')
                     params[mapped_key] = args[i]
             i += 1
         elif params['title'] is None:
