@@ -7,6 +7,14 @@
     <language>zh-CN</language>
     <atom:link href="https://709527.xyz/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>如何维持好自己的健康：写给程序员的长期运维指南</title>
+      <link>https://709527.xyz/blog/posts/如何维持好自己的健康写给程序员的长期运维指南.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/如何维持好自己的健康写给程序员的长期运维指南.html</guid>
+      <description>久坐、熬夜、高压是程序员的职业三件套，但健康和代码一样可以工程化管理。从颈椎腰椎到睡眠饮食，从运动体检到心理减压，一份可以直接落地的健康维护方案。</description>
+      <category>思考</category>
+      <pubDate>Sun, 23 Aug 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
       <title>AI 助手定时任务投递指南：从 Agent 废话到 No-Agent 脚本</title>
       <link>https://709527.xyz/blog/posts/ai-助手定时任务投递指南从-agent-废话到-no-agent-脚本.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/ai-助手定时任务投递指南从-agent-废话到-no-agent-脚本.html</guid>
@@ -157,14 +165,6 @@
       <description>打破红-绿-重构的刻板印象，聊聊三角测量、转换优先级、测试替身的正确用法，以及那些让你能在实战中用好 TDD 的经验</description>
       <category>开发</category>
       <pubDate>Sun, 12 Jul 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>医生不会告诉你的健康习惯：从睡眠到饮食的系统性方案</title>
-      <link>https://709527.xyz/blog/posts/医生不会告诉你的健康习惯从睡眠到饮食的系统性方案.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/医生不会告诉你的健康习惯从睡眠到饮食的系统性方案.html</guid>
-      <description>从睡眠、饮食、运动、数字健康、环境、心理六个维度，建立科学且可执行的健康习惯体系</description>
-      <category>思考</category>
-      <pubDate>Thu, 09 Jul 2026 00:00:00 +0800</pubDate>
     </item>
   </channel>
 </rss>
