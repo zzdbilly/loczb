@@ -7,6 +7,14 @@
     <language>zh-CN</language>
     <atom:link href="https://709527.xyz/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>心学不是鸡汤：一个程序员的阳明心学实践手册</title>
+      <link>https://709527.xyz/blog/posts/心学不是鸡汤一个程序员的阳明心学实践手册.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/心学不是鸡汤一个程序员的阳明心学实践手册.html</guid>
+      <description>王阳明说「知行合一」「事上磨练」，这些四百年前的话，恰好是今天对抗焦虑、内耗和拖延最硬核的方法论。从程序员视角拆解心学的核心概念与实践方式。</description>
+      <category>思考</category>
+      <pubDate>Mon, 24 Aug 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
       <title>程序员的注意力管理：比时间更稀缺的资源</title>
       <link>https://709527.xyz/blog/posts/程序员的注意力管理比时间更稀缺的资源.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/程序员的注意力管理比时间更稀缺的资源.html</guid>
@@ -157,14 +165,6 @@
       <description>2026年7月，Rust首次杀进TIOBE前十。从语言进化到生态扩张，从行业应用到未来展望，全面复盘Rust凭什么走到这一步。</description>
       <category>系统编程</category>
       <pubDate>Sun, 19 Jul 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>Rust 在 AI 基础设施中的崛起：为什么大模型框架纷纷拥抱 Rust</title>
-      <link>https://709527.xyz/blog/posts/rust-在-ai-基础设施中的崛起为什么大模型框架纷纷拥抱-rust.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/rust-在-ai-基础设施中的崛起为什么大模型框架纷纷拥抱-rust.html</guid>
-      <description>从 HuggingFace 的 tokenizer 到 LLM 推理引擎，从向量数据库到数据处理管道——Rust 正在改写 AI 基础设施的底层规则。本文深入分析 Rust 为何崛起、谁在用、以及如何融入你的技术栈。</description>
-      <category>开发</category>
-      <pubDate>Tue, 14 Jul 2026 00:00:00 +0800</pubDate>
     </item>
   </channel>
 </rss>
