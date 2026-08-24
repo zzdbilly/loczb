@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>心学不是鸡汤：一个程序员的阳明心学实践手册 | 张小猛 - loczb</title>
+    <meta name="description" content="王阳明说「知行合一」「事上磨练」，这些四百年前的话，恰好是今天对抗焦虑、内耗和拖延最硬核的方法论。从程序员视角拆解心学的核心概念与实践方式。">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="心学不是鸡汤：一个程序员的阳明心学实践手册 | 张小猛 - loczb">
+    <meta property="og:description" content="王阳明说「知行合一」「事上磨练」，这些四百年前的话，恰好是今天对抗焦虑、内耗和拖延最硬核的方法论。从程序员视角拆解心学的核心概念与实践方式。">
+    <meta property="og:url" content="https://709527.xyz/blog/posts/心学不是鸡汤一个程序员的阳明心学实践手册.html">
+    <meta property="og:type" content="article">
+        <meta property="og:image" content="../../assets/images/og-image.png">
+    <meta property="og:site_name" content="loczb">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="心学不是鸡汤：一个程序员的阳明心学实践手册 | 张小猛 - loczb">
+    <meta name="twitter:description" content="王阳明说「知行合一」「事上磨练」，这些四百年前的话，恰好是今天对抗焦虑、内耗和拖延最硬核的方法论。从程序员视角拆解心学的核心概念与实践方式。">
+
+
+        <script type="application/ld+json">
+{
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "心学不是鸡汤：一个程序员的阳明心学实践手册",
+      "description": "王阳明说「知行合一」「事上磨练」，这些四百年前的话，恰好是今天对抗焦虑、内耗和拖延最硬核的方法论。从程序员视角拆解心学的核心概念与实践方式。",
+      "image": "https://709527.xyz/assets/images/og-image.png",
+      "author": {
+            "@type": "Person",
+            "name": "张小猛",
+            "url": "https://709527.xyz/about/"
+      },
+      "publisher": {
+            "@type": "Organization",
+            "name": "loczb",
+            "logo": {
+                  "@type": "ImageObject",
+                  "url": "https://709527.xyz/assets/images/favicon.svg"
+            }
+      },
+      "datePublished": "2026-08-24 09:00:00",
+      "dateModified": "2026-08-24 09:00:00",
+      "url": "https://709527.xyz/blog/posts/心学不是鸡汤一个程序员的阳明心学实践手册.html",
+      "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://709527.xyz/blog/posts/心学不是鸡汤一个程序员的阳明心学实践手册.html"
+      },
+      "keywords": "心学, 王阳明, 哲学, 个人成长, 思维方式",
+      "articleSection": "思考",
+      "timeRequired": "PT14M",
+      "inLanguage": "zh-CN"
+}
+    </script>
+
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&family=Noto+Sans+SC:wght@500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500&display=swap" media="print" onload="this.media='all'">
+    <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
+    <link rel="alternate icon" href="../../assets/images/favicon.ico">
+    <link rel="canonical" href="https://709527.xyz/blog/posts/心学不是鸡汤一个程序员的阳明心学实践手册.html">
+</head>
+<body>
+  <!-- Loading -->
+  <div class="loading">
+    <div class="loading-spinner"></div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../../index.html" class="nav-logo">
+        loc<span>zb</span>
+      </a>
+      <button class="nav-toggle" aria-label="打开菜单" aria-expanded="false" aria-controls="nav-links-menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <div class="nav-overlay"></div>
+      <ul class="nav-links" id="nav-links-menu">
+        <li><a href="../../index.html" class="nav-link">首页</a></li>
+        <li><a href="../../projects/index.html" class="nav-link">项目</a></li>
+        <li><a href="../index.html" class="nav-link active">博客</a></li>
+        <li><a href="../../about/index.html" class="nav-link">关于</a></li>
+      </ul>
+      <button class="theme-toggle" aria-label="切换主题" title="切换亮/暗模式">
+        <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+        <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+      </button>
+    </div>
+  </nav>
+  <!-- Particle Canvas Background -->
+  <canvas id="particle-canvas" class="particle-canvas"></canvas>
+
+  <div class="scroll-progress"></div>
+
+  <main class="section" style="padding-bottom: 0; padding-top: var(--space-4xl);">
+    <div class="container container-narrow">
+      <a href="../index.html" class="back-link">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        返回博客列表
+      </a>
+
+      <article class="post-content">
+        <h1>心学不是鸡汤：一个程序员的阳明心学实践手册</h1>
+
+        <div class="post-meta">
+          <span>📅 2026-08-24 09:00:00</span>
+          <span>⏱️ 14 min read</span>
+          <span>👤 张小猛</span>
+        </div>
+
+        <div class="post-tags">
+          <span class="tag">心学</span>
+          <span class="tag">王阳明</span>
+          <span class="tag">哲学</span>
+          <span class="tag">个人成长</span>
+          <span class="tag">思维方式</span>
+        </div>
+
+        
+
+        <h2>从一次线上事故说起</h2>
+<p>凌晨两点,告警响了。你盯着屏幕上滚动的错误日志,心里同时进行着两件事:一件是排查故障,另一件是对自己的攻击——"这个 bug 是不是我上周改出来的?""我怎么又没考虑到边界情况?"</p>
+<p>故障本身三十分钟解决了,但对自我的攻击持续到了第二天下午。</p>
+<p>后来我读《传习录》,看到王阳明讲一句话:</p>
+<blockquote>
+<p>"人须在事上磨,方立得住,方能静亦定,动亦定。"</p>
+</blockquote>
+<p>突然意识到,那次凌晨的痛苦,问题不在事故,而在于我把"处理事故"和"评判自己"搅在了一起。而把这两件事分开——这正是心学四百多年前就在解决的问题。</p>
+<p>这篇文章不打算把心学讲成玄学,也不打算把它熬成鸡汤。我想用工程师的习惯,把它当成一套<strong>可以运行的方法论</strong>来拆解:它解决什么问题,核心机制是什么,怎么在日常里跑起来。</p>
+<h2>心学到底在解决什么问题</h2>
+<p>先说结论:<strong>心学解决的是"知道但做不到"的问题。</strong></p>
+<p>我们每个人都知道一堆道理:</p>
+<ul>
+<li>知道该早睡,还是刷手机到一点</li>
+<li>知道该专注,还是忍不住切窗口</li>
+<li>知道该跟同事好好沟通,话到嘴边还是带了刺</li>
+<li>知道该锻炼,办了年卡去了四次</li>
+</ul>
+<p>传统解释是"意志力不够",于是解决方案变成各种自我压榨。而王阳明的诊断完全不同,他说:</p>
+<blockquote>
+<p>"未有知而不行者。知而不行,只是未知。"</p>
+</blockquote>
+<p>翻译过来:你以为你知道,其实你不知道。真正知道早睡好处的人,自然会早睡;一边熬夜一边说"我知道熬夜不好",说明这个"知道"只停留在信息层面,没有进入行动层面。</p>
+<p>这个诊断很锋利。它把问题从"我意志薄弱"重新定义为"我的认知是假的"。前者让人自责,后者让人改进——这是完全不同的两条路。</p>
+<h2>格物:一场著名的失败实验</h2>
+<p>要理解心学,得先理解它反对什么。</p>
+<p>王阳明年轻时笃信朱熹的"格物致知"——道理存在于外部事物中,一格一格地去研究,穷尽事物之理,就能成为圣人。他决定从眼前的竹子格起,对着竹子坐了七天,想格出竹子之理。</p>
+<p>结果是:病倒了,一无所获。</p>
+<p>这就是著名的"阳明格竹"。这次失败让他后来得出一个颠覆性判断:<strong>理不在心外</strong>。</p>
+<blockquote>
+<p>"心即理也。天下又有心外之事、心外之理乎?"</p>
+</blockquote>
+<p>注意,这句话常被误解为唯心主义的"我想怎样就怎样"。但它实际的主张更接近一种工程视角:<strong>所有价值判断、所有意义、所有"应该",都不存在于客观世界里,而是产生于人的认知系统内部。</strong></p>
+<p>竹子里有植物学的理(细胞、纤维、光合作用),但没有"做人的理"。你面对一个技术选型,数据都在那里,但"哪个更适合我们的团队"这个判断,永远是你结合自身处境做出的——理不在选项里,在你做判断的心里。</p>
+<p>用现代话说:客观世界提供事实,<strong>意义由认知系统生成</strong>。搞不清这一点的人,会永远向外寻找标准答案,然后在找不到时陷入迷茫。</p>
+<h2>知行合一:不是口号,是一个运行模型</h2>
+<p>"知行合一"大概是被误用最多的四个字。它经常被理解为"说到做到""理论与实践相结合"——这都不是王阳明的原意。</p>
+<p>原意更激进:<strong>知和行本来就是同一件事的两面,不是两件事。</strong></p>
+<blockquote>
+<p>"知是行的主意,行是知的功夫;知是行之始,行是知之成。"</p>
+<p>"见好色属知,好好色属行。只见那好色时已自好了,不是见了后又立个心去好。"</p>
+</blockquote>
+<p>你看到一个漂亮的界面截图,"觉得它好看"和"喜欢它"是同时发生的,不存在先判断再执行的延迟。王阳明认为,一切真知都是这样:认知本身就带着行动倾向。</p>
+<p>反过来说,如果你对一件事毫无行动倾向,比如对"写单元测试很重要"毫无感觉,那说明你对它的"知"还没建立起来——你只是记住了这句话,就像缓存了一个从未被命中的键。</p>
+<h3>用程序员的方式理解知行合一</h3>
+<p>如果把人看成一个系统,可以粗略地建立这样一个模型:</p>
+<ul>
+<li><strong>表层的知</strong>:能复述的道理,存放在"语言记忆"里,调用成本高,和决策系统几乎不连通</li>
+<li><strong>真知</strong>:已经写入决策系统的认知,遇到触发条件自动执行,不需要意志力介入</li>
+<li><strong>学习的过程</strong>:就是把认知从表层搬运到决策系统里的过程,而搬运的唯一通道是<strong>重复的实际执行</strong></li>
+</ul>
+<p>这解释了为什么"听过很多道理,依然过不好这一生":道理停留在语言记忆里,从未被执行过,所以永远不会进入决策系统。</p>
+<p>也解释了为什么"事后诸葛亮"式的复盘没用:复盘如果只产生新的语言表述("下次要注意"),而不改变下一次的实际行为,它就只是往缓存里又写了一条死数据。</p>
+<p>真正的复盘必须回答一个问题:<strong>下一次遇到同样的情境,我的第一个动作是什么?</strong>答不出具体动作的复盘,都是假复盘。</p>
+<h2>致良知:你体内有个默认的裁判</h2>
+<p>心学体系里最核心的概念是"致良知"。</p>
+<p>"良知"不是道德优越感,王阳明给它下的定义非常朴素:</p>
+<blockquote>
+<p>"见父自然知孝,见兄自然知弟,见孺子入井自然知恻隐。"</p>
+</blockquote>
+<p>就是你看到小孩快摔倒时那一瞬间心里"咯噔"一下的东西。不经过推理,不经过利益计算,直接给出的那个反应。王阳明认为每个人体内都有这么一个即时、诚实的评估系统,它会在每个当下给出真实的判断——这件事该不该做,这句话该不该说,你这个操作稳不稳。</p>
+<p>问题在于,这个信号通常很微弱,而且经常被另外两种声音覆盖:</p>
+<ol>
+<li><strong>欲望的声音</strong>:"再刷十分钟""这个需求糊弄一下也能过"</li>
+<li><strong>恐惧的声音</strong>:"现在提出异议会不会得罪人""承认是我改坏的会不会很难堪"</li>
+</ol>
+<p>所谓"致良知","致"是推极、落实的意思——就是<strong>把微弱的真实判断从噪音里捞出来,并且照着执行</strong>。</p>
+<h3>一个可操作的识别方法</h3>
+<p>怎么区分良知和噪音?我自己总结了三个特征:</p>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>良知</th>
+<th>欲望/恐惧</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>出现时机</td>
+<td>事情发生的当下,第一反应</td>
+<td>往往滞后半拍,或者提前很久开始盘算</td>
+</tr>
+<tr>
+<td>语言形态</td>
+<td>简短、具体:"这句不该回"</td>
+<td>复杂、绕圈:"但是万一……那么就……"</td>
+</tr>
+<tr>
+<td>事后感受</td>
+<td>平静,哪怕结果不好</td>
+<td>隐隐不安,需要反复自我说服</td>
+</tr>
+</tbody>
+</table>
+<p>第三条最有鉴别力。做了违心的事之后那种挥之不去的不适感——王阳明称之为违背良知的直接证据。他说:</p>
+<blockquote>
+<p>"此心光明,亦复何言。"</p>
+</blockquote>
+<p>反过来,心里不光明的时候,你是知道的。</p>
+<h2>事上磨练:拒绝悬空的正念</h2>
+<p>心学最实用主义的部分,是坚决反对脱离具体事务去"修心"。</p>
+<p>有官员对王阳明说,公务繁忙,没时间做学问。王阳明的回答是:</p>
+<blockquote>
+<p>"我何尝教尔离了簿书讼狱,悬空去讲学?尔既有官司之事,便从官司的事上为学,才是真格物。"</p>
+</blockquote>
+<p>翻译成现代场景:<strong>不要指望先调整好心态再去干活,干活本身就是调心的唯一途径。</strong></p>
+<p>这一点对当代人特别重要。我们熟悉的各种减压方法——冥想、正念、休假——都有一个隐含假设:压力源在工作里,所以修心要在工作外。王阳明会反驳:离开工作修出来的平静是脆弱的,一回到工位就碎。真正的定力只能在具体的事里长出来。</p>
+<h3>事上磨练的具体做法</h3>
+<p>结合日常,我认为"事上磨练"可以落成三个习惯:</p>
+<p><strong>第一,把每次烦躁当观察样本。</strong></p>
+<p>改一个改不动的小 bug 时,内心升起的烦躁,本身就是练习材料。做法很简单:注意到烦躁 → 不压制也不跟随 → 问一句"它在提醒我什么?"有时答案是"该换个思路了",有时答案是"你饿了"。烦躁从干扰变成了诊断信息。</p>
+<p><strong>第二,在最不想做的事上练。</strong></p>
+<p>王阳明专门讲过"人须在事上磨",而且强调专挑自己怕的事:</p>
+<blockquote>
+<p>"人若着实用功,随人毁谤,随人欺慢,处处得益。"</p>
+</blockquote>
+<p>评审被人提了几十条意见、方案被当众否掉、背锅——这些时刻才是修行现场。顺境里谁都心平气和,测不出任何东西;逆境里的第一反应,才暴露真实水平。</p>
+<p><strong>第三,降低颗粒度。</strong></p>
+<p>"磨练"听起来宏大,实际操作单位很小。今天说话比昨天少带了一次情绪,今天面对批评先问了细节而不是先辩护,这就完成了一次。心学不追求顿悟,它明确说工夫是连续的:</p>
+<blockquote>
+<p>"我辈致知,只是各随分限所及。今日良知见在此如此,只随今日所知扩充到底。"</p>
+</blockquote>
+<p>今天的版本比昨天的版本好一点,持续集成,仅此而已。</p>
+<h2>破心中贼:内耗的根源与解法</h2>
+<p>王阳明有一句流传很广的话:</p>
+<blockquote>
+<p>"破山中贼易,破心中贼难。"</p>
+</blockquote>
+<p>说的是剿匪的经历:山里的贼好平定,心里的贼难对付。放到今天,"心中贼"最好的对应物就是<strong>内耗</strong>——事情还没发生,内心已经打完了三百回合。</p>
+<p>内耗的典型结构是这样的:一个待办事项在脑子里反复出现 → 想到它的难度 → 逃避 → 产生愧疚 → 愧疚消耗更多能量 → 更没有能量去做 → 事项再次出现,循环加深。</p>
+<p>心学对这个循环的诊断出奇地精准。王阳明讲:</p>
+<blockquote>
+<p>"悔悟是去病之药,然以改之为贵。若留滞于中,则又因药发病。"</p>
+</blockquote>
+<p>意思是:自责是药,但药效只在"改正"那一刻兑现;把自责留在心里反复咀嚼,药本身就变成了病。</p>
+<p>这段话值得逐字读。"留滞于中,则因药发病"——<strong>过度自责不是责任心强,它是另一种形式的逃避</strong>:用感受痛苦代替实际行动,因为感受痛苦比行动容易得多。</p>
+<p>解法也藏在心学的框架里:既然"知而不行只是未知",那么打破内耗的方式不是说服自己"别想了",而是<strong>立刻做一个最小的动作</strong>。行动一旦发生,知与行的回路就接通了,内耗失去燃料。</p>
+<p>具体到操作:任务在脑子里第三次出现时,强制自己做一个两分钟内的启动动作——打开文件、写下第一行、发出那条消息。不求做完,只求启动。</p>
+<h2>此心不动:随机应变的底气</h2>
+<p>有人问王阳明用兵之术,他的回答是:</p>
+<blockquote>
+<p>"用兵何术?但学问纯笃,养得此心不动,乃术尔。……此心不动,即为术。"</p>
+</blockquote>
+<p>打仗没有特别的技巧,唯一的技巧是"此心不动"。这不是麻木,而是<strong>不被恐慌和杂念劫持,从而能把注意力全部投给当前局面</strong>。</p>
+<p>这对做技术的人有直接的启发。线上重大故障时,水平接近的两个工程师,差别往往不在知识量,而在:一个人的心被"完蛋了要担责了"占据,另一个人的心还在问题上。后者不是天赋,是练出来的——每一次小事故都当作"此心不动"的训练场,日积月累。</p>
+<p>王阳明还有八个字概括这种状态:</p>
+<blockquote>
+<p>"此心不动,随机而动。"</p>
+</blockquote>
+<p>心不动,不是不动,而是<strong>等到了正确的时机、看清了正确的方向再动</strong>。不动的时候不是浪费,是在积累对局面的观察。急着表态、急着动手、急着下结论,多数是心动了的产物。</p>
+<h2>常见的三个误读</h2>
+<p>把心学当方法论用,要先排掉几个常见的坑。</p>
+<h3>误读一:心即理 = 主观臆断</h3>
+<p>"心即理"常被曲解成"我觉得对就是对"。但王阳明说的"心"恰恰剔除了私欲和恐惧之后的那个判断系统。他反复强调省察克治,要求人对自己的每个念头做审查。拿"心即理"给自己的固执找理论依据,正好站在了心学的反面。</p>
+<h3>误读二:知行合一 = 执行力口号</h3>
+<p>很多管理培训把"知行合一"讲成"要有执行力"。但知行合一首先是个<strong>诊断工具</strong>,不是一个励志词。它的用法是:当你发现自己"知道但做不到"时,回头检查那个"知"是不是真的成立——是真理解了,还是只是记住了句子。它让你怀疑自己的认知,而不是鞭策自己的行动。</p>
+<h3>误读三:致良知 = 跟着感觉走</h3>
+<p>"跟着感觉走"跟着的多半是欲望和情绪,而良知恰恰要穿过欲望和情绪才能被听见。二者的区别前面给了鉴别表。简单说:<strong>感觉要你舒服,良知要你诚实</strong>,这两件事经常不一致。</p>
+<h2>一份最小可行的心学实践清单</h2>
+<p>最后,把前面的内容收敛成一个可以直接跑起来的清单。心学的好处是它从不要求你出家或闭关,所有功夫都在日常生活里。</p>
+<p><strong>每日:</strong></p>
+<ol>
+<li>睡前花三分钟回顾当天的一个"心动时刻"(烦躁/得意/恐惧),问:当时良知怎么说?我照做了吗?</li>
+<li>任务在脑内出现第三次时,立即做一个两分钟启动动作</li>
+<li>自责出现时,把它转换为一个具体修正动作,然后停止咀嚼</li>
+</ol>
+<p><strong>每周:</strong></p>
+<ol start="4">
+<li>找一件一直回避的事,主动做掉它(专挑怕的事练)</li>
+<li>复盘一次冲突或失误,输出"下次的第一个动作",而不是"下次要注意"</li>
+</ol>
+<p><strong>原则:</strong></p>
+<ol start="6">
+<li>区分表层知与真知:凡是没带来行为改变的"懂了",标记为未懂</li>
+<li>记住药与病的比喻:悔悟的价值以改正兑现,留滞即发病</li>
+</ol>
+<p>这份清单没有任何一条需要额外的时间预算,它们全都寄生在你本来就要经历的事情上——这正是"事上磨练"的本义:修行不在别处,就在你今天要开的那几个会、要改的那几行代码里。</p>
+<h2>写在最后</h2>
+<p>四百多年前,王阳明在贵州龙场——一个瘴气弥漫、语言不通、前途尽毁的贬谪之地——完成了"龙场悟道"。他悟出的东西并不神秘:圣人之道不在外部标准里,自己的心就是最终裁判。</p>
+<p>对今天的我们,这个结论依然锋利。在一个评价体系极度嘈杂的时代——绩效、排名、别人的生活、算法推送的焦虑——心学提供的不是逃避,而是一套<strong>向内校准</strong>的方法:你的判断系统是可信的,前提是你勤加保养它、诚实倾听它、并在每一件小事上训练它。</p>
+<blockquote>
+<p>"你未看此花时,此花与汝心同归于寂;你来看此花时,则此花颜色一时明白起来。"</p>
+</blockquote>
+<p>花一直在那里。区别在于你是否真的在看。</p>
+      </article>
+    </div>
+  </main>
+
+  <!-- Related Posts / Navigation -->
+  <section class="section" style="padding-top: 0;">
+    <div class="container container-narrow">
+      <hr style="border: none; border-top: 1px solid var(--color-border); margin: var(--space-3xl) 0;">
+
+      <div class="blog-topics" style="margin-bottom: var(--space-xl);">
+        <span class="topic-label">读完之后:</span>
+        <a href="../index.html" class="topic-tag">返回博客列表</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <p class="footer-signature">写代码,做产品,也认真生活。</p>
+      <div class="footer-social">
+        <a href="https://github.com/zzdbilly" class="footer-social-link" target="_blank" rel="noopener" aria-label="GitHub">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+        </a>
+        <a href="../../rss.xml" class="footer-social-link" aria-label="RSS">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+      </div>
+      <div class="footer-links">
+        <a href="../../index.html" class="footer-link">首页</a>
+        <a href="../../projects/index.html" class="footer-link">项目</a>
+        <a href="../../blog/index.html" class="footer-link">博客</a>
+        <a href="../../about/index.html" class="footer-link">关于</a>
+      </div>
+      <p class="footer-copyright">
+        &copy; 2026 张小猛
+      </p>
+    </div>
+  </footer>
+
+
+  <script defer src="../../assets/js/related-posts.js"></script>
+  <script defer src="../../assets/js/main.js"></script>
+  <script defer src="../../assets/js/article.js"></script>
+  <script defer src="../../assets/js/share.js"></script>
+  <script defer src="../../assets/js/back-to-top.js"></script>
+  <!-- Back to Top & Reading Progress -->
+  <button class="back-to-top" id="backToTop" aria-label="回到顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
+  <div class="reading-progress" id="readingProgress"></div>
+
+  <!-- Post Sidebar Info（左侧） -->
+  <div class="post-sidebar-info" id="postSidebar">
+    <div class="post-info-card">
+      <div class="post-info-section">
+        <div class="post-info-label">作者</div>
+        <div class="post-info-author">
+          <div class="post-info-avatar">小</div>
+          <div>
+            <div class="post-info-author-name">张小猛</div>
+            <div class="post-info-author-desc">写代码，做产品</div>
+          </div>
+        </div>
+      </div>
+      <div class="post-info-section">
+        <div class="post-info-label">文章信息</div>
+        <div class="post-info-stat"><span class="post-info-stat-label">📅 发布日期</span><span class="post-info-stat-value">2026-08-24</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label">⏱️ 阅读时间</span><span class="post-info-stat-value">14 min read</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label">📝 文章字数</span><span class="post-info-stat-value">4127 字</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label">📊 章节数</span><span class="post-info-stat-value">11 节 · 6 子节</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label">💻 代码块</span><span class="post-info-stat-value">0 段</span></div>
+      </div>
+      <div class="post-info-section" id="postSidebarTags">
+        <div class="post-info-label">标签</div>
+        <div class="post-info-links">
+          <a href="../../blog/index.html?tag=心学" class="post-info-link"># 心学</a>
+          <a href="../../blog/index.html?tag=王阳明" class="post-info-link"># 王阳明</a>
+          <a href="../../blog/index.html?tag=哲学" class="post-info-link"># 哲学</a>
+          <a href="../../blog/index.html?tag=个人成长" class="post-info-link"># 个人成长</a>
+          <a href="../../blog/index.html?tag=思维方式" class="post-info-link"># 思维方式</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Post TOC -->
+  <div class="post-toc-container" id="postToc">
+    <nav class="post-toc">
+      <div class="post-toc-title">目录</div>
+      <ul class="post-toc-list" id="tocList">
+      </ul>
+    </nav>
+  </div>
+<script defer src="../../assets/js/particles.js"></script>
+
+  <!-- Comment System -->
+  <script src="../../workers/comment-system/comment-widget.js" defer></script>
+
+  <!-- highlight.js 代码语法高亮（本地完整构建，无外部依赖） -->
+  <script defer src="../../assets/vendor/highlight/highlight.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // 只对没有 codehilite 的代码块应用 highlight.js
+      document.querySelectorAll('pre code').forEach(function(block) {
+        // 跳过已经有 Pygments 高亮的块
+        if (block.closest('.codehilite') || block.classList.contains('hljs')) return;
+        try { hljs.highlightElement(block); } catch (e) {}
+      });
+    });
+  </script>
+
+  <!-- Cloudflare Web Analytics -->
+  <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "29e7cff6f37448989538e2165cb79187"}'></script>
+</body>
+</html>
