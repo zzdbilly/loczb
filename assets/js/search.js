@@ -152,12 +152,90 @@
     return scored.slice(0, 8).map(s => s.post);
   }
 
+  let currentFilter = 'all';
+
+  const SERIES_QUICK_LINKS = [
+    { icon: '🤖', title: 'AI Agent 与本地大模型', url: 'blog/posts/ai-助手定时任务投递指南从-agent-废话到-no-agent-脚本.html' },
+    { icon: '📱', title: 'Android 16 深度演进', url: 'blog/posts/android-16-features.html' },
+    { icon: '⚡', title: 'Kotlin 现代并发与架构', url: 'blog/posts/kotlin-coroutines-best-practices.html' },
+    { icon: '🎨', title: 'Jetpack Compose 现代 UI', url: 'blog/posts/compose-april-2026-update.html' },
+    { icon: '🛠️', title: '全栈工程化与高性能架构', url: 'blog/posts/static-blog-performance-optimization-59mb.html' },
+    { icon: '💡', title: '程序员的工程思维与成长', url: 'blog/posts/程序员带娃把养孩子当成一个长期运维的系统工程.html' }
+  ];
+
+  function getFilterBarHtml() {
+    const filters = [
+      { id: 'all', label: '全部' },
+      { id: 'ai', label: '🤖 AI Agent' },
+      { id: 'android', label: '📱 Android' },
+      { id: 'kotlin', label: '⚡ Kotlin' },
+      { id: 'devops', label: '🛠️ DevOps' },
+      { id: 'thought', label: '💡 思考' }
+    ];
+
+    return `
+      <div class="sr-filter-bar">
+        ${filters.map(f => `
+          <button type="button" class="sr-filter-chip ${currentFilter === f.id ? 'active' : ''}" data-filter="${f.id}">
+            ${f.label}
+          </button>
+        `).join('')}
+      </div>
+    `;
+  }
+
+  function displaySmartRecs() {
+    if (!searchResults) return;
+    const isBlogDir = window.location.pathname.includes('/blog/');
+    const filterBar = getFilterBarHtml();
+
+    const seriesHtml = SERIES_QUICK_LINKS.map(s => {
+      const href = isBlogDir ? s.url.replace(/^blog\//, '') : s.url;
+      return `
+        <a href="${href}" class="sr-series-item">
+          <span class="sr-series-item-icon">${s.icon}</span>
+          <span class="sr-series-item-title">${s.title}</span>
+        </a>
+      `;
+    }).join('');
+
+    searchResults.innerHTML = `
+      ${filterBar}
+      <div class="sr-rec-container">
+        <div class="sr-rec-title">
+          <span>📚 6 大精选旗舰专栏直达</span>
+          <span style="font-size: 0.7rem; color: var(--color-accent-primary); font-weight: 500;">快捷跳转 ➔</span>
+        </div>
+        <div class="sr-series-grid">
+          ${seriesHtml}
+        </div>
+      </div>
+    `;
+    searchResults.classList.add('active');
+    bindFilterChips();
+  }
+
+  function bindFilterChips() {
+    if (!searchResults) return;
+    const chips = searchResults.querySelectorAll('.sr-filter-chip');
+    chips.forEach(chip => {
+      chip.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        currentFilter = chip.getAttribute('data-filter') || 'all';
+        chips.forEach(c => c.classList.toggle('active', c === chip));
+        if (searchInput && searchInput.value.trim()) {
+          performSearch(searchInput.value);
+        } else {
+          displaySmartRecs();
+        }
+      });
+    });
+  }
+
   async function performSearch(query) {
     if (!query || !query.trim()) {
-      if (searchResults) {
-        searchResults.classList.remove('active');
-        searchResults.innerHTML = '';
-      }
+      displaySmartRecs();
       if (searchClear) searchClear.classList.remove('visible');
       if (searchKbd) searchKbd.style.display = '';
       selectedIndex = -1;
@@ -171,31 +249,95 @@
       await loadSearchData();
     }
 
-    let matched = [];
-    if (fuse) {
-      try {
-        matched = fuse.search(query).slice(0, 8).map(r => r.item);
-      } catch (e) {
-        matched = nativeSearch(query);
-      }
-    } else {
-      matched = nativeSearch(query);
+    // 自动检测 @ 前缀筛选
+    let cleanQuery = query.trim();
+    if (cleanQuery.startsWith('@ai')) {
+      currentFilter = 'ai';
+      cleanQuery = cleanQuery.replace(/^@ai\s*/i, '');
+    } else if (cleanQuery.startsWith('@android')) {
+      currentFilter = 'android';
+      cleanQuery = cleanQuery.replace(/^@android\s*/i, '');
+    } else if (cleanQuery.startsWith('@kotlin')) {
+      currentFilter = 'kotlin';
+      cleanQuery = cleanQuery.replace(/^@kotlin\s*/i, '');
+    } else if (cleanQuery.startsWith('@devops')) {
+      currentFilter = 'devops';
+      cleanQuery = cleanQuery.replace(/^@devops\s*/i, '');
+    } else if (cleanQuery.startsWith('@thought')) {
+      currentFilter = 'thought';
+      cleanQuery = cleanQuery.replace(/^@thought\s*/i, '');
     }
 
-    displayResults(matched, query);
+    let rawPosts = searchData.posts || [];
+    if (currentFilter !== 'all') {
+      rawPosts = rawPosts.filter(p => {
+        const cat = (p.category || '').toLowerCase();
+        const tags = (p.tags || []).join(' ').toLowerCase();
+        if (currentFilter === 'ai') return cat.includes('ai') || tags.includes('ai') || tags.includes('agent') || tags.includes('llm');
+        if (currentFilter === 'android') return cat.includes('android') || tags.includes('compose') || tags.includes('android');
+        if (currentFilter === 'kotlin') return cat.includes('kotlin') || tags.includes('coroutine') || tags.includes('flow') || tags.includes('kmp');
+        if (currentFilter === 'devops') return cat.includes('devops') || tags.includes('docker') || tags.includes('ci') || tags.includes('gradle');
+        if (currentFilter === 'thought') return cat.includes('思考') || cat.includes('thought') || tags.includes('成长') || tags.includes('思维');
+        return true;
+      });
+    }
+
+    let matched = [];
+    if (!cleanQuery) {
+      matched = rawPosts.slice(0, 8);
+    } else if (fuse && currentFilter === 'all') {
+      try {
+        matched = fuse.search(cleanQuery).slice(0, 8).map(r => r.item);
+      } catch (e) {
+        matched = nativeSearchWithPool(cleanQuery, rawPosts);
+      }
+    } else {
+      matched = nativeSearchWithPool(cleanQuery, rawPosts);
+    }
+
+    displayResults(matched, cleanQuery);
+  }
+
+  function nativeSearchWithPool(query, pool) {
+    const q = query.toLowerCase().trim();
+    if (!q) return pool.slice(0, 8);
+    const terms = q.split(/\s+/).filter(Boolean);
+
+    const scored = pool.map(post => {
+      let score = 0;
+      const titleLower = (post.title || '').toLowerCase();
+      const excerptLower = (post.excerpt || '').toLowerCase();
+      const catLower = (post.category || '').toLowerCase();
+      const tagsLower = (post.tags || []).join(' ').toLowerCase();
+
+      for (const term of terms) {
+        if (titleLower.includes(term)) score += 10;
+        if (catLower.includes(term)) score += 5;
+        if (tagsLower.includes(term)) score += 4;
+        if (excerptLower.includes(term)) score += 2;
+      }
+
+      return { post, score };
+    }).filter(item => item.score > 0);
+
+    scored.sort((a, b) => b.score - a.score);
+    return scored.slice(0, 8).map(s => s.post);
   }
 
   function displayResults(results, query) {
     if (!searchResults) return;
+    const filterBar = getFilterBarHtml();
 
     if (!results || results.length === 0) {
       searchResults.innerHTML = `
+        ${filterBar}
         <div class="sr-empty">
           <div class="sr-empty-icon">🔍</div>
           <div>未找到包含 <strong>"${escapeHtml(query)}"</strong> 的文章</div>
-          <div style="font-size: 0.75rem; color: var(--color-text-muted); margin-top: 0.25rem;">建议尝试：Android、Kotlin、AI Agent、架构、思考 等关键词</div>
+          <div style="font-size: 0.75rem; color: var(--color-text-muted); margin-top: 0.25rem;">建议尝试切换顶部分类标签或尝试：Android、Kotlin、AI Agent、架构 等关键词</div>
         </div>`;
       searchResults.classList.add('active');
+      bindFilterChips();
       return;
     }
 
@@ -233,8 +375,9 @@
       </a>`;
     }).join('');
 
-    searchResults.innerHTML = headerHtml + itemsHtml;
+    searchResults.innerHTML = filterBar + headerHtml + itemsHtml;
     searchResults.classList.add('active');
+    bindFilterChips();
   }
 
   function updateSelected() {
@@ -253,7 +396,7 @@
       let debounceTimer = null;
       searchInput.addEventListener('input', (e) => {
         clearTimeout(debounceTimer);
-        debounceTimer = setTimeout(() => performSearch(e.target.value), 120);
+        debounceTimer = setTimeout(() => performSearch(e.target.value), 100);
       });
 
       searchInput.addEventListener('focus', () => {
@@ -262,6 +405,7 @@
         } else {
           loadSearchData();
           loadFuse();
+          displaySmartRecs();
         }
       });
 
@@ -294,14 +438,14 @@
         e.preventDefault();
         if (searchInput) {
           searchInput.value = '';
-          performSearch('');
+          displaySmartRecs();
           searchInput.focus();
         }
       });
     }
 
     document.addEventListener('click', (e) => {
-      if (!e.target.closest('.blog-search-bar')) {
+      if (!e.target.closest('.blog-search-bar') && !e.target.closest('.hero-search-bar') && !e.target.closest('.hero-search-wrapper') && !e.target.closest('.blog-search-results')) {
         if (searchResults) searchResults.classList.remove('active');
       }
     });
