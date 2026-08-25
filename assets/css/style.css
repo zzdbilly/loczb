@@ -5951,3 +5951,303 @@ pre code.hljs {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+/* ========================================================
+   COMPREHENSIVE MOBILE OPTIMIZATIONS (IOS & ANDROID TOUCH)
+   ======================================================== */
+
+/* 1. iOS Safe Area & Viewport Overflow Safeguards */
+html, body {
+  touch-action: manipulation;
+}
+
+@media (max-width: 768px) {
+  /* Prevent iOS auto-zoom on inputs */
+  input[type="text"],
+  input[type="search"],
+  input[type="email"],
+  textarea,
+  select {
+    font-size: 16px !important;
+  }
+
+  /* Safe Area Support */
+  .footer {
+    padding-bottom: max(2rem, env(safe-area-inset-bottom));
+  }
+
+  .nav {
+    padding-top: max(0.5rem, env(safe-area-inset-top));
+  }
+}
+
+/* 2. Hero Section on Mobile (<= 640px) */
+@media (max-width: 640px) {
+  .hero {
+    padding: 4.5rem 0 2.5rem;
+  }
+
+  .hero-title {
+    font-size: clamp(1.8rem, 1.5rem + 3vw, 2.75rem) !important;
+    line-height: 1.25 !important;
+    margin-bottom: 1rem !important;
+  }
+
+  .hero-typewriter {
+    display: inline-block;
+    min-height: 1.2em;
+  }
+
+  .hero-description {
+    font-size: 0.95rem !important;
+    line-height: 1.65 !important;
+    margin-bottom: 1.25rem !important;
+  }
+
+  .hero-search-wrapper {
+    margin-bottom: 1.25rem;
+    padding: 0 0.25rem;
+  }
+
+  .hero-search-bar {
+    padding: 0.65rem 0.95rem;
+  }
+
+  .hero-actions {
+    flex-direction: column;
+    width: 100%;
+    gap: 0.75rem !important;
+  }
+
+  .hero-actions .btn {
+    width: 100%;
+    justify-content: center;
+    padding: 0.75rem 1.25rem;
+  }
+}
+
+/* 3. Bento Grid Mobile Layout & Terminal Workstation */
+@media (max-width: 640px) {
+  .bento-grid {
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  .spotlight-card {
+    padding: 1.25rem 1rem;
+    border-radius: var(--radius-xl);
+  }
+
+  .terminal-bar {
+    margin-bottom: 0.85rem;
+    padding-bottom: 0.5rem;
+  }
+
+  .terminal-title {
+    font-size: 0.7rem;
+  }
+
+  .terminal-body {
+    font-size: 0.78rem;
+    line-height: 1.7;
+  }
+
+  .terminal-line {
+    margin-bottom: 0.5rem;
+  }
+
+  .terminal-text {
+    word-break: break-word;
+  }
+
+  .bento-series-pills {
+    grid-template-columns: 1fr;
+    gap: 0.6rem;
+  }
+
+  .bento-series-chip {
+    padding: 0.65rem 0.85rem;
+  }
+
+  .bento-metrics-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.65rem;
+  }
+
+  .bento-metric-item {
+    padding: 0.85rem;
+  }
+
+  .bento-metric-num {
+    font-size: 1.85rem;
+  }
+
+  .bento-quote-text {
+    font-size: 1.05rem;
+    line-height: 1.6;
+  }
+}
+
+/* 4. Blog List View & Filter Bar Mobile */
+@media (max-width: 640px) {
+  .blog-view-switcher {
+    width: 100%;
+    justify-content: center;
+    gap: 0.25rem;
+    padding: 0.25rem;
+  }
+
+  .blog-view-btn {
+    font-size: 0.75rem;
+    padding: 0.4rem 0.65rem;
+    flex: 1;
+    text-align: center;
+    justify-content: center;
+  }
+
+  .category-filter-bar,
+  .blog-topic-tags,
+  .projects-filter-bar {
+    display: flex;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 0.5rem;
+    margin-left: -1rem;
+    margin-right: -1rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .category-filter-bar::-webkit-scrollbar,
+  .projects-filter-bar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .blog-list-card,
+  .blog-card {
+    padding: 1.25rem 1rem;
+    border-radius: var(--radius-xl);
+  }
+
+  .blog-list-title,
+  .blog-card-title {
+    font-size: 1.15rem;
+    line-height: 1.45;
+  }
+}
+
+/* 5. Mobile Floating Action Pill & Touch Enhancements */
+.mobile-reading-toolbar {
+  display: none;
+}
+
+@media (max-width: 1024px) {
+  .mobile-reading-toolbar {
+    display: flex;
+    position: fixed;
+    bottom: max(1.25rem, env(safe-area-inset-bottom));
+    right: 1rem;
+    z-index: 999;
+    align-items: center;
+    gap: 0.4rem;
+    background: rgba(17, 17, 19, 0.85);
+    border: 1px solid var(--color-border);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    padding: 0.35rem;
+    border-radius: var(--radius-full);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(15px);
+  }
+
+  [data-theme="light"] .mobile-reading-toolbar {
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  }
+
+  .mobile-reading-toolbar.visible {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
+
+  .mobile-toolbar-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    padding: 0.45rem 0.85rem;
+    border-radius: var(--radius-full);
+    background: transparent;
+    border: none;
+    color: var(--color-text-primary);
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .mobile-toolbar-btn:active {
+    transform: scale(0.94);
+    background: var(--color-accent-subtle);
+  }
+
+  .mobile-toolbar-btn.btn-toc {
+    background: var(--color-accent-subtle);
+    color: var(--color-accent-primary);
+  }
+
+  body .back-to-top {
+    display: none !important;
+  }
+}
+
+/* 6. Mobile Code Block & Content Typography */
+@media (max-width: 640px) {
+  .post-content {
+    font-size: 1rem;
+    line-height: 1.8;
+  }
+
+  .post-content h2 {
+    font-size: 1.35rem;
+    margin-top: 2rem;
+    margin-bottom: 0.85rem;
+  }
+
+  .post-content h3 {
+    font-size: 1.15rem;
+    margin-top: 1.5rem;
+    margin-bottom: 0.65rem;
+  }
+
+  .code-block-wrapper {
+    margin: 1.25rem -0.5rem;
+    border-radius: var(--radius-lg);
+  }
+
+  .code-block-wrapper pre {
+    padding: 0.85rem 1rem;
+    font-size: 0.8rem;
+  }
+
+  .post-copyright-card {
+    margin: 2rem -0.25rem 1.5rem;
+    padding: 1.25rem 1rem;
+  }
+
+  .copyright-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.6rem;
+  }
+
+  .copyright-cite-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}

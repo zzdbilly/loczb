@@ -159,20 +159,32 @@
 
     headings.forEach(h => observer.observe(h));
 
-    // === 手机端 TOC 按钮 & 抽屉 ===
+    // === 手机端智能悬浮阅读胶囊 & TOC 抽屉 ===
     (function() {
-      // 创建手机端 TOC 按钮
-      const tocBtn = document.createElement('button');
-      tocBtn.className = 'mobile-toc-btn';
-      tocBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>';
-      tocBtn.setAttribute('aria-label', '显示目录');
+      // 创建手机端阅读工具栏（目录 + 回到顶部）
+      const toolbar = document.createElement('div');
+      toolbar.className = 'mobile-reading-toolbar';
+      toolbar.innerHTML = `
+        <button class="mobile-toolbar-btn btn-toc" aria-label="文章目录">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+          <span>目录</span>
+        </button>
+        <button class="mobile-toolbar-btn btn-top" aria-label="回到顶部">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 15l-6-6-6 6"/>
+          </svg>
+          <span>顶部</span>
+        </button>
+      `;
 
       // 创建抽屉
       const drawer = document.createElement('div');
       drawer.className = 'toc-drawer';
       drawer.innerHTML = `
         <div class="toc-drawer-header">
-          <span class="toc-drawer-title">目录</span>
+          <span class="toc-drawer-title">📑 文章大纲与目录</span>
           <button class="toc-drawer-close" aria-label="关闭目录">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M18 6L6 18M6 6l12 12"/>
@@ -195,7 +207,7 @@
       });
 
       // 添加到页面
-      document.body.appendChild(tocBtn);
+      document.body.appendChild(toolbar);
       document.body.appendChild(drawer);
       document.body.appendChild(overlay);
 
@@ -211,7 +223,19 @@
         document.body.style.overflow = '';
       };
 
-      tocBtn.addEventListener('click', openDrawer);
+      toolbar.querySelector('.btn-toc').addEventListener('click', openDrawer);
+      toolbar.querySelector('.btn-top').addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 250) {
+          toolbar.classList.add('visible');
+        } else {
+          toolbar.classList.remove('visible');
+        }
+      });
+
       overlay.addEventListener('click', closeDrawer);
       drawer.querySelector('.toc-drawer-close').addEventListener('click', closeDrawer);
 
