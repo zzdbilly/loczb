@@ -6,28 +6,31 @@
 
 ```
 loczb/
-├── index.html                    # 首页 - 大卡(via JS) + 最新文章列表 + 精选项目 + 关于
+├── index.html                    # 首页 - Bento Grid 2.0 + 动态打字机 + Hero ⌘K 秒搜 + 精选推荐
 ├── blog/
-│   ├── index.html                # 博客列表页 - 筛选/分页/搜索/标签云/归档
-│   ├── articles-index.json       # 文章索引（搜索用，关联推荐用）
-│   └── posts/                    # 所有文章 HTML（54 篇）
+│   ├── index.html                # 博客列表页 - 全部文章 / 📚 专题专栏 / 时间归档三重视图
+│   ├── articles-index.json       # 文章索引与元数据（103 篇博文）
+│   └── posts/                    # 所有文章 HTML（103 篇，支持专栏便当盒注入）
 ├── templates/
 │   ├── blog-post-template.html   # 文章骨架模板
 │   └── inline-styles.css         # 内联样式（嵌入每篇文章 <style>）
 ├── scripts/
-│   ├── generate-post.py          # ★ 主生成脚本（Python）
-│   └── generate-index.js         # 完整生成 articles-index.json（Node.js）
+│   ├── generate-post.py          # ★ 主生成脚本（Python 单文件 CLI / Frontmatter）
+│   ├── generate-index.js         # 全站 CI 全量索引重建管线（Node.js）
+│   ├── build-series.js           # 6 大核心旗舰专栏聚合构建器
+│   └── check-links.js            # 自动化死链与静态资源巡检医生
 ├── assets/
-│   ├── css/style.css             # 全局样式
+│   ├── css/style.css             # 全局核心样式 (Bento 2.0, Spotlight, 高对比度双模)
 │   ├── js/
-│   │   ├── main.js               # 筛选/分页/归档/标签云
-│   │   ├── search.js             # 站内搜索（Ctrl+K）
+│   │   ├── main.js               # 核心交互、打字机、Instant Prefetch 预加载引擎
+│   │   ├── blog-list.js          # 博客分页、3重视图切换与专栏渲染
+│   │   ├── search.js             # 全局 Command Palette 模糊检索 (⌘K / Ctrl+K)
 │   │   └── related-posts.js      # 相关文章推荐索引
 │   └── images/                   # 图片资源
 ├── .github/workflows/
-│   └── update-index.yml          # CI: 自动更新 articles-index.json
+│   └── update-index.yml          # CI: 自动化测试与全站索引校验
 ├── BLOG-SYSTEM.md                # 博客系统完整规范（本文件）
-└── README.md                      # （已删除，整合到 BLOG-SYSTEM.md）
+└── README.md                     # 项目全局品牌说明与架构指南
 ```
 
 ---
