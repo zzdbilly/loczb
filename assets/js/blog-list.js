@@ -249,15 +249,16 @@
     {
       icon: '💡',
       title: '程序员的工程思维与成长',
-      desc: '将系统工程思维融入带娃、技术写作、认知进阶与生活节奏，构建可持续的长期复利成长模式。',
+      desc: '将系统工程思维融入注意力管理、长期健康运维、阳明心学实践、带娃与认知进阶，构建可持续的长期复利成长模式。',
       articles: [
+        { url: 'posts/心学不是鸡汤一个程序员的阳明心学实践手册.html', title: '心学不是鸡汤：一个程序员的阳明心学实践手册' },
+        { url: 'posts/程序员的注意力管理比时间更稀缺的资源.html', title: '程序员的注意力管理：比时间更稀缺的资源' },
+        { url: 'posts/如何维持好自己的健康写给程序员的长期运维指南.html', title: '如何维持好自己的健康：写给程序员的长期运维指南' },
         { url: 'posts/程序员带娃把养孩子当成一个长期运维的系统工程.html', title: '程序员带娃：把养孩子当成一个长期运维的系统工程' },
         { url: 'posts/why-tech-people-should-write.html', title: '技术人为什么要坚持写技术博客' },
-        { url: 'posts/how-tech-people-learn-new-tech.html', title: '技术人如何高效学习一门全新技术栈' },
-        { url: 'posts/programmers-should-learn-to-unplug.html', title: '程序员要学会「断联」：信息过载时代的注意力保卫战' },
-        { url: 'posts/soft-skills-tech-people-overlook.html', title: '技术人最容易忽视的 5 项软技能' }
+        { url: 'posts/how-tech-people-learn-new-tech.html', title: '技术人如何高效学习一门全新技术栈' }
       ],
-      totalCount: 6
+      totalCount: 9
     }
   ];
 
