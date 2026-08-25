@@ -5699,3 +5699,255 @@ pre code.hljs {
   opacity: 1;
   transform: translateX(-50%) translateY(0);
 }
+
+/* ========================================================
+   CODE COLLAPSIBLE EXPAND BAR
+   ======================================================== */
+.code-block-wrapper.code-collapsible.code-collapsed pre {
+  max-height: 320px;
+  overflow: hidden;
+}
+
+.code-block-wrapper.code-collapsible.code-collapsed::after {
+  content: '';
+  position: absolute;
+  bottom: 38px;
+  left: 0;
+  right: 0;
+  height: 90px;
+  background: linear-gradient(to bottom, transparent, rgba(13, 17, 23, 0.95));
+  pointer-events: none;
+}
+
+[data-theme="light"] .code-block-wrapper.code-collapsible.code-collapsed::after {
+  background: linear-gradient(to bottom, transparent, rgba(248, 250, 252, 0.95));
+}
+
+.code-expand-bar {
+  display: flex;
+  justify-content: center;
+  padding: 0.45rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  position: relative;
+  z-index: 3;
+}
+
+.code-expand-btn {
+  background: transparent;
+  border: 1px solid var(--color-border);
+  color: var(--color-text-secondary);
+  padding: 0.25rem 0.8rem;
+  border-radius: var(--radius-full);
+  font-size: 0.72rem;
+  font-family: var(--font-mono);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.code-expand-btn:hover {
+  background: var(--color-accent-subtle);
+  border-color: var(--color-accent-primary);
+  color: var(--color-accent-primary);
+}
+
+/* ========================================================
+   POST COPYRIGHT & LICENSE BENTO CARD
+   ======================================================== */
+.post-copyright-card {
+  margin: 3rem 0 2rem;
+  padding: 1.5rem 1.75rem;
+  border-radius: var(--radius-xl);
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+}
+
+.post-copyright-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 4px;
+  background: var(--gradient-accent);
+}
+
+.copyright-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.85rem;
+}
+
+.copyright-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--color-accent-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.copyright-cite-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.75rem;
+  border-radius: var(--radius-full);
+  background: var(--color-bg-tertiary);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-secondary);
+  font-size: 0.75rem;
+  font-family: var(--font-mono);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.copyright-cite-btn:hover {
+  background: var(--color-accent-subtle);
+  border-color: var(--color-accent-primary);
+  color: var(--color-accent-primary);
+  transform: translateY(-1px);
+}
+
+.copyright-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+}
+
+.copyright-item strong {
+  color: var(--color-text-primary);
+  margin-right: 0.35rem;
+}
+
+.copyright-item a {
+  color: var(--color-accent-primary);
+  text-decoration: none;
+  word-break: break-all;
+}
+
+.copyright-item a:hover {
+  text-decoration: underline;
+}
+
+.copyright-notice {
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px dashed var(--color-border);
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+}
+
+/* ========================================================
+   COMMAND PALETTE 2.0 (FILTER CHIPS & SMART EMPTY RECS)
+   ======================================================== */
+.sr-filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.6rem 1rem;
+  border-bottom: 1px solid var(--color-border);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.sr-filter-bar::-webkit-scrollbar { display: none; }
+
+.sr-filter-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--radius-full);
+  background: var(--color-bg-tertiary);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-secondary);
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.sr-filter-chip:hover {
+  border-color: var(--color-accent-primary);
+  color: var(--color-accent-primary);
+}
+
+.sr-filter-chip.active {
+  background: var(--color-accent-primary);
+  border-color: var(--color-accent-primary);
+  color: #ffffff;
+}
+
+.sr-rec-container {
+  padding: 1rem 1.25rem;
+}
+
+.sr-rec-title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sr-series-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.6rem;
+  margin-bottom: 0.5rem;
+}
+
+@media (max-width: 540px) {
+  .sr-series-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.sr-series-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.6rem 0.85rem;
+  border-radius: var(--radius-lg);
+  background: var(--color-bg-tertiary);
+  border: 1px solid var(--color-border);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.sr-series-item:hover {
+  background: var(--color-accent-subtle);
+  border-color: var(--color-accent-primary);
+  transform: translateY(-1px);
+}
+
+.sr-series-item-icon {
+  font-size: 1.2rem;
+}
+
+.sr-series-item-title {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

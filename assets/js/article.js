@@ -13,6 +13,9 @@
     // === macOS 风格代码块与复制功能 ===
     initCodeBlocks();
 
+    // === 原创版权卡片与一键引用 ===
+    initCopyrightCard();
+
     window.addEventListener('scroll', () => {
       if (backToTop) {
         if (window.scrollY > 300) {
@@ -221,7 +224,7 @@
     })();
   });
 
-  // === macOS 风格代码块与一键复制 ===
+  // === macOS 风格代码块、行数折叠与一键复制 ===
   function initCodeBlocks() {
     const codeBlocks = document.querySelectorAll('.post-content pre');
     if (!codeBlocks.length) return;
@@ -258,9 +261,32 @@
       wrapper.appendChild(header);
       wrapper.appendChild(pre);
 
+      // 超过 22 行长代码自动折叠
+      const text = code ? code.innerText : pre.innerText;
+      const lines = text.trim().split('\n').length;
+      if (lines > 22) {
+        wrapper.classList.add('code-collapsible', 'code-collapsed');
+        const expandBar = document.createElement('div');
+        expandBar.className = 'code-expand-bar';
+        expandBar.innerHTML = `<button class="code-expand-btn">展开完整代码 (${lines} 行) ▾</button>`;
+        wrapper.appendChild(expandBar);
+
+        const expandBtn = expandBar.querySelector('.code-expand-btn');
+        expandBtn.addEventListener('click', () => {
+          const isCollapsed = wrapper.classList.contains('code-collapsed');
+          if (isCollapsed) {
+            wrapper.classList.remove('code-collapsed');
+            expandBtn.textContent = '收起代码 ▴';
+          } else {
+            wrapper.classList.add('code-collapsed');
+            expandBtn.textContent = `展开完整代码 (${lines} 行) ▾`;
+            wrapper.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          }
+        });
+      }
+
       const copyBtn = header.querySelector('.code-copy-btn');
       copyBtn.addEventListener('click', async () => {
-        const text = code ? code.innerText : pre.innerText;
         try {
           await navigator.clipboard.writeText(text);
           copyBtn.classList.add('copied');
@@ -286,6 +312,58 @@
         }
       });
     });
+  }
+
+  // === 原创版权便当盒与一键引用 ===
+  function initCopyrightCard() {
+    const postContent = document.querySelector('.post-content');
+    if (!postContent) return;
+
+    let copyrightCard = document.querySelector('.post-copyright-card');
+    const pageTitle = document.title.replace(/ \| 张小猛 - loczb$/, '');
+    const pageUrl = window.location.href.split('#')[0].split('?')[0];
+
+    // 如果文章内没有现成的版权卡片，动态在文末插入
+    if (!copyrightCard) {
+      copyrightCard = document.createElement('div');
+      copyrightCard.className = 'post-copyright-card';
+      copyrightCard.innerHTML = `
+        <div class="copyright-header">
+          <div class="copyright-badge">
+            <span>📜</span>
+            <span>原创与知识共享协议</span>
+          </div>
+          <button class="copyright-cite-btn" id="copy-cite-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+            </svg>
+            <span>复制 Markdown 引用</span>
+          </button>
+        </div>
+        <div class="copyright-list">
+          <div class="copyright-item"><strong>文章标题：</strong>${pageTitle}</div>
+          <div class="copyright-item"><strong>文章作者：</strong>张小猛 · loczb</div>
+          <div class="copyright-item"><strong>永久链接：</strong><a href="${pageUrl}">${pageUrl}</a></div>
+          <div class="copyright-item"><strong>版权声明：</strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 国际许可协议。商业转载请联系作者获得授权，非商业转载请注明出处。</div>
+        </div>
+      `;
+      postContent.appendChild(copyrightCard);
+    }
+
+    const citeBtn = copyrightCard.querySelector('#copy-cite-btn');
+    if (citeBtn) {
+      citeBtn.addEventListener('click', async () => {
+        const citeText = `> 原文：[《${pageTitle}》](${pageUrl})\n> 作者：张小猛 · loczb（遵循 CC BY-NC-SA 4.0 协议）`;
+        try {
+          await navigator.clipboard.writeText(citeText);
+          showToast('Markdown 引用格式已复制到剪贴板');
+        } catch (e) {
+          showToast('已复制本文链接');
+          navigator.clipboard.writeText(pageUrl);
+        }
+      });
+    }
   }
 
   function showToast(msg) {
