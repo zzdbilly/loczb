@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>和 AI 结对写代码这一年，我学会了怎么放手 | 张小猛 - loczb</title>
+    <meta name="description" content="一个移动端开发者和 AI 编程助手协作一年的真实复盘：从不敢信、到滥信踩坑、再到建立边界和验收习惯。">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="和 AI 结对写代码这一年，我学会了怎么放手 | 张小猛 - loczb">
+    <meta property="og:description" content="一个移动端开发者和 AI 编程助手协作一年的真实复盘：从不敢信、到滥信踩坑、再到建立边界和验收习惯。">
+    <meta property="og:url" content="https://709527.xyz/blog/posts/和ai结对写代码这一年我学会了怎么放手.html">
+    <meta property="og:type" content="article">
+        <meta property="og:image" content="../../assets/images/og-image.png">
+    <meta property="og:site_name" content="loczb">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="和 AI 结对写代码这一年，我学会了怎么放手 | 张小猛 - loczb">
+    <meta name="twitter:description" content="一个移动端开发者和 AI 编程助手协作一年的真实复盘：从不敢信、到滥信踩坑、再到建立边界和验收习惯。">
+
+
+        <script type="application/ld+json">
+{
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "和 AI 结对写代码这一年，我学会了怎么放手",
+      "description": "一个移动端开发者和 AI 编程助手协作一年的真实复盘：从不敢信、到滥信踩坑、再到建立边界和验收习惯。",
+      "image": "https://709527.xyz/assets/images/og-image.png",
+      "author": {
+            "@type": "Person",
+            "name": "张小猛",
+            "url": "https://709527.xyz/about/"
+      },
+      "publisher": {
+            "@type": "Organization",
+            "name": "loczb",
+            "logo": {
+                  "@type": "ImageObject",
+                  "url": "https://709527.xyz/assets/images/favicon.svg"
+            }
+      },
+      "datePublished": "2026-09-01 14:31:00",
+      "dateModified": "2026-09-01 14:31:00",
+      "url": "https://709527.xyz/blog/posts/和ai结对写代码这一年我学会了怎么放手.html",
+      "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://709527.xyz/blog/posts/和ai结对写代码这一年我学会了怎么放手.html"
+      },
+      "keywords": "思考, AI, 开发习惯, 代码质量",
+      "articleSection": "思考",
+      "timeRequired": "PT5M",
+      "inLanguage": "zh-CN"
+}
+    </script>
+
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&family=Noto+Sans+SC:wght@500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500&display=swap" media="print" onload="this.media='all'">
+    <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
+    <link rel="alternate icon" href="../../assets/images/favicon.ico">
+    <link rel="canonical" href="https://709527.xyz/blog/posts/和ai结对写代码这一年我学会了怎么放手.html">
+</head>
+<body>
+  <!-- Loading -->
+  <div class="loading">
+    <div class="loading-spinner"></div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../../index.html" class="nav-logo">
+        loc<span>zb</span>
+      </a>
+      <button class="nav-toggle" aria-label="打开菜单" aria-expanded="false" aria-controls="nav-links-menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <div class="nav-overlay"></div>
+      <ul class="nav-links" id="nav-links-menu">
+        <li><a href="../../index.html" class="nav-link">首页</a></li>
+        <li><a href="../../projects/index.html" class="nav-link">项目</a></li>
+        <li><a href="../index.html" class="nav-link active">博客</a></li>
+        <li><a href="../../about/index.html" class="nav-link">关于</a></li>
+      </ul>
+      <button class="theme-toggle" aria-label="切换主题" title="切换亮/暗模式">
+        <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+        <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+      </button>
+    </div>
+  </nav>
+  <!-- Particle Canvas Background -->
+  <canvas id="particle-canvas" class="particle-canvas"></canvas>
+
+  <div class="scroll-progress"></div>
+
+  <main class="section" style="padding-bottom: 0; padding-top: var(--space-4xl);">
+    <div class="container container-narrow">
+      <a href="../index.html" class="back-link">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        返回博客列表
+      </a>
+
+      <article class="post-content">
+        <h1>和 AI 结对写代码这一年，我学会了怎么放手</h1>
+
+        <div class="post-meta">
+          <span>📅 2026-09-01 14:31:00</span>
+          <span>⏱️ 5 min read</span>
+          <span>👤 张小猛</span>
+        </div>
+
+        <div class="post-tags">
+          <span class="tag">思考</span>
+          <span class="tag">AI</span>
+          <span class="tag">开发习惯</span>
+          <span class="tag">代码质量</span>
+        </div>
+
+        
+
+        <h2>一年三个阶段</h2>
+<p>去年这个时候，我让 AI 写一段列表性能优化代码，逐行审了四十分钟，最后只留了三行。今年这个时候，我一个下午合并七八个 PR，每个平均花不到十分钟。中间这段路，我把它拆成三个阶段：不敢信、滥信、有边界地信。坑主要踩在第二个阶段。</p>
+<h2>阶段一：不敢信</h2>
+<h3>只敢让它补全，不敢让它接管</h3>
+<p>最初三个月，我对它的定位是「高级自动补全」：正则、SQL、样板代码、写注释。功能级任务照旧自己做，它负责减少我敲键盘的次数。</p>
+<h3>逐行重写的心理账</h3>
+<p>那时候的算法是：它生成，我逐行核对重写，看起来省了打字，实际把时间花在了验证上。问题不在它写得慢，在我信不过。每次它给一个和我预期不一样的方案，我的第一反应不是读它的思路，而是回到自己的写法。它的好点子基本都被这个动作筛掉了。</p>
+<h3>不敢背锅</h3>
+<p>还有一层不好意思承认的原因：如果代码是它写的，线上出了事，汇报时「AI 写的」四个字说不出口。责任没有归属，人就不敢授权。这和大模型能力无关，是我自己的管理问题。</p>
+<h2>阶段二：滥信踩的坑</h2>
+<h3>能力涨得比我心态调整得快</h3>
+<p>转折出现在它一次生成整个模块还能编译通过之后。我开始成块地让它写，自己只看 diff 摘要。效率确实翻倍，然后我开始还债。</p>
+<h3>幻觉 API：看起来能用，其实不存在</h3>
+<p>它生成的代码里出现过一个不存在的包名和一个不存在的配置项——名字起得特别合理，合理到你不会去怀疑。它不是乱码式的错，是流畅自信的错，读起来比很多真人写的还顺，这种最容易骗过评审。第一次在 CI 安装依赖时暴露，算运气好；真正花钱的教训是下一个。</p>
+<h3>上下文之外的世界它不知道</h3>
+<p>它写的日期处理代码在开发机一切正常，上线后报表全错：它不知道生产容器是 UTC 时区，而我们业务全在东八区。像这类跨环境的隐性 bug，它没法从代码里推断出来，它只见过代码，没见过你的运维历史。</p>
+<h3>「顺手重构」的代价</h3>
+<p>我让它修一个 bug，它顺手重构了相邻三个文件，引入了两个新问题，diff 看起来还特别勤快。那次线上事故我排了四个小时，源头就是一次「看都没看就合并」。复盘时我意识到，改动量越大我越不想逐行读，而它给「小任务」的默认交付量恰恰在变大——这是机制性的冲突，不是运气问题。</p>
+<h3>我读不懂的东西，不该在我名下合并</h3>
+<p>那之后我立了一条硬规矩：AI 生成的代码，我读不懂就不合并。「读不懂」的定义是我能不看代码向别人解释它为什么这样写，而不是眼睛扫过去觉得「嗯，像对的」。</p>
+<h2>阶段三：建立边界和验收习惯</h2>
+<h3>分工：哪些活给它，哪些留给自己</h3>
+<p>给它的：重复样板、测试数据、正则、SQL、配置文件、文档注释。留给自己的：需求拆解、模块边界、性能关键路径、安全相关。标准只有一条——这个决定将来错了，谁负责。答不出是我，就不能外包。</p>
+<h3>设计决策不能外包</h3>
+<p>设计靠的是理解「为什么」——为什么兼容这层旧逻辑、为什么这个字段永远不能删。这些理由活在我脑子里和历史工单里，模型只见过「是什么」。所以我把协作顺序改了：先自己写设计说明和约束，再让它实现。它执行我的方案的质量，远高于我评审它的方案。</p>
+<h3>验收从逐行读码改成验证行为</h3>
+<p>全量逐行读已经跟不上生成速度，我把验收对象从代码换成了行为：功能写完必须附带边界用例清单，我逐条跑；生产链路自己手动走一遍；时区、权限、并发这三个它踩过的区域，有固定的检查项。读码只精读关键路径，其余抽查。</p>
+<h3>给它的约束，也是给我自己的</h3>
+<p>任务描述必须包含运行环境和历史包袱，上下文缺口它一定用假想的默认值填。一次只派一个目标，它太爱顺手改别的东西，范围越宽回滚成本越高。最后一条自检：任一改动我解释不了，视为验收不通过。</p>
+<h2>放手的分寸</h2>
+<h3>放手不等于撒手</h3>
+<p>放手的本质是把「逐行审查」换成「边界加验收」，不是关掉审查开关。信任要挣来的，每个月的线上事故就是它的信用记录。</p>
+<h3>省下的时间去哪了</h3>
+<p>这一年它替我省了大约三分之一的时间。如果这些时间用来少看代码，事故率会替我找回平衡；它真正的去处应该更高——想清楚需求、写更准的设计说明、读线上数据。它把实现的边际成本打下来之后，瓶颈整个挪到了「定义问题」上，这才是我今年最大的职业体感。</p>
+<h3>有一条底线没有松过</h3>
+<p>无论多信它，我始终对合并进主分支的每一行代码负责。名义上可以写「Co-authored-by」，责任栏里不能这么写。它没有工牌，出了事站不到复盘会上。</p>
+
+        <!-- Post Copyright & License Card -->
+        <div class="post-copyright-card">
+          <div class="copyright-header">
+            <div class="copyright-badge">
+              <span>📜</span>
+              <span>原创与知识共享协议</span>
+            </div>
+            <button class="copyright-cite-btn" id="copy-cite-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+              </svg>
+              <span>复制 Markdown 引用</span>
+            </button>
+          </div>
+          <div class="copyright-list">
+            <div class="copyright-item"><strong>文章标题：</strong>和 AI 结对写代码这一年，我学会了怎么放手</div>
+            <div class="copyright-item"><strong>文章作者：</strong>张小猛 · loczb</div>
+            <div class="copyright-item"><strong>永久链接：</strong><a href="https://709527.xyz/blog/posts/和ai结对写代码这一年我学会了怎么放手.html">https://709527.xyz/blog/posts/和ai结对写代码这一年我学会了怎么放手.html</a></div>
+            <div class="copyright-item"><strong>版权声明：</strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 国际许可协议。商业转载请联系作者获得授权，非商业转载请注明出处。</div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </main>
+
+  <!-- Related Posts / Navigation -->
+  <section class="section" style="padding-top: 0;">
+    <div class="container container-narrow">
+      <hr style="border: none; border-top: 1px solid var(--color-border); margin: var(--space-3xl) 0;">
+
+      <div class="blog-topics" style="margin-bottom: var(--space-xl);">
+        <span class="topic-label">读完之后:</span>
+        <a href="../index.html" class="topic-tag">返回博客列表</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <p class="footer-signature">写代码,做产品,也认真生活。</p>
+      <div class="footer-social">
+        <a href="https://github.com/zzdbilly" class="footer-social-link" target="_blank" rel="noopener" aria-label="GitHub">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+        </a>
+        <a href="../../rss.xml" class="footer-social-link" aria-label="RSS">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+      </div>
+      <div class="footer-links">
+        <a href="../../index.html" class="footer-link">首页</a>
+        <a href="../../projects/index.html" class="footer-link">项目</a>
+        <a href="../../blog/index.html" class="footer-link">博客</a>
+        <a href="../../about/index.html" class="footer-link">关于</a>
+      </div>
+      <p class="footer-copyright">
+        &copy; 2026 张小猛
+      </p>
+    </div>
+  </footer>
+
+
+  <script defer src="../../assets/js/related-posts.js"></script>
+  <script defer src="../../assets/js/main.js"></script>
+  <script defer src="../../assets/js/article.js"></script>
+  <script defer src="../../assets/js/share.js"></script>
+  <script defer src="../../assets/js/back-to-top.js"></script>
+  <!-- Back to Top & Reading Progress -->
+  <button class="back-to-top" id="backToTop" aria-label="回到顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
+  <div class="reading-progress" id="readingProgress"></div>
+
+  <!-- Post Sidebar Info（左侧） -->
+  <div class="post-sidebar-info" id="postSidebar">
+    <div class="post-info-card">
+      <div class="post-info-section">
+        <div class="post-info-label">作者</div>
+        <div class="post-info-author">
+          <div class="post-info-avatar">小</div>
+          <div>
+            <div class="post-info-author-name">张小猛</div>
+            <div class="post-info-author-desc">写代码，做产品</div>
+          </div>
+        </div>
+      </div>
+      <div class="post-info-section">
+        <div class="post-info-label">文章信息</div>
+        <div class="post-info-stat"><span class="post-info-stat-label">📅 发布日期</span><span class="post-info-stat-value">2026-09-01</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label">⏱️ 阅读时间</span><span class="post-info-stat-value">5 min read</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label">📝 文章字数</span><span class="post-info-stat-value">1483 字</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label">📊 章节数</span><span class="post-info-stat-value">5 节 · 15 子节</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label">💻 代码块</span><span class="post-info-stat-value">0 段</span></div>
+      </div>
+      <div class="post-info-section" id="postSidebarTags">
+        <div class="post-info-label">标签</div>
+        <div class="post-info-links">
+          <a href="../../blog/index.html?tag=思考" class="post-info-link"># 思考</a>
+          <a href="../../blog/index.html?tag=AI" class="post-info-link"># AI</a>
+          <a href="../../blog/index.html?tag=开发习惯" class="post-info-link"># 开发习惯</a>
+          <a href="../../blog/index.html?tag=代码质量" class="post-info-link"># 代码质量</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Post TOC -->
+  <div class="post-toc-container" id="postToc">
+    <nav class="post-toc">
+      <div class="post-toc-title">目录</div>
+      <ul class="post-toc-list" id="tocList">
+      </ul>
+    </nav>
+  </div>
+<script defer src="../../assets/js/particles.js"></script>
+
+  <!-- Comment System -->
+  <script src="../../workers/comment-system/comment-widget.js" defer></script>
+
+  <!-- highlight.js 代码语法高亮（本地完整构建，无外部依赖） -->
+  <script defer src="../../assets/vendor/highlight/highlight.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // 只对没有 codehilite 的代码块应用 highlight.js
+      document.querySelectorAll('pre code').forEach(function(block) {
+        // 跳过已经有 Pygments 高亮的块
+        if (block.closest('.codehilite') || block.classList.contains('hljs')) return;
+        try { hljs.highlightElement(block); } catch (e) {}
+      });
+    });
+  </script>
+
+  <!-- Cloudflare Web Analytics -->
+  <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "29e7cff6f37448989538e2165cb79187"}'></script>
+</body>
+</html>
