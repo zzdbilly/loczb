@@ -2,7 +2,7 @@
 // 版本号规则：修改内容后更新此版本号（格式：loczb-YYYYMMDD-N）
 // 每次部署有实质性变更时递增 N，重大改版更新日期
 // 查看更新日志：https://github.com/zzdbilly/loczb/commits
-const SW_VERSION = '20260825-4107';
+const SW_VERSION = '20260901-4226';
 const CACHE_NAME = 'loczb-' + SW_VERSION;
 
 // Core pages to cache on install

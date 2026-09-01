@@ -7,6 +7,14 @@
     <language>zh-CN</language>
     <atom:link href="https://709527.xyz/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>和 AI 结对写代码这一年，我学会了怎么放手</title>
+      <link>https://709527.xyz/blog/posts/和ai结对写代码这一年我学会了怎么放手.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/和ai结对写代码这一年我学会了怎么放手.html</guid>
+      <description>一个移动端开发者和 AI 编程助手协作一年的真实复盘：从不敢信、到滥信踩坑、再到建立边界和验收习惯。</description>
+      <category>思考</category>
+      <pubDate>Tue, 01 Sep 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
       <title>心学不是鸡汤：一个程序员的阳明心学实践手册</title>
       <link>https://709527.xyz/blog/posts/心学不是鸡汤一个程序员的阳明心学实践手册.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/心学不是鸡汤一个程序员的阳明心学实践手册.html</guid>
@@ -156,14 +164,6 @@
       <guid isPermaLink="true">https://709527.xyz/blog/posts/ai-编码代理实战从-copilot-到-agent.html</guid>
       <description>从自动补全到自主编码，2026 年的 AI 编码工具正在经历一次质变。这篇文章用真实场景复盘 Claude Code、Cursor Agent、MCP 协议的实际用法，以及开发者应该怎样调整工作流。</description>
       <category>开发</category>
-      <pubDate>Sun, 19 Jul 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>Rust 入局：2026 年的生态全景</title>
-      <link>https://709527.xyz/blog/posts/rust-入局2026-年的生态全景.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/rust-入局2026-年的生态全景.html</guid>
-      <description>2026年7月，Rust首次杀进TIOBE前十。从语言进化到生态扩张，从行业应用到未来展望，全面复盘Rust凭什么走到这一步。</description>
-      <category>系统编程</category>
       <pubDate>Sun, 19 Jul 2026 00:00:00 +0800</pubDate>
     </item>
   </channel>
