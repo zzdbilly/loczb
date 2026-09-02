@@ -156,8 +156,12 @@ console.log(`✅ articles-index.json: ${indexData.stats.totalPosts} posts, ${ind
 // ═══════════════════════════════════════════════
 
 function syncPostCount(html) {
-  return html.replace(/<!-- POSTS_COUNT -->[\s\S]*?<!-- \/POSTS_COUNT -->/g,
+  html = html.replace(/<!-- POSTS_COUNT -->[\s\S]*?<!-- \/POSTS_COUNT -->/g,
     `<!-- POSTS_COUNT -->${posts.length}<!-- /POSTS_COUNT -->`);
+  // 搜索框 placeholder 属性里不能放注释锚点（会原样显示），单独按数字同步
+  html = html.replace(/(placeholder="即时检索 )\d+( 篇博文)/g,
+    `$1${posts.length}$2`);
+  return html;
 }
 
 // ═══════════════════════════════════════════════
