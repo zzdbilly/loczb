@@ -7,6 +7,14 @@
     <language>zh-CN</language>
     <atom:link href="https://709527.xyz/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>技术文档编写指南写出别人真的会看的文档</title>
+      <link>https://709527.xyz/blog/posts/技术文档编写指南写出别人真的会看的文档.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/技术文档编写指南写出别人真的会看的文档.html</guid>
+      <description>写了没人看、看了找不到答案、找到了已经过期——技术文档的三大死法。这篇把我维护博客和项目文档攒下的规范全摊开：读者画像、Diátaxis 分层、结构措辞红线、代码示例标准、docs-as-code 工作流、常见反模式和发布前检查清单。</description>
+      <category>开发</category>
+      <pubDate>Thu, 03 Sep 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
       <title>和 AI 结对写代码这一年，我学会了怎么放手</title>
       <link>https://709527.xyz/blog/posts/和ai结对写代码这一年我学会了怎么放手.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/和ai结对写代码这一年我学会了怎么放手.html</guid>
@@ -156,14 +164,6 @@
       <guid isPermaLink="true">https://709527.xyz/blog/posts/postgresql-从-17-到-18生产环境升级实战.html</guid>
       <description>PG 18 带来了哪些实质性改进？增量物化视图、并行查询增强、OAuth 认证……本文用一个完整的升级记录，带你从准备工作到新特性实战，涵盖升级检查清单和常见问题排查。</description>
       <category>数据库</category>
-      <pubDate>Sun, 19 Jul 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>AI 编码代理实战：从 Copilot 到 Agent</title>
-      <link>https://709527.xyz/blog/posts/ai-编码代理实战从-copilot-到-agent.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/ai-编码代理实战从-copilot-到-agent.html</guid>
-      <description>从自动补全到自主编码，2026 年的 AI 编码工具正在经历一次质变。这篇文章用真实场景复盘 Claude Code、Cursor Agent、MCP 协议的实际用法，以及开发者应该怎样调整工作流。</description>
-      <category>开发</category>
       <pubDate>Sun, 19 Jul 2026 00:00:00 +0800</pubDate>
     </item>
   </channel>
