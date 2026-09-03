@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>技术文档编写指南写出别人真的会看的文档 | 张小猛 - loczb</title>
+    <meta name="description" content="写了没人看、看了找不到答案、找到了已经过期——技术文档的三大死法。这篇把我维护博客和项目文档攒下的规范全摊开：读者画像、Diátaxis 分层、结构措辞红线、代码示例标准、docs-as-code 工作流、常见反模式和发布前检查清单。">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="技术文档编写指南写出别人真的会看的文档 | 张小猛 - loczb">
+    <meta property="og:description" content="写了没人看、看了找不到答案、找到了已经过期——技术文档的三大死法。这篇把我维护博客和项目文档攒下的规范全摊开：读者画像、Diátaxis 分层、结构措辞红线、代码示例标准、docs-as-code 工作流、常见反模式和发布前检查清单。">
+    <meta property="og:url" content="https://709527.xyz/blog/posts/技术文档编写指南写出别人真的会看的文档.html">
+    <meta property="og:type" content="article">
+        <meta property="og:image" content="../../assets/images/og-image.png">
+    <meta property="og:site_name" content="loczb">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="技术文档编写指南写出别人真的会看的文档 | 张小猛 - loczb">
+    <meta name="twitter:description" content="写了没人看、看了找不到答案、找到了已经过期——技术文档的三大死法。这篇把我维护博客和项目文档攒下的规范全摊开：读者画像、Diátaxis 分层、结构措辞红线、代码示例标准、docs-as-code 工作流、常见反模式和发布前检查清单。">
+
+
+        <script type="application/ld+json">
+{
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "技术文档编写指南写出别人真的会看的文档",
+      "description": "写了没人看、看了找不到答案、找到了已经过期——技术文档的三大死法。这篇把我维护博客和项目文档攒下的规范全摊开：读者画像、Diátaxis 分层、结构措辞红线、代码示例标准、docs-as-code 工作流、常见反模式和发布前检查清单。",
+      "image": "https://709527.xyz/assets/images/og-image.png",
+      "author": {
+            "@type": "Person",
+            "name": "张小猛",
+            "url": "https://709527.xyz/about/"
+      },
+      "publisher": {
+            "@type": "Organization",
+            "name": "loczb",
+            "logo": {
+                  "@type": "ImageObject",
+                  "url": "https://709527.xyz/assets/images/favicon.svg"
+            }
+      },
+      "datePublished": "2026-09-03 17:30:00",
+      "dateModified": "2026-09-03 17:30:00",
+      "url": "https://709527.xyz/blog/posts/技术文档编写指南写出别人真的会看的文档.html",
+      "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://709527.xyz/blog/posts/技术文档编写指南写出别人真的会看的文档.html"
+      },
+      "keywords": "技术写作, 文档规范, 工程实践, Docs-as-Code",
+      "articleSection": "开发",
+      "timeRequired": "PT18M",
+      "inLanguage": "zh-CN"
+}
+    </script>
+
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&family=Noto+Sans+SC:wght@500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500&display=swap" media="print" onload="this.media='all'">
+    <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
+    <link rel="alternate icon" href="../../assets/images/favicon.ico">
+    <link rel="canonical" href="https://709527.xyz/blog/posts/技术文档编写指南写出别人真的会看的文档.html">
+</head>
+<body>
+  <!-- Loading -->
+  <div class="loading">
+    <div class="loading-spinner"></div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../../index.html" class="nav-logo">
+        loc<span>zb</span>
+      </a>
+      <button class="nav-toggle" aria-label="打开菜单" aria-expanded="false" aria-controls="nav-links-menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <div class="nav-overlay"></div>
+      <ul class="nav-links" id="nav-links-menu">
+        <li><a href="../../index.html" class="nav-link">首页</a></li>
+        <li><a href="../../projects/index.html" class="nav-link">项目</a></li>
+        <li><a href="../index.html" class="nav-link active">博客</a></li>
+        <li><a href="../../about/index.html" class="nav-link">关于</a></li>
+      </ul>
+      <button class="theme-toggle" aria-label="切换主题" title="切换亮/暗模式">
+        <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+        <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+      </button>
+    </div>
+  </nav>
+  <!-- Particle Canvas Background -->
+  <canvas id="particle-canvas" class="particle-canvas"></canvas>
+
+  <div class="scroll-progress"></div>
+
+  <main class="section" style="padding-bottom: 0; padding-top: var(--space-4xl);">
+    <div class="container container-narrow">
+      <a href="../index.html" class="back-link">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        返回博客列表
+      </a>
+
+      <article class="post-content">
+        <h1>技术文档编写指南写出别人真的会看的文档</h1>
+
+        <div class="post-meta">
+          <span>📅 2026-09-03 17:30:00</span>
+          <span>⏱️ 18 min read</span>
+          <span>👤 张小猛</span>
+        </div>
+
+        <div class="post-tags">
+          <span class="tag">技术写作</span>
+          <span class="tag">文档规范</span>
+          <span class="tag">工程实践</span>
+          <span class="tag">Docs-as-Code</span>
+        </div>
+
+        
+
+        <h2>先说为什么大部分技术文档是失败的</h2>
+<p>我读过上千份 README、设计文档和接口说明，得出一个不太客气的结论：<strong>大多数技术文档不是"写得不好"，而是根本没打算让人读</strong>。它们存在的目的更像是"证明这个功能有文档"，而不是"帮下一个人把事办成"。</p>
+<p>失败的技术文档通常死在三件事上：</p>
+<ol>
+<li><strong>没人看</strong>——因为读者打开前三秒不知道该不该继续读下去；</li>
+<li><strong>看了找不到答案</strong>——因为作者按自己的实现顺序组织内容，而不是按读者的问题顺序；</li>
+<li><strong>找到了，但已经过期</strong>——因为文档和代码分开维护，改代码的人不知道要改文档。</li>
+</ol>
+<p>这三件事都有对应的工程化解法，这篇文章就是把解法摊开讲清楚：写给谁、分几层、怎么组织结构、措辞红线、代码示例的标准、docs-as-code 工作流、以及一份可以直接抄走的发布前检查清单。</p>
+<h3>判断一份文档好坏的唯一标准</h3>
+<p>我给自己定了一个很简单的标准，比任何写作课都管用：</p>
+<blockquote>
+<p>一个不了解背景的工程师，能不能只靠这份文档，在不问任何人的情况下完成他要做的事？</p>
+</blockquote>
+<p>做不到，就是文档的问题，不是读者的问题。"这个很简单，显然应该……"是技术文档里最有害的一句话——对作者显然的东西，对三周后的作者本人都不显然。</p>
+<h2>动笔前先回答：写给谁看</h2>
+<p>同一个 Redis 配置项，写给三类人看是三种写法。动笔前必须写下读者画像，不写下不去笔。</p>
+<h3>三类典型读者</h3>
+<table>
+<thead>
+<tr>
+<th>读者</th>
+<th>他要完成的事</th>
+<th>他讨厌什么</th>
+<th>文档该给什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>评估者</td>
+<td>决定要不要用这个库</td>
+<td>看了一半还不知道能干嘛</td>
+<td>第一段讲清"解决什么问题"，给最小可运行示例</td>
+</tr>
+<tr>
+<td>使用者</td>
+<td>把它跑起来、用起来</td>
+<td>环境假设、跳步骤</td>
+<td>按顺序可复制执行的步骤，每步有预期输出</td>
+</tr>
+<tr>
+<td>排障者</td>
+<td>出错了，找原因</td>
+<td>找不到错误信息对应的那一节</td>
+<td>错误码表、常见报错和解法、FAQ</td>
+</tr>
+</tbody>
+</table>
+<p>排障者最容易被忽略，但他往往是打开文档频率最高的人——只在系统挂掉的时候。深夜三点对着报错的人没有耐心读你的架构哲学，他需要 Ctrl+F 能搜到那行错误信息。</p>
+<h3>写读者画像这件事本身</h3>
+<p>读者画像不用长篇大论，放在文档开头两三行即可：</p>
+<pre><code class="language-markdown">## 本文适用对象
+- 已部署本服务、需要调整超时参数的 SRE
+- 不熟悉：不需要你了解内部调度实现
+- 前置条件：能登录部署机器，有 config/ 目录读写权限
+</code></pre>
+<p>这同时是在帮作者自己砍内容：凡是这个读者用不到的段落，删掉，或者拆成链接。</p>
+<h2>用 Diátaxis 把文档分四层</h2>
+<p>写文档最常见的结构灾难，是一份文档同时想当教程、手册和架构图。Diátaxis 框架把文档切成四种互斥的类型，每种只服务一种需求，这个划分我用了两年，是真正改变我写作习惯的一条：</p>
+<ul>
+<li><strong>教程（Tutorial）</strong>：带新手走一条预设路线，"跟我做"。重学习，允许啰嗦，保证每步成功。</li>
+<li><strong>操作指南（How-to）</strong>：解决一个具体任务，"怎么做 X"。重行动，标题就是任务名。</li>
+<li><strong>参考（Reference）</strong>：描述工具本身，参数表、错误码、API 签名。重信息，必须完整、无遗漏。</li>
+<li><strong>解释（Explanation）</strong>：讲设计动机和背景，"为什么这么设计"。重理解，可以有观点。</li>
+</ul>
+<h3>一篇文档只属于一层</h3>
+<p>判断方法很粗暴：读者是<strong>在学习</strong>还是<strong>在工作</strong>？参考和 how-to 服务工作中的读者，教程和解释服务学习中的读者。混层的典型症状是：how-to 的第 4 步突然插入两页架构史——工作的人只想把第 4 步执行完。</p>
+<p>以我自己这个博客为例（这篇也是按这个标准维护的）：</p>
+<pre><code class="language-markdown">blog/
+├── README.md            # 教程：5 分钟从零发一篇文
+├── docs/
+│   ├── write-post.md    # how-to：改封面图 / 加分类 / 回刷旧文章
+│   ├── reference.md     # 参考：frontmatter 字段表、脚本参数、模板占位符
+│   └── why-markdown.md  # 解释：为什么弃用 WordPress 自己写生成器
+</code></pre>
+<p>四层各自独立，互相用链接引用，绝不把彼此的内容抄进对方——一抄就开始了复制粘贴漂移的深渊（后面反模式一节细讲）。</p>
+<h2>单篇文档的结构规范</h2>
+<p>分层解决了"该写哪几篇"，这一节解决"每一篇内部长什么样"。</p>
+<h3>标准骨架</h3>
+<p>一份合格的 how-to / 说明类文档，我建议固定这个骨架：</p>
+<pre><code class="language-markdown"># 标题：面向动作，一眼知道读完能干嘛
+## 你将完成什么（1-2 句 + 结果截图/输出）
+## 前置条件（版本、权限、账号，用表格或列表）
+## 步骤
+### 第 1 步：……
+### 第 2 步：……
+## 验证成功（怎么确认真的生效了，给出预期输出）
+## 常见问题 / 回滚（失败怎么办）
+## 延伸阅读（链接到参考或解释，不展开）
+</code></pre>
+<p>每步一节、一节一个观点。验证成功是最常被省掉又最不该省的一节——读者做完十步，你需要告诉他怎么知道这十步都成了，而不是让他猜。</p>
+<h3>标题层级不许跳级</h3>
+<p>标题是目录树的原料，跳级会毁掉大纲和可访问性（屏幕阅读器按层级导航）。<code>h1</code> 只允许一个，<code>##</code> 下直接出现 <code>####</code> 属于 bug 不是风格：</p>
+<pre><code class="language-markdown"># 配置超时参数            ✅ h1 全篇唯一
+## 服务端                  ✅
+### Nginx 层               ✅ 逐级递进
+#### 单个 location 覆盖     ✅
+
+# 配置超时参数
+## 服务端
+#### 单个 location 覆盖     ❌ 跳级，大纲会错位
+</code></pre>
+<p>发布前用脚本扫一遍，比人眼可靠：</p>
+<pre><code class="language-bash"># 检查 h1 数量与标题跳级（本博客 generate-post.py 内置同款检查）
+grep -c &quot;&lt;h1&gt;&quot; blog/posts/*.html | grep -v &quot;:1$&quot; &amp;&amp; echo &quot;h1 数量异常&quot;
+awk '/^#+ /{n=length($1)} prev &amp;&amp; n&gt;prev+1{print FILENAME&quot;: 跳级 -&gt; &quot;$0} {prev=n}' docs/*.md
+</code></pre>
+<h3>目录和锚点</h3>
+<p>超过两屏的文档必须有目录。目录要么手写要么从标题生成，<strong>永远不要在正文里再手写一遍"第一章……"之类的编号</strong>——插入一节就得全部重排，编号漂移是文档腐烂的第一现场。</p>
+<h2>措辞规范：十条红线</h2>
+<p>内容对了，措辞不对照样劝退。这是我长期修订文档总结的红线，每条都附 bad / good 对比。</p>
+<h3>红线 1-5：主动、具体、面向动作</h3>
+<pre><code class="language-markdown">❌ 超时可以在配置中被修改。
+✅ 你可以修改配置中的 timeout 值。
+# 被动语态藏起了&quot;谁来做&quot;；主动语态逼你写出动作的执行者。
+
+❌ 该功能性能很好。
+✅ 单次查询 P99 从 120ms 降到 8ms（v2.3，16C32G，100 并发）。
+# 没有数字的性能描述等于没写。
+
+❌ 关于部署的相关信息
+✅ 部署到生产环境
+# 标题就是任务名。名词短语的标题搜不到、看不懂。
+
+❌ 这里我们采用了一个巧妙的方案，非常简单，显然应该……
+✅ 采用 X 方案，代价是 Y（见「为什么不用 Z」）。
+# &quot;简单/显然/只需&quot;是对读者的否定：读者卡在这一步时只会觉得自己蠢。
+
+❌ 用户点击保存按钮之后，系统将会把数据写入数据库。
+✅ 点「保存」，数据落库。
+# 删掉&quot;之后/将会/进行/对所……的&quot;这些水分词。中文技术写作同样适用。
+</code></pre>
+<h3>红线 6-10：一致、精确、不卖关子</h3>
+<pre><code class="language-markdown">❌ 先&quot;登录控制台&quot;，后&quot;登陆管理后台&quot;，再&quot;进入 Dashboard&quot;。
+✅ 全文统一用一个词：&quot;登录管理控制台&quot;。
+# 术语一致性：同一事物全文只有一个名字。建术语表，review 时对照。
+
+❌ 较新的 Node 版本即可。
+✅ 需要 Node.js ≥ 18.17（v16 已 EOL）。
+# 版本、路径、参数名精确到可复制。&quot;较新/大概/一般来说&quot;都是埋雷。
+
+❌ 未来将支持导入功能。
+✅ 导入功能在 3.1 提供（未 GA，勿用于生产）。
+# 不写没有日期的承诺。要么给版本，要么不写。
+
+❌ 详见相关文档。
+✅ 见《限流参数参考》#qps 一节。
+# &quot;相关文档&quot;要么给确切链接，要么删掉这句废话。
+
+❌ 这段逻辑很复杂，就不再展开了。
+✅ 核心逻辑分四步：A → B → C → D（每步一句话 + 链接到解释文档）。
+# 复杂不是省略的理由，是拆分层级的信号。
+</code></pre>
+<h3>代码优先于文字</h3>
+<p>能用一行代码说清的，不要三行中文。比较两种赋值方式，最好的写法是并排放两段代码加一句结论，而不是用文字描述代码行为：</p>
+<pre><code class="language-markdown">❌ 文字描述：&quot;你需要先解构出 head 和 tail，然后对 tail 做 map……&quot;
+✅ 直接给：
+
+const [head, ...tail] = list;          // 取第一个和其余
+const doubled = tail.map(x =&gt; x * 2);  // 其余翻倍
+</code></pre>
+<h2>代码示例的规范</h2>
+<p>技术文档里代码示例是本体，文字是注解。示例不合格，整篇文档作废。</p>
+<h3>合格示例的四条硬标准</h3>
+<ol>
+<li><strong>可运行</strong>：复制粘贴能跑通，不省略 import、不假设有魔法变量；</li>
+<li><strong>完整但有边界</strong>：展示最小闭环，错误处理可以用注释标明"生产环境需处理"，但不能不写输入输出；</li>
+<li><strong>标注版本</strong>：语言、库版本不对，示例就是误导；</li>
+<li><strong>有预期输出</strong>：跑完之后 stdout / 返回值长什么样，贴在代码后面。</li>
+</ol>
+<pre><code class="language-python"># Python ≥ 3.9；redis-py 5.0.1
+import redis
+
+client = redis.Redis(host=&quot;127.0.0.1&quot;, port=6379, decode_responses=True)
+client.set(&quot;session:42&quot;, &quot;active&quot;, ex=900)   # 900 秒后自动过期
+print(client.ttl(&quot;session:42&quot;))
+# 预期输出：899
+</code></pre>
+<h3>参数注释写的是"为什么"</h3>
+<p>字段名和类型看一眼就知道，注释要给的是看代码看不出来的信息：单位、边界、为什么是这个默认值。</p>
+<pre><code class="language-python">@dataclass
+class TimeoutConfig:
+    connect_timeout: float = 3.0
+    # 单位：秒。拨号阶段超时，不含 TLS 握手。
+    # 3s 而非 30s：跨机房建连 P99 为 1.2s，超过 3s 基本等于网络已断，
+    # 快速失败让上层的重试逻辑接管（见 docs/retry-policy.md）。
+
+    read_timeout: float = 10.0
+    # 单位：秒。建连后两次收包之间的最大间隔，不是整个请求的总耗时。
+    # ⚠️ 必须 &lt; 上游 Nginx 的 proxy_read_timeout(15s)，否则超时发生在哪一层不可控，
+    #    排障时会互相甩锅。这是踩过的坑，别改小注释不通知 SRE。
+</code></pre>
+<h3>反例：坏示例长什么样</h3>
+<pre><code class="language-markdown">❌ 修改配置文件中的相关参数，重启服务即可生效。
+❌ // TODO: implement here（教程挖坑让读者自己填核心步骤）
+❌ 用伪代码当真实 API 用：db.query(&quot;SELECT ...&quot;) —— 真实叫法不是这个
+❌ 截图里带一个无法从文字复现的配置界面（截图不能代替文字，见反模式一节）
+</code></pre>
+<h2>Docs-as-Code：把文档当代码管</h2>
+<p>文档腐烂的根源是"文档和代码分家"。解法是把文档纳入写代码的那套流程：版本管理、lint、CI、code review。这一步做完，前面所有规范才不是靠自觉。</p>
+<h3>仓库布局</h3>
+<pre><code class="language-markdown">项目文档的推荐布局（docs/ 与代码同仓、同 PR 演进）：
+.
+├── README.md              # 教程入口 + 一句话定位 + 指向 docs/
+├── docs/
+│   ├── how-to/            # 面向任务
+│   ├── reference/         # 面向信息（可从代码注释生成）
+│   └── explanation/       # 面向理解
+├── scripts/
+│   ├── generate-post.py   # 文档生成器（本博客就是这个模式）
+│   └── check-links.py     # 死链检查
+└── .github/workflows/docs.yml
+</code></pre>
+<h3>Markdown lint 与 frontmatter</h3>
+<p>先把风格问题交给机器，别浪费 review 的人力在空格和列表符号上：</p>
+<pre><code class="language-yaml"># .markdownlint.yml —— 收紧到能防住大半结构病
+MD001: true        # 标题层级逐级递进，不许跳级
+MD003: { style: atx }
+MD004: { style: dash }
+MD013: false       # 行宽交给编辑器，不禁
+MD022: true        # 标题前后必须空行
+MD024: { siblings_only: true }  # 允许不同父节下有同名标题
+MD025: { front_matter_title: &quot;^\\s*title\\s*[:=]&quot; }  # h1 唯一，排除 frontmatter
+MD028: true        # 块引用不能多空行
+MD032: true        # 列表前后空行
+MD041: true        # 文件必须以 h1（或 frontmatter title）开头
+</code></pre>
+<p>结构化元数据（标题、日期、分类）放 frontmatter，让生成脚本读，而不是从正文里正则抠——这是我把博客生成器从 v2 升到 v3 学到的最重要一课：</p>
+<pre><code class="language-markdown">---
+title: 技术文档编写指南
+description: 一句话摘要，给列表页和 RSS 用
+date: 2026-09-03 17:30:00   # 带时间：同一天两篇文靠它排序
+category: 开发
+tags: [技术写作, 文档规范]
+slug: 自定义-url-片段
+---
+</code></pre>
+<h3>CI 校验：链接、示例、数字</h3>
+<p>死链检查是最小可行 CI。文档里的 URL 和文件路径全部用 markdown 链接写，机器才能扫：</p>
+<pre><code class="language-yaml"># .github/workflows/docs.yml
+name: docs
+on:
+  pull_request:
+    paths: [&quot;docs/**&quot;, &quot;README.md&quot;]
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: markdownlint
+        uses: DavidAnson/markdownlint-cli2-action@v16
+      - name: 检查相对链接死链
+        run: python3 scripts/check-links.py docs/ README.md
+      - name: 示例代码语法检查（能 parse 才能谈可运行）
+        run: |
+          pip install &quot;pyright==1.1.*&quot;
+          python scripts/extract-code-blocks.py docs/ --lang python &gt; /tmp/snippets/
+          pyright /tmp/snippets/
+</code></pre>
+<pre><code class="language-python"># scripts/check-links.py（简化版）
+import re, sys, pathlib
+
+LINK = re.compile(r&quot;\[[^\]]*\]\((?!https?://)([^)]+)\)&quot;)  # 只看相对链接
+bad = 0
+for md in pathlib.Path(sys.argv[1]).rglob(&quot;*.md&quot;):
+    for target in LINK.findall(md.read_text(encoding=&quot;utf-8&quot;)):
+        path = (md.parent / target.split(&quot;#&quot;)[0]).resolve()
+        if not path.exists():
+            print(f&quot;❌ {md}: 链接目标不存在 -&gt; {target}&quot;)
+            bad += 1
+sys.exit(1 if bad else 0)
+</code></pre>
+<h3>Review 规则</h3>
+<p>PR 改了行为、接口或参数，必须同 PR 改文档，否则 review 直接打回。这条规则写进 CONTRIBUTING，由模板强制：</p>
+<pre><code class="language-markdown">## PR 检查模板（.github/pull_request_template.md）
+- [ ] 本 PR 是否改变用户可见行为/接口/配置？
+- [ ] 若是：对应文档在哪个文件？（附 diff 链接）
+- [ ] 新增错误信息是否已收录 docs/reference/errors.md？
+</code></pre>
+<h2>常见反模式与解药</h2>
+<p>规范讲完了，这一节是真实尸体陈列。每种反模式都配可操作的解药。</p>
+<h3>反模式一：一次性文档</h3>
+<p>上线前突击写完，上线后再没人打开过。解药是<strong>把文档变更绑定到代码变更的触发条件</strong>上：CI 规则（上一节）、错误码表从代码注释生成、CHANGELOG 和文档同 PR。</p>
+<h3>反模式二：只写是什么，不写为什么</h3>
+<pre><code class="language-markdown">❌ &quot;重试次数设为 3。&quot;（三个月后没人敢动这个数字）
+✅ &quot;重试次数 3：覆盖瞬时抖动（占故障 92%）；第 4 次起的成功率增益 &lt;1%，
+   但最坏延迟翻倍。数据见 docs/explanation/retry-policy.md。&quot;
+</code></pre>
+<p>"为什么"是文档里保鲜期最长的部分——参数会变，权衡的逻辑能活很久。</p>
+<h3>反模式三：复制粘贴漂移</h3>
+<p>同一份安装步骤抄在 README、官网和 wiki 三处，半年后三个版本互相矛盾。解药只有一个：<strong>单一事实源 + 引用</strong>。内容只存在一处，其他地方用链接或 include 指令引入。本博客的相关文章、索引页全是这么做的——所有列表由 <code>generate-index.js</code> 从文章 HTML 反向生成，绝不手写第二份。</p>
+<h3>反模式四：用截图代替文字</h3>
+<p>截图不能搜索、不能复制、界面改版即作废。截图只该用于"无法用文字描述的空间布局"，且必须配文字步骤：</p>
+<pre><code class="language-markdown">❌ （一张 800px 的控制台设置页截图）&quot;按下图配置&quot;
+✅ 1. 打开「设置 → 网络 → 高级」
+   2. 「连接超时」填 3s（默认 30s，务必改小，原因见下文）
+   ![超时设置](../images/timeout.png)   # 截图降级为辅助，不是主体
+</code></pre>
+<h3>反模式五：完美主义瘫痪</h3>
+<p>"等 API 稳定了再写文档"永远不会写。解药是分层：先交参考层的骨架（哪怕每格只有一行），再补 how-to，解释层最后。一份粗糙但完整的地图，胜于一张永远在画的局部高清。</p>
+<h3>流图表也当作代码</h3>
+<p>流程图用 Mermaid 存在 markdown 里，跟着 git diff 演进，别贴白板照片。比如本博客的发文流水线：</p>
+<pre><code class="language-mermaid">flowchart LR
+    A[写 article.md] --&gt; B[generate-post.py]
+    B --&gt; C{本地校验&lt;br/&gt;h1 死链 体积}
+    C -- 通过 --&gt; D[git push]
+    C -- 失败 --&gt; A
+    D --&gt; E[线上 200 验证]
+</code></pre>
+<h2>发布前检查清单</h2>
+<p>最后把全文压缩成一份可打印的清单。本博客发文的实际流程就是这张清单的具象化——写完文章跑生成脚本、本地 grep 校验、push、线上实测，一步不省。</p>
+<pre><code class="language-markdown">## 发布前逐项打勾
+### 定位
+- [ ] 这篇属于教程/how-to/参考/解释中的哪一层？没有混层？
+- [ ] 开头两行写清读者画像和前置条件？
+### 结构
+- [ ] h1 唯一、标题逐级不跳、超两屏有目录？
+- [ ] 标题是动作短语（&quot;部署到生产&quot;，不是&quot;关于部署&quot;）？
+- [ ] 有&quot;验证成功&quot;一节？
+### 措辞
+- [ ] 无&quot;简单/显然/只需/将会&quot;？
+- [ ] 同一事物全文同一个名字？
+- [ ] 所有版本、路径、参数精确可复制？
+### 示例
+- [ ] 代码块可运行：含 import、标版本、附预期输出？
+### 工程
+- [ ] markdownlint / 死链检查通过？
+- [ ] 改动的接口/参数已同步更新对应文档？
+- [ ] 生成物全部重跑（索引/地图/RSS），首页和列表页能看到新文章？
+- [ ] 线上地址实测返回 200 且含标题？
+</code></pre>
+<p>最后一句心得：<strong>写文档是写给三个月后的自己和深夜三点的排障者</strong>。他们都不了解背景、都没有耐心、都不能被你拉来问两句。把这三件事放进心里，规范只是自然的结果。</p>
+
+        <!-- Post Copyright & License Card -->
+        <div class="post-copyright-card">
+          <div class="copyright-header">
+            <div class="copyright-badge">
+              <span>📜</span>
+              <span>原创与知识共享协议</span>
+            </div>
+            <button class="copyright-cite-btn" id="copy-cite-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+              </svg>
+              <span>复制 Markdown 引用</span>
+            </button>
+          </div>
+          <div class="copyright-list">
+            <div class="copyright-item"><strong>文章标题：</strong>技术文档编写指南写出别人真的会看的文档</div>
+            <div class="copyright-item"><strong>文章作者：</strong>张小猛 · loczb</div>
+            <div class="copyright-item"><strong>永久链接：</strong><a href="https://709527.xyz/blog/posts/技术文档编写指南写出别人真的会看的文档.html">https://709527.xyz/blog/posts/技术文档编写指南写出别人真的会看的文档.html</a></div>
+            <div class="copyright-item"><strong>版权声明：</strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 国际许可协议。商业转载请联系作者获得授权，非商业转载请注明出处。</div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </main>
+
+  <!-- Related Posts / Navigation -->
+  <section class="section" style="padding-top: 0;">
+    <div class="container container-narrow">
+      <hr style="border: none; border-top: 1px solid var(--color-border); margin: var(--space-3xl) 0;">
+
+      <div class="blog-topics" style="margin-bottom: var(--space-xl);">
+        <span class="topic-label">读完之后:</span>
+        <a href="../index.html" class="topic-tag">返回博客列表</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <p class="footer-signature">写代码,做产品,也认真生活。</p>
+      <div class="footer-social">
+        <a href="https://github.com/zzdbilly" class="footer-social-link" target="_blank" rel="noopener" aria-label="GitHub">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+        </a>
+        <a href="../../rss.xml" class="footer-social-link" aria-label="RSS">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+      </div>
+      <div class="footer-links">
+        <a href="../../index.html" class="footer-link">首页</a>
+        <a href="../../projects/index.html" class="footer-link">项目</a>
+        <a href="../../blog/index.html" class="footer-link">博客</a>
+        <a href="../../about/index.html" class="footer-link">关于</a>
+      </div>
+      <p class="footer-copyright">
+        &copy; 2026 张小猛
+      </p>
+    </div>
+  </footer>
+
+
+  <script defer src="../../assets/js/related-posts.js"></script>
+  <script defer src="../../assets/js/main.js"></script>
+  <script defer src="../../assets/js/article.js"></script>
+  <script defer src="../../assets/js/share.js"></script>
+  <script defer src="../../assets/js/back-to-top.js"></script>
+  <!-- Back to Top & Reading Progress -->
+  <button class="back-to-top" id="backToTop" aria-label="回到顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
+  <div class="reading-progress" id="readingProgress"></div>
+
+  <!-- Post Sidebar Info（左侧） -->
+  <div class="post-sidebar-info" id="postSidebar">
+    <div class="post-info-card">
+      <div class="post-info-section">
+        <div class="post-info-label">作者</div>
+        <div class="post-info-author">
+          <div class="post-info-avatar">小</div>
+          <div>
+            <div class="post-info-author-name">张小猛</div>
+            <div class="post-info-author-desc">写代码，做产品</div>
+          </div>
+        </div>
+      </div>
+      <div class="post-info-section">
+        <div class="post-info-label">文章信息</div>
+        <div class="post-info-stat"><span class="post-info-stat-label">📅 发布日期</span><span class="post-info-stat-value">2026-09-03</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label">⏱️ 阅读时间</span><span class="post-info-stat-value">18 min read</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label">📝 文章字数</span><span class="post-info-stat-value">4448 字</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label">📊 章节数</span><span class="post-info-stat-value">9 节 · 23 子节</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label">💻 代码块</span><span class="post-info-stat-value">21 段</span></div>
+      </div>
+      <div class="post-info-section" id="postSidebarTags">
+        <div class="post-info-label">标签</div>
+        <div class="post-info-links">
+          <a href="../../blog/index.html?tag=技术写作" class="post-info-link"># 技术写作</a>
+          <a href="../../blog/index.html?tag=文档规范" class="post-info-link"># 文档规范</a>
+          <a href="../../blog/index.html?tag=工程实践" class="post-info-link"># 工程实践</a>
+          <a href="../../blog/index.html?tag=Docs-as-Code" class="post-info-link"># Docs-as-Code</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Post TOC -->
+  <div class="post-toc-container" id="postToc">
+    <nav class="post-toc">
+      <div class="post-toc-title">目录</div>
+      <ul class="post-toc-list" id="tocList">
+      </ul>
+    </nav>
+  </div>
+<script defer src="../../assets/js/particles.js"></script>
+
+  <!-- Comment System -->
+  <script src="../../workers/comment-system/comment-widget.js" defer></script>
+
+  <!-- highlight.js 代码语法高亮（本地完整构建，无外部依赖） -->
+  <script defer src="../../assets/vendor/highlight/highlight.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // 只对没有 codehilite 的代码块应用 highlight.js
+      document.querySelectorAll('pre code').forEach(function(block) {
+        // 跳过已经有 Pygments 高亮的块
+        if (block.closest('.codehilite') || block.classList.contains('hljs')) return;
+        try { hljs.highlightElement(block); } catch (e) {}
+      });
+    });
+  </script>
+
+  <!-- Cloudflare Web Analytics -->
+  <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "29e7cff6f37448989538e2165cb79187"}'></script>
+</body>
+</html>
