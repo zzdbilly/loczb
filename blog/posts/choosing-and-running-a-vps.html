@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>主流 VPS 的选择和使用 | 张小猛 - loczb</title>
+    <meta name="description" content="截至 2026 年 9 月的主流 VPS 厂商盘点、选型维度、下单开机、新机安全加固、Docker/Caddy 日常使用与费用控制的全流程实操指南。">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="主流 VPS 的选择和使用 | 张小猛 - loczb">
+    <meta property="og:description" content="截至 2026 年 9 月的主流 VPS 厂商盘点、选型维度、下单开机、新机安全加固、Docker/Caddy 日常使用与费用控制的全流程实操指南。">
+    <meta property="og:url" content="https://709527.xyz/blog/posts/choosing-and-running-a-vps.html">
+    <meta property="og:type" content="article">
+        <meta property="og:image" content="../../assets/images/og-image.png">
+    <meta property="og:site_name" content="loczb">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="主流 VPS 的选择和使用 | 张小猛 - loczb">
+    <meta name="twitter:description" content="截至 2026 年 9 月的主流 VPS 厂商盘点、选型维度、下单开机、新机安全加固、Docker/Caddy 日常使用与费用控制的全流程实操指南。">
+
+
+        <script type="application/ld+json">
+{
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "主流 VPS 的选择和使用",
+      "description": "截至 2026 年 9 月的主流 VPS 厂商盘点、选型维度、下单开机、新机安全加固、Docker/Caddy 日常使用与费用控制的全流程实操指南。",
+      "image": "https://709527.xyz/assets/images/og-image.png",
+      "author": {
+            "@type": "Person",
+            "name": "张小猛",
+            "url": "https://709527.xyz/about/"
+      },
+      "publisher": {
+            "@type": "Organization",
+            "name": "loczb",
+            "logo": {
+                  "@type": "ImageObject",
+                  "url": "https://709527.xyz/assets/images/favicon.svg"
+            }
+      },
+      "datePublished": "2026-09-08 10:20:00",
+      "dateModified": "2026-09-08 10:20:00",
+      "url": "https://709527.xyz/blog/posts/choosing-and-running-a-vps.html",
+      "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://709527.xyz/blog/posts/choosing-and-running-a-vps.html"
+      },
+      "keywords": "VPS, DevOps, 运维, 服务器",
+      "articleSection": "DevOps",
+      "timeRequired": "PT14M",
+      "inLanguage": "zh-CN"
+}
+    </script>
+
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&family=Noto+Sans+SC:wght@500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500&display=swap" media="print" onload="this.media='all'">
+    <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
+    <link rel="alternate icon" href="../../assets/images/favicon.ico">
+    <link rel="canonical" href="https://709527.xyz/blog/posts/choosing-and-running-a-vps.html">
+</head>
+<body>
+  <!-- Loading -->
+  <div class="loading">
+    <div class="loading-spinner"></div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../../index.html" class="nav-logo">
+        loc<span>zb</span>
+      </a>
+      <button class="nav-toggle" aria-label="打开菜单" aria-expanded="false" aria-controls="nav-links-menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <div class="nav-overlay"></div>
+      <ul class="nav-links" id="nav-links-menu">
+        <li><a href="../../index.html" class="nav-link">首页</a></li>
+        <li><a href="../../projects/index.html" class="nav-link">项目</a></li>
+        <li><a href="../index.html" class="nav-link active">博客</a></li>
+        <li><a href="../../about/index.html" class="nav-link">关于</a></li>
+      </ul>
+      <button class="theme-toggle" aria-label="切换主题" title="切换亮/暗模式">
+        <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+        <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+      </button>
+    </div>
+  </nav>
+  <!-- Particle Canvas Background -->
+  <canvas id="particle-canvas" class="particle-canvas"></canvas>
+
+  <div class="scroll-progress"></div>
+
+  <main class="section" style="padding-bottom: 0; padding-top: var(--space-4xl);">
+    <div class="container container-narrow">
+      <a href="../index.html" class="back-link">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        返回博客列表
+      </a>
+
+      <article class="post-content">
+        <h1>主流 VPS 的选择和使用</h1>
+
+        <div class="post-meta">
+          <span>📅 2026-09-08 10:20:00</span>
+          <span>⏱️ 14 min read</span>
+          <span>👤 张小猛</span>
+        </div>
+
+        <div class="post-tags">
+          <span class="tag">VPS</span>
+          <span class="tag">DevOps</span>
+          <span class="tag">运维</span>
+          <span class="tag">服务器</span>
+        </div>
+
+        
+
+        <p>本文面向有一两台服务器运维需求的技术读者：想跑个人网站、自建服务、代理网关或开发测试环境的程序员。前置条件：会用命令行、有一个支持 SSH 的终端、准备一张可国际支付的银行卡（或对应厂商支持的支付方式）。如果你手头的问题就是「某个场景该买什么配置」，本站旧文《VPS 选购与使用指南：五个常见场景的配置与避坑》已经覆盖；SSH 加固的深度步骤另有《云服务器 SSH 安全加固完整指南》。本文补上的是另一半：厂商横向盘点、选型维度、从下单到日常运维的完整操作线，术语全文统一用 VPS。</p>
+<h2>重新认识为什么还要自己管一台 VPS</h2>
+<p>静态托管 + Serverless 已经能覆盖大部分个人场景，这个判断在本站旧文里说过。但以下需求仍然只有「自己掌控一台常驻机器」能干净地满足：</p>
+<h3>需要常驻进程和任意端口</h3>
+<p>Webhook 接收器、Telegram bot、定时爬虫、内网穿透的服务端、自建 DERP 中继——这些要有稳定 IP、想开哪个端口开哪个端口的常驻环境。Serverless 的冷启动和端口限制会把它们挡在门外。</p>
+<h3>需要「刚好够用」的成本曲线</h3>
+<p>一台 1 vCPU / 1GB 内存的 VPS 月费可以控制在 4 美元以内，而同等「永远在线」能力的托管平台组合，账单通常高出一截。低负载时 VPS 几乎是单机性价比上限。</p>
+<h3>需要完整的操作系统权限</h3>
+<p>装内核模块、改 sysctl、跑 iptables/nftables、自建 DNS、测网络线路——这些操作要求 root。托管平台不会给你。</p>
+<p>代价是明确的：系统更新、安全加固、备份恢复都是你的责任。一台不做维护的 VPS，从上线那天就开始积累风险。</p>
+<h2>盘点主流玩家与价格档位</h2>
+<p>价格数据截至 2026 年 9 月，均为官网或可靠来源核实过的档位，标注「约」的为促销波动区间。<strong>所有价格随时可能调整，下单前以官网为准</strong>——2026 年上半年就有两次标志性变动：Hetzner 于 6 月 15 日上调云产品价格（共享 vCPU 系列普遍上调约 30%），Oracle 同日宣布缩减 Always Free 的 ARM 配额（8 月 18 日执行）。</p>
+<h3>Hetzner：欧洲性价比标杆</h3>
+<p>德国厂商，机房在德国（Falkenstein/Nuremberg）、芬兰（Helsinki）、美国（Ashburn/Hillsboro）、新加坡。2026 年 6 月调价后的入门档位（不含 IPv4 附加费、不含增值税）：</p>
+<ul>
+<li>CX23（2 vCPU / 4GB / 40GB NVMe）：约 €5.49/月（美区约 $6.49）</li>
+<li>CAX11（2 ARM vCPU / 4GB / 40GB）：约 €5.99/月起</li>
+<li>流量政策：各档普遍送 20TB/月，超额按量计费，在 VPS 里属于极宽裕的一档</li>
+</ul>
+<p>注意点：注册审核偏严，需要真实姓名与可用支付方式（信用卡/PayPal），无理由拒批存在；美区机房选项少；对中文用户网络延迟较高。</p>
+<h3>DigitalOcean：开发者体验标杆</h3>
+<p>纽约上市厂商，机房覆盖美欧亚太主要城市。Basic Droplet（共享 CPU）档位（官网实价）：</p>
+<ul>
+<li>512MB / 1 vCPU / 10GB SSD / 500GiB 流量：$4/月</li>
+<li>1GB / 1 vCPU / 25GB SSD / 1TB 流量：$6/月</li>
+<li>2GB / 1 vCPU / 50GB SSD / 2TB 流量：$12/月</li>
+<li>4GB / 2 vCPU / 80GB SSD / 4TB 流量：$24/月</li>
+</ul>
+<p>特色是文档质量、控制面板体验和成熟的生态镜像；溢价来自这些软件层价值。新注册常有 200 美元额度赠送（有效期 60 天，促销条款以官网为准）。</p>
+<h3>Vultr：机房数量与灵活度取胜</h3>
+<p>美系厂商，30+ 个机房全球铺点，入门 Cloud Compute 档 $2.50/月起（IPv6-only 更低的档偶有），常规 1GB/2GB 档约 $5–$6 与 $12 一线，另有 VX1 等新系列按小时计费不封顶。支持支付宝付款，注册即开，是「需要特定小机房」（首尔、东京、悉尼、约翰内斯堡等）时的默认候选。风控方面对新账户首月充值有小额限制，超额需人工审核。</p>
+<h3>Linode（Akamai）：老牌稳定的中性选择</h3>
+<p>被 Akamai 收购后并入其网络资源。入门 Nanode（1GB/1 vCPU）约 $5/月，2GB 档约 $12/月，与 DigitalOcean 定价高度对齐，流量配额政策各家略有差异（入门档普遍 1–2TB）。品牌溢价与稳定性口碑都在，缺少明显差异化卖点时也意味着：促销少。</p>
+<h3>AWS Lightsail：入门 EC2 的封装壳</h3>
+<p>固定月费的轻量产品线（美区实价）：$3.50/月（IPv6-only）起，$5/月档为 0.5GB 内存 / 2 vCPU / 20GB SSD / 1TB 流量，$7/月翻倍到 1GB / 40GB / 2TB。超出流量按 $0.01/GB 级别计费。优势是随时无缝迁移到完整 EC2、与 AWS 生态打通；劣势是绝对价格在同配置里不占优、控制台复杂度高于专用 VPS 面板。</p>
+<h3>Oracle Cloud Free Tier：免费但别再当长期饭票</h3>
+<p>Always Free 层在 2026 年 6 月 15 日公告、8 月 18 日执行缩减：ARM Ampere A1 配额从 4 OCPU / 24GB 减半至 2 OCPU / 12GB（可按 1–2 台 VM 分配），另有 x86 实例 2 台各 1GB 与合计 200GB 块存储。免费层依然可观——12GB ARM 内存免费在市面上没有直接对手——但两个风险要计入：长期零占用（尤其免费 ARM 实例停机不复活）会触发闲置资源回收，信用卡预授权验证失败的账户会被整体清理；想依赖它跑长期服务的人，请配合本站《自建 Tailscale DERP 中继服务器完整指南》里同样的「随时可弃」心态。</p>
+<h3>国内厂商：轻量应用服务器的促销世界</h3>
+<p>面向国内读者的阿里云、腾讯云都把「轻量应用服务器」作为入门线（本质是封装好的 VPS，按套餐售卖）。2026 年 9 月前后的常见促销档位（新用户导向，价格波动大）：</p>
+<ul>
+<li>阿里云轻量 2核2G：抢购价约 38 元/年，常规活动约 68–99 元/年；2核4G 约 199 元/年（峰值 200M 带宽档）</li>
+<li>腾讯云 Lighthouse 2核2G/4M/300G 月流量档：约 99 元/年，新用户秒杀更低</li>
+<li>共同套路：首年低价、续费回原价，带宽为「峰值」且普遍有月流量包限制</li>
+</ul>
+<p>适用判断：目标用户在国内、需要备案域名、要求境内低延迟，选它们；面向海外用户，境内外互访延迟会把价格优势吃掉。备案与合规见下文选型维度一节。</p>
+<h3>价格横向锚点（1GB–2GB 内存入门档）</h3>
+<table>
+<thead>
+<tr>
+<th>厂商</th>
+<th>入门月费</th>
+<th>流量政策</th>
+<th>人民币约/月</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Oracle 免费层</td>
+<td>$0（ARM 12GB 档）</td>
+<td>约 10TB/月</td>
+<td>0</td>
+</tr>
+<tr>
+<td>阿里云/腾讯云轻量</td>
+<td>促销折合 ¥8–¥17/年付均摊</td>
+<td>月流量包 300G–不限</td>
+<td>促销首年极低</td>
+</tr>
+<tr>
+<td>Vultr</td>
+<td>约 $5–6</td>
+<td>1–2TB</td>
+<td>¥36–43</td>
+</tr>
+<tr>
+<td>Linode</td>
+<td>约 $5</td>
+<td>1TB</td>
+<td>¥36</td>
+</tr>
+<tr>
+<td>DigitalOcean</td>
+<td>$6（1GB）</td>
+<td>1TB</td>
+<td>¥43</td>
+</tr>
+<tr>
+<td>AWS Lightsail</td>
+<td>$5（0.5GB）</td>
+<td>1TB</td>
+<td>¥36</td>
+</tr>
+<tr>
+<td>Hetzner</td>
+<td>约 €5.49（4GB）</td>
+<td>20TB</td>
+<td>¥45</td>
+</tr>
+</tbody>
+</table>
+<p>数字只用于建立量级直觉，下单前回到各家官网页面核对。</p>
+<h2>用选型维度把候选集缩小</h2>
+<h3>定地域：延迟预算先于价格</h3>
+<p>按「你的用户在哪」而不是「机器在哪便宜」选机房。境内用户选国内节点（北上广深杭）；跨境访问选港/日/新（延迟 40–80ms 量级，但国际出口质量看运营商心情）；纯自用的网关类服务选美西/欧洲（150–250ms 可接受）。下单前用厂商提供的 looking glass 或试用 <code>ping</code>/<code>mtr</code> 实测：</p>
+<pre><code class="language-bash"># 拿到候选机房 IP 后，本地与目标端各跑一次
+mtr -rwzbc 100 --tcp --port 443 203.0.113.10
+# 输出最后一列 Loss% 与 Avg ms 就是线路质量底牌；晚高峰再测一次
+</code></pre>
+<h3>定规格：内存优先，磁盘看 IO</h3>
+<p>CPU 在共享 vCPU 档普遍够用，瓶颈通常按「内存 → 磁盘 IO → 带宽」顺序出现。1GB 内存跑一个 Node 应用 + Caddy 是下限体验，2GB 开始从容。NVMe/SSD 宣传值不等于实际 IO，新机器到货先测：</p>
+<pre><code class="language-bash"># 顺序写 + 随机写各测一次（fio，Debian 12: apt install fio）
+fio --name=seqwrite --rw=write --bs=1M --size=256M --numjobs=1 --direct=1 --runtime=10 --group_reporting
+fio --name=randwrite --rw=randwrite --bs=4k --size=128M --numjobs=4 --iodepth=32 --direct=1 --runtime=20 --group_reporting
+# 关注结果行 write: BW=xxx MiB/s 与 IOPS=xxxxx；随机写低于约 5k IOPS 的盘跑数据库要慎重
+</code></pre>
+<h3>定流量与带宽政策：看清「不限」的写法</h3>
+<p>「不限流量」在国内轻量套餐里普遍是「峰值带宽 + 公平使用条款」，海外厂商的「Unmetered」同样受 AUP 约束。Hetzner 式「给足一个显性配额（20TB）」反而最诚实。读条款时找三个词：cap（上限）、fair use（公平使用）、overage（超额计费单价）。</p>
+<h3>定 IPv4/IPv6：双栈是底线，纯 IPv6 看场景</h3>
+<p>IPv4 枯竭让部分厂商把纯 IPv6 实例做成最低价档（Lightsail $3.50、Hetzner 附加费模式）。只有当你确认出口网络、对端服务都支持 IPv6 时才选纯 IPv6；否则把 IPv4 附加费计入报价再比较。验收命令：</p>
+<pre><code class="language-bash">curl -4 -s ifconfig.me &amp;&amp; echo &quot; &lt;- IPv4&quot; ; curl -6 -s ifconfig.me &amp;&amp; echo &quot; &lt;- IPv6&quot;
+</code></pre>
+<h3>定合规与备案：决定你能用哪些机房</h3>
+<p>域名解析到境内节点提供 Web 服务需要 ICP 备案（部分经营性场景另需许可证），未备案域名在境内机房通常直接拦截 80/443。嫌麻烦就选境外机房——代价是延迟与内容属性要自己评估合规边界。这笔账在选型阶段算清楚，不要等上线被阻断。</p>
+<h3>定支付方式与风控：被拒付比配置难排查</h3>
+<p>国际卡（Visa/Master）、PayPal 几乎通吃；支付宝微信在 Vultr、Lightsail 等可用；国内厂商自不必说。风控常识：新账户一次性大额充值、多账户共用支付方式、频繁开/删高配实例，都会触发人工审核甚至封号。把 VPS 当基础设施而不是「随时换的消耗品」，养一个干净的账户信用长期比薅新号划算。</p>
+<h2>完成下单并初始化第一台机器</h2>
+<p>以 Debian 12 为例（Ubuntu 24.04 命令通用）。厂商面板里的标准动线：</p>
+<ol>
+<li>选机房 → 选规格 → 镜像选「Debian 12 / Ubuntu 24.04 64-bit」，避免用预装应用镜像（多一层厂商魔改）。</li>
+<li>认证方式选 SSH Keys——先在本机生成密钥再粘贴公钥，多数面板支持；厂商若强制密码登录，第一步就换密钥。</li>
+<li>主机名、标签、自动备份（额外约 20–40% 费用，见费用控制一节）按需勾选。</li>
+<li>开机后拿到公网 IP，验证 SSH 可达：</li>
+</ol>
+<pre><code class="language-bash">ssh-keygen -t ed25519 -C &quot;vps-2026&quot; -f ~/.ssh/id_ed25519_vps   # 本机执行，已有密钥可跳过
+ssh-copy-id -i ~/.ssh/id_ed25519_vps.pub root@203.0.113.10      # 首次用厂商密码登录
+ssh -i ~/.ssh/id_ed25519_vps root@203.0.113.10 'hostname &amp;&amp; cat /etc/debian_version'
+# 预期输出：你的主机名 + 12.x，说明密钥登录已通
+</code></pre>
+<p>在 <code>~/.ssh/config</code> 固化别名，后续所有命令用别名，不再手敲 IP：</p>
+<pre><code>Host myvps
+    HostName 203.0.113.10
+    User root
+    IdentityFile ~/.ssh/id_ed25519_vps
+    ServerAliveInterval 30
+</code></pre>
+<h2>30 分钟内加固新机器</h2>
+<p>公网上的新机器，首次 SSH 密码登录尝试通常在几分钟内开始出现——2026 年公开端口扫描强度只增不减。以下动作以 root 在 <code>ssh myvps</code> 会话内依次执行（Ubuntu 24.04 需先 <code>adduser admin &amp;&amp; usermod -aG sudo admin</code>；Debian 12 安装时已建普通用户）。</p>
+<h3>创建普通用户并收权</h3>
+<pre><code class="language-bash">adduser deploy          # 建用户
+usermod -aG sudo deploy # Debian 下用 -aG sudo 亦可（需安装 sudo）
+loginctl enable-linger deploy  # 让该用户的 systemd 服务常驻（后续 Docker 方案会用）
+</code></pre>
+<h3>加固 SSH：禁密码、禁 root</h3>
+<p>新建 <code>/etc/ssh/sshd_config.d/20-hardening.conf</code>（不要直接改主文件，发行版升级友好）：</p>
+<pre><code># /etc/ssh/sshd_config.d/20-hardening.conf
+PermitRootLogin no
+PasswordAuthentication no
+KbdInteractiveAuthentication no
+PubkeyAuthentication yes
+MaxAuthTries 3
+LoginGraceTime 20
+ClientAliveInterval 60
+ClientAliveCountMax 3
+</code></pre>
+<pre><code class="language-bash">sshd -t &amp;&amp; systemctl reload ssh    # 先校验再重载；Ubuntu 服务名 ssh，Debian 同为 ssh
+# 另开一个新终端验证 deploy 用户还能登录，确认无误后才退出当前 root 会话：
+ssh deploy@203.0.113.10 'id &amp;&amp; sudo -n true &amp;&amp; echo OK'   # 预期输出 uid + OK
+</code></pre>
+<p><strong>保留一个已验证的 root 会话直到新配置测试通过</strong>，这是防锁死的唯一保险。真锁死了走厂商控制台的 VNC/救援模式。</p>
+<h3>配置防火墙 ufw</h3>
+<pre><code class="language-bash">apt update &amp;&amp; apt install -y ufw
+ufw default deny incoming &amp;&amp; ufw default allow outgoing
+ufw allow 22/tcp &amp;&amp; ufw allow 80/tcp &amp;&amp; ufw allow 443/tcp
+ufw --force enable &amp;&amp; ufw status verbose
+# 预期输出：Status: active，三行 ALLOW IN
+</code></pre>
+<h3>部署 fail2ban 挡住暴力破解</h3>
+<pre><code># /etc/fail2ban/jail.d/sshd.local
+[sshd]
+enabled = true
+port = ssh
+maxretry = 5
+findtime = 10m
+bantime = 24h
+backend = systemd
+</code></pre>
+<pre><code class="language-bash">apt install -y fail2ban &amp;&amp; systemctl enable --now fail2ban
+fail2ban-client status sshd
+# 预期输出含 &quot;Currently banned:  N&quot;，N 随扫描持续上升
+</code></pre>
+<h3>设置时区、swap 与主机时钟同步</h3>
+<pre><code class="language-bash">timedatectl set-timezone Asia/Shanghai &amp;&amp; timedatectl   # Local time 与 ZONE 正确即通过
+
+# 2GB 内存机型建议 1G swap（部分厂商默认没有，OOM 时直接杀进程）
+fallocate -l 1G /swapfile &amp;&amp; chmod 600 /swapfile &amp;&amp; mkswap /swapfile
+swapon /swapfile &amp;&amp; echo '/swapfile none swap sw 0 0' &gt;&gt; /etc/fstab
+free -h | grep -i swap    # 预期输出：Swap: 1.0Gi
+</code></pre>
+<h3>开启自动安全更新</h3>
+<pre><code class="language-bash">apt install -y unattended-upgrades
+dpkg-reconfigure -plow unattended-upgrades   # 选 Yes；或手写 /etc/apt/apt.conf.d/20auto-upgrades
+apt-config dump | grep Unattended-Upgrade | head -2
+# 预期含 &quot;Unattended-Upgrade::Automatic-Reboot&quot; 配置项即已生效
+</code></pre>
+<p>自动重启策略按需打开（建议维护窗口时间），默认不重启更安全。</p>
+<h2>跑起来：Docker、反向代理与 systemd 服务</h2>
+<h3>装 Docker 并验证</h3>
+<pre><code class="language-bash">curl -fsSL https://get.docker.com | sudo sh
+sudo usermod -aG docker deploy
+docker run --rm hello-world | grep -o &quot;Docker is working&quot; # 或看到 &quot;Hello from Docker&quot; 段即通过
+</code></pre>
+<p>2GB 内存以下的机器慎用 Docker Desktop 类重型栈；单容器用 <code>--memory</code> 和 <code>--restart unless-stopped</code> 兜底。</p>
+<h3>用 Caddy 做反向代理：HTTPS 全自动</h3>
+<p>Caddy 单二进制 + 自动签发 Let's Encrypt，比 nginx + certbot 的脚本链条省心。<code>/etc/caddy/Caddyfile</code> 完整示例：</p>
+<pre><code>api.example.com {
+    encode gzip
+    reverse_proxy 127.0.0.1:8080 {
+        header_up X-Real-IP {remote_host}
+    }
+}
+</code></pre>
+<pre><code class="language-bash">sudo apt install -y debian-keyring debian-archive-keyring apt-transport-https curl
+curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' | sudo gpg --dearmor -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg
+curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' | sudo tee /etc/apt/sources.list.d/caddy-stable.list
+sudo apt update &amp;&amp; sudo apt install -y caddy
+systemctl status caddy --no-pager | head -5   # active (running) 即通过
+</code></pre>
+<p>域名 A 记录指到 VPS IP 后，<code>curl -I https://api.example.com</code> 应返回 200 且证书有效——这是整套反代链路的验收点。nginx 派读者可用 <code>certbot --nginx -d api.example.com</code> 达到同效，此处不展开。</p>
+<h3>把服务写成 systemd 单元</h3>
+<p>自写程序不要 <code>nohup</code> 裸跑，给它一个单元文件 <code>/etc/systemd/user/myapp.service</code>（deploy 用户）：</p>
+<pre><code>[Unit]
+Description=My App
+After=network-online.target
+
+[Service]
+ExecStart=/home/deploy/myapp/bin/myapp
+Restart=on-failure
+RestartSec=5
+MemoryMax=512M
+
+[Install]
+WantedBy=default.target
+</code></pre>
+<pre><code class="language-bash">systemctl --user daemon-reload &amp;&amp; systemctl --user enable --now myapp
+systemctl --user status myapp --no-pager   # Active: active (running) 即通过
+journalctl --user -u myapp -n 20           # 看日志
+</code></pre>
+<h3>建立备份习惯：先备份再折腾</h3>
+<p>最低配方案是「本地打包 + 推对象存储」，每周日 3 点跑：</p>
+<pre><code class="language-bash">cat &gt; /home/deploy/backup.sh &lt;&lt;'EOF'
+#!/usr/bin/env bash
+set -euo pipefail
+APP_DIR=/home/deploy/myapp
+DEST=/home/deploy/backups
+mkdir -p &quot;$DEST&quot;
+tar -czf &quot;$DEST/myapp-$(date +%F).tar.gz&quot; -C &quot;$APP_DIR&quot; data config Caddyfile
+find &quot;$DEST&quot; -name 'myapp-*.tar.gz' -mtime +14 -delete
+EOF
+chmod +x /home/deploy/backup.sh
+crontab -e   # 追加： 0 3 * * 0 /home/deploy/backup.sh &gt;&gt; /home/deploy/backup.log 2&gt;&amp;1
+</code></pre>
+<p>异地副本用 <code>rclone copy /home/deploy/backups remote:vps-backup/</code>（rclone 配好任意 S3/B2/WebDAV 后端），防单机全损。备份的验收标准是<strong>真的做一次恢复演练</strong>，而不是脚本退出码为 0。</p>
+<h2>控制长期费用与运维节奏</h2>
+<h3>续费与到期：日历比邮件提醒可靠</h3>
+<ul>
+<li>把每台 VPS 的到期日写进日历（提前 7/1/0 天三次提醒），促销价的「续费回原价」条款在购买当天就决定明年成本。</li>
+<li>Hetzner/DO/Vultr 支持余额与自动扣费；国内轻量套餐基本是「到期即释放」，数据保留窗口以天计，不要赌厂商的宽限期。</li>
+</ul>
+<h3>快照：重做实验前的后悔药</h3>
+<p>高危操作（系统大版本升级、反代配置重写）前先做厂商快照/镜像，部分厂商按存储量单独计费。没有快照功能的，<code>dd</code> + <code>gzip</code> 导分区不现实，退而求其次：<code>rsync -aHAXx --delete /etc/ /backup/etc-$(date +%F)/</code> 至少保住配置。</p>
+<h3>退订前导出数据的固定清单</h3>
+<ol>
+<li>DNS 区域文件/解析记录；2. <code>/etc</code> 自定义配置（上条 rsync 产物）；3. 应用数据 + 数据库 dump（<code>pg_dumpall</code> / <code>mysqldump --single-transaction</code>）；4. 证书与私钥（如自管）；5. 账单与发票记录。全部拉到第二存储介质后，再点厂商的销毁按钮——回收站式「已释放可找回」窗口不可依赖。</li>
+</ol>
+<h3>建立轻量监控，别等挂了才知道</h3>
+<pre><code class="language-bash"># 三件套自查，写成 cron 每 10 分钟一次落日志即可覆盖 80% 个人服务监控
+df -h / | awk 'NR==2 {print &quot;disk&quot;, $5}'
+free -m | awk '/Mem/ {printf &quot;mem %.0f%%\n&quot;, $3/$2*100}'
+uptime | awk -F'load average:' '{print &quot;load&quot;$2}'
+</code></pre>
+<p>进阶再上 Uptime Kuma（自监控）+ 厂商面板的 CPU/带宽告警，起步阶段别把监控本身做成负担。</p>
+<h2>排查常见的坑</h2>
+<h3>超售：CPU 争用与「邻居效应」</h3>
+<p>共享 vCPU 实例的 <code>steal time</code> 是体检指标：</p>
+<pre><code class="language-bash">top -bn1 | grep '%Cpu'   # 看 st 列；长期 &gt;10% 说明宿主超售严重
+vmstat 1 5               # si/so 持续非零且 swap 繁忙 → 内存被超卖挤压
+</code></pre>
+<p>偶尔尖峰正常，长期高 steal 走工单或迁移，别在超售机上跑对延迟敏感的服务。</p>
+<h3>磁盘 IO 瓶颈：便宜 HDD RAID 的伪装</h3>
+<p>上一节 fio 实测随机写低于数千 IOPS 的「SSD」，SQLite/PostgreSQL 会慢到不可用。对策：数据库挪 NVMe 档、或换厂商，别用加缓存层掩盖选型错误。</p>
+<h3>被 IP 封禁：共享 IPv4 池的代价</h3>
+<p>机房网段被滥用者污染后，你的「干净」服务也会对着某些 CDN/风控黑名单吃 403。上线前把 IP 过一遍黑名单（MXToolbox 一类工具），被污染就提工单换 IP（多数厂商免费或低价），同时避免在同网段批量开户。</p>
+<h3>免费层回收：Oracle 们的明规则</h3>
+<p>免费实例长期零负载、信用卡扣预授权失败、账户 12 个月未升级 PAYG——都可能在某次「悄悄更新条款」后被回收，且回收后数据不可找回。把免费 VPS 上的一切当作「随时会消失」来设计：配置进 Git、数据在别处有副本、DNS 可分钟级切换。</p>
+<h3>只测白天：晚高峰线路判若两机</h3>
+<p>跨境场景务必在 20:00–23:00（用户所在时区）用 <code>speedtest-cli</code>（或厂商 looking glass）与 <code>mtr</code> 复测。白天 200ms 晚上 400ms 丢包 5% 的线路，体验上等于换了一家厂商。</p>
+<h2>验证你成功了</h2>
+<p>逐条对照，全过即本文目标达成：</p>
+<ul>
+<li><code>ssh -o PasswordAuthentication=no root@IP</code> 被拒绝，<code>deploy</code> 用户密钥登录成功；</li>
+<li><code>ufw status</code> 显示 active 且仅放行 22/80/443；<code>fail2ban-client status sshd</code> 有 Ban 列表；</li>
+<li><code>free -h</code> 显示 Swap ≥ 1Gi，<code>timedatectl</code> 时区正确；</li>
+<li><code>docker run --rm hello-world</code> 成功，<code>systemctl --user status myapp</code> 为 active；</li>
+<li><code>curl -I https://你的域名</code> 返回 200 且无证书告警；</li>
+<li>跑一次恢复演练：把最新备份 tar 解到临时目录，应用能用它启动；</li>
+<li>fio/top 的 st 列给出你接受的基线数字并记录在案。</li>
+</ul>
+<h2>收束：把 VPS 当固定资产管理</h2>
+<p>选型时它是采购问题（地域 → 规格 → 流量 → 合规 → 支付），拿到手后它变成运维问题（加固、备份、监控、续费），退出时它是数据资产处置问题。三条线各有一两个习惯就能覆盖大部分风险：SSH 加固当天做、备份要有异地副本且做过恢复演练、到期日进日历。本站关于场景选择与 SSH 深度的两篇旧文在正文中已链接，价格数据请以 2026 年 9 月后的官网页面为准——这类文章的保质期本身就是它的一部分。</p>
+
+        <!-- Post Copyright & License Card -->
+        <div class="post-copyright-card">
+          <div class="copyright-header">
+            <div class="copyright-badge">
+              <span>📜</span>
+              <span>原创与知识共享协议</span>
+            </div>
+            <button class="copyright-cite-btn" id="copy-cite-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+              </svg>
+              <span>复制 Markdown 引用</span>
+            </button>
+          </div>
+          <div class="copyright-list">
+            <div class="copyright-item"><strong>文章标题：</strong>主流 VPS 的选择和使用</div>
+            <div class="copyright-item"><strong>文章作者：</strong>张小猛 · loczb</div>
+            <div class="copyright-item"><strong>永久链接：</strong><a href="https://709527.xyz/blog/posts/choosing-and-running-a-vps.html">https://709527.xyz/blog/posts/choosing-and-running-a-vps.html</a></div>
+            <div class="copyright-item"><strong>版权声明：</strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 国际许可协议。商业转载请联系作者获得授权，非商业转载请注明出处。</div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </main>
+
+  <!-- Related Posts / Navigation -->
+  <section class="section" style="padding-top: 0;">
+    <div class="container container-narrow">
+      <hr style="border: none; border-top: 1px solid var(--color-border); margin: var(--space-3xl) 0;">
+
+      <div class="blog-topics" style="margin-bottom: var(--space-xl);">
+        <span class="topic-label">读完之后:</span>
+        <a href="../index.html" class="topic-tag">返回博客列表</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <p class="footer-signature">写代码,做产品,也认真生活。</p>
+      <div class="footer-social">
+        <a href="https://github.com/zzdbilly" class="footer-social-link" target="_blank" rel="noopener" aria-label="GitHub">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+        </a>
+        <a href="../../rss.xml" class="footer-social-link" aria-label="RSS">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+      </div>
+      <div class="footer-links">
+        <a href="../../index.html" class="footer-link">首页</a>
+        <a href="../../projects/index.html" class="footer-link">项目</a>
+        <a href="../../blog/index.html" class="footer-link">博客</a>
+        <a href="../../about/index.html" class="footer-link">关于</a>
+      </div>
+      <p class="footer-copyright">
+        &copy; 2026 张小猛
+      </p>
+    </div>
+  </footer>
+
+
+  <script defer src="../../assets/js/related-posts.js"></script>
+  <script defer src="../../assets/js/main.js"></script>
+  <script defer src="../../assets/js/article.js"></script>
+  <script defer src="../../assets/js/share.js"></script>
+  <script defer src="../../assets/js/back-to-top.js"></script>
+  <!-- Back to Top & Reading Progress -->
+  <button class="back-to-top" id="backToTop" aria-label="回到顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
+  <div class="reading-progress" id="readingProgress"></div>
+
+  <!-- Post Sidebar Info（左侧） -->
+  <div class="post-sidebar-info" id="postSidebar">
+    <div class="post-info-card">
+      <div class="post-info-section">
+        <div class="post-info-label">作者</div>
+        <div class="post-info-author">
+          <div class="post-info-avatar">小</div>
+          <div>
+            <div class="post-info-author-name">张小猛</div>
+            <div class="post-info-author-desc">写代码，做产品</div>
+          </div>
+        </div>
+      </div>
+      <div class="post-info-section">
+        <div class="post-info-label">文章信息</div>
+        <div class="post-info-stat"><span class="post-info-stat-label">📅 发布日期</span><span class="post-info-stat-value">2026-09-08</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label">⏱️ 阅读时间</span><span class="post-info-stat-value">14 min read</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label">📝 文章字数</span><span class="post-info-stat-value">4906 字</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label">📊 章节数</span><span class="post-info-stat-value">10 节 · 36 子节</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label">💻 代码块</span><span class="post-info-stat-value">21 段</span></div>
+      </div>
+      <div class="post-info-section" id="postSidebarTags">
+        <div class="post-info-label">标签</div>
+        <div class="post-info-links">
+          <a href="../../blog/index.html?tag=VPS" class="post-info-link"># VPS</a>
+          <a href="../../blog/index.html?tag=DevOps" class="post-info-link"># DevOps</a>
+          <a href="../../blog/index.html?tag=运维" class="post-info-link"># 运维</a>
+          <a href="../../blog/index.html?tag=服务器" class="post-info-link"># 服务器</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Post TOC -->
+  <div class="post-toc-container" id="postToc">
+    <nav class="post-toc">
+      <div class="post-toc-title">目录</div>
+      <ul class="post-toc-list" id="tocList">
+      </ul>
+    </nav>
+  </div>
+<script defer src="../../assets/js/particles.js"></script>
+
+  <!-- Comment System -->
+  <script src="../../workers/comment-system/comment-widget.js" defer></script>
+
+  <!-- highlight.js 代码语法高亮（本地完整构建，无外部依赖） -->
+  <script defer src="../../assets/vendor/highlight/highlight.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // 只对没有 codehilite 的代码块应用 highlight.js
+      document.querySelectorAll('pre code').forEach(function(block) {
+        // 跳过已经有 Pygments 高亮的块
+        if (block.closest('.codehilite') || block.classList.contains('hljs')) return;
+        try { hljs.highlightElement(block); } catch (e) {}
+      });
+    });
+  </script>
+
+  <!-- Cloudflare Web Analytics -->
+  <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "29e7cff6f37448989538e2165cb79187"}'></script>
+</body>
+</html>

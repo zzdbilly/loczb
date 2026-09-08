@@ -1,6 +1,20 @@
 {
   "posts": [
     {
+      "slug": "choosing-and-running-a-vps",
+      "title": "主流 VPS 的选择和使用",
+      "date": "2026-09-08",
+      "category": "DevOps",
+      "tags": [
+        "VPS",
+        "DevOps",
+        "运维",
+        "服务器"
+      ],
+      "excerpt": "截至 2026 年 9 月的主流 VPS 厂商盘点、选型维度、下单开机、新机安全加固、Docker/Caddy 日常使用与费用控制的全流程实操指南。",
+      "url": "blog/posts/choosing-and-running-a-vps.html"
+    },
+    {
       "slug": "技术文档编写指南写出别人真的会看的文档",
       "title": "技术文档编写指南写出别人真的会看的文档",
       "date": "2026-09-03",
@@ -1500,7 +1514,7 @@
     },
     {
       "tag": "DevOps",
-      "count": 11
+      "count": 12
     },
     {
       "tag": "思考",
@@ -1769,6 +1783,18 @@
     {
       "tag": "网络",
       "count": 2
+    },
+    {
+      "tag": "VPS",
+      "count": 1
+    },
+    {
+      "tag": "运维",
+      "count": 1
+    },
+    {
+      "tag": "服务器",
+      "count": 1
     },
     {
       "tag": "技术写作",
@@ -2590,8 +2616,13 @@
   "archives": [
     {
       "month": "2026-09",
-      "count": 2,
+      "count": 3,
       "posts": [
+        {
+          "title": "主流 VPS 的选择和使用",
+          "date": "2026-09-08",
+          "url": "blog/posts/choosing-and-running-a-vps.html"
+        },
         {
           "title": "技术文档编写指南写出别人真的会看的文档",
           "date": "2026-09-03",
@@ -3163,9 +3194,9 @@
     }
   ],
   "categories": [
+    "DevOps",
     "开发",
     "思考",
-    "DevOps",
     "Kotlin",
     "Android",
     "前端",
@@ -3175,9 +3206,9 @@
     "安全"
   ],
   "stats": {
-    "totalPosts": 105,
-    "totalTags": 274,
-    "latestDate": "2026-09-03",
+    "totalPosts": 106,
+    "totalTags": 277,
+    "latestDate": "2026-09-08",
     "oldestDate": "2026-02-15"
   }
 }
