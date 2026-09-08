@@ -7,6 +7,14 @@
     <language>zh-CN</language>
     <atom:link href="https://709527.xyz/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>主流 VPS 的选择和使用</title>
+      <link>https://709527.xyz/blog/posts/choosing-and-running-a-vps.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/choosing-and-running-a-vps.html</guid>
+      <description>截至 2026 年 9 月的主流 VPS 厂商盘点、选型维度、下单开机、新机安全加固、Docker/Caddy 日常使用与费用控制的全流程实操指南。</description>
+      <category>DevOps</category>
+      <pubDate>Tue, 08 Sep 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
       <title>技术文档编写指南写出别人真的会看的文档</title>
       <link>https://709527.xyz/blog/posts/技术文档编写指南写出别人真的会看的文档.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/技术文档编写指南写出别人真的会看的文档.html</guid>
@@ -157,14 +165,6 @@
       <description>从 Function Calling、MCP 到 Multi-Agent，梳理 AI Agent 架构的进化路径，以及当前面临的挑战和未来方向。</description>
       <category>AI</category>
       <pubDate>Wed, 22 Jul 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>PostgreSQL 从 17 到 18：生产环境升级实战</title>
-      <link>https://709527.xyz/blog/posts/postgresql-从-17-到-18生产环境升级实战.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/postgresql-从-17-到-18生产环境升级实战.html</guid>
-      <description>PG 18 带来了哪些实质性改进？增量物化视图、并行查询增强、OAuth 认证……本文用一个完整的升级记录，带你从准备工作到新特性实战，涵盖升级检查清单和常见问题排查。</description>
-      <category>数据库</category>
-      <pubDate>Sun, 19 Jul 2026 00:00:00 +0800</pubDate>
     </item>
   </channel>
 </rss>
