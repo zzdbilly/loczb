@@ -1,0 +1,18 @@
+{
+  "slug": "zig-language-introduction",
+  "title": "Zig 语言入门：比 C 更安全的系统编程",
+  "description": "Zig 语言入门完整指南：comptime 编译期计算、Allocator 模式、错误处理、C 互操作、交叉编译与构建系统深度解析",
+  "date": "2026-06-27",
+  "dateTime": "2026-06-27 20:08:24",
+  "category": "系统编程",
+  "tags": [
+    "Zig",
+    "系统编程",
+    "comptime",
+    "Allocator",
+    "交叉编译",
+    "build.zig",
+    "C 互操作"
+  ],
+  "readTime": 16
+}

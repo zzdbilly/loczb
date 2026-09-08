@@ -1,0 +1,15 @@
+{
+  "slug": "sqlite-wal-performance",
+  "title": "SQLite 进阶：WAL 模式与性能优化",
+  "description": "SQLite 进阶：WAL 模式原理、性能优化技巧、并发处理、索引策略、PRAGMA 配置详解",
+  "date": "2026-04-26",
+  "dateTime": "2026-04-26 15:11:29",
+  "category": "数据库",
+  "tags": [
+    "SQLite",
+    "数据库",
+    "WAL",
+    "性能优化"
+  ],
+  "readTime": 14
+}

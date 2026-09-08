@@ -1,0 +1,17 @@
+{
+  "slug": "nginx-reverse-proxy-tuning",
+  "title": "Nginx 反向代理性能调优：从入门到生产",
+  "description": "Nginx 反向代理生产级调优指南：worker 配置、SSL 优化、缓存策略、负载均衡、限流与监控完整实践",
+  "date": "2026-06-27",
+  "dateTime": "2026-06-27 20:38:28",
+  "category": "DevOps",
+  "tags": [
+    "Nginx",
+    "反向代理",
+    "性能调优",
+    "SSL",
+    "负载均衡",
+    "DevOps"
+  ],
+  "readTime": 18
+}

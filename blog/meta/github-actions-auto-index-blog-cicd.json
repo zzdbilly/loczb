@@ -1,0 +1,10 @@
+{
+  "slug": "github-actions-auto-index-blog-cicd",
+  "title": "GitHub Actions 自动索引：我的静态博客 CI/CD 进化之路",
+  "description": "68篇技术博客的索引更新从手动7文件到CI全量自动重建——聊聊全量vs增量的取舍、HTML解析技巧、RSS日期格式化踩坑，以及为什么应该让CI管索引",
+  "date": "2026-07-04",
+  "dateTime": "2026-07-04 13:50:50",
+  "category": "DevOps",
+  "tags": [],
+  "readTime": 5
+}

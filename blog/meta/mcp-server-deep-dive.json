@@ -1,0 +1,15 @@
+{
+  "slug": "mcp-server-deep-dive",
+  "title": "MCP 协议深入实战：从入门到编写自定义 MCP Server",
+  "description": "3000字完整教程，从零搭建 MCP Server，涵盖协议核心、SDK 使用、调试技巧和生产部署最佳实践",
+  "date": "2026-06-30",
+  "dateTime": "2026-06-30 11:24:15",
+  "category": "AI",
+  "tags": [
+    "AI",
+    "MCP",
+    "工具调用",
+    "协议"
+  ],
+  "readTime": 14
+}

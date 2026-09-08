@@ -1,0 +1,15 @@
+{
+  "slug": "android-16-foreground-service-constraints",
+  "title": "Android 16 前台服务类型全新限制：类型强制匹配与迁移指南",
+  "description": "Android 16 前台服务类型强制约束详解，涵盖 shortService、specialUse、类型匹配规则和迁移适配方案",
+  "date": "2026-06-30",
+  "dateTime": "2026-06-30 16:40:49",
+  "category": "Android",
+  "tags": [
+    "Android 16",
+    "前台服务",
+    "后台任务",
+    "WorkManager"
+  ],
+  "readTime": 10
+}

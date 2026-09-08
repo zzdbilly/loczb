@@ -1,0 +1,14 @@
+{
+  "slug": "git-worktree-multi-branch-guide",
+  "title": "Git Worktree 高效多分支开发指南",
+  "description": "Git Worktree 让你同时检出多个分支，切换零成本，告别 stash 和冲突的烦恼。本文详解 worktree 的使用场景和最佳实践。",
+  "date": "2026-06-28",
+  "dateTime": "2026-06-28 16:00:04",
+  "category": "开发",
+  "tags": [
+    "Git",
+    "开发技巧",
+    "效率工具"
+  ],
+  "readTime": 12
+}

@@ -1,0 +1,10 @@
+{
+  "slug": "linux-inode-mechanism-deep-dive",
+  "title": "Linux inode 机制深入理解：从数据结构到实战排查",
+  "description": "inode 是 Linux 文件系统的核心概念。本文从 ext4 inode 数据结构、硬链接软链接原理、文件删除机制到 inode 耗尽排查，全面解析 inode 工作原理。",
+  "date": "2026-07-04",
+  "dateTime": "2026-07-04 14:48:19",
+  "category": "系统编程",
+  "tags": [],
+  "readTime": 5
+}

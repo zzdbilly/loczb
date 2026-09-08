@@ -1,0 +1,16 @@
+{
+  "slug": "github-pages-blog-setup",
+  "title": "从零搭建个人博客系统（GitHub Pages + 自定义域名 + 自动化部署）",
+  "description": "从零搭建个人博客系统：GitHub Pages + 自定义域名 + 自动化部署完整指南",
+  "date": "2026-04-09",
+  "dateTime": "2026-04-09 20:50:17",
+  "category": "DevOps",
+  "tags": [
+    "GitHub Pages",
+    "博客系统",
+    "自动化部署",
+    "CI/CD",
+    "静态网站"
+  ],
+  "readTime": 20
+}

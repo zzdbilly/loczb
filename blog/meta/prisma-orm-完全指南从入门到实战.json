@@ -1,0 +1,17 @@
+{
+  "slug": "prisma-orm-完全指南从入门到实战",
+  "title": "Prisma ORM 完全指南：从入门到实战",
+  "description": "从 Prisma 的基础概念到项目实战，涵盖 Schema 设计、CRUD 操作、迁移管理、性能优化等核心话题，带你全面掌握 TypeScript 生态最流行的数据库 ORM。",
+  "date": "2026-07-07",
+  "dateTime": "2026-07-07 15:47:51",
+  "category": "数据库",
+  "tags": [
+    "Prisma",
+    "TypeScript",
+    "PostgreSQL",
+    "ORM",
+    "数据库",
+    "Next.js"
+  ],
+  "readTime": 5
+}

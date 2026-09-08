@@ -1,0 +1,16 @@
+{
+  "slug": "android-16-background-tasks",
+  "title": "Android 16 后台任务新限制：开发者迁移指南",
+  "description": "Android 16 后台任务新限制完整解读：JobScheduler 强化、前台服务严格限制、WorkManager 迁移策略与兼容性适配指南",
+  "date": "2026-06-27",
+  "dateTime": "2026-06-27 16:08:05",
+  "category": "Android",
+  "tags": [
+    "Android 16",
+    "后台任务",
+    "WorkManager",
+    "前台服务",
+    "电池优化"
+  ],
+  "readTime": 16
+}

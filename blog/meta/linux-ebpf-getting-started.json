@@ -1,0 +1,16 @@
+{
+  "slug": "linux-ebpf-getting-started",
+  "title": "Linux eBPF 入门：内核可观测性新范式",
+  "description": "Linux eBPF 入门实战：内核可观测性新范式，从 BPF 程序编写到 bpftrace、BCC 工具链使用，覆盖网络、安全、性能分析场景",
+  "date": "2026-06-27",
+  "dateTime": "2026-06-27 12:14:16",
+  "category": "系统编程",
+  "tags": [
+    "eBPF",
+    "Linux 内核",
+    "可观测性",
+    "bpftrace",
+    "云原生"
+  ],
+  "readTime": 18
+}
