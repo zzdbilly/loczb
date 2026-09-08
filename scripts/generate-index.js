@@ -105,10 +105,30 @@ posts.forEach(p => {
 });
 
 // 排序：按日期时间降序（同日的文章按精确时间排，新写的排前面）
+// 健壮性（2026-09-08）：
+// - 日期串统一补 +08:00，避免无 Z 无偏移时按机器本地时区解析（UTC 与 CST
+//   机器跨日边界顺序不一致）；
+// - 同日无精确时间时，用文件 mtime 作 tiebreaker（fileDates 早就算好了却
+//   被闲置），mtime 再并列用 slug 字典序——不再依赖 readdirSync 的偶然顺序；
+// - 解析不出日期的文章不再混进比较器产生 NaN，收集后统一报 warning 并排末尾。
+function parseTime(s) {
+  const t = new Date(s + '+08:00').getTime();
+  return Number.isNaN(t) ? null : t;
+}
+const badDates = [];
+posts.forEach(p => {
+  const key = p.dateTime || p.date + ' 00:00:00';
+  p._ts = parseTime(key);
+  if (p._ts === null) { badDates.push(p.slug); p._ts = 0; }
+  p._mt = fileDates[p.slug + '.html'] || 0;
+});
+if (badDates.length) {
+  console.warn(`⚠️ 以下文章日期无法解析，已排到列表末尾: ${badDates.join(', ')}`);
+}
 posts.sort((a, b) => {
-  const aTime = a.dateTime || a.date + ' 00:00:00';
-  const bTime = b.dateTime || b.date + ' 00:00:00';
-  return new Date(bTime) - new Date(aTime);
+  if (a._ts !== b._ts) return b._ts - a._ts;         // 日期时间降序
+  if (a._mt !== b._mt) return b._mt - a._mt;         // 同日 → 文件 mtime
+  return a.slug < b.slug ? -1 : a.slug > b.slug ? 1 : 0; // 再并列 → slug 字典序
 });
 
 console.log(`📊 解析完成: ${posts.length} 篇文章`);
@@ -368,15 +388,12 @@ function generateSitemap() {
     lines.push('  </url>');
   });
 
-  // 文章页面 - lastmod 使用文件修改时间（CI 环境中为 commit 时间）
+  // 文章页面 - lastmod 使用文章发布日期（meta 中的 date），
+  // 不再取 fs mtime：旧逻辑下 build-series 每次重写文章文件就把 mtime 刷成
+  // 「脚本运行日」，导致 106 条 lastmod 挤在同一天，污染搜索引擎信任。
   posts.forEach(p => {
     const filename = p.slug + '.html';
-    const fileMtime = fileDates[filename];
-    let lastmod = p.date; // 默认用发布日期
-    if (fileMtime) {
-      const mdate = new Date(fileMtime);
-      lastmod = mdate.toISOString().split('T')[0]; // YYYY-MM-DD
-    }
+    let lastmod = p.date; // 发布日期（YYYY-MM-DD）
     lines.push('  <url>');
     lines.push(`    <loc>${BASE_URL}/blog/posts/${p.slug}.html</loc>`);
     lines.push(`    <lastmod>${lastmod}</lastmod>`);
@@ -462,16 +479,27 @@ function xmlEscape(str) {
 function updateServiceWorker() {
   const SW_PATH = path.join(CWD, 'sw.js');
   if (!fs.existsSync(SW_PATH)) return;
-  let swCode = fs.readFileSync(SW_PATH, 'utf-8');
-  const now = new Date();
-  const yyyy = now.getFullYear();
-  const mm = String(now.getMonth() + 1).padStart(2, '0');
-  const dd = String(now.getDate()).padStart(2, '0');
-  const dateStr = `${yyyy}${mm}${dd}`;
-  const newSwVersion = `${dateStr}-${Math.floor(Date.now() / 1000).toString().slice(-4)}`;
-  swCode = swCode.replace(/const SW_VERSION = '[^']+';/, `const SW_VERSION = '${newSwVersion}';`);
-  fs.writeFileSync(SW_PATH, swCode, 'utf-8');
-  console.log(`✅ sw.js: updated cache version to ${newSwVersion}`);
+  const swCode = fs.readFileSync(SW_PATH, 'utf-8');
+  // 内容驱动版本号：以关键产物（文章索引 JSON）的哈希为版本，
+  // 内容不变则 sw.js 不落盘（幂等）。取代旧的「当前时间戳后4位」——
+  // 时间戳版本导致每次重建 sw.js 必 dirty，重跑产生无意义 diff。
+  const crypto = require('crypto');
+  let digest = 'empty';
+  try {
+    digest = crypto.createHash('sha256')
+      .update(fs.readFileSync(path.join(CWD, 'blog', 'articles-index.json')))
+      .digest('hex').slice(0, 8);
+  } catch (e) { /* 索引缺失时退回 stable 标记 */ }
+  const newSwVersion = `c-${digest}`;
+  if (swCode.includes(`const SW_VERSION = '${newSwVersion}';`)) {
+    console.log(`✅ sw.js: cache version unchanged (${newSwVersion}), skip write`);
+    return;
+  }
+  const updated = swCode.replace(/const SW_VERSION = '[^']+';/, `const SW_VERSION = '${newSwVersion}';`);
+  if (updated !== swCode) {
+    fs.writeFileSync(SW_PATH, updated, 'utf-8');
+    console.log(`✅ sw.js: updated cache version to ${newSwVersion}`);
+  }
 }
 
 function buildSeries() {
