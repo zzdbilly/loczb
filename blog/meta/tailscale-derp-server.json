@@ -1,0 +1,15 @@
+{
+  "slug": "tailscale-derp-server",
+  "title": "自建 Tailscale DERP 中继服务器完整指南",
+  "description": "自建 Tailscale DERP 中继服务器完整指南 - 从原理到实战，掌握私有 DERP 服务器搭建",
+  "date": "2026-03-17",
+  "dateTime": "2026-03-17 17:02:19",
+  "category": "DevOps",
+  "tags": [
+    "DevOps",
+    "Tailscale",
+    "网络",
+    "VPN"
+  ],
+  "readTime": 15
+}

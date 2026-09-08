@@ -31,8 +31,26 @@ files.forEach(file => {
 });
 
 // 解析每篇文章
+// 元数据 sidecar（blog/meta/{slug}.json，单一真相源）优先：字段取 sidecar，
+// 缺失字段（空串/null）回退下方正则；sidecar 不存在则完全走正则路径。
+// 语义与旧正则逐字符一致（backfill-meta.py 保证），产物输出不受迁移影响。
+const META_DIR = path.join(CWD, 'blog', 'meta');
+
+function readSidecar(slug) {
+  const p = path.join(META_DIR, slug + '.json');
+  if (!fs.existsSync(p)) return null;
+  try {
+    return JSON.parse(fs.readFileSync(p, 'utf-8'));
+  } catch (e) {
+    console.warn(`⚠️ blog/meta/${slug}.json 解析失败，回退正则: ${e.message}`);
+    return null;
+  }
+}
+
 const posts = files.map(file => {
   const content = fs.readFileSync(path.join(POSTS_DIR, file), 'utf-8');
+  const slug = file.replace('.html', '');
+  const sidecar = readSidecar(slug) || {};
 
   const titleMatch = content.match(/<title>([^<]+)<\/title>/);
   const title = titleMatch ? titleMatch[1].replace(/ \| 张小猛 - loczb$/, '') : '';
@@ -70,17 +88,24 @@ const posts = files.map(file => {
   const readTimeMatch = content.match(/(\d+)\s*min/);
   const readTime = readTimeMatch ? parseInt(readTimeMatch[1]) : 5;
 
-  const slug = file.replace('.html', '');
+  // sidecar 优先（空值回退正则结果）
+  const sTitle = sidecar.title || title;
+  const sDate = sidecar.date || date;
+  const sDateTime = sidecar.dateTime || dateTime;
+  const sExcerpt = sidecar.description || excerpt;
+  const sTags = (sidecar.tags && sidecar.tags.length) ? sidecar.tags : tags;
+  const sCategory = sidecar.category || category;
+  const sReadTime = (sidecar.readTime != null && sidecar.readTime !== '') ? sidecar.readTime : readTime;
 
   return {
     slug,
-    title,
-    date,
-    dateTime,
-    category,
-    tags,
-    excerpt,
-    readTime,
+    title: sTitle,
+    date: sDate,
+    dateTime: sDateTime,
+    category: sCategory,
+    tags: sTags,
+    excerpt: sExcerpt,
+    readTime: sReadTime,
     url: `blog/posts/${file}`
   };
 });
@@ -161,7 +186,10 @@ const archiveList = Object.entries(archives)
 // Series 功能已移除
 
 const indexData = {
-  posts: posts.map(p => ({ slug: p.slug, title: p.title, date: p.date, category: p.category, tags: p.tags, excerpt: p.excerpt, url: p.url })),
+  // post 对象含 dateTime/readTime（来自 sidecar 单一真相源）；
+  // 已核对 assets/js/search.js、blog-list.js 均按固定 key 取值，多字段安全。
+  // 顶层 keys 不变（posts/tagCloud/archives/categories/stats）。
+  posts: posts.map(p => ({ slug: p.slug, title: p.title, date: p.date, dateTime: p.dateTime, category: p.category, tags: p.tags, readTime: p.readTime, excerpt: p.excerpt, url: p.url })),
   tagCloud,
   archives: archiveList,
   categories: [...new Set(posts.map(p => p.category))],

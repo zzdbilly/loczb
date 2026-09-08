@@ -1,0 +1,16 @@
+{
+  "slug": "compose-navigation-guide",
+  "title": "Jetpack Compose Navigation 进阶指南：从路由设计到深层链接",
+  "description": "Jetpack Compose Navigation 进阶指南 - 路由设计、参数传递、深层链接、类型安全导航、动画过渡等实战技巧",
+  "date": "2026-06-22",
+  "dateTime": "2026-06-22 14:24:10",
+  "category": "Android",
+  "tags": [
+    "Jetpack Compose",
+    "Android",
+    "Navigation",
+    "Kotlin",
+    "DeepLink"
+  ],
+  "readTime": 16
+}

@@ -1,0 +1,16 @@
+{
+  "slug": "android-app-security-hardening",
+  "title": "Android 应用签名与安全加固完整指南",
+  "description": "Android 应用签名与安全加固完整指南 - 签名机制、加固方案、完整性校验、混淆策略等",
+  "date": "2026-06-19",
+  "dateTime": "2026-06-19 10:16:17",
+  "category": "Android",
+  "tags": [
+    "Android",
+    "安全",
+    "签名",
+    "混淆",
+    "Play Integrity"
+  ],
+  "readTime": 16
+}

@@ -1,0 +1,16 @@
+{
+  "slug": "android-offline-speech-input",
+  "title": "Android 离线语音输入实现方案",
+  "description": "Android 离线语音输入实现方案：Sherpa ONNX、Whisper、Vosk 三大主流方案深度对比",
+  "date": "2026-04-03",
+  "dateTime": "2026-04-03 16:07:15",
+  "category": "Android",
+  "tags": [
+    "Android",
+    "离线语音识别",
+    "Sherpa ONNX",
+    "Whisper",
+    "端侧AI"
+  ],
+  "readTime": 10
+}

@@ -1,0 +1,16 @@
+{
+  "slug": "nextjs-prisma-部署-vercel-常见踩坑外键约束与构建时数据修复",
+  "title": "Next.js + Prisma 部署 Vercel 常见踩坑：外键约束与构建时数据修复",
+  "description": "Vercel 构建时 prisma db push 失败，外键约束报错怎么办？本文完整复盘一次真实的部署失败案例，从根因分析到构建时数据修复方案。",
+  "date": "2026-08-01",
+  "dateTime": "2026-08-01 15:12:09",
+  "category": "DevOps",
+  "tags": [
+    "Next.js",
+    "Prisma",
+    "Vercel",
+    "部署",
+    "DevOps"
+  ],
+  "readTime": 5
+}

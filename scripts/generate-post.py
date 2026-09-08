@@ -35,6 +35,7 @@ from xml.sax.saxutils import escape as xml_escape
 
 TEMPLATE = 'templates/blog-post-template.html'
 POSTS_DIR = 'blog/posts'
+META_DIR = 'blog/meta'
 RELATED_JS = 'assets/js/related-posts.js'
 BLOG_INDEX = 'blog/index.html'
 HOME_INDEX = 'index.html'
@@ -346,6 +347,33 @@ def generate_article(title, description, article_date, read_time, tags, content_
     return html, slug, tag_list, read_time
 
 
+def write_sidecar(slug, title, description, article_date, read_time, tags, category):
+    """写 blog/meta/{slug}.json 元数据 sidecar（全站元数据单一真相源）。
+
+    只含规范化发布字段（无正文、无敏感信息）；generate-index.js 优先读它，
+    verify.js 用它做一致性门禁。date 无时间部分时 dateTime 补 00:00:00。
+    """
+    os.makedirs(META_DIR, exist_ok=True)
+    date_short = str(article_date)[:10]
+    m = re.match(r'^(\d{4}-\d{2}-\d{2})[ T](\d{2}:\d{2}:\d{2})', str(article_date))
+    date_time = f"{m.group(1)} {m.group(2)}" if m else f"{date_short} 00:00:00"
+    meta = {
+        'slug': slug,
+        'title': title,
+        'description': description,
+        'date': date_short,
+        'dateTime': date_time,
+        'category': category,
+        'tags': list(tags),
+        'readTime': read_time,
+    }
+    out = os.path.join(META_DIR, f'{slug}.json')
+    with open(out, 'w', encoding='utf-8') as f:
+        json.dump(meta, f, ensure_ascii=False, indent=2)
+        f.write('\n')
+    print(f"  ✅ 元数据 sidecar: blog/meta/{slug}.json")
+
+
 def add_to_index(slug, title, tag_list):
     """添加文章到 related-posts.js 索引"""
     with open(RELATED_JS, 'r', encoding='utf-8') as f:
@@ -491,6 +519,9 @@ def main():
     # 更新相关文章索引
     add_to_index(slug, title, tag_list)
 
+    # 写元数据 sidecar（与 HTML 同步落盘，单一真相源）
+    write_sidecar(slug, title, description, str(article_date), read_time, tag_list, category)
+
     # 调用 generate-index.js 重建所有全站索引
     script_dir = os.path.dirname(os.path.abspath(__file__))
     proj_root = os.path.dirname(script_dir)
@@ -501,6 +532,16 @@ def main():
         print(f"  ✅ generate-index.js 重建完成")
     else:
         print(f"  ⚠️ generate-index.js 失败: {result.stderr}")
+        sys.exit(result.returncode)
+
+    # 一致性门禁：索引重建成功后跑 verify.js，不过则以同码退出（阻断发布）
+    vresult = subprocess.run(['node', 'scripts/verify.js'], capture_output=True, text=True, cwd=proj_root)
+    for line in (vresult.stdout + vresult.stderr).strip().split('\n'):
+        if line.strip():
+            print(f"  {line}")
+    if vresult.returncode != 0:
+        print("❌ 一致性校验未通过，请修复后重新运行（详见 scripts/verify.js 断言）")
+        sys.exit(vresult.returncode)
 
     print(f"\n🎉 文章已发布！所有索引已更新，直接 git push 即可")
 

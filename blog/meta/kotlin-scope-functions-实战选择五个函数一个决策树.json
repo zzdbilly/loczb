@@ -1,0 +1,14 @@
+{
+  "slug": "kotlin-scope-functions-实战选择五个函数一个决策树",
+  "title": "Kotlin Scope Functions 实战选择：五个函数一个决策树",
+  "description": "别再纠结 let 和 apply 的区别了——从 this/it 和返回值两个维度理清 Kotlin 的五个 Scope Functions，附反模式和团队规范",
+  "date": "2026-07-05",
+  "dateTime": "2026-07-05 14:09:50",
+  "category": "Kotlin",
+  "tags": [
+    "Kotlin",
+    "Android",
+    "最佳实践"
+  ],
+  "readTime": 5
+}

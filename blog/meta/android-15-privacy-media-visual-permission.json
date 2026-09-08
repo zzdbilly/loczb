@@ -1,0 +1,18 @@
+{
+  "slug": "android-15-privacy-media-visual-permission",
+  "title": "Android 15 隐私新特性：所有文件都需要 MEDIA_VISUAL_PERMISSION",
+  "description": "详解 Android 15 引入的媒体权限重大变更，以及从 MediaStore 迁移到 Photo Picker 的完整指南",
+  "date": "2026-07-01",
+  "dateTime": "2026-07-01 15:15:44",
+  "category": "Android",
+  "tags": [
+    "Android",
+    "隐私",
+    "Android 15",
+    "权限",
+    "适配",
+    "Photo Picker",
+    "迁移"
+  ],
+  "readTime": 20
+}

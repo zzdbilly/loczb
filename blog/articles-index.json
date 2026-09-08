@@ -4,6 +4,7 @@
       "slug": "choosing-and-running-a-vps",
       "title": "主流 VPS 的选择和使用",
       "date": "2026-09-08",
+      "dateTime": "2026-09-08 10:20:00",
       "category": "DevOps",
       "tags": [
         "VPS",
@@ -11,6 +12,7 @@
         "运维",
         "服务器"
       ],
+      "readTime": 14,
       "excerpt": "截至 2026 年 9 月的主流 VPS 厂商盘点、选型维度、下单开机、新机安全加固、Docker/Caddy 日常使用与费用控制的全流程实操指南。",
       "url": "blog/posts/choosing-and-running-a-vps.html"
     },
@@ -18,6 +20,7 @@
       "slug": "技术文档编写指南写出别人真的会看的文档",
       "title": "技术文档编写指南写出别人真的会看的文档",
       "date": "2026-09-03",
+      "dateTime": "2026-09-03 17:30:00",
       "category": "开发",
       "tags": [
         "技术写作",
@@ -25,6 +28,7 @@
         "工程实践",
         "Docs-as-Code"
       ],
+      "readTime": 18,
       "excerpt": "写了没人看、看了找不到答案、找到了已经过期——技术文档的三大死法。这篇把我维护博客和项目文档攒下的规范全摊开：读者画像、Diátaxis 分层、结构措辞红线、代码示例标准、docs-as-code 工作流、常见反模式和发布前检查清单。",
       "url": "blog/posts/技术文档编写指南写出别人真的会看的文档.html"
     },
@@ -32,6 +36,7 @@
       "slug": "和ai结对写代码这一年我学会了怎么放手",
       "title": "和 AI 结对写代码这一年，我学会了怎么放手",
       "date": "2026-09-01",
+      "dateTime": "2026-09-01 14:31:00",
       "category": "思考",
       "tags": [
         "思考",
@@ -39,6 +44,7 @@
         "开发习惯",
         "代码质量"
       ],
+      "readTime": 5,
       "excerpt": "一个移动端开发者和 AI 编程助手协作一年的真实复盘：从不敢信、到滥信踩坑、再到建立边界和验收习惯。",
       "url": "blog/posts/和ai结对写代码这一年我学会了怎么放手.html"
     },
@@ -46,6 +52,7 @@
       "slug": "心学不是鸡汤一个程序员的阳明心学实践手册",
       "title": "心学不是鸡汤：一个程序员的阳明心学实践手册",
       "date": "2026-08-24",
+      "dateTime": "2026-08-24 09:00:00",
       "category": "思考",
       "tags": [
         "心学",
@@ -54,6 +61,7 @@
         "个人成长",
         "思维方式"
       ],
+      "readTime": 14,
       "excerpt": "王阳明说「知行合一」「事上磨练」，这些四百年前的话，恰好是今天对抗焦虑、内耗和拖延最硬核的方法论。从程序员视角拆解心学的核心概念与实践方式。",
       "url": "blog/posts/心学不是鸡汤一个程序员的阳明心学实践手册.html"
     },
@@ -61,6 +69,7 @@
       "slug": "程序员的注意力管理比时间更稀缺的资源",
       "title": "程序员的注意力管理：比时间更稀缺的资源",
       "date": "2026-08-23",
+      "dateTime": "2026-08-23 19:23:20",
       "category": "思考",
       "tags": [
         "注意力管理",
@@ -68,6 +77,7 @@
         "程序员效率",
         "认知科学"
       ],
+      "readTime": 17,
       "excerpt": "时间对人人平等，注意力的质量却天差地别。把注意力当作可管理的系统资源：看清泄漏点，用深度时段、批处理、通知分级和精力匹配拿回有效算力。",
       "url": "blog/posts/程序员的注意力管理比时间更稀缺的资源.html"
     },
@@ -75,12 +85,14 @@
       "slug": "如何维持好自己的健康写给程序员的长期运维指南",
       "title": "如何维持好自己的健康：写给程序员的长期运维指南",
       "date": "2026-08-23",
+      "dateTime": "2026-08-23 00:00:00",
       "category": "思考",
       "tags": [
         "健康",
         "生活方式",
         "程序员"
       ],
+      "readTime": 14,
       "excerpt": "久坐、熬夜、高压是程序员的职业三件套，但健康和代码一样可以工程化管理。从颈椎腰椎到睡眠饮食，从运动体检到心理减压，一份可以直接落地的健康维护方案。",
       "url": "blog/posts/如何维持好自己的健康写给程序员的长期运维指南.html"
     },
@@ -88,6 +100,7 @@
       "slug": "ai-助手定时任务投递指南从-agent-废话到-no-agent-脚本",
       "title": "AI 助手定时任务投递指南：从 Agent 废话到 No-Agent 脚本",
       "date": "2026-08-20",
+      "dateTime": "2026-08-20 00:00:00",
       "category": "开发",
       "tags": [
         "AI",
@@ -95,6 +108,7 @@
         "前端",
         "开发"
       ],
+      "readTime": 18,
       "excerpt": "一份基于真实踩坑经验的定时任务投递实战：LLM 生成 vs 脚本直投，如何让机器人每天准时、干净、以「回复」样式把日报送到你面前。",
       "url": "blog/posts/ai-助手定时任务投递指南从-agent-废话到-no-agent-脚本.html"
     },
@@ -102,6 +116,7 @@
       "slug": "程序员带娃把养孩子当成一个长期运维的系统工程",
       "title": "程序员带娃：把养孩子当成一个长期运维的系统工程",
       "date": "2026-08-19",
+      "dateTime": "2026-08-19 00:00:00",
       "category": "思考",
       "tags": [
         "程序员",
@@ -111,6 +126,7 @@
         "DevOps",
         "养育"
       ],
+      "readTime": 8,
       "excerpt": "用工程师的思维看带娃：需求分析、状态监控、容错设计、灰度发布、日志排查——原来养孩子比写代码更像在做系统运维",
       "url": "blog/posts/程序员带娃把养孩子当成一个长期运维的系统工程.html"
     },
@@ -118,6 +134,7 @@
       "slug": "从-openclaw-到-hermesai-agent-工作区迁移完整记录",
       "title": "从 OpenClaw 到 Hermes：AI Agent 工作区迁移完整记录",
       "date": "2026-08-18",
+      "dateTime": "2026-08-18 13:40:41",
       "category": "DevOps",
       "tags": [
         "OpenClaw",
@@ -126,6 +143,7 @@
         "迁移",
         "DevOps"
       ],
+      "readTime": 12,
       "excerpt": "一次真实的 AI Agent 平台迁移复盘：身份、记忆、技能、项目与定时任务的全量迁移方向、踩坑与验证方法",
       "url": "blog/posts/从-openclaw-到-hermesai-agent-工作区迁移完整记录.html"
     },
@@ -133,11 +151,13 @@
       "slug": "周末如何度过才有意义",
       "title": "周末如何度过才有意义",
       "date": "2026-08-16",
+      "dateTime": "2026-08-16 09:56:54",
       "category": "思考",
       "tags": [
         "思考",
         "生活方式"
       ],
+      "readTime": 5,
       "excerpt": "恢复与创造并重，让周末不再越休越累——从识别消耗型休息、主动回血，到用小小创造留下属于你的痕迹。",
       "url": "blog/posts/周末如何度过才有意义.html"
     },
@@ -145,12 +165,14 @@
       "slug": "程序员的周五晚上如何有意义地度过",
       "title": "程序员的周五晚上，如何有意义地度过",
       "date": "2026-08-14",
+      "dateTime": "2026-08-14 09:12:52",
       "category": "思考",
       "tags": [
         "思考",
         "生活方式",
         "效率"
       ],
+      "readTime": 5,
       "excerpt": "周五晚不该是工作的延续，也不该是报复性熬夜。给每一个辛苦了一周的程序员一份可落地的框架：告别、转换、收尾，三件小事让周末真正休息过来。",
       "url": "blog/posts/程序员的周五晚上如何有意义地度过.html"
     },
@@ -158,6 +180,7 @@
       "slug": "2026-年了ai-编程助手到底能帮你干多少活",
       "title": "2026 年了，AI 编程助手到底能帮你干多少活？",
       "date": "2026-08-12",
+      "dateTime": "2026-08-12 16:17:20",
       "category": "开发",
       "tags": [
         "AI",
@@ -167,6 +190,7 @@
         "编程助手",
         "效率"
       ],
+      "readTime": 5,
       "excerpt": "结合当前 Agent 编程趋势，聊聊 AI 助手能做/不能做/边界三层认知、五种实战协作心法，以及开发者如何重新定位自己",
       "url": "blog/posts/2026-年了ai-编程助手到底能帮你干多少活.html"
     },
@@ -174,6 +198,7 @@
       "slug": "300-万能躺平吗",
       "title": "300 万能躺平吗",
       "date": "2026-08-09",
+      "dateTime": "2026-08-09 17:17:27",
       "category": "思考",
       "tags": [
         "思考",
@@ -182,6 +207,7 @@
         "FIRE",
         "财务自由"
       ],
+      "readTime": 5,
       "excerpt": "一个看似数字、实则是认知与心态的问题：300 万到底够不够躺平？聊透 4% 法则、通胀与黑天鹅、城市差异、心态准备和务实替代路径。",
       "url": "blog/posts/300-万能躺平吗.html"
     },
@@ -189,6 +215,7 @@
       "slug": "如何好好工作从看起来很忙到真正产出",
       "title": "如何好好工作：从看起来很忙到真正产出",
       "date": "2026-08-08",
+      "dateTime": "2026-08-08 14:00:18",
       "category": "思考",
       "tags": [
         "工作法",
@@ -196,6 +223,7 @@
         "深度工作",
         "个人成长"
       ],
+      "readTime": 5,
       "excerpt": "一套经过实践检验的工作方法论：识别重要的事、用系统代替意志力、管理注意力、用健康托底，以及一张可执行的每日清单。",
       "url": "blog/posts/如何好好工作从看起来很忙到真正产出.html"
     },
@@ -203,6 +231,7 @@
       "slug": "kotlin-coroutines-并发实战从入门到优雅的并发编程",
       "title": "Kotlin Coroutines 并发实战：从入门到优雅的并发编程",
       "date": "2026-08-07",
+      "dateTime": "2026-08-07 20:42:59",
       "category": "Kotlin",
       "tags": [
         "Kotlin",
@@ -210,6 +239,7 @@
         "并发",
         "Android"
       ],
+      "readTime": 5,
       "excerpt": "深入掌握 Kotlin 协程：协程与线程的区别、Scope、Dispatcher、结构化并发、取消协作、异常处理与并发控制实战",
       "url": "blog/posts/kotlin-coroutines-并发实战从入门到优雅的并发编程.html"
     },
@@ -217,6 +247,7 @@
       "slug": "jetpack-compose-性能优化实战从卡顿到丝滑的-12-个技巧",
       "title": "Jetpack Compose 性能优化实战：从卡顿到丝滑的 12 个技巧",
       "date": "2026-08-07",
+      "dateTime": "2026-08-07 17:58:44",
       "category": "Android",
       "tags": [
         "Jetpack Compose",
@@ -226,6 +257,7 @@
         "UI",
         "重组"
       ],
+      "readTime": 12,
       "excerpt": "全面梳理 Jetpack Compose 性能优化的核心技巧，涵盖重组优化、状态管理、延迟布局、图片加载、基线配置文件等实战经验",
       "url": "blog/posts/jetpack-compose-性能优化实战从卡顿到丝滑的-12-个技巧.html"
     },
@@ -233,6 +265,7 @@
       "slug": "web-worker-与前端多线程开发把主线程从繁重计算中解放出来",
       "title": "Web Worker 与前端多线程开发：把主线程从繁重计算中解放出来",
       "date": "2026-08-07",
+      "dateTime": "2026-08-07 17:57:38",
       "category": "前端",
       "tags": [
         "前端",
@@ -242,6 +275,7 @@
         "性能优化",
         "多线程"
       ],
+      "readTime": 10,
       "excerpt": "深入解析 Web Worker 的原理与实践，涵盖 Dedicated Worker、Shared Worker、Service Worker 的区别与使用场景，以及 Comlink、Worker 池、Transferable Objects 等进阶技巧",
       "url": "blog/posts/web-worker-与前端多线程开发把主线程从繁重计算中解放出来.html"
     },
@@ -249,6 +283,7 @@
       "slug": "nextjs-prisma-部署-vercel-常见踩坑外键约束与构建时数据修复",
       "title": "Next.js + Prisma 部署 Vercel 常见踩坑：外键约束与构建时数据修复",
       "date": "2026-08-01",
+      "dateTime": "2026-08-01 15:12:09",
       "category": "DevOps",
       "tags": [
         "Next.js",
@@ -257,6 +292,7 @@
         "部署",
         "DevOps"
       ],
+      "readTime": 5,
       "excerpt": "Vercel 构建时 prisma db push 失败，外键约束报错怎么办？本文完整复盘一次真实的部署失败案例，从根因分析到构建时数据修复方案。",
       "url": "blog/posts/nextjs-prisma-部署-vercel-常见踩坑外键约束与构建时数据修复.html"
     },
@@ -264,6 +300,7 @@
       "slug": "ai-agent-实战用子代理并行驱动多项目开发",
       "title": "AI Agent 实战：用子代理并行驱动多项目开发",
       "date": "2026-08-01",
+      "dateTime": "2026-08-01 15:11:17",
       "category": "前端",
       "tags": [
         "AI",
@@ -271,6 +308,7 @@
         "工程实践",
         "并行开发"
       ],
+      "readTime": 5,
       "excerpt": "子代理并行调度是 AI 辅助开发的高效模式。本文分享一套经过实战验证的调度策略，涵盖任务拆分、并行执行、结果汇总和验证闭环。",
       "url": "blog/posts/ai-agent-实战用子代理并行驱动多项目开发.html"
     },
@@ -278,12 +316,14 @@
       "slug": "agentic-ai-架构演进从-chatbot-到自主-agent",
       "title": "Agentic AI 架构演进：从 Chatbot 到自主 Agent",
       "date": "2026-07-22",
+      "dateTime": "2026-07-22 17:02:29",
       "category": "AI",
       "tags": [
         "AI",
         "Agent",
         "架构"
       ],
+      "readTime": 5,
       "excerpt": "从 Function Calling、MCP 到 Multi-Agent，梳理 AI Agent 架构的进化路径，以及当前面临的挑战和未来方向。",
       "url": "blog/posts/agentic-ai-架构演进从-chatbot-到自主-agent.html"
     },
@@ -291,6 +331,7 @@
       "slug": "postgresql-从-17-到-18生产环境升级实战",
       "title": "PostgreSQL 从 17 到 18：生产环境升级实战",
       "date": "2026-07-19",
+      "dateTime": "2026-07-19 18:51:37",
       "category": "数据库",
       "tags": [
         "PostgreSQL",
@@ -298,6 +339,7 @@
         "DevOps",
         "性能优化"
       ],
+      "readTime": 5,
       "excerpt": "PG 18 带来了哪些实质性改进？增量物化视图、并行查询增强、OAuth 认证……本文用一个完整的升级记录，带你从准备工作到新特性实战，涵盖升级检查清单和常见问题排查。",
       "url": "blog/posts/postgresql-从-17-到-18生产环境升级实战.html"
     },
@@ -305,6 +347,7 @@
       "slug": "ai-编码代理实战从-copilot-到-agent",
       "title": "AI 编码代理实战：从 Copilot 到 Agent",
       "date": "2026-07-19",
+      "dateTime": "2026-07-19 18:50:02",
       "category": "开发",
       "tags": [
         "AI",
@@ -313,6 +356,7 @@
         "开发规范",
         "效率提升"
       ],
+      "readTime": 5,
       "excerpt": "从自动补全到自主编码，2026 年的 AI 编码工具正在经历一次质变。这篇文章用真实场景复盘 Claude Code、Cursor Agent、MCP 协议的实际用法，以及开发者应该怎样调整工作流。",
       "url": "blog/posts/ai-编码代理实战从-copilot-到-agent.html"
     },
@@ -320,6 +364,7 @@
       "slug": "rust-入局2026-年的生态全景",
       "title": "Rust 入局：2026 年的生态全景",
       "date": "2026-07-19",
+      "dateTime": "2026-07-19 18:48:21",
       "category": "系统编程",
       "tags": [
         "Rust",
@@ -327,6 +372,7 @@
         "系统编程",
         "编程语言"
       ],
+      "readTime": 5,
       "excerpt": "2026年7月，Rust首次杀进TIOBE前十。从语言进化到生态扩张，从行业应用到未来展望，全面复盘Rust凭什么走到这一步。",
       "url": "blog/posts/rust-入局2026-年的生态全景.html"
     },
@@ -334,6 +380,7 @@
       "slug": "rust-在-ai-基础设施中的崛起为什么大模型框架纷纷拥抱-rust",
       "title": "Rust 在 AI 基础设施中的崛起：为什么大模型框架纷纷拥抱 Rust",
       "date": "2026-07-14",
+      "dateTime": "2026-07-14 15:19:26",
       "category": "开发",
       "tags": [
         "Rust",
@@ -342,6 +389,7 @@
         "基础设施",
         "性能优化"
       ],
+      "readTime": 12,
       "excerpt": "从 HuggingFace 的 tokenizer 到 LLM 推理引擎，从向量数据库到数据处理管道——Rust 正在改写 AI 基础设施的底层规则。本文深入分析 Rust 为何崛起、谁在用、以及如何融入你的技术栈。",
       "url": "blog/posts/rust-在-ai-基础设施中的崛起为什么大模型框架纷纷拥抱-rust.html"
     },
@@ -349,6 +397,7 @@
       "slug": "从-tdd-到-tdd²测试驱动开发的进阶实践",
       "title": "从 TDD 到 TDD²：测试驱动开发的进阶实践",
       "date": "2026-07-12",
+      "dateTime": "2026-07-12 19:20:07",
       "category": "开发",
       "tags": [
         "TDD",
@@ -356,6 +405,7 @@
         "开发实践",
         "重构"
       ],
+      "readTime": 5,
       "excerpt": "打破红-绿-重构的刻板印象，聊聊三角测量、转换优先级、测试替身的正确用法，以及那些让你能在实战中用好 TDD 的经验",
       "url": "blog/posts/从-tdd-到-tdd²测试驱动开发的进阶实践.html"
     },
@@ -363,6 +413,7 @@
       "slug": "医生不会告诉你的健康习惯从睡眠到饮食的系统性方案",
       "title": "医生不会告诉你的健康习惯：从睡眠到饮食的系统性方案",
       "date": "2026-07-09",
+      "dateTime": "2026-07-09 15:00:00",
       "category": "思考",
       "tags": [
         "健康",
@@ -370,6 +421,7 @@
         "效率",
         "心理"
       ],
+      "readTime": 18,
       "excerpt": "从睡眠、饮食、运动、数字健康、环境、心理六个维度，建立科学且可执行的健康习惯体系",
       "url": "blog/posts/医生不会告诉你的健康习惯从睡眠到饮食的系统性方案.html"
     },
@@ -377,6 +429,7 @@
       "slug": "prisma-orm-完全指南从入门到实战",
       "title": "Prisma ORM 完全指南：从入门到实战",
       "date": "2026-07-07",
+      "dateTime": "2026-07-07 15:47:51",
       "category": "数据库",
       "tags": [
         "Prisma",
@@ -386,6 +439,7 @@
         "数据库",
         "Next.js"
       ],
+      "readTime": 5,
       "excerpt": "从 Prisma 的基础概念到项目实战，涵盖 Schema 设计、CRUD 操作、迁移管理、性能优化等核心话题，带你全面掌握 TypeScript 生态最流行的数据库 ORM。",
       "url": "blog/posts/prisma-orm-完全指南从入门到实战.html"
     },
@@ -393,6 +447,7 @@
       "slug": "技术人员转行指南当写代码不再是你想做的事",
       "title": "技术人员转行指南：当写代码不再是你想做的事",
       "date": "2026-07-06",
+      "dateTime": "2026-07-06 20:34:54",
       "category": "思考",
       "tags": [
         "转行",
@@ -400,6 +455,7 @@
         "思考",
         "程序员"
       ],
+      "readTime": 5,
       "excerpt": "深入分析技术人员转行的原因、方向和策略——不想写代码了，接下来该怎么办？",
       "url": "blog/posts/技术人员转行指南当写代码不再是你想做的事.html"
     },
@@ -407,6 +463,7 @@
       "slug": "打工人理财第一课从看懂钱去哪了到让钱自己长大",
       "title": "打工人理财第一课：从看懂钱去哪了到让钱自己长大",
       "date": "2026-07-06",
+      "dateTime": "2026-07-06 16:52:02",
       "category": "思考",
       "tags": [
         "理财",
@@ -416,6 +473,7 @@
         "省钱",
         "保险"
       ],
+      "readTime": 5,
       "excerpt": "面向程序员的实用理财入门指南——四个账户法、极简记账、常见金融坑、可执行的起步计划。不折腾、不焦虑，让钱安静地替你打工。",
       "url": "blog/posts/打工人理财第一课从看懂钱去哪了到让钱自己长大.html"
     },
@@ -423,6 +481,7 @@
       "slug": "当-ai-编程-agent-有了眼睛safari-mcp-server-深度解读",
       "title": "当 AI 编程 Agent 有了\"眼睛\"：Safari MCP Server 深度解读",
       "date": "2026-07-06",
+      "dateTime": "2026-07-06 15:56:51",
       "category": "前端",
       "tags": [
         "AI",
@@ -432,6 +491,7 @@
         "前端开发",
         "调试"
       ],
+      "readTime": 5,
       "excerpt": "2026年7月，Apple 发布了 Safari MCP Server，让 AI 编程 Agent 可以直接连接浏览器调试页面。本文深入解读其原理、安装配置、四个实战场景，以及与 Chrome MCP 的全方位对比。",
       "url": "blog/posts/当-ai-编程-agent-有了眼睛safari-mcp-server-深度解读.html"
     },
@@ -439,6 +499,7 @@
       "slug": "这些年我攒下来的生活小技巧",
       "title": "这些年我攒下来的生活小技巧",
       "date": "2026-07-06",
+      "dateTime": "2026-07-06 11:26:19",
       "category": "思考",
       "tags": [
         "生活技巧",
@@ -446,6 +507,7 @@
         "极简主义",
         "个人管理"
       ],
+      "readTime": 5,
       "excerpt": "从厨房到居家，从时间管理到数字生活，分享一套经过实践验证的生活小窍门，帮你少踩坑、少浪费时间。",
       "url": "blog/posts/这些年我攒下来的生活小技巧.html"
     },
@@ -453,6 +515,7 @@
       "slug": "gradle-构建加速全攻略从-5-分钟到-30-秒",
       "title": "Gradle 构建加速全攻略：从 5 分钟到 30 秒",
       "date": "2026-07-05",
+      "dateTime": "2026-07-05 14:41:32",
       "category": "Android",
       "tags": [
         "Gradle",
@@ -460,6 +523,7 @@
         "构建优化",
         "性能优化"
       ],
+      "readTime": 5,
       "excerpt": "从 Profile 找到瓶颈到 Configuration Cache，一步步把 Android 项目构建从 5 分钟优化到 30 秒的完整方案",
       "url": "blog/posts/gradle-构建加速全攻略从-5-分钟到-30-秒.html"
     },
@@ -467,12 +531,14 @@
       "slug": "kotlin-scope-functions-实战选择五个函数一个决策树",
       "title": "Kotlin Scope Functions 实战选择：五个函数一个决策树",
       "date": "2026-07-05",
+      "dateTime": "2026-07-05 14:09:50",
       "category": "Kotlin",
       "tags": [
         "Kotlin",
         "Android",
         "最佳实践"
       ],
+      "readTime": 5,
       "excerpt": "别再纠结 let 和 apply 的区别了——从 this/it 和返回值两个维度理清 Kotlin 的五个 Scope Functions，附反模式和团队规范",
       "url": "blog/posts/kotlin-scope-functions-实战选择五个函数一个决策树.html"
     },
@@ -480,8 +546,10 @@
       "slug": "vps-选购与使用指南五个常见场景的配置与避坑",
       "title": "VPS 选购与使用指南：五个常见场景的配置与避坑",
       "date": "2026-07-05",
+      "dateTime": "2026-07-05 13:07:14",
       "category": "DevOps",
       "tags": [],
+      "readTime": 5,
       "excerpt": "从扶墙线路到生产环境部署，不同场景下 VPS 怎么选、怎么配、怎么不踩坑",
       "url": "blog/posts/vps-选购与使用指南五个常见场景的配置与避坑.html"
     },
@@ -489,8 +557,10 @@
       "slug": "mysql-索引优化实战从慢查询到最佳实践",
       "title": "MySQL 索引优化实战：从慢查询到最佳实践",
       "date": "2026-07-05",
+      "dateTime": "2026-07-05 13:07:10",
       "category": "数据库",
       "tags": [],
+      "readTime": 5,
       "excerpt": "从 EXPLAIN 认识索引失效到复合索引设计，一个慢查询从 2 秒优化到 12 毫秒的完整过程",
       "url": "blog/posts/mysql-索引优化实战从慢查询到最佳实践.html"
     },
@@ -498,8 +568,10 @@
       "slug": "ai-编程助手进化论从结对编程到自主编程团队-2026",
       "title": "AI 编程助手进化论：从结对编程到自主编程团队 (2026)",
       "date": "2026-07-04",
+      "dateTime": "2026-07-04 16:55:32",
       "category": "AI",
       "tags": [],
+      "readTime": 5,
       "excerpt": "2026 年，AI 编程 Agent 跨越了从辅助工具到自主成员的临界点。Cursor 移动端发布、Claude Code 深度推理、Codex CLI 稳定执行、多 Agent 并行协作——本文梳理 AI 编程的三次范式跃迁，分析主流工具，分享落地实践，并展望 2027 年的开发者生态。",
       "url": "blog/posts/ai-编程助手进化论从结对编程到自主编程团队-2026.html"
     },
@@ -507,8 +579,10 @@
       "slug": "linux-inode-mechanism-deep-dive",
       "title": "Linux inode 机制深入理解：从数据结构到实战排查",
       "date": "2026-07-04",
+      "dateTime": "2026-07-04 14:48:19",
       "category": "系统编程",
       "tags": [],
+      "readTime": 5,
       "excerpt": "inode 是 Linux 文件系统的核心概念。本文从 ext4 inode 数据结构、硬链接软链接原理、文件删除机制到 inode 耗尽排查，全面解析 inode 工作原理。",
       "url": "blog/posts/linux-inode-mechanism-deep-dive.html"
     },
@@ -516,8 +590,10 @@
       "slug": "github-actions-auto-index-blog-cicd",
       "title": "GitHub Actions 自动索引：我的静态博客 CI/CD 进化之路",
       "date": "2026-07-04",
+      "dateTime": "2026-07-04 13:50:50",
       "category": "DevOps",
       "tags": [],
+      "readTime": 5,
       "excerpt": "68篇技术博客的索引更新从手动7文件到CI全量自动重建——聊聊全量vs增量的取舍、HTML解析技巧、RSS日期格式化踩坑，以及为什么应该让CI管索引",
       "url": "blog/posts/github-actions-auto-index-blog-cicd.html"
     },
@@ -525,12 +601,14 @@
       "slug": "programmers-should-learn-to-unplug",
       "title": "程序员应该学会「关机」：工作焦虑如何侵蚀你的休息时间",
       "date": "2026-07-04",
+      "dateTime": "2026-07-04 11:29:44",
       "category": "思考",
       "tags": [
         "工作方法",
         "生活方式",
         "自我管理"
       ],
+      "readTime": 8,
       "excerpt": "不会关机的程序员不是在拼事业，而是在慢性消耗自己。聊聊为什么下班后的大脑还在 debug，以及如何真正停下来。",
       "url": "blog/posts/programmers-should-learn-to-unplug.html"
     },
@@ -538,8 +616,10 @@
       "slug": "static-blog-performance-optimization-59mb",
       "title": "静态博客性能优化实战：从 59MB 到精简高效",
       "date": "2026-07-03",
+      "dateTime": "2026-07-03 20:48:53",
       "category": "前端",
       "tags": [],
+      "readTime": 5,
       "excerpt": "66篇文章4KB重复内联样式、4.4MB死文件、404幽灵引用——一次完整的静态博客性能优化记录",
       "url": "blog/posts/static-blog-performance-optimization-59mb.html"
     },
@@ -547,8 +627,10 @@
       "slug": "gradle-build-acceleration-5min-to-30sec",
       "title": "Gradle 构建加速全攻略：从 5 分钟到 30 秒",
       "date": "2026-07-02",
+      "dateTime": "2026-07-02 11:12:53",
       "category": "Android",
       "tags": [],
+      "readTime": 5,
       "excerpt": "系统梳理 Gradle 构建加速的完整方法论——配置调优、KAPT迁移KSP、增量编译、模块化拆分、远程缓存、CI优化，附真实项目优化案例，构建时间减少85%",
       "url": "blog/posts/gradle-build-acceleration-5min-to-30sec.html"
     },
@@ -556,8 +638,10 @@
       "slug": "urban-planning-inspires-software-architecture",
       "title": "像规划城市一样设计系统：城市规划给软件架构的启示",
       "date": "2026-07-02",
+      "dateTime": "2026-07-02 11:05:59",
       "category": "思考",
       "tags": [],
+      "readTime": 5,
       "excerpt": "城市和软件系统的本质惊人相似——功能分区映射限界上下文、交通网络映射数据流、基础设施先行映射可观测性、有机更新映射演进式架构。从城市规划的百年智慧中，找到软件架构的跨界启发",
       "url": "blog/posts/urban-planning-inspires-software-architecture.html"
     },
@@ -565,8 +649,10 @@
       "slug": "software-engineer-learns-from-manufacturing-lean",
       "title": "软件工程师能从制造业学到什么：精益思维重塑开发流程",
       "date": "2026-07-02",
+      "dateTime": "2026-07-02 10:54:35",
       "category": "思考",
       "tags": [],
+      "readTime": 5,
       "excerpt": "制造业精益思想如何重塑软件开发流程——从丰田生产系统到敏捷开发，从5S方法论到持续交付，跨行业视角下的效率革命",
       "url": "blog/posts/software-engineer-learns-from-manufacturing-lean.html"
     },
@@ -574,6 +660,7 @@
       "slug": "how-tech-people-learn-new-tech",
       "title": "技术人如何学习新技术",
       "date": "2026-07-01",
+      "dateTime": "2026-07-01 21:22:51",
       "category": "思考",
       "tags": [
         "学习方法",
@@ -582,6 +669,7 @@
         "效率",
         "知识管理"
       ],
+      "readTime": 8,
       "excerpt": "从被动输入到主动输出，80/20 法则选技术，知识体系建立，实践驱动学习，构建记忆宫殿，善用 AI 与社群",
       "url": "blog/posts/how-tech-people-learn-new-tech.html"
     },
@@ -589,6 +677,7 @@
       "slug": "why-tech-people-should-write",
       "title": "技术人为什么要写作",
       "date": "2026-07-01",
+      "dateTime": "2026-07-01 19:27:04",
       "category": "思考",
       "tags": [
         "思考",
@@ -598,6 +687,7 @@
         "学习方法",
         "个人品牌"
       ],
+      "readTime": 8,
       "excerpt": "写作不仅是最强的学习方式，更能帮助技术人建立个人品牌、打破信息茧房、留下成长痕迹",
       "url": "blog/posts/why-tech-people-should-write.html"
     },
@@ -605,8 +695,10 @@
       "slug": "kotlin-coroutine-exception-handling",
       "title": "Kotlin Coroutine 异常处理机制全面解析",
       "date": "2026-07-01",
+      "dateTime": "2026-07-01 17:43:07",
       "category": "Kotlin",
       "tags": [],
+      "readTime": 5,
       "excerpt": "全面解析 Kotlin 协程异常处理机制，涵盖 launch/async 异常传播差异、SupervisorJob、结构化并发、CoroutineExceptionHandler、Android 最佳实践等核心内容",
       "url": "blog/posts/kotlin-coroutine-exception-handling.html"
     },
@@ -614,6 +706,7 @@
       "slug": "android-15-privacy-media-visual-permission",
       "title": "Android 15 隐私新特性：所有文件都需要 MEDIA_VISUAL_PERMISSION",
       "date": "2026-07-01",
+      "dateTime": "2026-07-01 15:15:44",
       "category": "Android",
       "tags": [
         "Android",
@@ -624,28 +717,15 @@
         "Photo Picker",
         "迁移"
       ],
+      "readTime": 20,
       "excerpt": "详解 Android 15 引入的媒体权限重大变更，以及从 MediaStore 迁移到 Photo Picker 的完整指南",
       "url": "blog/posts/android-15-privacy-media-visual-permission.html"
-    },
-    {
-      "slug": "less-is-more-focus-in-information-age",
-      "title": "少即是多：信息过载时代的专注力修炼",
-      "date": "2026-07-01",
-      "category": "思考",
-      "tags": [
-        "思考",
-        "专注力",
-        "深度工作",
-        "信息管理",
-        "自我管理"
-      ],
-      "excerpt": "信息爆炸不是问题，问题是我们在海量输入中丧失了深度思考的能力。本文分享我在信息筛选、注意力管理和深度工作方面的实践经验与反思。",
-      "url": "blog/posts/less-is-more-focus-in-information-age.html"
     },
     {
       "slug": "soft-skills-tech-people-overlook",
       "title": "代码之外的竞争力：技术人最容易忽视的软技能",
       "date": "2026-07-01",
+      "dateTime": "2026-07-01 09:46:20",
       "category": "思考",
       "tags": [
         "思考",
@@ -654,13 +734,32 @@
         "技术人成长",
         "沟通"
       ],
+      "readTime": 5,
       "excerpt": "技术能力决定了你能走多快，但软技能决定了你能走多远。本文聊聊沟通、表达、影响力等容易被技术人忽视的能力。",
       "url": "blog/posts/soft-skills-tech-people-overlook.html"
+    },
+    {
+      "slug": "less-is-more-focus-in-information-age",
+      "title": "少即是多：信息过载时代的专注力修炼",
+      "date": "2026-07-01",
+      "dateTime": "2026-07-01 09:46:20",
+      "category": "思考",
+      "tags": [
+        "思考",
+        "专注力",
+        "深度工作",
+        "信息管理",
+        "自我管理"
+      ],
+      "readTime": 5,
+      "excerpt": "信息爆炸不是问题，问题是我们在海量输入中丧失了深度思考的能力。本文分享我在信息筛选、注意力管理和深度工作方面的实践经验与反思。",
+      "url": "blog/posts/less-is-more-focus-in-information-age.html"
     },
     {
       "slug": "why-i-started-blogging",
       "title": "为什么我开始写博客：从潜水到发声",
       "date": "2026-06-30",
+      "dateTime": "2026-06-30 18:05:41",
       "category": "思考",
       "tags": [
         "思考",
@@ -668,6 +767,7 @@
         "个人成长",
         "博客"
       ],
+      "readTime": 4,
       "excerpt": "一个普通工程师的写作心路 — 为什么要开始写博客，写作如何改变了我的学习方式，以及我对个人品牌的理解",
       "url": "blog/posts/why-i-started-blogging.html"
     },
@@ -675,6 +775,7 @@
       "slug": "android-16-foreground-service-constraints",
       "title": "Android 16 前台服务类型全新限制：类型强制匹配与迁移指南",
       "date": "2026-06-30",
+      "dateTime": "2026-06-30 16:40:49",
       "category": "Android",
       "tags": [
         "Android 16",
@@ -682,6 +783,7 @@
         "后台任务",
         "WorkManager"
       ],
+      "readTime": 10,
       "excerpt": "Android 16 前台服务类型强制约束详解，涵盖 shortService、specialUse、类型匹配规则和迁移适配方案",
       "url": "blog/posts/android-16-foreground-service-constraints.html"
     },
@@ -689,6 +791,7 @@
       "slug": "cursor-rules-guide",
       "title": "Cursor Rules 实战：自定义 AI 代码助手的进阶指南",
       "date": "2026-06-30",
+      "dateTime": "2026-06-30 14:26:53",
       "category": "AI",
       "tags": [
         "Cursor",
@@ -696,6 +799,7 @@
         "效率工具",
         "开发规范"
       ],
+      "readTime": 12,
       "excerpt": "从零搭建 Cursor Rules 体系，涵盖规则语法、分层架构、真实 Android 项目案例和最佳实践",
       "url": "blog/posts/cursor-rules-guide.html"
     },
@@ -703,6 +807,7 @@
       "slug": "mcp-server-deep-dive",
       "title": "MCP 协议深入实战：从入门到编写自定义 MCP Server",
       "date": "2026-06-30",
+      "dateTime": "2026-06-30 11:24:15",
       "category": "AI",
       "tags": [
         "AI",
@@ -710,6 +815,7 @@
         "工具调用",
         "协议"
       ],
+      "readTime": 14,
       "excerpt": "3000字完整教程，从零搭建 MCP Server，涵盖协议核心、SDK 使用、调试技巧和生产部署最佳实践",
       "url": "blog/posts/mcp-server-deep-dive.html"
     },
@@ -717,12 +823,14 @@
       "slug": "ai-code-editor-review-cursor-windsurf-copilot",
       "title": "AI 代码编辑器深度横评：Cursor vs Windsurf vs Copilot",
       "date": "2026-06-28",
+      "dateTime": "2026-06-28 21:46:17",
       "category": "AI",
       "tags": [
         "AI",
         "AI 工具",
         "开发技巧"
       ],
+      "readTime": 12,
       "excerpt": "三大主流 AI 代码编辑器全方位对比",
       "url": "blog/posts/ai-code-editor-review-cursor-windsurf-copilot.html"
     },
@@ -730,12 +838,14 @@
       "slug": "git-worktree-multi-branch-guide",
       "title": "Git Worktree 高效多分支开发指南",
       "date": "2026-06-28",
+      "dateTime": "2026-06-28 16:00:04",
       "category": "开发",
       "tags": [
         "Git",
         "开发技巧",
         "效率工具"
       ],
+      "readTime": 12,
       "excerpt": "Git Worktree 让你同时检出多个分支，切换零成本，告别 stash 和冲突的烦恼。本文详解 worktree 的使用场景和最佳实践。",
       "url": "blog/posts/git-worktree-multi-branch-guide.html"
     },
@@ -743,6 +853,7 @@
       "slug": "android-hilt-dependency-injection",
       "title": "Android Hilt 依赖注入最佳实践：从入门到架构",
       "date": "2026-06-27",
+      "dateTime": "2026-06-27 21:07:35",
       "category": "Android",
       "tags": [
         "Hilt",
@@ -752,6 +863,7 @@
         "ViewModel",
         "模块化"
       ],
+      "readTime": 18,
       "excerpt": "Android Hilt 依赖注入完整指南：核心注解、ViewModel 注入、多模块架构、作用域管理、第三方库集成与测试最佳实践",
       "url": "blog/posts/android-hilt-dependency-injection.html"
     },
@@ -759,6 +871,7 @@
       "slug": "nginx-reverse-proxy-tuning",
       "title": "Nginx 反向代理性能调优：从入门到生产",
       "date": "2026-06-27",
+      "dateTime": "2026-06-27 20:38:28",
       "category": "DevOps",
       "tags": [
         "Nginx",
@@ -768,6 +881,7 @@
         "负载均衡",
         "DevOps"
       ],
+      "readTime": 18,
       "excerpt": "Nginx 反向代理生产级调优指南：worker 配置、SSL 优化、缓存策略、负载均衡、限流与监控完整实践",
       "url": "blog/posts/nginx-reverse-proxy-tuning.html"
     },
@@ -775,6 +889,7 @@
       "slug": "zig-language-introduction",
       "title": "Zig 语言入门：比 C 更安全的系统编程",
       "date": "2026-06-27",
+      "dateTime": "2026-06-27 20:08:24",
       "category": "系统编程",
       "tags": [
         "Zig",
@@ -785,6 +900,7 @@
         "build.zig",
         "C 互操作"
       ],
+      "readTime": 16,
       "excerpt": "Zig 语言入门完整指南：comptime 编译期计算、Allocator 模式、错误处理、C 互操作、交叉编译与构建系统深度解析",
       "url": "blog/posts/zig-language-introduction.html"
     },
@@ -792,6 +908,7 @@
       "slug": "rag-introduction",
       "title": "RAG 检索增强生成入门：从理念到落地",
       "date": "2026-06-27",
+      "dateTime": "2026-06-27 16:39:27",
       "category": "AI",
       "tags": [
         "RAG",
@@ -802,6 +919,7 @@
         "LangChain",
         "AI"
       ],
+      "readTime": 18,
       "excerpt": "RAG 检索增强生成完整入门指南：文档分块策略、嵌入模型选型、向量数据库对比、LangChain 实现、HyDE/RAG-Fusion 高级优化与 RAGAS 评估框架",
       "url": "blog/posts/rag-introduction.html"
     },
@@ -809,6 +927,7 @@
       "slug": "android-16-background-tasks",
       "title": "Android 16 后台任务新限制：开发者迁移指南",
       "date": "2026-06-27",
+      "dateTime": "2026-06-27 16:08:05",
       "category": "Android",
       "tags": [
         "Android 16",
@@ -817,6 +936,7 @@
         "前台服务",
         "电池优化"
       ],
+      "readTime": 16,
       "excerpt": "Android 16 后台任务新限制完整解读：JobScheduler 强化、前台服务严格限制、WorkManager 迁移策略与兼容性适配指南",
       "url": "blog/posts/android-16-background-tasks.html"
     },
@@ -824,6 +944,7 @@
       "slug": "github-actions-advanced",
       "title": "GitHub Actions 高级工作流：CI/CD 最佳实践",
       "date": "2026-06-27",
+      "dateTime": "2026-06-27 15:38:33",
       "category": "DevOps",
       "tags": [
         "DevOps",
@@ -832,6 +953,7 @@
         "OIDC",
         "自动化"
       ],
+      "readTime": 16,
       "excerpt": "GitHub Actions 高级工作流实战：矩阵构建、可复用工作流、自定义 Action、OIDC 集成、安全审计与性能优化完整指南",
       "url": "blog/posts/github-actions-advanced.html"
     },
@@ -839,6 +961,7 @@
       "slug": "css-view-transitions",
       "title": "CSS View Transitions API 实战：页面过渡动画新范式",
       "date": "2026-06-27",
+      "dateTime": "2026-06-27 15:07:27",
       "category": "前端",
       "tags": [
         "前端",
@@ -847,6 +970,7 @@
         "页面过渡",
         "SPA"
       ],
+      "readTime": 14,
       "excerpt": "CSS View Transitions API 实战：从 document.startViewTransition 到跨页面导航过渡、SPA 集成、列表动画完整指南",
       "url": "blog/posts/css-view-transitions.html"
     },
@@ -854,6 +978,7 @@
       "slug": "postgresql-index-optimization",
       "title": "PostgreSQL 索引优化实战",
       "date": "2026-06-27",
+      "dateTime": "2026-06-27 14:41:49",
       "category": "数据库",
       "tags": [
         "PostgreSQL",
@@ -864,6 +989,7 @@
         "慢查询",
         "数据库"
       ],
+      "readTime": 20,
       "excerpt": "PostgreSQL 索引优化实战：B-Tree、GiST、GIN 索引类型对比，复合索引、部分索引设计，EXPLAIN 执行计划分析与慢查询优化",
       "url": "blog/posts/postgresql-index-optimization.html"
     },
@@ -871,6 +997,7 @@
       "slug": "go-concurrency-patterns",
       "title": "Go 并发模式：Channel 与 Context",
       "date": "2026-06-27",
+      "dateTime": "2026-06-27 14:41:49",
       "category": "开发",
       "tags": [
         "Go",
@@ -880,42 +1007,15 @@
         "Channel",
         "Context"
       ],
+      "readTime": 18,
       "excerpt": "Go 并发模式深度解析：Goroutine 与 Channel 实战、GMP 调度模型、Context 包详解、Fan-Out/Fan-In 模式、并发测试最佳实践",
       "url": "blog/posts/go-concurrency-patterns.html"
-    },
-    {
-      "slug": "android-16-notifications",
-      "title": "Android 16 通知系统新 API 详解",
-      "date": "2026-06-27",
-      "category": "Android",
-      "tags": [
-        "Android 16",
-        "通知系统",
-        "Live Updates",
-        "Notifications",
-        "Android 开发"
-      ],
-      "excerpt": "Android 16 通知系统新 API 详解：Live Updates、Rich Ongoing、Bubble API 增强、通知优先级改革与迁移指南",
-      "url": "blog/posts/android-16-notifications.html"
-    },
-    {
-      "slug": "https-tls13-deep-dive",
-      "title": "HTTPS 与 TLS 1.3 深度解析",
-      "date": "2026-06-27",
-      "category": "安全",
-      "tags": [
-        "安全",
-        "HTTPS",
-        "TLS 1.3",
-        "Nginx"
-      ],
-      "excerpt": "HTTPS 与 TLS 1.3 深度解析：握手流程、ECDHE 密钥交换、证书体系、性能优化与 Nginx 配置最佳实践",
-      "url": "blog/posts/https-tls13-deep-dive.html"
     },
     {
       "slug": "prompt-engineering-systematic",
       "title": "Prompt Engineering 系统化方法论",
       "date": "2026-06-27",
+      "dateTime": "2026-06-27 12:27:38",
       "category": "AI",
       "tags": [
         "Prompt Engineering",
@@ -924,28 +1024,48 @@
         "Function Calling",
         "AI"
       ],
+      "readTime": 18,
       "excerpt": "Prompt Engineering 系统化方法论：从 CRISPE 框架到思维链、自一致性、Function Calling，覆盖评估与迭代的系统性指南",
       "url": "blog/posts/prompt-engineering-systematic.html"
     },
     {
-      "slug": "kotlin-flow-advanced",
-      "title": "Kotlin Flow 进阶：背压策略与共享流",
+      "slug": "https-tls13-deep-dive",
+      "title": "HTTPS 与 TLS 1.3 深度解析",
       "date": "2026-06-27",
+      "dateTime": "2026-06-27 12:27:38",
+      "category": "安全",
+      "tags": [
+        "安全",
+        "HTTPS",
+        "TLS 1.3",
+        "Nginx"
+      ],
+      "readTime": 20,
+      "excerpt": "HTTPS 与 TLS 1.3 深度解析：握手流程、ECDHE 密钥交换、证书体系、性能优化与 Nginx 配置最佳实践",
+      "url": "blog/posts/https-tls13-deep-dive.html"
+    },
+    {
+      "slug": "android-16-notifications",
+      "title": "Android 16 通知系统新 API 详解",
+      "date": "2026-06-27",
+      "dateTime": "2026-06-27 12:27:38",
       "category": "Android",
       "tags": [
-        "Kotlin Flow",
-        "背压策略",
-        "SharedFlow",
-        "StateFlow",
-        "Android"
+        "Android 16",
+        "通知系统",
+        "Live Updates",
+        "Notifications",
+        "Android 开发"
       ],
-      "excerpt": "Kotlin Flow 进阶实战：背压策略（conflate/buffer/collectLatest）与共享流（shareIn/stateIn）深度解析，附 Android 实际场景",
-      "url": "blog/posts/kotlin-flow-advanced.html"
+      "readTime": 16,
+      "excerpt": "Android 16 通知系统新 API 详解：Live Updates、Rich Ongoing、Bubble API 增强、通知优先级改革与迁移指南",
+      "url": "blog/posts/android-16-notifications.html"
     },
     {
       "slug": "linux-ebpf-getting-started",
       "title": "Linux eBPF 入门：内核可观测性新范式",
       "date": "2026-06-27",
+      "dateTime": "2026-06-27 12:14:16",
       "category": "系统编程",
       "tags": [
         "eBPF",
@@ -954,13 +1074,32 @@
         "bpftrace",
         "云原生"
       ],
+      "readTime": 18,
       "excerpt": "Linux eBPF 入门实战：内核可观测性新范式，从 BPF 程序编写到 bpftrace、BCC 工具链使用，覆盖网络、安全、性能分析场景",
       "url": "blog/posts/linux-ebpf-getting-started.html"
+    },
+    {
+      "slug": "kotlin-flow-advanced",
+      "title": "Kotlin Flow 进阶：背压策略与共享流",
+      "date": "2026-06-27",
+      "dateTime": "2026-06-27 12:14:16",
+      "category": "Android",
+      "tags": [
+        "Kotlin Flow",
+        "背压策略",
+        "SharedFlow",
+        "StateFlow",
+        "Android"
+      ],
+      "readTime": 16,
+      "excerpt": "Kotlin Flow 进阶实战：背压策略（conflate/buffer/collectLatest）与共享流（shareIn/stateIn）深度解析，附 Android 实际场景",
+      "url": "blog/posts/kotlin-flow-advanced.html"
     },
     {
       "slug": "webassembly-in-practice",
       "title": "WebAssembly 实战：浏览器端高性能计算",
       "date": "2026-06-27",
+      "dateTime": "2026-06-27 10:37:43",
       "category": "前端",
       "tags": [
         "WebAssembly",
@@ -969,6 +1108,7 @@
         "WASM",
         "浏览器"
       ],
+      "readTime": 16,
       "excerpt": "WebAssembly 实战指南：从 C/Rust 编译到浏览器运行，WASM 与 JS 互操作、内存管理、性能优化与真实应用场景",
       "url": "blog/posts/webassembly-in-practice.html"
     },
@@ -976,6 +1116,7 @@
       "slug": "kotlin-multiplatform-practice",
       "title": "Kotlin Multiplatform 实战：共享业务逻辑到 iOS",
       "date": "2026-06-24",
+      "dateTime": "2026-06-24 21:03:04",
       "category": "Kotlin",
       "tags": [
         "Kotlin Multiplatform",
@@ -985,6 +1126,7 @@
         "跨平台",
         "Ktor"
       ],
+      "readTime": 22,
       "excerpt": "Kotlin Multiplatform 实战：将 Android 业务逻辑共享到 iOS - 架构设计、expect/actual、网络层、数据层完整实现",
       "url": "blog/posts/kotlin-multiplatform-practice.html"
     },
@@ -992,6 +1134,7 @@
       "slug": "android-gradle-kts-migration",
       "title": "Android Gradle 迁移到 KTS 完整指南：从 Groovy 到 Kotlin DSL",
       "date": "2026-06-24",
+      "dateTime": "2026-06-24 21:03:04",
       "category": "Kotlin",
       "tags": [
         "Android",
@@ -1000,6 +1143,7 @@
         "Kotlin DSL",
         "构建优化"
       ],
+      "readTime": 18,
       "excerpt": "Android Gradle 从 Groovy 迁移到 Kotlin DSL (KTS) 完整指南 - 语法对比、迁移步骤、踩坑记录与最佳实践",
       "url": "blog/posts/android-gradle-kts-migration.html"
     },
@@ -1007,6 +1151,7 @@
       "slug": "compose-navigation-guide",
       "title": "Jetpack Compose Navigation 进阶指南：从路由设计到深层链接",
       "date": "2026-06-22",
+      "dateTime": "2026-06-22 14:24:10",
       "category": "Android",
       "tags": [
         "Jetpack Compose",
@@ -1015,6 +1160,7 @@
         "Kotlin",
         "DeepLink"
       ],
+      "readTime": 16,
       "excerpt": "Jetpack Compose Navigation 进阶指南 - 路由设计、参数传递、深层链接、类型安全导航、动画过渡等实战技巧",
       "url": "blog/posts/compose-navigation-guide.html"
     },
@@ -1022,6 +1168,7 @@
       "slug": "android-performance-optimization",
       "title": "Android 性能优化完整实战：从启动到渲染",
       "date": "2026-06-22",
+      "dateTime": "2026-06-22 14:24:10",
       "category": "Android",
       "tags": [
         "Android",
@@ -1030,28 +1177,32 @@
         "内存优化",
         "渲染优化"
       ],
+      "readTime": 18,
       "excerpt": "Android 性能优化完整实战指南 - 从启动优化、内存管理到渲染调优，涵盖 Baseline Profiles、R8、App Startup、LeakCanary 等工具和最佳实践",
       "url": "blog/posts/android-performance-optimization.html"
     },
     {
-      "slug": "compose-april-2026-update",
-      "title": "Jetpack Compose April 2026 Update 深度解读",
+      "slug": "mcp-android-integration",
+      "title": "MCP 协议在 Android 端的应用：AI 工具调用新范式",
       "date": "2026-06-19",
-      "category": "Android",
+      "dateTime": "2026-06-19 10:16:17",
+      "category": "AI",
       "tags": [
-        "Jetpack Compose",
         "Android",
-        "Compose Multiplatform",
-        "UI",
+        "MCP",
+        "AI",
+        "Agent",
         "Kotlin"
       ],
-      "excerpt": "Jetpack Compose April 2026 Update 完整解读 — BOM 2026.04.01、Compose 1.11、共享元素过渡调试工具、触控板事件、Testing v2 默认启用、Navigation3 1.1.1 等全解析",
-      "url": "blog/posts/compose-april-2026-update.html"
+      "readTime": 14,
+      "excerpt": "MCP (Model Context Protocol) 协议在 Android 端的集成实战 - 从概念到手写实现，构建 AI 驱动的 Android 应用",
+      "url": "blog/posts/mcp-android-integration.html"
     },
     {
       "slug": "kotlin-240-features",
       "title": "Kotlin 2.4.0 重磅发布：Context Parameters 稳定、Destructuring 升级、Lombok 插件进入 Alpha",
       "date": "2026-06-19",
+      "dateTime": "2026-06-19 10:16:17",
       "category": "Kotlin",
       "tags": [
         "Kotlin",
@@ -1062,43 +1213,15 @@
         "Context Parameters",
         "Compose Multiplatform"
       ],
+      "readTime": 14,
       "excerpt": "Kotlin 2.4.0 正式发布——Context Parameters 稳定、Name-based Destructuring、Lombok 编译器插件 Alpha、Compose Multiplatform 1.11 等重磅特性详解",
       "url": "blog/posts/kotlin-240-features.html"
-    },
-    {
-      "slug": "android-16-features",
-      "title": "Android 16 新特性详解：开发者需要知道的 8 件事",
-      "date": "2026-06-19",
-      "category": "Android",
-      "tags": [
-        "Android",
-        "Android 16",
-        "Live Updates",
-        "AICore",
-        "大屏适配"
-      ],
-      "excerpt": "Android 16 新特性详解 - Live Updates、大屏强制适配、AICore 增强、APV 编码支持等开发者必知内容",
-      "url": "blog/posts/android-16-features.html"
-    },
-    {
-      "slug": "mcp-android-integration",
-      "title": "MCP 协议在 Android 端的应用：AI 工具调用新范式",
-      "date": "2026-06-19",
-      "category": "AI",
-      "tags": [
-        "Android",
-        "MCP",
-        "AI",
-        "Agent",
-        "Kotlin"
-      ],
-      "excerpt": "MCP (Model Context Protocol) 协议在 Android 端的集成实战 - 从概念到手写实现，构建 AI 驱动的 Android 应用",
-      "url": "blog/posts/mcp-android-integration.html"
     },
     {
       "slug": "google-io-2026-recap",
       "title": "Google I/O 2026 完整回顾：AI 重塑一切",
       "date": "2026-06-19",
+      "dateTime": "2026-06-19 10:16:17",
       "category": "AI",
       "tags": [
         "AI",
@@ -1107,13 +1230,32 @@
         "Gemini",
         "Agent"
       ],
+      "readTime": 20,
       "excerpt": "Google I/O 2026 完整回顾 - Gemini 3.5 Flash、Android 17、Android XR、Managed Agents 等重大发布全解析",
       "url": "blog/posts/google-io-2026-recap.html"
+    },
+    {
+      "slug": "compose-april-2026-update",
+      "title": "Jetpack Compose April 2026 Update 深度解读",
+      "date": "2026-06-19",
+      "dateTime": "2026-06-19 10:16:17",
+      "category": "Android",
+      "tags": [
+        "Jetpack Compose",
+        "Android",
+        "Compose Multiplatform",
+        "UI",
+        "Kotlin"
+      ],
+      "readTime": 12,
+      "excerpt": "Jetpack Compose April 2026 Update 完整解读 — BOM 2026.04.01、Compose 1.11、共享元素过渡调试工具、触控板事件、Testing v2 默认启用、Navigation3 1.1.1 等全解析",
+      "url": "blog/posts/compose-april-2026-update.html"
     },
     {
       "slug": "android-app-security-hardening",
       "title": "Android 应用签名与安全加固完整指南",
       "date": "2026-06-19",
+      "dateTime": "2026-06-19 10:16:17",
       "category": "Android",
       "tags": [
         "Android",
@@ -1122,13 +1264,32 @@
         "混淆",
         "Play Integrity"
       ],
+      "readTime": 16,
       "excerpt": "Android 应用签名与安全加固完整指南 - 签名机制、加固方案、完整性校验、混淆策略等",
       "url": "blog/posts/android-app-security-hardening.html"
+    },
+    {
+      "slug": "android-16-features",
+      "title": "Android 16 新特性详解：开发者需要知道的 8 件事",
+      "date": "2026-06-19",
+      "dateTime": "2026-06-19 10:16:17",
+      "category": "Android",
+      "tags": [
+        "Android",
+        "Android 16",
+        "Live Updates",
+        "AICore",
+        "大屏适配"
+      ],
+      "readTime": 16,
+      "excerpt": "Android 16 新特性详解 - Live Updates、大屏强制适配、AICore 增强、APV 编码支持等开发者必知内容",
+      "url": "blog/posts/android-16-features.html"
     },
     {
       "slug": "ai-coding-workflow-optimization",
       "title": "AI 编程工作流优化：从 Prompt 设计到上下文管理",
       "date": "2026-05-08",
+      "dateTime": "2026-05-08 18:36:42",
       "category": "AI",
       "tags": [
         "AI",
@@ -1136,6 +1297,7 @@
         "Prompt设计",
         "效率提升"
       ],
+      "readTime": 12,
       "excerpt": "AI 编程工作流优化 - 从 Prompt 设计到上下文管理的实战指南，提升 AI 辅助编程效率",
       "url": "blog/posts/ai-coding-workflow-optimization.html"
     },
@@ -1143,6 +1305,7 @@
       "slug": "android-gemini-nano-integration",
       "title": "Android 端侧 AI 实战：Gemini Nano 集成指南",
       "date": "2026-05-07",
+      "dateTime": "2026-05-07 20:34:40",
       "category": "AI",
       "tags": [
         "Android",
@@ -1151,6 +1314,7 @@
         "端侧AI",
         "ML Kit"
       ],
+      "readTime": 15,
       "excerpt": "Android 端侧 AI 实战：Gemini Nano 集成指南 - 深入解析 AICore 架构与 ML Kit GenAI API 实战",
       "url": "blog/posts/android-gemini-nano-integration.html"
     },
@@ -1158,6 +1322,7 @@
       "slug": "sqlite-wal-performance",
       "title": "SQLite 进阶：WAL 模式与性能优化",
       "date": "2026-04-26",
+      "dateTime": "2026-04-26 15:11:29",
       "category": "数据库",
       "tags": [
         "SQLite",
@@ -1165,41 +1330,15 @@
         "WAL",
         "性能优化"
       ],
+      "readTime": 14,
       "excerpt": "SQLite 进阶：WAL 模式原理、性能优化技巧、并发处理、索引策略、PRAGMA 配置详解",
       "url": "blog/posts/sqlite-wal-performance.html"
-    },
-    {
-      "slug": "docker-compose-best-practices",
-      "title": "Docker Compose 最佳实践",
-      "date": "2026-04-26",
-      "category": "DevOps",
-      "tags": [
-        "Docker",
-        "Docker Compose",
-        "容器化",
-        "DevOps"
-      ],
-      "excerpt": "Docker Compose 最佳实践：多容器编排、网络配置、数据持久化、环境变量管理、健康检查等实战技巧",
-      "url": "blog/posts/docker-compose-best-practices.html"
-    },
-    {
-      "slug": "css-container-queries",
-      "title": "CSS Container Queries 实战",
-      "date": "2026-04-26",
-      "category": "前端",
-      "tags": [
-        "CSS",
-        "Container Queries",
-        "响应式设计",
-        "前端开发"
-      ],
-      "excerpt": "CSS Container Queries 实战：基于容器尺寸的响应式设计，比媒体查询更灵活的组件级响应式方案",
-      "url": "blog/posts/css-container-queries.html"
     },
     {
       "slug": "rust-getting-started",
       "title": "Rust 入门：从零到生产",
       "date": "2026-04-26",
+      "dateTime": "2026-04-26 15:11:29",
       "category": "系统编程",
       "tags": [
         "Rust",
@@ -1207,6 +1346,7 @@
         "所有权",
         "内存安全"
       ],
+      "readTime": 20,
       "excerpt": "Rust 入门指南：从零开始学习 Rust，掌握所有权、借用、生命周期等核心概念，构建高性能安全程序",
       "url": "blog/posts/rust-getting-started.html"
     },
@@ -1214,6 +1354,7 @@
       "slug": "react-server-components",
       "title": "React Server Components 深入解析",
       "date": "2026-04-26",
+      "dateTime": "2026-04-26 15:11:29",
       "category": "前端",
       "tags": [
         "React",
@@ -1221,13 +1362,63 @@
         "Next.js",
         "前端架构"
       ],
+      "readTime": 15,
       "excerpt": "React Server Components 深入解析：理解服务端组件的工作原理、数据获取方式、与客户端组件的交互，以及最佳实践",
       "url": "blog/posts/react-server-components.html"
+    },
+    {
+      "slug": "docker-compose-best-practices",
+      "title": "Docker Compose 最佳实践",
+      "date": "2026-04-26",
+      "dateTime": "2026-04-26 15:11:29",
+      "category": "DevOps",
+      "tags": [
+        "Docker",
+        "Docker Compose",
+        "容器化",
+        "DevOps"
+      ],
+      "readTime": 16,
+      "excerpt": "Docker Compose 最佳实践：多容器编排、网络配置、数据持久化、环境变量管理、健康检查等实战技巧",
+      "url": "blog/posts/docker-compose-best-practices.html"
+    },
+    {
+      "slug": "css-container-queries",
+      "title": "CSS Container Queries 实战",
+      "date": "2026-04-26",
+      "dateTime": "2026-04-26 15:11:29",
+      "category": "前端",
+      "tags": [
+        "CSS",
+        "Container Queries",
+        "响应式设计",
+        "前端开发"
+      ],
+      "readTime": 12,
+      "excerpt": "CSS Container Queries 实战：基于容器尺寸的响应式设计，比媒体查询更灵活的组件级响应式方案",
+      "url": "blog/posts/css-container-queries.html"
+    },
+    {
+      "slug": "typescript-type-gymnastics",
+      "title": "TypeScript 类型体操指南",
+      "date": "2026-04-25",
+      "dateTime": "2026-04-25 15:27:53",
+      "category": "前端",
+      "tags": [
+        "TypeScript",
+        "类型体操",
+        "前端",
+        "类型安全"
+      ],
+      "readTime": 20,
+      "excerpt": "TypeScript 类型体操指南：从基础到高级，掌握条件类型、映射类型、模板字面量类型等核心技巧",
+      "url": "blog/posts/typescript-type-gymnastics.html"
     },
     {
       "slug": "jetpack-compose-animation",
       "title": "Jetpack Compose 动画实战",
       "date": "2026-04-25",
+      "dateTime": "2026-04-25 15:27:53",
       "category": "Android",
       "tags": [
         "Jetpack Compose",
@@ -1236,6 +1427,7 @@
         "Kotlin",
         "UI"
       ],
+      "readTime": 15,
       "excerpt": "Jetpack Compose 动画实战：掌握声明式 UI 动画的核心技巧，打造流畅的用户体验",
       "url": "blog/posts/jetpack-compose-animation.html"
     },
@@ -1243,6 +1435,7 @@
       "slug": "git-advanced-techniques",
       "title": "Git 高级技巧：变基、挑拣和交互式暂存",
       "date": "2026-04-25",
+      "dateTime": "2026-04-25 15:27:53",
       "category": "开发",
       "tags": [
         "Git",
@@ -1250,27 +1443,15 @@
         "开发技巧",
         "团队协作"
       ],
+      "readTime": 18,
       "excerpt": "Git 高级技巧：掌握变基、挑拣、交互式暂存等进阶操作，提升代码管理效率",
       "url": "blog/posts/git-advanced-techniques.html"
-    },
-    {
-      "slug": "typescript-type-gymnastics",
-      "title": "TypeScript 类型体操指南",
-      "date": "2026-04-25",
-      "category": "前端",
-      "tags": [
-        "TypeScript",
-        "类型体操",
-        "前端",
-        "类型安全"
-      ],
-      "excerpt": "TypeScript 类型体操指南：从基础到高级，掌握条件类型、映射类型、模板字面量类型等核心技巧",
-      "url": "blog/posts/typescript-type-gymnastics.html"
     },
     {
       "slug": "nextjs-16-tutorial",
       "title": "Next.js 16 实战：App Router + Server Actions + Turbopack",
       "date": "2026-04-20",
+      "dateTime": "2026-04-20 21:26:40",
       "category": "前端",
       "tags": [
         "Next.js",
@@ -1279,6 +1460,7 @@
         "App Router",
         "Server Actions"
       ],
+      "readTime": 20,
       "excerpt": "Next.js 16 实战指南：App Router、Server Actions、Turbopack 完整教程与最佳实践",
       "url": "blog/posts/nextjs-16-tutorial.html"
     },
@@ -1286,6 +1468,7 @@
       "slug": "ai-coding-tools-comparison",
       "title": "主流 AI 编程工具深度对比：Cursor、Claude Code、OpenCode、GitHub Copilot",
       "date": "2026-04-19",
+      "dateTime": "2026-04-19 10:45:49",
       "category": "AI",
       "tags": [
         "AI 工具",
@@ -1294,6 +1477,7 @@
         "GitHub Copilot",
         "编程效率"
       ],
+      "readTime": 18,
       "excerpt": "主流 AI 编程工具深度对比：Cursor、Claude Code、OpenCode、GitHub Copilot 选型指南",
       "url": "blog/posts/ai-coding-tools-comparison.html"
     },
@@ -1301,6 +1485,7 @@
       "slug": "gemini-notebooklm-integration",
       "title": "Gemini Notebooks 深度体验：与 NotebookLM 无缝整合后的全新 AI 工作流",
       "date": "2026-04-11",
+      "dateTime": "2026-04-11 08:27:00",
       "category": "AI",
       "tags": [
         "AI 工具",
@@ -1310,6 +1495,7 @@
         "生产力",
         "Google AI"
       ],
+      "readTime": 12,
       "excerpt": "Gemini Notebooks 深度体验：与 NotebookLM 无缝整合后的全新 AI 工作流",
       "url": "blog/posts/gemini-notebooklm-integration.html"
     },
@@ -1317,6 +1503,7 @@
       "slug": "gemini-notebooklm-workflow",
       "title": "Gemini + NotebookLM 结合使用指南",
       "date": "2026-04-10",
+      "dateTime": "2026-04-10 21:14:26",
       "category": "AI",
       "tags": [
         "AI 工具",
@@ -1325,6 +1512,7 @@
         "生产力",
         "知识管理"
       ],
+      "readTime": 15,
       "excerpt": "Gemini + NotebookLM 结合使用指南：打造个人 AI 知识工作流",
       "url": "blog/posts/gemini-notebooklm-workflow.html"
     },
@@ -1332,6 +1520,7 @@
       "slug": "github-pages-blog-setup",
       "title": "从零搭建个人博客系统（GitHub Pages + 自定义域名 + 自动化部署）",
       "date": "2026-04-09",
+      "dateTime": "2026-04-09 20:50:17",
       "category": "DevOps",
       "tags": [
         "GitHub Pages",
@@ -1340,6 +1529,7 @@
         "CI/CD",
         "静态网站"
       ],
+      "readTime": 20,
       "excerpt": "从零搭建个人博客系统：GitHub Pages + 自定义域名 + 自动化部署完整指南",
       "url": "blog/posts/github-pages-blog-setup.html"
     },
@@ -1347,6 +1537,7 @@
       "slug": "kotlin-coroutines-best-practices",
       "title": "Kotlin Coroutines 最佳实践",
       "date": "2026-04-08",
+      "dateTime": "2026-04-08 21:12:09",
       "category": "Kotlin",
       "tags": [
         "Kotlin",
@@ -1355,6 +1546,7 @@
         "Android",
         "最佳实践"
       ],
+      "readTime": 18,
       "excerpt": "Kotlin Coroutines 最佳实践：从入门到精通，掌握异步编程的核心技巧与常见陷阱",
       "url": "blog/posts/kotlin-coroutines-best-practices.html"
     },
@@ -1362,6 +1554,7 @@
       "slug": "local-rag-ollama",
       "title": "RAG 本地实践：用 Ollama + Embedding 搭建私有知识库",
       "date": "2026-04-07",
+      "dateTime": "2026-04-07 20:51:59",
       "category": "AI",
       "tags": [
         "RAG",
@@ -1370,6 +1563,7 @@
         "向量数据库",
         "本地部署"
       ],
+      "readTime": 15,
       "excerpt": "RAG 本地实践：用 Ollama + Embedding 搭建私有知识库，实现完全离线的智能问答",
       "url": "blog/posts/local-rag-ollama.html"
     },
@@ -1377,6 +1571,7 @@
       "slug": "android-offline-speech-input",
       "title": "Android 离线语音输入实现方案",
       "date": "2026-04-03",
+      "dateTime": "2026-04-03 16:07:15",
       "category": "Android",
       "tags": [
         "Android",
@@ -1385,6 +1580,7 @@
         "Whisper",
         "端侧AI"
       ],
+      "readTime": 10,
       "excerpt": "Android 离线语音输入实现方案：Sherpa ONNX、Whisper、Vosk 三大主流方案深度对比",
       "url": "blog/posts/android-offline-speech-input.html"
     },
@@ -1392,6 +1588,7 @@
       "slug": "onnx-mobile-deployment",
       "title": "ONNX 移动端侧模型实践：从转换到部署",
       "date": "2026-03-30",
+      "dateTime": "2026-03-30 22:00:12",
       "category": "AI",
       "tags": [
         "ONNX",
@@ -1400,6 +1597,7 @@
         "Android",
         "端侧推理"
       ],
+      "readTime": 5,
       "excerpt": "ONNX 移动端侧模型实践：从模型转换到端侧部署的完整指南，涵盖模型优化、量化压缩、多框架推理对比",
       "url": "blog/posts/onnx-mobile-deployment.html"
     },
@@ -1407,6 +1605,7 @@
       "slug": "pwa-offline-web-app",
       "title": "PWA 实战：从零打造离线可用 Web 应用",
       "date": "2026-03-22",
+      "dateTime": "2026-03-22 15:00:01",
       "category": "前端",
       "tags": [
         "PWA",
@@ -1414,6 +1613,7 @@
         "前端",
         "离线应用"
       ],
+      "readTime": 5,
       "excerpt": "PWA 实战：从零开始打造离线可用的 Web 应用，详解 Service Worker、manifest.json 配置与缓存策略",
       "url": "blog/posts/pwa-offline-web-app.html"
     },
@@ -1421,6 +1621,7 @@
       "slug": "ssh-security-hardening",
       "title": "云服务器 SSH 安全加固完整指南",
       "date": "2026-03-18",
+      "dateTime": "2026-03-18 21:09:32",
       "category": "安全",
       "tags": [
         "DevOps",
@@ -1428,6 +1629,7 @@
         "SSH",
         "云服务器"
       ],
+      "readTime": 15,
       "excerpt": "云服务器 SSH 安全加固完整指南 - 从端口修改到密钥认证，全方位提升 Linux VPS 安全性。适用于 AWS、阿里云、腾讯云、DigitalOcean 等主流云服务商",
       "url": "blog/posts/ssh-security-hardening.html"
     },
@@ -1435,6 +1637,7 @@
       "slug": "tailscale-derp-server",
       "title": "自建 Tailscale DERP 中继服务器完整指南",
       "date": "2026-03-17",
+      "dateTime": "2026-03-17 17:02:19",
       "category": "DevOps",
       "tags": [
         "DevOps",
@@ -1442,6 +1645,7 @@
         "网络",
         "VPN"
       ],
+      "readTime": 15,
       "excerpt": "自建 Tailscale DERP 中继服务器完整指南 - 从原理到实战，掌握私有 DERP 服务器搭建",
       "url": "blog/posts/tailscale-derp-server.html"
     },
@@ -1449,6 +1653,7 @@
       "slug": "vscode-port-forward",
       "title": "VS Code 端口转发原理详解",
       "date": "2026-03-17",
+      "dateTime": "2026-03-17 15:49:22",
       "category": "DevOps",
       "tags": [
         "DevOps",
@@ -1456,6 +1661,7 @@
         "VS Code",
         "网络"
       ],
+      "readTime": 10,
       "excerpt": "VS Code 端口转发原理详解：SSH 隧道工作机制与实战应用 - 张小猛的技术博客",
       "url": "blog/posts/vscode-port-forward.html"
     },
@@ -1463,6 +1669,7 @@
       "slug": "ai-agent-skill-development",
       "title": "AI Agent 技能开发实战：从需求到上线的完整流程",
       "date": "2026-03-14",
+      "dateTime": "2026-03-14 11:00:48",
       "category": "AI",
       "tags": [
         "AI Agent",
@@ -1470,6 +1677,7 @@
         "Skill",
         "JavaScript"
       ],
+      "readTime": 15,
       "excerpt": "AI Agent 技能开发实战：从需求到上线的完整流程 - 张小猛的技术博客",
       "url": "blog/posts/ai-agent-skill-development.html"
     },
@@ -1477,6 +1685,7 @@
       "slug": "openclaw-guide",
       "title": "OpenClaw 深度使用指南：从 0 到 1 构建个人 AI Agent",
       "date": "2026-03-13",
+      "dateTime": "2026-03-13 11:35:32",
       "category": "AI",
       "tags": [
         "AI",
@@ -1484,6 +1693,7 @@
         "Agent",
         "自动化"
       ],
+      "readTime": 12,
       "excerpt": "OpenClaw 深度使用指南：从 0 到 1 构建个人 AI Agent - 张小猛的技术博客",
       "url": "blog/posts/openclaw-guide.html"
     },
@@ -1491,6 +1701,7 @@
       "slug": "mobile-gs-paper-review",
       "title": "Mobile-GS：让 3D 高斯泼溅在移动端实时渲染",
       "date": "2026-02-15",
+      "dateTime": "2026-02-15 11:00:48",
       "category": "AI",
       "tags": [
         "计算机视觉",
@@ -1499,6 +1710,7 @@
         "AI",
         "论文解读"
       ],
+      "readTime": 10,
       "excerpt": "Mobile-GS：让 3D 高斯泼溅在移动端实时渲染 - 论文解读，ICLR 2026，移动端 3D 渲染新突破",
       "url": "blog/posts/mobile-gs-paper-review.html"
     }
@@ -2041,14 +2253,6 @@
       "count": 1
     },
     {
-      "tag": "专注力",
-      "count": 1
-    },
-    {
-      "tag": "信息管理",
-      "count": 1
-    },
-    {
       "tag": "软技能",
       "count": 1
     },
@@ -2062,6 +2266,14 @@
     },
     {
       "tag": "沟通",
+      "count": 1
+    },
+    {
+      "tag": "专注力",
+      "count": 1
+    },
+    {
+      "tag": "信息管理",
       "count": 1
     },
     {
@@ -2217,26 +2429,6 @@
       "count": 1
     },
     {
-      "tag": "通知系统",
-      "count": 1
-    },
-    {
-      "tag": "Notifications",
-      "count": 1
-    },
-    {
-      "tag": "Android 开发",
-      "count": 1
-    },
-    {
-      "tag": "HTTPS",
-      "count": 1
-    },
-    {
-      "tag": "TLS 1.3",
-      "count": 1
-    },
-    {
       "tag": "Prompt Engineering",
       "count": 1
     },
@@ -2253,19 +2445,23 @@
       "count": 1
     },
     {
-      "tag": "Kotlin Flow",
+      "tag": "HTTPS",
       "count": 1
     },
     {
-      "tag": "背压策略",
+      "tag": "TLS 1.3",
       "count": 1
     },
     {
-      "tag": "SharedFlow",
+      "tag": "通知系统",
       "count": 1
     },
     {
-      "tag": "StateFlow",
+      "tag": "Notifications",
+      "count": 1
+    },
+    {
+      "tag": "Android 开发",
       "count": 1
     },
     {
@@ -2286,6 +2482,22 @@
     },
     {
       "tag": "云原生",
+      "count": 1
+    },
+    {
+      "tag": "Kotlin Flow",
+      "count": 1
+    },
+    {
+      "tag": "背压策略",
+      "count": 1
+    },
+    {
+      "tag": "SharedFlow",
+      "count": 1
+    },
+    {
+      "tag": "StateFlow",
       "count": 1
     },
     {
@@ -2369,14 +2581,6 @@
       "count": 1
     },
     {
-      "tag": "AICore",
-      "count": 1
-    },
-    {
-      "tag": "大屏适配",
-      "count": 1
-    },
-    {
       "tag": "Google I/O",
       "count": 1
     },
@@ -2390,6 +2594,14 @@
     },
     {
       "tag": "Play Integrity",
+      "count": 1
+    },
+    {
+      "tag": "AICore",
+      "count": 1
+    },
+    {
+      "tag": "大屏适配",
       "count": 1
     },
     {
@@ -2417,6 +2629,22 @@
       "count": 1
     },
     {
+      "tag": "所有权",
+      "count": 1
+    },
+    {
+      "tag": "内存安全",
+      "count": 1
+    },
+    {
+      "tag": "Server Components",
+      "count": 1
+    },
+    {
+      "tag": "前端架构",
+      "count": 1
+    },
+    {
       "tag": "Docker",
       "count": 1
     },
@@ -2437,19 +2665,11 @@
       "count": 1
     },
     {
-      "tag": "所有权",
+      "tag": "类型体操",
       "count": 1
     },
     {
-      "tag": "内存安全",
-      "count": 1
-    },
-    {
-      "tag": "Server Components",
-      "count": 1
-    },
-    {
-      "tag": "前端架构",
+      "tag": "类型安全",
       "count": 1
     },
     {
@@ -2462,14 +2682,6 @@
     },
     {
       "tag": "团队协作",
-      "count": 1
-    },
-    {
-      "tag": "类型体操",
-      "count": 1
-    },
-    {
-      "tag": "类型安全",
       "count": 1
     },
     {
@@ -2866,14 +3078,14 @@
           "url": "blog/posts/android-15-privacy-media-visual-permission.html"
         },
         {
-          "title": "少即是多：信息过载时代的专注力修炼",
-          "date": "2026-07-01",
-          "url": "blog/posts/less-is-more-focus-in-information-age.html"
-        },
-        {
           "title": "代码之外的竞争力：技术人最容易忽视的软技能",
           "date": "2026-07-01",
           "url": "blog/posts/soft-skills-tech-people-overlook.html"
+        },
+        {
+          "title": "少即是多：信息过载时代的专注力修炼",
+          "date": "2026-07-01",
+          "url": "blog/posts/less-is-more-focus-in-information-age.html"
         }
       ]
     },
@@ -2957,9 +3169,9 @@
           "url": "blog/posts/go-concurrency-patterns.html"
         },
         {
-          "title": "Android 16 通知系统新 API 详解",
+          "title": "Prompt Engineering 系统化方法论",
           "date": "2026-06-27",
-          "url": "blog/posts/android-16-notifications.html"
+          "url": "blog/posts/prompt-engineering-systematic.html"
         },
         {
           "title": "HTTPS 与 TLS 1.3 深度解析",
@@ -2967,19 +3179,19 @@
           "url": "blog/posts/https-tls13-deep-dive.html"
         },
         {
-          "title": "Prompt Engineering 系统化方法论",
+          "title": "Android 16 通知系统新 API 详解",
           "date": "2026-06-27",
-          "url": "blog/posts/prompt-engineering-systematic.html"
-        },
-        {
-          "title": "Kotlin Flow 进阶：背压策略与共享流",
-          "date": "2026-06-27",
-          "url": "blog/posts/kotlin-flow-advanced.html"
+          "url": "blog/posts/android-16-notifications.html"
         },
         {
           "title": "Linux eBPF 入门：内核可观测性新范式",
           "date": "2026-06-27",
           "url": "blog/posts/linux-ebpf-getting-started.html"
+        },
+        {
+          "title": "Kotlin Flow 进阶：背压策略与共享流",
+          "date": "2026-06-27",
+          "url": "blog/posts/kotlin-flow-advanced.html"
         },
         {
           "title": "WebAssembly 实战：浏览器端高性能计算",
@@ -3007,9 +3219,9 @@
           "url": "blog/posts/android-performance-optimization.html"
         },
         {
-          "title": "Jetpack Compose April 2026 Update 深度解读",
+          "title": "MCP 协议在 Android 端的应用：AI 工具调用新范式",
           "date": "2026-06-19",
-          "url": "blog/posts/compose-april-2026-update.html"
+          "url": "blog/posts/mcp-android-integration.html"
         },
         {
           "title": "Kotlin 2.4.0 重磅发布：Context Parameters 稳定、Destructuring 升级、Lombok 插件进入 Alpha",
@@ -3017,24 +3229,24 @@
           "url": "blog/posts/kotlin-240-features.html"
         },
         {
-          "title": "Android 16 新特性详解：开发者需要知道的 8 件事",
-          "date": "2026-06-19",
-          "url": "blog/posts/android-16-features.html"
-        },
-        {
-          "title": "MCP 协议在 Android 端的应用：AI 工具调用新范式",
-          "date": "2026-06-19",
-          "url": "blog/posts/mcp-android-integration.html"
-        },
-        {
           "title": "Google I/O 2026 完整回顾：AI 重塑一切",
           "date": "2026-06-19",
           "url": "blog/posts/google-io-2026-recap.html"
         },
         {
+          "title": "Jetpack Compose April 2026 Update 深度解读",
+          "date": "2026-06-19",
+          "url": "blog/posts/compose-april-2026-update.html"
+        },
+        {
           "title": "Android 应用签名与安全加固完整指南",
           "date": "2026-06-19",
           "url": "blog/posts/android-app-security-hardening.html"
+        },
+        {
+          "title": "Android 16 新特性详解：开发者需要知道的 8 件事",
+          "date": "2026-06-19",
+          "url": "blog/posts/android-16-features.html"
         }
       ]
     },
@@ -3064,16 +3276,6 @@
           "url": "blog/posts/sqlite-wal-performance.html"
         },
         {
-          "title": "Docker Compose 最佳实践",
-          "date": "2026-04-26",
-          "url": "blog/posts/docker-compose-best-practices.html"
-        },
-        {
-          "title": "CSS Container Queries 实战",
-          "date": "2026-04-26",
-          "url": "blog/posts/css-container-queries.html"
-        },
-        {
           "title": "Rust 入门：从零到生产",
           "date": "2026-04-26",
           "url": "blog/posts/rust-getting-started.html"
@@ -3084,6 +3286,21 @@
           "url": "blog/posts/react-server-components.html"
         },
         {
+          "title": "Docker Compose 最佳实践",
+          "date": "2026-04-26",
+          "url": "blog/posts/docker-compose-best-practices.html"
+        },
+        {
+          "title": "CSS Container Queries 实战",
+          "date": "2026-04-26",
+          "url": "blog/posts/css-container-queries.html"
+        },
+        {
+          "title": "TypeScript 类型体操指南",
+          "date": "2026-04-25",
+          "url": "blog/posts/typescript-type-gymnastics.html"
+        },
+        {
           "title": "Jetpack Compose 动画实战",
           "date": "2026-04-25",
           "url": "blog/posts/jetpack-compose-animation.html"
@@ -3092,11 +3309,6 @@
           "title": "Git 高级技巧：变基、挑拣和交互式暂存",
           "date": "2026-04-25",
           "url": "blog/posts/git-advanced-techniques.html"
-        },
-        {
-          "title": "TypeScript 类型体操指南",
-          "date": "2026-04-25",
-          "url": "blog/posts/typescript-type-gymnastics.html"
         },
         {
           "title": "Next.js 16 实战：App Router + Server Actions + Turbopack",

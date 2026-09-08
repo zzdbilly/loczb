@@ -1,0 +1,17 @@
+{
+  "slug": "kotlin-multiplatform-practice",
+  "title": "Kotlin Multiplatform 实战：共享业务逻辑到 iOS",
+  "description": "Kotlin Multiplatform 实战：将 Android 业务逻辑共享到 iOS - 架构设计、expect/actual、网络层、数据层完整实现",
+  "date": "2026-06-24",
+  "dateTime": "2026-06-24 21:03:04",
+  "category": "Kotlin",
+  "tags": [
+    "Kotlin Multiplatform",
+    "KMP",
+    "Android",
+    "iOS",
+    "跨平台",
+    "Ktor"
+  ],
+  "readTime": 22
+}

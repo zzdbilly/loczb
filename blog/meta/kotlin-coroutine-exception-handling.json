@@ -1,0 +1,10 @@
+{
+  "slug": "kotlin-coroutine-exception-handling",
+  "title": "Kotlin Coroutine 异常处理机制全面解析",
+  "description": "全面解析 Kotlin 协程异常处理机制，涵盖 launch/async 异常传播差异、SupervisorJob、结构化并发、CoroutineExceptionHandler、Android 最佳实践等核心内容",
+  "date": "2026-07-01",
+  "dateTime": "2026-07-01 17:43:07",
+  "category": "Kotlin",
+  "tags": [],
+  "readTime": 5
+}

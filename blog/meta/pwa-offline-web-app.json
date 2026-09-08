@@ -1,0 +1,15 @@
+{
+  "slug": "pwa-offline-web-app",
+  "title": "PWA 实战：从零打造离线可用 Web 应用",
+  "description": "PWA 实战：从零开始打造离线可用的 Web 应用，详解 Service Worker、manifest.json 配置与缓存策略",
+  "date": "2026-03-22",
+  "dateTime": "2026-03-22 15:00:01",
+  "category": "前端",
+  "tags": [
+    "PWA",
+    "Service Worker",
+    "前端",
+    "离线应用"
+  ],
+  "readTime": null
+}

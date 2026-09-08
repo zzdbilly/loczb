@@ -1,0 +1,17 @@
+{
+  "slug": "go-concurrency-patterns",
+  "title": "Go 并发模式：Channel 与 Context",
+  "description": "Go 并发模式深度解析：Goroutine 与 Channel 实战、GMP 调度模型、Context 包详解、Fan-Out/Fan-In 模式、并发测试最佳实践",
+  "date": "2026-06-27",
+  "dateTime": "2026-06-27 14:41:49",
+  "category": "开发",
+  "tags": [
+    "Go",
+    "Golang",
+    "并发",
+    "Goroutine",
+    "Channel",
+    "Context"
+  ],
+  "readTime": 18
+}

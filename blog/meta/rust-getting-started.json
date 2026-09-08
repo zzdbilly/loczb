@@ -1,0 +1,15 @@
+{
+  "slug": "rust-getting-started",
+  "title": "Rust 入门：从零到生产",
+  "description": "Rust 入门指南：从零开始学习 Rust，掌握所有权、借用、生命周期等核心概念，构建高性能安全程序",
+  "date": "2026-04-26",
+  "dateTime": "2026-04-26 15:11:29",
+  "category": "系统编程",
+  "tags": [
+    "Rust",
+    "系统编程",
+    "所有权",
+    "内存安全"
+  ],
+  "readTime": 20
+}

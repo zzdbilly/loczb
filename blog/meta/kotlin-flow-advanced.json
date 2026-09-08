@@ -1,0 +1,16 @@
+{
+  "slug": "kotlin-flow-advanced",
+  "title": "Kotlin Flow 进阶：背压策略与共享流",
+  "description": "Kotlin Flow 进阶实战：背压策略（conflate/buffer/collectLatest）与共享流（shareIn/stateIn）深度解析，附 Android 实际场景",
+  "date": "2026-06-27",
+  "dateTime": "2026-06-27 12:14:16",
+  "category": "Android",
+  "tags": [
+    "Kotlin Flow",
+    "背压策略",
+    "SharedFlow",
+    "StateFlow",
+    "Android"
+  ],
+  "readTime": 16
+}

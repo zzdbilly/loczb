@@ -1,0 +1,18 @@
+{
+  "slug": "postgresql-index-optimization",
+  "title": "PostgreSQL 索引优化实战",
+  "description": "PostgreSQL 索引优化实战：B-Tree、GiST、GIN 索引类型对比，复合索引、部分索引设计，EXPLAIN 执行计划分析与慢查询优化",
+  "date": "2026-06-27",
+  "dateTime": "2026-06-27 14:41:49",
+  "category": "数据库",
+  "tags": [
+    "PostgreSQL",
+    "索引优化",
+    "B-Tree",
+    "GIN",
+    "EXPLAIN",
+    "慢查询",
+    "数据库"
+  ],
+  "readTime": 20
+}

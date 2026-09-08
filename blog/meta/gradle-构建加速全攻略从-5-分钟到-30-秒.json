@@ -1,0 +1,15 @@
+{
+  "slug": "gradle-构建加速全攻略从-5-分钟到-30-秒",
+  "title": "Gradle 构建加速全攻略：从 5 分钟到 30 秒",
+  "description": "从 Profile 找到瓶颈到 Configuration Cache，一步步把 Android 项目构建从 5 分钟优化到 30 秒的完整方案",
+  "date": "2026-07-05",
+  "dateTime": "2026-07-05 14:41:32",
+  "category": "Android",
+  "tags": [
+    "Gradle",
+    "Android",
+    "构建优化",
+    "性能优化"
+  ],
+  "readTime": 5
+}

@@ -1,0 +1,17 @@
+{
+  "slug": "android-hilt-dependency-injection",
+  "title": "Android Hilt 依赖注入最佳实践：从入门到架构",
+  "description": "Android Hilt 依赖注入完整指南：核心注解、ViewModel 注入、多模块架构、作用域管理、第三方库集成与测试最佳实践",
+  "date": "2026-06-27",
+  "dateTime": "2026-06-27 21:07:35",
+  "category": "Android",
+  "tags": [
+    "Hilt",
+    "依赖注入",
+    "Android",
+    "Dagger",
+    "ViewModel",
+    "模块化"
+  ],
+  "readTime": 18
+}

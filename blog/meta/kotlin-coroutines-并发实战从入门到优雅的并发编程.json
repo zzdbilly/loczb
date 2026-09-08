@@ -1,0 +1,15 @@
+{
+  "slug": "kotlin-coroutines-并发实战从入门到优雅的并发编程",
+  "title": "Kotlin Coroutines 并发实战：从入门到优雅的并发编程",
+  "description": "深入掌握 Kotlin 协程：协程与线程的区别、Scope、Dispatcher、结构化并发、取消协作、异常处理与并发控制实战",
+  "date": "2026-08-07",
+  "dateTime": "2026-08-07 20:42:59",
+  "category": "Kotlin",
+  "tags": [
+    "Kotlin",
+    "协程",
+    "并发",
+    "Android"
+  ],
+  "readTime": 5
+}

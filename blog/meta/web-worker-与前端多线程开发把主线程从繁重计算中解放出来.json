@@ -1,0 +1,17 @@
+{
+  "slug": "web-worker-与前端多线程开发把主线程从繁重计算中解放出来",
+  "title": "Web Worker 与前端多线程开发：把主线程从繁重计算中解放出来",
+  "description": "深入解析 Web Worker 的原理与实践，涵盖 Dedicated Worker、Shared Worker、Service Worker 的区别与使用场景，以及 Comlink、Worker 池、Transferable Objects 等进阶技巧",
+  "date": "2026-08-07",
+  "dateTime": "2026-08-07 17:57:38",
+  "category": "前端",
+  "tags": [
+    "前端",
+    "前端开发",
+    "JavaScript",
+    "Web Worker",
+    "性能优化",
+    "多线程"
+  ],
+  "readTime": 10
+}

@@ -1,0 +1,18 @@
+{
+  "slug": "rag-introduction",
+  "title": "RAG 检索增强生成入门：从理念到落地",
+  "description": "RAG 检索增强生成完整入门指南：文档分块策略、嵌入模型选型、向量数据库对比、LangChain 实现、HyDE/RAG-Fusion 高级优化与 RAGAS 评估框架",
+  "date": "2026-06-27",
+  "dateTime": "2026-06-27 16:39:27",
+  "category": "AI",
+  "tags": [
+    "RAG",
+    "检索增强生成",
+    "LLM",
+    "向量数据库",
+    "Embedding",
+    "LangChain",
+    "AI"
+  ],
+  "readTime": 18
+}
