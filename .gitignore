@@ -16,9 +16,13 @@ build/
 out/
 
 # Environment
+*.env
 .env
 .env.local
 .env.*.local
+
+# 非发布私有文件（2026-09-08 从发布树移出，见 loczb-private/README.md）
+loczb-private/
 
 # IDE
 .vscode/
