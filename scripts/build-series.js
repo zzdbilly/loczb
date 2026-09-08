@@ -101,6 +101,7 @@ const SERIES_CONFIG = [
 
 // 遍历并更新文章 HTML
 let updatedCount = 0;
+let changedCount = 0;
 
 SERIES_CONFIG.forEach(series => {
   const total = series.articles.length;
@@ -124,6 +125,7 @@ SERIES_CONFIG.forEach(series => {
     if (!fs.existsSync(filePath)) return;
 
     let content = fs.readFileSync(filePath, 'utf-8');
+    const original = content;
     const order = idx + 1;
 
     // 构建顶部专栏便当盒
@@ -135,8 +137,7 @@ SERIES_CONFIG.forEach(series => {
       }
     }).join('\n            ');
 
-    const seriesCardHtml = `
-        <!-- Series Card Widget -->
+    const seriesCardHtml = `<!-- Series Card Widget -->
         <div class="series-card spotlight-card">
           <div class="series-header">
             <div class="series-badge">
@@ -156,13 +157,14 @@ SERIES_CONFIG.forEach(series => {
         </div>
         <!-- /Series Card Widget -->`;
 
-    // 移除旧的 series-banner 或 series-card
-    content = content.replace(/<!-- Series Card Widget -->[\s\S]*?<!-- \/Series Card Widget -->\s*/g, '');
-    content = content.replace(/<div class="series-banner[\s\S]*?<\/div>\s*/g, '');
+    // 移除旧的 series-card / series-banner（两侧空白一并吃掉，配合注入端固定缩进保证幂等）
+    content = content.replace(/\s*<!-- Series Card Widget -->[\s\S]*?<!-- \/Series Card Widget -->\s*/g, '');
+    content = content.replace(/\s*<div class="series-banner[\s\S]*?<\/div>\s*/g, ' ');
 
-    // 注入到 post-tags 后面
+    // 注入到 post-tags 后面（缩进与移除正则严格对称：吃掉的空白 == 写回的空白）
     if (content.includes('class="post-tags"')) {
-      content = content.replace(/(<div class="post-tags">[\s\S]*?<\/div>)/, `$1\n${seriesCardHtml}`);
+      content = content.replace(/(<div class="post-tags">[\s\S]*?<\/div>)([ \t]*\n?)/,
+        `$1\n\n        ${seriesCardHtml}\n\n        `);
     }
 
     // 构建底部专栏上一篇/下一篇
@@ -170,8 +172,7 @@ SERIES_CONFIG.forEach(series => {
     let nextItem = idx < total - 1 ? articleMeta[idx + 1] : null;
 
     if (prevItem || nextItem) {
-      let navHtml = `
-      <!-- Series Nav Widget -->
+      let navHtml = `<!-- Series Nav Widget -->
       <div class="series-nav">
         ${prevItem ? `
         <a href="${prevItem.filename}" class="series-nav-btn series-nav-prev">
@@ -186,18 +187,22 @@ SERIES_CONFIG.forEach(series => {
       </div>
       <!-- /Series Nav Widget -->`;
 
-      // 移除旧的 series-nav
-      content = content.replace(/<!-- Series Nav Widget -->[\s\S]*?<!-- \/Series Nav Widget -->\s*/g, '');
+      // 移除旧的 series-nav（两侧空白一并吃掉）
+      content = content.replace(/\s*<!-- Series Nav Widget -->[\s\S]*?<!-- \/Series Nav Widget -->\s*/g, '');
 
-      // 注入在 相关文章 hr 之前
+      // 注入在 相关文章区 之前（吃掉锚点前空白再写回固定空白 → 幂等）
       if (content.includes('<!-- Related Posts / Navigation -->')) {
-        content = content.replace('<!-- Related Posts / Navigation -->', `${navHtml}\n  <!-- Related Posts / Navigation -->`);
+        content = content.replace(/\s*<!-- Related Posts \/ Navigation -->/,
+          `\n\n  ${navHtml}\n  <!-- Related Posts / Navigation -->`);
       }
     }
 
-    fs.writeFileSync(filePath, content, 'utf-8');
+    if (content !== original) {
+      fs.writeFileSync(filePath, content, 'utf-8');
+      changedCount++;
+    }
     updatedCount++;
   });
 });
 
-console.log(`✅ 成功将 ${SERIES_CONFIG.length} 大专栏注入到 ${updatedCount} 篇相关核心博文中！`);
+console.log(`✅ 专栏注入：${updatedCount} 篇扫描，${changedCount} 篇实际写入（其余内容一致跳过）`);
