@@ -384,6 +384,7 @@ def parse_args(args):
         'slug': None,
         'content_file': None,
         'text': None,
+        'force': False,
     }
     
     # 快捷模式：如果直接传入一个 .md / .html 文件作为第一个参数
@@ -395,7 +396,10 @@ def parse_args(args):
     while i < len(args):
         if args[i].startswith('--'):
             key = args[i][2:]
-            if key in ('date', 'read-time', 'tags', 'category', 'series', 'content', 'text', 'slug'):
+            if key == 'force':
+                params['force'] = True
+                i += 1
+            elif key in ('date', 'read-time', 'tags', 'category', 'series', 'content', 'text', 'slug'):
                 i += 1
                 if i < len(args):
                     # --date 写入 article_date（main() 读取的键）；其余按 - 转 _ 映射
@@ -474,8 +478,12 @@ def main():
         title, description, str(article_date), read_time, tags, content_html, category, custom_slug, series
     )
 
-    # 写入文件
+    # 写入文件（slug 冲突保护：同 slug 覆盖会让旧文整篇消失，需显式 --force）
     output_path = os.path.join(POSTS_DIR, f'{slug}.html')
+    if os.path.exists(output_path) and not params.get('force'):
+        print(f"❌ blog/posts/{slug}.html 已存在，直接生成会覆盖旧文章。")
+        print(f"   确认要覆盖请加 --force；否则请给新文章换一个唯一 slug（frontmatter 的 slug 字段）。")
+        sys.exit(2)
     with open(output_path, 'w', encoding='utf-8') as f:
         f.write(html)
     print(f"\n✅ 文章已生成: {output_path}")
