@@ -20,9 +20,9 @@
   --gradient-glow: radial-gradient(ellipse at center, var(--color-accent-glow), transparent 70%);
   --color-border: rgba(255, 255, 255, 0.15);
   --color-border-hover: rgba(255, 255, 255, 0.25);
-  --font-sans: 'Inter', 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-serif: 'Noto Serif SC', 'Georgia', serif;
-  --font-mono: 'JetBrains Mono', 'Monaco', 'Consolas', monospace;
+  --font-sans: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+  --font-serif: Georgia, "Times New Roman", "Songti SC", "SimSun", serif;
+  --font-mono: "SF Mono", Monaco, Consolas, "Courier New", monospace;
   --text-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);
   --text-sm: clamp(0.875rem, 0.8rem + 0.375vw, 1rem);
   --text-base: clamp(1rem, 0.9rem + 0.5vw, 1.125rem);
@@ -1179,31 +1179,7 @@ a:hover {
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: var(--space-xl);
 }
-.loading {
-  position: fixed;
-  inset: 0;
-  background: var(--color-bg-primary);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: var(--z-modal);
-  transition: opacity 0.5s ease, visibility 0.5s ease;
-}
-.loading.hidden {
-  opacity: 0;
-  visibility: hidden;
-}
-.loading-spinner {
-  width: 48px;
-  height: 48px;
-  border: 3px solid var(--color-bg-tertiary);
-  border-top-color: var(--color-accent-primary);
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
+/* 全屏 Loading 遮罩已移除（性能优化：原生流式渲染，无需 JS 淡出） */
 code {
   font-family: var(--font-mono);
   font-size: 0.9em;
@@ -2441,8 +2417,7 @@ pre code {
   }
 }
 @media print {
-  .nav,
-  .loading {
+  .nav {
     display: none;
   }
   body {
@@ -4240,6 +4215,9 @@ pre code.hljs {
   -webkit-backdrop-filter: blur(16px);
   transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.35s ease, box-shadow 0.35s ease;
   overflow: hidden;
+  /* 长列表渲染优化：视口外卡片跳过渲染与布局计算 */
+  content-visibility: auto;
+  contain-intrinsic-size: 0 130px;
 }
 
 .blog-list-item:hover {

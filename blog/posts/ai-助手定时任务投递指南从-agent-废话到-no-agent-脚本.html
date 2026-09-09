@@ -19,7 +19,6 @@
     <meta name="twitter:description" content="一份基于真实踩坑经验的定时任务投递实战：LLM 生成 vs 脚本直投，如何让机器人每天准时、干净、以「回复」样式把日报送到你面前。">
     <meta name="twitter:image" content="https://709527.xyz/assets/images/og-image.png">
 
-
         <script type="application/ld+json">
 {
       "@context": "https://schema.org",
@@ -55,19 +54,11 @@
     </script>
 
     <link rel="stylesheet" href="../../assets/css/style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&family=Noto+Sans+SC:wght@500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500&display=swap" media="print" onload="this.media='all'">
     <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
     <link rel="alternate icon" href="../../assets/images/favicon.ico">
     <link rel="canonical" href="https://709527.xyz/blog/posts/ai-助手定时任务投递指南从-agent-废话到-no-agent-脚本.html">
 </head>
 <body>
-  <!-- Loading -->
-  <div class="loading">
-    <div class="loading-spinner"></div>
-  </div>
-
   <!-- Navigation -->
   <nav class="nav">
     <div class="nav-inner">
@@ -278,7 +269,6 @@ ENV_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), &quot;.env&q
 
 PROJECTS = [&quot;loczb&quot;, &quot;pastebin&quot;, &quot;zest&quot;, &quot;sansi-sanxing&quot;, &quot;baobaogu&quot;]
 
-
 def git_info(proj_dir):
     &quot;&quot;&quot;返回 {branch, hash, date, subject, dirty_count}&quot;&quot;&quot;
     def run(args):
@@ -302,7 +292,6 @@ def git_info(proj_dir):
         &quot;dirty_count&quot;: len([l for l in dirty.splitlines() if l.strip()]),
     }
 
-
 def build_report():
     today = datetime.date.today().isoformat()
     lines = [f&quot;**项目状态日报 · {today}**&quot;, &quot;&quot;]
@@ -316,7 +305,6 @@ def build_report():
             lines.append(f&quot;- 最近提交：`{info['hash']}` {info['subject'][:50]}&quot;)
         lines.append(&quot;&quot;)
     return &quot;\n&quot;.join(lines)
-
 
 def send_discord_reply(content):
     &quot;&quot;&quot;绕过代理 + 带 UA + 回复用户最近消息（踩坑全处理）&quot;&quot;&quot;
@@ -337,7 +325,6 @@ def send_discord_reply(content):
     with opener.open(req, timeout=15) as resp:
         return json.loads(resp.read().decode())
 
-
 def main():
     content = build_report()
     if &quot;--print&quot; in sys.argv:
@@ -348,7 +335,6 @@ def main():
         print(f&quot;发送失败: {result}&quot;, file=sys.stderr)
         sys.exit(1)
     print(&quot;&quot;)                              # 静默协议
-
 
 if __name__ == &quot;__main__&quot;:
     main()
@@ -599,7 +585,6 @@ ENV_FILE = &quot;.../.env&quot;       # 放 DISCORD_BOT_TOKEN 的文件
       </p>
     </div>
   </footer>
-
 
   <script defer src="../../assets/js/related-posts.js"></script>
   <script defer src="../../assets/js/main.js"></script>

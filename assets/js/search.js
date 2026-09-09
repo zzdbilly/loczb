@@ -400,14 +400,24 @@
       });
 
       searchInput.addEventListener('focus', () => {
+        // 交互时才懒加载索引数据与 Fuse.js（不再在页面加载时预取）
+        loadSearchData();
+        loadFuse();
         if (searchInput.value.trim()) {
           performSearch(searchInput.value);
         } else {
-          loadSearchData();
-          loadFuse();
           displaySmartRecs();
         }
       });
+
+      // 鼠标悬停搜索框即预热：提前拉取索引与 Fuse.js，减少首次输入的等待
+      const searchWrap = searchInput.closest('.hero-search-bar, .blog-search-bar, .hero-search-wrapper');
+      if (searchWrap) {
+        searchWrap.addEventListener('mouseenter', () => {
+          loadSearchData();
+          loadFuse();
+        }, { passive: true, once: true });
+      }
 
       searchInput.addEventListener('keydown', (e) => {
         if (!searchResults || !searchResults.classList.contains('active')) return;
@@ -469,8 +479,8 @@
   }
 
   document.addEventListener('DOMContentLoaded', () => {
-    loadSearchData();
-    loadFuse();
+    // 索引数据与 Fuse.js 均改为交互懒加载（focus / hover / Cmd-Ctrl-K→focus），
+    // 页面加载时零额外请求，避免 102KB JSON + Fuse.js 阻塞首屏
     bindEvents();
     initShortcut();
   });

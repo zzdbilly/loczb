@@ -3,17 +3,8 @@
  * 精致动画效果与交互
  */
 
-// Page Loading Animation
+// 页面初始化（无遮罩，HTML 原生流式渲染，秒开）
 document.addEventListener('DOMContentLoaded', () => {
-  const loading = document.querySelector('.loading');
-  
-  // Hide loading quickly for better LCP
-  requestAnimationFrame(() => {
-    if (loading) {
-      loading.classList.add('hidden');
-    }
-  });
-  
   // Initialize all animations
   initScrollAnimations();
   initNavScroll();
@@ -482,19 +473,27 @@ function initCursorEffect() {
 }
 
 // Spotlight Mouse Glow for modern cards
+// 仅在真正有指针悬停能力的设备启用（触屏设备省掉全部 mousemove 监听）
 function initSpotlightCards() {
+  if (!window.matchMedia || !window.matchMedia('(hover: hover)').matches) return;
   const cards = document.querySelectorAll('.spotlight-card, .project-card, .blog-card-featured, .blog-mini-card, .case-card, .archive-month');
   if (!cards.length) return;
 
   cards.forEach(card => {
     if (card._hasSpotlight) return;
     card._hasSpotlight = true;
+    // rect 在进入卡片时缓存一次，mousemove 中只做减法，避免高频触发强制重排
+    let rect = null;
+    card.addEventListener('mouseenter', () => {
+      rect = card.getBoundingClientRect();
+    }, { passive: true });
     card.addEventListener('mousemove', (e) => {
-      const rect = card.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      card.style.setProperty('--mouse-x', `${x}px`);
-      card.style.setProperty('--mouse-y', `${y}px`);
+      if (!rect) rect = card.getBoundingClientRect();
+      card.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
+      card.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
+    }, { passive: true });
+    card.addEventListener('mouseleave', () => {
+      rect = null;
     }, { passive: true });
   });
 }
