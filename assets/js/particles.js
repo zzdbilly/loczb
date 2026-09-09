@@ -170,40 +170,75 @@ class ParticleConstellation {
   }
 }
 
-// Auto-initialize
+// Auto-initialize —— 移动端降级 + IntersectionObserver/visibilitychange 按需启停
 document.addEventListener('DOMContentLoaded', () => {
   const canvas = document.getElementById('particle-canvas');
   if (!canvas) return;
 
-  // 检测 prefers-reduced-motion，如果用户要求减少动画则不启动粒子效果
-  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-  if (prefersReducedMotion.matches) {
-    canvas.style.display = 'none';
-    return;
+  const mmReduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+  // 移动端降级：宽 < 768px 或触屏设备（无悬停能力 / 粗指针）禁用粒子
+  const mmMobile = window.matchMedia('(max-width: 767px), (hover: none), (pointer: coarse)');
+
+  let particle = null;
+  let inViewport = true;
+
+  function isDisabled() {
+    return (mmReduced && mmReduced.matches) || (mmMobile && mmMobile.matches);
   }
 
-  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-  const particle = new ParticleConstellation(canvas, {
-    particleColor: isDark ? 'rgba(100, 150, 255, 0.6)' : 'rgba(59, 130, 246, 0.5)',
-    lineColor: isDark ? 'rgba(100, 150, 255, 0.12)' : 'rgba(59, 130, 246, 0.1)',
-    particleCount: Math.min(80, Math.floor(window.innerWidth / 15))
-  });
-  particle.start();
+  function createParticle() {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    particle = new ParticleConstellation(canvas, {
+      particleColor: isDark ? 'rgba(100, 150, 255, 0.6)' : 'rgba(59, 130, 246, 0.5)',
+      lineColor: isDark ? 'rgba(100, 150, 255, 0.12)' : 'rgba(59, 130, 246, 0.1)',
+      particleCount: Math.min(80, Math.floor(window.innerWidth / 15))
+    });
+  }
 
-  // Re-initialize on theme change
-  const observer = new MutationObserver((mutations) => {
+  // 统一状态机：禁用 → 销毁并隐藏；启用 → 按「视口内 + 标签页前台」启停 rAF
+  function applyState() {
+    if (isDisabled()) {
+      canvas.style.display = 'none';
+      if (particle) { particle.destroy(); particle = null; }
+      return;
+    }
+    canvas.style.display = '';
+    if (!particle) createParticle();
+    if (inViewport && !document.hidden) {
+      particle.start();
+    } else {
+      particle.stop();
+    }
+  }
+
+  applyState();
+
+  // 画布滚出视口暂停 rAF，回到视口恢复
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      inViewport = entries.some(e => e.isIntersecting);
+      applyState();
+    }, { threshold: 0 });
+    io.observe(canvas);
+  }
+
+  // 标签页切后台暂停，回前台恢复
+  document.addEventListener('visibilitychange', applyState);
+
+  // 断点/偏好变化（如缩小窗口、系统开启减弱动画）时重新评估
+  [mmReduced, mmMobile].forEach(mq => {
+    if (mq.addEventListener) mq.addEventListener('change', applyState);
+    else if (mq.addListener) mq.addListener(applyState);
+  });
+
+  // 主题切换时按新配色重建粒子
+  const themeObserver = new MutationObserver((mutations) => {
     mutations.forEach((mutation) => {
       if (mutation.attributeName === 'data-theme') {
-        particle.destroy();
-        const newIsDark = document.documentElement.getAttribute('data-theme') === 'dark';
-        const newParticle = new ParticleConstellation(canvas, {
-          particleColor: newIsDark ? 'rgba(100, 150, 255, 0.6)' : 'rgba(59, 130, 246, 0.5)',
-          lineColor: newIsDark ? 'rgba(100, 150, 255, 0.12)' : 'rgba(59, 130, 246, 0.1)',
-          particleCount: Math.min(80, Math.floor(window.innerWidth / 15))
-        });
-        newParticle.start();
+        if (particle) { particle.destroy(); particle = null; }
+        applyState();
       }
     });
   });
-  observer.observe(document.documentElement, { attributes: true });
+  themeObserver.observe(document.documentElement, { attributes: true });
 });
