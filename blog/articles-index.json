@@ -1,6 +1,22 @@
 {
   "posts": [
     {
+      "slug": "seek-long-term-desires",
+      "title": "欲望也要看周期：把长期欲望当成你的核心资产",
+      "date": "2026-09-11",
+      "dateTime": "2026-09-11 00:57:31",
+      "category": "思考",
+      "tags": [
+        "认知科学",
+        "长期主义",
+        "自我管理",
+        "复利思维"
+      ],
+      "readTime": "14",
+      "excerpt": "自律失败不是道德问题，是机制问题。本文从双曲贴现、多巴胺预期误差和享乐跑步机出发，解释为什么短期欲望总是赢，然后给出一套不靠意志力的欲望组合管理方法：摩擦调节、身份驱动、中间兑现点和每周欲望审计。",
+      "url": "blog/posts/seek-long-term-desires.html"
+    },
+    {
       "slug": "android-testing-playbook",
       "title": "别再从 Espresso 开始：Android 测试分层实战手册",
       "date": "2026-09-10",
@@ -1806,6 +1822,10 @@
       "count": 4
     },
     {
+      "tag": "自我管理",
+      "count": 3
+    },
+    {
       "tag": "深度工作",
       "count": 3
     },
@@ -1844,6 +1864,10 @@
     {
       "tag": "Gemini",
       "count": 3
+    },
+    {
+      "tag": "认知科学",
+      "count": 2
     },
     {
       "tag": "测试",
@@ -1915,10 +1939,6 @@
     },
     {
       "tag": "最佳实践",
-      "count": 2
-    },
-    {
-      "tag": "自我管理",
       "count": 2
     },
     {
@@ -2018,6 +2038,14 @@
       "count": 2
     },
     {
+      "tag": "长期主义",
+      "count": 1
+    },
+    {
+      "tag": "复利思维",
+      "count": 1
+    },
+    {
       "tag": "CI",
       "count": 1
     },
@@ -2075,10 +2103,6 @@
     },
     {
       "tag": "程序员效率",
-      "count": 1
-    },
-    {
-      "tag": "认知科学",
       "count": 1
     },
     {
@@ -2849,8 +2873,13 @@
   "archives": [
     {
       "month": "2026-09",
-      "count": 4,
+      "count": 5,
       "posts": [
+        {
+          "title": "欲望也要看周期：把长期欲望当成你的核心资产",
+          "date": "2026-09-11",
+          "url": "blog/posts/seek-long-term-desires.html"
+        },
         {
           "title": "别再从 Espresso 开始：Android 测试分层实战手册",
           "date": "2026-09-10",
@@ -3432,10 +3461,10 @@
     }
   ],
   "categories": [
+    "思考",
     "Android",
     "DevOps",
     "开发",
-    "思考",
     "Kotlin",
     "前端",
     "AI",
@@ -3444,9 +3473,9 @@
     "安全"
   ],
   "stats": {
-    "totalPosts": 107,
-    "totalTags": 278,
-    "latestDate": "2026-09-10",
+    "totalPosts": 108,
+    "totalTags": 280,
+    "latestDate": "2026-09-11",
     "oldestDate": "2026-02-15"
   }
 }
