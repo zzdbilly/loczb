@@ -7,6 +7,14 @@
     <language>zh-CN</language>
     <atom:link href="https://709527.xyz/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>欲望也要看周期：把长期欲望当成你的核心资产</title>
+      <link>https://709527.xyz/blog/posts/seek-long-term-desires.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/seek-long-term-desires.html</guid>
+      <description>自律失败不是道德问题，是机制问题。本文从双曲贴现、多巴胺预期误差和享乐跑步机出发，解释为什么短期欲望总是赢，然后给出一套不靠意志力的欲望组合管理方法：摩擦调节、身份驱动、中间兑现点和每周欲望审计。</description>
+      <category>思考</category>
+      <pubDate>Fri, 11 Sep 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
       <title>别再从 Espresso 开始：Android 测试分层实战手册</title>
       <link>https://709527.xyz/blog/posts/android-testing-playbook.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/android-testing-playbook.html</guid>
@@ -156,14 +164,6 @@
       <guid isPermaLink="true">https://709527.xyz/blog/posts/nextjs-prisma-部署-vercel-常见踩坑外键约束与构建时数据修复.html</guid>
       <description>Vercel 构建时 prisma db push 失败，外键约束报错怎么办？本文完整复盘一次真实的部署失败案例，从根因分析到构建时数据修复方案。</description>
       <category>DevOps</category>
-      <pubDate>Sat, 01 Aug 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>AI Agent 实战：用子代理并行驱动多项目开发</title>
-      <link>https://709527.xyz/blog/posts/ai-agent-实战用子代理并行驱动多项目开发.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/ai-agent-实战用子代理并行驱动多项目开发.html</guid>
-      <description>子代理并行调度是 AI 辅助开发的高效模式。本文分享一套经过实战验证的调度策略，涵盖任务拆分、并行执行、结果汇总和验证闭环。</description>
-      <category>前端</category>
       <pubDate>Sat, 01 Aug 2026 00:00:00 +0800</pubDate>
     </item>
   </channel>
