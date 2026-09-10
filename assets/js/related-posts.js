@@ -4,6 +4,7 @@
 
 // Article index with tags
 const ARTICLE_INDEX = [
+  { slug: "android-testing-playbook", tags: ["Android", "测试", "Kotlin", "Jetpack Compose", "CI"], title: "别再从 Espresso 开始：Android 测试分层实战手册" },
   { slug: "choosing-and-running-a-vps", tags: ["VPS", "DevOps", "运维", "服务器"], title: "主流 VPS 的选择和使用" },
   { slug: "技术文档编写指南写出别人真的会看的文档", tags: ["技术写作", "文档规范", "工程实践", "Docs-as-Code"], title: "技术文档编写指南写出别人真的会看的文档" },
   { slug: "和ai结对写代码这一年我学会了怎么放手", tags: ["思考", "AI", "开发习惯", "代码质量"], title: "和 AI 结对写代码这一年，我学会了怎么放手" },

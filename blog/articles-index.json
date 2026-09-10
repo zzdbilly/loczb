@@ -1,6 +1,23 @@
 {
   "posts": [
     {
+      "slug": "android-testing-playbook",
+      "title": "别再从 Espresso 开始：Android 测试分层实战手册",
+      "date": "2026-09-10",
+      "dateTime": "2026-09-10 16:20:00",
+      "category": "Android",
+      "tags": [
+        "Android",
+        "测试",
+        "Kotlin",
+        "Jetpack Compose",
+        "CI"
+      ],
+      "readTime": "18",
+      "excerpt": "从 JUnit 5 + MockK 到 Compose 语义树断言，从 Robolectric 到 Firebase Test Lab——一个老 Android 开发对测试金字塔的分层打法、Flaky 治理与 CI 取舍，全是踩坑后留下的判断。",
+      "url": "blog/posts/android-testing-playbook.html"
+    },
+    {
       "slug": "choosing-and-running-a-vps",
       "title": "主流 VPS 的选择和使用",
       "date": "2026-09-08",
@@ -1718,7 +1735,7 @@
   "tagCloud": [
     {
       "tag": "Android",
-      "count": 21
+      "count": 22
     },
     {
       "tag": "AI",
@@ -1729,12 +1746,12 @@
       "count": 12
     },
     {
-      "tag": "思考",
+      "tag": "Kotlin",
       "count": 9
     },
     {
-      "tag": "Kotlin",
-      "count": 8
+      "tag": "思考",
+      "count": 9
     },
     {
       "tag": "Agent",
@@ -1753,6 +1770,10 @@
       "count": 6
     },
     {
+      "tag": "Jetpack Compose",
+      "count": 5
+    },
+    {
       "tag": "个人成长",
       "count": 5
     },
@@ -1762,10 +1783,6 @@
     },
     {
       "tag": "程序员",
-      "count": 4
-    },
-    {
-      "tag": "Jetpack Compose",
       "count": 4
     },
     {
@@ -1827,6 +1844,10 @@
     {
       "tag": "Gemini",
       "count": 3
+    },
+    {
+      "tag": "测试",
+      "count": 2
     },
     {
       "tag": "工程实践",
@@ -1997,6 +2018,10 @@
       "count": 2
     },
     {
+      "tag": "CI",
+      "count": 1
+    },
+    {
       "tag": "VPS",
       "count": 1
     },
@@ -2146,10 +2171,6 @@
     },
     {
       "tag": "TDD",
-      "count": 1
-    },
-    {
-      "tag": "测试",
       "count": 1
     },
     {
@@ -2828,8 +2849,13 @@
   "archives": [
     {
       "month": "2026-09",
-      "count": 3,
+      "count": 4,
       "posts": [
+        {
+          "title": "别再从 Espresso 开始：Android 测试分层实战手册",
+          "date": "2026-09-10",
+          "url": "blog/posts/android-testing-playbook.html"
+        },
         {
           "title": "主流 VPS 的选择和使用",
           "date": "2026-09-08",
@@ -3406,11 +3432,11 @@
     }
   ],
   "categories": [
+    "Android",
     "DevOps",
     "开发",
     "思考",
     "Kotlin",
-    "Android",
     "前端",
     "AI",
     "数据库",
@@ -3418,9 +3444,9 @@
     "安全"
   ],
   "stats": {
-    "totalPosts": 106,
-    "totalTags": 277,
-    "latestDate": "2026-09-08",
+    "totalPosts": 107,
+    "totalTags": 278,
+    "latestDate": "2026-09-10",
     "oldestDate": "2026-02-15"
   }
 }

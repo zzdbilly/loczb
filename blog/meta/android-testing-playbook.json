@@ -1,0 +1,16 @@
+{
+  "slug": "android-testing-playbook",
+  "title": "别再从 Espresso 开始：Android 测试分层实战手册",
+  "description": "从 JUnit 5 + MockK 到 Compose 语义树断言，从 Robolectric 到 Firebase Test Lab——一个老 Android 开发对测试金字塔的分层打法、Flaky 治理与 CI 取舍，全是踩坑后留下的判断。",
+  "date": "2026-09-10",
+  "dateTime": "2026-09-10 16:20:00",
+  "category": "Android",
+  "tags": [
+    "Android",
+    "测试",
+    "Kotlin",
+    "Jetpack Compose",
+    "CI"
+  ],
+  "readTime": "18"
+}

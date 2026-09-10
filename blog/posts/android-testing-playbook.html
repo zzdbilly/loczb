@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>别再从 Espresso 开始：Android 测试分层实战手册 | 张小猛 - loczb</title>
+    <meta name="description" content="从 JUnit 5 + MockK 到 Compose 语义树断言，从 Robolectric 到 Firebase Test Lab——一个老 Android 开发对测试金字塔的分层打法、Flaky 治理与 CI 取舍，全是踩坑后留下的判断。">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="别再从 Espresso 开始：Android 测试分层实战手册 | 张小猛 - loczb">
+    <meta property="og:description" content="从 JUnit 5 + MockK 到 Compose 语义树断言，从 Robolectric 到 Firebase Test Lab——一个老 Android 开发对测试金字塔的分层打法、Flaky 治理与 CI 取舍，全是踩坑后留下的判断。">
+    <meta property="og:url" content="https://709527.xyz/blog/posts/android-testing-playbook.html">
+    <meta property="og:type" content="article">
+    <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
+    <meta property="og:site_name" content="loczb">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="别再从 Espresso 开始：Android 测试分层实战手册 | 张小猛 - loczb">
+    <meta name="twitter:description" content="从 JUnit 5 + MockK 到 Compose 语义树断言，从 Robolectric 到 Firebase Test Lab——一个老 Android 开发对测试金字塔的分层打法、Flaky 治理与 CI 取舍，全是踩坑后留下的判断。">
+    <meta name="twitter:image" content="https://709527.xyz/assets/images/og-image.png">
+
+        <script type="application/ld+json">
+{
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "别再从 Espresso 开始：Android 测试分层实战手册",
+      "description": "从 JUnit 5 + MockK 到 Compose 语义树断言，从 Robolectric 到 Firebase Test Lab——一个老 Android 开发对测试金字塔的分层打法、Flaky 治理与 CI 取舍，全是踩坑后留下的判断。",
+      "image": "https://709527.xyz/assets/images/og-image.png",
+      "author": {
+            "@type": "Person",
+            "name": "张小猛",
+            "url": "https://709527.xyz/about/"
+      },
+      "publisher": {
+            "@type": "Organization",
+            "name": "loczb",
+            "logo": {
+                  "@type": "ImageObject",
+                  "url": "https://709527.xyz/assets/images/favicon.svg"
+            }
+      },
+      "datePublished": "2026-09-10 16:20:00",
+      "dateModified": "2026-09-10 16:20:00",
+      "url": "https://709527.xyz/blog/posts/android-testing-playbook.html",
+      "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://709527.xyz/blog/posts/android-testing-playbook.html"
+      },
+      "keywords": "Android, 测试, Kotlin, Jetpack Compose, CI",
+      "articleSection": "Android",
+      "timeRequired": "PT18M",
+      "inLanguage": "zh-CN"
+}
+    </script>
+
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
+    <link rel="alternate icon" href="../../assets/images/favicon.ico">
+    <link rel="canonical" href="https://709527.xyz/blog/posts/android-testing-playbook.html">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../../index.html" class="nav-logo">
+        loc<span>zb</span>
+      </a>
+      <button class="nav-toggle" aria-label="打开菜单" aria-expanded="false" aria-controls="nav-links-menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <div class="nav-overlay"></div>
+      <ul class="nav-links" id="nav-links-menu">
+        <li><a href="../../index.html" class="nav-link">首页</a></li>
+        <li><a href="../../projects/index.html" class="nav-link">项目</a></li>
+        <li><a href="../index.html" class="nav-link active">博客</a></li>
+        <li><a href="../../about/index.html" class="nav-link">关于</a></li>
+      </ul>
+      <button class="theme-toggle" aria-label="切换主题" title="切换亮/暗模式">
+        <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+        <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+      </button>
+    </div>
+  </nav>
+  <!-- Particle Canvas Background -->
+  <canvas id="particle-canvas" class="particle-canvas"></canvas>
+
+  <div class="scroll-progress"></div>
+
+  <main class="section" style="padding-bottom: 0; padding-top: var(--space-4xl);">
+    <div class="container container-narrow">
+      <a href="../index.html" class="back-link">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        返回博客列表
+      </a>
+
+      <article class="post-content">
+        <h1>别再从 Espresso 开始：Android 测试分层实战手册</h1>
+
+        <div class="post-meta">
+          <span>📅 2026-09-10 16:20:00</span>
+          <span>⏱️ 18 min read</span>
+          <span>👤 张小猛</span>
+        </div>
+
+        <div class="post-tags">
+          <span class="tag">Android</span>
+          <span class="tag">测试</span>
+          <span class="tag">Kotlin</span>
+          <span class="tag">Jetpack Compose</span>
+          <span class="tag">CI</span>
+        </div>
+
+        
+
+        <h2>写在前面：测试决定的是你敢不敢点发布</h2>
+<h3>发版前夜的味道</h3>
+<p>带了几年 Android 项目，我最记得的不是哪个需求多复杂，而是每次发版前夜的味道：构建产物躺在文件夹里，测试同学在回归，你嘴上说「稳住」，手却在刷新崩溃平台。有一年我们发一个支付页改版，本地一切正常，线上灰度十分钟后风控回调开始丢，回滚、查日志、修数据，一整套折腾下来，我痛定思痛——问题不在代码量，在于我们对「改了这个会不会坏那个」完全没有底气。</p>
+<p>后来我把整个测试体系推倒重来，按金字塔重新分层。这篇文章就是那次重构沉淀下来的打法：每一层用什么工具、测什么、在 CI 里怎么排布，以及我在真实项目里踩过的坑。</p>
+<h3>我的三条测试立场</h3>
+<p>先把立场摆出来，后面所有的技术选择都是从这里推出来的：</p>
+<ul>
+<li><strong>UI 测试是最后手段，不是第一选择。</strong> 它最贵、最慢、最容易坏，却经常被新手当成测试的起点。正确的顺序是：先问这段逻辑能不能不经过界面测。</li>
+<li><strong>覆盖率是副产品，不是目标。</strong> 一旦把「覆盖率 80%」写进 KPI，你会收获一堆调用 <code>toString()</code> 凑数的垃圾测试。覆盖率用来找盲区，不用来交差。</li>
+<li><strong>测试的第一质量指标是「失败时的可信度」。</strong> 一个经常误报的测试比没有测试更糟——团队学会忽略它之后，它吞掉的真 bug 再也找不回来。</li>
+</ul>
+<h2>测试金字塔在移动端到底怎么分层</h2>
+<h3>四层各自回答什么问题</h3>
+<p>Google 官方推荐的移动端测试模型把测试按「离设备的距离」排成三层，我实际落地时拆成四层，每层只回答一类问题：</p>
+<ol>
+<li><strong>纯 JVM 单元测试</strong>：这个函数/这个类的逻辑对不对？不碰任何 Android API。</li>
+<li><strong>Android 逻辑层测试（Robolectric）</strong>：这段依赖 <code>Context</code>、<code>SharedPreferences</code>、资源系统的代码，在 JVM 上模拟出的 Android 环境里对不对？</li>
+<li><strong>界面测试（Espresso / Compose Testing）</strong>：用户点下去，屏幕上出现的东西对不对？</li>
+<li><strong>截图测试（Paparazzi / Roborazzi）</strong>：这个组件渲染出来的像素，是不是被谁改丑了？</li>
+</ol>
+<h3>为什么我把 Espresso 放在塔尖</h3>
+<p>View 时代的习惯是「写个 Activity 起 Espresso 测一切」，因为不这么做就没法测。现在不是了：只要业务逻辑从 Activity/Fragment 里剥出来（放 Presenter、ViewModel 或纯 Kotlin UseCase），它能待在塔基用毫秒级速度跑。剩下真正需要 UI 测试的，只有「这条用户路径端到端通不通」这一类问题——一个 App 挑五到十条黄金路径覆盖就够了。我的一个两百多模块的商用车机项目，Espresso 用例长期控制在 60 条以内，反而是塔基的 JVM 测试写了四千多条。</p>
+<h3>一张成本对照表</h3>
+<table>
+<thead>
+<tr>
+<th>层级</th>
+<th>单条用例耗时</th>
+<th>维护成本</th>
+<th>环境依赖</th>
+<th>适合测什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>JVM 单元测试</td>
+<td>毫秒</td>
+<td>低</td>
+<td>无</td>
+<td>业务规则、状态机、纯逻辑</td>
+</tr>
+<tr>
+<td>Robolectric</td>
+<td>几十~几百毫秒</td>
+<td>中</td>
+<td>模拟 Android 环境</td>
+<td>Framework 交互、数据层</td>
+</tr>
+<tr>
+<td>Paparazzi 截图</td>
+<td>几百毫秒</td>
+<td>中</td>
+<td>基线 PNG</td>
+<td>组件视觉回归</td>
+</tr>
+<tr>
+<td>Espresso / Compose UI</td>
+<td>秒级</td>
+<td>高</td>
+<td>模拟器或真机</td>
+<td>黄金路径、交互反馈</td>
+</tr>
+<tr>
+<td>Firebase Test Lab</td>
+<td>分钟级排队</td>
+<td>高</td>
+<td>云端真机</td>
+<td>机型兼容、厂商碎片化</td>
+</tr>
+</tbody>
+</table>
+<h2>塔基：纯 JVM 单元测试（JUnit 5 + MockK）</h2>
+<h3>工程配置</h3>
+<p>统一用 Gradle Version Catalog 管版本。下面是我目前一个生产项目的测试相关版本，全文示例都基于它们：</p>
+<pre><code class="language-toml"># gradle/libs.versions.toml
+[versions]
+kotlin = &quot;2.1.21&quot;
+junit5 = &quot;5.11.4&quot;
+mockk = &quot;1.13.13&quot;
+robolectric = &quot;4.14.1&quot;
+androidJunit5 = &quot;1.11.0.1&quot;
+
+[libraries]
+junit-jupiter = { module = &quot;org.junit.jupiter:junit-jupiter&quot;, version.ref = &quot;junit5&quot; }
+junit-jupiter-params = { module = &quot;org.junit.jupiter:junit-jupiter-params&quot;, version.ref = &quot;junit5&quot; }
+mockk = { module = &quot;io.mockk:mockk&quot;, version.ref = &quot;mockk&quot; }
+robolectric = { module = &quot;org.robolectric:robolectric&quot;, version.ref = &quot;robolectric&quot; }
+
+[plugins]
+android-junit5 = { id = &quot;de.mannodermaus.android-junit5&quot;, version.ref = &quot;androidJunit5&quot; }
+</code></pre>
+<p>模块的 <code>build.gradle.kts</code> 里两件事必须做：应用 android-junit5 插件，并显式声明用 JUnit Platform 跑测试：</p>
+<pre><code class="language-kotlin">// module/build.gradle.kts
+plugins {
+    id(&quot;com.android.library&quot;)
+    alias(libs.plugins.android.junit5)
+    kotlin(&quot;android&quot;)
+}
+
+android {
+    testOptions {
+        unitTests.all {
+            it.useJUnitPlatform()
+        }
+        // Robolectric 需要资源时打开这两行
+        unitTests.isIncludeAndroidResources = true
+        unitTests.isReturnDefaultValues = true
+    }
+}
+
+dependencies {
+    testImplementation(libs.junit.jupiter)
+    testImplementation(libs.junit.jupiter.params)
+    testImplementation(libs.mockk)
+}
+</code></pre>
+<h3>AAA 结构与测试命名</h3>
+<p>我强制团队遵守 Arrange-Act-Assert 三段式：准备数据、执行动作、断言结果，段间空行，一个测试方法只有一个 Act。命名用「被测对象 + 场景 + 期望结果」的完整句子，让测试报告本身就是需求文档。</p>
+<pre><code class="language-kotlin">class PriceCalculatorTest {
+
+    @Test
+    fun `calculateFinalPrice 会员且订单满300 应叠加9折与满减优惠`() {
+        // Arrange
+        val calculator = PriceCalculator(membershipDiscount = 0.9f)
+        val order = Order(items = listOf(Item(price = 180f), Item(price = 150f)))
+
+        // Act
+        val result = calculator.calculateFinalPrice(order, isMember = true)
+
+        // Assert
+        assertEquals(297f, result, 0.01f) // 330 * 0.9 = 297
+    }
+}
+</code></pre>
+<p>反例我也见过：<code>test1()</code>、<code>checkPrice()</code>、<code>priceShouldBeRight()</code>。三个月后没人知道这些名字底下埋的是哪个 bug 的回归用例。</p>
+<h3>MockK：什么时候 mock，什么时候别 mock</h3>
+<p>MockK 是 Kotlin 生态里对 DSL 支持最完整的 mock 框架，接口、final 类、单例、扩展函数都能处理。但我的原则是：<strong>纯逻辑不 mock，边界才 mock。</strong> 金额计算、日期推算这类函数直接构造真实对象测；Repository、网络客户端、<code>TimeProvider</code> 这类跨边界的依赖才上 fake 或 mock。</p>
+<pre><code class="language-kotlin">class CouponViewModelTest {
+
+    private val repo = mockk&lt;CouponRepository&gt;()
+    private val viewModel = CouponViewModel(repo)
+
+    @Test
+    fun `loadCoupons 接口失败时 state 应为 Error 且携带原始信息`() {
+        // Arrange：mock 一个失败分支
+        coEvery { repo.fetchCoupons() } throws IOException(&quot;网络走丢了&quot;)
+
+        // Act
+        viewModel.loadCoupons()
+        val state = viewModel.state.first() // Flow 取第一个值需要 coroutines-test
+
+        // Assert
+        assertIs&lt;CouponState.Error&gt;(state)
+        assertEquals(&quot;网络走丢了&quot;, state.message)
+    }
+}
+</code></pre>
+<p>协程测试记得配 <code>kotlinx-coroutines-test</code>，用 <code>runTest</code> 拿到 <code>TestScope</code>，别拿 <code>Thread.sleep</code> 等异步——那正是 flaky 的第一批种子。</p>
+<p><code>verify</code> 用来断言交互（「点了退款按钮必须调一次 <code>analytics.track</code>」），但一条测试里断言交互超过三次，通常说明你在测实现细节而不是行为——重构时它会哭。</p>
+<h3>JUnit 5 在 Android 上的真实边界</h3>
+<p>有个坑我得提前说透：<strong>JUnit 5 只覆盖 instrumented tests 之外的世界。</strong> <code>androidTest/</code> 目录下跑在设备上的用例由 AndroidX Test 的 Runner 驱动，至今仍是 JUnit 4。我见过有团队在 instrumented 包里混进 <code>@Test</code> 来自 <code>org.junit.jupiter.api</code> 的注解，测试「全部通过」——因为 JUnit4 Runner 根本不认识它，一条都没跑。这类静默失效我在 code review 里抓到过三次，防它的手段是在 CI 里开 Android Lint 的自定义规则或至少检查用例总数是否与本地一致。</p>
+<h3>覆盖率：仪表盘不是 KPI</h3>
+<p>接 Kover 或 JaCoCo，把总覆盖率贴在 PR 评论里当参考，团队约定「新增代码要有测试」，但没人因为 79% 被扣绩效。覆盖率对我唯一的用法是打开按包视图找那 0% 的角落——它们要么是死代码该删，要么是真正的雷区。</p>
+<h2>Android 逻辑层：Robolectric 不用真机的 Android 测试</h2>
+<h3>什么场景值得上 Robolectric</h3>
+<p>当代码绕不开 <code>Context</code>、资源读取、<code>SharedPreferences</code>、<code>Settings.Global</code> 这类 framework 调用，纯 JVM 测试会撞上一堆 <code>Method ... not mocked</code> 异常（这正是上文 <code>isReturnDefaultValues = true</code> 存在的原因）。Robolectric 在 JVM 上反射组装了一套 Android 框架实现，让这类代码在毫秒级跑完，还能按需控制生命周期。</p>
+<p>我的判断标准：一个类的行为依赖 framework API，但不依赖「真实渲染与真实触控」，就放 Robolectric。</p>
+<h3>配置与基本用法</h3>
+<pre><code class="language-kotlin">// build.gradle.kts
+android {
+    testOptions {
+        unitTests.isIncludeAndroidResources = true
+    }
+}
+
+dependencies {
+    testImplementation(libs.robolectric)
+    testImplementation(&quot;androidx.test:core-ktx:1.6.1&quot;)
+}
+</code></pre>
+<pre><code class="language-kotlin">@RunWith(RobolectricTestRunner::class)
+@Config(sdk = [34])
+class TokenStoreTest {
+
+    private val context = ApplicationProvider.getApplicationContext&lt;Context&gt;()
+
+    @Test
+    fun `clearAll 后本地不应残留任何 token`() {
+        // Arrange
+        val store = TokenStore(context)
+        store.save(accessToken = &quot;a-123&quot;, refreshToken = &quot;r-456&quot;)
+
+        // Act
+        store.clearAll()
+
+        // Assert
+        assertNull(store.accessToken)
+        assertNull(store.refreshToken)
+    }
+}
+</code></pre>
+<h3>踩过的三个坑</h3>
+<p><strong>其一，SDK 对齐。</strong> <code>@Config(sdk = [34])</code> 指定模拟的 Android 版本，Robolectric 首次运行会去下载对应 android-all jar。CI 上如果没缓存 <code>~/.m2/repository/org/robolectric</code>，每次冷跑多花几十秒，务必加 Actions 缓存。</p>
+<p><strong>其二，生命周期黑盒。</strong> Robolectric 下 <code>Activity</code> 的 <code>onCreate</code> 到 <code>onResume</code> 需要手动 <code>ActivityController</code> 推进，忘了推进的测试会拿到半初始化的对象，报出莫名其妙的 NPE。</p>
+<p><strong>其三，shadow 不是万能的。</strong> 冷门 framework API 在 Robolectric 里没有实现（或行为与真机偏差），撞到 <code>ShadowNotWritableException</code> 之类的异常时，先查官方 shadow 清单；确实模拟不了的逻辑，认输，下沉一层重构成纯函数，或者升级到 instrumented test。</p>
+<h2>View 体系的 UI：Espresso</h2>
+<h3>三件套心智模型</h3>
+<p>Espresso 的所有 API 归成三类：<strong>onView</strong> 定位元素、<strong>perform</strong> 执行动作、<strong>check/matches</strong> 断言状态。它内置了等待机制（IdlingResource 体系），主线程空闲前不会乱动，这是它比早年 Robotium 稳的根本原因。</p>
+<pre><code class="language-kotlin">@Test
+fun login_withWrongPassword_showsInlineError() {
+    // Arrange：用 test tag 而非 id 定位，重命名 id 不应弄断测试
+    onView(withId(R.id.et_account)).perform(typeText(&quot;zhangmeng@demo.com&quot;), closeSoftKeyboard())
+    onView(withId(R.id.et_password)).perform(typeText(&quot;wrong-pass&quot;), closeSoftKeyboard())
+
+    // Act
+    onView(withId(R.id.btn_login)).perform(click())
+
+    // Assert
+    onView(withText(&quot;账号或密码不正确&quot;))
+        .check(matches(isDisplayed()))
+}
+</code></pre>
+<h3>RecyclerView 的滚动断言</h3>
+<p>长列表里找元素要用 <code>RecyclerViewActions</code>，它替你完成滚动—绑定—再点击的状态机：</p>
+<pre><code class="language-kotlin">onView(withId(R.id.rv_history))
+    .perform(
+        RecyclerViewActions.actionOnItemAtPosition&lt;HistoryViewHolder&gt;(
+            12,
+            click()
+        )
+    )
+</code></pre>
+<p>配套一个坑：列表项内容来自分页网络时，Espresso 等不到网络（RxFlow 场景 IdlingResource 经常漏注册）。我们的做法是测试环境注入假数据源，一次灌满一页，绝不让 UI 测试承担网络时序。</p>
+<h3>自定义 Matcher 让失败信息说人话</h3>
+<p>Espresso 断言失败默认打印整棵 View 树，可读性一般。写一个带 <code>describeTo</code> 的自定义 Matcher，PR 里的失败日志会感激你：</p>
+<pre><code class="language-kotlin">fun isEnabledWithText(expected: String): Matcher&lt;View&gt; =
+    object : TypeSafeMatcher&lt;View&gt;() {
+        override fun describeTo(description: Description) {
+            description.appendText(&quot;按钮应可用且文案为「$expected」&quot;)
+        }
+
+        override fun matchesSafely(view: View): Boolean =
+            view is Button &amp;&amp; view.isEnabled &amp;&amp; view.text.toString() == expected
+    }
+</code></pre>
+<h2>Compose 时代：语义树才是测试面</h2>
+<h3>createComposeRule 与基本断言</h3>
+<p>Compose 没有 id，测试框架从 View 树切换成<strong>语义树（SemanticsTree）</strong>：渲染时每个可交互节点带着 <code>Modifier.semantics</code> 暴露的属性，测试用这些属性定位。写法比 Espresso 更直白：</p>
+<pre><code class="language-kotlin">class CheckoutScreenTest {
+
+    @get:Rule
+    val composeRule = createComposeRule()
+
+    @Test
+    fun `勾选运费险后应付金额应从39变为42`() {
+        // Arrange
+        composeRule.setContent {
+            CheckoutScreen(order = OrderDemo.withShipping())
+        }
+
+        // Act
+        composeRule.onAllNodesWithText(&quot;运费险&quot;)[0]
+            .performClick()
+
+        // Assert
+        composeRule.onNodeWithText(&quot;¥42.00&quot;).assertIsDisplayed()
+    }
+}
+</code></pre>
+<p><code>createComposeRule</code>（instrumented）与 <code>createAndroidComposeRule&lt;ComponentActivity&gt;</code>（Robolectric 里跑 Compose，配合前文的 android-junit5 桥接）是两个入口，逻辑一致的组件我优先放 Robolectric 跑，快一个数量级。</p>
+<h3>testTag 是测试的接口契约</h3>
+<p>按文案定位在中文项目里很脆——文案会改、会做 A/B、会国际化。稳定做法是给关键节点打 <code>testTag</code>，并把它当成公开接口对待：改 tag 要走和改 API 一样的 review：</p>
+<pre><code class="language-kotlin">Button(
+    onClick = onSubmit,
+    modifier = Modifier.testTag(&quot;checkout.submit&quot;)
+) { Text(&quot;提交订单&quot;) }
+
+// 测试侧
+composeRule.onNodeWithTag(&quot;checkout.submit&quot;)
+    .performClick()
+    .assertAny(hasClickAction())
+</code></pre>
+<p>命名规范我们用「模块.场景.元素」三段点分制，全局唯一，搜索即定位。</p>
+<h3>滚动 LazyColumn 断言不可见项</h3>
+<pre><code class="language-kotlin">composeRule.onNodeWithTag(&quot;settings.row.darkmode&quot;)
+    .performScrollTo()   // 先滚进视口
+    .performClick()
+
+composeRule.onNode(hasSetTextAction())
+    .assertIsDisplayed()
+</code></pre>
+<p><code>performScrollTo</code> 只处理列表内滚动；涉及 <code>Scaffold</code> 嵌套滚动容器时它偶尔找不到锚点，我们的兜底是把 <code>isScrollable()</code> 的父节点单独 <code>performGesture { swipeUp() }</code>。</p>
+<h2>截图测试：Paparazzi 与 Roborazzi</h2>
+<h3>它们防的是哪类 bug</h3>
+<p>UI 断言查的是「对不对」，查不了「好不好看」。改一个 <code>MaterialTheme</code> 的 spacing，语义测试全线绿灯，视觉却碎了一地——这类回归交给截图测试：把组件渲染成 PNG 与基线比对，像素差异超阈值即失败。</p>
+<h3>Paparazzi：JVM 上出图，不需要模拟器</h3>
+<p>Cash App 开源的 Paparazzi 用 LayoutLib（就是 Android Studio 预览用的那套）在 JVM 渲染，速度快到可以每条 PR 全量跑：</p>
+<pre><code class="language-kotlin">plugins {
+    id(&quot;app.cash.paparazzi&quot;) version &quot;1.3.5&quot;
+}
+</code></pre>
+<pre><code class="language-kotlin">class PriceTagSnapshotTest {
+
+    @get:Rule
+    val paparazzi = Paparazzi(
+        deviceConfig = DeviceConfig.PIXEL_6,
+        theme = &quot;android:Theme.Material.Light.NoActionBar&quot;,
+    )
+
+    @Test
+    fun `priceTag - 会员价态`() {
+        paparazzi.snapshot {
+            AppTheme {
+                PriceTag(origin = 39.0f, member = 29.9f, isMember = true)
+            }
+        }
+    }
+}
+</code></pre>
+<p><code>./gradlew recordPaparazziDebug</code> 生成基线，<code>verifyPaparazziDebug</code> 比对。基线 PNG 提交进仓库，PR diff 里直接能看图。</p>
+<h3>Roborazzi：接管 instrumented 与 Compose 的截图</h3>
+<p>Roborazzi 挂在 Robolectric 或普通 instrumented 流程上，胜在能截<strong>真实运行时</strong>的屏（含第三方 SDK 的渲染），失败时输出 diff 图。我们用它覆盖那些 Paparazzi 渲染不了的 WebView 混合页面：</p>
+<pre><code class="language-kotlin">plugins {
+    id(&quot;io.github.takahirom.roborazzi&quot;) version &quot;1.33.0&quot;
+}
+</code></pre>
+<pre><code class="language-kotlin">@RunWith(ParameterizedRobolectricTestRunner::class)
+@Config(sdk = [34])
+class HomeCardRoborazziTest(private val state: FeedState) {
+
+    @get:Rule
+    val composeRule = createAndroidComposeRule&lt;ComponentActivity&gt;()
+
+    @Test
+    @WithRoborazziOptions(options = RoborazziOptions(
+        captureOptions = CaptureOptions(changeThreshold = 0.01f)
+    ))
+    fun snapshot() {
+        composeRule.setContent { HomeFeedCard(state) }
+        composeRule.onRoot().captureRoboImage(
+            &quot;src/test/screenshots/home_card_${state.name.lowercase()}.png&quot;
+        )
+    }
+
+    companion object {
+        @ParameterizedRobolectricTestRunner.Parameters
+        @JvmStatic
+        fun states() = listOf(
+            FeedState.NORMAL, FeedState.VIDEO, FeedState.PROMO, FeedState.OFFLINE
+        )
+    }
+}
+</code></pre>
+<p><code>changeThreshold = 0.01f</code> 是关键：不同字体 hinting 会产生 1~2% 的像素噪声，零容忍的截图测试一周内就会被团队关掉。</p>
+<h3>基线 review 的工程办法</h3>
+<p>截图测试最大的阻力是「肉眼审不过来的 PNG」。我们在 CI 里把失败截图与基线截图、diff 图三张打包成一条 PR 评论，约定两条规则：视觉改动必须带「为什么改」的说明才能重新录制基线；一次 PR 里基线变更超过 10 张，拆 PR。</p>
+<h2>Flaky 治理：测试说谎比测试缺席更致命</h2>
+<h3>抖动从哪里来</h3>
+<p>回看我们治理前的 47 条 flaky 用例，根因分布如下：</p>
+<table>
+<thead>
+<tr>
+<th>根因</th>
+<th>占比</th>
+<th>典型形态</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>时间依赖</td>
+<td>~30%</td>
+<td>断言「显示 2 分钟前」，CI 慢机器变 3 分钟</td>
+</tr>
+<tr>
+<td>协程/线程时序</td>
+<td>~25%</td>
+<td>用 delay 等异步结果，机器负载一高就超时</td>
+</tr>
+<tr>
+<td>动画未关</td>
+<td>~20%</td>
+<td>Compose 默认动画让断言抢跑</td>
+</tr>
+<tr>
+<td>测试间共享状态</td>
+<td>~15%</td>
+<td>单例、磁盘文件、静态变量被上一个用例污染</td>
+</tr>
+<tr>
+<td>模拟器抖动</td>
+<td>~10%</td>
+<td>图形渲染、输入法弹出层时序</td>
+</tr>
+</tbody>
+</table>
+<h3>治理手段一：把时间变成注入参数</h3>
+<p>所有「当前时间」从 <code>Clock</code> 来，测试给固定值：</p>
+<pre><code class="language-kotlin">interface AppClock { fun now(): Instant }
+data class SystemClock : AppClock { override fun now() = Instant.now() }
+
+class OrderExpiryChecker(private val clock: AppClock) {
+    fun isExpired(order: Order): Boolean =
+        order.createdAt.plus(30, ChronoUnit.MINUTES) &lt; clock.now()
+}
+
+@Test
+fun `第31分钟的订单应判为过期`() {
+    val fixed = AppClockFixed(Instant.parse(&quot;2026-09-10T08:00:00Z&quot;))
+    val checker = OrderExpiryChecker(fixed)
+    val order = OrderDemo.createdMinutesAgo(31)
+    assertIsTrue(checker.isExpired(order))
+}
+</code></pre>
+<p>Compose UI 测试统一关动画：<code>composeRule.mainClock.autoAdvance = false</code> 后手动 <code>advanceTimeBy</code>，让动画在测试里变成可控的逐帧播放。</p>
+<h3>治理手段二：重试是麻醉剂，要付利息</h3>
+<p>我的规矩：允许 CI 对「隔离清单之外」的失败自动重试一次，但每个被重试救活的用例必须当天建卡片、进隔离清单——这是「利息」。<strong>quarantine 标签机制</strong>让它不阻塞主干：</p>
+<pre><code class="language-kotlin">android {
+    testOptions {
+        unitTests.all {
+            it.useJUnitPlatform()
+            // 主 pipeline 排除隔离用例，单独的 quarantine job 天天跑它们观察
+            it.excludeTags(&quot;quarantine&quot;)
+        }
+    }
+}
+</code></pre>
+<pre><code class="language-kotlin">@Tag(&quot;quarantine&quot;)
+@Test
+fun `支付结果页偶发拿不到订单号`() { /* 修复完成后删掉 @Tag */ }
+</code></pre>
+<p>隔离区用例连续两周不再抖动就毕业回主干；隔离超过六周还没人修，删掉——没人修的测试是负资产。</p>
+<h3>治理手段三：用例之间必须老死不相往来</h3>
+<p>共享的 <code>object</code> 单例、写死同一个文件的 IO、上一个用例留下的数据库状态，是测试随机通过组合里最常见的暗雷。我们在基类里强制 <code>@BeforeEach</code> 重建全部依赖，数据库测试用 <code>@Transactional</code> 回滚。判据很硬：<strong>任意用例单独跑必须通过，任意两个用例随机顺序必须通过。</strong> 做不到就是架构问题。</p>
+<h2>CI 接入：GitHub Actions 与 Firebase Test Lab 的取舍</h2>
+<h3>流水线分两档：PR 跑便宜的，merge 跑贵的</h3>
+<pre><code class="language-yaml"># .github/workflows/ci.yml（节选）
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  unit:                       # 每个 PR 都跑，5 分钟内出结果
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: 17 }
+      - uses: gradle/actions/setup-gradle@v4
+      - name: 缓存 Robolectric android-all
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository/org/robolectric
+          key: robolectric-${{ hashFiles('gradle/libs.versions.toml') }}
+      - run: ./gradlew testDebugUnitTest verifyPaparazziDebug
+
+  instrumented:               # 只跑合并后的 main，控制设备成本
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        api: [28, 34]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: ${{ matrix.api }}
+          arch: x86_64
+          script: ./gradlew connectedDebugAndroidTest
+</code></pre>
+<p>矩阵里 <code>api: [28, 34]</code> 取的是用户占比的两端，不是设备商店的型号数——真机长尾交给 Test Lab，模拟器矩阵只守最低支持版本和当前 target。</p>
+<h3>Actions 里跑模拟器的成本真相</h3>
+<p>GitHub 的 Linux runner 带 KVM，x86_64 模拟器能硬件加速，冷启动加跑完 60 条用例大约 12~18 分钟；图形相关用例偶发渲染失败，所以我把 instrumented 从 PR 门禁里摘出来，作为 merge 后的「准入门禁」——红了就 revert 排查，不阻塞别人的 PR。</p>
+<h3>Firebase Test Lab：碎片化外包</h3>
+<p>真机长尾不值得自己养。gcloud 一条命令提交，按机型矩阵分发，结果带视频和 logcat：</p>
+<pre><code class="language-bash">gcloud firebase test android run \
+  --type instrumentation \
+  --app app/build/outputs/apk/release/app-release.apk \
+  --test app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk \
+  --device model=oriole,version=34 \
+  --device model=redfin,version=30 \
+  --use-orchestrator \
+  --num-flaky-test-attempts=1 \
+  --results-bucket=gs://my-app-flank-results
+</code></pre>
+<p>参数里的三个决定：<code>--use-orchestrator</code> 让每条用例独立进程跑，专治测试间污染；<code>--num-flaky-test-attempts=1</code> 只在这里允许一次重试，因为云端模拟器/真机本身的底座抖动确实存在；<code>--results-bucket</code> 把产物落到自己的 GCS，方便留存视频。</p>
+<h3>三套执行环境的取舍表</h3>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>Actions 模拟器</th>
+<th>Paparazzi(Robolectric) JVM</th>
+<th>Firebase Test Lab</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>单轮耗时</td>
+<td>10~20 分钟</td>
+<td>秒~分钟</td>
+<td>排队 5~30 分钟 + 执行</td>
+</tr>
+<tr>
+<td>成本</td>
+<td>runner 分钟数</td>
+<td>≈0</td>
+<td>按设备·分钟计费</td>
+</tr>
+<tr>
+<td>可信度</td>
+<td>中（模拟器≠真机）</td>
+<td>中</td>
+<td>高（真实 SoC/ROM）</td>
+</tr>
+<tr>
+<td>触发时机</td>
+<td>merge 后</td>
+<td>每条 PR</td>
+<td>发版前 + 每周巡检</td>
+</tr>
+</tbody>
+</table>
+<p>发布周的节奏：每条 PR 跑 unit + 截图；合并进 main 跑模拟器矩阵；封版那天凌晨跑一轮 Test Lab，覆盖 8 台重点机型，视频归档。</p>
+<h2>落地路径：从第一周到第一季度</h2>
+<h3>第一周：把地基打平</h3>
+<p>接上 JUnit 5 + MockK + Kover，挑一个改动最频繁的纯逻辑类补 3~5 条 AAA 结构的单测，把「测试命名 + 三段式」写进团队的 review checklist。先让「跑测试」这件事在 CI 里存在，比跑多少条重要。</p>
+<h3>第一个月：拆依赖 + 建隔离区</h3>
+<p>重构两三个 god ViewModel，把时间、网络、数据库访问改成注入；搭 Robolectric 环境收编那些「必须 Context」的测试；同步启动 flaky 隔离区机制，第一次全量跑挂的偶发用例全部打 tag，每天看隔离区报表。</p>
+<h3>第一季度：UI 契约与视觉回归</h3>
+<p>给核心页面补五条黄金路径的 Compose/Espresso 测试，同时把 testTag 命名规范推广到设计协作里（设计师标注可交互态 → 开发落 tag）；Paparazzi 接管设计组件库的视觉回归；最后把 instrumented 上云，Test Lab 接入发版流程。</p>
+<h2>收尾：测试是工程判断，不是仪式</h2>
+<p>写完这套体系回头看，工具的更迭比我预想的快——ViewBinding 淘汰了 findViewById，Compose 又淘汰了 Espresso 的一半用例，截图测试两年前还被认为是玩具。但有三件事始终没过时：把逻辑从界面里剥出来的架构决策决定了测试上限；flaky 必须治理否则一切归零；以及测试体系的价值要在发版前夜才能见真章。</p>
+<p>如果你现在只有一周时间，别去写 UI 测试。把最常被改坏的那个业务函数，用纯 Kotlin 测起来。</p>
+
+        <!-- Post Copyright & License Card -->
+        <div class="post-copyright-card">
+          <div class="copyright-header">
+            <div class="copyright-badge">
+              <span>📜</span>
+              <span>原创与知识共享协议</span>
+            </div>
+            <button class="copyright-cite-btn" id="copy-cite-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+              </svg>
+              <span>复制 Markdown 引用</span>
+            </button>
+          </div>
+          <div class="copyright-list">
+            <div class="copyright-item"><strong>文章标题：</strong>别再从 Espresso 开始：Android 测试分层实战手册</div>
+            <div class="copyright-item"><strong>文章作者：</strong>张小猛 · loczb</div>
+            <div class="copyright-item"><strong>永久链接：</strong><a href="https://709527.xyz/blog/posts/android-testing-playbook.html">https://709527.xyz/blog/posts/android-testing-playbook.html</a></div>
+            <div class="copyright-item"><strong>版权声明：</strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 国际许可协议。商业转载请联系作者获得授权，非商业转载请注明出处。</div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </main>
+
+  <!-- Related Posts / Navigation -->
+  <section class="section" style="padding-top: 0;">
+    <div class="container container-narrow">
+      <hr style="border: none; border-top: 1px solid var(--color-border); margin: var(--space-3xl) 0;">
+
+      <div class="blog-topics" style="margin-bottom: var(--space-xl);">
+        <span class="topic-label">读完之后:</span>
+        <a href="../index.html" class="topic-tag">返回博客列表</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <p class="footer-signature">写代码,做产品,也认真生活。</p>
+      <div class="footer-social">
+        <a href="https://github.com/zzdbilly" class="footer-social-link" target="_blank" rel="noopener" aria-label="GitHub">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+        </a>
+        <a href="../../rss.xml" class="footer-social-link" aria-label="RSS">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+      </div>
+      <div class="footer-links">
+        <a href="../../index.html" class="footer-link">首页</a>
+        <a href="../../projects/index.html" class="footer-link">项目</a>
+        <a href="../../blog/index.html" class="footer-link">博客</a>
+        <a href="../../about/index.html" class="footer-link">关于</a>
+      </div>
+      <p class="footer-copyright">
+        &copy; 2026 张小猛
+      </p>
+    </div>
+  </footer>
+
+  <script defer src="../../assets/js/related-posts.js"></script>
+  <script defer src="../../assets/js/main.js"></script>
+  <script defer src="../../assets/js/article.js"></script>
+  <script defer src="../../assets/js/share.js"></script>
+  <script defer src="../../assets/js/back-to-top.js"></script>
+  <!-- Back to Top & Reading Progress -->
+  <button class="back-to-top" id="backToTop" aria-label="回到顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
+  <div class="reading-progress" id="readingProgress"></div>
+
+  <!-- Post Sidebar Info（左侧） -->
+  <div class="post-sidebar-info" id="postSidebar">
+    <div class="post-info-card">
+      <div class="post-info-section">
+        <div class="post-info-label">作者</div>
+        <div class="post-info-author">
+          <div class="post-info-avatar">小</div>
+          <div>
+            <div class="post-info-author-name">张小猛</div>
+            <div class="post-info-author-desc">写代码，做产品</div>
+          </div>
+        </div>
+      </div>
+      <div class="post-info-section">
+        <div class="post-info-label">文章信息</div>
+        <div class="post-info-stat"><span class="post-info-stat-label">📅 发布日期</span><span class="post-info-stat-value">2026-09-10</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label">⏱️ 阅读时间</span><span class="post-info-stat-value">18 min read</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label">📝 文章字数</span><span class="post-info-stat-value">4933 字</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label">📊 章节数</span><span class="post-info-stat-value">11 节 · 34 子节</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label">💻 代码块</span><span class="post-info-stat-value">21 段</span></div>
+      </div>
+      <div class="post-info-section" id="postSidebarTags">
+        <div class="post-info-label">标签</div>
+        <div class="post-info-links">
+          <a href="../../blog/index.html?tag=Android" class="post-info-link"># Android</a>
+          <a href="../../blog/index.html?tag=测试" class="post-info-link"># 测试</a>
+          <a href="../../blog/index.html?tag=Kotlin" class="post-info-link"># Kotlin</a>
+          <a href="../../blog/index.html?tag=Jetpack Compose" class="post-info-link"># Jetpack Compose</a>
+          <a href="../../blog/index.html?tag=CI" class="post-info-link"># CI</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Post TOC -->
+  <div class="post-toc-container" id="postToc">
+    <nav class="post-toc">
+      <div class="post-toc-title">目录</div>
+      <ul class="post-toc-list" id="tocList">
+      </ul>
+    </nav>
+  </div>
+<script defer src="../../assets/js/particles.js"></script>
+
+  <!-- Comment System -->
+  <script src="../../workers/comment-system/comment-widget.js" defer></script>
+
+  <!-- highlight.js 代码语法高亮（本地完整构建，无外部依赖） -->
+  <script defer src="../../assets/vendor/highlight/highlight.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // 只对没有 codehilite 的代码块应用 highlight.js
+      document.querySelectorAll('pre code').forEach(function(block) {
+        // 跳过已经有 Pygments 高亮的块
+        if (block.closest('.codehilite') || block.classList.contains('hljs')) return;
+        try { hljs.highlightElement(block); } catch (e) {}
+      });
+    });
+  </script>
+
+  <!-- Cloudflare Web Analytics -->
+  <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "29e7cff6f37448989538e2165cb79187"}'></script>
+</body>
+</html>

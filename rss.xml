@@ -7,6 +7,14 @@
     <language>zh-CN</language>
     <atom:link href="https://709527.xyz/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>别再从 Espresso 开始：Android 测试分层实战手册</title>
+      <link>https://709527.xyz/blog/posts/android-testing-playbook.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/android-testing-playbook.html</guid>
+      <description>从 JUnit 5 + MockK 到 Compose 语义树断言，从 Robolectric 到 Firebase Test Lab——一个老 Android 开发对测试金字塔的分层打法、Flaky 治理与 CI 取舍，全是踩坑后留下的判断。</description>
+      <category>Android</category>
+      <pubDate>Thu, 10 Sep 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
       <title>主流 VPS 的选择和使用</title>
       <link>https://709527.xyz/blog/posts/choosing-and-running-a-vps.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/choosing-and-running-a-vps.html</guid>
@@ -157,14 +165,6 @@
       <description>子代理并行调度是 AI 辅助开发的高效模式。本文分享一套经过实战验证的调度策略，涵盖任务拆分、并行执行、结果汇总和验证闭环。</description>
       <category>前端</category>
       <pubDate>Sat, 01 Aug 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>Agentic AI 架构演进：从 Chatbot 到自主 Agent</title>
-      <link>https://709527.xyz/blog/posts/agentic-ai-架构演进从-chatbot-到自主-agent.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/agentic-ai-架构演进从-chatbot-到自主-agent.html</guid>
-      <description>从 Function Calling、MCP 到 Multi-Agent，梳理 AI Agent 架构的进化路径，以及当前面临的挑战和未来方向。</description>
-      <category>AI</category>
-      <pubDate>Wed, 22 Jul 2026 00:00:00 +0800</pubDate>
     </item>
   </channel>
 </rss>
