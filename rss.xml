@@ -7,6 +7,14 @@
     <language>zh-CN</language>
     <atom:link href="https://709527.xyz/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>如何快速恢复能量，让自己快乐起来</title>
+      <link>https://709527.xyz/blog/posts/quick-energy-recovery.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/quick-energy-recovery.html</guid>
+      <description>电量见底时怎么用几十分钟把自己拉回来：先分清是累还是空，再抓住低谷里的十分钟，把光照、社交和任务切换的顺序排对，末尾附一份十分钟能做完的最短路径清单。</description>
+      <category>思考</category>
+      <pubDate>Sun, 13 Sep 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
       <title>欲望也要看周期：把长期欲望当成你的核心资产</title>
       <link>https://709527.xyz/blog/posts/seek-long-term-desires.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/seek-long-term-desires.html</guid>
@@ -157,14 +165,6 @@
       <description>深入解析 Web Worker 的原理与实践，涵盖 Dedicated Worker、Shared Worker、Service Worker 的区别与使用场景，以及 Comlink、Worker 池、Transferable Objects 等进阶技巧</description>
       <category>前端</category>
       <pubDate>Fri, 07 Aug 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>Next.js + Prisma 部署 Vercel 常见踩坑：外键约束与构建时数据修复</title>
-      <link>https://709527.xyz/blog/posts/nextjs-prisma-部署-vercel-常见踩坑外键约束与构建时数据修复.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/nextjs-prisma-部署-vercel-常见踩坑外键约束与构建时数据修复.html</guid>
-      <description>Vercel 构建时 prisma db push 失败，外键约束报错怎么办？本文完整复盘一次真实的部署失败案例，从根因分析到构建时数据修复方案。</description>
-      <category>DevOps</category>
-      <pubDate>Sat, 01 Aug 2026 00:00:00 +0800</pubDate>
     </item>
   </channel>
 </rss>
