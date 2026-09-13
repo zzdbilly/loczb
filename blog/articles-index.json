@@ -1,6 +1,22 @@
 {
   "posts": [
     {
+      "slug": "quick-energy-recovery",
+      "title": "如何快速恢复能量，让自己快乐起来",
+      "date": "2026-09-13",
+      "dateTime": "2026-09-13 16:58:54",
+      "category": "思考",
+      "tags": [
+        "能量管理",
+        "情绪",
+        "生活方式",
+        "程序员"
+      ],
+      "readTime": "12",
+      "excerpt": "电量见底时怎么用几十分钟把自己拉回来：先分清是累还是空，再抓住低谷里的十分钟，把光照、社交和任务切换的顺序排对，末尾附一份十分钟能做完的最短路径清单。",
+      "url": "blog/posts/quick-energy-recovery.html"
+    },
+    {
       "slug": "seek-long-term-desires",
       "title": "欲望也要看周期：把长期欲望当成你的核心资产",
       "date": "2026-09-11",
@@ -1786,20 +1802,20 @@
       "count": 6
     },
     {
+      "tag": "生活方式",
+      "count": 5
+    },
+    {
+      "tag": "程序员",
+      "count": 5
+    },
+    {
       "tag": "Jetpack Compose",
       "count": 5
     },
     {
       "tag": "个人成长",
       "count": 5
-    },
-    {
-      "tag": "生活方式",
-      "count": 4
-    },
-    {
-      "tag": "程序员",
-      "count": 4
     },
     {
       "tag": "Next.js",
@@ -2036,6 +2052,14 @@
     {
       "tag": "网络",
       "count": 2
+    },
+    {
+      "tag": "能量管理",
+      "count": 1
+    },
+    {
+      "tag": "情绪",
+      "count": 1
     },
     {
       "tag": "长期主义",
@@ -2873,8 +2897,13 @@
   "archives": [
     {
       "month": "2026-09",
-      "count": 5,
+      "count": 6,
       "posts": [
+        {
+          "title": "如何快速恢复能量，让自己快乐起来",
+          "date": "2026-09-13",
+          "url": "blog/posts/quick-energy-recovery.html"
+        },
         {
           "title": "欲望也要看周期：把长期欲望当成你的核心资产",
           "date": "2026-09-11",
@@ -3473,9 +3502,9 @@
     "安全"
   ],
   "stats": {
-    "totalPosts": 108,
-    "totalTags": 280,
-    "latestDate": "2026-09-11",
+    "totalPosts": 109,
+    "totalTags": 282,
+    "latestDate": "2026-09-13",
     "oldestDate": "2026-02-15"
   }
 }
