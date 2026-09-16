@@ -12,7 +12,7 @@
     <meta property="og:description" content="Kotlin Multiplatform 实战：将 Android 业务逻辑共享到 iOS - 架构设计、expect/actual、网络层、数据层完整实现">
     <meta property="og:url" content="https://709527.xyz/blog/posts/kotlin-multiplatform-practice.html">
     <meta property="og:type" content="article">
-        <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
+    <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
     <meta property="og:site_name" content="loczb">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Kotlin Multiplatform 实战：共享业务逻辑到 iOS | 张小猛 - loczb">
@@ -139,6 +139,38 @@
           </details>
         </div>
         <!-- /Series Card Widget -->
+
+        
+        
+
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="kotlin-coroutines-并发实战从入门到优雅的并发编程.html">
+            <div class="related-post-card-title">Kotlin Coroutines 并发实战：从入门到优雅的并发编程</div>
+            <div class="related-post-card-tags"><span>Kotlin</span><span>协程</span><span>并发</span></div>
+          </a>
+          <a class="related-post-card" href="kotlin-scope-functions-实战选择五个函数一个决策树.html">
+            <div class="related-post-card-title">Kotlin Scope Functions 实战选择：五个函数一个决策树</div>
+            <div class="related-post-card-tags"><span>Kotlin</span><span>Android</span><span>最佳实践</span></div>
+          </a>
+          <a class="related-post-card" href="android-gradle-kts-migration.html">
+            <div class="related-post-card-title">Android Gradle 迁移到 KTS 完整指南：从 Groovy 到 Kotlin DSL</div>
+            <div class="related-post-card-tags"><span>Android</span><span>Gradle</span><span>KTS</span></div>
+          </a>
+          <a class="related-post-card" href="kotlin-coroutines-best-practices.html">
+            <div class="related-post-card-title">Kotlin Coroutines 最佳实践</div>
+            <div class="related-post-card-tags"><span>Kotlin</span><span>Coroutines</span><span>异步编程</span></div>
+          </a>
+          <a class="related-post-card" href="android-testing-playbook.html">
+            <div class="related-post-card-title">别再从 Espresso 开始：Android 测试分层实战手册</div>
+            <div class="related-post-card-tags"><span>Android</span><span>测试</span><span>Kotlin</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
 
         <p>Kotlin Multiplatform（KMP）已经从「实验特性」进化到「生产可用」。2024 年 Google 宣布 KMP 成为 Android 官方推荐的跨平台方案，2026 年 Compose Multiplatform for iOS 进入 Stable，KMP 的生态已经成熟到可以认真考虑在商业项目中使用了。</p>
 
@@ -826,6 +858,29 @@ val localDate = now.toLocalDateTime(TimeZone.currentSystemDefault())</code></pre
       </ol>
 
       <p>2026 年的 KMP 已经不是早期实验品了。Kotlin 2.0 的 K2 编译器让构建速度大幅提升，Compose Multiplatform for iOS 进入 Stable，Google 官方背书——如果你在做 Android 开发同时需要 iOS 端，现在是认真考虑 KMP 的时候了。</p>
+
+        <!-- Post Copyright & License Card -->
+        <div class="post-copyright-card">
+          <div class="copyright-header">
+            <div class="copyright-badge">
+              <span>📜</span>
+              <span>原创与知识共享协议</span>
+            </div>
+            <button class="copyright-cite-btn" id="copy-cite-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+              </svg>
+              <span>复制 Markdown 引用</span>
+            </button>
+          </div>
+          <div class="copyright-list">
+            <div class="copyright-item"><strong>文章标题：</strong>Kotlin Multiplatform 实战：共享业务逻辑到 iOS</div>
+            <div class="copyright-item"><strong>文章作者：</strong>张小猛 · loczb</div>
+            <div class="copyright-item"><strong>永久链接：</strong><a href="https://709527.xyz/blog/posts/kotlin-multiplatform-practice.html">https://709527.xyz/blog/posts/kotlin-multiplatform-practice.html</a></div>
+            <div class="copyright-item"><strong>版权声明：</strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 国际许可协议。商业转载请联系作者获得授权，非商业转载请注明出处。</div>
+          </div>
+        </div>
       </article>
     </div>
   </main>
@@ -874,13 +929,12 @@ val localDate = now.toLocalDateTime(TimeZone.currentSystemDefault())</code></pre
         <a href="../../blog/index.html" class="footer-link">博客</a>
         <a href="../../about/index.html" class="footer-link">关于</a>
       </div>
-<p class="footer-copyright">
+      <p class="footer-copyright">
         &copy; 2026 张小猛
       </p>
     </div>
   </footer>
 
-  <script defer src="../../assets/js/related-posts.js"></script>
   <script defer src="../../assets/js/main.js"></script>
   <script defer src="../../assets/js/article.js"></script>
   <script defer src="../../assets/js/share.js"></script>

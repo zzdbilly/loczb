@@ -12,7 +12,7 @@
     <meta property="og:description" content="PostgreSQL 索引优化实战：B-Tree、GiST、GIN 索引类型对比，复合索引、部分索引设计，EXPLAIN 执行计划分析与慢查询优化">
     <meta property="og:url" content="https://709527.xyz/blog/posts/postgresql-index-optimization.html">
     <meta property="og:type" content="article">
-        <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
+    <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
     <meta property="og:site_name" content="loczb">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="PostgreSQL 索引优化实战 | 张小猛 - loczb">
@@ -139,6 +139,34 @@
           </details>
         </div>
         <!-- /Series Card Widget -->
+
+        
+        
+
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="postgresql-从-17-到-18生产环境升级实战.html">
+            <div class="related-post-card-title">PostgreSQL 从 17 到 18：生产环境升级实战</div>
+            <div class="related-post-card-tags"><span>PostgreSQL</span><span>数据库</span><span>DevOps</span></div>
+          </a>
+          <a class="related-post-card" href="prisma-orm-完全指南从入门到实战.html">
+            <div class="related-post-card-title">Prisma ORM 完全指南：从入门到实战</div>
+            <div class="related-post-card-tags"><span>Prisma</span><span>TypeScript</span><span>PostgreSQL</span></div>
+          </a>
+          <a class="related-post-card" href="sqlite-wal-performance.html">
+            <div class="related-post-card-title">SQLite 进阶：WAL 模式与性能优化</div>
+            <div class="related-post-card-tags"><span>SQLite</span><span>数据库</span><span>WAL</span></div>
+          </a>
+          <a class="related-post-card" href="mysql-索引优化实战从慢查询到最佳实践.html">
+            <div class="related-post-card-title">MySQL 索引优化实战：从慢查询到最佳实践</div>
+            <div class="related-post-card-tags"></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
 
         <p>数据库性能优化中，索引是最重要的手段——没有之一。PostgreSQL 提供了丰富的索引类型和灵活的索引策略，但用错了比不用更糟：不仅查询没变快，写入还变慢了，磁盘空间也白白浪费。</p>
 
@@ -1174,6 +1202,29 @@ SELECT * FROM orders WHERE id &gt; 999980 ORDER BY id LIMIT 21;
       <div class="tip-box">
         <strong>一句话总结</strong>：索引设计 = 选对类型 + 排好列序 + 控好范围。B-Tree 是万金油但不是万能药；GIN 搞定 JSONB 和数组；部分索引省空间又省维护；覆盖索引免回表；EXPLAIN 是你的听诊器。建索引前先 EXPLAIN，建完后再 EXPLAIN 验证——永远不要猜。
       </div>
+
+        <!-- Post Copyright & License Card -->
+        <div class="post-copyright-card">
+          <div class="copyright-header">
+            <div class="copyright-badge">
+              <span>📜</span>
+              <span>原创与知识共享协议</span>
+            </div>
+            <button class="copyright-cite-btn" id="copy-cite-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+              </svg>
+              <span>复制 Markdown 引用</span>
+            </button>
+          </div>
+          <div class="copyright-list">
+            <div class="copyright-item"><strong>文章标题：</strong>PostgreSQL 索引优化实战</div>
+            <div class="copyright-item"><strong>文章作者：</strong>张小猛 · loczb</div>
+            <div class="copyright-item"><strong>永久链接：</strong><a href="https://709527.xyz/blog/posts/postgresql-index-optimization.html">https://709527.xyz/blog/posts/postgresql-index-optimization.html</a></div>
+            <div class="copyright-item"><strong>版权声明：</strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 国际许可协议。商业转载请联系作者获得授权，非商业转载请注明出处。</div>
+          </div>
+        </div>
       </article>
     </div>
   </main>
@@ -1222,13 +1273,12 @@ SELECT * FROM orders WHERE id &gt; 999980 ORDER BY id LIMIT 21;
         <a href="../../blog/index.html" class="footer-link">博客</a>
         <a href="../../about/index.html" class="footer-link">关于</a>
       </div>
-<p class="footer-copyright">
+      <p class="footer-copyright">
         &copy; 2026 张小猛
       </p>
     </div>
   </footer>
 
-  <script defer src="../../assets/js/related-posts.js"></script>
   <script defer src="../../assets/js/main.js"></script>
   <script defer src="../../assets/js/article.js"></script>
   <script defer src="../../assets/js/share.js"></script>

@@ -12,7 +12,7 @@
     <meta property="og:description" content="子代理并行调度是 AI 辅助开发的高效模式。本文分享一套经过实战验证的调度策略，涵盖任务拆分、并行执行、结果汇总和验证闭环。">
     <meta property="og:url" content="https://709527.xyz/blog/posts/ai-agent-实战用子代理并行驱动多项目开发.html">
     <meta property="og:type" content="article">
-        <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
+    <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
     <meta property="og:site_name" content="loczb">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="AI Agent 实战：用子代理并行驱动多项目开发 | 张小猛 - loczb">
@@ -112,6 +112,37 @@
           <span class="tag">工程实践</span>
           <span class="tag">并行开发</span>
         </div>
+
+        
+
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="2026-年了ai-编程助手到底能帮你干多少活.html">
+            <div class="related-post-card-title">2026 年了，AI 编程助手到底能帮你干多少活？</div>
+            <div class="related-post-card-tags"><span>AI</span><span>前端</span><span>开发</span></div>
+          </a>
+          <a class="related-post-card" href="agentic-ai-架构演进从-chatbot-到自主-agent.html">
+            <div class="related-post-card-title">Agentic AI 架构演进：从 Chatbot 到自主 Agent</div>
+            <div class="related-post-card-tags"><span>AI</span><span>Agent</span><span>架构</span></div>
+          </a>
+          <a class="related-post-card" href="ai-编码代理实战从-copilot-到-agent.html">
+            <div class="related-post-card-title">AI 编码代理实战：从 Copilot 到 Agent</div>
+            <div class="related-post-card-tags"><span>AI</span><span>AI编程</span><span>Agent</span></div>
+          </a>
+          <a class="related-post-card" href="google-io-2026-recap.html">
+            <div class="related-post-card-title">Google I/O 2026 完整回顾：AI 重塑一切</div>
+            <div class="related-post-card-tags"><span>AI</span><span>Android</span><span>Google I/O</span></div>
+          </a>
+          <a class="related-post-card" href="mcp-android-integration.html">
+            <div class="related-post-card-title">MCP 协议在 Android 端的应用：AI 工具调用新范式</div>
+            <div class="related-post-card-tags"><span>Android</span><span>MCP</span><span>AI</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
 
         <p>在 2026 年的 AI 辅助开发实践中，"一个 Agent 干所有事"已经不再是唯一选择。随着项目复杂度增长，<strong>子代理并行调度</strong> 成了一种高效的工作模式。本文将分享一套经过实战验证的子代理调度策略，涵盖任务拆分、并行执行、结果汇总和验证闭环。</p>
 <h2>为什么需要子代理并行</h2>
@@ -346,6 +377,29 @@ yield(&quot;等待子代理完成&quot;);
 </ol>
 <p>关键工程实践包括：合理的任务拆分粒度、明确的输入输出约定、yield 而非轮询的等待机制、以及统一的验证和提交流程。</p>
 <p>这种模式特别适合维护多个独立项目的场景。随着 AI Agent 能力的提升，子代理调度会成为越来越多开发团队的标准工作流。</p>
+
+        <!-- Post Copyright & License Card -->
+        <div class="post-copyright-card">
+          <div class="copyright-header">
+            <div class="copyright-badge">
+              <span>📜</span>
+              <span>原创与知识共享协议</span>
+            </div>
+            <button class="copyright-cite-btn" id="copy-cite-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+              </svg>
+              <span>复制 Markdown 引用</span>
+            </button>
+          </div>
+          <div class="copyright-list">
+            <div class="copyright-item"><strong>文章标题：</strong>AI Agent 实战：用子代理并行驱动多项目开发</div>
+            <div class="copyright-item"><strong>文章作者：</strong>张小猛 · loczb</div>
+            <div class="copyright-item"><strong>永久链接：</strong><a href="https://709527.xyz/blog/posts/ai-agent-实战用子代理并行驱动多项目开发.html">https://709527.xyz/blog/posts/ai-agent-实战用子代理并行驱动多项目开发.html</a></div>
+            <div class="copyright-item"><strong>版权声明：</strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 国际许可协议。商业转载请联系作者获得授权，非商业转载请注明出处。</div>
+          </div>
+        </div>
       </article>
     </div>
   </main>
@@ -380,13 +434,12 @@ yield(&quot;等待子代理完成&quot;);
         <a href="../../blog/index.html" class="footer-link">博客</a>
         <a href="../../about/index.html" class="footer-link">关于</a>
       </div>
-<p class="footer-copyright">
+      <p class="footer-copyright">
         &copy; 2026 张小猛
       </p>
     </div>
   </footer>
 
-  <script defer src="../../assets/js/related-posts.js"></script>
   <script defer src="../../assets/js/main.js"></script>
   <script defer src="../../assets/js/article.js"></script>
   <script defer src="../../assets/js/share.js"></script>

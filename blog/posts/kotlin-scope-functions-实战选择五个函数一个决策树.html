@@ -12,7 +12,7 @@
     <meta property="og:description" content="别再纠结 let 和 apply 的区别了——从 this/it 和返回值两个维度理清 Kotlin 的五个 Scope Functions，附反模式和团队规范">
     <meta property="og:url" content="https://709527.xyz/blog/posts/kotlin-scope-functions-实战选择五个函数一个决策树.html">
     <meta property="og:type" content="article">
-        <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
+    <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
     <meta property="og:site_name" content="loczb">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Kotlin Scope Functions 实战选择：五个函数一个决策树 | 张小猛 - loczb">
@@ -137,6 +137,38 @@
           </details>
         </div>
         <!-- /Series Card Widget -->
+
+        
+        
+
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="kotlin-coroutines-best-practices.html">
+            <div class="related-post-card-title">Kotlin Coroutines 最佳实践</div>
+            <div class="related-post-card-tags"><span>Kotlin</span><span>Coroutines</span><span>异步编程</span></div>
+          </a>
+          <a class="related-post-card" href="kotlin-coroutines-并发实战从入门到优雅的并发编程.html">
+            <div class="related-post-card-title">Kotlin Coroutines 并发实战：从入门到优雅的并发编程</div>
+            <div class="related-post-card-tags"><span>Kotlin</span><span>协程</span><span>并发</span></div>
+          </a>
+          <a class="related-post-card" href="android-testing-playbook.html">
+            <div class="related-post-card-title">别再从 Espresso 开始：Android 测试分层实战手册</div>
+            <div class="related-post-card-tags"><span>Android</span><span>测试</span><span>Kotlin</span></div>
+          </a>
+          <a class="related-post-card" href="compose-navigation-guide.html">
+            <div class="related-post-card-title">Jetpack Compose Navigation 进阶指南：从路由设计到深层链接</div>
+            <div class="related-post-card-tags"><span>Jetpack Compose</span><span>Android</span><span>Navigation</span></div>
+          </a>
+          <a class="related-post-card" href="compose-april-2026-update.html">
+            <div class="related-post-card-title">Jetpack Compose April 2026 Update 深度解读</div>
+            <div class="related-post-card-tags"><span>Jetpack Compose</span><span>Android</span><span>Compose Multiplatform</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
 
         <p>Kotlin 的 Scope Functions（<code>let</code>、<code>run</code>、<code>with</code>、<code>apply</code>、<code>also</code>）是日常开发中使用最频繁的特性之一。但很多人用它们只是"别人这么写我也这么写"，不清楚它们之间的细微区别，结果写出了一把剪刀可以搞定却用了砍刀的例子。</p>
 <p>这篇文章不是 Scope Functions 的入门教程——网上这类文章太多了。我想聊的是它们在实际项目中的<strong>选择逻辑</strong>和<strong>反模式</strong>，看完你至少不会再对着五个函数犹豫该用哪个。</p>
@@ -411,6 +443,29 @@ list?.let {
 不确定选哪个？                          → 先写传统方式，回头重构成函数提取
 </code></pre>
 <p>记得加一条：<strong>不要嵌套 scope functions</strong>。超过两层嵌套说明你的逻辑应该提取成独立函数了。</p>
+
+        <!-- Post Copyright & License Card -->
+        <div class="post-copyright-card">
+          <div class="copyright-header">
+            <div class="copyright-badge">
+              <span>📜</span>
+              <span>原创与知识共享协议</span>
+            </div>
+            <button class="copyright-cite-btn" id="copy-cite-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+              </svg>
+              <span>复制 Markdown 引用</span>
+            </button>
+          </div>
+          <div class="copyright-list">
+            <div class="copyright-item"><strong>文章标题：</strong>Kotlin Scope Functions 实战选择：五个函数一个决策树</div>
+            <div class="copyright-item"><strong>文章作者：</strong>张小猛 · loczb</div>
+            <div class="copyright-item"><strong>永久链接：</strong><a href="https://709527.xyz/blog/posts/kotlin-scope-functions-实战选择五个函数一个决策树.html">https://709527.xyz/blog/posts/kotlin-scope-functions-实战选择五个函数一个决策树.html</a></div>
+            <div class="copyright-item"><strong>版权声明：</strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 国际许可协议。商业转载请联系作者获得授权，非商业转载请注明出处。</div>
+          </div>
+        </div>
       </article>
     </div>
   </main>
@@ -455,13 +510,12 @@ list?.let {
         <a href="../../blog/index.html" class="footer-link">博客</a>
         <a href="../../about/index.html" class="footer-link">关于</a>
       </div>
-<p class="footer-copyright">
+      <p class="footer-copyright">
         &copy; 2026 张小猛
       </p>
     </div>
   </footer>
 
-  <script defer src="../../assets/js/related-posts.js"></script>
   <script defer src="../../assets/js/main.js"></script>
   <script defer src="../../assets/js/article.js"></script>
   <script defer src="../../assets/js/share.js"></script>

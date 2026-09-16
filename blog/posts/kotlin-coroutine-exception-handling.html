@@ -12,7 +12,7 @@
     <meta property="og:description" content="全面解析 Kotlin 协程异常处理机制，涵盖 launch/async 异常传播差异、SupervisorJob、结构化并发、CoroutineExceptionHandler、Android 最佳实践等核心内容">
     <meta property="og:url" content="https://709527.xyz/blog/posts/kotlin-coroutine-exception-handling.html">
     <meta property="og:type" content="article">
-        <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
+    <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
     <meta property="og:site_name" content="loczb">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Kotlin Coroutine 异常处理机制全面解析 | 张小猛 - loczb">
@@ -134,6 +134,38 @@
           </details>
         </div>
         <!-- /Series Card Widget -->
+
+        
+        
+
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="kotlin-coroutines-并发实战从入门到优雅的并发编程.html">
+            <div class="related-post-card-title">Kotlin Coroutines 并发实战：从入门到优雅的并发编程</div>
+            <div class="related-post-card-tags"><span>Kotlin</span><span>协程</span><span>并发</span></div>
+          </a>
+          <a class="related-post-card" href="kotlin-scope-functions-实战选择五个函数一个决策树.html">
+            <div class="related-post-card-title">Kotlin Scope Functions 实战选择：五个函数一个决策树</div>
+            <div class="related-post-card-tags"><span>Kotlin</span><span>Android</span><span>最佳实践</span></div>
+          </a>
+          <a class="related-post-card" href="android-gradle-kts-migration.html">
+            <div class="related-post-card-title">Android Gradle 迁移到 KTS 完整指南：从 Groovy 到 Kotlin DSL</div>
+            <div class="related-post-card-tags"><span>Android</span><span>Gradle</span><span>KTS</span></div>
+          </a>
+          <a class="related-post-card" href="kotlin-multiplatform-practice.html">
+            <div class="related-post-card-title">Kotlin Multiplatform 实战：共享业务逻辑到 iOS</div>
+            <div class="related-post-card-tags"><span>Kotlin Multiplatform</span><span>KMP</span><span>Android</span></div>
+          </a>
+          <a class="related-post-card" href="kotlin-240-features.html">
+            <div class="related-post-card-title">Kotlin 2.4.0 重磅发布：Context Parameters 稳定、Destructuring 升级、Lombok 插件进入 Alpha</div>
+            <div class="related-post-card-tags"><span>Kotlin</span><span>编程语言</span><span>JetBrains</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
 
         <h2>引言</h2>
 <p>Kotlin Coroutines 已经成为 Android 和 Kotlin 后端开发中处理异步操作的标准方案。然而，异常处理机制是协程中最容易让人困惑的部分之一——<code>launch</code> 和 <code>async</code> 的异常传播行为不同，<code>SupervisorJob</code> 和普通 <code>Job</code> 的表现也不同，结构化并发的取消和异常传播更是让很多开发者踩坑。</p>
@@ -1035,6 +1067,29 @@ class ProfileViewModel : BaseViewModel() {
 - <code>CancellationException</code> 只应在 <code>finally</code> 块中特殊处理
 - 在 Android 中使用 <code>viewModelScope</code> + <code>launch</code> + <code>try-catch</code> 处理 UI 层异常</p>
 <p>掌握这些机制，你就能写出健壮、可维护的协程代码，再也不会被协程的异常处理问题困扰。</p>
+
+        <!-- Post Copyright & License Card -->
+        <div class="post-copyright-card">
+          <div class="copyright-header">
+            <div class="copyright-badge">
+              <span>📜</span>
+              <span>原创与知识共享协议</span>
+            </div>
+            <button class="copyright-cite-btn" id="copy-cite-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+              </svg>
+              <span>复制 Markdown 引用</span>
+            </button>
+          </div>
+          <div class="copyright-list">
+            <div class="copyright-item"><strong>文章标题：</strong>Kotlin Coroutine 异常处理机制全面解析</div>
+            <div class="copyright-item"><strong>文章作者：</strong>张小猛 · loczb</div>
+            <div class="copyright-item"><strong>永久链接：</strong><a href="https://709527.xyz/blog/posts/kotlin-coroutine-exception-handling.html">https://709527.xyz/blog/posts/kotlin-coroutine-exception-handling.html</a></div>
+            <div class="copyright-item"><strong>版权声明：</strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 国际许可协议。商业转载请联系作者获得授权，非商业转载请注明出处。</div>
+          </div>
+        </div>
       </article>
     </div>
   </main>
@@ -1083,13 +1138,12 @@ class ProfileViewModel : BaseViewModel() {
         <a href="../../blog/index.html" class="footer-link">博客</a>
         <a href="../../about/index.html" class="footer-link">关于</a>
       </div>
-<p class="footer-copyright">
+      <p class="footer-copyright">
         &copy; 2026 张小猛
       </p>
     </div>
   </footer>
 
-  <script defer src="../../assets/js/related-posts.js"></script>
   <script defer src="../../assets/js/main.js"></script>
   <script defer src="../../assets/js/article.js"></script>
   <script defer src="../../assets/js/share.js"></script>

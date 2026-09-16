@@ -12,7 +12,7 @@
     <meta property="og:description" content="Prompt Engineering 系统化方法论：从 CRISPE 框架到思维链、自一致性、Function Calling，覆盖评估与迭代的系统性指南">
     <meta property="og:url" content="https://709527.xyz/blog/posts/prompt-engineering-systematic.html">
     <meta property="og:type" content="article">
-        <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
+    <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
     <meta property="og:site_name" content="loczb">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Prompt Engineering 系统化方法论 | 张小猛 - loczb">
@@ -112,6 +112,37 @@
           <span class="tag">Function Calling</span>
           <span class="tag">AI</span>
         </div>
+
+        
+
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="agentic-ai-架构演进从-chatbot-到自主-agent.html">
+            <div class="related-post-card-title">Agentic AI 架构演进：从 Chatbot 到自主 Agent</div>
+            <div class="related-post-card-tags"><span>AI</span><span>Agent</span><span>架构</span></div>
+          </a>
+          <a class="related-post-card" href="mcp-server-deep-dive.html">
+            <div class="related-post-card-title">MCP 协议深入实战：从入门到编写自定义 MCP Server</div>
+            <div class="related-post-card-tags"><span>AI</span><span>MCP</span><span>工具调用</span></div>
+          </a>
+          <a class="related-post-card" href="ai-code-editor-review-cursor-windsurf-copilot.html">
+            <div class="related-post-card-title">AI 代码编辑器深度横评：Cursor vs Windsurf vs Copilot</div>
+            <div class="related-post-card-tags"><span>AI</span><span>AI 工具</span><span>开发技巧</span></div>
+          </a>
+          <a class="related-post-card" href="rag-introduction.html">
+            <div class="related-post-card-title">RAG 检索增强生成入门：从理念到落地</div>
+            <div class="related-post-card-tags"><span>RAG</span><span>检索增强生成</span><span>LLM</span></div>
+          </a>
+          <a class="related-post-card" href="google-io-2026-recap.html">
+            <div class="related-post-card-title">Google I/O 2026 完整回顾：AI 重塑一切</div>
+            <div class="related-post-card-tags"><span>AI</span><span>Android</span><span>Google I/O</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
 
         <p>当 ChatGPT 刚爆火的时候，很多人以为 Prompt Engineering 就是「写一句好的提示词」。但随着 LLM 应用场景从聊天扩展到 Agent、RAG、代码生成、工具调用，仅靠灵感式写 Prompt 已经远远不够了。你需要的是一套<strong>系统化的方法论</strong>——从框架选择、结构设计、推理策略到评估迭代，形成闭环。</p>
 
@@ -1412,6 +1443,29 @@ class ConversationManager:
       <div class="tip-box">
         <strong>一句话总结</strong>：Prompt Engineering 不是「写提示词」，而是一个<strong>工程化</strong>的过程——用 CRISPE 框架结构化思考，用 System/User 分层管理复杂度，用 CoT/Self-Consistency/ToT 提升推理质量，用 Function Calling 设计扩展能力，用版本管理和 A/B Test 保证可持续迭代。好 Prompt 是改出来的，不是写出来的。
       </div>
+
+        <!-- Post Copyright & License Card -->
+        <div class="post-copyright-card">
+          <div class="copyright-header">
+            <div class="copyright-badge">
+              <span>📜</span>
+              <span>原创与知识共享协议</span>
+            </div>
+            <button class="copyright-cite-btn" id="copy-cite-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+              </svg>
+              <span>复制 Markdown 引用</span>
+            </button>
+          </div>
+          <div class="copyright-list">
+            <div class="copyright-item"><strong>文章标题：</strong>Prompt Engineering 系统化方法论</div>
+            <div class="copyright-item"><strong>文章作者：</strong>张小猛 · loczb</div>
+            <div class="copyright-item"><strong>永久链接：</strong><a href="https://709527.xyz/blog/posts/prompt-engineering-systematic.html">https://709527.xyz/blog/posts/prompt-engineering-systematic.html</a></div>
+            <div class="copyright-item"><strong>版权声明：</strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 国际许可协议。商业转载请联系作者获得授权，非商业转载请注明出处。</div>
+          </div>
+        </div>
       </article>
     </div>
   </main>
@@ -1446,13 +1500,12 @@ class ConversationManager:
         <a href="../../blog/index.html" class="footer-link">博客</a>
         <a href="../../about/index.html" class="footer-link">关于</a>
       </div>
-<p class="footer-copyright">
+      <p class="footer-copyright">
         &copy; 2026 张小猛
       </p>
     </div>
   </footer>
 
-  <script defer src="../../assets/js/related-posts.js"></script>
   <script defer src="../../assets/js/main.js"></script>
   <script defer src="../../assets/js/article.js"></script>
   <script defer src="../../assets/js/share.js"></script>

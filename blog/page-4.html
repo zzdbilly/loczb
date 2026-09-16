@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- SEO Basic -->
+  <meta name="description" content="张小猛的技术博客 - Android、Kotlin、AI、全栈开发。分享技术文章、学习笔记与思考。">
+  <meta name="keywords" content="技术博客, Android, Kotlin, AI, 前端, DevOps, 张小猛">
+  <meta name="author" content="张小猛">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://709527.xyz/blog/page-4.html">
+  <link rel="prev" href="https://709527.xyz/blog/page-3.html">
+  <link rel="next" href="https://709527.xyz/blog/page-5.html">
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://709527.xyz/blog/page-4.html">
+  <meta property="og:title" content="博客 第 4 页 | 张小猛 - loczb">
+  <meta property="og:description" content="张小猛的技术博客 - Android、Kotlin、AI、全栈开发。分享技术文章、学习笔记与思考。">
+  <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
+  <meta property="og:locale" content="zh_CN">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="博客 第 4 页 | 张小猛 - loczb">
+  <meta name="twitter:description" content="张小猛的技术博客 - Android、Kotlin、AI、全栈开发。">
+  <meta name="twitter:image" content="https://709527.xyz/assets/images/og-image.png">
+  <title>博客 第 4 页 | 张小猛 - loczb</title>
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    "name": "张小猛的技术博客",
+    "url": "https://709527.xyz/blog/",
+    "description": "张小猛的技术博客 - Android、Kotlin、AI、全栈开发。分享技术文章、学习笔记与思考。",
+    "author": {
+      "@type": "Person",
+      "name": "张小猛",
+      "url": "https://709527.xyz/about/"
+    },
+    "inLanguage": "zh-CN"
+  }
+  </script>
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="../assets/images/favicon.ico">
+  <link rel="icon" type="image/svg+xml" href="../assets/images/favicon.svg">
+  <link rel="icon" type="image/png" sizes="16x16" href="../assets/images/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="48x48" href="../assets/images/favicon-48x48.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="../assets/images/apple-touch-icon.png">
+  <link rel="manifest" href="../site.webmanifest">
+  <link rel="alternate" type="application/rss+xml" title="RSS 订阅" href="../rss.xml">
+  <meta name="theme-color" content="#3b82f6">
+  <link rel="stylesheet" href="../assets/css/style.css?v=20260909-perf1">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../index.html" class="nav-logo">loc<span>zb</span></a>
+      <button class="nav-toggle" aria-label="打开菜单" aria-expanded="false" aria-controls="nav-links-menu">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="nav-overlay"></div>
+      <ul class="nav-links" id="nav-links-menu">
+        <li><a href="../index.html" class="nav-link">首页</a></li>
+        <li><a href="../projects/index.html" class="nav-link">项目</a></li>
+        <li><a href="index.html" class="nav-link active">博客</a></li>
+        <li><a href="../about/index.html" class="nav-link">关于</a></li>
+      </ul>
+      <button class="theme-toggle" aria-label="切换主题" title="切换亮/暗模式">
+        <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line></svg>
+        <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+      </button>
+    </div>
+  </nav>
+  <!-- Particle Canvas Background -->
+  <canvas id="particle-canvas" class="particle-canvas"></canvas>
+  <!-- Hero -->
+  <main id="main-content">
+  <section class="blog-hero">
+    <div class="hero-glow"></div>
+    <div class="container container-wide">
+      <!-- Compact Hero: title + search inline -->
+      <div class="blog-hero-bar">
+        <div class="blog-hero-info">
+          <div class="status-pill" style="margin-bottom: 0.5rem;">
+            <span class="pulse-dot"></span>
+            <span><!-- POSTS_COUNT -->110<!-- /POSTS_COUNT --> 篇深度文章 · 持续迭代中</span>
+          </div>
+          <h1 class="blog-hero-title">技术博客</h1>
+          <p class="blog-hero-subtitle">Android、Kotlin、端侧 AI、全栈架构与开发思考</p>
+        </div>
+        <div class="blog-search-bar">
+          <div class="search-input-wrapper">
+            <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+            <input type="text" id="blog-search-input" placeholder="全站博文即时检索..." autocomplete="off">
+            <div class="search-actions">
+              <button class="search-clear" id="search-clear-btn" aria-label="清除搜索" title="清除">&times;</button>
+              <kbd class="search-kbd" id="search-kbd-badge">⌘K</kbd>
+            </div>
+          </div>
+          <div id="blog-search-results" class="blog-search-results"></div>
+        </div>
+      </div>
+      <!-- Filters -->
+      <div class="blog-filters" role="tablist" aria-label="博客分类筛选">
+        <button class="filter-btn filter-btn-active" data-filter="all" role="tab" aria-selected="true">全部</button>
+        <button class="filter-btn" data-filter="AI" role="tab" aria-selected="false">AI</button>
+        <button class="filter-btn" data-filter="Android" role="tab" aria-selected="false">Android</button>
+        <button class="filter-btn" data-filter="Kotlin" role="tab" aria-selected="false">Kotlin</button>
+        <button class="filter-btn" data-filter="前端" role="tab" aria-selected="false">前端</button>
+        <button class="filter-btn" data-filter="思考" role="tab" aria-selected="false">思考</button>
+        <button class="filter-btn" data-filter="DevOps" role="tab" aria-selected="false">DevOps</button>
+        <button class="filter-btn" data-filter="数据库" role="tab" aria-selected="false">数据库</button>
+        <button class="filter-btn" data-filter="系统编程" role="tab" aria-selected="false">系统编程</button>
+        <button class="filter-btn" data-filter="安全" role="tab" aria-selected="false">安全</button>
+        <button class="filter-btn" data-filter="开发" role="tab" aria-selected="false">开发</button>
+      </div>
+
+      <!-- Tag Cloud -->
+        <!-- 标签云已移除（分类筛选按钮已覆盖功能） -->
+      <!-- /Tag Cloud -->
+    </div>
+  </section>
+  <!-- Blog Posts List -->
+  <section class="section section-narrow" style="padding-top: 0.5rem;">
+    <div class="container">
+      <div class="blog-list-header-bar">
+        <h2 class="blog-list-heading" id="blog-filter-title">全部文章</h2>
+        <div class="blog-view-toggle">
+          <button class="view-toggle-btn active" data-view="list" onclick="toggleBlogView('list')">全部文章</button>
+          <button class="view-toggle-btn" data-view="series" onclick="toggleBlogView('series')">📚 专题专栏</button>
+          <button class="view-toggle-btn" data-view="archive" onclick="toggleBlogView('archive')">时间归档</button>
+        </div>
+      </div>
+      <div class="blog-list-container" id="blog-list">
+        <!-- Post List -->
+        <article class="blog-list-item spotlight-card animate-on-scroll" data-category="数据库" data-tags="Prisma,TypeScript,PostgreSQL,ORM,数据库,Next.js" data-page="4">
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-07-07</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 5 min</span>
+              </div>
+              <span class="blog-list-tag">数据库</span>
+            </div>
+            <h3 class="blog-list-title">
+              <a href="posts/prisma-orm-完全指南从入门到实战.html">Prisma ORM 完全指南：从入门到实战</a>
+            </h3>
+            <p class="blog-list-excerpt">从 Prisma 的基础概念到项目实战，涵盖 Schema 设计、CRUD 操作、迁移管理、性能优化等核心话题，带你全面掌握 TypeScript 生态最流行的数据库 ORM。</p>
+          </div>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#Prisma</span> <span class="tag-pill">#TypeScript</span> <span class="tag-pill">#PostgreSQL</span>
+            </div>
+            <a href="posts/prisma-orm-完全指南从入门到实战.html" style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600; text-decoration: none;">阅读全文 ➔</a>
+          </div>
+        </article>
+        <article class="blog-list-item spotlight-card animate-on-scroll" data-category="思考" data-tags="转行,职业选择,思考,程序员" data-page="4">
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-07-06</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 5 min</span>
+              </div>
+              <span class="blog-list-tag">思考</span>
+            </div>
+            <h3 class="blog-list-title">
+              <a href="posts/技术人员转行指南当写代码不再是你想做的事.html">技术人员转行指南：当写代码不再是你想做的事</a>
+            </h3>
+            <p class="blog-list-excerpt">深入分析技术人员转行的原因、方向和策略——不想写代码了，接下来该怎么办？</p>
+          </div>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#转行</span> <span class="tag-pill">#职业选择</span> <span class="tag-pill">#思考</span>
+            </div>
+            <a href="posts/技术人员转行指南当写代码不再是你想做的事.html" style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600; text-decoration: none;">阅读全文 ➔</a>
+          </div>
+        </article>
+        <article class="blog-list-item spotlight-card animate-on-scroll" data-category="思考" data-tags="理财,打工人,程序员,投资,省钱,保险" data-page="4">
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-07-06</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 5 min</span>
+              </div>
+              <span class="blog-list-tag">思考</span>
+            </div>
+            <h3 class="blog-list-title">
+              <a href="posts/打工人理财第一课从看懂钱去哪了到让钱自己长大.html">打工人理财第一课：从看懂钱去哪了到让钱自己长大</a>
+            </h3>
+            <p class="blog-list-excerpt">面向程序员的实用理财入门指南——四个账户法、极简记账、常见金融坑、可执行的起步计划。不折腾、不焦虑，让钱安静地替你打工。</p>
+          </div>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#理财</span> <span class="tag-pill">#打工人</span> <span class="tag-pill">#程序员</span>
+            </div>
+            <a href="posts/打工人理财第一课从看懂钱去哪了到让钱自己长大.html" style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600; text-decoration: none;">阅读全文 ➔</a>
+          </div>
+        </article>
+        <article class="blog-list-item spotlight-card animate-on-scroll" data-category="前端" data-tags="AI,MCP,WebKit,Safari,前端开发,调试" data-page="4">
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-07-06</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 5 min</span>
+              </div>
+              <span class="blog-list-tag">前端</span>
+            </div>
+            <h3 class="blog-list-title">
+              <a href="posts/当-ai-编程-agent-有了眼睛safari-mcp-server-深度解读.html">当 AI 编程 Agent 有了&quot;眼睛&quot;：Safari MCP Server 深度解读</a>
+            </h3>
+            <p class="blog-list-excerpt">2026年7月，Apple 发布了 Safari MCP Server，让 AI 编程 Agent 可以直接连接浏览器调试页面。本文深入解读其原理、安装配置、四个实战场景，以及与 Chrome MCP 的全方位对比。</p>
+          </div>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#AI</span> <span class="tag-pill">#MCP</span> <span class="tag-pill">#WebKit</span>
+            </div>
+            <a href="posts/当-ai-编程-agent-有了眼睛safari-mcp-server-深度解读.html" style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600; text-decoration: none;">阅读全文 ➔</a>
+          </div>
+        </article>
+        <article class="blog-list-item spotlight-card animate-on-scroll" data-category="思考" data-tags="生活技巧,效率,极简主义,个人管理" data-page="4">
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-07-06</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 5 min</span>
+              </div>
+              <span class="blog-list-tag">思考</span>
+            </div>
+            <h3 class="blog-list-title">
+              <a href="posts/这些年我攒下来的生活小技巧.html">这些年我攒下来的生活小技巧</a>
+            </h3>
+            <p class="blog-list-excerpt">从厨房到居家，从时间管理到数字生活，分享一套经过实践验证的生活小窍门，帮你少踩坑、少浪费时间。</p>
+          </div>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#生活技巧</span> <span class="tag-pill">#效率</span> <span class="tag-pill">#极简主义</span>
+            </div>
+            <a href="posts/这些年我攒下来的生活小技巧.html" style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600; text-decoration: none;">阅读全文 ➔</a>
+          </div>
+        </article>
+        <article class="blog-list-item spotlight-card animate-on-scroll" data-category="Android" data-tags="Gradle,Android,构建优化,性能优化" data-page="4">
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-07-05</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 5 min</span>
+              </div>
+              <span class="blog-list-tag">Android</span>
+            </div>
+            <h3 class="blog-list-title">
+              <a href="posts/gradle-构建加速全攻略从-5-分钟到-30-秒.html">Gradle 构建加速全攻略：从 5 分钟到 30 秒</a>
+            </h3>
+            <p class="blog-list-excerpt">从 Profile 找到瓶颈到 Configuration Cache，一步步把 Android 项目构建从 5 分钟优化到 30 秒的完整方案</p>
+          </div>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#Gradle</span> <span class="tag-pill">#Android</span> <span class="tag-pill">#构建优化</span>
+            </div>
+            <a href="posts/gradle-构建加速全攻略从-5-分钟到-30-秒.html" style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600; text-decoration: none;">阅读全文 ➔</a>
+          </div>
+        </article>
+        <article class="blog-list-item spotlight-card animate-on-scroll" data-category="Kotlin" data-tags="Kotlin,Android,最佳实践" data-page="4">
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-07-05</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 5 min</span>
+              </div>
+              <span class="blog-list-tag">Kotlin</span>
+            </div>
+            <h3 class="blog-list-title">
+              <a href="posts/kotlin-scope-functions-实战选择五个函数一个决策树.html">Kotlin Scope Functions 实战选择：五个函数一个决策树</a>
+            </h3>
+            <p class="blog-list-excerpt">别再纠结 let 和 apply 的区别了——从 this/it 和返回值两个维度理清 Kotlin 的五个 Scope Functions，附反模式和团队规范</p>
+          </div>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#Kotlin</span> <span class="tag-pill">#Android</span> <span class="tag-pill">#最佳实践</span>
+            </div>
+            <a href="posts/kotlin-scope-functions-实战选择五个函数一个决策树.html" style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600; text-decoration: none;">阅读全文 ➔</a>
+          </div>
+        </article>
+        <article class="blog-list-item spotlight-card animate-on-scroll" data-category="DevOps" data-tags="" data-page="4">
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-07-05</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 5 min</span>
+              </div>
+              <span class="blog-list-tag">DevOps</span>
+            </div>
+            <h3 class="blog-list-title">
+              <a href="posts/vps-选购与使用指南五个常见场景的配置与避坑.html">VPS 选购与使用指南：五个常见场景的配置与避坑</a>
+            </h3>
+            <p class="blog-list-excerpt">从扶墙线路到生产环境部署，不同场景下 VPS 怎么选、怎么配、怎么不踩坑</p>
+          </div>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              
+            </div>
+            <a href="posts/vps-选购与使用指南五个常见场景的配置与避坑.html" style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600; text-decoration: none;">阅读全文 ➔</a>
+          </div>
+        </article>
+        <article class="blog-list-item spotlight-card animate-on-scroll" data-category="数据库" data-tags="" data-page="4">
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-07-05</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 5 min</span>
+              </div>
+              <span class="blog-list-tag">数据库</span>
+            </div>
+            <h3 class="blog-list-title">
+              <a href="posts/mysql-索引优化实战从慢查询到最佳实践.html">MySQL 索引优化实战：从慢查询到最佳实践</a>
+            </h3>
+            <p class="blog-list-excerpt">从 EXPLAIN 认识索引失效到复合索引设计，一个慢查询从 2 秒优化到 12 毫秒的完整过程</p>
+          </div>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              
+            </div>
+            <a href="posts/mysql-索引优化实战从慢查询到最佳实践.html" style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600; text-decoration: none;">阅读全文 ➔</a>
+          </div>
+        </article>
+        <article class="blog-list-item spotlight-card animate-on-scroll" data-category="AI" data-tags="" data-page="4">
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-07-04</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 5 min</span>
+              </div>
+              <span class="blog-list-tag">AI</span>
+            </div>
+            <h3 class="blog-list-title">
+              <a href="posts/ai-编程助手进化论从结对编程到自主编程团队-2026.html">AI 编程助手进化论：从结对编程到自主编程团队 (2026)</a>
+            </h3>
+            <p class="blog-list-excerpt">2026 年，AI 编程 Agent 跨越了从辅助工具到自主成员的临界点。Cursor 移动端发布、Claude Code 深度推理、Codex CLI 稳定执行、多 Agent 并行协作——本文梳理 AI 编程的三次范式跃迁，分析主流工具，分享落地实践，并展望 2027 年的开发者生态。</p>
+          </div>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              
+            </div>
+            <a href="posts/ai-编程助手进化论从结对编程到自主编程团队-2026.html" style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600; text-decoration: none;">阅读全文 ➔</a>
+          </div>
+        </article>
+      <!-- /Post List -->
+      </div>
+      <!-- 分页 -->
+      <div class="pagination" id="pagination" data-total-pages="11" data-static-page="4">
+        <a href="page-3.html" class="pagination-btn pagination-prev" rel="prev" aria-label="上一页" title="上一页"><span class="pagination-arrow">←</span></a>
+        <div class="pagination-pages">
+          <a href="index.html" class="pagination-btn">1</a>
+          <a href="page-2.html" class="pagination-btn">2</a>
+          <a href="page-3.html" class="pagination-btn">3</a>
+          <span class="pagination-btn active" aria-current="page">4</span>
+          <a href="page-5.html" class="pagination-btn">5</a>
+          <a href="page-6.html" class="pagination-btn">6</a>
+          <span class="pagination-ellipsis">···</span>
+          <a href="page-11.html" class="pagination-btn">11</a>
+        </div>
+        <a href="page-5.html" class="pagination-btn pagination-next" rel="next" aria-label="下一页" title="下一页"><span class="pagination-arrow">→</span></a>
+      </div>
+      <!-- Archive View -->
+      <div id="archive-view" class="archive-view"></div>
+      <!-- Series View -->
+      <div id="series-view" class="series-view"></div>
+    </div>
+  </section>
+  </main>
+  <!-- Footer -->
+  <footer class="footer" role="contentinfo">
+    <div class="footer-inner">
+      <p class="footer-signature">写代码，做产品，也认真生活。</p>
+      <div class="footer-social">
+        <a href="https://github.com/zzdbilly" class="footer-social-link" target="_blank" rel="noopener" aria-label="GitHub">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+        </a>
+        <a href="../rss.xml" class="footer-social-link" aria-label="RSS">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+      </div>
+      <div class="footer-links">
+        <a href="../index.html" class="footer-link">首页</a>
+        <a href="../projects/index.html" class="footer-link">项目</a>
+        <a href="../blog/index.html" class="footer-link">博客</a>
+        <a href="../about/index.html" class="footer-link">关于</a>
+      </div>
+      <p class="footer-copyright">© 2026 张小猛</p>
+    </div>
+  </footer>
+
+  <script defer src="../assets/js/main.js?v=20260909-perf1"></script>
+
+  <script>
+    // 给博客列表 meta 加图标
+    (function() {
+      const calIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>';
+      const clockIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>';
+      document.querySelectorAll('.blog-list-meta .blog-date').forEach(el => {
+        el.insertAdjacentHTML('afterbegin', calIcon);
+      });
+      document.querySelectorAll('.blog-list-meta .blog-read-time').forEach(el => {
+        el.insertAdjacentHTML('afterbegin', clockIcon);
+      });
+    })();
+  </script>
+  <script defer src="../assets/js/time-progress.js"></script>
+
+  <script defer src="../assets/js/meta-cache.js?v=20260916-slim1"></script>
+  <script defer src="../assets/js/blog-list.js?v=20260916-slim1"></script>
+
+  <script defer src="../assets/js/search.js?v=20260916-slim1"></script>
+  <!-- Back to Top & Reading Progress -->
+  <button class="back-to-top" id="backToTop" aria-label="回到顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
+  <div class="reading-progress" id="readingProgress"></div>
+  <script defer src="../assets/js/back-to-top.js?v=97bbf5c9"></script>
+  <script defer src="../assets/js/particles.js"></script>
+
+  <!-- Fallback: ensure filter buttons work even if blog-list.js fails -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Check if blog-list.js already handled filtering
+      function hasBlogList() {
+        return window._blogApplyFilter && window._blogApplyFilter._blogListJS;
+      }
+      
+      // If blog-list.js didn't bind events (e.g., loaded but errored),
+      // bind filter buttons directly here
+      if (!hasBlogList()) {
+        console.warn('blog-list.js filter not detected; using inline fallback');
+        var btns = document.querySelectorAll('.filter-btn');
+        btns.forEach(function(btn) {
+          btn.addEventListener('click', function(e) {
+            var filter = this.getAttribute('data-filter') || this.textContent.trim();
+            // Try blog-list's applyFilter if available
+            if (window._blogApplyFilter) {
+              window._blogApplyFilter(filter);
+              return;
+            }
+            // Bare-minimum filter: show/hide articles
+            var posts = document.querySelectorAll('.blog-list-item');
+            posts.forEach(function(post) {
+              if (filter === 'all') {
+                post.style.display = '';
+              } else {
+                var cat = post.getAttribute('data-category');
+                post.style.display = (cat === filter) ? '' : 'none';
+              }
+            });
+            btns.forEach(function(b) { b.classList.remove('filter-btn-active'); });
+            btn.classList.add('filter-btn-active');
+          });
+        });
+        
+        // Also handle tag cloud if it exists
+        var tagCloud = document.getElementById('blog-tag-cloud');
+        if (!tagCloud) {
+          // Try legacy container
+          tagCloud = document.querySelector('.tag-cloud');
+        }
+        if (tagCloud) {
+          tagCloud.addEventListener('click', function(e) {
+            var item = e.target.closest('.tag-cloud-item');
+            if (!item) return;
+            var tag = item.getAttribute('data-filter');
+            if (!tag) return;
+            // Try blog-list's _blogApplyFilter if available
+            if (window._blogApplyFilter) {
+              window._blogApplyFilter(tag);
+              return;
+            }
+            // Fallback: find matching data-tags in articles
+            var posts = document.querySelectorAll('.blog-list-item');
+            posts.forEach(function(post) {
+              var tags = (post.getAttribute('data-tags') || '').split(',');
+              var match = tags.indexOf(tag) !== -1 || post.getAttribute('data-category') === tag;
+              post.style.display = match ? '' : 'none';
+            });
+            btns.forEach(function(b) { b.classList.remove('filter-btn-active'); });
+            item.classList.add('active');
+          });
+        }
+      }
+    });
+  </script>
+
+<!-- Cloudflare Web Analytics -->
+  <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "29e7cff6f37448989538e2165cb79187"}'></script>
+
+</body>
+</html>

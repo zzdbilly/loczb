@@ -1,102 +1,215 @@
-// 博客列表：分页 + 筛选 + 视图切换（IIFE 封装，无全局污染）
+// 博客列表：静态分页（默认视图）+ 动态筛选/归档/专栏视图（IIFE 封装，无全局污染）
+//
+// 分页改造（2026-09-16）：列表卡与分页导航在构建期写死 —— blog/index.html 是第 1 页，
+// blog/page-2..N.html 是其余页，默认视图（filter=all）不依赖 JS，无 JS 也能翻页，
+// 且每页 DOM 只有 10 张卡而不是全站 110 张。
+// 只有「分类筛选 / 标签筛选 / 专栏 / 归档」这些静态页装不下的视图才回退到客户端渲染：
+// 懒加载瘦身后的 articles-index.json，客户端 10 条/页；摘要按需拉 blog/meta/{slug}.json。
 (function() {
   'use strict';
 
   var POSTS_PER_PAGE = 10;
-  var allPosts = document.querySelectorAll('.blog-list-item');
-  var filteredPosts = Array.from(allPosts);
+  var INDEX_URL = 'articles-index.json';
+
+  // 静态视图状态（由构建脚本写进 HTML：data-total-pages / data-static-page）
+  var paginationEl = document.getElementById('pagination');
+  var listContainer = document.getElementById('blog-list');
+  var staticTotalPages = parseInt((paginationEl && paginationEl.getAttribute('data-total-pages')) || '1', 10) || 1;
+  var staticCards = Array.from(document.querySelectorAll('.blog-list-item'));
+
+  var dynamic = false;       // 是否已切换为客户端渲染（静态卡已被替换）
+  var allPostsData = null;   // 瘦身后的 posts[]（懒加载 + 缓存）
+  var loadingPromise = null;
+  var filteredPosts = [];
   var totalPages = 1;
   var currentPage = 1;
   var currentFilter = 'all';
+  var renderToken = 0;       // 丢弃过期渲染的异步回填（摘要）
+
+  function staticPageNo() {
+    var m = window.location.pathname.match(/page-(\d+)\.html$/);
+    return m ? parseInt(m[1], 10) : 1;
+  }
+
+  // 旧 URL 兼容：?page=N（N≥2）是分页改造前的客户端分页参数，静态页只装了一页数据，
+  // 必须真跳到 page-N.html，否则会停在首页或 404。filter/tag/view 参数原样带走。
+  function redirectLegacyPageParam() {
+    var params = new URLSearchParams(window.location.search);
+    var p = parseInt(params.get('page') || '', 10);
+    if (!p || p < 2 || p === staticPageNo() || p > staticTotalPages) return false;
+    var qs = new URLSearchParams();
+    ['filter', 'tag', 'view'].forEach(function(k) {
+      var v = params.get(k);
+      if (v) qs.set(k, v);
+    });
+    window.location.replace('page-' + p + '.html' + (qs.toString() ? '?' + qs.toString() : ''));
+    return true;
+  }
+
+  function esc(str) {
+    return String(str == null ? '' : str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
+  function slugOf(post) {
+    return post.slug || String(post.url || '').replace(/^blog\/posts\//, '').replace(/\.html$/, '');
+  }
+
+  function loadPosts() {
+    if (allPostsData) return Promise.resolve(allPostsData);
+    if (loadingPromise) return loadingPromise;
+    loadingPromise = fetch(INDEX_URL)
+      .then(function(resp) { return resp.ok ? resp.json() : null; })
+      .then(function(data) {
+        allPostsData = (data && data.posts) || [];
+        return allPostsData;
+      })
+      .catch(function(e) {
+        console.error('加载文章索引失败:', e);
+        allPostsData = [];
+        return allPostsData;
+      });
+    return loadingPromise;
+  }
+
+  function postMatchesFilter(post, filter) {
+    if (filter === 'all' || filter === '全部') return true;
+    if ((post.category || '') === filter) return true;
+    var tags = post.tags || [];
+    return tags.indexOf(filter) !== -1;
+  }
+
+  // 动态卡片（客户端渲染）：结构与构建期卡片一致，但不带 animate-on-scroll
+  // （滚动动画观察器在首屏已绑定，后插入的节点会一直 opacity:0）。
+  function renderCardHtml(post, pageNo) {
+    var tags = post.tags || [];
+    var slug = slugOf(post);
+    var pills = tags.slice(0, 3).map(function(t) { return '<span class="tag-pill">#' + esc(t) + '</span>'; }).join(' ');
+    return '        <article class="blog-list-item spotlight-card" data-category="' + esc(post.category || '') + '" data-tags="' + tags.map(esc).join(',') + '" data-page="' + pageNo + '">\n' +
+      '          <div>\n' +
+      '            <div class="blog-list-header">\n' +
+      '              <div class="blog-list-meta">\n' +
+      '                <span class="blog-date">📅 ' + esc(post.date || '') + '</span>\n' +
+      '                <span>·</span>\n' +
+      '                <span class="blog-read-time">⏱️ ' + esc(post.readTime || 5) + ' min</span>\n' +
+      '              </div>\n' +
+      '              <span class="blog-list-tag">' + esc(post.category || '') + '</span>\n' +
+      '            </div>\n' +
+      '            <h3 class="blog-list-title">\n' +
+      '              <a href="posts/' + slug + '.html">' + esc(post.title || '') + '</a>\n' +
+      '            </h3>\n' +
+      '            <p class="blog-list-excerpt" data-meta-slug="' + esc(slug) + '"></p>\n' +
+      '          </div>\n' +
+      '          <div class="blog-list-footer">\n' +
+      '            <div class="blog-list-tags">\n' +
+      '              ' + pills + '\n' +
+      '            </div>\n' +
+      '            <a href="posts/' + slug + '.html" style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600; text-decoration: none;">阅读全文 ➔</a>\n' +
+      '          </div>\n' +
+      '        </article>';
+  }
+
+  // 摘要按需拉取：索引里已无 excerpt，只对当前页真正展示的 ≤10 条拉 sidecar，结果缓存
+  function fillExcerpts(posts, token) {
+    if (!window.LoczbMeta) return;
+    posts.forEach(function(post) {
+      var slug = slugOf(post);
+      var cached = window.LoczbMeta.cached(slug);
+      var apply = function(meta) {
+        if (token !== renderToken) return;
+        var el = document.querySelector('.blog-list-excerpt[data-meta-slug="' + slug.replace(/"/g, '\\"') + '"]');
+        if (el && meta && meta.description) el.textContent = meta.description;
+      };
+      if (cached) apply(cached);
+      else window.LoczbMeta.get(slug).then(apply);
+    });
+  }
 
   function calcTotalPages() {
     return Math.max(1, Math.ceil(filteredPosts.length / POSTS_PER_PAGE));
   }
 
-  function initFromURL() {
-    var params = new URLSearchParams(window.location.search);
-    var pageParam = params.get('page');
-    var filterParam = params.get('filter');
-    var viewParam = params.get('view');
-    if (filterParam) currentFilter = filterParam;
-    if (pageParam && !isNaN(pageParam)) {
-      currentPage = Math.max(1, parseInt(pageParam));
-    }
-    if (viewParam === 'series' || viewParam === 'archive') {
-      setTimeout(function() { toggleBlogView(viewParam); }, 10);
-    }
+  function renderDynamicList() {
+    if (!listContainer) return;
+    var start = (currentPage - 1) * POSTS_PER_PAGE;
+    var pagePosts = filteredPosts.slice(start, start + POSTS_PER_PAGE);
+    listContainer.innerHTML = pagePosts.map(function(p) { return renderCardHtml(p, currentPage); }).join('\n');
+    var emptyState = document.getElementById('blog-empty-state');
+    if (emptyState) emptyState.style.display = filteredPosts.length === 0 ? 'block' : 'none';
+    if (window.initSpotlightCards) window.initSpotlightCards();
+    fillExcerpts(pagePosts, renderToken);
+    updatePagination(currentPage);
   }
 
-  function postMatchesFilter(post, filter) {
-    if (filter === 'all' || filter === '全部') return true;
-    if (post.dataset.category === filter) return true;
-    var tagsStr = post.getAttribute('data-tags') || '';
-    var tags = tagsStr ? tagsStr.split(',').filter(Boolean) : [];
-    if (tags.indexOf(filter) !== -1) return true;
-    var tagEls = post.querySelectorAll('.tag, .tag-accent, .blog-list-tag');
-    for (var i = 0; i < tagEls.length; i++) {
-      if (tagEls[i].textContent.trim() === filter) return true;
-    }
-    return false;
-  }
+  function applyFilter(filter, opts) {
+    opts = opts || {};
+    if (filter === '全部') filter = 'all';
+    currentFilter = filter || 'all';
+    currentPage = opts.page || 1;
+    dynamic = true;
 
-  function applyFilter(filter) {
-    currentFilter = filter;
-    currentPage = 1;
-    document.querySelectorAll('.filter-btn').forEach(btn => {
+    document.querySelectorAll('.filter-btn').forEach(function(btn) {
       var btnFilter = btn.dataset.filter || btn.textContent.trim();
       var isAll = btnFilter === 'all' || btnFilter === '全部';
-      var isActive = (filter === 'all' || filter === '全部') ? isAll : (btnFilter === filter);
+      var isActive = (currentFilter === 'all') ? isAll : (btnFilter === currentFilter);
       btn.classList.toggle('filter-btn-active', isActive);
       btn.classList.toggle('tag-accent', isActive);
       btn.setAttribute('aria-selected', isActive ? 'true' : 'false');
     });
-    filteredPosts = (filter === 'all' || filter === '全部')
-      ? Array.from(allPosts)
-      : Array.from(allPosts).filter(post => postMatchesFilter(post, filter));
+
     var titleEl = document.getElementById('blog-filter-title');
     if (titleEl) {
-      if (filter === 'all' || filter === '全部') {
-        titleEl.textContent = '全部文章';
-      } else {
-        titleEl.textContent = filter + ' · ' + filteredPosts.length + ' 篇';
-      }
+      titleEl.textContent = currentFilter === 'all' ? '全部文章' : currentFilter + ' · 加载中…';
     }
     var featuredSection = document.getElementById('featured-section');
-    if (featuredSection) {
-      var isAll = (filter === 'all' || filter === '全部');
-      featuredSection.style.display = isAll ? '' : 'none';
-    }
-    var emptyState = document.getElementById('blog-empty-state');
-    if (emptyState) {
-      emptyState.style.display = filteredPosts.length === 0 ? 'block' : 'none';
-    }
-    totalPages = calcTotalPages();
-    showPage(1);
-    var params = new URLSearchParams();
-    if (filter !== 'all' && filter !== '全部') params.set('filter', filter);
-    if (currentPage > 1) params.set('page', currentPage);
-    var newUrl = params.toString() ? '?' + params.toString() : window.location.pathname;
-    window.history.pushState({ page: currentPage, filter: filter }, '', newUrl);
+    if (featuredSection) featuredSection.style.display = currentFilter === 'all' ? '' : 'none';
+
+    // 从归档/专栏视图切回列表时，先把视图容器收起来
+    var archiveView = document.getElementById('archive-view');
+    var seriesView = document.getElementById('series-view');
+    if (archiveView) archiveView.classList.remove('active');
+    if (seriesView) seriesView.classList.remove('active');
+    if (listContainer) listContainer.classList.remove('hidden');
+    if (paginationEl) paginationEl.classList.remove('hidden');
+    document.querySelectorAll('.view-toggle-btn').forEach(function(b) {
+      b.classList.toggle('active', b.dataset.view === 'list');
+    });
+
+    var token = ++renderToken;
+    loadPosts().then(function(posts) {
+      if (token !== renderToken) return;   // 有更新的筛选，丢弃本次结果
+      filteredPosts = currentFilter === 'all' ? posts.slice() : posts.filter(function(p) { return postMatchesFilter(p, currentFilter); });
+      totalPages = calcTotalPages();
+      if (currentPage > totalPages) currentPage = 1;
+      if (titleEl) {
+        titleEl.textContent = currentFilter === 'all' ? '全部文章' : currentFilter + ' · ' + filteredPosts.length + ' 篇';
+      }
+      renderDynamicList();
+      if (opts.pushState !== false) pushStateForList();
+    });
   }
 
-  // 暴露给 main.js 的标签云点击（最小全局接口）
+  // 暴露给 main.js 的标签云点击 / 内联兜底脚本（最小全局接口）
   applyFilter._blogListJS = true;
   window._blogApplyFilter = applyFilter;
 
+  function pushStateForList() {
+    var params = new URLSearchParams();
+    if (currentFilter !== 'all') params.set('filter', currentFilter);
+    if (currentPage > 1) params.set('page', currentPage);
+    var newUrl = params.toString() ? '?' + params.toString() : window.location.pathname;
+    window.history.pushState({ page: currentPage, filter: currentFilter, dynamic: true }, '', newUrl);
+  }
+
   function showPage(page) {
     if (page < 1 || page > totalPages) return;
-    allPosts.forEach(post => post.style.display = 'none');
-    var start = (page - 1) * POSTS_PER_PAGE;
-    var end = start + POSTS_PER_PAGE;
-    filteredPosts.slice(start, end).forEach(post => post.style.display = '');
     currentPage = page;
-    updatePagination(page);
-    var params = new URLSearchParams();
-    if (currentFilter !== 'all' && currentFilter !== '全部') params.set('filter', currentFilter);
-    if (page > 1) params.set('page', page);
-    var newUrl = params.toString() ? '?' + params.toString() : window.location.pathname;
-    window.history.pushState({ page: page, filter: currentFilter }, '', newUrl);
+    renderDynamicList();
+    pushStateForList();
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
@@ -110,17 +223,17 @@
     var leftStart = Math.max(2, current - 2);
     var rightEnd = Math.min(total - 1, current + 2);
     if (leftStart > 2) pages.push('...');
-    for (var i = leftStart; i <= rightEnd; i++) pages.push(i);
+    for (var j = leftStart; j <= rightEnd; j++) pages.push(j);
     if (rightEnd < total - 1) pages.push('...');
     pages.push(total);
     return pages;
   }
 
+  // 动态分页导航：带 data-page，由下方事件委托接管（静态导航不带 data-page，是普通跳转）
   function updatePagination(page) {
-    var container = document.getElementById('pagination');
-    if (!container) return;
+    if (!paginationEl) return;
     if (totalPages <= 1) {
-      container.innerHTML = '';
+      paginationEl.innerHTML = '';
       return;
     }
     var html = '';
@@ -130,8 +243,7 @@
       html += '<span class="pagination-btn pagination-prev disabled" aria-disabled="true" title="上一页"><span class="pagination-arrow">←</span></span>';
     }
     var pageNumbersHtml = '';
-    var pageNumbers = generatePageNumbers(page, totalPages);
-    pageNumbers.forEach(function(item) {
+    generatePageNumbers(page, totalPages).forEach(function(item) {
       if (item === '...') {
         pageNumbersHtml += '<span class="pagination-ellipsis">···</span>';
       } else if (item === page) {
@@ -146,40 +258,44 @@
     } else {
       html += '<span class="pagination-btn pagination-next disabled" aria-disabled="true" title="下一页"><span class="pagination-arrow">→</span></span>';
     }
-    container.innerHTML = html;
+    paginationEl.innerHTML = html;
   }
 
-  // 归档功能
+  // 归档功能（数据从瘦身后的 posts[] 现算，不再依赖索引里的派生字段）
   var archiveData = null;
 
+  function buildArchive(posts) {
+    var yearGroups = {};
+    posts.forEach(function(post) {
+      var year = (post.date || '').substring(0, 4);
+      var month = (post.date || '').substring(0, 7);
+      if (!yearGroups[year]) yearGroups[year] = {};
+      if (!yearGroups[year][month]) yearGroups[year][month] = [];
+      yearGroups[year][month].push({
+        title: post.title,
+        date: post.date,
+        url: post.url,
+        category: post.category
+      });
+    });
+    return Object.keys(yearGroups).sort().reverse().map(function(year) {
+      var months = Object.keys(yearGroups[year]).sort().reverse().map(function(month) {
+        return {
+          month: month,
+          count: yearGroups[year][month].length,
+          posts: yearGroups[year][month].sort(function(a, b) { return (b.date || '').localeCompare(a.date || ''); })
+        };
+      });
+      var total = months.reduce(function(sum, m) { return sum + m.count; }, 0);
+      return { year: year, count: total, months: months };
+    });
+  }
+
   function loadArchive() {
-    return fetch('articles-index.json')
-      .then(response => response.json())
-      .then(data => {
-        var yearGroups = {};
-        data.posts.forEach(post => {
-          var year = post.date.substring(0, 4);
-          var month = post.date.substring(0, 7);
-          if (!yearGroups[year]) yearGroups[year] = {};
-          if (!yearGroups[year][month]) yearGroups[year][month] = [];
-          yearGroups[year][month].push({
-            title: post.title,
-            date: post.date,
-            url: post.url,
-            category: post.category
-          });
-        });
-        archiveData = Object.keys(yearGroups).sort().reverse().map(year => {
-          var months = Object.keys(yearGroups[year]).sort().reverse().map(month => ({
-            month: month,
-            count: yearGroups[year][month].length,
-            posts: yearGroups[year][month].sort((a, b) => b.date.localeCompare(a.date))
-          }));
-          var total = months.reduce((sum, m) => sum + m.count, 0);
-          return { year: year, count: total, months: months };
-        });
-      })
-      .catch(e => console.error('加载归档失败:', e));
+    return loadPosts().then(function(posts) {
+      archiveData = buildArchive(posts);
+      return archiveData;
+    }).catch(function(e) { console.error('加载归档失败:', e); });
   }
 
   const SERIES_DATA = [
@@ -303,10 +419,10 @@
         html += '<div class="archive-month-header"><span class="month-pill">' + parseInt(m.month.substring(5)) + ' 月</span> <span class="archive-count">' + m.count + ' 篇文章</span></div>';
         html += '<div class="archive-month-body">';
         m.posts.forEach(function(p) {
-          var dayStr = p.date.substring(5);
+          var dayStr = (p.date || '').substring(5);
           html += '<div class="archive-post">';
           html += '<span class="archive-post-date">' + dayStr + '</span>';
-          html += '<span class="archive-post-title"><a href="posts/' + p.url.replace('blog/posts/', '') + '">' + p.title + '</a></span>';
+          html += '<span class="archive-post-title"><a href="posts/' + String(p.url || '').replace('blog/posts/', '') + '">' + p.title + '</a></span>';
           if (p.category) {
             html += '<span class="archive-post-cat">' + p.category + '</span>';
           }
@@ -321,8 +437,6 @@
   }
 
   function toggleBlogView(view) {
-    var listContainer = document.querySelector('.blog-list-container');
-    var pagination = document.getElementById('pagination');
     var archiveView = document.getElementById('archive-view');
     var seriesView = document.getElementById('series-view');
     var heading = document.getElementById('blog-filter-title');
@@ -332,7 +446,7 @@
     var archiveBtn = document.querySelector('[data-view="archive"]');
 
     if (listContainer) listContainer.classList.remove('hidden');
-    if (pagination) pagination.classList.remove('hidden');
+    if (paginationEl) paginationEl.classList.remove('hidden');
     if (archiveView) archiveView.classList.remove('active');
     if (seriesView) seriesView.classList.remove('active');
 
@@ -342,7 +456,7 @@
 
     if (view === 'archive') {
       if (listContainer) listContainer.classList.add('hidden');
-      if (pagination) pagination.classList.add('hidden');
+      if (paginationEl) paginationEl.classList.add('hidden');
       if (archiveView) archiveView.classList.add('active');
       if (archiveBtn) archiveBtn.classList.add('active');
       if (heading) heading.textContent = '时间归档';
@@ -350,7 +464,7 @@
       else renderArchive();
     } else if (view === 'series') {
       if (listContainer) listContainer.classList.add('hidden');
-      if (pagination) pagination.classList.add('hidden');
+      if (paginationEl) paginationEl.classList.add('hidden');
       if (seriesView) seriesView.classList.add('active');
       if (seriesBtn) seriesBtn.classList.add('active');
       if (heading) heading.textContent = '专题专栏 (6)';
@@ -358,6 +472,8 @@
     } else {
       if (listBtn) listBtn.classList.add('active');
       if (heading) heading.textContent = currentFilter === 'all' ? '全部文章' : currentFilter;
+      // 静态视图（未过滤过）无需重渲染；已切到客户端渲染则重建当前页
+      if (dynamic) renderDynamicList();
     }
   }
 
@@ -366,8 +482,8 @@
 
   // === 事件绑定（替代内联 onclick） ===
 
-  // 分页按钮事件委托
   document.addEventListener('click', function(e) {
+    // 动态分页按钮（data-page 由 JS 自己生成的才拦截；静态导航是真链接，走正常跳转）
     var target = e.target.closest('.pagination-btn[data-page]');
     if (target) {
       e.preventDefault();
@@ -390,36 +506,37 @@
     }
   });
 
-  // 浏览器后退
-  window.addEventListener('popstate', function(e) {
-    if (e.state) {
-      currentPage = e.state.page || 1;
-      currentFilter = e.state.filter || 'all';
-      filteredPosts = (currentFilter === 'all' || currentFilter === '全部')
-        ? Array.from(allPosts)
-        : Array.from(allPosts).filter(post => postMatchesFilter(post, currentFilter));
-      totalPages = calcTotalPages();
-      document.querySelectorAll('.filter-btn').forEach(btn => {
-        var btnFilter = btn.dataset.filter;
-        var isAll = btnFilter === 'all';
-        var isActive = (currentFilter === 'all') ? isAll : (btnFilter === currentFilter);
-        btn.classList.toggle('filter-btn-active', isActive);
-      });
-      showPage(currentPage);
-    } else {
-      applyFilter('all');
-    }
+  // 浏览器后退：仅客户端渲染模式需要接管（静态分页由浏览器正常导航）
+  window.addEventListener('popstate', function() {
+    if (!dynamic) return;
+    var params = new URLSearchParams(window.location.search);
+    applyFilter(params.get('filter') || 'all', { page: parseInt(params.get('page') || '1', 10) || 1, pushState: false });
   });
 
   // 初始化
   window.addEventListener('DOMContentLoaded', function() {
     window._blogApplyFilter = applyFilter;
-    initFromURL();
-    if (currentFilter !== 'all') {
-      applyFilter(currentFilter);
-    } else {
-      totalPages = calcTotalPages();
-      showPage(currentPage);
+    if (redirectLegacyPageParam()) return;   // 旧 ?page=N 兼容跳转中
+
+    var params = new URLSearchParams(window.location.search);
+    var viewParam = params.get('view');
+    var filterParam = params.get('filter');
+    var tagParam = params.get('tag');
+
+    if (viewParam === 'series' || viewParam === 'archive') {
+      setTimeout(function() { toggleBlogView(viewParam); }, 10);
+      return;
     }
+    if (tagParam) {          // 文章侧栏标签链接：?tag=xxx
+      applyFilter(tagParam);
+      return;
+    }
+    if (filterParam && filterParam !== 'all') {
+      applyFilter(filterParam);
+      return;
+    }
+    // 默认视图：静态卡片 + 静态分页导航已就绪，不做任何重渲染
+    filteredPosts = staticCards.slice();
+    totalPages = staticTotalPages;
   });
 })();

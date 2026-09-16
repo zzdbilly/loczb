@@ -12,7 +12,7 @@
     <meta property="og:description" content="从 EXPLAIN 认识索引失效到复合索引设计，一个慢查询从 2 秒优化到 12 毫秒的完整过程">
     <meta property="og:url" content="https://709527.xyz/blog/posts/mysql-索引优化实战从慢查询到最佳实践.html">
     <meta property="og:type" content="article">
-        <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
+    <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
     <meta property="og:site_name" content="loczb">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="MySQL 索引优化实战：从慢查询到最佳实践 | 张小猛 - loczb">
@@ -109,6 +109,33 @@
         <div class="post-tags">
           
         </div>
+
+        
+
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="postgresql-从-17-到-18生产环境升级实战.html">
+            <div class="related-post-card-title">PostgreSQL 从 17 到 18：生产环境升级实战</div>
+            <div class="related-post-card-tags"><span>PostgreSQL</span><span>数据库</span><span>DevOps</span></div>
+          </a>
+          <a class="related-post-card" href="prisma-orm-完全指南从入门到实战.html">
+            <div class="related-post-card-title">Prisma ORM 完全指南：从入门到实战</div>
+            <div class="related-post-card-tags"><span>Prisma</span><span>TypeScript</span><span>PostgreSQL</span></div>
+          </a>
+          <a class="related-post-card" href="postgresql-index-optimization.html">
+            <div class="related-post-card-title">PostgreSQL 索引优化实战</div>
+            <div class="related-post-card-tags"><span>PostgreSQL</span><span>索引优化</span><span>B-Tree</span></div>
+          </a>
+          <a class="related-post-card" href="sqlite-wal-performance.html">
+            <div class="related-post-card-title">SQLite 进阶：WAL 模式与性能优化</div>
+            <div class="related-post-card-tags"><span>SQLite</span><span>数据库</span><span>WAL</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
 
         <p>你有没有遇到过这种情况：一个数据库查询在本地跑得飞快，部署到生产环境后突然变慢几十倍？或者同一个查询，同样的数据量，有时候几毫秒就返回，有时候几秒钟还没结果？</p>
 <p>这种"玄学"问题，十有八九跟 <strong>索引</strong> 有关——更准确地说，跟查询有没有用上索引、用对了索引有关。今天我们就用 MySQL 8 来实战，从一条慢 SQL 开始，一步步推到索引设计的最佳实践。</p>
@@ -348,6 +375,29 @@ SELECT * FROM performance_schema.table_io_waits_summary_by_index_usage;
 </ol>
 <p>数据库索引不是什么玄学。理解了 B+ 树的存储结构，明白了最左前缀、覆盖索引、索引下推这些概念，再遇到慢查询就能按部就班推理了——而不是靠猜和碰运气。</p>
 <p>下一篇我们会深入 B+ 树的存储原理，从数据结构层面理解为什么复合索引的最左前缀法则如此重要。敬请期待。</p>
+
+        <!-- Post Copyright & License Card -->
+        <div class="post-copyright-card">
+          <div class="copyright-header">
+            <div class="copyright-badge">
+              <span>📜</span>
+              <span>原创与知识共享协议</span>
+            </div>
+            <button class="copyright-cite-btn" id="copy-cite-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+              </svg>
+              <span>复制 Markdown 引用</span>
+            </button>
+          </div>
+          <div class="copyright-list">
+            <div class="copyright-item"><strong>文章标题：</strong>MySQL 索引优化实战：从慢查询到最佳实践</div>
+            <div class="copyright-item"><strong>文章作者：</strong>张小猛 · loczb</div>
+            <div class="copyright-item"><strong>永久链接：</strong><a href="https://709527.xyz/blog/posts/mysql-索引优化实战从慢查询到最佳实践.html">https://709527.xyz/blog/posts/mysql-索引优化实战从慢查询到最佳实践.html</a></div>
+            <div class="copyright-item"><strong>版权声明：</strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 国际许可协议。商业转载请联系作者获得授权，非商业转载请注明出处。</div>
+          </div>
+        </div>
       </article>
     </div>
   </main>
@@ -382,13 +432,12 @@ SELECT * FROM performance_schema.table_io_waits_summary_by_index_usage;
         <a href="../../blog/index.html" class="footer-link">博客</a>
         <a href="../../about/index.html" class="footer-link">关于</a>
       </div>
-<p class="footer-copyright">
+      <p class="footer-copyright">
         &copy; 2026 张小猛
       </p>
     </div>
   </footer>
 
-  <script defer src="../../assets/js/related-posts.js"></script>
   <script defer src="../../assets/js/main.js"></script>
   <script defer src="../../assets/js/article.js"></script>
   <script defer src="../../assets/js/share.js"></script>

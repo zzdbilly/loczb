@@ -12,7 +12,7 @@
     <meta property="og:description" content="inode 是 Linux 文件系统的核心概念。本文从 ext4 inode 数据结构、硬链接软链接原理、文件删除机制到 inode 耗尽排查，全面解析 inode 工作原理。">
     <meta property="og:url" content="https://709527.xyz/blog/posts/linux-inode-mechanism-deep-dive.html">
     <meta property="og:type" content="article">
-        <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
+    <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
     <meta property="og:site_name" content="loczb">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Linux inode 机制深入理解：从数据结构到实战排查 | 张小猛 - loczb">
@@ -109,6 +109,33 @@
         <div class="post-tags">
           
         </div>
+
+        
+
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="rust-入局2026-年的生态全景.html">
+            <div class="related-post-card-title">Rust 入局：2026 年的生态全景</div>
+            <div class="related-post-card-tags"><span>Rust</span><span>TIOBE</span><span>系统编程</span></div>
+          </a>
+          <a class="related-post-card" href="zig-language-introduction.html">
+            <div class="related-post-card-title">Zig 语言入门：比 C 更安全的系统编程</div>
+            <div class="related-post-card-tags"><span>Zig</span><span>系统编程</span><span>comptime</span></div>
+          </a>
+          <a class="related-post-card" href="linux-ebpf-getting-started.html">
+            <div class="related-post-card-title">Linux eBPF 入门：内核可观测性新范式</div>
+            <div class="related-post-card-tags"><span>eBPF</span><span>Linux 内核</span><span>可观测性</span></div>
+          </a>
+          <a class="related-post-card" href="rust-getting-started.html">
+            <div class="related-post-card-title">Rust 入门：从零到生产</div>
+            <div class="related-post-card-tags"><span>Rust</span><span>系统编程</span><span>所有权</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
 
         <h2>从一个经典问题说起</h2>
 <p>你有没有遇到过这种情况：磁盘 <code>df</code> 显示还有大量空间，但创建新文件却报 <code>No space left on device</code>？或者删除了一个大文件，但磁盘空间没有释放，直到关掉某个进程？</p>
@@ -710,6 +737,29 @@ docker container prune
 <li><strong>文件恢复</strong> → <code>debugfs</code> 可以在 inode 未被复用时恢复数据</li>
 </ol>
 <p>掌握 inode 机制是每个 Linux 运维和开发者的必备技能。它不仅能帮你解决实际问题，更能让你深入理解 Linux 「一切皆文件」的设计哲学。</p>
+
+        <!-- Post Copyright & License Card -->
+        <div class="post-copyright-card">
+          <div class="copyright-header">
+            <div class="copyright-badge">
+              <span>📜</span>
+              <span>原创与知识共享协议</span>
+            </div>
+            <button class="copyright-cite-btn" id="copy-cite-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+              </svg>
+              <span>复制 Markdown 引用</span>
+            </button>
+          </div>
+          <div class="copyright-list">
+            <div class="copyright-item"><strong>文章标题：</strong>Linux inode 机制深入理解：从数据结构到实战排查</div>
+            <div class="copyright-item"><strong>文章作者：</strong>张小猛 · loczb</div>
+            <div class="copyright-item"><strong>永久链接：</strong><a href="https://709527.xyz/blog/posts/linux-inode-mechanism-deep-dive.html">https://709527.xyz/blog/posts/linux-inode-mechanism-deep-dive.html</a></div>
+            <div class="copyright-item"><strong>版权声明：</strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 国际许可协议。商业转载请联系作者获得授权，非商业转载请注明出处。</div>
+          </div>
+        </div>
       </article>
     </div>
   </main>
@@ -744,13 +794,12 @@ docker container prune
         <a href="../../blog/index.html" class="footer-link">博客</a>
         <a href="../../about/index.html" class="footer-link">关于</a>
       </div>
-<p class="footer-copyright">
+      <p class="footer-copyright">
         &copy; 2026 张小猛
       </p>
     </div>
   </footer>
 
-  <script defer src="../../assets/js/related-posts.js"></script>
   <script defer src="../../assets/js/main.js"></script>
   <script defer src="../../assets/js/article.js"></script>
   <script defer src="../../assets/js/share.js"></script>

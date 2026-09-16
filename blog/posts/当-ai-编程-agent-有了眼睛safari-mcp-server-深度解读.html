@@ -12,7 +12,7 @@
     <meta property="og:description" content="2026年7月，Apple 发布了 Safari MCP Server，让 AI 编程 Agent 可以直接连接浏览器调试页面。本文深入解读其原理、安装配置、四个实战场景，以及与 Chrome MCP 的全方位对比。">
     <meta property="og:url" content="https://709527.xyz/blog/posts/当-ai-编程-agent-有了眼睛safari-mcp-server-深度解读.html">
     <meta property="og:type" content="article">
-        <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
+    <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
     <meta property="og:site_name" content="loczb">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="当 AI 编程 Agent 有了"眼睛"：Safari MCP Server 深度解读 | 张小猛 - loczb">
@@ -114,6 +114,37 @@
           <span class="tag">前端开发</span>
           <span class="tag">调试</span>
         </div>
+
+        
+
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="mcp-server-deep-dive.html">
+            <div class="related-post-card-title">MCP 协议深入实战：从入门到编写自定义 MCP Server</div>
+            <div class="related-post-card-tags"><span>AI</span><span>MCP</span><span>工具调用</span></div>
+          </a>
+          <a class="related-post-card" href="mcp-android-integration.html">
+            <div class="related-post-card-title">MCP 协议在 Android 端的应用：AI 工具调用新范式</div>
+            <div class="related-post-card-tags"><span>Android</span><span>MCP</span><span>AI</span></div>
+          </a>
+          <a class="related-post-card" href="web-worker-与前端多线程开发把主线程从繁重计算中解放出来.html">
+            <div class="related-post-card-title">Web Worker 与前端多线程开发：把主线程从繁重计算中解放出来</div>
+            <div class="related-post-card-tags"><span>前端</span><span>前端开发</span><span>JavaScript</span></div>
+          </a>
+          <a class="related-post-card" href="ai-agent-实战用子代理并行驱动多项目开发.html">
+            <div class="related-post-card-title">AI Agent 实战：用子代理并行驱动多项目开发</div>
+            <div class="related-post-card-tags"><span>AI</span><span>Agent</span><span>工程实践</span></div>
+          </a>
+          <a class="related-post-card" href="css-container-queries.html">
+            <div class="related-post-card-title">CSS Container Queries 实战</div>
+            <div class="related-post-card-tags"><span>CSS</span><span>Container Queries</span><span>响应式设计</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
 
         <h2>当 AI 编程 Agent 有了"眼睛"：Safari MCP Server 深度解读</h2>
 <p>2026 年 7 月 1 日，Apple 在 WebKit 官方博客上发布了一条让 Web 开发者兴奋的消息——<strong>Safari Technology Preview 247 引入了 Safari MCP Server</strong>，一个基于 Model Context Protocol（MCP）的浏览器调试工具。</p>
@@ -631,6 +662,29 @@ cat ~/.claude/mcp.json | grep safari
 <p>你的 AI 助手不再盲目码字了——它能看到你的页面，真正理解代码如何渲染。</p>
 </blockquote>
 <p>这大概就是 2026 年最值得 Web 开发者尝试的开发方式升级。</p>
+
+        <!-- Post Copyright & License Card -->
+        <div class="post-copyright-card">
+          <div class="copyright-header">
+            <div class="copyright-badge">
+              <span>📜</span>
+              <span>原创与知识共享协议</span>
+            </div>
+            <button class="copyright-cite-btn" id="copy-cite-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+              </svg>
+              <span>复制 Markdown 引用</span>
+            </button>
+          </div>
+          <div class="copyright-list">
+            <div class="copyright-item"><strong>文章标题：</strong>当 AI 编程 Agent 有了"眼睛"：Safari MCP Server 深度解读</div>
+            <div class="copyright-item"><strong>文章作者：</strong>张小猛 · loczb</div>
+            <div class="copyright-item"><strong>永久链接：</strong><a href="https://709527.xyz/blog/posts/当-ai-编程-agent-有了眼睛safari-mcp-server-深度解读.html">https://709527.xyz/blog/posts/当-ai-编程-agent-有了眼睛safari-mcp-server-深度解读.html</a></div>
+            <div class="copyright-item"><strong>版权声明：</strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 国际许可协议。商业转载请联系作者获得授权，非商业转载请注明出处。</div>
+          </div>
+        </div>
       </article>
     </div>
   </main>
@@ -665,13 +719,12 @@ cat ~/.claude/mcp.json | grep safari
         <a href="../../blog/index.html" class="footer-link">博客</a>
         <a href="../../about/index.html" class="footer-link">关于</a>
       </div>
-<p class="footer-copyright">
+      <p class="footer-copyright">
         &copy; 2026 张小猛
       </p>
     </div>
   </footer>
 
-  <script defer src="../../assets/js/related-posts.js"></script>
   <script defer src="../../assets/js/main.js"></script>
   <script defer src="../../assets/js/article.js"></script>
   <script defer src="../../assets/js/share.js"></script>

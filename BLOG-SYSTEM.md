@@ -8,12 +8,13 @@
 loczb/
 ├── index.html                    # 首页 - Bento Grid 2.0 + 动态打字机 + Hero ⌘K 秒搜 + 精选推荐
 ├── blog/
-│   ├── index.html                # 博客列表页 - 全部文章 / 📚 专题专栏 / 时间归档三重视图
-│   ├── articles-index.json       # 文章索引与元数据（103 篇博文）
-│   └── posts/                    # 所有文章 HTML（103 篇，支持专栏便当盒注入）
+│   ├── index.html                # 博客列表第 1 页 - 全部文章 / 📚 专题专栏 / 时间归档三重视图
+│   ├── page-2.html ... page-N.html  # 静态分页页（每页 10 张卡 + 写死的 <a> 分页导航，无 JS 可翻页）
+│   ├── articles-index.json       # 文章索引与元数据（瘦身版：posts/categories/stats，无 excerpt/archives/tagCloud）
+│   ├── meta/{slug}.json          # 每篇文章元数据 sidecar（摘要按需拉取，单一真相源）
+│   └── posts/                    # 所有文章 HTML（支持专栏便当盒注入 + 静态「相关文章」内联）
 ├── templates/
-│   ├── blog-post-template.html   # 文章骨架模板
-│   └── inline-styles.css         # 内联样式（嵌入每篇文章 <style>）
+│   └── blog-post-template.html   # 文章骨架模板（含 <!-- Related Static --> 相关文章标记区间）
 ├── scripts/
 │   ├── generate-post.py          # ★ 主生成脚本（Python 单文件 CLI / Frontmatter）
 │   ├── generate-index.js         # 全站 CI 全量索引重建管线（Node.js）
@@ -23,9 +24,9 @@ loczb/
 │   ├── css/style.css             # 全局核心样式 (Bento 2.0, Spotlight, 高对比度双模)
 │   ├── js/
 │   │   ├── main.js               # 核心交互、打字机、Instant Prefetch 预加载引擎
-│   │   ├── blog-list.js          # 博客分页、3重视图切换与专栏渲染
-│   │   ├── search.js             # 全局 Command Palette 模糊检索 (⌘K / Ctrl+K)
-│   │   └── related-posts.js      # 相关文章推荐索引
+│   │   ├── blog-list.js          # 列表页：默认走静态卡/静态分页，筛选/归档/专栏才回退 JSON 渲染
+│   │   ├── meta-cache.js         # 按需拉取 blog/meta/{slug}.json 摘要 + 内存缓存（搜索/筛选共用）
+│   │   └── search.js             # 全局 Command Palette 模糊检索 (⌘K / Ctrl+K)
 │   └── images/                   # 图片资源
 ├── .github/workflows/
 │   └── update-index.yml          # CI: 自动化测试与全站索引校验
@@ -95,11 +96,14 @@ loczb/
 
 ### 2.3 博客列表 `blog/index.html`
 
-- **筛选**：按分类（Android / AI / 前端 / DevOps / ...）
-- **分页**：客户端静态分页，JS 控制显示/隐藏
-- **搜索**：Ctrl+K 弹出搜索框
-- **标签云**：从 articles-index.json 读取
-- **归档视图**：按月份分组
+- **分页**：构建期静态分页（`blog/index.html` 是第 1 页，`blog/page-2..N.html` 是其余页，每页 10 篇）。
+  卡片与分页导航都是静态 HTML，无 JS 也能翻页；每页带自指 canonical + rel=prev/next，不进 sitemap。
+  旧 URL `blog/index.html?page=N`（N≥2）由 `blog-list.js` 重定向到 `page-N.html`。
+- **筛选**：按分类 / 标签筛选。静态页只装一页数据，故筛选时 `blog-list.js` 懒加载
+  `articles-index.json` 后客户端 10 条/页渲染；归档、专栏视图同理。
+- **搜索**：Ctrl+K 弹出搜索框（命中后才按需拉 meta sidecar 显示摘要）
+- **归档视图**：按月份分组（从 `posts[]` 现算，索引不再存派生字段）
+- **相关文章**：构建期算好、内联进文章页静态 HTML（`generate-index.js` 的 injectStaticRelated）
 
 ---
 
@@ -115,11 +119,9 @@ load_template()                      # 读取文章模板
 # 文章生成
 generate_article(...)                # 替换模板占位符，写出 HTML 文件
 
-# 索引更新
-add_to_index(slug, title, tags)      # 更新 related-posts.js（关联推荐）
-
 # 触发全量重建（Node.js）
-generate-index.js                    # 重建 articles-index.json / 博客列表 / 首页 / Sitemap / RSS
+generate-index.js                    # 重建 articles-index.json / 列表页+静态分页 / 首页 / Sitemap / RSS
+                                     # 并内联每篇文章的静态「相关文章」与专栏卡
 
 # 入口
 parse_args(args)                     # 参数解析
@@ -129,7 +131,7 @@ main()                               # 主流程（调用生成并触发 generat
 ### 发布自动更新流程
 
 ```
-generate_article() → add_to_index() → scripts/generate-index.js
+generate_article() → write_sidecar() → scripts/generate-index.js → scripts/verify.js
 ```
 
 ### 命令行用法
@@ -159,11 +161,13 @@ python3 scripts/generate-post.py "标题" "描述" \
 
 ## 四、索引更新脚本 `generate-index.js`
 
-完整重新生成 `blog/articles-index.json`：
-- 读取所有 `blog/posts/*.html`
-- 解析标题、日期、标签、slug
-- 计算标签云、归档、分类、统计
-- 写入 JSON
+完整重新生成全站产物：
+- 读取所有 `blog/posts/*.html`（元数据优先取 `blog/meta/{slug}.json` sidecar）
+- 解析标题、日期、标签、slug、分类、统计，写入 `blog/articles-index.json`
+  （**已瘦身**：不再内联 `excerpt`，也不再输出 `archives` / `tagCloud` 这类重复派生数据）
+- 重建 `blog/index.html` 第 1 页 + `blog/page-2..N.html` 静态分页页（每页 10 篇）
+- 为每篇文章内联静态「相关文章」（共有 tag ×3 + 同 category ×1，取 top 5，新文优先做 tiebreaker）
+- 重建首页、sitemap.xml（不含 page-N）、rss.xml、sw.js 缓存版本
 
 触发方式：
 - **本地**：`node scripts/generate-index.js`
@@ -204,12 +208,12 @@ git push
 ```
 
 ### 生成脚本自动完成的内容
-- ✅ 生成 `blog/posts/<slug>.html`
-- ✅ 更新 `assets/js/related-posts.js`
-- ✅ 更新 `blog/index.html`（列表顶部插入）
-- ✅ 更新 `blog/articles-index.json`（标签云/归档/分类）
-- ✅ 更新 `index.html` 大卡 + 文章列表
-- ✅ 更新 `index.html` JS posts 数组
+- ✅ 生成 `blog/posts/<slug>.html` + `blog/meta/<slug>.json` sidecar
+- ✅ 更新 `blog/articles-index.json`（posts/categories/stats）
+- ✅ 重建 `blog/index.html` + `blog/page-2..N.html` 静态分页
+- ✅ 内联全站文章的静态「相关文章」与专栏卡
+- ✅ 更新 `index.html` 大卡 + 文章列表 + JS posts 数组
+- ✅ 跑 `scripts/verify.js` 一致性门禁（含体积与分页门禁）
 
 ### CI 自动完成
 - **GitHub Actions** 推送后自动运行 `generate-index.js`，确保索引最新
@@ -225,7 +229,7 @@ git push
 - 需要同步更新：
   - `blog/index.html` 中的链接
   - `blog/articles-index.json` 中的 url 和 slug
-  - `assets/js/related-posts.js` 中的 slug
+  - `blog/meta/<slug>.json` sidecar 与文章页内联的相关文章链接（重跑 `generate-index.js` 即可）
   - `index.html` 首页中的链接
   - 文章本身的 OG URL
 
@@ -252,13 +256,14 @@ git push
 
 | 文件 | 被谁更新 | 读谁 |
 |------|---------|------|
-| `index.html` | `generate-post.py` | 从 `blog/index.html` 读最新文章 |
-| `blog/index.html` | `generate-post.py` | 静态插入 |
-| `blog/posts/*.html` | `generate-post.py` | 模板 `templates/` |
-| `blog/articles-index.json` | `generate-post.py` + CI | 各 JS 文件 |
-| `assets/js/related-posts.js` | `generate-post.py` | 文章页底部 |
-| `assets/js/search.js` | — | `articles-index.json` |
-| `assets/js/main.js` | — | `articles-index.json` |
+| `index.html` | `generate-index.js` | 从 `posts[]` 读最新文章 |
+| `blog/index.html` + `blog/page-*.html` | `generate-index.js` | `posts[]`（每页 10 张卡） |
+| `blog/posts/*.html` | `generate-post.py` / `refresh-posts.py` + `generate-index.js` | 模板 `templates/` + 内联相关文章 |
+| `blog/articles-index.json` | `generate-index.js` | 各 JS 文件（搜索/筛选/归档） |
+| `blog/meta/{slug}.json` | `generate-post.py` | `generate-index.js`、`meta-cache.js` |
+| `assets/js/blog-list.js` | — | `articles-index.json`（仅筛选/归档视图） |
+| `assets/js/search.js` | — | `articles-index.json` + `blog/meta/*` 摘要 |
+| `assets/js/main.js` | — | — |
 
 ---
 
@@ -281,4 +286,4 @@ git push
 
 ---
 
-*文档版本 v1.0 / 2026-06-30*
+*文档版本 v1.1 / 2026-09-16（索引瘦身 + 列表静态分页 + 静态相关文章）*

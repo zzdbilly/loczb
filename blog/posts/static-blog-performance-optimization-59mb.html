@@ -12,7 +12,7 @@
     <meta property="og:description" content="66篇文章4KB重复内联样式、4.4MB死文件、404幽灵引用——一次完整的静态博客性能优化记录">
     <meta property="og:url" content="https://709527.xyz/blog/posts/static-blog-performance-optimization-59mb.html">
     <meta property="og:type" content="article">
-        <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
+    <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
     <meta property="og:site_name" content="loczb">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="静态博客性能优化实战：从 59MB 到精简高效 | 张小猛 - loczb">
@@ -134,6 +134,38 @@
           </details>
         </div>
         <!-- /Series Card Widget -->
+
+        
+        
+
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="web-worker-与前端多线程开发把主线程从繁重计算中解放出来.html">
+            <div class="related-post-card-title">Web Worker 与前端多线程开发：把主线程从繁重计算中解放出来</div>
+            <div class="related-post-card-tags"><span>前端</span><span>前端开发</span><span>JavaScript</span></div>
+          </a>
+          <a class="related-post-card" href="ai-agent-实战用子代理并行驱动多项目开发.html">
+            <div class="related-post-card-title">AI Agent 实战：用子代理并行驱动多项目开发</div>
+            <div class="related-post-card-tags"><span>AI</span><span>Agent</span><span>工程实践</span></div>
+          </a>
+          <a class="related-post-card" href="当-ai-编程-agent-有了眼睛safari-mcp-server-深度解读.html">
+            <div class="related-post-card-title">当 AI 编程 Agent 有了&quot;眼睛&quot;：Safari MCP Server 深度解读</div>
+            <div class="related-post-card-tags"><span>AI</span><span>MCP</span><span>WebKit</span></div>
+          </a>
+          <a class="related-post-card" href="css-view-transitions.html">
+            <div class="related-post-card-title">CSS View Transitions API 实战：页面过渡动画新范式</div>
+            <div class="related-post-card-tags"><span>前端</span><span>CSS</span><span>View Transitions</span></div>
+          </a>
+          <a class="related-post-card" href="webassembly-in-practice.html">
+            <div class="related-post-card-title">WebAssembly 实战：浏览器端高性能计算</div>
+            <div class="related-post-card-tags"><span>WebAssembly</span><span>Rust</span><span>前端性能</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
 
         <h2>为什么需要性能优化</h2>
 <p>很多人觉得静态网站（如 GitHub Pages）天然就快，不需要优化。但实际情况是，随着内容增长，没有维护的静态站会积累大量问题：死文件占空间、内联样式膨胀、缓存策略缺失、404 错误拖慢加载……</p>
@@ -636,6 +668,29 @@ lines.append(f&#39;      &lt;description&gt;{xml_escape(description)}&lt;/descri
 <p>手动维护缓存 hash、sitemap、索引等容易出错。用 GitHub Actions 自动化可以避免人为错误，每次提交自动更新所有依赖文件。</p>
 <h3>5. 数据驱动优化</h3>
 <p>不要凭感觉优化。用 <code>du</code>、<code>grep</code>、脚本统计来量化问题，优化后再验证效果。每一步优化都应该有可测量的数据支撑。</p>
+
+        <!-- Post Copyright & License Card -->
+        <div class="post-copyright-card">
+          <div class="copyright-header">
+            <div class="copyright-badge">
+              <span>📜</span>
+              <span>原创与知识共享协议</span>
+            </div>
+            <button class="copyright-cite-btn" id="copy-cite-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+              </svg>
+              <span>复制 Markdown 引用</span>
+            </button>
+          </div>
+          <div class="copyright-list">
+            <div class="copyright-item"><strong>文章标题：</strong>静态博客性能优化实战：从 59MB 到精简高效</div>
+            <div class="copyright-item"><strong>文章作者：</strong>张小猛 · loczb</div>
+            <div class="copyright-item"><strong>永久链接：</strong><a href="https://709527.xyz/blog/posts/static-blog-performance-optimization-59mb.html">https://709527.xyz/blog/posts/static-blog-performance-optimization-59mb.html</a></div>
+            <div class="copyright-item"><strong>版权声明：</strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 国际许可协议。商业转载请联系作者获得授权，非商业转载请注明出处。</div>
+          </div>
+        </div>
       </article>
     </div>
   </main>
@@ -680,13 +735,12 @@ lines.append(f&#39;      &lt;description&gt;{xml_escape(description)}&lt;/descri
         <a href="../../blog/index.html" class="footer-link">博客</a>
         <a href="../../about/index.html" class="footer-link">关于</a>
       </div>
-<p class="footer-copyright">
+      <p class="footer-copyright">
         &copy; 2026 张小猛
       </p>
     </div>
   </footer>
 
-  <script defer src="../../assets/js/related-posts.js"></script>
   <script defer src="../../assets/js/main.js"></script>
   <script defer src="../../assets/js/article.js"></script>
   <script defer src="../../assets/js/share.js"></script>

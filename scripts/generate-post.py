@@ -36,7 +36,6 @@ from xml.sax.saxutils import escape as xml_escape
 TEMPLATE = 'templates/blog-post-template.html'
 POSTS_DIR = 'blog/posts'
 META_DIR = 'blog/meta'
-RELATED_JS = 'assets/js/related-posts.js'
 BLOG_INDEX = 'blog/index.html'
 HOME_INDEX = 'index.html'
 ARTICLES_JSON = 'blog/articles-index.json'
@@ -374,31 +373,6 @@ def write_sidecar(slug, title, description, article_date, read_time, tags, categ
     print(f"  ✅ 元数据 sidecar: blog/meta/{slug}.json")
 
 
-def add_to_index(slug, title, tag_list):
-    """添加文章到 related-posts.js 索引"""
-    with open(RELATED_JS, 'r', encoding='utf-8') as f:
-        content = f.read()
-    
-    if f'{{ slug: "{slug}"' in content:
-        print(f"  ⚠️ 已在索引中，跳过")
-        return False
-    
-    safe_title = title.replace('\\', '\\\\').replace('"', '\\"')
-    tags_json = json.dumps(tag_list, ensure_ascii=False)
-    new_entry = f'  {{ slug: "{slug}", tags: {tags_json}, title: "{safe_title}" }}'
-    
-    content = content.replace(
-        'const ARTICLE_INDEX = [',
-        'const ARTICLE_INDEX = [\n' + new_entry + ','
-    )
-    
-    with open(RELATED_JS, 'w', encoding='utf-8') as f:
-        f.write(content)
-    
-    print(f"  ✅ 已添加到相关文章索引")
-    return True
-
-
 def parse_args(args):
     """解析命令行参数，支持 Frontmatter 自动推断与覆盖"""
     params = {
@@ -516,8 +490,8 @@ def main():
         f.write(html)
     print(f"\n✅ 文章已生成: {output_path}")
 
-    # 更新相关文章索引
-    add_to_index(slug, title, tag_list)
+    # 相关文章由 generate-index.js 构建期内联为静态 HTML，
+    # 全站索引（articles-index.json / 列表页 / 静态分页）统一由其重建
 
     # 写元数据 sidecar（与 HTML 同步落盘，单一真相源）
     write_sidecar(slug, title, description, str(article_date), read_time, tag_list, category)

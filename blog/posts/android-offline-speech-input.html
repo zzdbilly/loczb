@@ -12,7 +12,7 @@
     <meta property="og:description" content="Android 离线语音输入实现方案：Sherpa ONNX、Whisper、Vosk 三大主流方案深度对比">
     <meta property="og:url" content="https://709527.xyz/blog/posts/android-offline-speech-input.html">
     <meta property="og:type" content="article">
-        <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
+    <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
     <meta property="og:site_name" content="loczb">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Android 离线语音输入实现方案 | 张小猛 - loczb">
@@ -112,6 +112,37 @@
           <span class="tag">Whisper</span>
           <span class="tag">端侧AI</span>
         </div>
+
+        
+
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="android-gemini-nano-integration.html">
+            <div class="related-post-card-title">Android 端侧 AI 实战：Gemini Nano 集成指南</div>
+            <div class="related-post-card-tags"><span>Android</span><span>AI</span><span>Gemini Nano</span></div>
+          </a>
+          <a class="related-post-card" href="android-testing-playbook.html">
+            <div class="related-post-card-title">别再从 Espresso 开始：Android 测试分层实战手册</div>
+            <div class="related-post-card-tags"><span>Android</span><span>测试</span><span>Kotlin</span></div>
+          </a>
+          <a class="related-post-card" href="jetpack-compose-性能优化实战从卡顿到丝滑的-12-个技巧.html">
+            <div class="related-post-card-title">Jetpack Compose 性能优化实战：从卡顿到丝滑的 12 个技巧</div>
+            <div class="related-post-card-tags"><span>Jetpack Compose</span><span>Android</span><span>性能优化</span></div>
+          </a>
+          <a class="related-post-card" href="gradle-构建加速全攻略从-5-分钟到-30-秒.html">
+            <div class="related-post-card-title">Gradle 构建加速全攻略：从 5 分钟到 30 秒</div>
+            <div class="related-post-card-tags"><span>Gradle</span><span>Android</span><span>构建优化</span></div>
+          </a>
+          <a class="related-post-card" href="android-15-privacy-media-visual-permission.html">
+            <div class="related-post-card-title">Android 15 隐私新特性：所有文件都需要 MEDIA_VISUAL_PERMISSION</div>
+            <div class="related-post-card-tags"><span>Android</span><span>隐私</span><span>Android 15</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
 
         <p>在移动应用开发中，语音输入已成为提升用户体验的重要交互方式。然而，传统的云端语音识别方案存在明显的痛点：<strong>网络依赖、隐私风险、延迟抖动、成本不可控</strong>。对于需要高隐私保护、弱网环境可用、或实时性要求高的场景，<strong>真正的离线语音识别</strong>成为必需。</p>
 
@@ -222,6 +253,29 @@ val result = recognizer.result()</code></pre>
         Whisper.cpp：<a href="https://github.com/ggerganov/whisper.cpp" target="_blank">github.com/ggerganov/whisper.cpp</a><br>
         Vosk：<a href="https://github.com/alphacephei/vosk-api" target="_blank">github.com/alphacephei/vosk-api</a>
       </div>
+
+        <!-- Post Copyright & License Card -->
+        <div class="post-copyright-card">
+          <div class="copyright-header">
+            <div class="copyright-badge">
+              <span>📜</span>
+              <span>原创与知识共享协议</span>
+            </div>
+            <button class="copyright-cite-btn" id="copy-cite-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+              </svg>
+              <span>复制 Markdown 引用</span>
+            </button>
+          </div>
+          <div class="copyright-list">
+            <div class="copyright-item"><strong>文章标题：</strong>Android 离线语音输入实现方案</div>
+            <div class="copyright-item"><strong>文章作者：</strong>张小猛 · loczb</div>
+            <div class="copyright-item"><strong>永久链接：</strong><a href="https://709527.xyz/blog/posts/android-offline-speech-input.html">https://709527.xyz/blog/posts/android-offline-speech-input.html</a></div>
+            <div class="copyright-item"><strong>版权声明：</strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 国际许可协议。商业转载请联系作者获得授权，非商业转载请注明出处。</div>
+          </div>
+        </div>
       </article>
     </div>
   </main>
@@ -256,13 +310,12 @@ val result = recognizer.result()</code></pre>
         <a href="../../blog/index.html" class="footer-link">博客</a>
         <a href="../../about/index.html" class="footer-link">关于</a>
       </div>
-<p class="footer-copyright">
+      <p class="footer-copyright">
         &copy; 2026 张小猛
       </p>
     </div>
   </footer>
 
-  <script defer src="../../assets/js/related-posts.js"></script>
   <script defer src="../../assets/js/main.js"></script>
   <script defer src="../../assets/js/article.js"></script>
   <script defer src="../../assets/js/share.js"></script>

@@ -12,7 +12,7 @@
     <meta property="og:description" content="Kotlin Flow 进阶实战：背压策略（conflate/buffer/collectLatest）与共享流（shareIn/stateIn）深度解析，附 Android 实际场景">
     <meta property="og:url" content="https://709527.xyz/blog/posts/kotlin-flow-advanced.html">
     <meta property="og:type" content="article">
-        <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
+    <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
     <meta property="og:site_name" content="loczb">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Kotlin Flow 进阶：背压策略与共享流 | 张小猛 - loczb">
@@ -138,6 +138,38 @@
           </details>
         </div>
         <!-- /Series Card Widget -->
+
+        
+        
+
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="android-testing-playbook.html">
+            <div class="related-post-card-title">别再从 Espresso 开始：Android 测试分层实战手册</div>
+            <div class="related-post-card-tags"><span>Android</span><span>测试</span><span>Kotlin</span></div>
+          </a>
+          <a class="related-post-card" href="jetpack-compose-性能优化实战从卡顿到丝滑的-12-个技巧.html">
+            <div class="related-post-card-title">Jetpack Compose 性能优化实战：从卡顿到丝滑的 12 个技巧</div>
+            <div class="related-post-card-tags"><span>Jetpack Compose</span><span>Android</span><span>性能优化</span></div>
+          </a>
+          <a class="related-post-card" href="gradle-构建加速全攻略从-5-分钟到-30-秒.html">
+            <div class="related-post-card-title">Gradle 构建加速全攻略：从 5 分钟到 30 秒</div>
+            <div class="related-post-card-tags"><span>Gradle</span><span>Android</span><span>构建优化</span></div>
+          </a>
+          <a class="related-post-card" href="android-15-privacy-media-visual-permission.html">
+            <div class="related-post-card-title">Android 15 隐私新特性：所有文件都需要 MEDIA_VISUAL_PERMISSION</div>
+            <div class="related-post-card-tags"><span>Android</span><span>隐私</span><span>Android 15</span></div>
+          </a>
+          <a class="related-post-card" href="android-hilt-dependency-injection.html">
+            <div class="related-post-card-title">Android Hilt 依赖注入最佳实践：从入门到架构</div>
+            <div class="related-post-card-tags"><span>Hilt</span><span>依赖注入</span><span>Android</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
 
         <p>用 Kotlin Flow 替换 LiveData 之后，很多人止步于 <code>flow { }</code> + <code>collect { }</code> 的基本用法。但当生产者发射速度超过消费者处理速度时，问题就来了——背压（Backpressure）。当你想让多个订阅者共享同一个数据源时，冷流的热化——共享流（SharedFlow / StateFlow）就是必修课。</p>
 
@@ -761,6 +793,29 @@ val navigateEvent = MutableSharedFlow&lt;Screen&gt;()             // 事件</cod
       <div class="tip-box">
         <strong>一句话总结</strong>：背压三剑客——<code>buffer</code> 并发缓冲、<code>conflate</code> 保留最新、<code>collectLatest</code> 取消旧处理。共享流双雄——<code>StateFlow</code> 持有状态、<code>SharedFlow</code> 广播事件。Android 上 <code>WhileSubscribed(5000)</code> 是黄金搭档。
       </div>
+
+        <!-- Post Copyright & License Card -->
+        <div class="post-copyright-card">
+          <div class="copyright-header">
+            <div class="copyright-badge">
+              <span>📜</span>
+              <span>原创与知识共享协议</span>
+            </div>
+            <button class="copyright-cite-btn" id="copy-cite-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+              </svg>
+              <span>复制 Markdown 引用</span>
+            </button>
+          </div>
+          <div class="copyright-list">
+            <div class="copyright-item"><strong>文章标题：</strong>Kotlin Flow 进阶：背压策略与共享流</div>
+            <div class="copyright-item"><strong>文章作者：</strong>张小猛 · loczb</div>
+            <div class="copyright-item"><strong>永久链接：</strong><a href="https://709527.xyz/blog/posts/kotlin-flow-advanced.html">https://709527.xyz/blog/posts/kotlin-flow-advanced.html</a></div>
+            <div class="copyright-item"><strong>版权声明：</strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 国际许可协议。商业转载请联系作者获得授权，非商业转载请注明出处。</div>
+          </div>
+        </div>
       </article>
     </div>
   </main>
@@ -809,13 +864,12 @@ val navigateEvent = MutableSharedFlow&lt;Screen&gt;()             // 事件</cod
         <a href="../../blog/index.html" class="footer-link">博客</a>
         <a href="../../about/index.html" class="footer-link">关于</a>
       </div>
-<p class="footer-copyright">
+      <p class="footer-copyright">
         &copy; 2026 张小猛
       </p>
     </div>
   </footer>
 
-  <script defer src="../../assets/js/related-posts.js"></script>
   <script defer src="../../assets/js/main.js"></script>
   <script defer src="../../assets/js/article.js"></script>
   <script defer src="../../assets/js/share.js"></script>

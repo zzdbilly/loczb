@@ -12,7 +12,7 @@
     <meta property="og:description" content="深入解析 Web Worker 的原理与实践，涵盖 Dedicated Worker、Shared Worker、Service Worker 的区别与使用场景，以及 Comlink、Worker 池、Transferable Objects 等进阶技巧">
     <meta property="og:url" content="https://709527.xyz/blog/posts/web-worker-与前端多线程开发把主线程从繁重计算中解放出来.html">
     <meta property="og:type" content="article">
-        <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
+    <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
     <meta property="og:site_name" content="loczb">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Web Worker 与前端多线程开发：把主线程从繁重计算中解放出来 | 张小猛 - loczb">
@@ -114,6 +114,37 @@
           <span class="tag">性能优化</span>
           <span class="tag">多线程</span>
         </div>
+
+        
+
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="当-ai-编程-agent-有了眼睛safari-mcp-server-深度解读.html">
+            <div class="related-post-card-title">当 AI 编程 Agent 有了&quot;眼睛&quot;：Safari MCP Server 深度解读</div>
+            <div class="related-post-card-tags"><span>AI</span><span>MCP</span><span>WebKit</span></div>
+          </a>
+          <a class="related-post-card" href="css-view-transitions.html">
+            <div class="related-post-card-title">CSS View Transitions API 实战：页面过渡动画新范式</div>
+            <div class="related-post-card-tags"><span>前端</span><span>CSS</span><span>View Transitions</span></div>
+          </a>
+          <a class="related-post-card" href="css-container-queries.html">
+            <div class="related-post-card-title">CSS Container Queries 实战</div>
+            <div class="related-post-card-tags"><span>CSS</span><span>Container Queries</span><span>响应式设计</span></div>
+          </a>
+          <a class="related-post-card" href="typescript-type-gymnastics.html">
+            <div class="related-post-card-title">TypeScript 类型体操指南</div>
+            <div class="related-post-card-tags"><span>TypeScript</span><span>类型体操</span><span>前端</span></div>
+          </a>
+          <a class="related-post-card" href="pwa-offline-web-app.html">
+            <div class="related-post-card-title">PWA 实战：从零打造离线可用 Web 应用</div>
+            <div class="related-post-card-tags"><span>PWA</span><span>Service Worker</span><span>前端</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
 
         <p>JavaScript 从诞生之初就被设计为单线程语言，这在当时是合理的——浏览器的页面交互逻辑并不需要多线程的复杂性。然而，随着 Web 应用变得越来越复杂，Canvas 动画、大数据处理、密码学运算、音视频编码等计算密集型任务不断涌现，"单线程"这把双刃剑开始显露出它的另一面：一个长任务就能让整个页面卡死，用户的点击、滚动、输入全都得不到响应。</p>
 <p>Web Worker 正是浏览器为应对这一困境提供的解决方案。它允许开发者在后台线程中运行 JavaScript，让主线程专注于 UI 渲染和用户交互，把繁重的计算任务交给 Worker 线程去处理。本文将从基础概念到进阶实践，全面解析 Web Worker 在前端开发中的应用。</p>
@@ -1728,6 +1759,29 @@ importScripts('/heavy-lib.js', '/utils.js', '/helpers.js');
 </ol>
 <p>Web Worker 把主线程从繁重计算中解放出来，让前端应用保持流畅的 60fps 体验。随着 WebAssembly 和 OffscreenCanvas 等 API 的成熟，Worker 的能力边界的不断扩展，未来在浏览器中处理更复杂的任务将越来越可行。</p>
 <p>记住：好的用户体验不仅是功能完整，更是丝滑流畅——而这，正是 Web Worker 的用武之地。</p>
+
+        <!-- Post Copyright & License Card -->
+        <div class="post-copyright-card">
+          <div class="copyright-header">
+            <div class="copyright-badge">
+              <span>📜</span>
+              <span>原创与知识共享协议</span>
+            </div>
+            <button class="copyright-cite-btn" id="copy-cite-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+              </svg>
+              <span>复制 Markdown 引用</span>
+            </button>
+          </div>
+          <div class="copyright-list">
+            <div class="copyright-item"><strong>文章标题：</strong>Web Worker 与前端多线程开发：把主线程从繁重计算中解放出来</div>
+            <div class="copyright-item"><strong>文章作者：</strong>张小猛 · loczb</div>
+            <div class="copyright-item"><strong>永久链接：</strong><a href="https://709527.xyz/blog/posts/web-worker-与前端多线程开发把主线程从繁重计算中解放出来.html">https://709527.xyz/blog/posts/web-worker-与前端多线程开发把主线程从繁重计算中解放出来.html</a></div>
+            <div class="copyright-item"><strong>版权声明：</strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 国际许可协议。商业转载请联系作者获得授权，非商业转载请注明出处。</div>
+          </div>
+        </div>
       </article>
     </div>
   </main>
@@ -1762,13 +1816,12 @@ importScripts('/heavy-lib.js', '/utils.js', '/helpers.js');
         <a href="../../blog/index.html" class="footer-link">博客</a>
         <a href="../../about/index.html" class="footer-link">关于</a>
       </div>
-<p class="footer-copyright">
+      <p class="footer-copyright">
         &copy; 2026 张小猛
       </p>
     </div>
   </footer>
 
-  <script defer src="../../assets/js/related-posts.js"></script>
   <script defer src="../../assets/js/main.js"></script>
   <script defer src="../../assets/js/article.js"></script>
   <script defer src="../../assets/js/share.js"></script>

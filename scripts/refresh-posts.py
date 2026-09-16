@@ -57,6 +57,10 @@ def extract_post_data(html):
     # read time
     m = re.search(r'⏱️ (.*?)</span>', html)
     data['read_time'] = m.group(1).strip() if m else '5 min read'
+
+    # 专栏 banner（generate-post.py --series 生成时是单行 HTML；存量文章基本没有）
+    m = re.search(r'^.*<div class="series-banner.*$', html, re.MULTILINE)
+    data['series_banner'] = m.group(0).strip() if m else ''
     
     # tags
     tags = re.findall(r'<span class="tag">(.*?)</span>', html)
@@ -64,15 +68,25 @@ def extract_post_data(html):
     data['tags'] = tags
     
     # content: 提取 <article class="post-content"> 内部，去掉 h1/post-meta/post-tags
+    # 以及构建期注入的片段（专栏卡/相关文章），并在版权卡前截断 ——
+    # 模板自带版权卡与相关文章标记，若不清干净，回刷会把它们复制一份
+    # （2026-09-16 修复：旧版会把版权卡叠加成两份、并让 {{SERIES_BANNER}} 字面量漏到页面上）。
     m = re.search(r'<article class="post-content">(.*?)</article>', html, re.DOTALL)
     if m:
         inner = m.group(1)
+        # 截断模板自带尾部（版权卡由模板渲染）
+        inner = re.split(r'[ \t]*<!-- Post Copyright & License Card -->', inner)[0]
         # 去掉 h1
         inner = re.sub(r'<h1>.*?</h1>\s*', '', inner, count=1, flags=re.DOTALL)
         # 去掉 post-meta
         inner = re.sub(r'<div class="post-meta">.*?</div>\s*', '', inner, count=1, flags=re.DOTALL)
         # 去掉 post-tags
         inner = re.sub(r'<div class="post-tags">.*?</div>\s*', '', inner, count=1, flags=re.DOTALL)
+        # 去掉构建期注入：专栏卡 / 专栏 banner / 静态相关文章 / 未替换占位符
+        inner = re.sub(r'\s*<!-- Series Card Widget -->[\s\S]*?<!-- /Series Card Widget -->\s*', '', inner)
+        inner = re.sub(r'\s*<div class="series-banner[\s\S]*?</div></div>\s*', '', inner)
+        inner = re.sub(r'\s*<!-- Related Static -->[\s\S]*?<!-- /Related Static -->\s*', '', inner)
+        inner = re.sub(r'[ \t]*\{\{SERIES_BANNER\}\}[ \t]*\n?', '', inner)
         data['content'] = inner.strip()
     else:
         data['content'] = None
@@ -90,6 +104,7 @@ def render_with_template(template, data, slug=''):
     html = html.replace('{{ARTICLE_DATE}}', data['article_date'])
     html = html.replace('{{ARTICLE_READ_TIME}}', data['read_time'])
     html = html.replace('{{ARTICLE_TAGS}}', data['tags_html'])
+    html = html.replace('{{SERIES_BANNER}}', data.get('series_banner', ''))
     html = html.replace('{{ARTICLE_CONTENT}}', data['content'] or '<p>文章内容...</p>')
     
     # 左侧面板统计信息
@@ -151,6 +166,13 @@ def refresh_post(filepath, template, dry_run=False):
     
     # 用模板重新渲染
     new_html = render_with_template(template, data, slug)
+
+    # 占位符残留检查：模板加了新占位符但这里没替换时，字面量会直接漏到页面上
+    # （历史踩坑：{{SERIES_BANNER}} 曾整段显示在文章里），宁可跳过也不写坏
+    residue = re.findall(r'\{\{[A-Z_]+\}\}', new_html)
+    if residue:
+        print(f"  ❌ {slug}: 渲染结果残留占位符 {', '.join(sorted(set(residue)))}，跳过")
+        return False
     
     # 检查是否有变化
     if new_html == original:

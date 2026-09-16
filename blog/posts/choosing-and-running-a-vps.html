@@ -12,7 +12,7 @@
     <meta property="og:description" content="截至 2026 年 9 月的主流 VPS 厂商盘点、选型维度、下单开机、新机安全加固、Docker/Caddy 日常使用与费用控制的全流程实操指南。">
     <meta property="og:url" content="https://709527.xyz/blog/posts/choosing-and-running-a-vps.html">
     <meta property="og:type" content="article">
-        <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
+    <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
     <meta property="og:site_name" content="loczb">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="主流 VPS 的选择和使用 | 张小猛 - loczb">
@@ -114,6 +114,35 @@
         </div>
 
         
+
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="从-openclaw-到-hermesai-agent-工作区迁移完整记录.html">
+            <div class="related-post-card-title">从 OpenClaw 到 Hermes：AI Agent 工作区迁移完整记录</div>
+            <div class="related-post-card-tags"><span>OpenClaw</span><span>Hermes</span><span>AI Agent</span></div>
+          </a>
+          <a class="related-post-card" href="nextjs-prisma-部署-vercel-常见踩坑外键约束与构建时数据修复.html">
+            <div class="related-post-card-title">Next.js + Prisma 部署 Vercel 常见踩坑：外键约束与构建时数据修复</div>
+            <div class="related-post-card-tags"><span>Next.js</span><span>Prisma</span><span>Vercel</span></div>
+          </a>
+          <a class="related-post-card" href="nginx-reverse-proxy-tuning.html">
+            <div class="related-post-card-title">Nginx 反向代理性能调优：从入门到生产</div>
+            <div class="related-post-card-tags"><span>Nginx</span><span>反向代理</span><span>性能调优</span></div>
+          </a>
+          <a class="related-post-card" href="github-actions-advanced.html">
+            <div class="related-post-card-title">GitHub Actions 高级工作流：CI/CD 最佳实践</div>
+            <div class="related-post-card-tags"><span>DevOps</span><span>GitHub Actions</span><span>CI/CD</span></div>
+          </a>
+          <a class="related-post-card" href="docker-compose-best-practices.html">
+            <div class="related-post-card-title">Docker Compose 最佳实践</div>
+            <div class="related-post-card-tags"><span>Docker</span><span>Docker Compose</span><span>容器化</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
 
         <p>本文面向有一两台服务器运维需求的技术读者：想跑个人网站、自建服务、代理网关或开发测试环境的程序员。前置条件：会用命令行、有一个支持 SSH 的终端、准备一张可国际支付的银行卡（或对应厂商支持的支付方式）。如果你手头的问题就是「某个场景该买什么配置」，本站旧文《VPS 选购与使用指南：五个常见场景的配置与避坑》已经覆盖；SSH 加固的深度步骤另有《云服务器 SSH 安全加固完整指南》。本文补上的是另一半：厂商横向盘点、选型维度、从下单到日常运维的完整操作线，术语全文统一用 VPS。</p>
 <h2>重新认识为什么还要自己管一台 VPS</h2>
@@ -487,7 +516,6 @@ vmstat 1 5               # si/so 持续非零且 swap 繁忙 → 内存被超卖
     </div>
   </footer>
 
-  <script defer src="../../assets/js/related-posts.js"></script>
   <script defer src="../../assets/js/main.js"></script>
   <script defer src="../../assets/js/article.js"></script>
   <script defer src="../../assets/js/share.js"></script>
