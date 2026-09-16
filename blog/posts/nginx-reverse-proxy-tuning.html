@@ -12,7 +12,7 @@
     <meta property="og:description" content="Nginx 反向代理生产级调优指南：worker 配置、SSL 优化、缓存策略、负载均衡、限流与监控完整实践">
     <meta property="og:url" content="https://709527.xyz/blog/posts/nginx-reverse-proxy-tuning.html">
     <meta property="og:type" content="article">
-        <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
+    <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
     <meta property="og:site_name" content="loczb">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Nginx 反向代理性能调优：从入门到生产 | 张小猛 - loczb">
@@ -138,6 +138,38 @@
           </details>
         </div>
         <!-- /Series Card Widget -->
+
+        
+        
+
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="choosing-and-running-a-vps.html">
+            <div class="related-post-card-title">主流 VPS 的选择和使用</div>
+            <div class="related-post-card-tags"><span>VPS</span><span>DevOps</span><span>运维</span></div>
+          </a>
+          <a class="related-post-card" href="从-openclaw-到-hermesai-agent-工作区迁移完整记录.html">
+            <div class="related-post-card-title">从 OpenClaw 到 Hermes：AI Agent 工作区迁移完整记录</div>
+            <div class="related-post-card-tags"><span>OpenClaw</span><span>Hermes</span><span>AI Agent</span></div>
+          </a>
+          <a class="related-post-card" href="nextjs-prisma-部署-vercel-常见踩坑外键约束与构建时数据修复.html">
+            <div class="related-post-card-title">Next.js + Prisma 部署 Vercel 常见踩坑：外键约束与构建时数据修复</div>
+            <div class="related-post-card-tags"><span>Next.js</span><span>Prisma</span><span>Vercel</span></div>
+          </a>
+          <a class="related-post-card" href="github-actions-advanced.html">
+            <div class="related-post-card-title">GitHub Actions 高级工作流：CI/CD 最佳实践</div>
+            <div class="related-post-card-tags"><span>DevOps</span><span>GitHub Actions</span><span>CI/CD</span></div>
+          </a>
+          <a class="related-post-card" href="docker-compose-best-practices.html">
+            <div class="related-post-card-title">Docker Compose 最佳实践</div>
+            <div class="related-post-card-tags"><span>Docker</span><span>Docker Compose</span><span>容器化</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
 
         <p>Nginx 作为反向代理几乎是现代 Web 架构的标配。但很多人止步于 <code>proxy_pass</code> 的基本配置，默认参数跑起来能工作，一上量就出问题——502 频发、SSL 握手拖慢首字节、缓存没命中反而多了一跳、限流太粗暴误杀正常用户。</p>
 
@@ -997,6 +1029,29 @@ scrape_configs:
       <div class="tip-box">
         <strong>一句话总结</strong>：Nginx 反向代理调优的核心公式——<code>worker 调度最大化</code> + <code>连接复用（keepalive）</code> + <code>SSL 会话复用</code> + <code>缓存防击穿</code> + <code>压缩减带宽</code> + <code>限流保后端</code> + <code>监控看全局</code>。每一层省 10%，整体就是数量级的提升。
       </div>
+
+        <!-- Post Copyright & License Card -->
+        <div class="post-copyright-card">
+          <div class="copyright-header">
+            <div class="copyright-badge">
+              <span>📜</span>
+              <span>原创与知识共享协议</span>
+            </div>
+            <button class="copyright-cite-btn" id="copy-cite-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+              </svg>
+              <span>复制 Markdown 引用</span>
+            </button>
+          </div>
+          <div class="copyright-list">
+            <div class="copyright-item"><strong>文章标题：</strong>Nginx 反向代理性能调优：从入门到生产</div>
+            <div class="copyright-item"><strong>文章作者：</strong>张小猛 · loczb</div>
+            <div class="copyright-item"><strong>永久链接：</strong><a href="https://709527.xyz/blog/posts/nginx-reverse-proxy-tuning.html">https://709527.xyz/blog/posts/nginx-reverse-proxy-tuning.html</a></div>
+            <div class="copyright-item"><strong>版权声明：</strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 国际许可协议。商业转载请联系作者获得授权，非商业转载请注明出处。</div>
+          </div>
+        </div>
       </article>
     </div>
   </main>
@@ -1041,13 +1096,12 @@ scrape_configs:
         <a href="../../blog/index.html" class="footer-link">博客</a>
         <a href="../../about/index.html" class="footer-link">关于</a>
       </div>
-<p class="footer-copyright">
+      <p class="footer-copyright">
         &copy; 2026 张小猛
       </p>
     </div>
   </footer>
 
-  <script defer src="../../assets/js/related-posts.js"></script>
   <script defer src="../../assets/js/main.js"></script>
   <script defer src="../../assets/js/article.js"></script>
   <script defer src="../../assets/js/share.js"></script>

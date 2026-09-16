@@ -19,6 +19,16 @@ const targetFiles = [
   path.join(ROOT_DIR, 'blog', 'index.html'),
 ];
 
+// 静态分页页（blog/page-N.html，与 blog/index.html 同目录）也要巡检，
+// 否则分页导航里的 page-N.html 真链接没人验可达性
+const BLOG_DIR = path.join(ROOT_DIR, 'blog');
+if (fs.existsSync(BLOG_DIR)) {
+  fs.readdirSync(BLOG_DIR)
+    .filter(f => /^page-\d+\.html$/.test(f))
+    .sort((a, b) => parseInt(a.match(/\d+/)[0], 10) - parseInt(b.match(/\d+/)[0], 10))
+    .forEach(f => targetFiles.push(path.join(BLOG_DIR, f)));
+}
+
 if (fs.existsSync(POSTS_DIR)) {
   fs.readdirSync(POSTS_DIR)
     .filter(f => f.endsWith('.html'))

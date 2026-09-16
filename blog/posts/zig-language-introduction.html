@@ -12,7 +12,7 @@
     <meta property="og:description" content="Zig 语言入门完整指南：comptime 编译期计算、Allocator 模式、错误处理、C 互操作、交叉编译与构建系统深度解析">
     <meta property="og:url" content="https://709527.xyz/blog/posts/zig-language-introduction.html">
     <meta property="og:type" content="article">
-        <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
+    <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
     <meta property="og:site_name" content="loczb">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Zig 语言入门：比 C 更安全的系统编程 | 张小猛 - loczb">
@@ -114,6 +114,33 @@
           <span class="tag">build.zig</span>
           <span class="tag">C 互操作</span>
         </div>
+
+        
+
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="rust-入局2026-年的生态全景.html">
+            <div class="related-post-card-title">Rust 入局：2026 年的生态全景</div>
+            <div class="related-post-card-tags"><span>Rust</span><span>TIOBE</span><span>系统编程</span></div>
+          </a>
+          <a class="related-post-card" href="rust-getting-started.html">
+            <div class="related-post-card-title">Rust 入门：从零到生产</div>
+            <div class="related-post-card-tags"><span>Rust</span><span>系统编程</span><span>所有权</span></div>
+          </a>
+          <a class="related-post-card" href="linux-inode-mechanism-deep-dive.html">
+            <div class="related-post-card-title">Linux inode 机制深入理解：从数据结构到实战排查</div>
+            <div class="related-post-card-tags"></div>
+          </a>
+          <a class="related-post-card" href="linux-ebpf-getting-started.html">
+            <div class="related-post-card-title">Linux eBPF 入门：内核可观测性新范式</div>
+            <div class="related-post-card-tags"><span>eBPF</span><span>Linux 内核</span><span>可观测性</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
 
         <p>如果你写 C 写了十年，厌倦了空指针崩溃、隐式转换陷阱和手动内存管理的刀尖跳舞；如果你觉得 Rust 的借用检查器和生命周期标注太过繁重，学习曲线陡峭到让人望而却步——那么 Zig 可能是你一直在找的那个平衡点。</p>
 
@@ -955,6 +982,29 @@ fn delay(cycles: u32) void {
       <div class="tip-box">
         <strong>一句话总结</strong>：Zig 是 C 的精神继任者——它保留了 C 的简洁和直接，用 <code>comptime</code> 替代宏，用 <code>?T/!T</code> 替代空指针和错误码，用 Allocator 替代裸 malloc/free，用 build.zig 替代 Makefile。如果你觉得 C 太危险、Rust 太复杂，Zig 正是中间那个甜点。
       </div>
+
+        <!-- Post Copyright & License Card -->
+        <div class="post-copyright-card">
+          <div class="copyright-header">
+            <div class="copyright-badge">
+              <span>📜</span>
+              <span>原创与知识共享协议</span>
+            </div>
+            <button class="copyright-cite-btn" id="copy-cite-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+              </svg>
+              <span>复制 Markdown 引用</span>
+            </button>
+          </div>
+          <div class="copyright-list">
+            <div class="copyright-item"><strong>文章标题：</strong>Zig 语言入门：比 C 更安全的系统编程</div>
+            <div class="copyright-item"><strong>文章作者：</strong>张小猛 · loczb</div>
+            <div class="copyright-item"><strong>永久链接：</strong><a href="https://709527.xyz/blog/posts/zig-language-introduction.html">https://709527.xyz/blog/posts/zig-language-introduction.html</a></div>
+            <div class="copyright-item"><strong>版权声明：</strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 国际许可协议。商业转载请联系作者获得授权，非商业转载请注明出处。</div>
+          </div>
+        </div>
       </article>
     </div>
   </main>
@@ -989,13 +1039,12 @@ fn delay(cycles: u32) void {
         <a href="../../blog/index.html" class="footer-link">博客</a>
         <a href="../../about/index.html" class="footer-link">关于</a>
       </div>
-<p class="footer-copyright">
+      <p class="footer-copyright">
         &copy; 2026 张小猛
       </p>
     </div>
   </footer>
 
-  <script defer src="../../assets/js/related-posts.js"></script>
   <script defer src="../../assets/js/main.js"></script>
   <script defer src="../../assets/js/article.js"></script>
   <script defer src="../../assets/js/share.js"></script>

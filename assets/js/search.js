@@ -79,12 +79,12 @@
 
   function initFuse() {
     if (!searchData.posts || !searchData.posts.length || typeof Fuse === 'undefined') return;
+    // 索引已瘦身：excerpt 不再内联（改为命中后按需拉 sidecar），故 Fuse 不再索引该字段
     fuse = new Fuse(searchData.posts, {
       keys: [
         { name: 'title', weight: 0.5 },
         { name: 'category', weight: 0.2 },
-        { name: 'tags', weight: 0.2 },
-        { name: 'excerpt', weight: 0.1 }
+        { name: 'tags', weight: 0.2 }
       ],
       threshold: 0.35,
       ignoreLocation: true,
@@ -134,7 +134,6 @@
     const scored = searchData.posts.map(post => {
       let score = 0;
       const titleLower = (post.title || '').toLowerCase();
-      const excerptLower = (post.excerpt || '').toLowerCase();
       const catLower = (post.category || '').toLowerCase();
       const tagsLower = (post.tags || []).join(' ').toLowerCase();
 
@@ -142,7 +141,6 @@
         if (titleLower.includes(term)) score += 10;
         if (catLower.includes(term)) score += 5;
         if (tagsLower.includes(term)) score += 4;
-        if (excerptLower.includes(term)) score += 2;
       }
 
       return { post, score };
@@ -306,7 +304,6 @@
     const scored = pool.map(post => {
       let score = 0;
       const titleLower = (post.title || '').toLowerCase();
-      const excerptLower = (post.excerpt || '').toLowerCase();
       const catLower = (post.category || '').toLowerCase();
       const tagsLower = (post.tags || []).join(' ').toLowerCase();
 
@@ -314,7 +311,6 @@
         if (titleLower.includes(term)) score += 10;
         if (catLower.includes(term)) score += 5;
         if (tagsLower.includes(term)) score += 4;
-        if (excerptLower.includes(term)) score += 2;
       }
 
       return { post, score };
@@ -350,7 +346,6 @@
     const isBlogDir = window.location.pathname.includes('/blog/');
     const itemsHtml = results.map((post, idx) => {
       const title = highlightText(post.title, query);
-      const excerpt = highlightText(post.excerpt, query);
       const category = escapeHtml(post.category || '');
       const date = escapeHtml(post.date || '');
       const postSlug = post.slug || (post.url || '').replace(/^blog\/posts\//, '').replace(/\.html$/, '');
@@ -360,13 +355,14 @@
         `<span style="color: var(--color-text-muted);">#${escapeHtml(tag)}</span>`
       ).join(' ');
 
+      // 摘要不再内联在索引里：先占位，由 fillExcerpts() 按需拉 sidecar 后回填（缓存）
       return `
       <a href="${href}" class="sr-item" data-index="${idx}">
         <div class="sr-title">
           <span>${title}</span>
           <span style="font-size: 0.75rem; color: var(--color-accent-primary); opacity: 0.8;">➔</span>
         </div>
-        <div class="sr-excerpt">${excerpt}</div>
+        <div class="sr-excerpt" data-meta-slug="${escapeHtml(postSlug)}"></div>
         <div class="sr-meta">
           <span>📅 ${date}</span>
           <span class="sr-category">${category}</span>
@@ -378,6 +374,28 @@
     searchResults.innerHTML = filterBar + headerHtml + itemsHtml;
     searchResults.classList.add('active');
     bindFilterChips();
+    fillExcerpts(results, query);
+  }
+
+  // 摘要按需加载：只对当前真正展示的 ≤8 条结果拉 blog/meta/{slug}.json，结果由
+  // window.LoczbMeta 缓存（同一篇文章不会重复请求）
+  let excerptToken = 0;
+
+  function fillExcerpts(results, query) {
+    if (!window.LoczbMeta) return;
+    const token = ++excerptToken;
+    results.forEach(post => {
+      const slug = post.slug || (post.url || '').replace(/^blog\/posts\//, '').replace(/\.html$/, '');
+      if (!slug) return;
+      const apply = (meta) => {
+        if (token !== excerptToken) return;
+        const el = searchResults && searchResults.querySelector(`.sr-excerpt[data-meta-slug="${slug}"]`);
+        if (el && meta && meta.description) el.innerHTML = highlightText(meta.description, query);
+      };
+      const cached = window.LoczbMeta.cached(slug);
+      if (cached) apply(cached);
+      else window.LoczbMeta.get(slug).then(apply);
+    });
   }
 
   function updateSelected() {

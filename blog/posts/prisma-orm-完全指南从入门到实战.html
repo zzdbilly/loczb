@@ -12,7 +12,7 @@
     <meta property="og:description" content="从 Prisma 的基础概念到项目实战，涵盖 Schema 设计、CRUD 操作、迁移管理、性能优化等核心话题，带你全面掌握 TypeScript 生态最流行的数据库 ORM。">
     <meta property="og:url" content="https://709527.xyz/blog/posts/prisma-orm-完全指南从入门到实战.html">
     <meta property="og:type" content="article">
-        <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
+    <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
     <meta property="og:site_name" content="loczb">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Prisma ORM 完全指南：从入门到实战 | 张小猛 - loczb">
@@ -114,6 +114,37 @@
           <span class="tag">数据库</span>
           <span class="tag">Next.js</span>
         </div>
+
+        
+
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="postgresql-从-17-到-18生产环境升级实战.html">
+            <div class="related-post-card-title">PostgreSQL 从 17 到 18：生产环境升级实战</div>
+            <div class="related-post-card-tags"><span>PostgreSQL</span><span>数据库</span><span>DevOps</span></div>
+          </a>
+          <a class="related-post-card" href="postgresql-index-optimization.html">
+            <div class="related-post-card-title">PostgreSQL 索引优化实战</div>
+            <div class="related-post-card-tags"><span>PostgreSQL</span><span>索引优化</span><span>B-Tree</span></div>
+          </a>
+          <a class="related-post-card" href="nextjs-prisma-部署-vercel-常见踩坑外键约束与构建时数据修复.html">
+            <div class="related-post-card-title">Next.js + Prisma 部署 Vercel 常见踩坑：外键约束与构建时数据修复</div>
+            <div class="related-post-card-tags"><span>Next.js</span><span>Prisma</span><span>Vercel</span></div>
+          </a>
+          <a class="related-post-card" href="sqlite-wal-performance.html">
+            <div class="related-post-card-title">SQLite 进阶：WAL 模式与性能优化</div>
+            <div class="related-post-card-tags"><span>SQLite</span><span>数据库</span><span>WAL</span></div>
+          </a>
+          <a class="related-post-card" href="react-server-components.html">
+            <div class="related-post-card-title">React Server Components 深入解析</div>
+            <div class="related-post-card-tags"><span>React</span><span>Server Components</span><span>Next.js</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
 
         <h2>为什么选择 Prisma</h2>
 <p>在现代 Node.js 和 TypeScript 后端开发中，数据库操作是一个绕不开的环节。从最早的裸 SQL 查询，到后来的 Active Record 模式（如 Sequelize、TypeORM），再到近年崛起的 Prisma，数据库 ORM 的演进路线清晰地指向了"类型安全"和"开发体验"这两个核心目标。</p>
@@ -610,6 +641,29 @@ CMD [&quot;node&quot;, &quot;dist/index.js&quot;]
 </ul>
 <p>当然，Prisma 也有它的局限性——对于超大规模的数据表（千万级+）和极度复杂的原生查询，直接使用 SQL 可能更合适。但对于绝大多数 Web 应用和中型项目，Prisma 是目前 TypeScript 生态中最值得推荐的数据库工具。</p>
 <p>如果你正在考虑为项目选择 ORM，或者从其他 ORM 迁移过来，Prisma 值得一试。从 Zest 项目的实践经验来看，它带来的类型安全和开发体验提升，是值得投入学习成本的。</p>
+
+        <!-- Post Copyright & License Card -->
+        <div class="post-copyright-card">
+          <div class="copyright-header">
+            <div class="copyright-badge">
+              <span>📜</span>
+              <span>原创与知识共享协议</span>
+            </div>
+            <button class="copyright-cite-btn" id="copy-cite-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+              </svg>
+              <span>复制 Markdown 引用</span>
+            </button>
+          </div>
+          <div class="copyright-list">
+            <div class="copyright-item"><strong>文章标题：</strong>Prisma ORM 完全指南：从入门到实战</div>
+            <div class="copyright-item"><strong>文章作者：</strong>张小猛 · loczb</div>
+            <div class="copyright-item"><strong>永久链接：</strong><a href="https://709527.xyz/blog/posts/prisma-orm-完全指南从入门到实战.html">https://709527.xyz/blog/posts/prisma-orm-完全指南从入门到实战.html</a></div>
+            <div class="copyright-item"><strong>版权声明：</strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 国际许可协议。商业转载请联系作者获得授权，非商业转载请注明出处。</div>
+          </div>
+        </div>
       </article>
     </div>
   </main>
@@ -644,13 +698,12 @@ CMD [&quot;node&quot;, &quot;dist/index.js&quot;]
         <a href="../../blog/index.html" class="footer-link">博客</a>
         <a href="../../about/index.html" class="footer-link">关于</a>
       </div>
-<p class="footer-copyright">
+      <p class="footer-copyright">
         &copy; 2026 张小猛
       </p>
     </div>
   </footer>
 
-  <script defer src="../../assets/js/related-posts.js"></script>
   <script defer src="../../assets/js/main.js"></script>
   <script defer src="../../assets/js/article.js"></script>
   <script defer src="../../assets/js/share.js"></script>

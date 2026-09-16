@@ -12,7 +12,7 @@
     <meta property="og:description" content="PG 18 带来了哪些实质性改进？增量物化视图、并行查询增强、OAuth 认证……本文用一个完整的升级记录，带你从准备工作到新特性实战，涵盖升级检查清单和常见问题排查。">
     <meta property="og:url" content="https://709527.xyz/blog/posts/postgresql-从-17-到-18生产环境升级实战.html">
     <meta property="og:type" content="article">
-        <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
+    <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
     <meta property="og:site_name" content="loczb">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="PostgreSQL 从 17 到 18：生产环境升级实战 | 张小猛 - loczb">
@@ -112,6 +112,37 @@
           <span class="tag">DevOps</span>
           <span class="tag">性能优化</span>
         </div>
+
+        
+
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="prisma-orm-完全指南从入门到实战.html">
+            <div class="related-post-card-title">Prisma ORM 完全指南：从入门到实战</div>
+            <div class="related-post-card-tags"><span>Prisma</span><span>TypeScript</span><span>PostgreSQL</span></div>
+          </a>
+          <a class="related-post-card" href="postgresql-index-optimization.html">
+            <div class="related-post-card-title">PostgreSQL 索引优化实战</div>
+            <div class="related-post-card-tags"><span>PostgreSQL</span><span>索引优化</span><span>B-Tree</span></div>
+          </a>
+          <a class="related-post-card" href="sqlite-wal-performance.html">
+            <div class="related-post-card-title">SQLite 进阶：WAL 模式与性能优化</div>
+            <div class="related-post-card-tags"><span>SQLite</span><span>数据库</span><span>WAL</span></div>
+          </a>
+          <a class="related-post-card" href="choosing-and-running-a-vps.html">
+            <div class="related-post-card-title">主流 VPS 的选择和使用</div>
+            <div class="related-post-card-tags"><span>VPS</span><span>DevOps</span><span>运维</span></div>
+          </a>
+          <a class="related-post-card" href="ai-助手定时任务投递指南从-agent-废话到-no-agent-脚本.html">
+            <div class="related-post-card-title">AI 助手定时任务投递指南：从 Agent 废话到 No-Agent 脚本</div>
+            <div class="related-post-card-tags"><span>AI</span><span>DevOps</span><span>前端</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
 
         <h2>PostgreSQL 从 17 到 18：生产升级实战</h2>
 <p>2026 年 6 月，PostgreSQL 19 Beta 1 已经发布，这意味着 PG 18 已经是经过验证的稳定版本。</p>
@@ -514,6 +545,29 @@ FROM pg_stat_activity;
 <p>对于正在考虑升级的用户，我的建议是：先在预发布环境跑一个月，把查询日志过一遍，确认没有回归问题后再上生产。</p>
 <hr />
 <p><em>发表于 2026-07-19 · 数据库 · #PostgreSQL #数据库 #DevOps #性能优化</em></p>
+
+        <!-- Post Copyright & License Card -->
+        <div class="post-copyright-card">
+          <div class="copyright-header">
+            <div class="copyright-badge">
+              <span>📜</span>
+              <span>原创与知识共享协议</span>
+            </div>
+            <button class="copyright-cite-btn" id="copy-cite-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+              </svg>
+              <span>复制 Markdown 引用</span>
+            </button>
+          </div>
+          <div class="copyright-list">
+            <div class="copyright-item"><strong>文章标题：</strong>PostgreSQL 从 17 到 18：生产环境升级实战</div>
+            <div class="copyright-item"><strong>文章作者：</strong>张小猛 · loczb</div>
+            <div class="copyright-item"><strong>永久链接：</strong><a href="https://709527.xyz/blog/posts/postgresql-从-17-到-18生产环境升级实战.html">https://709527.xyz/blog/posts/postgresql-从-17-到-18生产环境升级实战.html</a></div>
+            <div class="copyright-item"><strong>版权声明：</strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 国际许可协议。商业转载请联系作者获得授权，非商业转载请注明出处。</div>
+          </div>
+        </div>
       </article>
     </div>
   </main>
@@ -548,13 +602,12 @@ FROM pg_stat_activity;
         <a href="../../blog/index.html" class="footer-link">博客</a>
         <a href="../../about/index.html" class="footer-link">关于</a>
       </div>
-<p class="footer-copyright">
+      <p class="footer-copyright">
         &copy; 2026 张小猛
       </p>
     </div>
   </footer>
 
-  <script defer src="../../assets/js/related-posts.js"></script>
   <script defer src="../../assets/js/main.js"></script>
   <script defer src="../../assets/js/article.js"></script>
   <script defer src="../../assets/js/share.js"></script>

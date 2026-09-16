@@ -12,7 +12,7 @@
     <meta property="og:description" content="系统梳理 Gradle 构建加速的完整方法论——配置调优、KAPT迁移KSP、增量编译、模块化拆分、远程缓存、CI优化，附真实项目优化案例，构建时间减少85%">
     <meta property="og:url" content="https://709527.xyz/blog/posts/gradle-build-acceleration-5min-to-30sec.html">
     <meta property="og:type" content="article">
-        <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
+    <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
     <meta property="og:site_name" content="loczb">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Gradle 构建加速全攻略：从 5 分钟到 30 秒 | 张小猛 - loczb">
@@ -133,6 +133,38 @@
           </details>
         </div>
         <!-- /Series Card Widget -->
+
+        
+        
+
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="android-testing-playbook.html">
+            <div class="related-post-card-title">别再从 Espresso 开始：Android 测试分层实战手册</div>
+            <div class="related-post-card-tags"><span>Android</span><span>测试</span><span>Kotlin</span></div>
+          </a>
+          <a class="related-post-card" href="jetpack-compose-性能优化实战从卡顿到丝滑的-12-个技巧.html">
+            <div class="related-post-card-title">Jetpack Compose 性能优化实战：从卡顿到丝滑的 12 个技巧</div>
+            <div class="related-post-card-tags"><span>Jetpack Compose</span><span>Android</span><span>性能优化</span></div>
+          </a>
+          <a class="related-post-card" href="gradle-构建加速全攻略从-5-分钟到-30-秒.html">
+            <div class="related-post-card-title">Gradle 构建加速全攻略：从 5 分钟到 30 秒</div>
+            <div class="related-post-card-tags"><span>Gradle</span><span>Android</span><span>构建优化</span></div>
+          </a>
+          <a class="related-post-card" href="android-15-privacy-media-visual-permission.html">
+            <div class="related-post-card-title">Android 15 隐私新特性：所有文件都需要 MEDIA_VISUAL_PERMISSION</div>
+            <div class="related-post-card-tags"><span>Android</span><span>隐私</span><span>Android 15</span></div>
+          </a>
+          <a class="related-post-card" href="android-16-foreground-service-constraints.html">
+            <div class="related-post-card-title">Android 16 前台服务类型全新限制：类型强制匹配与迁移指南</div>
+            <div class="related-post-card-tags"><span>Android 16</span><span>前台服务</span><span>后台任务</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
 
         <blockquote>
 <p>"等构建"是 Android 开发者最浪费时间的事情之一。一个中型项目，冷构建动辄 3-5 分钟，热构建也要 30 秒以上，一天下来光等构建就消耗半小时。本文系统梳理 Gradle 构建加速的完整方法论——从配置调优到架构改造，从本地缓存到远程缓存，手把手带你把构建时间压缩到极致。</p>
@@ -899,6 +931,29 @@ CI PR 检查      12 分钟         4 分 30 秒     -63%
 - <em>《Gradle in Action》— Benjamin Muschko</em>
 - <em>Google I/O 2025 — What's new in Android Gradle Plugin</em>
 - <em>Gradle Build Cache 最佳实践</em></p>
+
+        <!-- Post Copyright & License Card -->
+        <div class="post-copyright-card">
+          <div class="copyright-header">
+            <div class="copyright-badge">
+              <span>📜</span>
+              <span>原创与知识共享协议</span>
+            </div>
+            <button class="copyright-cite-btn" id="copy-cite-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+              </svg>
+              <span>复制 Markdown 引用</span>
+            </button>
+          </div>
+          <div class="copyright-list">
+            <div class="copyright-item"><strong>文章标题：</strong>Gradle 构建加速全攻略：从 5 分钟到 30 秒</div>
+            <div class="copyright-item"><strong>文章作者：</strong>张小猛 · loczb</div>
+            <div class="copyright-item"><strong>永久链接：</strong><a href="https://709527.xyz/blog/posts/gradle-build-acceleration-5min-to-30sec.html">https://709527.xyz/blog/posts/gradle-build-acceleration-5min-to-30sec.html</a></div>
+            <div class="copyright-item"><strong>版权声明：</strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 国际许可协议。商业转载请联系作者获得授权，非商业转载请注明出处。</div>
+          </div>
+        </div>
       </article>
     </div>
   </main>
@@ -947,13 +1002,12 @@ CI PR 检查      12 分钟         4 分 30 秒     -63%
         <a href="../../blog/index.html" class="footer-link">博客</a>
         <a href="../../about/index.html" class="footer-link">关于</a>
       </div>
-<p class="footer-copyright">
+      <p class="footer-copyright">
         &copy; 2026 张小猛
       </p>
     </div>
   </footer>
 
-  <script defer src="../../assets/js/related-posts.js"></script>
   <script defer src="../../assets/js/main.js"></script>
   <script defer src="../../assets/js/article.js"></script>
   <script defer src="../../assets/js/share.js"></script>

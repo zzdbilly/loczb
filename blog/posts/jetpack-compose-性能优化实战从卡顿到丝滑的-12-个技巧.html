@@ -12,7 +12,7 @@
     <meta property="og:description" content="全面梳理 Jetpack Compose 性能优化的核心技巧，涵盖重组优化、状态管理、延迟布局、图片加载、基线配置文件等实战经验">
     <meta property="og:url" content="https://709527.xyz/blog/posts/jetpack-compose-性能优化实战从卡顿到丝滑的-12-个技巧.html">
     <meta property="og:type" content="article">
-        <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
+    <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
     <meta property="og:site_name" content="loczb">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Jetpack Compose 性能优化实战：从卡顿到丝滑的 12 个技巧 | 张小猛 - loczb">
@@ -114,6 +114,37 @@
           <span class="tag">UI</span>
           <span class="tag">重组</span>
         </div>
+
+        
+
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="compose-april-2026-update.html">
+            <div class="related-post-card-title">Jetpack Compose April 2026 Update 深度解读</div>
+            <div class="related-post-card-tags"><span>Jetpack Compose</span><span>Android</span><span>Compose Multiplatform</span></div>
+          </a>
+          <a class="related-post-card" href="jetpack-compose-animation.html">
+            <div class="related-post-card-title">Jetpack Compose 动画实战</div>
+            <div class="related-post-card-tags"><span>Jetpack Compose</span><span>Android</span><span>动画</span></div>
+          </a>
+          <a class="related-post-card" href="android-testing-playbook.html">
+            <div class="related-post-card-title">别再从 Espresso 开始：Android 测试分层实战手册</div>
+            <div class="related-post-card-tags"><span>Android</span><span>测试</span><span>Kotlin</span></div>
+          </a>
+          <a class="related-post-card" href="gradle-构建加速全攻略从-5-分钟到-30-秒.html">
+            <div class="related-post-card-title">Gradle 构建加速全攻略：从 5 分钟到 30 秒</div>
+            <div class="related-post-card-tags"><span>Gradle</span><span>Android</span><span>构建优化</span></div>
+          </a>
+          <a class="related-post-card" href="android-performance-optimization.html">
+            <div class="related-post-card-title">Android 性能优化完整实战：从启动到渲染</div>
+            <div class="related-post-card-tags"><span>Android</span><span>性能优化</span><span>启动优化</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
 
         <h2>为什么 Compose 需要性能优化</h2>
 <p>Jetpack Compose 自 2021 年稳定版发布以来，已成为 Android UI 开发的主流选择。声明式 UI 范式让代码更简洁、状态管理更清晰，但也带来了新的性能挑战。很多团队在从 XML 迁移到 Compose 后，发现列表滑动偶现掉帧、复杂页面初始化慢、动画不够流畅——这些都是声明式框架特有的性能陷阱。</p>
@@ -747,6 +778,29 @@ Box(
 </ol>
 <p>Compose 的性能模型更接近 React/Vue 而非传统的 Android View，理解"声明式 UI 的性能心智模型"比记住具体 API 更重要。当你掌握了这些技巧，Compose 的 UI 从"能用"变成"丝滑"，用户的感知是直观的——页面"不卡了"、"流畅多了"。</p>
 <p>这些优化不仅适用于 Compose，Compose Multiplatform 在多平台场景下更需要这些实践——因为桌面端用户对卡顿比移动端更敏感。一次优化，全平台受益。</p>
+
+        <!-- Post Copyright & License Card -->
+        <div class="post-copyright-card">
+          <div class="copyright-header">
+            <div class="copyright-badge">
+              <span>📜</span>
+              <span>原创与知识共享协议</span>
+            </div>
+            <button class="copyright-cite-btn" id="copy-cite-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+              </svg>
+              <span>复制 Markdown 引用</span>
+            </button>
+          </div>
+          <div class="copyright-list">
+            <div class="copyright-item"><strong>文章标题：</strong>Jetpack Compose 性能优化实战：从卡顿到丝滑的 12 个技巧</div>
+            <div class="copyright-item"><strong>文章作者：</strong>张小猛 · loczb</div>
+            <div class="copyright-item"><strong>永久链接：</strong><a href="https://709527.xyz/blog/posts/jetpack-compose-性能优化实战从卡顿到丝滑的-12-个技巧.html">https://709527.xyz/blog/posts/jetpack-compose-性能优化实战从卡顿到丝滑的-12-个技巧.html</a></div>
+            <div class="copyright-item"><strong>版权声明：</strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 国际许可协议。商业转载请联系作者获得授权，非商业转载请注明出处。</div>
+          </div>
+        </div>
       </article>
     </div>
   </main>
@@ -781,13 +835,12 @@ Box(
         <a href="../../blog/index.html" class="footer-link">博客</a>
         <a href="../../about/index.html" class="footer-link">关于</a>
       </div>
-<p class="footer-copyright">
+      <p class="footer-copyright">
         &copy; 2026 张小猛
       </p>
     </div>
   </footer>
 
-  <script defer src="../../assets/js/related-posts.js"></script>
   <script defer src="../../assets/js/main.js"></script>
   <script defer src="../../assets/js/article.js"></script>
   <script defer src="../../assets/js/share.js"></script>

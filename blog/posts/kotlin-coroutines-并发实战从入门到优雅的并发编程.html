@@ -12,7 +12,7 @@
     <meta property="og:description" content="深入掌握 Kotlin 协程：协程与线程的区别、Scope、Dispatcher、结构化并发、取消协作、异常处理与并发控制实战">
     <meta property="og:url" content="https://709527.xyz/blog/posts/kotlin-coroutines-并发实战从入门到优雅的并发编程.html">
     <meta property="og:type" content="article">
-        <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
+    <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
     <meta property="og:site_name" content="loczb">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Kotlin Coroutines 并发实战：从入门到优雅的并发编程 | 张小猛 - loczb">
@@ -138,6 +138,38 @@
           </details>
         </div>
         <!-- /Series Card Widget -->
+
+        
+        
+
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="kotlin-scope-functions-实战选择五个函数一个决策树.html">
+            <div class="related-post-card-title">Kotlin Scope Functions 实战选择：五个函数一个决策树</div>
+            <div class="related-post-card-tags"><span>Kotlin</span><span>Android</span><span>最佳实践</span></div>
+          </a>
+          <a class="related-post-card" href="kotlin-coroutines-best-practices.html">
+            <div class="related-post-card-title">Kotlin Coroutines 最佳实践</div>
+            <div class="related-post-card-tags"><span>Kotlin</span><span>Coroutines</span><span>异步编程</span></div>
+          </a>
+          <a class="related-post-card" href="android-testing-playbook.html">
+            <div class="related-post-card-title">别再从 Espresso 开始：Android 测试分层实战手册</div>
+            <div class="related-post-card-tags"><span>Android</span><span>测试</span><span>Kotlin</span></div>
+          </a>
+          <a class="related-post-card" href="compose-navigation-guide.html">
+            <div class="related-post-card-title">Jetpack Compose Navigation 进阶指南：从路由设计到深层链接</div>
+            <div class="related-post-card-tags"><span>Jetpack Compose</span><span>Android</span><span>Navigation</span></div>
+          </a>
+          <a class="related-post-card" href="compose-april-2026-update.html">
+            <div class="related-post-card-title">Jetpack Compose April 2026 Update 深度解读</div>
+            <div class="related-post-card-tags"><span>Jetpack Compose</span><span>Android</span><span>Compose Multiplatform</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
 
         <h2>引言：为什么并发编程这么难又这么重要</h2>
 <p>在移动端和服务器端开发里，并发几乎是绕不开的话题。网络请求、数据库读写、图片加载、复杂的计算任务……只要涉及异步，就必然要和并发打交道。而并发之所以难，是因为它把"顺序执行"这个我们大脑最习惯的模型打破了——你不再能确定哪一行代码先跑、哪一行后跑，数据共享时的竞争条件、死锁、资源泄漏等问题也随之而来。</p>
@@ -769,6 +801,29 @@ class ApiClient(private val scope: CoroutineScope) {
 <li>并发限制用 <code>Semaphore</code>，超时用 <code>withTimeout</code>，集合并发用 <code>awaitAll</code></li>
 </ul>
 <p>进阶方向：如果你已经熟练掌握了这些基础，可以继续探索 <code>Flow</code>（响应式数据流）、Channel（协程间通信）、以及 <code>kotlinx.coroutines</code> 的协程调试工具（<code>CoroutineName</code>、<code>-Dkotlinx.coroutines.debug</code>）。并发编程是一座值得深耕的大山，而协程给了你最顺手的登山杖。希望这篇文章能帮你迈出坚实的一步。</p>
+
+        <!-- Post Copyright & License Card -->
+        <div class="post-copyright-card">
+          <div class="copyright-header">
+            <div class="copyright-badge">
+              <span>📜</span>
+              <span>原创与知识共享协议</span>
+            </div>
+            <button class="copyright-cite-btn" id="copy-cite-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+              </svg>
+              <span>复制 Markdown 引用</span>
+            </button>
+          </div>
+          <div class="copyright-list">
+            <div class="copyright-item"><strong>文章标题：</strong>Kotlin Coroutines 并发实战：从入门到优雅的并发编程</div>
+            <div class="copyright-item"><strong>文章作者：</strong>张小猛 · loczb</div>
+            <div class="copyright-item"><strong>永久链接：</strong><a href="https://709527.xyz/blog/posts/kotlin-coroutines-并发实战从入门到优雅的并发编程.html">https://709527.xyz/blog/posts/kotlin-coroutines-并发实战从入门到优雅的并发编程.html</a></div>
+            <div class="copyright-item"><strong>版权声明：</strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 国际许可协议。商业转载请联系作者获得授权，非商业转载请注明出处。</div>
+          </div>
+        </div>
       </article>
     </div>
   </main>
@@ -817,13 +872,12 @@ class ApiClient(private val scope: CoroutineScope) {
         <a href="../../blog/index.html" class="footer-link">博客</a>
         <a href="../../about/index.html" class="footer-link">关于</a>
       </div>
-<p class="footer-copyright">
+      <p class="footer-copyright">
         &copy; 2026 张小猛
       </p>
     </div>
   </footer>
 
-  <script defer src="../../assets/js/related-posts.js"></script>
   <script defer src="../../assets/js/main.js"></script>
   <script defer src="../../assets/js/article.js"></script>
   <script defer src="../../assets/js/share.js"></script>

@@ -12,7 +12,7 @@
     <meta property="og:description" content="ONNX 移动端侧模型实践：从模型转换到端侧部署的完整指南，涵盖模型优化、量化压缩、多框架推理对比">
     <meta property="og:url" content="https://709527.xyz/blog/posts/onnx-mobile-deployment.html">
     <meta property="og:type" content="article">
-        <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
+    <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
     <meta property="og:site_name" content="loczb">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="ONNX 移动端侧模型实践：从转换到部署 | 张小猛 - loczb">
@@ -112,6 +112,37 @@
           <span class="tag">Android</span>
           <span class="tag">端侧推理</span>
         </div>
+
+        
+
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="google-io-2026-recap.html">
+            <div class="related-post-card-title">Google I/O 2026 完整回顾：AI 重塑一切</div>
+            <div class="related-post-card-tags"><span>AI</span><span>Android</span><span>Google I/O</span></div>
+          </a>
+          <a class="related-post-card" href="mcp-android-integration.html">
+            <div class="related-post-card-title">MCP 协议在 Android 端的应用：AI 工具调用新范式</div>
+            <div class="related-post-card-tags"><span>Android</span><span>MCP</span><span>AI</span></div>
+          </a>
+          <a class="related-post-card" href="android-gemini-nano-integration.html">
+            <div class="related-post-card-title">Android 端侧 AI 实战：Gemini Nano 集成指南</div>
+            <div class="related-post-card-tags"><span>Android</span><span>AI</span><span>Gemini Nano</span></div>
+          </a>
+          <a class="related-post-card" href="android-testing-playbook.html">
+            <div class="related-post-card-title">别再从 Espresso 开始：Android 测试分层实战手册</div>
+            <div class="related-post-card-tags"><span>Android</span><span>测试</span><span>Kotlin</span></div>
+          </a>
+          <a class="related-post-card" href="kotlin-coroutines-并发实战从入门到优雅的并发编程.html">
+            <div class="related-post-card-title">Kotlin Coroutines 并发实战：从入门到优雅的并发编程</div>
+            <div class="related-post-card-tags"><span>Kotlin</span><span>协程</span><span>并发</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
 
         <p>随着移动端 AI 能力的不断提升，越来越多的模型开始从云端下沉到端侧运行。ONNX（Open Neural Network Exchange）作为业界主流的模型交换格式，为跨框架、跨平台的模型部署提供了便利。本文将分享 ONNX 模型在移动端部署的完整实践路径。</p>
 
@@ -409,6 +440,29 @@ class ONNXModel(private val context: Context) {
       </ol>
       
       <p>随着 NPU 的普及，端侧 AI 的潜力才刚刚开始释放。希望这篇实践总结能帮助你在移动端 AI 落地之路上少走弯路。</p>
+
+        <!-- Post Copyright & License Card -->
+        <div class="post-copyright-card">
+          <div class="copyright-header">
+            <div class="copyright-badge">
+              <span>📜</span>
+              <span>原创与知识共享协议</span>
+            </div>
+            <button class="copyright-cite-btn" id="copy-cite-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+              </svg>
+              <span>复制 Markdown 引用</span>
+            </button>
+          </div>
+          <div class="copyright-list">
+            <div class="copyright-item"><strong>文章标题：</strong>ONNX 移动端侧模型实践：从转换到部署</div>
+            <div class="copyright-item"><strong>文章作者：</strong>张小猛 · loczb</div>
+            <div class="copyright-item"><strong>永久链接：</strong><a href="https://709527.xyz/blog/posts/onnx-mobile-deployment.html">https://709527.xyz/blog/posts/onnx-mobile-deployment.html</a></div>
+            <div class="copyright-item"><strong>版权声明：</strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 国际许可协议。商业转载请联系作者获得授权，非商业转载请注明出处。</div>
+          </div>
+        </div>
       </article>
     </div>
   </main>
@@ -443,13 +497,12 @@ class ONNXModel(private val context: Context) {
         <a href="../../blog/index.html" class="footer-link">博客</a>
         <a href="../../about/index.html" class="footer-link">关于</a>
       </div>
-<p class="footer-copyright">
+      <p class="footer-copyright">
         &copy; 2026 张小猛
       </p>
     </div>
   </footer>
 
-  <script defer src="../../assets/js/related-posts.js"></script>
   <script defer src="../../assets/js/main.js"></script>
   <script defer src="../../assets/js/article.js"></script>
   <script defer src="../../assets/js/share.js"></script>

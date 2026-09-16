@@ -12,7 +12,7 @@
     <meta property="og:description" content="Vercel 构建时 prisma db push 失败，外键约束报错怎么办？本文完整复盘一次真实的部署失败案例，从根因分析到构建时数据修复方案。">
     <meta property="og:url" content="https://709527.xyz/blog/posts/nextjs-prisma-部署-vercel-常见踩坑外键约束与构建时数据修复.html">
     <meta property="og:type" content="article">
-        <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
+    <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
     <meta property="og:site_name" content="loczb">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Next.js + Prisma 部署 Vercel 常见踩坑：外键约束与构建时数据修复 | 张小猛 - loczb">
@@ -113,6 +113,37 @@
           <span class="tag">部署</span>
           <span class="tag">DevOps</span>
         </div>
+
+        
+
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="prisma-orm-完全指南从入门到实战.html">
+            <div class="related-post-card-title">Prisma ORM 完全指南：从入门到实战</div>
+            <div class="related-post-card-tags"><span>Prisma</span><span>TypeScript</span><span>PostgreSQL</span></div>
+          </a>
+          <a class="related-post-card" href="choosing-and-running-a-vps.html">
+            <div class="related-post-card-title">主流 VPS 的选择和使用</div>
+            <div class="related-post-card-tags"><span>VPS</span><span>DevOps</span><span>运维</span></div>
+          </a>
+          <a class="related-post-card" href="从-openclaw-到-hermesai-agent-工作区迁移完整记录.html">
+            <div class="related-post-card-title">从 OpenClaw 到 Hermes：AI Agent 工作区迁移完整记录</div>
+            <div class="related-post-card-tags"><span>OpenClaw</span><span>Hermes</span><span>AI Agent</span></div>
+          </a>
+          <a class="related-post-card" href="nginx-reverse-proxy-tuning.html">
+            <div class="related-post-card-title">Nginx 反向代理性能调优：从入门到生产</div>
+            <div class="related-post-card-tags"><span>Nginx</span><span>反向代理</span><span>性能调优</span></div>
+          </a>
+          <a class="related-post-card" href="github-actions-advanced.html">
+            <div class="related-post-card-title">GitHub Actions 高级工作流：CI/CD 最佳实践</div>
+            <div class="related-post-card-tags"><span>DevOps</span><span>GitHub Actions</span><span>CI/CD</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
 
         <p>将 Next.js + Prisma 项目部署到 Vercel 时，构建阶段的数据库操作常常踩坑。本文记录了一次真实的外键约束失败案例，从问题定位到根因分析再到解决方案，完整复盘整个过程。</p>
 <h2>问题背景</h2>
@@ -387,6 +418,29 @@ DELETE FROM habits WHERE id = 'default';
 <p>这次踩坑的核心教训是：<strong>Prisma 的外键约束在 schema 变动时会全局重算</strong>。你以为只改了 Badge 模型，实际上 <code>db push</code> 会重新验证所有模型的外键完整性。</p>
 <p>解决方案的关键思想是 <strong>构建时数据修复</strong>：在 CI/CD 的 build 阶段，schema 同步之前，先执行幂等的修复 SQL 确保数据一致性。这是一种通用的 CI/CD 模式，不限于 Prisma 或 Vercel。</p>
 <p>更长期的解决方案是做好数据迁移，将占位符数据（如 <code>habit_id = "default"</code>）替换为真实的数据关系，然后移除修复 SQL，保持构建流程的简洁。</p>
+
+        <!-- Post Copyright & License Card -->
+        <div class="post-copyright-card">
+          <div class="copyright-header">
+            <div class="copyright-badge">
+              <span>📜</span>
+              <span>原创与知识共享协议</span>
+            </div>
+            <button class="copyright-cite-btn" id="copy-cite-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+              </svg>
+              <span>复制 Markdown 引用</span>
+            </button>
+          </div>
+          <div class="copyright-list">
+            <div class="copyright-item"><strong>文章标题：</strong>Next.js + Prisma 部署 Vercel 常见踩坑：外键约束与构建时数据修复</div>
+            <div class="copyright-item"><strong>文章作者：</strong>张小猛 · loczb</div>
+            <div class="copyright-item"><strong>永久链接：</strong><a href="https://709527.xyz/blog/posts/nextjs-prisma-部署-vercel-常见踩坑外键约束与构建时数据修复.html">https://709527.xyz/blog/posts/nextjs-prisma-部署-vercel-常见踩坑外键约束与构建时数据修复.html</a></div>
+            <div class="copyright-item"><strong>版权声明：</strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 国际许可协议。商业转载请联系作者获得授权，非商业转载请注明出处。</div>
+          </div>
+        </div>
       </article>
     </div>
   </main>
@@ -421,13 +475,12 @@ DELETE FROM habits WHERE id = 'default';
         <a href="../../blog/index.html" class="footer-link">博客</a>
         <a href="../../about/index.html" class="footer-link">关于</a>
       </div>
-<p class="footer-copyright">
+      <p class="footer-copyright">
         &copy; 2026 张小猛
       </p>
     </div>
   </footer>
 
-  <script defer src="../../assets/js/related-posts.js"></script>
   <script defer src="../../assets/js/main.js"></script>
   <script defer src="../../assets/js/article.js"></script>
   <script defer src="../../assets/js/share.js"></script>
@@ -457,7 +510,7 @@ DELETE FROM habits WHERE id = 'default';
         <div class="post-info-label">文章信息</div>
         <div class="post-info-stat"><span class="post-info-stat-label">📅 发布日期</span><span class="post-info-stat-value">2026-08-01</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label">⏱️ 阅读时间</span><span class="post-info-stat-value">5 min read</span></div>
-        <div class="post-info-stat"><span class="post-info-stat-label">📝 文章字数</span><span class="post-info-stat-value">2366 字</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label">📝 文章字数</span><span class="post-info-stat-value">2363 字</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label">📊 章节数</span><span class="post-info-stat-value">8 节 · 16 子节</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label">💻 代码块</span><span class="post-info-stat-value">13 段</span></div>
       </div>

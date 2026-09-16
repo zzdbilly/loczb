@@ -12,7 +12,7 @@
     <meta property="og:description" content="SQLite 进阶：WAL 模式原理、性能优化技巧、并发处理、索引策略、PRAGMA 配置详解">
     <meta property="og:url" content="https://709527.xyz/blog/posts/sqlite-wal-performance.html">
     <meta property="og:type" content="article">
-        <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
+    <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
     <meta property="og:site_name" content="loczb">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="SQLite 进阶：WAL 模式与性能优化 | 张小猛 - loczb">
@@ -136,6 +136,38 @@
           </details>
         </div>
         <!-- /Series Card Widget -->
+
+        
+        
+
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="postgresql-从-17-到-18生产环境升级实战.html">
+            <div class="related-post-card-title">PostgreSQL 从 17 到 18：生产环境升级实战</div>
+            <div class="related-post-card-tags"><span>PostgreSQL</span><span>数据库</span><span>DevOps</span></div>
+          </a>
+          <a class="related-post-card" href="prisma-orm-完全指南从入门到实战.html">
+            <div class="related-post-card-title">Prisma ORM 完全指南：从入门到实战</div>
+            <div class="related-post-card-tags"><span>Prisma</span><span>TypeScript</span><span>PostgreSQL</span></div>
+          </a>
+          <a class="related-post-card" href="postgresql-index-optimization.html">
+            <div class="related-post-card-title">PostgreSQL 索引优化实战</div>
+            <div class="related-post-card-tags"><span>PostgreSQL</span><span>索引优化</span><span>B-Tree</span></div>
+          </a>
+          <a class="related-post-card" href="jetpack-compose-性能优化实战从卡顿到丝滑的-12-个技巧.html">
+            <div class="related-post-card-title">Jetpack Compose 性能优化实战：从卡顿到丝滑的 12 个技巧</div>
+            <div class="related-post-card-tags"><span>Jetpack Compose</span><span>Android</span><span>性能优化</span></div>
+          </a>
+          <a class="related-post-card" href="web-worker-与前端多线程开发把主线程从繁重计算中解放出来.html">
+            <div class="related-post-card-title">Web Worker 与前端多线程开发：把主线程从繁重计算中解放出来</div>
+            <div class="related-post-card-tags"><span>前端</span><span>前端开发</span><span>JavaScript</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
 
         <p>SQLite 是世界上最广泛使用的嵌入式数据库，但很多人只知道基础用法。合理配置 WAL 模式、索引、PRAGMA 参数后，SQLite 的性能可以媲美甚至超越传统数据库。本文深入 SQLite 的高级特性与优化技巧。</p>
 
@@ -526,6 +558,29 @@ PRAGMA temp_store = MEMORY;
 PRAGMA busy_timeout = 5000;
 PRAGMA foreign_keys = ON;</pre>
       </div>
+
+        <!-- Post Copyright & License Card -->
+        <div class="post-copyright-card">
+          <div class="copyright-header">
+            <div class="copyright-badge">
+              <span>📜</span>
+              <span>原创与知识共享协议</span>
+            </div>
+            <button class="copyright-cite-btn" id="copy-cite-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+              </svg>
+              <span>复制 Markdown 引用</span>
+            </button>
+          </div>
+          <div class="copyright-list">
+            <div class="copyright-item"><strong>文章标题：</strong>SQLite 进阶：WAL 模式与性能优化</div>
+            <div class="copyright-item"><strong>文章作者：</strong>张小猛 · loczb</div>
+            <div class="copyright-item"><strong>永久链接：</strong><a href="https://709527.xyz/blog/posts/sqlite-wal-performance.html">https://709527.xyz/blog/posts/sqlite-wal-performance.html</a></div>
+            <div class="copyright-item"><strong>版权声明：</strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 国际许可协议。商业转载请联系作者获得授权，非商业转载请注明出处。</div>
+          </div>
+        </div>
       </article>
     </div>
   </main>
@@ -574,13 +629,12 @@ PRAGMA foreign_keys = ON;</pre>
         <a href="../../blog/index.html" class="footer-link">博客</a>
         <a href="../../about/index.html" class="footer-link">关于</a>
       </div>
-<p class="footer-copyright">
+      <p class="footer-copyright">
         &copy; 2026 张小猛
       </p>
     </div>
   </footer>
 
-  <script defer src="../../assets/js/related-posts.js"></script>
   <script defer src="../../assets/js/main.js"></script>
   <script defer src="../../assets/js/article.js"></script>
   <script defer src="../../assets/js/share.js"></script>

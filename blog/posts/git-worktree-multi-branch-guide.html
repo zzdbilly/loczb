@@ -12,7 +12,7 @@
     <meta property="og:description" content="Git Worktree 让你同时检出多个分支，切换零成本，告别 stash 和冲突的烦恼。本文详解 worktree 的使用场景和最佳实践。">
     <meta property="og:url" content="https://709527.xyz/blog/posts/git-worktree-multi-branch-guide.html">
     <meta property="og:type" content="article">
-        <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
+    <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
     <meta property="og:site_name" content="loczb">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Git Worktree 高效多分支开发指南 | 张小猛 - loczb">
@@ -111,6 +111,37 @@
           <span class="tag">效率工具</span>
         </div>
 
+        
+
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="git-advanced-techniques.html">
+            <div class="related-post-card-title">Git 高级技巧：变基、挑拣和交互式暂存</div>
+            <div class="related-post-card-tags"><span>Git</span><span>版本控制</span><span>开发技巧</span></div>
+          </a>
+          <a class="related-post-card" href="cursor-rules-guide.html">
+            <div class="related-post-card-title">Cursor Rules 实战：自定义 AI 代码助手的进阶指南</div>
+            <div class="related-post-card-tags"><span>Cursor</span><span>AI编程</span><span>效率工具</span></div>
+          </a>
+          <a class="related-post-card" href="ai-code-editor-review-cursor-windsurf-copilot.html">
+            <div class="related-post-card-title">AI 代码编辑器深度横评：Cursor vs Windsurf vs Copilot</div>
+            <div class="related-post-card-tags"><span>AI</span><span>AI 工具</span><span>开发技巧</span></div>
+          </a>
+          <a class="related-post-card" href="技术文档编写指南写出别人真的会看的文档.html">
+            <div class="related-post-card-title">技术文档编写指南写出别人真的会看的文档</div>
+            <div class="related-post-card-tags"><span>技术写作</span><span>文档规范</span><span>工程实践</span></div>
+          </a>
+          <a class="related-post-card" href="ai-助手定时任务投递指南从-agent-废话到-no-agent-脚本.html">
+            <div class="related-post-card-title">AI 助手定时任务投递指南：从 Agent 废话到 No-Agent 脚本</div>
+            <div class="related-post-card-tags"><span>AI</span><span>DevOps</span><span>前端</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
+
         <p>在日常开发中，我们经常面临这样的场景：正在 A 分支上写代码，突然需要切到 B 分支修一个紧急 bug。这时候要么 stash 当前工作（然后忘记它），要么提交半成品。Git Worktree 优雅解决了这个问题。</p>
 
 <h2 id="what">什么是 Git Worktree</h2>
@@ -177,6 +208,29 @@ git worktree add ../pr-review-3 pr/feature-c</code></pre>
 <h2 id="conclusion">总结</h2>
 
 <p>Git Worktree 是每个开发者都应该掌握的高效技巧。它解决了多分支并行开发的核心痛点，尤其适合需要频繁切分支修 hotfix 的场景。下次遇到切分支需求时，试试 <code>git worktree add</code>，你会爱上这个功能。</p>
+
+        <!-- Post Copyright & License Card -->
+        <div class="post-copyright-card">
+          <div class="copyright-header">
+            <div class="copyright-badge">
+              <span>📜</span>
+              <span>原创与知识共享协议</span>
+            </div>
+            <button class="copyright-cite-btn" id="copy-cite-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+              </svg>
+              <span>复制 Markdown 引用</span>
+            </button>
+          </div>
+          <div class="copyright-list">
+            <div class="copyright-item"><strong>文章标题：</strong>Git Worktree 高效多分支开发指南</div>
+            <div class="copyright-item"><strong>文章作者：</strong>张小猛 · loczb</div>
+            <div class="copyright-item"><strong>永久链接：</strong><a href="https://709527.xyz/blog/posts/git-worktree-multi-branch-guide.html">https://709527.xyz/blog/posts/git-worktree-multi-branch-guide.html</a></div>
+            <div class="copyright-item"><strong>版权声明：</strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 国际许可协议。商业转载请联系作者获得授权，非商业转载请注明出处。</div>
+          </div>
+        </div>
       </article>
     </div>
   </main>
@@ -211,13 +265,12 @@ git worktree add ../pr-review-3 pr/feature-c</code></pre>
         <a href="../../blog/index.html" class="footer-link">博客</a>
         <a href="../../about/index.html" class="footer-link">关于</a>
       </div>
-<p class="footer-copyright">
+      <p class="footer-copyright">
         &copy; 2026 张小猛
       </p>
     </div>
   </footer>
 
-  <script defer src="../../assets/js/related-posts.js"></script>
   <script defer src="../../assets/js/main.js"></script>
   <script defer src="../../assets/js/article.js"></script>
   <script defer src="../../assets/js/share.js"></script>

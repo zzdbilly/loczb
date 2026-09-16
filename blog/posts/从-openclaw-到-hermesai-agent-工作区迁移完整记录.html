@@ -12,7 +12,7 @@
     <meta property="og:description" content="一次真实的 AI Agent 平台迁移复盘：身份、记忆、技能、项目与定时任务的全量迁移方向、踩坑与验证方法">
     <meta property="og:url" content="https://709527.xyz/blog/posts/从-openclaw-到-hermesai-agent-工作区迁移完整记录.html">
     <meta property="og:type" content="article">
-        <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
+    <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
     <meta property="og:site_name" content="loczb">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="从 OpenClaw 到 Hermes：AI Agent 工作区迁移完整记录 | 张小猛 - loczb">
@@ -141,6 +141,38 @@
           </details>
         </div>
         <!-- /Series Card Widget -->
+
+        
+        
+
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="ai-agent-skill-development.html">
+            <div class="related-post-card-title">AI Agent 技能开发实战：从需求到上线的完整流程</div>
+            <div class="related-post-card-tags"><span>AI Agent</span><span>OpenClaw</span><span>Skill</span></div>
+          </a>
+          <a class="related-post-card" href="choosing-and-running-a-vps.html">
+            <div class="related-post-card-title">主流 VPS 的选择和使用</div>
+            <div class="related-post-card-tags"><span>VPS</span><span>DevOps</span><span>运维</span></div>
+          </a>
+          <a class="related-post-card" href="nextjs-prisma-部署-vercel-常见踩坑外键约束与构建时数据修复.html">
+            <div class="related-post-card-title">Next.js + Prisma 部署 Vercel 常见踩坑：外键约束与构建时数据修复</div>
+            <div class="related-post-card-tags"><span>Next.js</span><span>Prisma</span><span>Vercel</span></div>
+          </a>
+          <a class="related-post-card" href="nginx-reverse-proxy-tuning.html">
+            <div class="related-post-card-title">Nginx 反向代理性能调优：从入门到生产</div>
+            <div class="related-post-card-tags"><span>Nginx</span><span>反向代理</span><span>性能调优</span></div>
+          </a>
+          <a class="related-post-card" href="github-actions-advanced.html">
+            <div class="related-post-card-title">GitHub Actions 高级工作流：CI/CD 最佳实践</div>
+            <div class="related-post-card-tags"><span>DevOps</span><span>GitHub Actions</span><span>CI/CD</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
 
         <h2>写在前面</h2>
 <p>2026 年年中，我做了一个拖延了很久的决定：把跑了大半年的 AI Agent 工作区，从 OpenClaw 整体迁移到 Hermes Agent。</p>
@@ -591,6 +623,29 @@ grep -rl &quot;\.openclaw/workspace-xiaoma&quot; docs/ | xargs -I{} sed -i \
 </ul>
 <p>整个过程最大的感触是：<strong>平台迁移最大的敌人不是技术，是"以为搬完就完了"的侥幸心理</strong>。真正的迁移，是从验收清单全部打勾那一刻才开始的——之后每一次使用，都在检验迁移的质量。</p>
 <p>如果你也在考虑给 AI Agent 换底座，我的建议是：列清单、做备份、放双跑、留回滚，然后果断开始。迁移本身没有想象中那么可怕，可怕的是带着一屋子旧家具，永远不搬家。</p>
+
+        <!-- Post Copyright & License Card -->
+        <div class="post-copyright-card">
+          <div class="copyright-header">
+            <div class="copyright-badge">
+              <span>📜</span>
+              <span>原创与知识共享协议</span>
+            </div>
+            <button class="copyright-cite-btn" id="copy-cite-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+              </svg>
+              <span>复制 Markdown 引用</span>
+            </button>
+          </div>
+          <div class="copyright-list">
+            <div class="copyright-item"><strong>文章标题：</strong>从 OpenClaw 到 Hermes：AI Agent 工作区迁移完整记录</div>
+            <div class="copyright-item"><strong>文章作者：</strong>张小猛 · loczb</div>
+            <div class="copyright-item"><strong>永久链接：</strong><a href="https://709527.xyz/blog/posts/从-openclaw-到-hermesai-agent-工作区迁移完整记录.html">https://709527.xyz/blog/posts/从-openclaw-到-hermesai-agent-工作区迁移完整记录.html</a></div>
+            <div class="copyright-item"><strong>版权声明：</strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 国际许可协议。商业转载请联系作者获得授权，非商业转载请注明出处。</div>
+          </div>
+        </div>
       </article>
     </div>
   </main>
@@ -639,13 +694,12 @@ grep -rl &quot;\.openclaw/workspace-xiaoma&quot; docs/ | xargs -I{} sed -i \
         <a href="../../blog/index.html" class="footer-link">博客</a>
         <a href="../../about/index.html" class="footer-link">关于</a>
       </div>
-<p class="footer-copyright">
+      <p class="footer-copyright">
         &copy; 2026 张小猛
       </p>
     </div>
   </footer>
 
-  <script defer src="../../assets/js/related-posts.js"></script>
   <script defer src="../../assets/js/main.js"></script>
   <script defer src="../../assets/js/article.js"></script>
   <script defer src="../../assets/js/share.js"></script>
@@ -684,7 +738,7 @@ grep -rl &quot;\.openclaw/workspace-xiaoma&quot; docs/ | xargs -I{} sed -i \
         <div class="post-info-links">
           <a href="../../blog/index.html?tag=OpenClaw" class="post-info-link"># OpenClaw</a>
           <a href="../../blog/index.html?tag=Hermes" class="post-info-link"># Hermes</a>
-          <a href="../../blog/index.html?tag=AI Agent" class="post-info-link"># AI Agent</a>
+          <a href="../../blog/index.html?tag=AIAgent" class="post-info-link"># AI Agent</a>
           <a href="../../blog/index.html?tag=迁移" class="post-info-link"># 迁移</a>
           <a href="../../blog/index.html?tag=DevOps" class="post-info-link"># DevOps</a>
         </div>

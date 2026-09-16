@@ -12,7 +12,7 @@
     <meta property="og:description" content="Android Gradle 从 Groovy 迁移到 Kotlin DSL (KTS) 完整指南 - 语法对比、迁移步骤、踩坑记录与最佳实践">
     <meta property="og:url" content="https://709527.xyz/blog/posts/android-gradle-kts-migration.html">
     <meta property="og:type" content="article">
-        <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
+    <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
     <meta property="og:site_name" content="loczb">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Android Gradle 迁移到 KTS 完整指南：从 Groovy 到 Kotlin DSL | 张小猛 - loczb">
@@ -112,6 +112,37 @@
           <span class="tag">Kotlin DSL</span>
           <span class="tag">构建优化</span>
         </div>
+
+        
+
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="gradle-构建加速全攻略从-5-分钟到-30-秒.html">
+            <div class="related-post-card-title">Gradle 构建加速全攻略：从 5 分钟到 30 秒</div>
+            <div class="related-post-card-tags"><span>Gradle</span><span>Android</span><span>构建优化</span></div>
+          </a>
+          <a class="related-post-card" href="kotlin-coroutines-并发实战从入门到优雅的并发编程.html">
+            <div class="related-post-card-title">Kotlin Coroutines 并发实战：从入门到优雅的并发编程</div>
+            <div class="related-post-card-tags"><span>Kotlin</span><span>协程</span><span>并发</span></div>
+          </a>
+          <a class="related-post-card" href="kotlin-scope-functions-实战选择五个函数一个决策树.html">
+            <div class="related-post-card-title">Kotlin Scope Functions 实战选择：五个函数一个决策树</div>
+            <div class="related-post-card-tags"><span>Kotlin</span><span>Android</span><span>最佳实践</span></div>
+          </a>
+          <a class="related-post-card" href="kotlin-multiplatform-practice.html">
+            <div class="related-post-card-title">Kotlin Multiplatform 实战：共享业务逻辑到 iOS</div>
+            <div class="related-post-card-tags"><span>Kotlin Multiplatform</span><span>KMP</span><span>Android</span></div>
+          </a>
+          <a class="related-post-card" href="kotlin-coroutines-best-practices.html">
+            <div class="related-post-card-title">Kotlin Coroutines 最佳实践</div>
+            <div class="related-post-card-tags"><span>Kotlin</span><span>Coroutines</span><span>异步编程</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
 
         <p>Android 项目的 Gradle 构建脚本，长期以来都是用 Groovy 写的（<code>.gradle</code> 文件）。但自从 Gradle 引入 Kotlin DSL 后，越来越多的项目开始迁移到 <code>.gradle.kts</code>。Google 官方也在 Android Studio 的新项目模板中默认使用 KTS。</p>
 
@@ -806,6 +837,29 @@ android {
       </ol>
 
       <p>每一步都可以独立验证，不需要一次搞定。今天就可以开始。</p>
+
+        <!-- Post Copyright & License Card -->
+        <div class="post-copyright-card">
+          <div class="copyright-header">
+            <div class="copyright-badge">
+              <span>📜</span>
+              <span>原创与知识共享协议</span>
+            </div>
+            <button class="copyright-cite-btn" id="copy-cite-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+              </svg>
+              <span>复制 Markdown 引用</span>
+            </button>
+          </div>
+          <div class="copyright-list">
+            <div class="copyright-item"><strong>文章标题：</strong>Android Gradle 迁移到 KTS 完整指南：从 Groovy 到 Kotlin DSL</div>
+            <div class="copyright-item"><strong>文章作者：</strong>张小猛 · loczb</div>
+            <div class="copyright-item"><strong>永久链接：</strong><a href="https://709527.xyz/blog/posts/android-gradle-kts-migration.html">https://709527.xyz/blog/posts/android-gradle-kts-migration.html</a></div>
+            <div class="copyright-item"><strong>版权声明：</strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 国际许可协议。商业转载请联系作者获得授权，非商业转载请注明出处。</div>
+          </div>
+        </div>
       </article>
     </div>
   </main>
@@ -840,13 +894,12 @@ android {
         <a href="../../blog/index.html" class="footer-link">博客</a>
         <a href="../../about/index.html" class="footer-link">关于</a>
       </div>
-<p class="footer-copyright">
+      <p class="footer-copyright">
         &copy; 2026 张小猛
       </p>
     </div>
   </footer>
 
-  <script defer src="../../assets/js/related-posts.js"></script>
   <script defer src="../../assets/js/main.js"></script>
   <script defer src="../../assets/js/article.js"></script>
   <script defer src="../../assets/js/share.js"></script>
