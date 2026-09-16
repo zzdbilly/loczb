@@ -7,6 +7,14 @@
     <language>zh-CN</language>
     <atom:link href="https://709527.xyz/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>技术人员如何做好汇报</title>
+      <link>https://709527.xyz/blog/posts/how-engineers-report.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/how-engineers-report.html</guid>
+      <description>写给&quot;干活行、汇报不行&quot;的工程师：把汇报当成降低对方决策成本的产品来做，附可直接抄的四个模板。</description>
+      <category>思考</category>
+      <pubDate>Wed, 16 Sep 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
       <title>如何快速恢复能量，让自己快乐起来</title>
       <link>https://709527.xyz/blog/posts/quick-energy-recovery.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/quick-energy-recovery.html</guid>
@@ -156,14 +164,6 @@
       <guid isPermaLink="true">https://709527.xyz/blog/posts/jetpack-compose-性能优化实战从卡顿到丝滑的-12-个技巧.html</guid>
       <description>全面梳理 Jetpack Compose 性能优化的核心技巧，涵盖重组优化、状态管理、延迟布局、图片加载、基线配置文件等实战经验</description>
       <category>Android</category>
-      <pubDate>Fri, 07 Aug 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>Web Worker 与前端多线程开发：把主线程从繁重计算中解放出来</title>
-      <link>https://709527.xyz/blog/posts/web-worker-与前端多线程开发把主线程从繁重计算中解放出来.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/web-worker-与前端多线程开发把主线程从繁重计算中解放出来.html</guid>
-      <description>深入解析 Web Worker 的原理与实践，涵盖 Dedicated Worker、Shared Worker、Service Worker 的区别与使用场景，以及 Comlink、Worker 池、Transferable Objects 等进阶技巧</description>
-      <category>前端</category>
       <pubDate>Fri, 07 Aug 2026 00:00:00 +0800</pubDate>
     </item>
   </channel>
