@@ -6,7 +6,8 @@
  *   b) blog/meta/*.json 与 posts 一一对应，且 dateTime 可解析（+08:00）
  *   c) 4 个主页面（index/blog/about/projects）style.css ?v= 值一致
  *   d) search.js 在 index.html 只加载一次
- *   e) 体积门禁：articles-index.json raw ≤ 250KB；related-posts.js 全量索引必须已下线
+ *   e) 体积门禁：articles-index.json 超 250KB 只预警（非阻断），超 400KB 才阻断；
+ *      related-posts.js 全量索引必须已下线
  *   f) 静态相关文章：文章页内联的 related 块标记齐全、链接指向真实文章（每篇 ≥1 条，
  *      期望 top 5；不足 3 条只提示不阻断）
  *   g) 列表静态分页：页数 = ceil(总文章数 / 10)、每页卡片数 ∈ [1,10]、跨页 slug 不重复、
@@ -21,7 +22,9 @@ const path = require('path');
 
 const CWD = path.join(__dirname, '..');
 const POSTS_PER_PAGE = 10;
-const INDEX_MAX_BYTES = 250 * 1024;
+const INDEX_WARN_BYTES = Number(process.env.INDEX_WARN_BYTES) || 250 * 1024;   // 预警线：只提示，不阻断发文
+const INDEX_FAIL_BYTES = Number(process.env.INDEX_FAIL_BYTES) || 400 * 1024;   // 阻断线：约 1000 篇（实测 ≈407 字节/篇）
+// 两条线均可用环境变量覆盖，便于验证门禁行为：INDEX_WARN_BYTES=1024 node scripts/verify.js
 const errors = [];
 const infos = [];
 
@@ -122,8 +125,10 @@ for (const slug of metaSlugs) {
     fail('e) blog/articles-index.json 不存在');
   } else {
     const size = fs.statSync(indexPath).size;
-    if (size > INDEX_MAX_BYTES) {
-      fail(`e) 体积门禁: blog/articles-index.json ${size} 字节 > 上限 ${INDEX_MAX_BYTES} 字节（索引必须保持瘦身，禁止内联 excerpt/派生数据）`);
+    if (size > INDEX_FAIL_BYTES) {
+      fail(`e) 体积门禁: blog/articles-index.json ${size} 字节 > 阻断线 ${INDEX_FAIL_BYTES} 字节（索引必须保持瘦身，禁止内联 excerpt/派生数据；突破此线说明该改搜索/索引架构了）`);
+    } else if (size > INDEX_WARN_BYTES) {
+      infos.push(`e) 索引体积 ${size} 字节已超预警线 ${INDEX_WARN_BYTES} 字节（约 ${Math.round(size / (htmlSlugs.size || 1))} 字节/篇，${htmlSlugs.size} 篇；未阻断，但已接近需要重构索引的规模）`);
     }
   }
 
