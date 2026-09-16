@@ -1,6 +1,22 @@
 {
   "posts": [
     {
+      "slug": "how-engineers-report",
+      "title": "技术人员如何做好汇报",
+      "date": "2026-09-16",
+      "dateTime": "2026-09-16 18:05:00",
+      "category": "思考",
+      "tags": [
+        "职场",
+        "沟通",
+        "汇报",
+        "思考"
+      ],
+      "readTime": "10",
+      "excerpt": "写给\"干活行、汇报不行\"的工程师：把汇报当成降低对方决策成本的产品来做，附可直接抄的四个模板。",
+      "url": "blog/posts/how-engineers-report.html"
+    },
+    {
       "slug": "quick-energy-recovery",
       "title": "如何快速恢复能量，让自己快乐起来",
       "date": "2026-09-13",
@@ -1778,11 +1794,11 @@
       "count": 12
     },
     {
-      "tag": "Kotlin",
-      "count": 9
+      "tag": "思考",
+      "count": 10
     },
     {
-      "tag": "思考",
+      "tag": "Kotlin",
       "count": 9
     },
     {
@@ -1880,6 +1896,10 @@
     {
       "tag": "Gemini",
       "count": 3
+    },
+    {
+      "tag": "沟通",
+      "count": 2
     },
     {
       "tag": "认知科学",
@@ -2052,6 +2072,14 @@
     {
       "tag": "网络",
       "count": 2
+    },
+    {
+      "tag": "职场",
+      "count": 1
+    },
+    {
+      "tag": "汇报",
+      "count": 1
     },
     {
       "tag": "能量管理",
@@ -2331,10 +2359,6 @@
     },
     {
       "tag": "技术人成长",
-      "count": 1
-    },
-    {
-      "tag": "沟通",
       "count": 1
     },
     {
@@ -2897,8 +2921,13 @@
   "archives": [
     {
       "month": "2026-09",
-      "count": 6,
+      "count": 7,
       "posts": [
+        {
+          "title": "技术人员如何做好汇报",
+          "date": "2026-09-16",
+          "url": "blog/posts/how-engineers-report.html"
+        },
         {
           "title": "如何快速恢复能量，让自己快乐起来",
           "date": "2026-09-13",
@@ -3502,9 +3531,9 @@
     "安全"
   ],
   "stats": {
-    "totalPosts": 109,
-    "totalTags": 282,
-    "latestDate": "2026-09-13",
+    "totalPosts": 110,
+    "totalTags": 284,
+    "latestDate": "2026-09-16",
     "oldestDate": "2026-02-15"
   }
 }
