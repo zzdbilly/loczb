@@ -171,19 +171,15 @@ python3 scripts/generate-post.py "标题" "描述" \
 
 触发方式：
 - **本地**：`node scripts/generate-index.js`
-- **自动**：GitHub Actions（push 时自动运行）
+- **自动**：无 CI 触发（见第五节）——发文时由 `generate-post.py` 自动调用，回刷时由 `refresh-posts.py` 调用
 
 ---
 
-## 五、CI/CD `update-index.yml`
+## 五、CI/CD（已下线，勿按此操作）
 
-GitHub Actions 自动更新 `articles-index.json`：
-
-```
-触发条件: push 到 blog/posts/** 或 blog/index.html
-执行: node scripts/generate-index.js
-提交: github-actions[bot] 自动 git commit + push
-```
+本仓库**不再使用 GitHub Actions**：`.github/` 目录下已无 workflow，原 `update-index.yml` 于 2026-09-08 删除。
+索引重建改为**推送前本地完成**：`generate-post.py` / `refresh-posts.py` 自动调用 `generate-index.js`，末尾跑 `scripts/verify.js` 门禁，不通过则不得 push。
+因此**没有「push 后 CI 再补一次索引」的兜底**——发文/回刷必须把本地重建产物一起提交。
 
 ---
 
@@ -213,11 +209,13 @@ git push
 - ✅ 重建 `blog/index.html` + `blog/page-2..N.html` 静态分页
 - ✅ 内联全站文章的静态「相关文章」与专栏卡
 - ✅ 更新 `index.html` 大卡 + 文章列表 + JS posts 数组
-- ✅ 跑 `scripts/verify.js` 一致性门禁（含体积与分页门禁）
+- ✅ 跑 `scripts/verify.js` 一致性门禁（posts/index/meta 对账 + 主页面 ?v= 一致 + 体积门禁 + 静态相关文章 + 静态分页；非零退出即阻断 push）
+  - 体积门禁阈值：`articles-index.json` 超 **250KB 只预警**（非阻断提示）、超 **400KB 阻断**；两条线可用 `INDEX_WARN_BYTES` / `INDEX_FAIL_BYTES` 环境变量覆盖，便于验证门禁行为
+  - 当前实测 ≈440 字节/篇（110 篇 48KB），按此外推：581 篇触预警、930 篇触阻断
 
-### CI 自动完成
-- **GitHub Actions** 推送后自动运行 `generate-index.js`，确保索引最新
-- **GitHub Pages** 自动部署
+### 推送后自动完成
+- **GitHub Pages** 推送后自动构建部署（常规 1-2 分钟；若线上仍旧版，查首页 `last-modified` 判断是否漏触发构建）
+- ❌ 索引重建**不在**推送后发生（GitHub Actions 已下线，见第五节）
 
 ---
 
@@ -286,4 +284,4 @@ git push
 
 ---
 
-*文档版本 v1.1 / 2026-09-16（索引瘦身 + 列表静态分页 + 静态相关文章）*
+*文档版本 v1.2 / 2026-09-17（体积门禁改为 250KB 预警 / 400KB 阻断；修正已下线的 GitHub Actions 描述）*

@@ -58,9 +58,9 @@
 | **UI 视觉体系** | Bento Grid 2.0 + Spotlight Glow + Glassmorphism | 动态打字机、高对比度双模控制台、macOS 代码块 |
 | **专栏体系** | 6 大核心旗舰系列专栏 | 自动化专栏便当盒、全集目录折叠板、上下篇导航直达 |
 | **本地依赖** | Fuse.js / marked / DOMPurify | Vendor 本地化托管，无外链 CDN 阻塞风险 |
-| **构建与质量**| Python 3 + Node.js + check-links.js | 自动化 CI 索引重建、0 死链校验、Service Worker 同步 |
+| **构建与质量**| Python 3 + Node.js + check-links.js + verify.js 门禁 | 推送前本地重建索引、0 死链校验、一致性门禁、Service Worker 同步 |
 | **边缘计算** | Cloudflare Workers + D1 数据库 | 支撑无服务器评论系统与 AI 知识库问答 |
-| **自动化工作流**| GitHub Actions (CI/CD) | 自动化测试、构建与部署 |
+| **自动化工作流**| 本地脚本链（无 CI） | 推送前重建索引 + verify.js 门禁，GitHub Pages 自动构建部署 |
 
 ---
 
