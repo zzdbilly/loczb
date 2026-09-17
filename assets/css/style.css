@@ -18,6 +18,9 @@
   --gradient-accent: linear-gradient(135deg, var(--color-accent-primary), var(--color-accent-secondary));
   --gradient-text: linear-gradient(135deg, #6366f1, #a78bfa, #8b5cf6);
   --gradient-glow: radial-gradient(ellipse at center, var(--color-accent-glow), transparent 70%);
+  /* 固定导航实测高度（桌面/移动端一致）。各页 hero 的 padding-top 用 calc() 引用它，
+     保证首屏内容永不被 fixed nav 压住；main.js 会按真实高度再校正一次。 */
+  --nav-height: 73px;
   --color-border: rgba(255, 255, 255, 0.15);
   --color-border-hover: rgba(255, 255, 255, 0.25);
   --font-sans: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
@@ -985,8 +988,7 @@ a:hover {
   border: 0;
 }
 .about-hero {
-  padding-top: 100px;
-  padding-bottom: var(--space-3xl);
+  padding: calc(var(--nav-height) + 1.25rem) 0 var(--space-xl);
   position: relative;
   overflow: hidden;
 }
@@ -1159,7 +1161,7 @@ a:hover {
   margin-bottom: var(--space-sm);
 }
 .projects-hero {
-  padding-top: 80px;
+  padding-top: calc(var(--nav-height) + 0.5rem);
   padding-bottom: 0.5rem;
   position: relative;
   overflow: hidden;
@@ -3814,7 +3816,7 @@ pre code.hljs {
    ======================================================== */
 
 .blog-hero {
-  padding: var(--space-3xl) 0 var(--space-xl);
+  padding: calc(var(--nav-height) + 1.25rem) 0 var(--space-xl);
   position: relative;
 }
 

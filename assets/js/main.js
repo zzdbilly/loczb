@@ -14,7 +14,22 @@ document.addEventListener('DOMContentLoaded', () => {
   initSmoothScroll();
   initThemeToggle();
   initSpotlightCards();
+  initNavHeight();
 });
+
+// 把导航真实高度同步到 --nav-height：系统字体缩放/移动端工具栏变化时，
+// hero 的 padding-top（calc(var(--nav-height) + …)）会自动跟着走，避免被 fixed nav 压住。
+function initNavHeight() {
+  const nav = document.querySelector('.nav');
+  if (!nav) return;
+  const apply = () => {
+    const h = Math.round(nav.getBoundingClientRect().height);
+    if (h > 0) document.documentElement.style.setProperty('--nav-height', h + 'px');
+  };
+  apply();
+  window.addEventListener('resize', apply, { passive: true });
+  window.addEventListener('load', apply);
+}
 
 // Scroll-triggered Animations
 function initScrollAnimations() {
