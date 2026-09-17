@@ -3595,13 +3595,20 @@ body .toc-drawer .toc-h2 {
   color: var(--color-accent-primary);
   font-weight: 600;
 }
-.post-content a {
+/* 正文内链：默认无下划线，hover 时补一条。
+   ⚠️ 必须用 :where(:not(...)) 排除「卡片类链接」（自带盒模型/边框的那些）：
+   本规则会把 border-bottom 置成 transparent，卡片底边会整条消失
+   （2026-09-17 修复：相关文章卡片 .related-post-card 与分享按钮 .share-btn 的下边框看不见）。
+   新增卡片类链接时，把类名补进下面两处 :not()。
+   用 :where() 是刻意让它不贡献优先级，保持本规则仍是 (0,1,1)，
+   不会压过 .copyright-item a 这类既有规则。 */
+.post-content a:where(:not(.related-post-card)):where(:not(.share-btn)) {
   color: var(--color-accent-primary);
   text-decoration: none;
   border-bottom: 1px solid transparent;
   transition: border-color var(--transition-fast);
 }
-.post-content a:hover {
+.post-content a:where(:not(.related-post-card)):where(:not(.share-btn)):hover {
   border-bottom-color: var(--color-accent-primary);
 }
 .post-content strong {
