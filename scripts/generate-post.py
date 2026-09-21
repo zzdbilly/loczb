@@ -389,10 +389,10 @@ def parse_args(args):
         'force': False,
     }
     
-    # 快捷模式：如果直接传入一个 .md / .html 文件作为第一个参数
-    if len(args) == 1 and not args[0].startswith('--') and (args[0].endswith('.md') or args[0].endswith('.html') or os.path.isfile(args[0])):
+    # 快捷模式：首个参数是内容文件时直接用，其余参数仍可传 --force 等 flag
+    if args and not args[0].startswith('--') and (args[0].endswith('.md') or args[0].endswith('.html') or os.path.isfile(args[0])):
         params['content_file'] = args[0]
-        return params
+        args = args[1:]
 
     i = 0
     while i < len(args):
@@ -404,8 +404,9 @@ def parse_args(args):
             elif key in ('date', 'read-time', 'tags', 'category', 'series', 'content', 'text', 'slug'):
                 i += 1
                 if i < len(args):
-                    # --date 写入 article_date（main() 读取的键）；其余按 - 转 _ 映射
-                    mapped_key = 'article_date' if key == 'date' else key.replace('-', '_')
+                    # --date 写入 article_date、--content 写入 content_file（main() 读取的键）；其余按 - 转 _ 映射
+                    key_map = {'date': 'article_date', 'content': 'content_file'}
+                    mapped_key = key_map.get(key, key.replace('-', '_'))
                     params[mapped_key] = args[i]
             i += 1
         elif params['title'] is None:
