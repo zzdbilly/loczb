@@ -19,17 +19,34 @@ const SITEMAP_XML = path.join(CWD, 'sitemap.xml');
 const RSS_XML = path.join(CWD, 'rss.xml');
 const BASE_URL = 'https://709527.xyz';
 
+// 无变化不落盘：字节级比对，内容相同则跳过写盘。
+// 目的：① 避免无意义地刷 mtime（旧版 build-series 每次重建都重写文章页，
+//       会连带影响依赖 mtime 的逻辑，sitemap lastmod 注释有记录）；
+//       ② 保证「无内容变化 ⇒ git 零改动」一遍收敛。
+function writeIfChanged(filePath, content) {
+  let old = null;
+  try { old = fs.readFileSync(filePath, 'utf-8'); } catch (e) { /* 文件不存在则直接写 */ }
+  if (old === content) return false;
+  fs.writeFileSync(filePath, content, 'utf-8');
+  return true;
+}
+
 // ═══════════════════════════════════════════════
 // Phase 1: 解析所有文章
 // ═══════���═══════════════════════════════════════
 
-// 文章文件名 => 日期排序（按文件修改时间，保证稳定性）
-const fileDates = {};
+// 稳定排序锚点：读取已提交的 articles-index.json 中各 slug 的既有位次。
+// 同刻（dateTime 完全相同）的文章用「既有位次」作 tiebreaker —— 取代旧的
+// 文件 mtime 方案：mtime 在全新 checkout / CI 机器上全部≈检出时刻且顺序随机，
+// 会导致每次重建 articles-index.json / page-N / sitemap / sw.js 产生无意义的
+// 重排 diff。用既有位次后，内容不变 ⇒ 排序不变 ⇒ 一遍收敛到不动点。
+const prevOrder = {};
+try {
+  const prevIndex = JSON.parse(fs.readFileSync(OUTPUT_FILE, 'utf-8'));
+  prevIndex.posts.forEach((p, i) => { prevOrder[p.slug] = i; });
+} catch (e) { /* 首次构建/索引缺失时无锚点，退化为 slug 字典序 */ }
+
 const files = fs.readdirSync(POSTS_DIR).filter(f => f.endsWith('.html'));
-files.forEach(file => {
-  const stat = fs.statSync(path.join(POSTS_DIR, file));
-  fileDates[file] = stat.mtimeMs;
-});
 
 // 解析每篇文章
 // 元数据 sidecar（blog/meta/{slug}.json，单一真相源）优先：字段取 sidecar，
@@ -156,14 +173,17 @@ posts.forEach(p => {
   const key = p.dateTime || p.date + ' 00:00:00';
   p._ts = parseTime(key);
   if (p._ts === null) { badDates.push(p.slug); p._ts = 0; }
-  p._mt = fileDates[p.slug + '.html'] || 0;
 });
 if (badDates.length) {
   console.warn(`⚠️ 以下文章日期无法解析，已排到列表末尾: ${badDates.join(', ')}`);
 }
 posts.sort((a, b) => {
   if (a._ts !== b._ts) return b._ts - a._ts;         // 日期时间降序
-  if (a._mt !== b._mt) return b._mt - a._mt;         // 同日 → 文件 mtime
+  const ra = prevOrder[a.slug], rb = prevOrder[b.slug];
+  // 同刻 → 既有索引位次升序（锚点幂等；新文章不在索引里则排同刻已有文章之后）
+  if (ra !== undefined && rb !== undefined && ra !== rb) return ra - rb;
+  if (ra === undefined && rb !== undefined) return 1;
+  if (rb === undefined && ra !== undefined) return -1;
   return a.slug < b.slug ? -1 : a.slug > b.slug ? 1 : 0; // 再并列 → slug 字典序
 });
 
@@ -196,7 +216,7 @@ const indexData = {
   stats: { totalPosts: posts.length, totalTags: Object.keys(tagCounts).length, latestDate: posts[0]?.date || '', oldestDate: posts[posts.length - 1]?.date || '' }
 };
 
-fs.writeFileSync(OUTPUT_FILE, JSON.stringify(indexData, null, 2));
+writeIfChanged(OUTPUT_FILE, JSON.stringify(indexData, null, 2));
 console.log(`✅ articles-index.json: ${indexData.stats.totalPosts} posts, ${indexData.stats.totalTags} tags (archives/tagCloud/excerpt 已移除)`);
 
 // ═══════════════════════════════════════════════
@@ -392,7 +412,7 @@ function rebuildBlogIndex() {
   const page1 = applyPageContent(html, 1);
   if (!page1) return;
   let page1Html = applyHeadLinks(page1.html, 1);
-  fs.writeFileSync(BLOG_INDEX, page1Html);
+  writeIfChanged(BLOG_INDEX, page1Html);
 
   // 第 2..N 页：由重建后的 index.html 派生（同目录，相对路径原样复用）
   const baseHtml = fs.readFileSync(BLOG_INDEX, 'utf-8');
@@ -400,7 +420,7 @@ function rebuildBlogIndex() {
     const page = applyPageContent(baseHtml, n);
     if (!page) break;
     const pageHtml = applyPageMeta(applyHeadLinks(page.html, n), n);
-    fs.writeFileSync(path.join(BLOG_DIR, `page-${n}.html`), pageHtml);
+    writeIfChanged(path.join(BLOG_DIR, `page-${n}.html`), pageHtml);
   }
 
   // 清理过期分页（文章数变少时不留死页；page-1.html 非法，第 1 页永远是 index.html）
@@ -514,7 +534,7 @@ function rebuildHomePage() {
   // 数量同步：替换 <!-- POSTS_COUNT --> 锚点
   html = syncPostCount(html);
 
-  fs.writeFileSync(HOME_INDEX, html);
+  writeIfChanged(HOME_INDEX, html);
   console.log(`✅ index.html: featured="${latest.title}", list=${listArticles.length} posts, JS array=${topPosts.length} posts`);
 }
 
@@ -631,7 +651,7 @@ function generateSitemap() {
   });
 
   lines.push('</urlset>');
-  fs.writeFileSync(SITEMAP_XML, lines.join('\n') + '\n');
+  writeIfChanged(SITEMAP_XML, lines.join('\n') + '\n');
   console.log(`✅ sitemap.xml: ${posts.length} articles`);
 }
 
@@ -673,7 +693,7 @@ function generateRSS() {
 
   lines.push('  </channel>');
   lines.push('</rss>');
-  fs.writeFileSync(RSS_XML, lines.join('\n') + '\n');
+  writeIfChanged(RSS_XML, lines.join('\n') + '\n');
   console.log(`✅ rss.xml: ${rssPosts.length} articles`);
 }
 
