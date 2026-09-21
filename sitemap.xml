@@ -21,6 +21,12 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://709527.xyz/blog/posts/tech-manager-vs-pm-vs-po.html</loc>
+    <lastmod>2026-09-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://709527.xyz/blog/posts/how-engineers-report.html</loc>
     <lastmod>2026-09-16</lastmod>
     <changefreq>monthly</changefreq>
@@ -429,7 +435,7 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://709527.xyz/blog/posts/prompt-engineering-systematic.html</loc>
+    <loc>https://709527.xyz/blog/posts/android-16-notifications.html</loc>
     <lastmod>2026-06-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -441,19 +447,19 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://709527.xyz/blog/posts/android-16-notifications.html</loc>
-    <lastmod>2026-06-27</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://709527.xyz/blog/posts/linux-ebpf-getting-started.html</loc>
+    <loc>https://709527.xyz/blog/posts/prompt-engineering-systematic.html</loc>
     <lastmod>2026-06-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://709527.xyz/blog/posts/kotlin-flow-advanced.html</loc>
+    <lastmod>2026-06-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://709527.xyz/blog/posts/linux-ebpf-getting-started.html</loc>
     <lastmod>2026-06-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -477,13 +483,13 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://709527.xyz/blog/posts/compose-navigation-guide.html</loc>
+    <loc>https://709527.xyz/blog/posts/android-performance-optimization.html</loc>
     <lastmod>2026-06-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://709527.xyz/blog/posts/android-performance-optimization.html</loc>
+    <loc>https://709527.xyz/blog/posts/compose-navigation-guide.html</loc>
     <lastmod>2026-06-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -501,13 +507,13 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://709527.xyz/blog/posts/google-io-2026-recap.html</loc>
+    <loc>https://709527.xyz/blog/posts/compose-april-2026-update.html</loc>
     <lastmod>2026-06-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://709527.xyz/blog/posts/compose-april-2026-update.html</loc>
+    <loc>https://709527.xyz/blog/posts/android-16-features.html</loc>
     <lastmod>2026-06-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -519,7 +525,7 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://709527.xyz/blog/posts/android-16-features.html</loc>
+    <loc>https://709527.xyz/blog/posts/google-io-2026-recap.html</loc>
     <lastmod>2026-06-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -543,18 +549,6 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://709527.xyz/blog/posts/rust-getting-started.html</loc>
-    <lastmod>2026-04-26</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://709527.xyz/blog/posts/react-server-components.html</loc>
-    <lastmod>2026-04-26</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
     <loc>https://709527.xyz/blog/posts/docker-compose-best-practices.html</loc>
     <lastmod>2026-04-26</lastmod>
     <changefreq>monthly</changefreq>
@@ -567,8 +561,14 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://709527.xyz/blog/posts/typescript-type-gymnastics.html</loc>
-    <lastmod>2026-04-25</lastmod>
+    <loc>https://709527.xyz/blog/posts/react-server-components.html</loc>
+    <lastmod>2026-04-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://709527.xyz/blog/posts/rust-getting-started.html</loc>
+    <lastmod>2026-04-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -580,6 +580,12 @@
   </url>
   <url>
     <loc>https://709527.xyz/blog/posts/git-advanced-techniques.html</loc>
+    <lastmod>2026-04-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://709527.xyz/blog/posts/typescript-type-gymnastics.html</loc>
     <lastmod>2026-04-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
