@@ -3,8 +3,8 @@
     {
       "slug": "tech-manager-vs-pm-vs-po",
       "title": "技术经理、项目经理、产品经理的区别",
-      "date": "2026-09-18",
-      "dateTime": "2026-09-18 20:40:00",
+      "date": "2026-09-21",
+      "dateTime": "2026-09-21 15:21:39",
       "category": "思考",
       "tags": [
         "职场",
@@ -750,22 +750,6 @@
       "url": "blog/posts/android-15-privacy-media-visual-permission.html"
     },
     {
-      "slug": "soft-skills-tech-people-overlook",
-      "title": "代码之外的竞争力：技术人最容易忽视的软技能",
-      "date": "2026-07-01",
-      "dateTime": "2026-07-01 09:46:20",
-      "category": "思考",
-      "tags": [
-        "思考",
-        "软技能",
-        "职业发展",
-        "技术人成长",
-        "沟通"
-      ],
-      "readTime": 5,
-      "url": "blog/posts/soft-skills-tech-people-overlook.html"
-    },
-    {
       "slug": "less-is-more-focus-in-information-age",
       "title": "少即是多：信息过载时代的专注力修炼",
       "date": "2026-07-01",
@@ -780,6 +764,22 @@
       ],
       "readTime": 5,
       "url": "blog/posts/less-is-more-focus-in-information-age.html"
+    },
+    {
+      "slug": "soft-skills-tech-people-overlook",
+      "title": "代码之外的竞争力：技术人最容易忽视的软技能",
+      "date": "2026-07-01",
+      "dateTime": "2026-07-01 09:46:20",
+      "category": "思考",
+      "tags": [
+        "思考",
+        "软技能",
+        "职业发展",
+        "技术人成长",
+        "沟通"
+      ],
+      "readTime": 5,
+      "url": "blog/posts/soft-skills-tech-people-overlook.html"
     },
     {
       "slug": "why-i-started-blogging",
@@ -1151,22 +1151,6 @@
       "url": "blog/posts/android-gradle-kts-migration.html"
     },
     {
-      "slug": "android-performance-optimization",
-      "title": "Android 性能优化完整实战：从启动到渲染",
-      "date": "2026-06-22",
-      "dateTime": "2026-06-22 14:24:10",
-      "category": "Android",
-      "tags": [
-        "Android",
-        "性能优化",
-        "启动优化",
-        "内存优化",
-        "渲染优化"
-      ],
-      "readTime": 18,
-      "url": "blog/posts/android-performance-optimization.html"
-    },
-    {
       "slug": "compose-navigation-guide",
       "title": "Jetpack Compose Navigation 进阶指南：从路由设计到深层链接",
       "date": "2026-06-22",
@@ -1183,20 +1167,36 @@
       "url": "blog/posts/compose-navigation-guide.html"
     },
     {
-      "slug": "mcp-android-integration",
-      "title": "MCP 协议在 Android 端的应用：AI 工具调用新范式",
-      "date": "2026-06-19",
-      "dateTime": "2026-06-19 10:16:17",
-      "category": "AI",
+      "slug": "android-performance-optimization",
+      "title": "Android 性能优化完整实战：从启动到渲染",
+      "date": "2026-06-22",
+      "dateTime": "2026-06-22 14:24:10",
+      "category": "Android",
       "tags": [
         "Android",
-        "MCP",
-        "AI",
-        "Agent",
+        "性能优化",
+        "启动优化",
+        "内存优化",
+        "渲染优化"
+      ],
+      "readTime": 18,
+      "url": "blog/posts/android-performance-optimization.html"
+    },
+    {
+      "slug": "compose-april-2026-update",
+      "title": "Jetpack Compose April 2026 Update 深度解读",
+      "date": "2026-06-19",
+      "dateTime": "2026-06-19 10:16:17",
+      "category": "Android",
+      "tags": [
+        "Jetpack Compose",
+        "Android",
+        "Compose Multiplatform",
+        "UI",
         "Kotlin"
       ],
-      "readTime": 14,
-      "url": "blog/posts/mcp-android-integration.html"
+      "readTime": 12,
+      "url": "blog/posts/compose-april-2026-update.html"
     },
     {
       "slug": "kotlin-240-features",
@@ -1217,22 +1217,6 @@
       "url": "blog/posts/kotlin-240-features.html"
     },
     {
-      "slug": "compose-april-2026-update",
-      "title": "Jetpack Compose April 2026 Update 深度解读",
-      "date": "2026-06-19",
-      "dateTime": "2026-06-19 10:16:17",
-      "category": "Android",
-      "tags": [
-        "Jetpack Compose",
-        "Android",
-        "Compose Multiplatform",
-        "UI",
-        "Kotlin"
-      ],
-      "readTime": 12,
-      "url": "blog/posts/compose-april-2026-update.html"
-    },
-    {
       "slug": "android-16-features",
       "title": "Android 16 新特性详解：开发者需要知道的 8 件事",
       "date": "2026-06-19",
@@ -1247,6 +1231,22 @@
       ],
       "readTime": 16,
       "url": "blog/posts/android-16-features.html"
+    },
+    {
+      "slug": "mcp-android-integration",
+      "title": "MCP 协议在 Android 端的应用：AI 工具调用新范式",
+      "date": "2026-06-19",
+      "dateTime": "2026-06-19 10:16:17",
+      "category": "AI",
+      "tags": [
+        "Android",
+        "MCP",
+        "AI",
+        "Agent",
+        "Kotlin"
+      ],
+      "readTime": 14,
+      "url": "blog/posts/mcp-android-integration.html"
     },
     {
       "slug": "android-app-security-hardening",
@@ -1699,7 +1699,7 @@
   "stats": {
     "totalPosts": 111,
     "totalTags": 286,
-    "latestDate": "2026-09-18",
+    "latestDate": "2026-09-21",
     "oldestDate": "2026-02-15"
   }
 }
