@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>技术经理、项目经理、产品经理的区别 | 张小猛 - loczb</title>
+    <meta name="description" content="三个都叫「经理」的岗位到底差在哪：对什么负责、权力从哪来、时间花在哪、失败长什么样，以及想转过去要提前补什么。">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="技术经理、项目经理、产品经理的区别 | 张小猛 - loczb">
+    <meta property="og:description" content="三个都叫「经理」的岗位到底差在哪：对什么负责、权力从哪来、时间花在哪、失败长什么样，以及想转过去要提前补什么。">
+    <meta property="og:url" content="https://709527.xyz/blog/posts/tech-manager-vs-pm-vs-po.html">
+    <meta property="og:type" content="article">
+    <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
+    <meta property="og:site_name" content="loczb">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="技术经理、项目经理、产品经理的区别 | 张小猛 - loczb">
+    <meta name="twitter:description" content="三个都叫「经理」的岗位到底差在哪：对什么负责、权力从哪来、时间花在哪、失败长什么样，以及想转过去要提前补什么。">
+    <meta name="twitter:image" content="https://709527.xyz/assets/images/og-image.png">
+
+        <script type="application/ld+json">
+{
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "技术经理、项目经理、产品经理的区别",
+      "description": "三个都叫「经理」的岗位到底差在哪：对什么负责、权力从哪来、时间花在哪、失败长什么样，以及想转过去要提前补什么。",
+      "image": "https://709527.xyz/assets/images/og-image.png",
+      "author": {
+            "@type": "Person",
+            "name": "张小猛",
+            "url": "https://709527.xyz/about/"
+      },
+      "publisher": {
+            "@type": "Organization",
+            "name": "loczb",
+            "logo": {
+                  "@type": "ImageObject",
+                  "url": "https://709527.xyz/assets/images/favicon.svg"
+            }
+      },
+      "datePublished": "2026-09-18 20:40:00",
+      "dateModified": "2026-09-18 20:40:00",
+      "url": "https://709527.xyz/blog/posts/tech-manager-vs-pm-vs-po.html",
+      "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://709527.xyz/blog/posts/tech-manager-vs-pm-vs-po.html"
+      },
+      "keywords": "职场, 团队管理, 角色认知",
+      "articleSection": "思考",
+      "timeRequired": "PT12M",
+      "inLanguage": "zh-CN"
+}
+    </script>
+
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
+    <link rel="alternate icon" href="../../assets/images/favicon.ico">
+    <link rel="canonical" href="https://709527.xyz/blog/posts/tech-manager-vs-pm-vs-po.html">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../../index.html" class="nav-logo">
+        loc<span>zb</span>
+      </a>
+      <button class="nav-toggle" aria-label="打开菜单" aria-expanded="false" aria-controls="nav-links-menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <div class="nav-overlay"></div>
+      <ul class="nav-links" id="nav-links-menu">
+        <li><a href="../../index.html" class="nav-link">首页</a></li>
+        <li><a href="../../projects/index.html" class="nav-link">项目</a></li>
+        <li><a href="../index.html" class="nav-link active">博客</a></li>
+        <li><a href="../../about/index.html" class="nav-link">关于</a></li>
+      </ul>
+      <button class="theme-toggle" aria-label="切换主题" title="切换亮/暗模式">
+        <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+        <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+      </button>
+    </div>
+  </nav>
+  <!-- Particle Canvas Background -->
+  <canvas id="particle-canvas" class="particle-canvas"></canvas>
+
+  <div class="scroll-progress"></div>
+
+  <main class="section" style="padding-bottom: 0; padding-top: var(--space-4xl);">
+    <div class="container container-narrow">
+      <a href="../index.html" class="back-link">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        返回博客列表
+      </a>
+
+      <article class="post-content">
+        <h1>技术经理、项目经理、产品经理的区别</h1>
+
+        <div class="post-meta">
+          <span>📅 2026-09-18 20:40:00</span>
+          <span>⏱️ 12 min read</span>
+          <span>👤 张小猛</span>
+        </div>
+
+        <div class="post-tags">
+          <span class="tag">职场</span>
+          <span class="tag">团队管理</span>
+          <span class="tag">角色认知</span>
+        </div>
+
+        
+
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="how-engineers-report.html">
+            <div class="related-post-card-title">技术人员如何做好汇报</div>
+            <div class="related-post-card-tags"><span>职场</span><span>沟通</span><span>汇报</span></div>
+          </a>
+          <a class="related-post-card" href="quick-energy-recovery.html">
+            <div class="related-post-card-title">如何快速恢复能量，让自己快乐起来</div>
+            <div class="related-post-card-tags"><span>能量管理</span><span>情绪</span><span>生活方式</span></div>
+          </a>
+          <a class="related-post-card" href="seek-long-term-desires.html">
+            <div class="related-post-card-title">欲望也要看周期：把长期欲望当成你的核心资产</div>
+            <div class="related-post-card-tags"><span>认知科学</span><span>长期主义</span><span>自我管理</span></div>
+          </a>
+          <a class="related-post-card" href="和ai结对写代码这一年我学会了怎么放手.html">
+            <div class="related-post-card-title">和 AI 结对写代码这一年，我学会了怎么放手</div>
+            <div class="related-post-card-tags"><span>思考</span><span>AI</span><span>开发习惯</span></div>
+          </a>
+          <a class="related-post-card" href="心学不是鸡汤一个程序员的阳明心学实践手册.html">
+            <div class="related-post-card-title">心学不是鸡汤：一个程序员的阳明心学实践手册</div>
+            <div class="related-post-card-tags"><span>心学</span><span>王阳明</span><span>哲学</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
+
+        <p>我 2017 年从 Android 开发做起，后来带过一个七八个人的移动端小组，也以技术负责人的身份长期和项目经理、产品经理坐在同一张桌子上。这几年被问得最多的一个问题不是「我要不要转管理」，而是：技术经理、项目经理、产品经理，到底谁管什么？</p>
+<p>这份困惑不怪人。招聘网站上这三个岗位的 JD 长得几乎一模一样，都写着「沟通能力强、推动力强、能承压」。可真进了同一间会议室，你会发现三个人关心的东西几乎不重叠：一个盯日期，一个盯方案，一个盯数据。更麻烦的是，这三个人都会来找你对齐，而你只有一份时间。</p>
+<p>我自己用的判断办法是很笨的三问：他能签字否掉什么？他半夜会被谁的电话叫醒？他的季度考核卡在哪个数字上？把这三点摊开，三个岗位的边界就出来了。下面按这三点展开，最后给一张对照表和想转岗要做的准备。</p>
+<h2>先分清：三个「经理」不是同一份工作</h2>
+<p>英文缩写先制造了一层雾。Project Manager 和 Product Manager 都缩写成 PM，Technical Manager、Engineering Manager、Tech Lead 又都能被叫成「技术负责」，所以跨团队沟通时一句「我找你们 PM 对齐一下」，可以指向两个完全不同的人，而且这两个人对同一件事的判断往往不一样。</p>
+<p>剥掉 title，三个岗位其实在为三种不同的东西负责：</p>
+<ul>
+<li>项目经理负责<strong>确定性</strong>——说好的事情按时发生，或者至少在被打破之前让所有人知道。</li>
+<li>技术经理负责<strong>质量</strong>——做出来的东西是对的，撑得住，三个月后还改得动。</li>
+<li>产品经理负责<strong>价值</strong>——做的东西值得做，有人用，那个数字会动。</li>
+</ul>
+<p>为什么大家容易混？因为在二十人的公司里，这三件事常常压在两个人甚至一个人身上。同一个人今天在排期表上追依赖，明天在评审会上否方案，后天在跟销售对需求——你自然看不出这是三份工作。</p>
+<p>所以判断一个「经理」在管什么，别看他名片，看他拒绝你的时候用什么理由。用「这样做风险太大、以后改不动」拒绝你的是技术经理；用「这版范围已经锁了、放下一版」拒绝你的是项目经理；用「这个需求我们不做，因为没有用户会因此改变行为」拒绝你的是产品经理。</p>
+<h2>对什么负责：交付确定性、工程质量、业务价值</h2>
+<h3>项目经理对「承诺能不能兑现」负责</h3>
+<p>项目经理的产出物是承诺本身：范围、时间、依赖、风险。他通常不写代码，但「9 月 30 号能上线」这句话由他对外说出口，也由他负责让这句话成立。</p>
+<p>他的核心动作是让不确定性提前显形。一个跨四个团队、十七个依赖项的需求，他会先把依赖画出来，找出关键路径，然后逼着每个环节给出自己的日期。哪个环节的日期说不出口，哪个环节就是风险点——他要的不是「应该没问题」，而是「谁在什么时候给出什么」。</p>
+<p>有一个反直觉的地方：项目经理的价值，很多时候体现在「承诺被修改得足够早」。发现要延期时，他第一反应不是硬扛，而是把范围、时间、人力三样东西摆到桌面上重新对齐。硬扛到最后一星期才说，是他最严重的失职。</p>
+<h3>技术经理对技术判断和工程质量负责</h3>
+<p>技术经理的产出物有两件：技术决策的质量，以及团队的长期能力。他要回答的问题是——这一版能不能扛住大促流量？这个方案三个月后还有人敢改吗？这个人离职以后，他手里的那块知识还在不在？</p>
+<p>技术经理的产出常常是「一些事情没有发生」：一次数据事故没有发生、一条走不通的技术路线被提前否掉、一个人没有硬扛到提离职。这类产出不好写进周报，但它是这个岗位真正的价值所在。</p>
+<p>他也为「不做什么」负责。工程师提交一个方向很吸引人但收益不明的重构，技术经理的作用不是批准或否定，而是把代价算清楚：这次重构要吃两周人力，等于砍掉两个需求，值不值。</p>
+<h3>产品经理对「做的东西有没有人用」负责</h3>
+<p>产品经理的产出物是一批经过取舍的需求，加上一条可验证的价值假设。他不为「功能上线」负责，他为「上线之后那个数字动了」负责——留存、转化、使用率、复购，具体看业务。</p>
+<p>好的产品经理做的第一件事是把需求还原成问题。业务方提「要支持批量导出」，他不会直接写进需求池，而是先问清：用户是嫌一条条点得慢，还是导出的文件打不开？前者是效率问题，后者是正确性问题，两个问题对应的方案和代价完全不同。这个动作叫把方案翻译回问题，它决定了后面所有人是不是在白干。</p>
+<p>他对取舍负责，包括对「不做」负责。一个需求被砍掉，通常比十个需求被排进来更需要判断力。</p>
+<h2>权力从哪来：流程权、专业权、需求权</h2>
+<p>这是三个岗位差别最大、也最容易让工程师踩坑的一层。</p>
+<p>项目经理多半没有对人的考核权，他的权力来自流程：排期表、风险清单、同步节奏、升级路径。他推动别人的方式是让事情变得可见——当延期被写进所有人的周报，压力就自己产生了。他推不动的时候只有一张牌：升级给能拍板的人。所以他会频繁地向上要决定，这不是他能力差，是他手里只有这些工具。</p>
+<p>技术经理的权力是专业权，通常还叠加组织权（绩效评价、招聘、技术线的用人）。技术正确性范围内，他的判断基本就是结论，讨论空间主要在取舍和成本上。这也是为什么工程师最容易对技术经理产生「他说了算」的感觉。</p>
+<p>产品经理的权力是需求权：做不做、先做哪个、做到什么程度。但他通常决定不了做多久、谁来做——这两件事要落到项目管理和技术侧的资源上。</p>
+<p>这里有个很实用的判断法，你可以用它看任何一家公司：</p>
+<ul>
+<li>谁能一句话把某个需求从这一版里拿掉？通常是产品经理。</li>
+<li>谁能一句话否掉一个技术方案？技术经理，在技术正确性的范围内。</li>
+<li>谁能一句话把发布日期往后推？通常谁都不能。延不延期从来不是一个人的决定，而是三方坐下来重排的结果——项目经理在这个场景里的角色，是把重排的代价算清楚给人看。</li>
+</ul>
+<p>认清这张权力地图，你在会上就知道该把哪句话递给谁。</p>
+<h2>时间花在哪：三种不同的日程表</h2>
+<h3>一天里占比最高的三件事</h3>
+<p>技术经理的时间大头在评审、对齐和人的问题上：技术方案评审、周会、一对一、招聘面试、绩效沟通，真正写代码的比例会随着团队变大一路下降，剩下的一般只留给他自己判断难度最高的部分，或者做原型验证。</p>
+<p>项目经理的时间大头在沟通和信息收集上：跨团队对齐、追依赖、把散落在十几个群里的进展收敛成一张表。剩下的时间写文档——排期表、风险清单、周报，这些不是形式，是让信息离开他的脑子、能被别人读到的唯一载体。</p>
+<p>产品经理的时间分给调研、数据和多方差对齐。看埋点、看用户反馈、和销售客服聊天、写需求文档、和设计技术来回对方案，会议同样是大头。</p>
+<p>一个粗略的对照：</p>
+<table>
+<thead>
+<tr>
+<th>角色</th>
+<th>占比最高的三件事</th>
+<th>最怕的事</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>技术经理</td>
+<td>评审与决策、人的问题、少量写码</td>
+<td>被拉进无休止的救火，没时间做技术判断</td>
+</tr>
+<tr>
+<td>项目经理</td>
+<td>沟通与会议、排期与风险文档、追依赖</td>
+<td>信息不对称：某个环节延了三天，他才从别人嘴里听说</td>
+</tr>
+<tr>
+<td>产品经理</td>
+<td>调研与看数据、写需求、对方案</td>
+<td>方向做错，功能都上线了，没有指标动</td>
+</tr>
+</tbody>
+</table>
+<h3>三种角色对「被打断」的反应不同</h3>
+<p>技术经理被打断一次，代价是一段技术判断的连续思考时间，所以他往往需要整块的「不排会」时段；项目经理被打断，多数时候是获得信息，他只怕信息绕开他流通；产品经理被打断，只要打断来自用户或数据，通常是好事，他怕的是自己关在会议室里凭想象做需求。</p>
+<p>理解这一点，你就明白为什么技术经理经常不回消息，项目经理每条消息都回，产品经理总在找人聊。</p>
+<h2>成功与失败：KPI 差异和三种翻车方式</h2>
+<h3>各自拿什么考核自己</h3>
+<p>项目经理看里程碑达成率、延期天数的分布、依赖问题的解决速度。他更愿意「不延期地砍范围」，而不是「延期把范围做满」。所以当他来问你「这个功能能不能拆成两次上」时，他不是在压你，他在保护那个日期。</p>
+<p>技术经理看线上事故的数量和等级、交付速度的变化趋势、团队里人的成长和留存、技术债的规模。这些指标里没有一条是短周期的，这也是技术经理最容易被误解的地方——他的成绩单要按季度甚至按年读。</p>
+<p>产品经理看核心指标的曲线，以及需求命中率：做十个功能，几个真的被用户用起来了。这个数字在很多团队没人算，但它是产品岗最诚实的一面镜子。</p>
+<h3>失败长什么样</h3>
+<p>项目经理翻车有两种形态。一种是延期到最后一周才暴露，团队已经没法补救；另一种是「按时交付」了，但实际上把质量欠账推给了下一个版本——上线日期守住了，代价埋在更后面。</p>
+<p>技术经理翻车也有两种。一种是技术上正确、业务上没价值，方案写得漂亮但没人因此受益；另一种更隐蔽：团队离了他就转不动，关键模块只有他懂，短期看不出问题，一直到有一天必须换人。</p>
+<p>产品经理翻车是功能都上线了，半年后没人用；或者永远在追下一个需求，从来没有一个假设被完整验证过。</p>
+<h3>一个问题帮你定位责任</h3>
+<p>出了事，别急着追责，先看决策该由谁做：项目延期，先看是谁给出的承诺、哪个依赖没被管理；线上事故，先看技术判断和评审环节漏了什么；功能没人用，先看需求是怎么来的、有没有人验证过价值假设。把决策放回正确的角色，下一次才有机会不出同样的事。</p>
+<h2>一张表看清三种角色</h2>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>技术经理</th>
+<th>项目经理</th>
+<th>产品经理</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>对什么负责</td>
+<td>技术判断的质量、工程底线、团队的长期能力</td>
+<td>交付的确定性：范围、时间、依赖、风险</td>
+<td>业务价值：做的东西有没有人用</td>
+</tr>
+<tr>
+<td>权力来源</td>
+<td>专业权，通常叠加考核与用人权</td>
+<td>流程权，靠机制推动，很少直接管人</td>
+<td>需求权，决定做什么和先做哪个</td>
+</tr>
+<tr>
+<td>一天里占比最高的三件事</td>
+<td>评审与决策、人的问题、少量写码</td>
+<td>沟通与会议、排期与风险文档、追依赖</td>
+<td>调研与看数据、写需求文档、对方案</td>
+</tr>
+<tr>
+<td>关键产出物</td>
+<td>技术方案约束、评审结论、团队能力提升</td>
+<td>排期表、风险清单、升级路径</td>
+<td>优先级清单、可验证的价值假设</td>
+</tr>
+<tr>
+<td>成功的判定</td>
+<td>事故等级下降、交付速度上升、人留得住</td>
+<td>里程碑达成、延期早暴露、依赖不长期阻塞</td>
+<td>核心指标动了、需求命中率够高</td>
+</tr>
+<tr>
+<td>典型的失败</td>
+<td>过度设计、团队离了他转不动</td>
+<td>延期到最后一周才暴露、把质量欠账推给下一版</td>
+<td>功能都上线了，半年后没人用</td>
+</tr>
+<tr>
+<td>对工程师的主要接口</td>
+<td>方案评审、技术决策、成长与绩效</td>
+<td>排期、依赖、阻塞上报</td>
+<td>需求背景、验收标准、优先级</td>
+</tr>
+</tbody>
+</table>
+<p>这张表不用背。你只要记住最后一行——遇到不同的事，先找对应的人。</p>
+<h2>协作界面：谁定优先级，谁定技术方案</h2>
+<h3>优先级到底谁定</h3>
+<p>严格来说，产品经理定「做什么」和「先做哪个」，项目经理定「这一轮谁先动手、哪一步卡住了」，技术经理提供约束条件：「必须先做接口改造，否则分表方案跑不起来」。</p>
+<p>现实里，优先级是三个人的博弈结果。产品经理说这个需求这版要，技术经理说这个改动会拖慢两周，项目经理把两种说法换算到同一张表上——范围、时间、人力，然后要一个明确决定。工程师最常犯的错是分别向三个人确认优先级，拿到三个不同的答案，然后自己夹在中间猜。</p>
+<p>正确做法是让冲突显式化：把「A 需求要两周、B 需求要一周，这版只有两周人力」这句话放到三个人同时在的场合，让他们当场对齐。优先级不是工程师该独自承担的问题，它是资源冲突，必须由资源的持有者解决。</p>
+<h3>技术方案谁定</h3>
+<p>技术经理对技术方案有最终判断，但他真正签的往往不是细节，而是约束：接口边界在哪、兼容策略是什么、怎么上线、回滚方案有没有。方案本身仍然应该是写代码的人给出。</p>
+<p>产品经理在这个环节有知情权和反对权。他可以提出「这个方案会让首屏多等 800 毫秒，用户能接受吗」，但不能替你决定用哪个索引。项目经理关心的是它带来的排期和风险变化：这个方案多两天，下个里程碑要不要跟着动。</p>
+<p>对工程师来说，这里的空间比自己以为的大得多：方案是你写的，只要你把取舍和代价说清楚，技术经理通常只在风险明显不可控的地方踩刹车。</p>
+<h3>出事了先找谁</h3>
+<p>线上故障，先找技术经理，技术和资源协调都归他；排期眼看要破，先找项目经理，他的工作就是重排和升级；需求理解偏了、验收标准不清楚，找产品经理。</p>
+<p>顺序错了只会多花时间。把「需求理解错了」报给项目经理，他会去调整排期表，但没有人会去改那份需求文档，于是同一件事会以另一种形式再来一次。</p>
+<h2>三种组织形态下的真实分工</h2>
+<h3>大厂：三个角色分得清，接口有名字</h3>
+<p>大厂的职责边界清楚，每个角色都有一份写明白的职责说明和对应的考核指标。代价是接口成本高：跨团队依赖多，一份需求要经过好几轮转手，信息在每一跳都会损耗一点。在大厂做事，能不能把接口写清楚，比能不能干活更能决定你推进的效率。</p>
+<h3>中小公司：一个人兼两个角色</h3>
+<p>几十人规模的公司，常见两种兼法。一种是项目经理兼产品经理，一个人既定需求也排期，好处是决策快，风险是没人从用户角度挑战这个需求——他既当出题人又当判卷人。另一种是技术经理兼项目经理，既带人又盯交付，风险是重心冲突：他很难同时为「范围要大」和「时间要短」负责，最后往往牺牲的是工程质量。</p>
+<p>判断一个兼任者偏心哪边，看他砍东西的时候先砍什么。先砍范围的是产品那一半在起作用，先砍质量要求的是交付那一半在起作用。</p>
+<h3>创业团队：角色重叠，title 只是对外称呼</h3>
+<p>十来个人的团队，三个人可能都只有半份工作。这时候真正重要的不是把职责切得多细，而是写明两件事：每件事有一个有名字的负责人，每件事有一个明确的决策人。角色重叠的团队不需要更细的分工文件，需要的是「这件事谁最后拍板」写清楚，并且所有人都知道。</p>
+<h2>三个常见误判</h2>
+<h3>误判一：把项目经理当催进度的</h3>
+<p>最常见的印象是「他只在我拖进度的时候出现」。事实是，项目经理最想从你这里听到的不是「没问题」，而是「有问题，卡在第三方接口，需要你在周三前帮我推一下」。他手里最有用的工具就是把风险变成可见的、有日期的条目，让能解决它的人看到。</p>
+<p>所以把风险压到最后一个星期，受伤的是双方：他从协调者变成追责者，你从「提前预警」变成「隐瞒不报」。</p>
+<h3>误判二：把技术经理当高级写码的</h3>
+<p>很多工程师默认技术经理就是「团队里最会写代码的人」，所有方案都指望他拍。这个理解只对了一小半。随着团队变大，他写代码的比例必然下降，他更多的时间花在保证工程底线和提升团队能力上——包括给别人的产出做质量把关、替团队挡掉不合理的排期、把一次事故变成一条不再犯的规则。</p>
+<p>反过来有个信号值得警惕：如果技术经理还在独自扛最难的模块且不放手，那是团队结构的风险，不是你运气好。</p>
+<h3>误判三：把产品经理当传话筒的</h3>
+<p>「产品就是把老板的话转给技术」——这句话在不少团队是真的，但那是团队的问题，不是岗位的定义。好的产品经理交付的核心是取舍，他解释「为什么不做这个需求」的能力，比解释「为什么要做这个」更能说明他做过功课。</p>
+<p>一个可以现场用的检验方法：问他「这个需求如果不做，会发生什么」。答案落到具体后果——哪一类用户在哪一步流失、哪笔收入拿不到、哪个流程会重新回到人工——说明他做过判断；答不出后果只说「业务方要」，那他确实还停在传话筒的位置上。</p>
+<h2>想转这三个方向，各自要补什么</h2>
+<h3>想转技术经理</h3>
+<p>要补的能力有三块：把技术决策讲成业务语言（说清代价和收益，而不是只讲实现）；给别人做质量把关（评审别人的方案，而不是只 review 代码）；处理人的问题（成长、冲突、绩效沟通）。</p>
+<p>提前能做的准备：主动接一次跨团队的技术难题，把「协调不同团队」这件事完整走一遍；把一次线上事故从定位到复盘完整做完并写成文档；带一个新人和一个实习生，观察自己是不是享受「帮别人把事做成」。</p>
+<p>信号也很明确：如果你比起自己写最难的代码，更享受帮别人把事做成、把方向定对，这个方向对得上。</p>
+<h3>想转项目经理</h3>
+<p>要补的能力：把不确定性量化（估算给区间、找出关键路径、说清假设）；把沟通变成机制（同步节奏、风险清单、升级路径，而不是靠个人提醒）；在不掌握职权的前提下推动人。</p>
+<p>提前能做的准备：在手上的项目里做一次依赖梳理，找出关键路径并写下来；主持一次跨团队的排期对齐会；练一件事——把坏消息在第 3 天说出去，而不是在第 20 天。</p>
+<p>要提前想清楚的落差是：你会从「产出代码的人」变成「让产出发生的人」，成就感来得更慢，也不容易被看见。</p>
+<h3>想转产品经理</h3>
+<p>要补的能力：从「怎么实现」切换到「要不要做」；看数据的能力（埋点、漏斗、留存的定义，这些比会写 SQL 更重要）；把模糊的问题拆成可验证假设的能力。</p>
+<p>提前能做的准备：把你负责的模块的埋点数据看一遍，写一份「这个模块上线以来真实被用了多少」的说明；挑一个你熟悉的产品，用三百字写清它为什么会被用、又可能因为什么被弃用。</p>
+<p>一个少有人提醒的落差：转产品经理最大的变化不是技能，而是权威。你不再有技术正确性这张牌，很多判断要靠论证和数据说服人，这对习惯「代码说明一切」的工程师是一次重建。</p>
+<h2>最后：先想清楚你要对什么负责</h2>
+<p>三个岗位的差别不在能力高低，而在你愿意长期为哪样东西负责：确定性、工程质量，还是业务价值。这三样东西吸引的人确实不一样——有人受不了日期不确定，有人受不了方案将就，有人受不了做了半年没人用。</p>
+<p>如果还没想清楚，我给一个自己用过的检验方式：去看这三个角色各自最不体面的那份工作。项目经理在群里第七次追问一个日期；技术经理在评审会上否掉一个大家已经写了两周的方案；产品经理一遍遍解释一个被砍掉的需求为什么砍。</p>
+<p>哪一件你愿意做，方向就在哪。title 只是别人叫你的方式，你负责的东西才是你的工作。</p>
+
+        <!-- Post Copyright & License Card -->
+        <div class="post-copyright-card">
+          <div class="copyright-header">
+            <div class="copyright-badge">
+              <span>📜</span>
+              <span>原创与知识共享协议</span>
+            </div>
+            <button class="copyright-cite-btn" id="copy-cite-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+              </svg>
+              <span>复制 Markdown 引用</span>
+            </button>
+          </div>
+          <div class="copyright-list">
+            <div class="copyright-item"><strong>文章标题：</strong>技术经理、项目经理、产品经理的区别</div>
+            <div class="copyright-item"><strong>文章作者：</strong>张小猛 · loczb</div>
+            <div class="copyright-item"><strong>永久链接：</strong><a href="https://709527.xyz/blog/posts/tech-manager-vs-pm-vs-po.html">https://709527.xyz/blog/posts/tech-manager-vs-pm-vs-po.html</a></div>
+            <div class="copyright-item"><strong>版权声明：</strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 国际许可协议。商业转载请联系作者获得授权，非商业转载请注明出处。</div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </main>
+
+  <!-- Related Posts / Navigation -->
+  <section class="section" style="padding-top: 0;">
+    <div class="container container-narrow">
+      <hr style="border: none; border-top: 1px solid var(--color-border); margin: var(--space-3xl) 0;">
+
+      <div class="blog-topics" style="margin-bottom: var(--space-xl);">
+        <span class="topic-label">读完之后:</span>
+        <a href="../index.html" class="topic-tag">返回博客列表</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <p class="footer-signature">写代码,做产品,也认真生活。</p>
+      <div class="footer-social">
+        <a href="https://github.com/zzdbilly" class="footer-social-link" target="_blank" rel="noopener" aria-label="GitHub">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+        </a>
+        <a href="../../rss.xml" class="footer-social-link" aria-label="RSS">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+      </div>
+      <div class="footer-links">
+        <a href="../../index.html" class="footer-link">首页</a>
+        <a href="../../projects/index.html" class="footer-link">项目</a>
+        <a href="../../blog/index.html" class="footer-link">博客</a>
+        <a href="../../about/index.html" class="footer-link">关于</a>
+      </div>
+      <p class="footer-copyright">
+        &copy; 2026 张小猛
+      </p>
+    </div>
+  </footer>
+
+  <script defer src="../../assets/js/main.js"></script>
+  <script defer src="../../assets/js/article.js"></script>
+  <script defer src="../../assets/js/share.js"></script>
+  <script defer src="../../assets/js/back-to-top.js"></script>
+  <!-- Back to Top & Reading Progress -->
+  <button class="back-to-top" id="backToTop" aria-label="回到顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
+  <div class="reading-progress" id="readingProgress"></div>
+
+  <!-- Post Sidebar Info（左侧） -->
+  <div class="post-sidebar-info" id="postSidebar">
+    <div class="post-info-card">
+      <div class="post-info-section">
+        <div class="post-info-label">作者</div>
+        <div class="post-info-author">
+          <div class="post-info-avatar">小</div>
+          <div>
+            <div class="post-info-author-name">张小猛</div>
+            <div class="post-info-author-desc">写代码，做产品</div>
+          </div>
+        </div>
+      </div>
+      <div class="post-info-section">
+        <div class="post-info-label">文章信息</div>
+        <div class="post-info-stat"><span class="post-info-stat-label">📅 发布日期</span><span class="post-info-stat-value">2026-09-18</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label">⏱️ 阅读时间</span><span class="post-info-stat-value">12 min read</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label">📝 文章字数</span><span class="post-info-stat-value">5860 字</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label">📊 章节数</span><span class="post-info-stat-value">11 节 · 20 子节</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label">💻 代码块</span><span class="post-info-stat-value">0 段</span></div>
+      </div>
+      <div class="post-info-section" id="postSidebarTags">
+        <div class="post-info-label">标签</div>
+        <div class="post-info-links">
+          <a href="../../blog/index.html?tag=职场" class="post-info-link"># 职场</a>
+          <a href="../../blog/index.html?tag=团队管理" class="post-info-link"># 团队管理</a>
+          <a href="../../blog/index.html?tag=角色认知" class="post-info-link"># 角色认知</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Post TOC -->
+  <div class="post-toc-container" id="postToc">
+    <nav class="post-toc">
+      <div class="post-toc-title">目录</div>
+      <ul class="post-toc-list" id="tocList">
+      </ul>
+    </nav>
+  </div>
+<script defer src="../../assets/js/particles.js"></script>
+
+  <!-- Comment System -->
+  <script src="../../workers/comment-system/comment-widget.js" defer></script>
+
+  <!-- highlight.js 代码语法高亮（本地完整构建，无外部依赖） -->
+  <script defer src="../../assets/vendor/highlight/highlight.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // 只对没有 codehilite 的代码块应用 highlight.js
+      document.querySelectorAll('pre code').forEach(function(block) {
+        // 跳过已经有 Pygments 高亮的块
+        if (block.closest('.codehilite') || block.classList.contains('hljs')) return;
+        try { hljs.highlightElement(block); } catch (e) {}
+      });
+    });
+  </script>
+
+  <!-- Cloudflare Web Analytics -->
+  <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "29e7cff6f37448989538e2165cb79187"}'></script>
+</body>
+</html>

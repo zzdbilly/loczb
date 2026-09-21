@@ -1,6 +1,20 @@
 {
   "posts": [
     {
+      "slug": "tech-manager-vs-pm-vs-po",
+      "title": "技术经理、项目经理、产品经理的区别",
+      "date": "2026-09-18",
+      "dateTime": "2026-09-18 20:40:00",
+      "category": "思考",
+      "tags": [
+        "职场",
+        "团队管理",
+        "角色认知"
+      ],
+      "readTime": "12",
+      "url": "blog/posts/tech-manager-vs-pm-vs-po.html"
+    },
+    {
       "slug": "how-engineers-report",
       "title": "技术人员如何做好汇报",
       "date": "2026-09-16",
@@ -1009,20 +1023,20 @@
       "url": "blog/posts/go-concurrency-patterns.html"
     },
     {
-      "slug": "prompt-engineering-systematic",
-      "title": "Prompt Engineering 系统化方法论",
+      "slug": "android-16-notifications",
+      "title": "Android 16 通知系统新 API 详解",
       "date": "2026-06-27",
       "dateTime": "2026-06-27 12:27:38",
-      "category": "AI",
+      "category": "Android",
       "tags": [
-        "Prompt Engineering",
-        "CRISPE",
-        "Chain-of-Thought",
-        "Function Calling",
-        "AI"
+        "Android 16",
+        "通知系统",
+        "Live Updates",
+        "Notifications",
+        "Android 开发"
       ],
-      "readTime": 18,
-      "url": "blog/posts/prompt-engineering-systematic.html"
+      "readTime": 16,
+      "url": "blog/posts/android-16-notifications.html"
     },
     {
       "slug": "https-tls13-deep-dive",
@@ -1040,36 +1054,20 @@
       "url": "blog/posts/https-tls13-deep-dive.html"
     },
     {
-      "slug": "android-16-notifications",
-      "title": "Android 16 通知系统新 API 详解",
+      "slug": "prompt-engineering-systematic",
+      "title": "Prompt Engineering 系统化方法论",
       "date": "2026-06-27",
       "dateTime": "2026-06-27 12:27:38",
-      "category": "Android",
+      "category": "AI",
       "tags": [
-        "Android 16",
-        "通知系统",
-        "Live Updates",
-        "Notifications",
-        "Android 开发"
-      ],
-      "readTime": 16,
-      "url": "blog/posts/android-16-notifications.html"
-    },
-    {
-      "slug": "linux-ebpf-getting-started",
-      "title": "Linux eBPF 入门：内核可观测性新范式",
-      "date": "2026-06-27",
-      "dateTime": "2026-06-27 12:14:16",
-      "category": "系统编程",
-      "tags": [
-        "eBPF",
-        "Linux 内核",
-        "可观测性",
-        "bpftrace",
-        "云原生"
+        "Prompt Engineering",
+        "CRISPE",
+        "Chain-of-Thought",
+        "Function Calling",
+        "AI"
       ],
       "readTime": 18,
-      "url": "blog/posts/linux-ebpf-getting-started.html"
+      "url": "blog/posts/prompt-engineering-systematic.html"
     },
     {
       "slug": "kotlin-flow-advanced",
@@ -1086,6 +1084,22 @@
       ],
       "readTime": 16,
       "url": "blog/posts/kotlin-flow-advanced.html"
+    },
+    {
+      "slug": "linux-ebpf-getting-started",
+      "title": "Linux eBPF 入门：内核可观测性新范式",
+      "date": "2026-06-27",
+      "dateTime": "2026-06-27 12:14:16",
+      "category": "系统编程",
+      "tags": [
+        "eBPF",
+        "Linux 内核",
+        "可观测性",
+        "bpftrace",
+        "云原生"
+      ],
+      "readTime": 18,
+      "url": "blog/posts/linux-ebpf-getting-started.html"
     },
     {
       "slug": "webassembly-in-practice",
@@ -1137,22 +1151,6 @@
       "url": "blog/posts/android-gradle-kts-migration.html"
     },
     {
-      "slug": "compose-navigation-guide",
-      "title": "Jetpack Compose Navigation 进阶指南：从路由设计到深层链接",
-      "date": "2026-06-22",
-      "dateTime": "2026-06-22 14:24:10",
-      "category": "Android",
-      "tags": [
-        "Jetpack Compose",
-        "Android",
-        "Navigation",
-        "Kotlin",
-        "DeepLink"
-      ],
-      "readTime": 16,
-      "url": "blog/posts/compose-navigation-guide.html"
-    },
-    {
       "slug": "android-performance-optimization",
       "title": "Android 性能优化完整实战：从启动到渲染",
       "date": "2026-06-22",
@@ -1167,6 +1165,22 @@
       ],
       "readTime": 18,
       "url": "blog/posts/android-performance-optimization.html"
+    },
+    {
+      "slug": "compose-navigation-guide",
+      "title": "Jetpack Compose Navigation 进阶指南：从路由设计到深层链接",
+      "date": "2026-06-22",
+      "dateTime": "2026-06-22 14:24:10",
+      "category": "Android",
+      "tags": [
+        "Jetpack Compose",
+        "Android",
+        "Navigation",
+        "Kotlin",
+        "DeepLink"
+      ],
+      "readTime": 16,
+      "url": "blog/posts/compose-navigation-guide.html"
     },
     {
       "slug": "mcp-android-integration",
@@ -1203,22 +1217,6 @@
       "url": "blog/posts/kotlin-240-features.html"
     },
     {
-      "slug": "google-io-2026-recap",
-      "title": "Google I/O 2026 完整回顾：AI 重塑一切",
-      "date": "2026-06-19",
-      "dateTime": "2026-06-19 10:16:17",
-      "category": "AI",
-      "tags": [
-        "AI",
-        "Android",
-        "Google I/O",
-        "Gemini",
-        "Agent"
-      ],
-      "readTime": 20,
-      "url": "blog/posts/google-io-2026-recap.html"
-    },
-    {
       "slug": "compose-april-2026-update",
       "title": "Jetpack Compose April 2026 Update 深度解读",
       "date": "2026-06-19",
@@ -1233,6 +1231,22 @@
       ],
       "readTime": 12,
       "url": "blog/posts/compose-april-2026-update.html"
+    },
+    {
+      "slug": "android-16-features",
+      "title": "Android 16 新特性详解：开发者需要知道的 8 件事",
+      "date": "2026-06-19",
+      "dateTime": "2026-06-19 10:16:17",
+      "category": "Android",
+      "tags": [
+        "Android",
+        "Android 16",
+        "Live Updates",
+        "AICore",
+        "大屏适配"
+      ],
+      "readTime": 16,
+      "url": "blog/posts/android-16-features.html"
     },
     {
       "slug": "android-app-security-hardening",
@@ -1251,20 +1265,20 @@
       "url": "blog/posts/android-app-security-hardening.html"
     },
     {
-      "slug": "android-16-features",
-      "title": "Android 16 新特性详解：开发者需要知道的 8 件事",
+      "slug": "google-io-2026-recap",
+      "title": "Google I/O 2026 完整回顾：AI 重塑一切",
       "date": "2026-06-19",
       "dateTime": "2026-06-19 10:16:17",
-      "category": "Android",
+      "category": "AI",
       "tags": [
+        "AI",
         "Android",
-        "Android 16",
-        "Live Updates",
-        "AICore",
-        "大屏适配"
+        "Google I/O",
+        "Gemini",
+        "Agent"
       ],
-      "readTime": 16,
-      "url": "blog/posts/android-16-features.html"
+      "readTime": 20,
+      "url": "blog/posts/google-io-2026-recap.html"
     },
     {
       "slug": "ai-coding-workflow-optimization",
@@ -1313,36 +1327,6 @@
       "url": "blog/posts/sqlite-wal-performance.html"
     },
     {
-      "slug": "rust-getting-started",
-      "title": "Rust 入门：从零到生产",
-      "date": "2026-04-26",
-      "dateTime": "2026-04-26 15:11:29",
-      "category": "系统编程",
-      "tags": [
-        "Rust",
-        "系统编程",
-        "所有权",
-        "内存安全"
-      ],
-      "readTime": 20,
-      "url": "blog/posts/rust-getting-started.html"
-    },
-    {
-      "slug": "react-server-components",
-      "title": "React Server Components 深入解析",
-      "date": "2026-04-26",
-      "dateTime": "2026-04-26 15:11:29",
-      "category": "前端",
-      "tags": [
-        "React",
-        "Server Components",
-        "Next.js",
-        "前端架构"
-      ],
-      "readTime": 15,
-      "url": "blog/posts/react-server-components.html"
-    },
-    {
       "slug": "docker-compose-best-practices",
       "title": "Docker Compose 最佳实践",
       "date": "2026-04-26",
@@ -1373,19 +1357,34 @@
       "url": "blog/posts/css-container-queries.html"
     },
     {
-      "slug": "typescript-type-gymnastics",
-      "title": "TypeScript 类型体操指南",
-      "date": "2026-04-25",
-      "dateTime": "2026-04-25 15:27:53",
+      "slug": "react-server-components",
+      "title": "React Server Components 深入解析",
+      "date": "2026-04-26",
+      "dateTime": "2026-04-26 15:11:29",
       "category": "前端",
       "tags": [
-        "TypeScript",
-        "类型体操",
-        "前端",
-        "类型安全"
+        "React",
+        "Server Components",
+        "Next.js",
+        "前端架构"
+      ],
+      "readTime": 15,
+      "url": "blog/posts/react-server-components.html"
+    },
+    {
+      "slug": "rust-getting-started",
+      "title": "Rust 入门：从零到生产",
+      "date": "2026-04-26",
+      "dateTime": "2026-04-26 15:11:29",
+      "category": "系统编程",
+      "tags": [
+        "Rust",
+        "系统编程",
+        "所有权",
+        "内存安全"
       ],
       "readTime": 20,
-      "url": "blog/posts/typescript-type-gymnastics.html"
+      "url": "blog/posts/rust-getting-started.html"
     },
     {
       "slug": "jetpack-compose-animation",
@@ -1417,6 +1416,21 @@
       ],
       "readTime": 18,
       "url": "blog/posts/git-advanced-techniques.html"
+    },
+    {
+      "slug": "typescript-type-gymnastics",
+      "title": "TypeScript 类型体操指南",
+      "date": "2026-04-25",
+      "dateTime": "2026-04-25 15:27:53",
+      "category": "前端",
+      "tags": [
+        "TypeScript",
+        "类型体操",
+        "前端",
+        "类型安全"
+      ],
+      "readTime": 20,
+      "url": "blog/posts/typescript-type-gymnastics.html"
     },
     {
       "slug": "nextjs-16-tutorial",
@@ -1683,9 +1697,9 @@
     "安全"
   ],
   "stats": {
-    "totalPosts": 110,
-    "totalTags": 284,
-    "latestDate": "2026-09-16",
+    "totalPosts": 111,
+    "totalTags": 286,
+    "latestDate": "2026-09-18",
     "oldestDate": "2026-02-15"
   }
 }

@@ -7,6 +7,14 @@
     <language>zh-CN</language>
     <atom:link href="https://709527.xyz/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>技术经理、项目经理、产品经理的区别</title>
+      <link>https://709527.xyz/blog/posts/tech-manager-vs-pm-vs-po.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/tech-manager-vs-pm-vs-po.html</guid>
+      <description>三个都叫「经理」的岗位到底差在哪：对什么负责、权力从哪来、时间花在哪、失败长什么样，以及想转过去要提前补什么。</description>
+      <category>思考</category>
+      <pubDate>Fri, 18 Sep 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
       <title>技术人员如何做好汇报</title>
       <link>https://709527.xyz/blog/posts/how-engineers-report.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/how-engineers-report.html</guid>
@@ -156,14 +164,6 @@
       <guid isPermaLink="true">https://709527.xyz/blog/posts/kotlin-coroutines-并发实战从入门到优雅的并发编程.html</guid>
       <description>深入掌握 Kotlin 协程：协程与线程的区别、Scope、Dispatcher、结构化并发、取消协作、异常处理与并发控制实战</description>
       <category>Kotlin</category>
-      <pubDate>Fri, 07 Aug 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>Jetpack Compose 性能优化实战：从卡顿到丝滑的 12 个技巧</title>
-      <link>https://709527.xyz/blog/posts/jetpack-compose-性能优化实战从卡顿到丝滑的-12-个技巧.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/jetpack-compose-性能优化实战从卡顿到丝滑的-12-个技巧.html</guid>
-      <description>全面梳理 Jetpack Compose 性能优化的核心技巧，涵盖重组优化、状态管理、延迟布局、图片加载、基线配置文件等实战经验</description>
-      <category>Android</category>
       <pubDate>Fri, 07 Aug 2026 00:00:00 +0800</pubDate>
     </item>
   </channel>
