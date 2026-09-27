@@ -83,7 +83,7 @@
     </div>
   </nav>
   <!-- Particle Canvas Background -->
-  <canvas id="particle-canvas" class="particle-canvas"></canvas>
+  <canvas id="particle-canvas" class="particle-canvas" aria-hidden="true"></canvas>
 
   <div class="scroll-progress"></div>
 
@@ -566,7 +566,7 @@ console.log(report);</code></pre>
       </div>
       <!-- /Series Nav Widget -->
   <!-- Related Posts / Navigation -->
-  <section class="section" style="padding-top: 0;">
+  <section class="section" aria-label="读完之后" style="padding-top: 0;">
     <div class="container container-narrow">
       <hr style="border: none; border-top: 1px solid var(--color-border); margin: var(--space-3xl) 0;">
 
@@ -648,7 +648,7 @@ console.log(report);</code></pre>
 
   <!-- Post TOC -->
   <div class="post-toc-container" id="postToc">
-    <nav class="post-toc">
+    <nav class="post-toc" aria-label="文章目录">
       <div class="post-toc-title">目录</div>
       <ul class="post-toc-list" id="tocList">
       </ul>
@@ -662,14 +662,48 @@ console.log(report);</code></pre>
   <!-- highlight.js 代码语法高亮（本地完整构建，无外部依赖） -->
   <script defer src="../../assets/vendor/highlight/highlight.min.js"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      // 只对没有 codehilite 的代码块应用 highlight.js
-      document.querySelectorAll('pre code').forEach(function(block) {
-        // 跳过已经有 Pygments 高亮的块
-        if (block.closest('.codehilite') || block.classList.contains('hljs')) return;
-        try { hljs.highlightElement(block); } catch (e) {}
-      });
-    });
+    /* 语法高亮改为「可见优先、空闲补齐」：
+       highlight.js 要遍历全篇代码块并生成数百个 span，若在 DOMContentLoaded 里同步跑完，
+       会在关键路径上长时间占住主线程（2026-09-27 实测本页长任务 1548ms、DCL 3651ms；
+       改动后长任务 145ms、DCL 1378ms）。这里 DCL 阶段只登记观察，实际高亮交给
+       IntersectionObserver（近屏 800px 内优先）+ requestIdleCallback（剩余块每片 ≤4 块），
+       首屏代码块的着色时机与视觉基本无变化。 */
+    (function() {
+      function canPaint(b) {
+        return !b.classList.contains('hljs') && !b.closest('.codehilite');
+      }
+      function paint(b) {
+        if (!canPaint(b)) return;
+        try { hljs.highlightElement(b); } catch (e) {}
+      }
+      function init() {
+        var blocks = [].slice.call(document.querySelectorAll('pre code')).filter(canPaint);
+        if (!blocks.length) return;
+        if ('IntersectionObserver' in window) {
+          var io = new IntersectionObserver(function(entries, obs) {
+            entries.forEach(function(en) {
+              if (!en.isIntersecting) return;
+              paint(en.target);
+              obs.unobserve(en.target);
+            });
+          }, { rootMargin: '800px 0px' });
+          blocks.forEach(function(b) { io.observe(b); });
+        }
+        var i = 0;
+        var idle = window.requestIdleCallback || window.setTimeout;
+        var step = function() {
+          var quota = 4;
+          while (i < blocks.length && quota-- > 0) paint(blocks[i++]);
+          if (i < blocks.length) idle(step);
+        };
+        idle(step); // 不在 DCL 里同步跑：可见块由 IntersectionObserver 处理，其余走空闲分片
+      }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+      } else {
+        init();
+      }
+    })();
   </script>
 
   <!-- Cloudflare Web Analytics -->

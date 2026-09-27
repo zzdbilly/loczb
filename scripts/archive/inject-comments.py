@@ -7,7 +7,7 @@ import os
 import re
 import glob
 
-POSTS_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'blog', 'posts')
+POSTS_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), 'blog', 'posts')  # scripts/archive/ → 仓库根
 COMMENT_SCRIPT_TAG = '  <!-- Comment System -->\n  <script src="../../workers/comment-system/comment-widget.js"></script>\n'
 
 def inject_comments(filepath):

@@ -9,6 +9,14 @@
   --color-text-muted: #9a9aa3;
   --color-accent-primary: #6366f1;
   --color-accent-secondary: #8b5cf6;
+  /* 深色底上「accent 当正文色」必须用这一支：#6366f1 在 --color-bg-tertiary(#18181b)
+     上只有 3.97:1，低于 WCAG AA 正文要求 4.5:1（axe 实测标签/链接全线命中）。
+     本变量是同一色相的提亮版，实测 #a5b4fc 对 #18181b = 8.89:1、对 #1f1f23 = 8.24:1。
+     装饰用途（边框/底色/渐变）继续用 --color-accent-primary 不变。 */
+  --color-accent-text: #a5b4fc;
+  /* 行内 <code> 的文字色：原来的 --color-accent-secondary(#8b5cf6) 在 #18181b 上只有 4.18:1，
+     同样不过 AA；#a78bfa 是同一紫色相的上一步，实测 6.51:1 / 对 #1f1f23 6.04:1。 */
+  --color-code-text: #a78bfa;
   --color-accent-glow: rgba(99, 102, 241, 0.4);
   --color-accent-subtle: rgba(99, 102, 241, 0.1);
   --hero-label-bg: var(--color-accent-subtle);
@@ -78,6 +86,11 @@
   --color-text-muted: #8a8a9a;
   --color-accent-primary: #6366f1;
   --color-accent-secondary: #8b5cf6;
+  /* 浅色底上「accent 当正文色」：--color-accent-primary 在白底只有 4.47:1（对 #f4f4f5 仅 4.06:1），
+     同样不过 AA 正文 4.5:1。这支实测 #4f46e5 对 #ffffff = 6.29:1、对 #f4f4f5 = 5.72:1。 */
+  --color-accent-text: #4f46e5;
+  /* 浅色主题的行内 <code> 文字色（对白底 7.1:1） */
+  --color-code-text: #6d28d9;
   --color-accent-glow: rgba(99, 102, 241, 0.15);
   --color-accent-subtle: rgba(99, 102, 241, 0.08);
   --color-border: rgba(0, 0, 0, 0.12);
@@ -1188,7 +1201,9 @@ code {
   padding: 2px 6px;
   background: var(--color-bg-tertiary);
   border-radius: var(--radius-sm);
-  color: var(--color-accent-secondary);
+  /* 全站行内代码文字色：用 --color-code-text（对深色底 ≥6:1）；
+     --color-accent-secondary(#8b5cf6) 在 #18181b/#1f1f23 上只有 3.87:1，不过 AA */
+  color: var(--color-code-text);
 }
 pre {
   font-family: var(--font-mono);
@@ -2877,7 +2892,7 @@ pre code {
 }
 .related-post-card-tags span {
   background: var(--color-bg-tertiary);
-  color: var(--color-accent-primary);
+  color: var(--color-accent-text);
   padding: 0.15rem 0.6rem;
   border-radius: 9999px;
   font-size: 0.75rem;
@@ -2922,6 +2937,14 @@ pre code {
   background: #22c55e;
   border-color: #22c55e;
   color: white;
+}
+/* 「复制链接」用的是 <button>（无 href 的 <a> 不允许 aria-label）：
+   抹掉 UA 默认样式，保证与 <a> 版本外观一致。 */
+button.share-btn {
+  padding: 0;
+  font: inherit;
+  appearance: none;
+  -webkit-appearance: none;
 }
 .back-to-top {
   position: fixed;
@@ -3605,7 +3628,8 @@ body .toc-drawer .toc-h2 {
    用 :where() 是刻意让它不贡献优先级，保持本规则仍是 (0,1,1)，
    不会压过 .copyright-item a 这类既有规则。 */
 .post-content a:where(:not(.related-post-card)):where(:not(.share-btn)) {
-  color: var(--color-accent-primary);
+  /* 正文内链也是文本：用 accent-text 保证 ≥4.5:1（#6366f1 在深色底只有 3.97:1） */
+  color: var(--color-accent-text);
   text-decoration: none;
   border-bottom: 1px solid transparent;
   transition: border-color var(--transition-fast);
@@ -3650,7 +3674,7 @@ body .toc-drawer .toc-h2 {
   border-radius: 4px;
   font-family: var(--font-mono);
   font-size: 0.9em;
-  color: var(--color-accent-secondary);
+  color: var(--color-code-text);
 }
 .post-content pre {
   background: var(--color-bg-tertiary);
@@ -3684,7 +3708,7 @@ body .toc-drawer .toc-h2 {
 }
 [data-theme="light"] .post-content code {
   background: rgba(99, 102, 241, 0.1);
-  color: #6d28d9;
+  color: var(--color-code-text);
 }
 .post-content table,
 table {
@@ -3745,7 +3769,7 @@ th, td {
 .demo-box { background: var(--color-bg-tertiary); border: 1px solid var(--color-border); border-radius: 8px; padding: 1rem; margin: 1.5rem 0; }
 .info-box { background: rgba(59, 130, 246, 0.1); border-left: 3px solid #3b82f6; padding: 1rem 1.2rem; margin: 1.5rem 0; border-radius: 0 6px 6px 0; }
 .post-meta { color: var(--color-text-secondary); font-size: 0.9rem; margin-bottom: 2rem; }
-.post-tags span { background: var(--color-bg-tertiary); padding: 0.3rem 0.8rem; border-radius: 9999px; font-size: 0.85rem; color: var(--color-accent-primary); }
+.post-tags span { background: var(--color-bg-tertiary); padding: 0.3rem 0.8rem; border-radius: 9999px; font-size: 0.85rem; color: var(--color-accent-text); }
 .post-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 3rem; }
 .tip-box { background: rgba(34, 197, 94, 0.1); border-left: 3px solid #22c55e; padding: 1rem 1.2rem; margin: 1.5rem 0; border-radius: 0 6px 6px 0; }
 .warning-box { background: rgba(234, 179, 8, 0.1); border-left: 3px solid #eab308; padding: 1rem 1.2rem; margin: 1.5rem 0; border-radius: 0 6px 6px 0; }
@@ -3760,7 +3784,7 @@ th, td {
   color: #e4e4e7;
   background: transparent;
 }
-.hljs-comment, .hljs-quote { color: #6b7280; font-style: italic; }
+.hljs-comment, .hljs-quote { color: #9ca3af; font-style: italic; }
 .hljs-keyword, .hljs-selector-tag, .hljs-built_in, .hljs-name, .hljs-tag { color: #c084fc; }
 .hljs-string, .hljs-title, .hljs-section, .hljs-attribute, .hljs-literal,
 .hljs-template-tag, .hljs-template-variable, .hljs-type, .hljs-addition { color: #86efac; }
@@ -5820,8 +5844,10 @@ pre code.hljs {
 }
 
 .copyright-item a {
-  color: var(--color-accent-primary);
-  text-decoration: none;
+  color: var(--color-accent-text);
+  /* 正文块内的链接必须有不依赖颜色的区分方式（WCAG 1.4.1 / axe link-in-text-block） */
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
   word-break: break-all;
 }
 

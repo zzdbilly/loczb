@@ -22,31 +22,34 @@ function initShareButtons() {
   ];
   
   btnGroups.forEach(btn => {
-    const a = document.createElement('a');
-    a.className = 'share-btn';
-    a.innerHTML = btn.icon;
-    a.setAttribute('aria-label', btn.name);
-    a.title = btn.name;
+    // 无 href 的动作用 <button>：<a> 不带 href 时既没有可访问角色、也不允许 aria-label
+    // （axe aria-prohibited-attr 实测命中）。带 href 的分享项继续用 <a>。
+    const el = document.createElement(btn.href ? 'a' : 'button');
+    el.className = 'share-btn';
+    el.innerHTML = btn.icon;
+    el.setAttribute('aria-label', btn.name);
+    el.title = btn.name;
     
     if (btn.action === 'copy') {
-      a.addEventListener('click', (e) => {
+      el.type = 'button';
+      el.addEventListener('click', (e) => {
         e.preventDefault();
         navigator.clipboard.writeText(window.location.href).then(() => {
-          a.classList.add('copied');
-          a.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>';
+          el.classList.add('copied');
+          el.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>';
           setTimeout(() => {
-            a.classList.remove('copied');
-            a.innerHTML = btn.icon;
+            el.classList.remove('copied');
+            el.innerHTML = btn.icon;
           }, 2000);
         });
       });
     } else if (btn.href) {
-      a.href = btn.href;
-      a.target = '_blank';
-      a.rel = 'noopener noreferrer';
+      el.href = btn.href;
+      el.target = '_blank';
+      el.rel = 'noopener noreferrer';
     }
     
-    share.appendChild(a);
+    share.appendChild(el);
   });
   
   postTags.parentNode.insertBefore(share, postTags.nextSibling);

@@ -336,6 +336,32 @@
         }
       });
     });
+
+    // 横向溢出的代码块要能被键盘聚焦，否则键盘用户没法查看被截断的行
+    // （axe scrollable-region-focusable；375px 宽下文章页实测 22 处命中）。
+    // 溢出可能落在 <pre> 也可能落在 <pre><code> 上，两边都按实测 scrollWidth 判定。
+    // ⚠️ 用 role="group" 而非 role="region"：同一页会有 20+ 个同样标签的元素，
+    //    role="region" 是 landmark，重复标签会触发 axe landmark-unique（实测踩到）。
+    function markScrollableCode() {
+      document.querySelectorAll('.post-content .code-block-wrapper pre, .post-content .code-block-wrapper pre > code').forEach(el => {
+        if (el.getAttribute('tabindex') === '0') return;
+        if (el.scrollWidth <= el.clientWidth + 1) return;
+        el.setAttribute('tabindex', '0');
+        el.setAttribute('role', 'group');
+        el.setAttribute('aria-label', '代码块，可横向滚动查看');
+      });
+    }
+    markScrollableCode();
+    // highlight.js 改为「可见才高亮」后行宽会晚一点才稳定（span 包裹改变 scrollWidth），
+    // 且窗口尺寸变化会改变是否溢出 —— 因此除了 load，再延时补两次。
+    window.addEventListener('load', markScrollableCode);
+    setTimeout(markScrollableCode, 1200);
+    setTimeout(markScrollableCode, 3000);
+    let scrollableRaf = null;
+    window.addEventListener('resize', () => {
+      cancelAnimationFrame(scrollableRaf);
+      scrollableRaf = requestAnimationFrame(markScrollableCode);
+    }, { passive: true });
   }
 
   // === 原创版权便当盒与一键引用 ===

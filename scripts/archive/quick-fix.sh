@@ -1,8 +1,19 @@
 #!/bin/bash
-# quick-fix.sh - loczb 网站 P0 问题快速修复脚本
+# [已归档 · 禁止无脑重跑] quick-fix.sh - loczb 网站 P0 问题快速修复脚本
 # 执行时间：约 1 分钟
+#
+# 2026-09-27 归档原因：一次性历史脚本（P0 链接修复已全量落地，实测全站已无
+# github.com/billyzl 残留）。它对**整个仓库所有 *.html** 做无备份的全局 `sed -i`，
+# 目标串一旦变化就会静默改坏文件，因此不再作为可反复执行的工具保留。
+# 确需复用请先 git commit 干净基线并核对 sed 目标。
 
 set -e
+
+if [ "$1" != "--force-run" ]; then
+  echo "⛔ quick-fix.sh 已归档停用（无备份的全站 sed -i，属一次性历史脚本）。"
+  echo "   确认要跑请显式传 --force-run，并先 commit 干净基线。"
+  exit 1
+fi
 
 PROJECT_DIR="/root/.hermes/workspaces/xiaoma/nook/loczb"
 cd "$PROJECT_DIR"

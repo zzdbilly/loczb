@@ -11,13 +11,19 @@
   python3 scripts/refresh-posts.py              # 回刷所有文章
   python3 scripts/refresh-posts.py --dry-run     # 只检查不写入
   python3 scripts/refresh-posts.py --post slug   # 只回刷指定文章
+
+注意（2026-09-27 起）：回刷会清空每篇文章的静态「相关文章」块，脚本末尾会自动补跑
+generate-index.js（重新内联相关文章 + 重建列表/分页/sitemap/rss/sw）与 verify.js 门禁，
+两者失败都会以非 0 退出。--dry-run 只检查，不补跑。
 """
 
+import html as html_lib
 import re
 import os
 import sys
 import json
 import glob
+import subprocess
 
 TEMPLATE = 'templates/blog-post-template.html'
 POSTS_DIR = 'blog/posts'
@@ -34,9 +40,10 @@ def extract_post_data(html):
     m = re.search(r'<title>(.*?) \| 张小猛 - loczb</title>', html)
     data['title'] = m.group(1) if m else None
     
-    # description
+    # description（先反转义实体，与 generate-post.py 的写入口径配对：
+    # 渲染时会用 html_lib.escape(quote=True) 重新转义，round-trip 逐字节稳定）
     m = re.search(r'<meta name="description" content="(.*?)">', html)
-    data['description'] = m.group(1) if m else ''
+    data['description'] = html_lib.unescape(m.group(1)) if m else ''
     
     # og_url
     m = re.search(r'<meta property="og:url" content="(.*?)">', html)
@@ -104,7 +111,10 @@ def render_with_template(template, data, slug=''):
     """用模板渲染文章"""
     html = template
     html = html.replace('{{TITLE}}', f"{data['title']} | 张小猛 - loczb")
-    html = html.replace('{{DESCRIPTION}}', data['description'])
+    # description 进的是 HTML 属性（meta description / og:description / twitter:description），
+    # 必须转义：历史文章（how-engineers-report）摘要里带裸双引号，未转义时属性在第一个引号处
+    # 闭合，线上三个 description 全被解析成「写给」（2026-09-27 修复）。
+    html = html.replace('{{DESCRIPTION}}', html_lib.escape(data['description'], quote=True))
     html = html.replace('{{OG_URL}}', data['og_url'])
     html = html.replace('{{JSON_LD}}', f'    <script type="application/ld+json">\n{data["json_ld"]}\n    </script>')
     html = html.replace('{{ARTICLE_TITLE}}', data['article_title'])
@@ -169,7 +179,7 @@ def refresh_post(filepath, template, dry_run=False):
     
     if missing:
         print(f"  ❌ {slug}: 缺少 {', '.join(missing)}")
-        return False
+        return 'fail'
     
     # 用模板重新渲染
     new_html = render_with_template(template, data, slug)
@@ -179,18 +189,18 @@ def refresh_post(filepath, template, dry_run=False):
     residue = re.findall(r'\{\{[A-Z_]+\}\}', new_html)
     if residue:
         print(f"  ❌ {slug}: 渲染结果残留占位符 {', '.join(sorted(set(residue)))}，跳过")
-        return False
+        return 'fail'
     
     # 检查是否有变化
     if new_html == original:
         print(f"  - {slug}: 无变化")
-        return True
+        return 'unchanged'
     
     # 验证渲染结果
     h1_count = new_html.count('<h1>')
     if h1_count != 1:
         print(f"  ⚠️ {slug}: h1 数量={h1_count}，跳过")
-        return False
+        return 'fail'
     
     if not dry_run:
         with open(filepath, 'w', encoding='utf-8') as f:
@@ -199,8 +209,11 @@ def refresh_post(filepath, template, dry_run=False):
     # 计算变化
     size_diff = len(new_html) - len(original)
     sign = '+' if size_diff >= 0 else ''
-    print(f"  ✅ {slug}: 已回刷 ({sign}{size_diff} bytes)")
-    return True
+    if dry_run:
+        print(f"  🔍 {slug}: 待回刷 ({sign}{size_diff} bytes)")
+    else:
+        print(f"  ✅ {slug}: 已回刷 ({sign}{size_diff} bytes)")
+    return 'ok'
 
 def main():
     dry_run = '--dry-run' in sys.argv
@@ -231,19 +244,48 @@ def main():
     
     for post in posts:
         result = refresh_post(post, template, dry_run)
-        if result:
+        if result == 'ok':
             success += 1
-            # 检查是否真的有变化
-            if not dry_run:
-                # 已经写入了，比较困难，假设都变了
-                changed += 1
+            changed += 1
+        elif result == 'unchanged':
+            skipped += 1
         else:
             failed += 1
     
     print()
-    print(f"📊 结果: {success} 成功, {failed} 失败, 共 {len(posts)} 篇")
+    label = '待回刷' if dry_run else '成功'
+    print(f"📊 结果: {success} {label}, {skipped} 无变化, {failed} 失败, 共 {len(posts)} 篇")
     if dry_run:
         print("   (dry-run 模式，未实际写入)")
+        return
+
+    proj_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+    # 回刷会按设计清空每篇文章的静态「相关文章」块（模板里 `<!-- Related Static -->` 区间），
+    # 等着 generate-index.js 重新内联。只跑 refresh 不跑 generate-index 会让 verify.js 的
+    # f) 断言直接失败——实测回刷 1 篇即触发「1 篇文章页的相关文章块为空」。
+    # 所以这里自动补跑 generate-index.js + verify.js，与 generate-post.py 的发布链路对齐。
+    if changed == 0:
+        print("\n本次没有文件变化，跳过索引重建。")
+    else:
+        print("\n🔁 回刷后重建全站索引（相关文章 / 列表页 / 分页 / sitemap / rss / sw）：")
+        r = subprocess.run(['node', 'scripts/generate-index.js'], capture_output=True, text=True, cwd=proj_root)
+        for line in (r.stdout + r.stderr).strip().split('\n'):
+            if line.strip():
+                print(f"  {line}")
+        if r.returncode != 0:
+            print("❌ generate-index.js 失败：已回刷文章的相关文章块可能为空，请修复后重跑")
+            sys.exit(r.returncode)
+
+    v = subprocess.run(['node', 'scripts/verify.js'], capture_output=True, text=True, cwd=proj_root)
+    for line in (v.stdout + v.stderr).strip().split('\n'):
+        if line.strip():
+            print(f"  {line}")
+    if v.returncode != 0:
+        print("❌ 一致性校验未通过，请修复后重新运行（详见 scripts/verify.js 断言）")
+        sys.exit(v.returncode)
+
+    print("\n🎉 回刷完成：所有索引已重建，直接 git push 即可")
 
 if __name__ == '__main__':
     main()
