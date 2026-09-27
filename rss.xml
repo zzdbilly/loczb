@@ -7,6 +7,14 @@
     <language>zh-CN</language>
     <atom:link href="https://709527.xyz/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>幂等与可复现：为什么你的构建总在产生无意义的 diff</title>
+      <link>https://709527.xyz/blog/posts/idempotent-reproducible-builds.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/idempotent-reproducible-builds.html</guid>
+      <description>从 mtime 并列裁决、无条件写盘到不对称正则，拆开构建噪声的三个真实来源，给出元数据 sidecar 与「零改动」门禁的落地实现。</description>
+      <category>开发</category>
+      <pubDate>Sun, 27 Sep 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
       <title>技术经理、项目经理、产品经理的区别</title>
       <link>https://709527.xyz/blog/posts/tech-manager-vs-pm-vs-po.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/tech-manager-vs-pm-vs-po.html</guid>
@@ -157,14 +165,6 @@
       <description>一套经过实践检验的工作方法论：识别重要的事、用系统代替意志力、管理注意力、用健康托底，以及一张可执行的每日清单。</description>
       <category>思考</category>
       <pubDate>Sat, 08 Aug 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>Kotlin Coroutines 并发实战：从入门到优雅的并发编程</title>
-      <link>https://709527.xyz/blog/posts/kotlin-coroutines-并发实战从入门到优雅的并发编程.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/kotlin-coroutines-并发实战从入门到优雅的并发编程.html</guid>
-      <description>深入掌握 Kotlin 协程：协程与线程的区别、Scope、Dispatcher、结构化并发、取消协作、异常处理与并发控制实战</description>
-      <category>Kotlin</category>
-      <pubDate>Fri, 07 Aug 2026 00:00:00 +0800</pubDate>
     </item>
   </channel>
 </rss>
