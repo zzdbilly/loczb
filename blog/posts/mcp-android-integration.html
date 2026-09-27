@@ -39,8 +39,8 @@
           "url": "https://709527.xyz/assets/images/favicon.svg"
         }
       },
-      "datePublished": "2026-06-19",
-      "dateModified": "2026-06-19",
+      "datePublished": "2026-06-19T10:16:17+08:00",
+      "dateModified": "2026-06-19T10:16:17+08:00",
       "url": "https://709527.xyz/blog/posts/mcp-android-integration.html",
       "mainEntityOfPage": {
         "@type": "WebPage",
@@ -153,6 +153,10 @@
             <div class="related-post-card-title">Agentic AI 架构演进：从 Chatbot 到自主 Agent</div>
             <div class="related-post-card-tags"><span>AI</span><span>Agent</span><span>架构</span></div>
           </a>
+          <a class="related-post-card" href="ai-编程助手进化论从结对编程到自主编程团队-2026.html">
+            <div class="related-post-card-title">AI 编程助手进化论：从结对编程到自主编程团队 (2026)</div>
+            <div class="related-post-card-tags"><span>AI</span><span>Agent</span><span>AI 工具</span></div>
+          </a>
           <a class="related-post-card" href="mcp-server-deep-dive.html">
             <div class="related-post-card-title">MCP 协议深入实战：从入门到编写自定义 MCP Server</div>
             <div class="related-post-card-tags"><span>AI</span><span>MCP</span><span>工具调用</span></div>
@@ -160,10 +164,6 @@
           <a class="related-post-card" href="android-gemini-nano-integration.html">
             <div class="related-post-card-title">Android 端侧 AI 实战：Gemini Nano 集成指南</div>
             <div class="related-post-card-tags"><span>Android</span><span>AI</span><span>Gemini Nano</span></div>
-          </a>
-          <a class="related-post-card" href="openclaw-guide.html">
-            <div class="related-post-card-title">OpenClaw 深度使用指南：从 0 到 1 构建个人 AI Agent</div>
-            <div class="related-post-card-tags"><span>AI</span><span>OpenClaw</span><span>Agent</span></div>
           </a>
           </div>
         </div>
@@ -198,14 +198,14 @@
       <pre><code>┌─────────────┐    discover tools     ┌─────────────┐
 │   Android   │  ──────────────────>  │    MCP      │
 │   App       │                       │   Server    │
-│   (Host)    │  <──────────────────  │             │
+│   (Host)    │  &lt;──────────────────  │             │
 │             │     tool list         │             │
 │   ┌─────┐   │                       │             │
 │   │MCP  │   │    call tool          │  ┌────────┐ │
 │   │Client│   │  ──────────────────>  │  │ Tool A │ │
 │   └─────┘   │                       │  │ Tool B │ │
 │             │     tool result       │  │ Tool C │ │
-│             │  <──────────────────  │  └────────┘ │
+│             │  &lt;──────────────────  │  └────────┘ │
 └─────────────┘                       └─────────────┘</code></pre>
 
       <h2>为什么 Android 需要 MCP？</h2>

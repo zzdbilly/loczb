@@ -39,8 +39,8 @@
           "url": "https://709527.xyz/assets/images/favicon.svg"
         }
       },
-      "datePublished": "2026-05-07",
-      "dateModified": "2026-05-07",
+      "datePublished": "2026-05-07T20:34:40+08:00",
+      "dateModified": "2026-05-07T20:34:40+08:00",
       "url": "https://709527.xyz/blog/posts/android-gemini-nano-integration.html",
       "mainEntityOfPage": {
         "@type": "WebPage",
@@ -161,9 +161,9 @@
             <div class="related-post-card-title">Agentic AI 架构演进：从 Chatbot 到自主 Agent</div>
             <div class="related-post-card-tags"><span>AI</span><span>Agent</span><span>架构</span></div>
           </a>
-          <a class="related-post-card" href="mcp-server-deep-dive.html">
-            <div class="related-post-card-title">MCP 协议深入实战：从入门到编写自定义 MCP Server</div>
-            <div class="related-post-card-tags"><span>AI</span><span>MCP</span><span>工具调用</span></div>
+          <a class="related-post-card" href="ai-编程助手进化论从结对编程到自主编程团队-2026.html">
+            <div class="related-post-card-title">AI 编程助手进化论：从结对编程到自主编程团队 (2026)</div>
+            <div class="related-post-card-tags"><span>AI</span><span>Agent</span><span>AI 工具</span></div>
           </a>
           </div>
         </div>
@@ -529,7 +529,7 @@ class TextProcessor {
     }
     
     // 批量处理
-    fun processBatch(texts: List<String>) {
+    fun processBatch(texts: List&lt;String>) {
         // 将多个文本组合成一个请求
         val combined = texts.mapIndexed { index, text ->
             "${index + 1}. $text"
@@ -550,7 +550,7 @@ class TextProcessor {
       <p>模型推理是耗时操作务必在后台线程执行：</p>
 
       <pre><code>// 使用协程处理
-fun generateAsync(prompt: String): Deferred<String> {
+fun generateAsync(prompt: String): Deferred&lt;String> {
     return CoroutineScope(Dispatchers.IO).async {
         try {
             textGenerator.generate(prompt).await().text.trim()
@@ -567,8 +567,8 @@ fun generateAsync(prompt: String): Deferred<String> {
       <pre><code>// 简单的 LRU 缓存
 class ResultCache(private val maxSize: Int = 100) {
     
-    private val cache = object : LinkedHashMap<String, String>(maxSize, 0.75f, true) {
-        override fun removeEldestEntry(eldest: MutableMap.MutableEntry<String, String>?): Boolean {
+    private val cache = object : LinkedHashMap&lt;String, String>(maxSize, 0.75f, true) {
+        override fun removeEldestEntry(eldest: MutableMap.MutableEntry&lt;String, String>?): Boolean {
             return size > maxSize
         }
     }
@@ -593,7 +593,7 @@ class ResultCache(private val maxSize: Int = 100) {
     // 智能摘要
     fun autoSummarize(note: String): String {
         // 输入验证
-        if (note.length < 100) return note
+        if (note.length &lt; 100) return note
         
         return summarizer.summarize(note)
     }

@@ -39,8 +39,8 @@
           "url": "https://709527.xyz/assets/images/favicon.svg"
         }
       },
-      "datePublished": "2026-06-19",
-      "dateModified": "2026-06-19",
+      "datePublished": "2026-06-19T10:16:17+08:00",
+      "dateModified": "2026-06-19T10:16:17+08:00",
       "url": "https://709527.xyz/blog/posts/compose-april-2026-update.html",
       "mainEntityOfPage": {
         "@type": "WebPage",
@@ -414,20 +414,20 @@ sealed class Route {
 
 @Composable
 fun AppNavigation() {
-    val navController = rememberNavController3<Route>(
+    val navController = rememberNavController3&lt;Route>(
         startDestination = Route.Home()
     )
     
     NavHost3(navController = navController) {
-        composable<Route.Home> {
+        composable&lt;Route.Home> {
             HomeScreen(
                 onArticleClick = { id, title ->
                     navController.navigate(Route.Article(id, title))
                 }
             )
         }
-        composable<Route.Article> { backStackEntry ->
-            val article = backStackEntry.toRoute<Route.Article>()
+        composable&lt;Route.Article> { backStackEntry ->
+            val article = backStackEntry.toRoute&lt;Route.Article>()
             ArticleScreen(articleId = article.id, title = article.title)
         }
     }

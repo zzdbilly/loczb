@@ -39,8 +39,8 @@
           "url": "https://709527.xyz/assets/images/favicon.svg"
         }
       },
-      "datePublished": "2026-03-18",
-      "dateModified": "2026-03-18",
+      "datePublished": "2026-03-18T21:09:32+08:00",
+      "dateModified": "2026-03-18T21:09:32+08:00",
       "url": "https://709527.xyz/blog/posts/ssh-security-hardening.html",
       "mainEntityOfPage": {
         "@type": "WebPage",
@@ -414,7 +414,7 @@ sudo dnf install -y epel-release
 sudo dnf install -y fail2ban
 
 # 创建 SSH 防护配置
-sudo cat > /etc/fail2ban/jail.d/sshd.local << 'EOF'
+sudo cat > /etc/fail2ban/jail.d/sshd.local &lt;&lt; 'EOF'
 [sshd]
 enabled = true
 port = 22222
@@ -531,9 +531,9 @@ if [ "$FAILED_COUNT" -gt "$ALERT_THRESHOLD" ]; then
 fi
 
 # 显示 Fail2ban 封禁状态
-if command -v fail2ban-client &> /dev/null; then
+if command -v fail2ban-client &amp;> /dev/null; then
     echo "Fail2ban banned IPs:" >> "$LOG_FILE"
-    fail2ban-client status sshd >> "$LOG_FILE" 2>&1
+    fail2ban-client status sshd >> "$LOG_FILE" 2>&amp;1
 fi</code></pre>
 
         <h3>5.2 配置定时监控</h3>

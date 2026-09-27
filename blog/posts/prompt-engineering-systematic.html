@@ -39,8 +39,8 @@
           "url": "https://709527.xyz/assets/images/favicon.svg"
         }
       },
-      "datePublished": "2026-06-27",
-      "dateModified": "2026-06-27",
+      "datePublished": "2026-06-27T12:27:38+08:00",
+      "dateModified": "2026-06-27T12:27:38+08:00",
       "url": "https://709527.xyz/blog/posts/prompt-engineering-systematic.html",
       "mainEntityOfPage": {
         "@type": "WebPage",
@@ -123,6 +123,10 @@
             <div class="related-post-card-title">Agentic AI 架构演进：从 Chatbot 到自主 Agent</div>
             <div class="related-post-card-tags"><span>AI</span><span>Agent</span><span>架构</span></div>
           </a>
+          <a class="related-post-card" href="ai-编程助手进化论从结对编程到自主编程团队-2026.html">
+            <div class="related-post-card-title">AI 编程助手进化论：从结对编程到自主编程团队 (2026)</div>
+            <div class="related-post-card-tags"><span>AI</span><span>Agent</span><span>AI 工具</span></div>
+          </a>
           <a class="related-post-card" href="mcp-server-deep-dive.html">
             <div class="related-post-card-title">MCP 协议深入实战：从入门到编写自定义 MCP Server</div>
             <div class="related-post-card-tags"><span>AI</span><span>MCP</span><span>工具调用</span></div>
@@ -134,10 +138,6 @@
           <a class="related-post-card" href="rag-introduction.html">
             <div class="related-post-card-title">RAG 检索增强生成入门：从理念到落地</div>
             <div class="related-post-card-tags"><span>RAG</span><span>检索增强生成</span><span>LLM</span></div>
-          </a>
-          <a class="related-post-card" href="google-io-2026-recap.html">
-            <div class="related-post-card-title">Google I/O 2026 完整回顾：AI 重塑一切</div>
-            <div class="related-post-card-tags"><span>AI</span><span>Android</span><span>Google I/O</span></div>
           </a>
           </div>
         </div>
@@ -1172,7 +1172,7 @@ def prompt_optimization_loop(
         score = results["mean_score"]
         
         # 2. 分析失败案例
-        failures = [r for r in results["details"] if r["score"] < 4]
+        failures = [r for r in results["details"] if r["score"] &lt; 4]
         failure_patterns = analyze_failure_patterns(failures)
         
         # 3. 基于失败模式生成优化建议

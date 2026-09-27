@@ -39,8 +39,8 @@
           "url": "https://709527.xyz/assets/images/favicon.svg"
         }
       },
-      "datePublished": "2026-03-17",
-      "dateModified": "2026-03-17",
+      "datePublished": "2026-03-17T17:02:19+08:00",
+      "dateModified": "2026-03-17T17:02:19+08:00",
       "url": "https://709527.xyz/blog/posts/tailscale-derp-server.html",
       "mainEntityOfPage": {
         "@type": "WebPage",
@@ -134,9 +134,9 @@
             <div class="related-post-card-title">Next.js + Prisma 部署 Vercel 常见踩坑：外键约束与构建时数据修复</div>
             <div class="related-post-card-tags"><span>Next.js</span><span>Prisma</span><span>Vercel</span></div>
           </a>
-          <a class="related-post-card" href="nginx-reverse-proxy-tuning.html">
-            <div class="related-post-card-title">Nginx 反向代理性能调优：从入门到生产</div>
-            <div class="related-post-card-tags"><span>Nginx</span><span>反向代理</span><span>性能调优</span></div>
+          <a class="related-post-card" href="vps-选购与使用指南五个常见场景的配置与避坑.html">
+            <div class="related-post-card-title">VPS 选购与使用指南：五个常见场景的配置与避坑</div>
+            <div class="related-post-card-tags"><span>VPS</span><span>DevOps</span><span>运维</span></div>
           </a>
           </div>
         </div>
@@ -320,7 +320,7 @@
         <p>首先登录你的服务器，更新系统：</p>
 
         <pre><code># 更新系统包
-sudo apt update && sudo apt upgrade -y
+sudo apt update &amp;&amp; sudo apt upgrade -y
 
 # 安装必要工具
 sudo apt install -y curl wget</code></pre>
@@ -398,7 +398,7 @@ openssl req -x509 -newkey rsa:4096 -keyout /etc/derper/certs/key.pem \
         <p>创建系统服务，让 derper 开机自启：</p>
 
         <pre><code># 创建服务文件
-sudo tee /etc/systemd/system/derper.service > /dev/null << 'EOF'
+sudo tee /etc/systemd/system/derper.service > /dev/null &lt;&lt; 'EOF'
 [Unit]
 Description=Tailscale DERP Server
 Documentation=https://tailscale.com/kb/1118/custom-derp-servers

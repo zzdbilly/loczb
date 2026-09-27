@@ -39,8 +39,8 @@
           "url": "https://709527.xyz/assets/images/favicon.svg"
         }
       },
-      "datePublished": "2026-04-26",
-      "dateModified": "2026-04-26",
+      "datePublished": "2026-04-26T15:11:29+08:00",
+      "dateModified": "2026-04-26T15:11:29+08:00",
       "url": "https://709527.xyz/blog/posts/react-server-components.html",
       "mainEntityOfPage": {
         "@type": "WebPage",
@@ -303,7 +303,7 @@ function ClientComponent({ children }) {
   return (
     &lt;div>
       &lt;button onClick={() => setIsOpen(!isOpen)}>切换&lt;/button>
-      {isOpen && children}
+      {isOpen &amp;&amp; children}
     &lt;/div&gt;
   );
 }

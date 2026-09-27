@@ -5,6 +5,11 @@
   "date": "2026-07-02",
   "dateTime": "2026-07-02 11:12:53",
   "category": "Android",
-  "tags": [],
+  "tags": [
+    "Gradle",
+    "Android",
+    "构建优化",
+    "性能优化"
+  ],
   "readTime": 5
 }

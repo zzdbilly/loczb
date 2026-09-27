@@ -39,8 +39,8 @@
           "url": "https://709527.xyz/assets/images/favicon.svg"
         }
       },
-      "datePublished": "2026-06-27",
-      "dateModified": "2026-06-27",
+      "datePublished": "2026-06-27T10:37:43+08:00",
+      "dateModified": "2026-06-27T10:37:43+08:00",
       "url": "https://709527.xyz/blog/posts/webassembly-in-practice.html",
       "mainEntityOfPage": {
         "@type": "WebPage",
@@ -218,7 +218,7 @@ cd image-processor</code></pre>
 use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
-pub fn grayscale(data: &mut [u8]) {
+pub fn grayscale(data: &amp;mut [u8]) {
     // 每个像素 4 字节：R, G, B, A
     for pixel in data.chunks_exact_mut(4) {
         let r = pixel[0] as f32;
@@ -234,7 +234,7 @@ pub fn grayscale(data: &mut [u8]) {
 }
 
 #[wasm_bindgen]
-pub fn invert(data: &mut [u8]) {
+pub fn invert(data: &amp;mut [u8]) {
     for pixel in data.chunks_exact_mut(4) {
         pixel[0] = 255 - pixel[0];
         pixel[1] = 255 - pixel[1];
@@ -243,7 +243,7 @@ pub fn invert(data: &mut [u8]) {
 }
 
 #[wasm_bindgen]
-pub fn blur(data: &[u8], width: u32, height: u32, radius: u32) -> Vec&lt;u8&gt; {
+pub fn blur(data: &amp;[u8], width: u32, height: u32, radius: u32) -> Vec&lt;u8&gt; {
     let mut output = data.to_vec();
     let w = width as usize;
     let h = height as usize;
@@ -387,7 +387,7 @@ wasm_exports.dealloc(ptr, size);  // 释放内存</code></pre>
 #[wasm_bindgen]
 pub fn process_vec(data: Vec&lt;u8&gt;) -> Vec&lt;u8&gt; {
     // wasm-bindgen 自动处理 JS ↔ Rust 的数据转换
-    data.iter().map(|&x| x.wrapping_add(1)).collect()
+    data.iter().map(|&amp;x| x.wrapping_add(1)).collect()
 }</code></pre>
 
       <div class="warning-box">
@@ -451,7 +451,7 @@ self.onmessage = async ({ data }) => {
       <pre><code>// Rust 端使用 SIMD intrinsics
 #[wasm_bindgen]
 #[target_feature(enable = "simd128")]
-pub fn grayscale_simd(data: &mut [u8]) {
+pub fn grayscale_simd(data: &amp;mut [u8]) {
     use std::arch::wasm32::*;
 
     for pixel in data.chunks_exact_mut(16) {

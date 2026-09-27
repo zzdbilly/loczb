@@ -39,8 +39,8 @@
           "url": "https://709527.xyz/assets/images/favicon.svg"
         }
       },
-      "datePublished": "2026-04-20",
-      "dateModified": "2026-04-20",
+      "datePublished": "2026-04-20T21:26:40+08:00",
+      "dateModified": "2026-04-20T21:26:40+08:00",
       "url": "https://709527.xyz/blog/posts/nextjs-16-tutorial.html",
       "mainEntityOfPage": {
         "@type": "WebPage",
@@ -213,36 +213,36 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="zh-CN">
-      <body>
-        <nav>
-          <a href="/">首页</a>
-          <a href="/blog">博客</a>
-        </nav>
+    &lt;html lang="zh-CN">
+      &lt;body>
+        &lt;nav>
+          &lt;a href="/">首页&lt;/a>
+          &lt;a href="/blog">博客&lt;/a>
+        &lt;/nav>
         {children}
       
-  <!-- Back to Top & Reading Progress -->
-  <button class="back-to-top" id="backToTop" aria-label="回到顶部">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <path d="M18 15l-6-6-6 6"/>
-    </svg>
-  </button>
-  <div class="reading-progress" id="readingProgress"></div>
+  &lt;!-- Back to Top &amp; Reading Progress -->
+  &lt;button class="back-to-top" id="backToTop" aria-label="回到顶部">
+    &lt;svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      &lt;path d="M18 15l-6-6-6 6"/>
+    &lt;/svg>
+  &lt;/button>
+  &lt;div class="reading-progress" id="readingProgress">&lt;/div>
 
-  <!-- Post TOC -->
-  <div class="post-toc-container" id="postToc">
-    <nav class="post-toc">
-      <div class="post-toc-title">目录</div>
-      <ul class="post-toc-list" id="tocList"></ul>
-    </nav>
-  </div>
+  &lt;!-- Post TOC -->
+  &lt;div class="post-toc-container" id="postToc">
+    &lt;nav class="post-toc">
+      &lt;div class="post-toc-title">目录&lt;/div>
+      &lt;ul class="post-toc-list" id="tocList">&lt;/ul>
+    &lt;/nav>
+  &lt;/div>
 
   
-<script src="../../assets/js/particles.js"></script>
-  <!-- Comment System -->
-  <script src="../../workers/comment-system/comment-widget.js" defer></script>
-</body>
-    </html>
+&lt;script src="../../assets/js/particles.js">&lt;/script>
+  &lt;!-- Comment System -->
+  &lt;script src="../../workers/comment-system/comment-widget.js" defer>&lt;/script>
+&lt;/body>
+    &lt;/html>
   )
 }</code></pre>
 

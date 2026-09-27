@@ -605,7 +605,12 @@
       "date": "2026-07-05",
       "dateTime": "2026-07-05 13:07:14",
       "category": "DevOps",
-      "tags": [],
+      "tags": [
+        "VPS",
+        "DevOps",
+        "运维",
+        "服务器"
+      ],
       "readTime": 5,
       "url": "blog/posts/vps-选购与使用指南五个常见场景的配置与避坑.html"
     },
@@ -615,7 +620,12 @@
       "date": "2026-07-05",
       "dateTime": "2026-07-05 13:07:10",
       "category": "数据库",
-      "tags": [],
+      "tags": [
+        "MySQL",
+        "数据库",
+        "索引优化",
+        "慢查询"
+      ],
       "readTime": 5,
       "url": "blog/posts/mysql-索引优化实战从慢查询到最佳实践.html"
     },
@@ -625,7 +635,12 @@
       "date": "2026-07-04",
       "dateTime": "2026-07-04 16:55:32",
       "category": "AI",
-      "tags": [],
+      "tags": [
+        "AI",
+        "Agent",
+        "AI 工具",
+        "编程助手"
+      ],
       "readTime": 5,
       "url": "blog/posts/ai-编程助手进化论从结对编程到自主编程团队-2026.html"
     },
@@ -635,7 +650,12 @@
       "date": "2026-07-04",
       "dateTime": "2026-07-04 14:48:19",
       "category": "系统编程",
-      "tags": [],
+      "tags": [
+        "Linux",
+        "文件系统",
+        "系统编程",
+        "运维"
+      ],
       "readTime": 5,
       "url": "blog/posts/linux-inode-mechanism-deep-dive.html"
     },
@@ -645,7 +665,12 @@
       "date": "2026-07-04",
       "dateTime": "2026-07-04 13:50:50",
       "category": "DevOps",
-      "tags": [],
+      "tags": [
+        "GitHub Actions",
+        "CI/CD",
+        "DevOps",
+        "自动化"
+      ],
       "readTime": 5,
       "url": "blog/posts/github-actions-auto-index-blog-cicd.html"
     },
@@ -669,7 +694,12 @@
       "date": "2026-07-03",
       "dateTime": "2026-07-03 20:48:53",
       "category": "前端",
-      "tags": [],
+      "tags": [
+        "性能优化",
+        "静态网站",
+        "前端",
+        "CSS"
+      ],
       "readTime": 5,
       "url": "blog/posts/static-blog-performance-optimization-59mb.html"
     },
@@ -679,7 +709,12 @@
       "date": "2026-07-02",
       "dateTime": "2026-07-02 11:12:53",
       "category": "Android",
-      "tags": [],
+      "tags": [
+        "Gradle",
+        "Android",
+        "构建优化",
+        "性能优化"
+      ],
       "readTime": 5,
       "url": "blog/posts/gradle-build-acceleration-5min-to-30sec.html"
     },
@@ -689,7 +724,12 @@
       "date": "2026-07-02",
       "dateTime": "2026-07-02 11:05:59",
       "category": "思考",
-      "tags": [],
+      "tags": [
+        "架构",
+        "系统思维",
+        "工程思维",
+        "思考"
+      ],
       "readTime": 5,
       "url": "blog/posts/urban-planning-inspires-software-architecture.html"
     },
@@ -699,7 +739,12 @@
       "date": "2026-07-02",
       "dateTime": "2026-07-02 10:54:35",
       "category": "思考",
-      "tags": [],
+      "tags": [
+        "工程实践",
+        "思考",
+        "工程思维",
+        "工作法"
+      ],
       "readTime": 5,
       "url": "blog/posts/software-engineer-learns-from-manufacturing-lean.html"
     },
@@ -742,7 +787,12 @@
       "date": "2026-07-01",
       "dateTime": "2026-07-01 17:43:07",
       "category": "Kotlin",
-      "tags": [],
+      "tags": [
+        "Kotlin",
+        "协程",
+        "异常处理",
+        "Android"
+      ],
       "readTime": 5,
       "url": "blog/posts/kotlin-coroutine-exception-handling.html"
     },
@@ -1713,7 +1763,7 @@
   ],
   "stats": {
     "totalPosts": 112,
-    "totalTags": 289,
+    "totalTags": 293,
     "latestDate": "2026-09-27",
     "oldestDate": "2026-02-15"
   }
