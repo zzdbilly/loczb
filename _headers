@@ -1,3 +1,20 @@
+# ⚠️ 本文件在 GitHub Pages 上【完全不生效】（2026-09-27 实测）
+#   线下实测 `curl -sI https://709527.xyz/`：只有 `cache-control: max-age=600` + `etag`，
+#   没有 CSP / X-Frame-Options / X-Content-Type-Options / Permissions-Policy；
+#   `/assets/css/style.css` 同样是 max-age=600，并非下面写的 immutable。
+#   `_headers` / `_redirects` 是 Netlify / Cloudflare Pages 的语法，GitHub Pages 直接忽略，
+#   而且这两个文件本身还能被公开 GET 到（返回 200）。
+# 现状补救：
+#   1) 能在 <meta> 里生效的那部分 CSP 已经逐页注入到 129 个 HTML 的 <head>
+#      （见 scripts/archive/batch-meta-csp.py：default-src/script-src/object-src 'none'/
+#        base-uri/form-action/upgrade-insecure-requests）。
+#   2) frame-ancestors、X-Frame-Options、X-Content-Type-Options、Permissions-Policy 和
+#      真正的 immutable 缓存头【无法用 meta 下发】，只能靠能下发响应头的层
+#      （前置 Cloudflare / 迁到 Cloudflare Pages）。迁过去之后本文件即可直接生效。
+#   3) `_redirects` 已删除：它的三条规则在 GitHub Pages 上都不生效，且对应 URL
+#      （/index.html、/blog/index.html）本来就直接 200，/blog.html 全站无人引用。
+# 保留本文件只为迁移时不再重写一遍；在 GitHub Pages 托管期间请不要以为它生效了。
+
 # Static asset caching
 /assets/css/*
   Cache-Control: public, max-age=31536000, immutable
