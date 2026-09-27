@@ -26,7 +26,10 @@ set -u
 DOMAIN="${DOMAIN:-https://709527.xyz}"
 MAX_WAIT_SEC="${MAX_WAIT_SEC:-300}"
 POLL_INTERVAL="${POLL_INTERVAL:-15}"
-FILES=(index.html blog/index.html projects/index.html about/index.html blog/articles-index.json)
+# 比对清单：改动频繁、且能代表一次部署是否真的上线的文件。
+# 注意 style.css 也要在列——纯 CSS 的提交只改这一个文件，漏了它就会出现
+# 「5 个页面都一致」但实际上新样式还没上的假绿（2026-09-27 踩到）。
+FILES=(index.html blog/index.html projects/index.html about/index.html blog/articles-index.json assets/css/style.css)
 
 BRANCH="$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo unknown)"
 HEAD_SHORT="$(git rev-parse --short HEAD 2>/dev/null || echo unknown)"
