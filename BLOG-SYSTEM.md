@@ -211,7 +211,7 @@ git push
 - ✅ 更新 `index.html` 大卡 + 文章列表 + JS posts 数组
 - ✅ 跑 `scripts/verify.js` 一致性门禁（posts/index/meta 对账 + 主页面 ?v= 一致 + 体积门禁 + 静态相关文章 + 静态分页；非零退出即阻断 push）
   - 体积门禁阈值：`articles-index.json` 超 **250KB 只预警**（非阻断提示）、超 **400KB 阻断**；两条线可用 `INDEX_WARN_BYTES` / `INDEX_FAIL_BYTES` 环境变量覆盖，便于验证门禁行为
-  - 当前实测 ≈440 字节/篇（110 篇 48KB），按此外推：581 篇触预警、930 篇触阻断
+  - 当前实测 ≈440 字节/篇（111 篇 48KB），按此外推：581 篇触预警、930 篇触阻断
 
 ### 推送后自动完成
 - **GitHub Pages** 推送后自动构建部署（常规 1-2 分钟；若线上仍旧版，查首页 `last-modified` 判断是否漏触发构建）
