@@ -94,7 +94,7 @@ loczb/
 │   ├── generate-post.py           # Markdown 文章构建器 (支持 YAML Frontmatter & 单文件 CLI)
 │   ├── generate-index.js          # 全站 CI 全量索引重建管线
 │   ├── build-series.js            # 6 大旗舰系列专栏聚合构建器
-│   ├── check-links.js             # 自动化死链与静态资源巡检医生 (0.2s 扫描 107 页)
+│   ├── check-links.js             # 自动化死链与静态资源巡检医生 (扫描 126 个 HTML 页面)
 │   ├── refresh-posts.py           # 模板变更后批量刷新旧文章
 │   └── deploy-check.sh            # 部署状态自动验证脚本
 ├── workers/
