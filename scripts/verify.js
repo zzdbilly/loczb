@@ -12,6 +12,9 @@
  *      期望 top 5；不足 3 条只提示不阻断）
  *   g) 列表静态分页：页数 = ceil(总文章数 / 10)、每页卡片数 ∈ [1,10]、跨页 slug 不重复、
  *      合计等于 posts 总数，且每页有自指 canonical 与可达的 prev/next 导航
+ *   h) 内容质量警告（非阻断，exit 仍 0）：① 每篇 JSON-LD 能否 JSON.parse；② datePublished/
+ *      dateModified 是否合法 ISO 8601；③ og:url/canonical 与文章实际路径是否一致；④ tags 是否为空。
+ *      每条打印「检查名 + 命中数 + 前几个 slug」；存量清干净后可升级为阻断。
  *
  * 本地 Run: node scripts/verify.js
  * generate-post.py 在索引重建成功后自动调用。
@@ -243,6 +246,78 @@ for (const slug of metaSlugs) {
 
   if (totalCards !== htmlSlugs.size) {
     fail(`g) 分页卡片合计 ${totalCards} ≠ 文章总数 ${htmlSlugs.size}`);
+  }
+}
+
+// ── h) 内容质量警告（非阻断：只提示，exit 仍 0）─────────
+// 这些是存量文章里真实存在的历史数据问题，修完之前不能阻断发文；
+// 存量清干净后可把下面的 warnCheck 换回 fail() 升级为阻断。
+function warnCheck(name, count, samples) {
+  const list = samples.slice(0, 5).join(', ') + (count > samples.length ? ' …' : '');
+  infos.push(`h) ${name}: 命中 ${count} 篇${count ? ' — 例: ' + list : ''}`);
+}
+
+{
+  const ISO_8601 = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})$/;
+  const JSON_LD_RE = /<script type="application\/ld\+json">([\s\S]*?)<\/script>/;
+
+  let ldMissing = 0, ldBadJson = 0, ldBadIso = 0, urlMismatch = 0, emptyTags = 0;
+  const ldMissingList = [], ldBadJsonList = [], ldBadIsoList = [], urlMismatchList = [], emptyTagsList = [];
+
+  for (const slug of [...htmlSlugs].sort()) {
+    const html = readText(`blog/posts/${slug}.html`);
+
+    // ① JSON-LD 能否 JSON.parse
+    const m = html.match(JSON_LD_RE);
+    let ld = null;
+    if (!m) {
+      ldMissing++;
+      ldMissingList.push(slug);
+    } else {
+      try {
+        ld = JSON.parse(m[1]);
+      } catch (e) {
+        ldBadJson++;
+        ldBadJsonList.push(slug);
+      }
+    }
+
+    // ② datePublished / dateModified 是否合法 ISO 8601
+    if (ld) {
+      const badKeys = ['datePublished', 'dateModified'].filter(k =>
+        !(typeof ld[k] === 'string' && ISO_8601.test(ld[k]) && !Number.isNaN(new Date(ld[k]).getTime())));
+      if (badKeys.length) {
+        ldBadIso++;
+        ldBadIsoList.push(`${slug}(${badKeys.join('/')}=${JSON.stringify(ld[badKeys[0]])})`);
+      }
+    }
+
+    // ③ og:url / canonical 与文章实际路径是否一致
+    const expectedUrl = `https://709527.xyz/blog/posts/${slug}.html`;
+    const ogUrl = (html.match(/<meta property="og:url" content="([^"]*)"/) || [])[1] || '';
+    const canonical = (html.match(/<link rel="canonical" href="([^"]*)"/) || [])[1] || '';
+    if (ogUrl !== expectedUrl || canonical !== expectedUrl) {
+      urlMismatch++;
+      urlMismatchList.push(`${slug}(og:url=${ogUrl || '缺失'}, canonical=${canonical || '缺失'})`);
+    }
+
+    // ④ tags 是否为空（sidecar 是元数据真相源；解析失败已在 b) 阻断，这里跳过）
+    try {
+      const meta = JSON.parse(readText(`blog/meta/${slug}.json`));
+      if (!Array.isArray(meta.tags) || meta.tags.filter(t => String(t).trim()).length === 0) {
+        emptyTags++;
+        emptyTagsList.push(slug);
+      }
+    } catch (e) { /* ignore */ }
+  }
+
+  warnCheck('① JSON-LD 缺失', ldMissing, ldMissingList);
+  warnCheck('① JSON-LD 无法 JSON.parse', ldBadJson, ldBadJsonList);
+  warnCheck('② datePublished/dateModified 非法 ISO 8601', ldBadIso, ldBadIsoList);
+  warnCheck('③ og:url/canonical 与文章路径不一致', urlMismatch, urlMismatchList);
+  warnCheck('④ tags 为空', emptyTags, emptyTagsList);
+  if (ldMissing + ldBadJson + ldBadIso + urlMismatch + emptyTags > 0) {
+    infos.push('h) 以上为存量数据问题（门禁仍为绿，但绿 ≠ 无问题）；存量清干净后应把 h) 升级为阻断');
   }
 }
 

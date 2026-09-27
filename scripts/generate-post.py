@@ -31,6 +31,7 @@ import sys
 import json
 import subprocess
 from datetime import datetime
+from html import escape as html_escape
 from xml.sax.saxutils import escape as xml_escape
 
 TEMPLATE = 'templates/blog-post-template.html'
@@ -48,6 +49,69 @@ def slugify(title):
     slug = re.sub(r'[\s_]+', '-', slug)
     slug = slug.strip('-')
     return slug
+
+
+# slug 白名单：小写字母 / 数字 / 中文 / 连字符 / 下划线（不含点、不含路径分隔符）
+SLUG_RE = re.compile(r'^[a-z0-9\u4e00-\u9fff_-]+$')
+# 日期只接受这两种写法（本地时间，落盘统一补 +08:00 的 ISO 8601）
+DATE_FORMATS = ('%Y-%m-%d', '%Y-%m-%d %H:%M:%S')
+
+
+def normalize_date(raw):
+    """校验并规范化日期，返回 (显示用字符串, ISO 8601 字符串)；非法返回 (None, None)。
+
+    接受 YYYY-MM-DD 与 YYYY-MM-DD HH:MM:SS，ISO 输出统一为
+    YYYY-MM-DDTHH:MM:SS+08:00（date-only 补 T00:00:00+08:00）。
+    显示字符串保持原有形态（date-only 显示日期、带时间显示 "日期 时间"），页面渲染语义不变。
+    """
+    if raw is None:
+        return None, None
+    s = str(raw).strip()
+    for fmt in DATE_FORMATS:
+        try:
+            dt = datetime.strptime(s, fmt)
+        except ValueError:
+            continue
+        date_short = dt.strftime('%Y-%m-%d')
+        if fmt == '%Y-%m-%d':
+            return date_short, f'{date_short}T00:00:00+08:00'
+        return dt.strftime('%Y-%m-%d %H:%M:%S'), f"{date_short}T{dt.strftime('%H:%M:%S')}+08:00"
+    return None, None
+
+
+def validate_slug(slug):
+    """校验 slug 能否安全作为文件名，返回 (是否合法, 错误原因)。
+
+    拒绝：空、首尾空白、路径分隔符、'..'、首尾点、白名单外字符。
+    """
+    if slug is None or not str(slug).strip():
+        return False, 'slug 为空'
+    s = str(slug)
+    if s != s.strip():
+        return False, 'slug 含首尾空白'
+    if '/' in s or '\\' in s:
+        return False, 'slug 含路径分隔符（/ 或 \\），禁止越界写盘'
+    if '..' in s:
+        return False, "slug 含 '..'，禁止路径穿越"
+    if s.startswith('.') or s.endswith('.'):
+        return False, 'slug 不允许以点开头或结尾'
+    bad = sorted({c for c in s if not re.match(r'[a-z0-9\u4e00-\u9fff_-]', c)})
+    if bad:
+        return False, 'slug 只允许小写字母/数字/中文/连字符/下划线，非法字符: ' + ' '.join(repr(c) for c in bad)
+    if not SLUG_RE.match(s):
+        return False, 'slug 格式非法'
+    return True, ''
+
+
+def resolve_within(base_dir, slug, ext, label):
+    """realpath 断言 base_dir/{slug}{ext} 仍在 base_dir 内，返回绝对路径；越界直接 exit 1。"""
+    base = os.path.realpath(base_dir)
+    target = os.path.realpath(os.path.join(base, f'{slug}{ext}'))
+    if target != base and not target.startswith(base + os.sep):
+        print(f"❌ {label} 目标路径越界，拒绝写入: {target}")
+        print(f"   （必须位于 {base}/ 内，请检查 slug 是否含路径穿越字符）")
+        sys.exit(1)
+    return target
 
 
 def load_template():
@@ -248,11 +312,18 @@ def markdown_to_html(md_text):
         return pure_python_markdown_to_html(md_text)
 
 
-def generate_article(title, description, article_date, read_time, tags, content_html, category, custom_slug=None, series=None):
-    """生成文章 HTML"""
+def generate_article(title, description, article_date, read_time, tags, content_html, category, custom_slug=None, series=None, iso_datetime=None):
+    """生成文章 HTML
+
+    article_date 为页面展示用日期字符串；iso_datetime 为 JSON-LD 用的 ISO 8601 字符串。
+    所有进入 HTML 属性的值经 html_escape(quote=True)；进入 JSON-LD 的属性值由
+    json.dumps 序列化后再把 < > & 转成 \\u003c \\u003e \\u0026，保证 JSON 合法且无法提前闭合 </script>。
+    """
     template = load_template()
     slug = custom_slug if custom_slug else slugify(title)
-    
+
+    iso_datetime = iso_datetime or f"{article_date}T00:00:00+08:00"
+
     og_url = f"https://709527.xyz/blog/posts/{slug}.html"
     
     # 标签 HTML 
@@ -263,8 +334,8 @@ def generate_article(title, description, article_date, read_time, tags, content_
     else:
         tag_list = []
 
-    tags_html = '\n          '.join([f'<span class="tag">{t}</span>' for t in tag_list])
-    tag_links_html = '\n          '.join([f'<a href="../../blog/index.html?tag={t}" class="post-info-link"># {t}</a>' for t in tag_list])
+    tags_html = '\n          '.join([f'<span class="tag">{html_escape(str(t), quote=True)}</span>' for t in tag_list])
+    tag_links_html = '\n          '.join([f'<a href="../../blog/index.html?tag={html_escape(str(t), quote=True)}" class="post-info-link"># {html_escape(str(t), quote=True)}</a>' for t in tag_list])
     
     # 计算文章统计
     text_only = re.sub(r'<[^>]+>', '', content_html) if content_html else ''
@@ -304,8 +375,8 @@ def generate_article(title, description, article_date, read_time, tags, content_
                 "url": "https://709527.xyz/assets/images/favicon.svg"
             }
         },
-        "datePublished": f"{article_date}T00:00:00+08:00" if len(article_date) == 10 else article_date,
-        "dateModified": f"{article_date}T00:00:00+08:00" if len(article_date) == 10 else article_date,
+        "datePublished": iso_datetime,
+        "dateModified": iso_datetime,
         "url": og_url,
         "mainEntityOfPage": {
             "@type": "WebPage",
@@ -316,26 +387,35 @@ def generate_article(title, description, article_date, read_time, tags, content_
         "timeRequired": f"PT{read_time}M",
         "inLanguage": "zh-CN"
     }
+    # JSON-LD 序列化：json.dumps 负责引号/反斜杠/控制字符转义，
+    # 再把 < > & 转成 \u003c \u003e \u0026（JSON 合法转义），彻底消除 </script> 提前闭合与注入
     json_ld_str = json.dumps(json_ld_obj, ensure_ascii=False, indent=6)
+    json_ld_str = json_ld_str.replace('<', '\\u003c').replace('>', '\\u003e').replace('&', '\\u0026')
     json_ld = f'    <script type="application/ld+json">\n{json_ld_str}\n    </script>'
     
-    # 专栏 Banner
-    series_html = f'<div class="series-banner spotlight-card"><div class="series-badge">📌 专栏收录</div><div class="series-title">{series}</div></div>' if series else ''
+    # 专栏 Banner（series 来自 frontmatter，属不可信文本，转义后再插入）
+    series_html = f'<div class="series-banner spotlight-card"><div class="series-badge">📌 专栏收录</div><div class="series-title">{html_escape(str(series), quote=True)}</div></div>' if series else ''
     
+    # 输出转义：同一份值同时落在 <title>/<h1> 文本与 <meta content="..."> 属性里，
+    # 统一按属性语义用 html_escape(quote=True)，文本上下文同样安全
+    title_esc = html_escape(f"{title} | 张小猛 - loczb", quote=True)
+    title_text_esc = html_escape(str(title), quote=True)
+    description_esc = html_escape(str(description), quote=True)
+
     html = template
-    html = html.replace('{{TITLE}}', f"{title} | 张小猛 - loczb")
-    html = html.replace('{{DESCRIPTION}}', description)
+    html = html.replace('{{TITLE}}', title_esc)
+    html = html.replace('{{DESCRIPTION}}', description_esc)
     html = html.replace('{{OG_URL}}', og_url)
     html = html.replace('{{JSON_LD}}', json_ld)
-    html = html.replace('{{ARTICLE_TITLE}}', title)
-    html = html.replace('{{ARTICLE_DATE}}', article_date)
+    html = html.replace('{{ARTICLE_TITLE}}', title_text_esc)
+    html = html.replace('{{ARTICLE_DATE}}', html_escape(str(article_date), quote=True))
     html = html.replace('{{ARTICLE_READ_TIME}}', f"{read_time} min read")
     html = html.replace('{{ARTICLE_TAGS}}', tags_html)
     html = html.replace('{{SERIES_BANNER}}', series_html)
     html = html.replace('{{ARTICLE_CONTENT}}', content_html or '<p>文章内容...</p>')
     
     # 左侧面板统计信息
-    html = html.replace('{{ARTICLE_DATE_SHORT}}', date_short)
+    html = html.replace('{{ARTICLE_DATE_SHORT}}', html_escape(str(date_short), quote=True))
     html = html.replace('{{ARTICLE_WORD_COUNT}}', str(total_word_count))
     html = html.replace('{{ARTICLE_H2_COUNT}}', str(h2_count))
     html = html.replace('{{ARTICLE_H3_COUNT}}', str(h3_count))
@@ -346,11 +426,12 @@ def generate_article(title, description, article_date, read_time, tags, content_
     return html, slug, tag_list, read_time
 
 
-def write_sidecar(slug, title, description, article_date, read_time, tags, category):
+def write_sidecar(slug, title, description, article_date, read_time, tags, category, meta_path=None):
     """写 blog/meta/{slug}.json 元数据 sidecar（全站元数据单一真相源）。
 
     只含规范化发布字段（无正文、无敏感信息）；generate-index.js 优先读它，
     verify.js 用它做一致性门禁。date 无时间部分时 dateTime 补 00:00:00。
+    meta_path 由调用方经 realpath 越界断言后传入（缺省时按 META_DIR 拼接，兼容旧调用）。
     """
     os.makedirs(META_DIR, exist_ok=True)
     date_short = str(article_date)[:10]
@@ -366,7 +447,7 @@ def write_sidecar(slug, title, description, article_date, read_time, tags, categ
         'tags': list(tags),
         'readTime': read_time,
     }
-    out = os.path.join(META_DIR, f'{slug}.json')
+    out = meta_path or resolve_within(META_DIR, slug, '.json', '元数据 sidecar')
     with open(out, 'w', encoding='utf-8') as f:
         json.dump(meta, f, ensure_ascii=False, indent=2)
         f.write('\n')
@@ -473,16 +554,36 @@ def main():
         print("❌ 缺少标签（可通过 Frontmatter 包含 tags: [...] 或使用 --tags 参数）")
         sys.exit(1)
 
+    # ── 先校验后写盘：日期格式 + slug 安全 + 目标路径越界断言 ──
+    # 每一项都在任何文件写入之前完成，非法输入一律 exit 1，保证零产物落盘
+    display_date, iso_date = normalize_date(article_date)
+    if not display_date:
+        print(f"❌ 非法日期: {article_date!r}")
+        print("   只接受 YYYY-MM-DD 或 YYYY-MM-DD HH:MM:SS（本地时间，输出 +08:00 的 ISO 8601），")
+        print("   例如 2026-09-27 或 2026-09-27 15:56:42")
+        sys.exit(1)
+
+    candidate_slug = custom_slug if custom_slug else slugify(title)
+    ok, reason = validate_slug(candidate_slug)
+    if not ok:
+        print(f"❌ 非法 slug: {candidate_slug!r}（{reason}）")
+        print("   slug 只允许小写字母/数字/中文/连字符/下划线，禁止 / \\ .. 与首尾点")
+        sys.exit(1)
+
+    posts_path = resolve_within(POSTS_DIR, candidate_slug, '.html', '文章输出')
+    meta_path = resolve_within(META_DIR, candidate_slug, '.json', '元数据 sidecar')
+
     print(f"\n📝 生成文章: {title}")
-    print(f"   日期: {article_date} | 分类: {category}")
+    print(f"   日期: {display_date} | 分类: {category}")
     print(f"   标签: {tags}")
 
     html, slug, tag_list, read_time = generate_article(
-        title, description, str(article_date), read_time, tags, content_html, category, custom_slug, series
+        title, description, str(display_date), read_time, tags, content_html, category,
+        candidate_slug, series, iso_date
     )
 
     # 写入文件（slug 冲突保护：同 slug 覆盖会让旧文整篇消失，需显式 --force）
-    output_path = os.path.join(POSTS_DIR, f'{slug}.html')
+    output_path = posts_path
     if os.path.exists(output_path) and not params.get('force'):
         print(f"❌ blog/posts/{slug}.html 已存在，直接生成会覆盖旧文章。")
         print(f"   确认要覆盖请加 --force；否则请给新文章换一个唯一 slug（frontmatter 的 slug 字段）。")
@@ -495,7 +596,7 @@ def main():
     # 全站索引（articles-index.json / 列表页 / 静态分页）统一由其重建
 
     # 写元数据 sidecar（与 HTML 同步落盘，单一真相源）
-    write_sidecar(slug, title, description, str(article_date), read_time, tag_list, category)
+    write_sidecar(slug, title, description, str(display_date), read_time, tag_list, category, meta_path=meta_path)
 
     # 调用 generate-index.js 重建所有全站索引
     script_dir = os.path.dirname(os.path.abspath(__file__))
