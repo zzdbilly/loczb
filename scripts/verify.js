@@ -12,9 +12,12 @@
  *      期望 top 5；不足 3 条只提示不阻断）
  *   g) 列表静态分页：页数 = ceil(总文章数 / 10)、每页卡片数 ∈ [1,10]、跨页 slug 不重复、
  *      合计等于 posts 总数，且每页有自指 canonical 与可达的 prev/next 导航
- *   h) 内容质量警告（非阻断，exit 仍 0）：① 每篇 JSON-LD 能否 JSON.parse；② datePublished/
- *      dateModified 是否合法 ISO 8601；③ og:url/canonical 与文章实际路径是否一致；④ tags 是否为空。
- *      每条打印「检查名 + 命中数 + 前几个 slug」；存量清干净后可升级为阻断。
+ *   h) 内容质量（阻断，2026-09-27 由警告升级）：① 每篇 JSON-LD 能 JSON.parse；
+ *      datePublished/dateModified 是合法 ISO 8601；③ og:url/canonical 与文章实际路径一致；
+ *      ④ tags 非空。存量（109 篇坏日期 / 1 篇 og:url / 10 篇空 tags）已于 1a066148 清干净，
+ *      故改为 fail() 阻断——否则「门禁全绿 ≠ 无问题」，坏数据会再次长期藏进绿灯下。
+ *      只有出现「确实要放行的存量数据」（例如上游批量导入无法立刻修正）时，才应该把这四条
+ *      降回警告（infos.push），且必须在描述里写明降级的理由和计划修正日期。
  *
  * 本地 Run: node scripts/verify.js
  * generate-post.py 在索引重建成功后自动调用。
@@ -249,12 +252,15 @@ for (const slug of metaSlugs) {
   }
 }
 
-// ── h) 内容质量警告（非阻断：只提示，exit 仍 0）─────────
-// 这些是存量文章里真实存在的历史数据问题，修完之前不能阻断发文；
-// 存量清干净后可把下面的 warnCheck 换回 fail() 升级为阻断。
-function warnCheck(name, count, samples) {
+// ── h) 内容质量（阻断：命中即 exit 1，2026-09-27 由警告升级）───────
+// 历史背景：这四条曾是 warnCheck（非阻断），存量问题就长期藏在绿灯下
+// （109 篇 JSON-LD 坏日期 / 1 篇 og:url 不一致 / 10 篇空 tags）。
+// 存量已于 1a066148 清零，故升级为 fail()。若将来真有必须放行的存量数据，
+// 降回警告时必须在本行注明降级理由与计划修正日期，不能静默降级。
+function contentCheck(name, count, samples) {
+  if (!count) return;
   const list = samples.slice(0, 5).join(', ') + (count > samples.length ? ' …' : '');
-  infos.push(`h) ${name}: 命中 ${count} 篇${count ? ' — 例: ' + list : ''}`);
+  fail(`h) ${name}: 命中 ${count} 篇${count ? ' — 例: ' + list : ''}`);
 }
 
 {
@@ -311,14 +317,11 @@ function warnCheck(name, count, samples) {
     } catch (e) { /* ignore */ }
   }
 
-  warnCheck('① JSON-LD 缺失', ldMissing, ldMissingList);
-  warnCheck('① JSON-LD 无法 JSON.parse', ldBadJson, ldBadJsonList);
-  warnCheck('② datePublished/dateModified 非法 ISO 8601', ldBadIso, ldBadIsoList);
-  warnCheck('③ og:url/canonical 与文章路径不一致', urlMismatch, urlMismatchList);
-  warnCheck('④ tags 为空', emptyTags, emptyTagsList);
-  if (ldMissing + ldBadJson + ldBadIso + urlMismatch + emptyTags > 0) {
-    infos.push('h) 以上为存量数据问题（门禁仍为绿，但绿 ≠ 无问题）；存量清干净后应把 h) 升级为阻断');
-  }
+  contentCheck('① JSON-LD 缺失', ldMissing, ldMissingList);
+  contentCheck('① JSON-LD 无法 JSON.parse', ldBadJson, ldBadJsonList);
+  contentCheck('② datePublished/dateModified 非法 ISO 8601', ldBadIso, ldBadIsoList);
+  contentCheck('③ og:url/canonical 与文章路径不一致', urlMismatch, urlMismatchList);
+  contentCheck('④ tags 为空', emptyTags, emptyTagsList);
 }
 
 // ── 结果 ─────────────────────────────────────────────────

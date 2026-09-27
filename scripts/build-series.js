@@ -161,10 +161,16 @@ SERIES_CONFIG.forEach(series => {
     content = content.replace(/\s*<!-- Series Card Widget -->[\s\S]*?<!-- \/Series Card Widget -->\s*/g, '');
     content = content.replace(/\s*<div class="series-banner[\s\S]*?<\/div>\s*/g, ' ');
 
-    // 注入到 post-tags 后面（缩进与移除正则严格对称：吃掉的空白 == 写回的空白）
+    // 注入到 post-tags 后面。锚点用「相关文章标记」，并把标记前的整段空白全部吃掉再写回
+    // 固定格式 —— 不能只吃 `[ \t]*\n?`：首次注入时页面上还没有专栏卡，post-tags 与 Related
+    // 标记之间只剩模板里 {{SERIES_BANNER}} 留下的空行（"        \n\n"），吃不完就会在
+    // refresh-posts + generate-index 之后多出 3 行空白（2026-09-27 修复；旧写法要跑第二遍
+    // 才收敛，导致「干净 HEAD 上跑一遍重建链 = 40 个文件被改」）。
     if (content.includes('class="post-tags"')) {
-      content = content.replace(/(<div class="post-tags">[\s\S]*?<\/div>)([ \t]*\n?)/,
-        `$1\n\n        ${seriesCardHtml}\n\n        `);
+      const RE_ANCHORED = /(<div class="post-tags">[\s\S]*?<\/div>)\s*(?=<!-- Related Static -->)/;
+      const RE_FALLBACK = /(<div class="post-tags">[\s\S]*?<\/div>)([ \t]*\n?)/;
+      const re = RE_ANCHORED.test(content) ? RE_ANCHORED : RE_FALLBACK;
+      content = content.replace(re, `$1\n\n        ${seriesCardHtml}\n\n        `);
     }
 
     // 构建底部专栏上一篇/下一篇

@@ -372,7 +372,7 @@ document.querySelector('.theme-btn').addEventListener('click', () => {
         <strong>动态命名</strong>：在 JS 中根据数据动态设置 <code>view-transition-name</code>，比在 CSS 中写 <code>nth-child</code> 更灵活：
         <pre><code>document.querySelectorAll('.card').forEach((card, i) => {
   card.style.viewTransitionName = `card-${card.dataset.id}`;
-});</pre>
+});</code></pre>
       </div>
 
       <h2>五、跨页面导航过渡（MPA）</h2>
@@ -483,7 +483,7 @@ document.startViewTransition(() => {
   flushSync(() => {
     navigate(`/product/${product.id}`);
   });
-});</pre>
+});</code></pre>
       </div>
 
       <h3>2. Vue Router</h3>
