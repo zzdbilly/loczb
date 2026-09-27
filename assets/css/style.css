@@ -24,6 +24,10 @@
   --hero-label-text: var(--color-accent-primary);
   --hero-label-dot: var(--color-accent-primary);
   --gradient-accent: linear-gradient(135deg, var(--color-accent-primary), var(--color-accent-secondary));
+  /* 白字专用渐变：--gradient-accent 的淡端 (#8b5cf6) 上白字只有 4.23:1、深端 4.47:1，都不过 AA 4.5:1。
+     本变量两端换成压深一档的同色相（#4f46e5 → #7c3aed），白字实测 6.29:1 / 5.70:1。
+     只用在「白字压在渐变上」的按钮，装饰性用法继续用 --gradient-accent。 */
+  --gradient-accent-strong: linear-gradient(135deg, #4f46e5, #7c3aed);
   --gradient-text: linear-gradient(135deg, #6366f1, #a78bfa, #8b5cf6);
   --gradient-glow: radial-gradient(ellipse at center, var(--color-accent-glow), transparent 70%);
   /* 固定导航实测高度（桌面/移动端一致）。各页 hero 的 padding-top 用 calc() 引用它，
@@ -613,7 +617,7 @@ a:hover {
   text-decoration: none;
 }
 .btn-primary {
-  background: var(--gradient-accent);
+  background: var(--gradient-accent-strong); /* 白字：见 --gradient-accent-strong 的对比度说明 */
   color: white;
   box-shadow: var(--shadow-md), 0 0 20px var(--color-accent-glow);
 }
@@ -4174,7 +4178,7 @@ pre code.hljs {
 }
 
 .filter-btn-active {
-  background: var(--gradient-accent);
+  background: var(--gradient-accent-strong); /* 白字 */
   border-color: transparent;
   color: #ffffff;
   box-shadow: 0 4px 14px var(--color-accent-glow);
@@ -4217,7 +4221,7 @@ pre code.hljs {
 }
 
 .view-toggle-btn.active {
-  background: var(--gradient-accent);
+  background: var(--gradient-accent-strong); /* 白字 */
   color: #ffffff;
   box-shadow: 0 2px 8px var(--color-accent-glow);
 }
