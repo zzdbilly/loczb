@@ -4386,7 +4386,9 @@ pre code.hljs {
 }
 
 .pagination-btn.active {
-  background: var(--gradient-accent);
+  /* 原来用 --gradient-accent + 白字：渐变淡端 (#8b5cf6) 上白字只有 ~3.9:1，实为 AA 不达标
+     （axe 因渐变无法计算会落进 incomplete，所以没报出来）。改为实底色 #5b5bd6 → 白字 5.37:1。 */
+  background: #5b5bd6;
   border-color: transparent;
   color: #fff;
   box-shadow: 0 4px 12px var(--color-accent-glow);
@@ -5900,9 +5902,16 @@ pre code.hljs {
 }
 
 .sr-filter-chip.active {
-  background: var(--color-accent-primary);
-  border-color: var(--color-accent-primary);
+  /* 白字压在 accent 上：--color-accent-primary(#6366f1) 只有 4.46:1，差 0.04 不过 AA 正文；
+     #5b5bd6 是同一色相压深一档，白字对比 5.37:1（axe 实测：搜索下拉展开态命中过 1 处） */
+  background: #5b5bd6;
+  border-color: #5b5bd6;
   color: #ffffff;
+}
+
+[data-theme="light"] .sr-filter-chip.active {
+  background: var(--color-accent-text);
+  border-color: var(--color-accent-text);
 }
 
 .sr-rec-container {
