@@ -19,6 +19,19 @@ const SITEMAP_XML = path.join(CWD, 'sitemap.xml');
 const RSS_XML = path.join(CWD, 'rss.xml');
 const BASE_URL = 'https://709527.xyz';
 
+// 主页面（/ /blog/ /projects/ /about/）的 sitemap lastmod。
+// 这 4 个页面的内容变化没有可派生的信号（不像文章有 date），也绝不能用
+// 「脚本运行日」或 fs mtime —— 那是造假日期，会让整份 sitemap 的 lastmod
+// 挤在同一天、污染搜索引擎信任（文章侧的历史教训见 generateSitemap 注释）。
+// 值是这几个页面真实的内容最后变更日；主页面内容改动时同步更新这一行
+// （与 style.css `?v=` bump 同一套纪律）。
+const MAIN_PAGE_LASTMOD = {
+  '/': '2026-09-27',
+  '/blog/': '2026-09-27',
+  '/projects/': '2026-09-27',
+  '/about/': '2026-09-27',
+};
+
 // 无变化不落盘：字节级比对，内容相同则跳过写盘。
 // 目的：① 避免无意义地刷 mtime（旧版 build-series 每次重建都重写文章页，
 //       会连带影响依赖 mtime 的逻辑，sitemap lastmod 注释有记录）；
@@ -621,16 +634,17 @@ function generateSitemap() {
   let lines = ['<?xml version="1.0" encoding="UTF-8"?>'];
   lines.push('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">');
 
-  // 固定页面
+  // 固定页面（lastmod 见 MAIN_PAGE_LASTMOD 注释：显式登记真值，不用运行日）
   const staticPages = [
-    { url: BASE_URL + '/', freq: 'weekly', priority: '1.0' },
-    { url: BASE_URL + '/blog/', freq: 'daily', priority: '0.9' },
-    { url: BASE_URL + '/projects/', freq: 'monthly', priority: '0.8' },
-    { url: BASE_URL + '/about/', freq: 'monthly', priority: '0.7' },
+    { url: BASE_URL + '/', freq: 'weekly', priority: '1.0', lastmod: MAIN_PAGE_LASTMOD['/'] },
+    { url: BASE_URL + '/blog/', freq: 'daily', priority: '0.9', lastmod: MAIN_PAGE_LASTMOD['/blog/'] },
+    { url: BASE_URL + '/projects/', freq: 'monthly', priority: '0.8', lastmod: MAIN_PAGE_LASTMOD['/projects/'] },
+    { url: BASE_URL + '/about/', freq: 'monthly', priority: '0.7', lastmod: MAIN_PAGE_LASTMOD['/about/'] },
   ];
   staticPages.forEach(p => {
     lines.push('  <url>');
     lines.push(`    <loc>${p.url}</loc>`);
+    if (p.lastmod) lines.push(`    <lastmod>${p.lastmod}</lastmod>`);
     lines.push(`    <changefreq>${p.freq}</changefreq>`);
     lines.push(`    <priority>${p.priority}</priority>`);
     lines.push('  </url>');

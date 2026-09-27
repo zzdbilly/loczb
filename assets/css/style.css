@@ -6238,3 +6238,30 @@ html, body {
     justify-content: center;
   }
 }
+/* ── 移动端触控目标（2026-09-27）─────────────────────────────
+   375px 视口实测：列表卡片里的「阅读全文 ➔」命中区 62×19px、页脚
+   .footer-link 28×23px，都低于 WCAG 2.5.8 的 24×24 最小触控目标。
+   做法：padding 撑大命中区、等量负 margin 抵消占位 → 视觉排版零变化
+   （文字位置、卡片间距、页脚行高都不动，只是可点区域变大）。 */
+.blog-list-footer > a {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 0;
+  margin: -0.5rem 0;
+}
+.footer-link {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 0;
+  margin: -0.5rem 0;
+}
+@media (max-width: 640px) {
+  .blog-list-footer > a {
+    padding: 0.8rem 0;
+    margin: -0.8rem 0;
+  }
+  .footer-link {
+    padding: 0.8rem 0;
+    margin: -0.8rem 0;
+  }
+}

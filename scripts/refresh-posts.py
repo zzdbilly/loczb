@@ -58,6 +58,13 @@ def extract_post_data(html):
     m = re.search(r'⏱️ (.*?)</span>', html)
     data['read_time'] = m.group(1).strip() if m else '5 min read'
 
+    # 文章字数：沿用页面上已有的值，不重算。
+    # refresh 只重渲染骨架、不改正文，重算会因「正文里的实体/转义」与 generate-post.py
+    # 的计数口径产生差异（正文被 &lt; 转义过的文章会多算 lt/div/gt 这些「单词」），
+    # 于是每次回刷都刷出 23 篇文章的数字变化（2026-09-27 修复）。取不到才回退到重算。
+    m = re.search(r'文章字数</span><span class="post-info-stat-value">(\d+)', html)
+    data['word_count'] = m.group(1) if m else None
+
     # 专栏 banner（generate-post.py --series 生成时是单行 HTML；存量文章基本没有）
     m = re.search(r'^.*<div class="series-banner.*$', html, re.MULTILINE)
     data['series_banner'] = m.group(0).strip() if m else ''
@@ -120,7 +127,7 @@ def render_with_template(template, data, slug=''):
     h3_count = str(data['content'].count('<h3')) if data['content'] else '0'
     code_block_count = str(data['content'].count('<pre')) if data['content'] else '0'
     
-    html = html.replace('{{ARTICLE_WORD_COUNT}}', total_word_count)
+    html = html.replace('{{ARTICLE_WORD_COUNT}}', data.get('word_count') or total_word_count)
     html = html.replace('{{ARTICLE_H2_COUNT}}', h2_count)
     html = html.replace('{{ARTICLE_H3_COUNT}}', h3_count)
     html = html.replace('{{ARTICLE_CODE_BLOCKS}}', code_block_count)
