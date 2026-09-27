@@ -39,8 +39,8 @@
           "url": "https://709527.xyz/assets/images/favicon.svg"
         }
       },
-      "datePublished": "2026-06-30",
-      "dateModified": "2026-06-30",
+      "datePublished": "2026-06-30T11:24:15+08:00",
+      "dateModified": "2026-06-30T11:24:15+08:00",
       "url": "https://709527.xyz/blog/posts/mcp-server-deep-dive.html",
       "mainEntityOfPage": {
         "@type": "WebPage",
@@ -156,13 +156,13 @@
             <div class="related-post-card-title">Agentic AI 架构演进：从 Chatbot 到自主 Agent</div>
             <div class="related-post-card-tags"><span>AI</span><span>Agent</span><span>架构</span></div>
           </a>
+          <a class="related-post-card" href="ai-编程助手进化论从结对编程到自主编程团队-2026.html">
+            <div class="related-post-card-title">AI 编程助手进化论：从结对编程到自主编程团队 (2026)</div>
+            <div class="related-post-card-tags"><span>AI</span><span>Agent</span><span>AI 工具</span></div>
+          </a>
           <a class="related-post-card" href="ai-code-editor-review-cursor-windsurf-copilot.html">
             <div class="related-post-card-title">AI 代码编辑器深度横评：Cursor vs Windsurf vs Copilot</div>
             <div class="related-post-card-tags"><span>AI</span><span>AI 工具</span><span>开发技巧</span></div>
-          </a>
-          <a class="related-post-card" href="rag-introduction.html">
-            <div class="related-post-card-title">RAG 检索增强生成入门：从理念到落地</div>
-            <div class="related-post-card-tags"><span>RAG</span><span>检索增强生成</span><span>LLM</span></div>
           </a>
           </div>
         </div>
@@ -207,7 +207,7 @@
 <h3>安装 MCP SDK</h3>
 <p>MCP 官方 SDK 支持 TypeScript 和 Python。我们以 TypeScript 为例：</p>
 <pre><code class="language-bash"># 创建项目
-mkdir my-mcp-server && cd my-mcp-server
+mkdir my-mcp-server &amp;&amp; cd my-mcp-server
 npm init -y
 npm install @modelcontextprotocol/sdk zod
 
@@ -278,7 +278,7 @@ main().catch((error) => {
     if (code.includes("console.log")) {
       issues.push({ line: "N/A", type: "info", message: "生产环境建议移除 console.log" });
     }
-    if (code.includes("any") && language === "typescript") {
+    if (code.includes("any") &amp;&amp; language === "typescript") {
       issues.push({ line: "N/A", type: "error", message: "避免使用 any 类型，改用具体类型" });
     }
 
@@ -318,7 +318,7 @@ main().catch((error) => {
           engines: { node: ">=18" },
           scripts: {
             dev: "vite",
-            build: "tsc && vite build",
+            build: "tsc &amp;&amp; vite build",
             test: "vitest",
           },
         }, null, 2),
@@ -343,7 +343,7 @@ main().catch((error) => {
         role: "user",
         content: {
           type: "text",
-          text: `生成一个 Conventional Commits 提交信息:\n类型: ${type}\n范围: ${scope || "无"}\n描述: ${description}\n\n格式: <type>(<scope>): <description>`,
+          text: `生成一个 Conventional Commits 提交信息:\n类型: ${type}\n范围: ${scope || "无"}\n描述: ${description}\n\n格式: &lt;type>(&lt;scope>): &lt;description>`,
         },
       },
     ],

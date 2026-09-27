@@ -39,8 +39,8 @@
           "url": "https://709527.xyz/assets/images/favicon.svg"
         }
       },
-      "datePublished": "2026-06-27",
-      "dateModified": "2026-06-27",
+      "datePublished": "2026-06-27T15:38:33+08:00",
+      "dateModified": "2026-06-27T15:38:33+08:00",
       "url": "https://709527.xyz/blog/posts/github-actions-advanced.html",
       "mainEntityOfPage": {
         "@type": "WebPage",
@@ -119,6 +119,10 @@
         <div class="related-posts">
           <div class="related-posts-title">📌 相关文章</div>
           <div class="related-posts-list">
+          <a class="related-post-card" href="github-actions-auto-index-blog-cicd.html">
+            <div class="related-post-card-title">GitHub Actions 自动索引：我的静态博客 CI/CD 进化之路</div>
+            <div class="related-post-card-tags"><span>GitHub Actions</span><span>CI/CD</span><span>DevOps</span></div>
+          </a>
           <a class="related-post-card" href="choosing-and-running-a-vps.html">
             <div class="related-post-card-title">主流 VPS 的选择和使用</div>
             <div class="related-post-card-tags"><span>VPS</span><span>DevOps</span><span>运维</span></div>
@@ -131,13 +135,9 @@
             <div class="related-post-card-title">Next.js + Prisma 部署 Vercel 常见踩坑：外键约束与构建时数据修复</div>
             <div class="related-post-card-tags"><span>Next.js</span><span>Prisma</span><span>Vercel</span></div>
           </a>
-          <a class="related-post-card" href="nginx-reverse-proxy-tuning.html">
-            <div class="related-post-card-title">Nginx 反向代理性能调优：从入门到生产</div>
-            <div class="related-post-card-tags"><span>Nginx</span><span>反向代理</span><span>性能调优</span></div>
-          </a>
-          <a class="related-post-card" href="docker-compose-best-practices.html">
-            <div class="related-post-card-title">Docker Compose 最佳实践</div>
-            <div class="related-post-card-tags"><span>Docker</span><span>Docker Compose</span><span>容器化</span></div>
+          <a class="related-post-card" href="vps-选购与使用指南五个常见场景的配置与避坑.html">
+            <div class="related-post-card-title">VPS 选购与使用指南：五个常见场景的配置与避坑</div>
+            <div class="related-post-card-tags"><span>VPS</span><span>DevOps</span><span>运维</span></div>
           </a>
           </div>
         </div>
@@ -417,9 +417,9 @@ async function run() {
   const changedLines = pr.additions + pr.deletions;
 
   let label: string;
-  if (changedLines <= maxSize) {
+  if (changedLines &lt;= maxSize) {
     label = 'size/small';
-  } else if (changedLines <= maxSize * 4) {
+  } else if (changedLines &lt;= maxSize * 4) {
     label = 'size/medium';
   } else {
     label = 'size/large';
@@ -923,7 +923,7 @@ jobs:
       </ul>
 
       <pre><code># 安装自托管 Runner
-mkdir actions-runner && cd actions-runner
+mkdir actions-runner &amp;&amp; cd actions-runner
 curl -o actions-runner-linux-x64-2.321.0.tar.gz -L \
   https://github.com/actions/runner/releases/download/v2.321.0/actions-runner-linux-x64-2.321.0.tar.gz
 tar xzf actions-runner-linux-x64-2.321.0.tar.gz

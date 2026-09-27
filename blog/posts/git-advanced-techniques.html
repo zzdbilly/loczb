@@ -39,8 +39,8 @@
           "url": "https://709527.xyz/assets/images/favicon.svg"
         }
       },
-      "datePublished": "2026-04-25",
-      "dateModified": "2026-04-25",
+      "datePublished": "2026-04-25T15:27:53+08:00",
+      "dateModified": "2026-04-25T15:27:53+08:00",
       "url": "https://709527.xyz/blog/posts/git-advanced-techniques.html",
       "mainEntityOfPage": {
         "@type": "WebPage",
@@ -280,7 +280,7 @@ git add -p utils.js
 @@ -10,7 +10,7 @@
  function validate(input) {
 -    return input !== null;
-+    return input !== null && input !== undefined;
++    return input !== null &amp;&amp; input !== undefined;
  }
 (1/2) Stage this hunk [y,n,q,a,d,e,?]? y
 
@@ -351,7 +351,7 @@ git checkout -b hotfix/urgent
 
 # 修复 bug
 vim src/bug.js
-git add . && git commit -m "fix: 紧急修复"
+git add . &amp;&amp; git commit -m "fix: 紧急修复"
 git push origin hotfix/urgent
 
 # 回到开发分支

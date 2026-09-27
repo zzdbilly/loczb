@@ -39,8 +39,8 @@
           "url": "https://709527.xyz/assets/images/favicon.svg"
         }
       },
-      "datePublished": "2026-06-27",
-      "dateModified": "2026-06-27",
+      "datePublished": "2026-06-27T12:14:16+08:00",
+      "dateModified": "2026-06-27T12:14:16+08:00",
       "url": "https://709527.xyz/blog/posts/linux-ebpf-getting-started.html",
       "mainEntityOfPage": {
         "@type": "WebPage",
@@ -125,7 +125,7 @@
           </a>
           <a class="related-post-card" href="linux-inode-mechanism-deep-dive.html">
             <div class="related-post-card-title">Linux inode 机制深入理解：从数据结构到实战排查</div>
-            <div class="related-post-card-tags"></div>
+            <div class="related-post-card-tags"><span>Linux</span><span>文件系统</span><span>系统编程</span></div>
           </a>
           <a class="related-post-card" href="zig-language-introduction.html">
             <div class="related-post-card-title">Zig 语言入门：比 C 更安全的系统编程</div>
@@ -630,12 +630,12 @@ SEC("tracepoint/syscalls/sys_enter_read")
 int count_reads(void *ctx)
 {
     u32 pid = bpf_get_current_pid_tgid() >> 32;
-    u64 *count = bpf_map_lookup_elem(&pid_count, &pid);
+    u64 *count = bpf_map_lookup_elem(&amp;pid_count, &amp;pid);
     if (count) {
         __sync_fetch_and_add(count, 1);  // 原子递增
     } else {
         u64 init = 1;
-        bpf_map_update_elem(&pid_count, &pid, &init, BPF_ANY);
+        bpf_map_update_elem(&amp;pid_count, &amp;pid, &amp;init, BPF_ANY);
     }
     return 0;
 }</code></pre>
@@ -688,7 +688,7 @@ int xdp_drop_attackers(struct xdp_md *ctx)
         return XDP_PASS;
 
     __u32 src_ip = ip->saddr;
-    if (bpf_map_lookup_elem(&blocklist, &src_ip))
+    if (bpf_map_lookup_elem(&amp;blocklist, &amp;src_ip))
         return XDP_DROP;  // 在网卡驱动层直接丢弃
 
     return XDP_PASS;

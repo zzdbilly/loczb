@@ -39,8 +39,8 @@
           "url": "https://709527.xyz/assets/images/favicon.svg"
         }
       },
-      "datePublished": "2026-06-27",
-      "dateModified": "2026-06-27",
+      "datePublished": "2026-06-27T16:08:05+08:00",
+      "dateModified": "2026-06-27T16:08:05+08:00",
       "url": "https://709527.xyz/blog/posts/android-16-background-tasks.html",
       "mainEntityOfPage": {
         "@type": "WebPage",
@@ -881,8 +881,8 @@ adb shell dumpsys deviceidle whitelist</code></pre>
      */
     fun shouldUseWorkManager(taskDurationMinutes: Long): Boolean {
         return when {
-            taskDurationMinutes <= 3 -> false   // 短任务可用 short-lived FGS
-            taskDurationMinutes <= 360 -> false  // 中等任务可用 dataSync FGS
+            taskDurationMinutes &lt;= 3 -> false   // 短任务可用 short-lived FGS
+            taskDurationMinutes &lt;= 360 -> false  // 中等任务可用 dataSync FGS
             else -> true                          // 超长任务必须用 WorkManager
         }
     }

@@ -39,8 +39,8 @@
           "url": "https://709527.xyz/assets/images/favicon.svg"
         }
       },
-      "datePublished": "2026-06-19",
-      "dateModified": "2026-06-19",
+      "datePublished": "2026-06-19T10:16:17+08:00",
+      "dateModified": "2026-06-19T10:16:17+08:00",
       "url": "https://709527.xyz/blog/posts/android-app-security-hardening.html",
       "mainEntityOfPage": {
         "@type": "WebPage",
@@ -131,13 +131,13 @@
             <div class="related-post-card-title">Gradle 构建加速全攻略：从 5 分钟到 30 秒</div>
             <div class="related-post-card-tags"><span>Gradle</span><span>Android</span><span>构建优化</span></div>
           </a>
+          <a class="related-post-card" href="gradle-build-acceleration-5min-to-30sec.html">
+            <div class="related-post-card-title">Gradle 构建加速全攻略：从 5 分钟到 30 秒</div>
+            <div class="related-post-card-tags"><span>Gradle</span><span>Android</span><span>构建优化</span></div>
+          </a>
           <a class="related-post-card" href="android-15-privacy-media-visual-permission.html">
             <div class="related-post-card-title">Android 15 隐私新特性：所有文件都需要 MEDIA_VISUAL_PERMISSION</div>
             <div class="related-post-card-tags"><span>Android</span><span>隐私</span><span>Android 15</span></div>
-          </a>
-          <a class="related-post-card" href="android-hilt-dependency-injection.html">
-            <div class="related-post-card-title">Android Hilt 依赖注入最佳实践：从入门到架构</div>
-            <div class="related-post-card-tags"><span>Hilt</span><span>依赖注入</span><span>Android</span></div>
           </a>
           </div>
         </div>
@@ -337,7 +337,7 @@ sealed class IntegrityResult {
     
     private fun checkBuildTags(): Boolean {
         val buildTags = Build.TAGS
-        return buildTags != null && buildTags.contains("test-keys")
+        return buildTags != null &amp;&amp; buildTags.contains("test-keys")
     }
     
     private fun checkSU(): Boolean {
@@ -382,7 +382,7 @@ sealed class IntegrityResult {
     }
     
     private fun checkHardware(): Boolean {
-        return (Build.BRAND.startsWith("generic") && 
+        return (Build.BRAND.startsWith("generic") &amp;&amp; 
                 Build.DEVICE.startsWith("generic")) ||
                Build.PRODUCT == "google_sdk" ||
                Build.HARDWARE == "ranchu"

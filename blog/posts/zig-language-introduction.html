@@ -39,8 +39,8 @@
           "url": "https://709527.xyz/assets/images/favicon.svg"
         }
       },
-      "datePublished": "2026-06-27",
-      "dateModified": "2026-06-27",
+      "datePublished": "2026-06-27T20:08:24+08:00",
+      "dateModified": "2026-06-27T20:08:24+08:00",
       "url": "https://709527.xyz/blog/posts/zig-language-introduction.html",
       "mainEntityOfPage": {
         "@type": "WebPage",
@@ -125,13 +125,13 @@
             <div class="related-post-card-title">Rust 入局：2026 年的生态全景</div>
             <div class="related-post-card-tags"><span>Rust</span><span>TIOBE</span><span>系统编程</span></div>
           </a>
+          <a class="related-post-card" href="linux-inode-mechanism-deep-dive.html">
+            <div class="related-post-card-title">Linux inode 机制深入理解：从数据结构到实战排查</div>
+            <div class="related-post-card-tags"><span>Linux</span><span>文件系统</span><span>系统编程</span></div>
+          </a>
           <a class="related-post-card" href="rust-getting-started.html">
             <div class="related-post-card-title">Rust 入门：从零到生产</div>
             <div class="related-post-card-tags"><span>Rust</span><span>系统编程</span><span>所有权</span></div>
-          </a>
-          <a class="related-post-card" href="linux-inode-mechanism-deep-dive.html">
-            <div class="related-post-card-title">Linux inode 机制深入理解：从数据结构到实战排查</div>
-            <div class="related-post-card-tags"></div>
           </a>
           <a class="related-post-card" href="linux-ebpf-getting-started.html">
             <div class="related-post-card-title">Linux eBPF 入门：内核可观测性新范式</div>
@@ -370,7 +370,7 @@ defer allocator.destroy(item);</code></pre>
 
       <pre><code>// 嵌入式场景：不用堆，用栈上的缓冲区
 var buf: [4096]u8 = undefined;
-var fba = std.heap.FixedBufferAllocator.init(&buf);
+var fba = std.heap.FixedBufferAllocator.init(&amp;buf);
 const allocator = fba.allocator();
 
 // 所有分配都从 buf 中切，用完即止
@@ -539,7 +539,7 @@ exe.addObjectFile(b.path("vendor/libfoo.a"));
 // 添加 C 源文件
 exe.addCSourceFile(.{
     .file = b.path("vendor/legacy.c"),
-    .flags = &.{"-Wall", "-O2"},
+    .flags = &amp;.{"-Wall", "-O2"},
 });</code></pre>
 
       <div class="warning-box">
@@ -625,7 +625,7 @@ pub fn build(b: *std.Build) void {
     const run_cmd = b.addRunArtifact(exe);
     run_cmd.step.dependOn(b.getInstallStep());
     const run_step = b.step("run", "Run the app");
-    run_step.dependOn(&run_cmd.step);
+    run_step.dependOn(&amp;run_cmd.step);
 
     // 测试命令：zig build test
     const unit_tests = b.addTest(.{
@@ -635,7 +635,7 @@ pub fn build(b: *std.Build) void {
     });
     const run_unit_tests = b.addRunArtifact(unit_tests);
     const test_step = b.step("test", "Run unit tests");
-    test_step.dependOn(&run_unit_tests.step);
+    test_step.dependOn(&amp;run_unit_tests.step);
 }</code></pre>
 
       <h3>依赖管理</h3>

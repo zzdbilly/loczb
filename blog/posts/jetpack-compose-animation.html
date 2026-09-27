@@ -39,8 +39,8 @@
           "url": "https://709527.xyz/assets/images/favicon.svg"
         }
       },
-      "datePublished": "2026-04-25",
-      "dateModified": "2026-04-25",
+      "datePublished": "2026-04-25T15:27:53+08:00",
+      "dateModified": "2026-04-25T15:27:53+08:00",
       "url": "https://709527.xyz/blog/posts/jetpack-compose-animation.html",
       "mainEntityOfPage": {
         "@type": "WebPage",
@@ -392,20 +392,20 @@ fun AnimatedButton() {
       <p>AnimationSpec 定义动画的执行方式：</p>
 
       <pre><code>// 1. tween - 时间插值动画
-tween<Float>(
+tween&lt;Float>(
     durationMillis = 300,
     delayMillis = 100,
     easing = FastOutSlowInEasing
 )
 
 // 2. spring - 弹簧动画（物理模拟）
-spring<Float>(
+spring&lt;Float>(
     dampingRatio = Spring.DampingRatioNoBouncy,
     stiffness = Spring.StiffnessMedium
 )
 
 // 3. keyframes - 关键帧动画
-keyframes<Float> {
+keyframes&lt;Float> {
     durationMillis = 500
     0f at 0 with LinearEasing
     0.5f at 200 with FastOutLinearInEasing
@@ -413,14 +413,14 @@ keyframes<Float> {
 }
 
 // 4. repeatable - 重复动画
-repeatable<Float>(
+repeatable&lt;Float>(
     iterations = 3,
     animation = tween(300),
     repeatMode = RepeatMode.Reverse
 )
 
 // 5. infiniteRepeatable - 无限循环
-infiniteRepeatable<Float>(
+infiniteRepeatable&lt;Float>(
     animation = tween(300),
     repeatMode = RepeatMode.Restart
 )</code></pre>

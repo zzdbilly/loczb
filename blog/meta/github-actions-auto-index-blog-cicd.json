@@ -5,6 +5,11 @@
   "date": "2026-07-04",
   "dateTime": "2026-07-04 13:50:50",
   "category": "DevOps",
-  "tags": [],
+  "tags": [
+    "GitHub Actions",
+    "CI/CD",
+    "DevOps",
+    "自动化"
+  ],
   "readTime": 5
 }

@@ -39,8 +39,8 @@
           "url": "https://709527.xyz/assets/images/favicon.svg"
         }
       },
-      "datePublished": "2026-04-26",
-      "dateModified": "2026-04-26",
+      "datePublished": "2026-04-26T15:11:29+08:00",
+      "dateModified": "2026-04-26T15:11:29+08:00",
       "url": "https://709527.xyz/blog/posts/rust-getting-started.html",
       "mainEntityOfPage": {
         "@type": "WebPage",
@@ -122,6 +122,10 @@
             <div class="related-post-card-title">Rust 入局：2026 年的生态全景</div>
             <div class="related-post-card-tags"><span>Rust</span><span>TIOBE</span><span>系统编程</span></div>
           </a>
+          <a class="related-post-card" href="linux-inode-mechanism-deep-dive.html">
+            <div class="related-post-card-title">Linux inode 机制深入理解：从数据结构到实战排查</div>
+            <div class="related-post-card-tags"><span>Linux</span><span>文件系统</span><span>系统编程</span></div>
+          </a>
           <a class="related-post-card" href="zig-language-introduction.html">
             <div class="related-post-card-title">Zig 语言入门：比 C 更安全的系统编程</div>
             <div class="related-post-card-tags"><span>Zig</span><span>系统编程</span><span>comptime</span></div>
@@ -133,10 +137,6 @@
           <a class="related-post-card" href="webassembly-in-practice.html">
             <div class="related-post-card-title">WebAssembly 实战：浏览器端高性能计算</div>
             <div class="related-post-card-tags"><span>WebAssembly</span><span>Rust</span><span>前端性能</span></div>
-          </a>
-          <a class="related-post-card" href="linux-inode-mechanism-deep-dive.html">
-            <div class="related-post-card-title">Linux inode 机制深入理解：从数据结构到实战排查</div>
-            <div class="related-post-card-tags"></div>
           </a>
           </div>
         </div>
@@ -296,12 +296,12 @@ fn makes_copy(i: i32) {
     let s = String::from("hello");
     
     // 借用：不获取所有权
-    let len = calculate_length(&s);
+    let len = calculate_length(&amp;s);
     
     println!("'{}' 的长度是 {}", s, len); // s 仍然有效
 }
 
-fn calculate_length(s: &String) -> usize {
+fn calculate_length(s: &amp;String) -> usize {
     s.len()
 } // s 是引用，不丢弃值</code></pre>
 
@@ -310,11 +310,11 @@ fn calculate_length(s: &String) -> usize {
       <pre><code>fn main() {
     let mut s = String::from("hello");
     
-    change(&mut s);
+    change(&amp;mut s);
     println!("{}", s); // "hello, world"
 }
 
-fn change(s: &mut String) {
+fn change(s: &amp;mut String) {
     s.push_str(", world");
 }</code></pre>
 
@@ -326,19 +326,19 @@ fn change(s: &mut String) {
     let mut s = String::from("hello");
     
     // 错误！不能同时有多个可变引用
-    let r1 = &mut s;
-    let r2 = &mut s; // 编译错误
+    let r1 = &amp;mut s;
+    let r2 = &amp;mut s; // 编译错误
     
     // 正确：引用作用域结束后再创建新的
     {
-        let r1 = &mut s;
+        let r1 = &amp;mut s;
     } // r1 结束
-    let r2 = &mut s; // OK
+    let r2 = &amp;mut s; // OK
     
     // 错误！有不可变引用时不能有可变引用
     let r1 = &s;
     let r2 = &s;
-    let r3 = &mut s; // 编译错误
+    let r3 = &amp;mut s; // 编译错误
 }</code></pre>
 
       <h2>五、结构体</h2>
@@ -393,11 +393,11 @@ impl User {
     }
     
     // 方法
-    fn is_active(&self) -> bool {
+    fn is_active(&amp;self) -> bool {
         self.active
     }
     
-    fn deactivate(&mut self) {
+    fn deactivate(&amp;mut self) {
         self.active = false;
     }
 }</code></pre>
@@ -442,14 +442,14 @@ fn main() {
     }
     
     // 错误处理
-    let result: Result<i32, &str> = Ok(42);
+    let result: Result&lt;i32, &amp;str> = Ok(42);
     match result {
         Ok(v) => println!("Success: {}", v),
         Err(e) => println!("Error: {}", e),
     }
     
     // ? 运算符
-    fn read_file() -> Result<String, std::io::Error> {
+    fn read_file() -> Result&lt;String, std::io::Error> {
         let content = std::fs::read_to_string("file.txt")?; // 自动处理错误
         Ok(content)
     }
@@ -491,8 +491,8 @@ fn main() {
       <h3>泛型</h3>
 
       <pre><code>// 泛型函数
-fn largest&lt;T: PartialOrd&gt;(list: &[T]) -> &T {
-    let mut largest = &list[0];
+fn largest&lt;T: PartialOrd&gt;(list: &amp;[T]) -> &amp;T {
+    let mut largest = &amp;list[0];
     for item in list {
         if item > largest {
             largest = item;
@@ -511,10 +511,10 @@ struct Point&lt;T&gt; {
 
       <pre><code>// 定义 Trait
 trait Summary {
-    fn summarize(&self) -> String;
+    fn summarize(&amp;self) -> String;
     
     // 默认实现
-    fn author(&self) -> String {
+    fn author(&amp;self) -> String {
         String::from("Unknown")
     }
 }
@@ -526,26 +526,26 @@ struct Article {
 }
 
 impl Summary for Article {
-    fn summarize(&self) -> String {
+    fn summarize(&amp;self) -> String {
         format!("{}: {}", self.title, self.content)
     }
 }
 
 // Trait 作为参数
-fn notify(item: &impl Summary) {
+fn notify(item: &amp;impl Summary) {
     println!("{}", item.summarize());
 }</code></pre>
 
       <h3>生命周期</h3>
 
       <pre><code>// 生命周期标注
-fn longest&lt;'a&gt;(x: &'a str, y: &'a str) -> &'a str {
+fn longest&lt;'a&gt;(x: &amp;'a str, y: &amp;'a str) -> &amp;'a str {
     if x.len() > y.len() { x } else { y }
 }
 
 // 结构体中的生命周期
 struct ImportantExcerpt&lt;'a&gt; {
-    part: &'a str,
+    part: &amp;'a str,
 }
 
 fn main() {

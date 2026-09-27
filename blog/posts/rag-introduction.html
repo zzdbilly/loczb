@@ -39,8 +39,8 @@
           "url": "https://709527.xyz/assets/images/favicon.svg"
         }
       },
-      "datePublished": "2026-06-27",
-      "dateModified": "2026-06-27",
+      "datePublished": "2026-06-27T16:39:27+08:00",
+      "dateModified": "2026-06-27T16:39:27+08:00",
       "url": "https://709527.xyz/blog/posts/rag-introduction.html",
       "mainEntityOfPage": {
         "@type": "WebPage",
@@ -155,6 +155,10 @@
             <div class="related-post-card-title">Agentic AI 架构演进：从 Chatbot 到自主 Agent</div>
             <div class="related-post-card-tags"><span>AI</span><span>Agent</span><span>架构</span></div>
           </a>
+          <a class="related-post-card" href="ai-编程助手进化论从结对编程到自主编程团队-2026.html">
+            <div class="related-post-card-title">AI 编程助手进化论：从结对编程到自主编程团队 (2026)</div>
+            <div class="related-post-card-tags"><span>AI</span><span>Agent</span><span>AI 工具</span></div>
+          </a>
           <a class="related-post-card" href="mcp-server-deep-dive.html">
             <div class="related-post-card-title">MCP 协议深入实战：从入门到编写自定义 MCP Server</div>
             <div class="related-post-card-tags"><span>AI</span><span>MCP</span><span>工具调用</span></div>
@@ -162,10 +166,6 @@
           <a class="related-post-card" href="ai-code-editor-review-cursor-windsurf-copilot.html">
             <div class="related-post-card-title">AI 代码编辑器深度横评：Cursor vs Windsurf vs Copilot</div>
             <div class="related-post-card-tags"><span>AI</span><span>AI 工具</span><span>开发技巧</span></div>
-          </a>
-          <a class="related-post-card" href="prompt-engineering-systematic.html">
-            <div class="related-post-card-title">Prompt Engineering 系统化方法论</div>
-            <div class="related-post-card-tags"><span>Prompt Engineering</span><span>CRISPE</span><span>Chain-of-Thought</span></div>
           </a>
           </div>
         </div>
@@ -534,9 +534,9 @@ chunks = splitter.split_text(document_text)</code></pre>
 
       <h3>选型建议</h3>
 
-      <pre><code>数据规模 & 使用场景：
+      <pre><code>数据规模 &amp; 使用场景：
 ├── 学习 / 原型验证 → Chroma（最简单，pip install 即用）
-├── 中小规模生产（<1000 万向量）→ Qdrant（性能好、过滤强、易部署）
+├── 中小规模生产（&lt;1000 万向量）→ Qdrant（性能好、过滤强、易部署）
 ├── 大规模生产（>1 亿向量）→ Milvus（分布式、水平扩展）
 ├── 不想运维 → Pinecone（全托管，按量付费）
 └── 纯批处理 / 不需在线 CRUD → FAISS（Meta 出品，极致性能）</code></pre>
