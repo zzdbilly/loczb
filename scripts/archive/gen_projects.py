@@ -1,11 +1,29 @@
 #!/usr/bin/env python3
 """
-Generate projects/index.html dynamically from projects/projects.json data.
+[已归档 · 禁止直接运行] Generate projects/index.html dynamically from projects/projects.json data.
+
+2026-09-27 归档原因（审计实测）：
+  projects/projects.json 只剩 2 条记录（loczb / pastebin），而已上线的 projects/index.html
+  已是手工维护的 4 张案例卡版本。直接运行本脚本会用 2 条数据重建页面：
+    - 删掉 2 张案例卡（Android 16 AICore & Compose Lab、Hermes Agent Toolkit 等）
+    - 重新插入已由 perf-cleanup 清理的 <div class="loading"> 遮罩与 Google Fonts 外链
+    - 把 style.css 的缓存戳从 ?v=20260927-touch1 退回 ?v=spotlight-ui
+  实测产物 diff：51 insertions / 143 deletions。
+
+正确做法：项目页直接手维 projects/index.html；若日后要恢复脚本化，先把
+projects/projects.json 补齐到与页面完全一致，再删除本守卫。
 """
 import json
+import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
+if '--i-know-this-is-stale' not in sys.argv:
+    print("⛔ 本脚本已归档停用：数据源 projects/projects.json 与线上项目页不同步，")
+    print("   直接运行会删除项目案例卡并回退性能优化（见文件头说明）。")
+    print("   确需重建请先补齐 projects.json，再显式传 --i-know-this-is-stale。")
+    sys.exit(1)
+
+ROOT = Path(__file__).resolve().parent.parent.parent  # scripts/archive/ → 仓库根
 DATA_FILE = ROOT / "projects" / "projects.json"
 OUTPUT = ROOT / "projects" / "index.html"
 

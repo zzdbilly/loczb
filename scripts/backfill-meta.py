@@ -12,6 +12,7 @@ generate-index.js 优先读取、verify.js 做一致性门禁。
   默认跳过已存在的 sidecar（幂等）；--force 全部重建。
 """
 
+import html as html_lib
 import json
 import os
 import re
@@ -36,9 +37,12 @@ def extract_meta(slug, html):
     m = re.search(r'<title>([^<]+)</title>', html)
     title = re.sub(r' \| 张小猛 - loczb$', '', m.group(1)) if m else ''
 
-    # description：meta description
-    m = re.search(r'<meta name="description" content="([^"]*)"', html)
-    description = m.group(1).strip() if m else ''
+    # description：meta description。口径与 refresh-posts.py 一致——非贪婪匹配到 `">` 为止，
+    # 再用 html.unescape 反转义实体。历史文章（如 how-engineers-report）的属性值里带未转义
+    # 的裸双引号，用 `[^"]*` 会在第一个引号处截断，把「写给"干活行…"的工程师：…」整段摘要
+    # 截成「写给」，--force 回填时静默写坏 sidecar（2026-09-27 修复）。
+    m = re.search(r'<meta name="description" content="(.*?)">', html)
+    description = html_lib.unescape(m.group(1)).strip() if m else ''
 
     # date/dateTime：📅 span（有 HH:MM:SS 就带上，无则补 00:00:00）
     date, date_time = '', ''

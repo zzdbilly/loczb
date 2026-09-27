@@ -1,8 +1,22 @@
 #!/usr/bin/env python3
-"""一次性性能清理脚本：移除全屏 loading 遮罩 + Google Fonts 依赖（全站 HTML 批量）。
-运行: python3 scripts/perf-cleanup.py [--dry]
+"""[已归档 · 禁止无脑重跑] 一次性性能清理脚本：移除全屏 loading 遮罩 + Google Fonts 依赖（全站 HTML 批量）。
+运行: cd <仓库根> && python3 scripts/archive/perf-cleanup.py --dry [--force-run]
+
+2026-09-27 归档原因（审计实测）：
+  本脚本已全站生效（重跑 0 变更的新增），但它第 45 行的全局 `re.sub(r'\\n{3,}', '\\n\\n', text)`
+  会作用到**正文**：实跑一次就改掉了 blog/posts/idempotent-reproducible-builds.html 里
+  <pre><code> 内 Python 示例的一个空行（diff 0 增 1 删）。另外 glob 不含 blog/page-*.html。
+  所以它不再适合作为可反复执行的工具；如需复用，请先把空行收敛限定在 <head> 区间。
 """
-import re, sys, glob
+import os, re, sys, glob
+
+if '--force-run' not in sys.argv:
+    print("⛔ 本脚本已归档停用：重跑会改写文章正文（代码块丢空行），且不覆盖 blog/page-*.html。")
+    print("   确认要跑请加 --force-run（建议先 --dry 看逐文件计数）。")
+    sys.exit(1)
+if not os.path.exists('index.html'):
+    print("⛔ 必须在仓库根目录运行（脚本用相对 glob 找 HTML）。")
+    sys.exit(1)
 
 DRY = '--dry' in sys.argv
 

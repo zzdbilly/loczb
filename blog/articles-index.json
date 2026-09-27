@@ -12,7 +12,7 @@
         "可复现",
         "工程实践"
       ],
-      "readTime": "14",
+      "readTime": 14,
       "url": "blog/posts/idempotent-reproducible-builds.html"
     },
     {
@@ -26,7 +26,7 @@
         "团队管理",
         "角色认知"
       ],
-      "readTime": "12",
+      "readTime": 12,
       "url": "blog/posts/tech-manager-vs-pm-vs-po.html"
     },
     {
@@ -41,7 +41,7 @@
         "汇报",
         "思考"
       ],
-      "readTime": "10",
+      "readTime": 10,
       "url": "blog/posts/how-engineers-report.html"
     },
     {
@@ -56,7 +56,7 @@
         "生活方式",
         "程序员"
       ],
-      "readTime": "12",
+      "readTime": 12,
       "url": "blog/posts/quick-energy-recovery.html"
     },
     {
@@ -71,7 +71,7 @@
         "自我管理",
         "复利思维"
       ],
-      "readTime": "14",
+      "readTime": 14,
       "url": "blog/posts/seek-long-term-desires.html"
     },
     {
@@ -87,7 +87,7 @@
         "Jetpack Compose",
         "CI"
       ],
-      "readTime": "18",
+      "readTime": 18,
       "url": "blog/posts/android-testing-playbook.html"
     },
     {
