@@ -7,6 +7,14 @@
     <language>zh-CN</language>
     <atom:link href="https://709527.xyz/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>纳指定投：把一笔月供当成长期运维来跑</title>
+      <link>https://709527.xyz/blog/posts/纳指定投把一笔月供当成长期运维来跑.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/纳指定投把一笔月供当成长期运维来跑.html</guid>
+      <description>一个程序员对纳指100定投的完整记录：它是什么、摊平了什么、摩擦成本在哪、我给自己定了哪些执行规则，以及怎么验证自己没做错。</description>
+      <category>思考</category>
+      <pubDate>Mon, 28 Sep 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
       <title>幂等与可复现：为什么你的构建总在产生无意义的 diff</title>
       <link>https://709527.xyz/blog/posts/idempotent-reproducible-builds.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/idempotent-reproducible-builds.html</guid>
@@ -157,14 +165,6 @@
       <description>一个看似数字、实则是认知与心态的问题：300 万到底够不够躺平？聊透 4% 法则、通胀与黑天鹅、城市差异、心态准备和务实替代路径。</description>
       <category>思考</category>
       <pubDate>Sun, 09 Aug 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>如何好好工作：从看起来很忙到真正产出</title>
-      <link>https://709527.xyz/blog/posts/如何好好工作从看起来很忙到真正产出.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/如何好好工作从看起来很忙到真正产出.html</guid>
-      <description>一套经过实践检验的工作方法论：识别重要的事、用系统代替意志力、管理注意力、用健康托底，以及一张可执行的每日清单。</description>
-      <category>思考</category>
-      <pubDate>Sat, 08 Aug 2026 00:00:00 +0800</pubDate>
     </item>
   </channel>
 </rss>

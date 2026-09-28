@@ -1,6 +1,22 @@
 {
   "posts": [
     {
+      "slug": "纳指定投把一笔月供当成长期运维来跑",
+      "title": "纳指定投：把一笔月供当成长期运维来跑",
+      "date": "2026-09-28",
+      "dateTime": "2026-09-28 10:42:00",
+      "category": "思考",
+      "tags": [
+        "理财",
+        "指数基金",
+        "定投",
+        "投资",
+        "个人财务"
+      ],
+      "readTime": "18",
+      "url": "blog/posts/纳指定投把一笔月供当成长期运维来跑.html"
+    },
+    {
       "slug": "idempotent-reproducible-builds",
       "title": "幂等与可复现：为什么你的构建总在产生无意义的 diff",
       "date": "2026-09-27",
@@ -1750,8 +1766,8 @@
     }
   ],
   "categories": [
-    "开发",
     "思考",
+    "开发",
     "Android",
     "DevOps",
     "Kotlin",
@@ -1762,9 +1778,9 @@
     "安全"
   ],
   "stats": {
-    "totalPosts": 112,
-    "totalTags": 293,
-    "latestDate": "2026-09-27",
+    "totalPosts": 113,
+    "totalTags": 296,
+    "latestDate": "2026-09-28",
     "oldestDate": "2026-02-15"
   }
 }
