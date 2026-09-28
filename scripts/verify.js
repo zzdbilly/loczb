@@ -18,6 +18,10 @@
  *      故改为 fail() 阻断——否则「门禁全绿 ≠ 无问题」，坏数据会再次长期藏进绿灯下。
  *      只有出现「确实要放行的存量数据」（例如上游批量导入无法立刻修正）时，才应该把这四条
  *      降回警告（infos.push），且必须在描述里写明降级的理由和计划修正日期。
+ *   i) 评论组件引用版本：每个含 <script src="…comment-widget.js?v="> 的页面，其 ?v= 必须
+ *      等于 workers/comment-system/comment-widget.js 的内容哈希（sha256 前 10 位），
+ *      组件内部注入 CSS 的 CSS_PATH 版本必须等于 comment-widget.css 的内容哈希。
+ *      作用：改组件后不重建（引用版本陈旧）会立刻在这里暴露，而不是上线后等 10 分钟缓存。
  *
  * 本地 Run: node scripts/verify.js
  * generate-post.py 在索引重建成功后自动调用。
@@ -324,6 +328,78 @@ function contentCheck(name, count, samples) {
   contentCheck('④ tags 为空', emptyTags, emptyTagsList);
 }
 
+// ── i) 评论组件引用版本 = 组件当前内容哈希 ────────────────
+// 为什么需要：comment-widget.js 是通过 <script src="…?v=<hash>"> 引用的，
+// GitHub Pages 对静态资源下发 max-age=600，内容变了而 URL 没变 ⇒ 用户最长 10 分钟
+// 拿到旧组件。版本号由 scripts/sync-widget-version.js 写（generate-index.js 末尾自动跑），
+// 这里对账「引用里的 ?v= == 组件内容 sha256 前 10 位」，挡住两类事故：
+//   ① 手改了 comment-widget.js/.css 却没重建（引用版本陈旧 ⇒ 改动不生效）
+//   ② 手改 HTML 版本号凑数（版本与内容哈希脱钩，缓存永不失效或错命中）
+// CSS 由组件自己动态注入 <link>（loadCSS()），不在 HTML 里，所以单独查它的 CSS_PATH 常量。
+{
+  const crypto = require('crypto');
+  const JS_REL = 'workers/comment-system/comment-widget.js';
+  const CSS_REL = 'workers/comment-system/comment-widget.css';
+  const HASH_LEN = 10;
+  const REF_RE = /<script[^>]*\bsrc="[^"]*comment-widget\.js(?:\?v=([0-9a-f]+))?"/g;
+
+  const hashOf = p => crypto.createHash('sha256').update(fs.readFileSync(path.join(CWD, p))).digest('hex').slice(0, HASH_LEN);
+
+  function walkHtml(dir, out = []) {
+    for (const name of fs.readdirSync(dir)) {
+      if (name === '.git' || name === 'node_modules') continue;
+      const full = path.join(dir, name);
+      if (fs.statSync(full).isDirectory()) walkHtml(full, out);
+      else if (name.endsWith('.html')) out.push(full);
+    }
+    return out;
+  }
+
+  if (!exists(JS_REL) || !exists(CSS_REL)) {
+    fail(`i) 缺少评论组件文件（${JS_REL} / ${CSS_REL}）`);
+  } else {
+    const expectJs = hashOf(JS_REL);
+    const expectCss = hashOf(CSS_REL);
+
+    // 组件内部注入的 CSS 版本
+    const m = readText(JS_REL).match(/const CSS_PATH = '[^']*\/comment-widget\.css\?v=([0-9a-f]+)'/);
+    if (!m) fail(`i) ${JS_REL} 的 CSS_PATH 没有 ?v= 版本参数（改 CSS 会继续吃 10 分钟旧缓存）`);
+    else if (m[1] !== expectCss) fail(`i) 评论组件 CSS 版本不一致: CSS_PATH=${m[1]}，当前 ${CSS_REL} 内容哈希=${expectCss}（跑 node scripts/sync-widget-version.js）`);
+
+    const pagesWithRef = [];
+    const stale = [], noVersion = [];
+    let refTotal = 0;
+
+    for (const full of walkHtml(CWD)) {
+      const rel = path.relative(CWD, full);
+      const html = fs.readFileSync(full, 'utf-8');
+      const matches = [...html.matchAll(REF_RE)];
+      if (!matches.length) continue;
+      refTotal += matches.length;
+      pagesWithRef.push(rel);
+      matches.forEach(mm => {
+        if (!mm[1]) noVersion.push(rel);
+        else if (mm[1] !== expectJs) stale.push(`${rel}(v=${mm[1]})`);
+      });
+    }
+
+    if (refTotal === 0) fail('i) 全站找不到任何评论组件引用（引用写法被改动过？）');
+    if (noVersion.length) fail(`i) ${noVersion.length} 处评论组件引用缺少 ?v= 版本参数: ${noVersion.slice(0, 5).join(', ')}${noVersion.length > 5 ? ' …' : ''}`);
+    if (stale.length) fail(`i) ${stale.length} 处评论组件引用版本 ≠ 当前组件内容哈希 ${expectJs}（改组件后未重建）: ${stale.slice(0, 5).join(', ')}${stale.length > 5 ? ' …' : ''}`);
+
+    // 文章页与模板必须恰好 1 处引用（多/少都说明模板链漂了）
+    const mustRef = ['templates/blog-post-template.html'];
+    for (const slug of htmlSlugs) mustRef.push(`blog/posts/${slug}.html`);
+    const missing = mustRef.filter(p => !pagesWithRef.includes(p));
+    const dup = pagesWithRef.filter(p => /^blog[\/]posts[\/]|^templates[\/]/.test(p)
+      && [...fs.readFileSync(path.join(CWD, p), 'utf-8').matchAll(REF_RE)].length !== 1);
+    if (missing.length) fail(`i) ${missing.length} 个文章页/模板缺少评论组件引用: ${missing.slice(0, 5).join(', ')}${missing.length > 5 ? ' …' : ''}`);
+    if (dup.length) fail(`i) ${dup.length} 个文章页/模板的评论组件引用不是恰好 1 处: ${dup.slice(0, 5).join(', ')}`);
+
+    infos.push(`i) 评论组件引用版本 ${expectJs}：${pagesWithRef.length} 个页面 / ${refTotal} 处引用全部一致`);
+  }
+}
+
 // ── 结果 ─────────────────────────────────────────────────
 if (infos.length) {
   console.log('ℹ️  非阻断提示:');
@@ -334,4 +410,4 @@ if (errors.length) {
   errors.forEach(e => console.error('   - ' + e));
   process.exit(1);
 }
-console.log(`✅ verify.js 全部通过（posts/index/meta 各 ${htmlSlugs.size} 条对齐，静态相关与静态分页门禁通过，主页面版本一致）`);
+console.log(`✅ verify.js 全部通过（posts/index/meta 各 ${htmlSlugs.size} 条对齐，静态相关与静态分页门禁通过，主页面版本一致，评论组件引用版本 = 组件内容哈希）`);

@@ -3,7 +3,8 @@
  * 自动注入到文章页面，提供评论/回复/编辑/删除功能
  * 
  * 用法: 在文章 HTML 的 </body> 前引入:
- *   <script src="/workers/comment-system/comment-widget.js"></script>
+ *   <script src="/workers/comment-system/comment-widget.js?v=<内容哈希>"></script>
+ *   （?v= 由 scripts/sync-widget-version.js 自动改写，别手写；作用见该脚本注释）
  * CSS 通过 JS 自动加载，无需手动引入
  */
 (function () {
@@ -14,7 +15,10 @@
   const API_BASE = 'https://loczb-comments.billycust716.workers.dev';
   const API_URL = API_BASE + '/api/comments';
   // CSS 路径（相对于站点根目录，GitHub Pages 也能访问）
-  const CSS_PATH = '/workers/comment-system/comment-widget.css';
+  // ?v= 的内容哈希由 scripts/sync-widget-version.js 自动写入（勿手改）：
+  // CSS 是本文件动态注入 <link> 的，不在 HTML 里，只能把版本拼在注入 URL 上，
+  // 否则改了 CSS 之后边缘缓存（max-age=600）会继续吐旧样式最多 10 分钟。
+  const CSS_PATH = '/workers/comment-system/comment-widget.css?v=5a3bac66f8';
 
   // ========== 工具函数 ==========
 
