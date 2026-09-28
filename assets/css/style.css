@@ -3261,7 +3261,7 @@ button.share-btn {
   background: var(--color-bg-tertiary);
 }
 .post-toc-list a.active {
-  color: var(--color-accent-primary);
+  color: var(--color-accent-text); /* 目录激活项是 11.5px 正文：accent 原色 #6366f1 压 #18181b 只有 3.96:1，不过 AA；换正文专用的 accent-text（8.89:1） */
   background: var(--color-bg-tertiary);
   border-left-color: var(--color-accent-primary);
 }
@@ -3507,7 +3507,7 @@ button.share-btn {
 }
 .toc-drawer .post-toc-list a:hover,
 .toc-drawer .post-toc-list a.active {
-  color: var(--color-accent-primary);
+  color: var(--color-accent-text); /* 目录激活项是 11.5px 正文：accent 原色 #6366f1 压 #18181b 只有 3.96:1，不过 AA；换正文专用的 accent-text（8.89:1） */
   background: var(--color-bg-tertiary);
   border-left-color: var(--color-accent-primary);
 }
