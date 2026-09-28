@@ -115,6 +115,9 @@
   box-sizing: border-box;
 }
 html {
+  /* 顶部导航是 position: fixed（65px），页面被滚到锚点/元素时默认会顶到导航底下被盖住。
+     这里给「被滚动到的目标」留出导航高度，锚点跳转、TOC 点击、scrollIntoView 都受益。 */
+  scroll-padding-top: 84px;
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
