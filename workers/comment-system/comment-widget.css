@@ -96,6 +96,14 @@
   line-height: 1.6;
 }
 
+/* 固定导航栏（65px）会盖住滚到视口顶部的内容。评论表单被自动滚动到时留出安全距离，
+   否则短视口下打字触发的「光标进入视野」滚动会把表单顶到导航底下（2026-09-28 用户反馈）。 */
+.comment-form,
+#comment-content,
+.comment-reply-preview {
+  scroll-margin-top: 84px;
+}
+
 .comment-form-actions {
   display: flex;
   justify-content: space-between;

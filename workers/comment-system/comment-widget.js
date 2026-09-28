@@ -296,6 +296,27 @@
         e.preventDefault();
         this.submitComment();
       });
+
+      // 聚焦评论框时把表单对齐到固定导航栏下方（只做一次，不跟用户的手动滚动打架）。
+      // 短视口/手机键盘弹出时，评论框若贴在视口底部，打字会让浏览器不断把光标「滚进视野」，
+      // 连带把整个表单顶到导航栏底下被遮住（2026-09-28 用户反馈「写着写着就往上跑，甚至完全遮挡住」）。
+      // 先给它腾出空间，光标就有地方待，浏览器不会再滚动页面。
+      const snapTextarea = this.container.querySelector('#comment-content');
+      if (snapTextarea && !snapTextarea.dataset.navSnapped) {
+        snapTextarea.addEventListener('focus', () => {
+          const rect = snapTextarea.getBoundingClientRect();
+          const nav = document.querySelector('.nav');
+          const navH = nav ? nav.getBoundingClientRect().height : 0;
+          // 只在框已经落到视口下半部时才对齐，避免无谓跳动
+          if (rect.top > window.innerHeight * 0.45) {
+            window.scrollTo({
+              top: rect.top + window.pageYOffset - navH - 20,
+              behavior: 'smooth'
+            });
+          }
+          snapTextarea.dataset.navSnapped = '1';
+        }, { once: true });
+      }
     },
 
     async loadComments() {
@@ -402,7 +423,8 @@
 
       // 聚焦
       this.container.querySelector('#comment-content').focus();
-      this.container.querySelector('#comment-content').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      // block:'center' 对高元素会把顶部顶出视口（被固定导航盖住）→ 用 start，交给 scroll-margin-top 留白
+      this.container.querySelector('#comment-content').scrollIntoView({ behavior: 'smooth', block: 'start' });
     },
 
     cancelReply() {
