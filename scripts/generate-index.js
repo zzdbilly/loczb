@@ -775,6 +775,22 @@ function buildSeries() {
   }
 }
 
+// 评论组件引用版本号：组件内容哈希 → 全站 HTML 的 `?v=`。
+// 必须放在所有会写文章页的步骤之后（injectStaticRelated 会重写文章页），
+// 否则刚写进去的版本号会被覆盖，改了组件又要等 10 分钟边缘缓存。
+// 内容不变时不落盘（幂等），故每次重建都调用是安全的。
+function syncWidgetVersion() {
+  const script = path.join(__dirname, 'sync-widget-version.js');
+  if (!fs.existsSync(script)) {
+    console.error('❌ 缺少 scripts/sync-widget-version.js，评论组件引用无法挂版本号');
+    process.exit(1);
+  }
+  const { syncWidgetVersion: run, report } = require(script);
+  const r = run({ dry: false });
+  report(r);
+  if (!r.ok) process.exit(1);
+}
+
 // ═══════════════════════════════════════════════
 // Execute all phases
 // ═══════════════════════════════════════════════
@@ -788,5 +804,7 @@ injectStaticRelated();
 generateSitemap();
 generateRSS();
 updateServiceWorker();
+// 收尾：评论组件引用版本号（必须在所有写文章页的步骤之后，见函数注释）
+syncWidgetVersion();
 
 console.log('\n🎉 完成！');
