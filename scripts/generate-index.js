@@ -551,6 +551,24 @@ function rebuildHomePage() {
   console.log(`✅ index.html: featured="${latest.title}", list=${listArticles.length} posts, JS array=${topPosts.length} posts`);
 }
 
+function syncOtherPagesPostCount() {
+  const otherPages = ['about/index.html', 'projects/index.html', '404.html'];
+  let updatedCount = 0;
+  otherPages.forEach(rel => {
+    const full = path.join(CWD, rel);
+    if (!fs.existsSync(full)) return;
+    const oldHtml = fs.readFileSync(full, 'utf-8');
+    const newHtml = syncPostCount(oldHtml);
+    if (newHtml !== oldHtml) {
+      writeIfChanged(full, newHtml);
+      updatedCount++;
+    }
+  });
+  if (updatedCount > 0) {
+    console.log(`✅ 自动同步 ${updatedCount} 个其他主页面的文章数量锚点 (about/projects/404)`);
+  }
+}
+
 // ═══════════════════════════════════════════════
 // Phase 4.5: 文章页静态「相关文章」（构建期内联，替代运行时 related-posts.js）
 // ═══════════════════════════════════════════════
@@ -800,6 +818,7 @@ console.log('\n🔨 CI 全量索引重建开始...\n');
 buildSeries();
 rebuildBlogIndex();
 rebuildHomePage();
+syncOtherPagesPostCount();
 injectStaticRelated();
 generateSitemap();
 generateRSS();

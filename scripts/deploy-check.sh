@@ -47,14 +47,23 @@ echo "   比对: ${FILES[*]}"
 echo "   超时 ${MAX_WAIT_SEC}s / 间隔 ${POLL_INTERVAL}s"
 
 local_hash() {
-  sha256sum "$1" 2>/dev/null | cut -d' ' -f1
+  if command -v sha256sum >/dev/null 2>&1; then
+    sha256sum "$1" 2>/dev/null | cut -d' ' -f1
+  else
+    shasum -a 256 "$1" 2>/dev/null | cut -d' ' -f1
+  fi
 }
 
 # --compressed：GitHub Pages 对支持 gzip 的客户端返回压缩体，curl 会自动解压，
 # 拿到的明文与仓库里的文件逐字节可比。
 live_hash() {
-  curl -fsSL --compressed --max-time 20 "$DOMAIN/$1?deploy-check=$HEAD_SHORT" 2>/dev/null \
-    | sha256sum | cut -d' ' -f1
+  if command -v sha256sum >/dev/null 2>&1; then
+    curl -fsSL --compressed --max-time 20 "$DOMAIN/$1?deploy-check=$HEAD_SHORT" 2>/dev/null \
+      | sha256sum | cut -d' ' -f1
+  else
+    curl -fsSL --compressed --max-time 20 "$DOMAIN/$1?deploy-check=$HEAD_SHORT" 2>/dev/null \
+      | shasum -a 256 | cut -d' ' -f1
+  fi
 }
 
 present=0

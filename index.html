@@ -64,7 +64,7 @@
   <link rel="sitemap" type="application/xml" title="Sitemap" href="sitemap.xml">
   
   <!-- Styles -->
-  <link rel="stylesheet" href="assets/css/style.css?v=20260927-touch1">
+  <link rel="stylesheet" href="assets/css/style.css?v=20261001-cleanup1">
 </head>
 <body>
   <!-- Navigation -->
@@ -547,51 +547,6 @@
   <!-- Scripts -->
   <script defer src="assets/js/main.js"></script>
   <script defer src="assets/js/particles.js"></script>
-  <script defer src="assets/js/time-progress.js"></script>
-  <script>
-    // 统计数字滚动动画
-    (function() {
-      const stats = document.querySelectorAll('.stat-value[data-count]');
-      let animated = false;
-      
-      function animateStats() {
-        if (animated) return;
-        animated = true;
-        stats.forEach(stat => {
-          const target = parseInt(stat.dataset.count);
-          const suffix = stat.dataset.suffix || '';
-          const duration = 1500;
-          const startTime = performance.now();
-          
-          function update(currentTime) {
-            const elapsed = currentTime - startTime;
-            const progress = Math.min(elapsed / duration, 1);
-            const eased = 1 - Math.pow(1 - progress, 3); // easeOutCubic
-            const current = Math.floor(eased * target);
-            stat.textContent = current + suffix;
-            if (progress < 1) {
-              requestAnimationFrame(update);
-            } else {
-              stat.textContent = target + suffix;
-            }
-          }
-          requestAnimationFrame(update);
-        });
-      }
-      
-      // 延迟启动，等 hero 动画完成后触发
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            setTimeout(animateStats, 600);
-          }
-        });
-      }, { threshold: 0.3 });
-      
-      const heroStats = document.querySelector('.hero-stats');
-      if (heroStats) observer.observe(heroStats);
-    })();
-  </script>
   <script>
     // 首页随机选择代表文章
     const posts = [
@@ -686,26 +641,6 @@
         desc: '一个移动端开发者和 AI 编程助手协作一年的真实复盘：从不敢信、到滥信踩坑、再到建立边界和验收习惯。'
       }
     ];
-    
-    const randomPost = posts[0]; // Always use latest post
-    
-    document.getElementById('home-featured-post').innerHTML = `
-      <div class="blog-card-header">
-        <div class="blog-card-meta">
-          <span class="blog-date">${randomPost.date}</span>
-          <span>·</span>
-          <span class="blog-read-time">${randomPost.readTime}</span>
-        </div>
-        <span class="blog-list-tag">${randomPost.category}</span>
-      </div>
-      <h3 class="blog-card-title">
-        <a href="${randomPost.url}">${randomPost.title}</a>
-      </h3>
-      <p class="blog-card-excerpt">${randomPost.desc}...</p>
-      <div class="blog-card-tags">
-        <span class="tech-tag tag-accent">${randomPost.category}</span>
-      </div>
-    `;
   </script>
   
   <!-- Back to Top & Reading Progress -->

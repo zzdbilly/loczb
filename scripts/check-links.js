@@ -17,6 +17,7 @@ const targetFiles = [
   path.join(ROOT_DIR, 'about', 'index.html'),
   path.join(ROOT_DIR, 'projects', 'index.html'),
   path.join(ROOT_DIR, 'blog', 'index.html'),
+  path.join(ROOT_DIR, '404.html'),
 ];
 
 // 静态分页页（blog/page-N.html，与 blog/index.html 同目录）也要巡检，
