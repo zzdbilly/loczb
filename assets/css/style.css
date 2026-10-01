@@ -6653,6 +6653,28 @@ pre code.hljs {
   text-overflow: ellipsis;
 }
 
+.sr-quick-hint {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 0.65rem;
+  margin-top: 0.4rem;
+  border-top: 1px dashed var(--color-border);
+  font-size: 0.72rem;
+  color: var(--color-text-muted);
+}
+
+.sr-quick-hint kbd {
+  display: inline-block;
+  padding: 0.1rem 0.35rem;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-secondary);
+}
+
 /* ========================================================
    COMPREHENSIVE MOBILE OPTIMIZATIONS (IOS & ANDROID TOUCH)
    ======================================================== */
