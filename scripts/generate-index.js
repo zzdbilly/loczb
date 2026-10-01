@@ -766,9 +766,13 @@ function updateServiceWorker() {
   const crypto = require('crypto');
   let digest = 'empty';
   try {
-    digest = crypto.createHash('sha256')
-      .update(fs.readFileSync(path.join(CWD, 'blog', 'articles-index.json')))
-      .digest('hex').slice(0, 8);
+    const h = crypto.createHash('sha256')
+      .update(fs.readFileSync(path.join(CWD, 'blog', 'articles-index.json')));
+    const searchJsPath = path.join(CWD, 'assets', 'js', 'search.js');
+    const styleCssPath = path.join(CWD, 'assets', 'css', 'style.css');
+    if (fs.existsSync(searchJsPath)) h.update(fs.readFileSync(searchJsPath));
+    if (fs.existsSync(styleCssPath)) h.update(fs.readFileSync(styleCssPath));
+    digest = h.digest('hex').slice(0, 8);
   } catch (e) { /* 索引缺失时退回 stable 标记 */ }
   const newSwVersion = `c-${digest}`;
   if (swCode.includes(`const SW_VERSION = '${newSwVersion}';`)) {

@@ -201,33 +201,6 @@
     return tags.includes(f);
   }
 
-  // 获取全站真实分类及其文章数量（用于未输入时的推荐分类栏）
-  function getAllCategoriesWithCounts() {
-    const counts = {};
-    const posts = searchData.posts || [];
-    posts.forEach(p => {
-      const c = p.category || '未分类';
-      counts[c] = (counts[c] || 0) + 1;
-    });
-
-    const priority = ['AI', 'Android', 'Kotlin', '数据库', 'DevOps', '思考', '安全', '前端', '系统编程', '开发'];
-    const cats = Object.keys(counts).sort((a, b) => {
-      const ia = priority.indexOf(a);
-      const ib = priority.indexOf(b);
-      if (ia !== -1 && ib !== -1) return ia - ib;
-      if (ia !== -1) return -1;
-      if (ib !== -1) return 1;
-      return counts[b] - counts[a];
-    });
-
-    return [{ id: 'all', label: '全部', count: posts.length }].concat(
-      cats.map(c => ({
-        id: c,
-        label: `${getCategoryIcon(c)} ${c}`,
-        count: counts[c]
-      }))
-    );
-  }
 
   // 动态分面标签生成器：根据当前搜索词匹配的所有文章，动态提取命中的分类和篇数
   function getDynamicFilterBarHtml(matchedPosts, activeFilter) {
@@ -265,28 +238,12 @@
     `;
   }
 
-  // 推荐状态下的分类栏
-  function getRecommendationFilterBarHtml(activeFilter) {
-    const filters = getAllCategoriesWithCounts();
-    return `
-      <div class="sr-filter-bar">
-        ${filters.map(f => `
-          <button type="button" class="sr-filter-chip ${activeFilter === f.id ? 'active' : ''}" data-filter="${escapeHtml(f.id)}">
-            <span>${escapeHtml(f.label)}</span>
-            <span class="sr-chip-count">${f.count}</span>
-          </button>
-        `).join('')}
-      </div>
-    `;
-  }
-
   let lastMatchedPosts = [];
   let lastSearchQuery = '';
 
   function displaySmartRecs() {
     if (!searchResults) return;
     const isBlogDir = window.location.pathname.includes('/blog/');
-    const filterBar = getRecommendationFilterBarHtml(currentFilter);
 
     const seriesHtml = SERIES_QUICK_LINKS.map(s => {
       const href = isBlogDir ? s.url.replace(/^blog\//, '') : s.url;
@@ -299,7 +256,6 @@
     }).join('');
 
     searchResults.innerHTML = `
-      ${filterBar}
       <div class="sr-rec-container">
         <div class="sr-rec-title">
           <span>📚 6 大精选旗舰专栏直达</span>
@@ -308,63 +264,16 @@
         <div class="sr-series-grid">
           ${seriesHtml}
         </div>
+        <div class="sr-quick-hint">
+          <span>⚡ 即时全文模糊检索 · 支持标题、分类与标签</span>
+          <span>按 <kbd>ESC</kbd> 关闭</span>
+        </div>
       </div>
     `;
     searchResults.classList.add('active');
-    bindFilterChips(false, '');
   }
 
-  function displayCategoryPosts(category, posts) {
-    if (!searchResults) return;
-    const filterBar = getRecommendationFilterBarHtml(category);
-    const headerHtml = `
-      <div class="sr-header">
-        <span>分类「${escapeHtml(category)}」下共 ${posts.length} 篇精选文章</span>
-        <button type="button" class="sr-clear-filter" style="background:none;border:none;color:var(--color-accent-primary);cursor:pointer;font-size:0.75rem;font-weight:600;">清空筛选 ✕</button>
-      </div>`;
-
-    const isBlogDir = window.location.pathname.includes('/blog/');
-    const itemsHtml = posts.slice(0, 10).map((post, idx) => {
-      const title = escapeHtml(post.title);
-      const cat = escapeHtml(post.category || '');
-      const date = escapeHtml(post.date || '');
-      const postSlug = post.slug || (post.url || '').replace(/^blog\/posts\//, '').replace(/\.html$/, '');
-      const href = isBlogDir ? `posts/${postSlug}.html` : `blog/posts/${postSlug}.html`;
-      const tags = (post.tags || []).slice(0, 3).map(tag =>
-        `<span style="color: var(--color-text-muted);">#${escapeHtml(tag)}</span>`
-      ).join(' ');
-
-      return `
-      <a href="${href}" class="sr-item" data-index="${idx}">
-        <div class="sr-title">
-          <span>${title}</span>
-          <span style="font-size: 0.75rem; color: var(--color-accent-primary); opacity: 0.8;">➔</span>
-        </div>
-        <div class="sr-excerpt" data-meta-slug="${escapeHtml(postSlug)}"></div>
-        <div class="sr-meta">
-          <span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -1px; margin-right: 3px; opacity: 0.7;"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>${date}</span>
-          <span class="sr-category">${cat}</span>
-          ${tags ? `<span>${tags}</span>` : ''}
-        </div>
-      </a>`;
-    }).join('');
-
-    searchResults.innerHTML = filterBar + headerHtml + itemsHtml;
-    searchResults.classList.add('active');
-    bindFilterChips(false, '');
-    const clearBtn = searchResults.querySelector('.sr-clear-filter');
-    if (clearBtn) {
-      clearBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        currentFilter = 'all';
-        displaySmartRecs();
-      });
-    }
-    fillExcerpts(posts.slice(0, 10), '');
-  }
-
-  function bindFilterChips(isSearchMode, query) {
+  function bindFilterChips(query) {
     if (!searchResults) return;
     const chips = searchResults.querySelectorAll('.sr-filter-chip');
     chips.forEach(chip => {
@@ -374,19 +283,12 @@
         const selected = chip.getAttribute('data-filter') || 'all';
         currentFilter = selected;
 
-        if (isSearchMode && query) {
+        if (query) {
           let displayed = lastMatchedPosts;
           if (currentFilter !== 'all') {
             displayed = lastMatchedPosts.filter(p => postMatchesCategory(p, currentFilter));
           }
           displayResults(displayed, query, lastMatchedPosts, currentFilter);
-        } else {
-          if (currentFilter === 'all') {
-            displaySmartRecs();
-          } else {
-            const catPosts = (searchData.posts || []).filter(p => postMatchesCategory(p, currentFilter));
-            displayCategoryPosts(currentFilter, catPosts);
-          }
         }
       });
     });
@@ -493,7 +395,7 @@
           <div style="font-size: 0.75rem; color: var(--color-text-muted); margin-top: 0.25rem;">建议尝试点击上方分类标签或尝试：数据库、Android、Kotlin、AI、架构 等关键词</div>
         </div>`;
       searchResults.classList.add('active');
-      bindFilterChips(true, query);
+      bindFilterChips(query);
       return;
     }
 
@@ -533,7 +435,7 @@
 
     searchResults.innerHTML = filterBar + headerHtml + itemsHtml;
     searchResults.classList.add('active');
-    bindFilterChips(true, query);
+    bindFilterChips(query);
     fillExcerpts(results, query);
   }
 
