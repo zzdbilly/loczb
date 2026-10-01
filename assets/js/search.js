@@ -259,7 +259,7 @@
       <div class="sr-rec-container">
         <div class="sr-rec-title">
           <span>📚 6 大精选旗舰专栏直达</span>
-          <span style="font-size: 0.7rem; color: var(--color-accent-primary); font-weight: 500;">快捷跳转 ➔</span>
+          <span style="font-size: 0.7rem; color: var(--color-accent-text); font-weight: 500;">快捷跳转 ➔</span>
         </div>
         <div class="sr-series-grid">
           ${seriesHtml}
@@ -422,7 +422,7 @@
       <a href="${href}" class="sr-item" data-index="${idx}">
         <div class="sr-title">
           <span>${title}</span>
-          <span style="font-size: 0.75rem; color: var(--color-accent-primary); opacity: 0.8;">➔</span>
+          <span style="font-size: 0.75rem; color: var(--color-accent-text);">➔</span>
         </div>
         <div class="sr-excerpt" data-meta-slug="${escapeHtml(postSlug)}"></div>
         <div class="sr-meta">

@@ -14,6 +14,9 @@
      本变量是同一色相的提亮版，实测 #a5b4fc 对 #18181b = 8.89:1、对 #1f1f23 = 8.24:1。
      装饰用途（边框/底色/渐变）继续用 --color-accent-primary 不变。 */
   --color-accent-text: #a5b4fc;
+  /* 成功/在线态文字：深色底 #10b981 可用，浅色底只有 3.49:1，浅色主题覆写为 #047857
+     （对 rgba(16,185,129,0.08)+#f8f9fa 合成底 5.08:1、对 rgba(16,185,129,0.15)+白底 4.53:1）。 */
+  --color-success-text: #10b981;
   /* 行内 <code> 的文字色：原来的 --color-accent-secondary(#8b5cf6) 在 #18181b 上只有 4.18:1，
      同样不过 AA；#a78bfa 是同一紫色相的上一步，实测 6.51:1 / 对 #1f1f23 6.04:1。 */
   --color-code-text: #a78bfa;
@@ -87,7 +90,10 @@
   --color-text-primary: #1a1a2e;
   --color-text-secondary: #4a4a5a;
   --color-text-tertiary: #6a6a7a;
-  --color-text-muted: #8a8a9a;
+  /* 浅色底上的次要文字：原 #8a8a9a 对 #ffffff 只有 3.40:1、对 #f8f9fa 3.22:1、对 #f1f3f5 3.05:1，
+     低于 AA 正文 4.5:1（自建对比度审计：博客日期/阅读时长/摘要/标签计数/分页省略号/评论提示 全线命中）。
+     #5f5f6e 实测 #ffffff 6.27:1 / #f8f9fa 5.95:1 / #f1f3f5 5.64:1 / #eeeff0 5.45:1 / #e0e2e4 4.83:1。 */
+  --color-text-muted: #5f5f6e;
   --color-accent-primary: #6366f1;
   --color-accent-secondary: #8b5cf6;
   /* 浅色底上「accent 当正文色」：--color-accent-primary 在白底只有 4.47:1（对 #f4f4f5 仅 4.06:1），
@@ -108,6 +114,11 @@
   --hero-label-border: rgba(99, 102, 241, 0.25);
   --hero-label-text: #4f46e5;
   --hero-label-dot: #4f46e5;
+  --color-success-text: #047857;
+  /* 浅色底上的渐变文字（首页打字机 / Bento 大数字 / 文章页指标 / .gradient-text）：深色主题那支的
+     淡端 #a78bfa 压白底只有 2.72:1，48px 大号文字也过不了 AA 大字 3:1。浅色下换成同色相压深一档的
+     三段渐变：对 #ffffff 依次 5.70 / 5.70 / 6.39:1。 */
+  --gradient-text: linear-gradient(135deg, #4f46e5, #7c3aed, #6d28d9);
 }
 *, *::before, *::after {
   margin: 0;
@@ -188,7 +199,8 @@ a:hover {
   color: var(--color-accent-secondary);
 }
 .gradient-text {
-  background: linear-gradient(135deg, #6366f1, #a78bfa, #8b5cf6, #6366f1);
+  /* 走主题变量：浅色主题会换成压深一档的三段（见 [data-theme="light"] 的 --gradient-text） */
+  background: var(--gradient-text);
   background-size: 200% 200%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -279,6 +291,10 @@ a:hover {
 }
 .nav-logo span {
   color: #7c7cf7;
+}
+[data-theme="light"] .nav-logo span {
+  /* 浅色底上 #7c7cf7 只有 3.45:1（18.3px/600 仍算正文，需 4.5:1）；accent-text 在浅色主题为 #4f46e5 = 6.29:1 */
+  color: var(--color-accent-text);
 }
 .nav-links {
   display: flex;
@@ -672,14 +688,15 @@ a:hover {
   gap: var(--space-sm);
   font-family: var(--font-mono);
   font-size: var(--text-xs);
-  color: #a5b4fc;
+  /* 原来是硬编码的深色主题色 #a5b4fc：浅色底上只有 1.99:1（全站最低）；改用主题正文专用 accent-text */
+  color: var(--color-accent-text);
   text-transform: uppercase;
   letter-spacing: 0.1em;
   margin-bottom: var(--space-sm);
 }
 .section-label::before {
   content: '//';
-  color: #a5b4fc;
+  color: var(--color-accent-text);
   opacity: 0.5;
   margin-right: 0.25rem;
 }
@@ -909,6 +926,10 @@ a:hover {
 .footer-copyright {
   color: #d1d5db;
   font-size: var(--text-xs);
+}
+[data-theme="light"] .footer-copyright {
+  /* 浅色页脚上 #d1d5db 只有 1.40:1（全站最低的一处）；换正文次级色 */
+  color: var(--color-text-secondary);
 }
 .blog-view-all {
   text-align: center;
@@ -1801,7 +1822,8 @@ pre code {
   font-weight: 600;
   padding: 0.3rem 0.8rem;
   background: var(--color-accent-subtle);
-  color: var(--color-accent-primary);
+  /* 同上：accent 原色压 tint 底 3.85:1 → accent-text 8.63:1 */
+  color: var(--color-accent-text);
   border-radius: var(--radius-full);
   border: 1px solid rgba(99, 102, 241, 0.2);
   letter-spacing: 0.03em;
@@ -3092,7 +3114,9 @@ button.share-btn {
   padding: 0.15rem 0.5rem;
   border-radius: var(--radius-full);
   background: var(--color-accent-subtle, rgba(99, 102, 241, 0.1));
-  color: var(--color-accent-primary);
+  /* 11.5px 正文：accent 原色压 tint 底只有 3.83:1（浅色 4.04:1），换 accent-text = 8.58:1 / 5.71:1。
+     注：这条比下面的 .sr-category 优先级高，改配色时两条都要动，否则会被它盖回去。 */
+  color: var(--color-accent-text);
   font-weight: 600;
   white-space: nowrap;
 }
@@ -3506,7 +3530,8 @@ body .toc-drawer .toc-h2 {
 .timeline-date {
   font-family: var(--font-mono);
   font-size: var(--text-sm);
-  color: var(--color-accent-primary);
+  /* 16px 正文：accent 原色压 #111113 只有 4.22:1，换 accent-text（浅色主题 6.29:1） */
+  color: var(--color-accent-text);
   margin-bottom: 2px;
 }
 .timeline-title {
@@ -4083,7 +4108,9 @@ pre code.hljs {
 
 .sr-title mark, .sr-excerpt mark {
   background: rgba(99, 102, 241, 0.25);
-  color: var(--color-accent-primary);
+  /* 高亮本体是正文：accent 原色压 rgba(99,102,241,0.25) 底只有 3.19:1（浅色 3.24:1），
+     换 accent-text = 7.13:1 / 4.57:1 */
+  color: var(--color-accent-text);
   border-radius: 3px;
   padding: 0 4px;
   font-weight: 700;
@@ -4113,7 +4140,8 @@ pre code.hljs {
   padding: 0.15rem 0.55rem;
   border-radius: var(--radius-full);
   background: var(--color-accent-subtle);
-  color: var(--color-accent-primary);
+  /* 11.5px 正文：accent 原色压 tint 底只有 3.83:1，换 accent-text（8.58:1 / 浅色 5.71:1） */
+  color: var(--color-accent-text);
   font-weight: 600;
   border: 1px solid rgba(99, 102, 241, 0.15);
 }
@@ -4172,7 +4200,9 @@ pre code.hljs {
 }
 
 .filter-btn-active {
-  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%) !important;
+  /* 白字压在渐变上：淡端 #6366f1 只有 4.47:1，差 0.03 不过 AA 正文；换 --gradient-accent-strong
+     （白字 6.29:1 / 5.70:1）。装饰性渐变继续用 --gradient-accent 不变。 */
+  background: var(--gradient-accent-strong) !important;
   border-color: transparent !important;
   color: #ffffff !important;
   font-weight: 700;
@@ -4249,7 +4279,9 @@ pre code.hljs {
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.08em;
-  color: var(--color-accent-primary);
+  /* 「VIEWPORT // POSTS」是 11.5px 正文：accent 原色 #6366f1 压 #0a0a0b 只有 4.43:1（axe 唯一命中的
+     一处 color-contrast），换正文专用 accent-text = 9.93:1（浅色主题 6.29:1）。 */
+  color: var(--color-accent-text);
   text-transform: uppercase;
 }
 
@@ -4355,7 +4387,8 @@ pre code.hljs {
 }
 
 .view-toggle-btn.active {
-  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+  /* 同上：淡端 #6366f1 白字 4.47:1 不过 AA，换压深一档的 --gradient-accent-strong */
+  background: var(--gradient-accent-strong);
   color: #ffffff;
   font-weight: 700;
   border-color: rgba(255, 255, 255, 0.2);
@@ -4368,9 +4401,11 @@ pre code.hljs {
 }
 
 .view-toggle-btn.active .tab-badge {
-  background: rgba(255, 255, 255, 0.22);
+  /* 白色透层压在渐变上会把底提亮：rgba(255,255,255,0.22) 合成出 #8588f4，白字只有 3.08:1。
+     改成压暗透层，白字在合成底上为 10.68:1（深端）/ 10.03:1（淡端）。 */
+  background: rgba(0, 0, 0, 0.35);
   color: #ffffff;
-  border-color: rgba(255, 255, 255, 0.3);
+  border-color: rgba(0, 0, 0, 0.25);
 }
 
 /* 分类筛选条智能折叠隐藏 */
@@ -4577,7 +4612,8 @@ pre code.hljs {
 [data-theme="light"] .blog-list-tags .tag-pill {
   background: rgba(0, 0, 0, 0.04);
   border-color: rgba(0, 0, 0, 0.08);
-  color: #64748b;
+  /* 11.5px 正文：slate-500 压 rgba(0,0,0,0.04)+#f1f3f5 只有 4.13:1，下沉一档到 slate-600 = 6.58:1 */
+  color: #475569;
 }
 
 .blog-list-item:hover .blog-list-tags .tag-pill {
@@ -4593,7 +4629,8 @@ pre code.hljs {
   gap: 0.35rem;
   font-size: 0.8rem !important;
   font-weight: 700 !important;
-  color: var(--color-accent-primary) !important;
+  /* accent 原色 #6366f1 压 rgba(99,102,241,0.1)+卡片底 只有 3.85:1，换 accent-text（8.63:1） */
+  color: var(--color-accent-text) !important;
   text-decoration: none !important;
   padding: 0.35rem 0.8rem;
   border-radius: var(--radius-full);
@@ -4612,9 +4649,10 @@ pre code.hljs {
 .blog-read-more:hover,
 .blog-list-item:hover .blog-read-more,
 .blog-list-item:hover .blog-list-footer a {
-  background: var(--color-accent-primary);
+  /* hover 态白字压 accent 原色只有 4.47:1，同样压深一档 */
+  background: #4f46e5;
   color: #ffffff !important;
-  border-color: var(--color-accent-primary);
+  border-color: #4f46e5;
   box-shadow: 0 4px 14px rgba(99, 102, 241, 0.4);
   transform: translateY(-1px);
 }
@@ -5823,7 +5861,8 @@ pre code.hljs {
   border-radius: var(--radius-full);
   background: rgba(16, 185, 129, 0.08);
   border: 1px solid rgba(16, 185, 129, 0.28);
-  color: #10b981;
+  /* 见 --color-success-text：浅色主题下 #10b981 只有 3.49:1 */
+  color: var(--color-success-text);
   font-size: var(--text-xs);
   font-weight: 600;
   letter-spacing: 0.02em;
@@ -5885,7 +5924,8 @@ pre code.hljs {
 [data-theme="light"] .status-pill {
   background: rgba(16, 185, 129, 0.08);
   border-color: rgba(16, 185, 129, 0.32);
-  color: #059669;
+  /* 12.1px/600 正文：emerald-600 压 tint 底只有 3.49:1，用浅色主题的 --color-success-text(#047857) = 5.08:1 */
+  color: var(--color-success-text);
 }
 
 [data-theme="light"] .pulse-dot {
@@ -5950,12 +5990,11 @@ pre code.hljs {
   line-height: 1.85;
 }
 .terminal-prompt {
-  color: var(--color-accent-primary);
+  /* #6366f1 压 #171719 只有 4.02:1，换 accent-text（8.98:1）；浅色主题 accent-text 就是 #4f46e5，
+     故删掉重复的浅色覆写 */
+  color: var(--color-accent-text);
   font-weight: 700;
   margin-right: 0.5rem;
-}
-[data-theme="light"] .terminal-prompt {
-  color: #4f46e5;
 }
 .terminal-line {
   margin-bottom: 0.6rem;
@@ -5975,7 +6014,8 @@ pre code.hljs {
   font-weight: 700;
 }
 [data-theme="light"] .terminal-highlight {
-  color: #0284c7;
+  /* 12.5px/700 正文：sky-600 压 #f8fafc 只有 3.91:1，下沉一档到 sky-700 = 5.67:1 */
+  color: #0369a1;
   font-weight: 700;
 }
 [data-theme="light"] .terminal-footer-location {
@@ -6074,7 +6114,8 @@ pre code.hljs {
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: var(--gradient-accent);
+  /* 白字压在 --gradient-accent 淡端 #8b5cf6 只有 4.23:1，换 --gradient-accent-strong（5.70:1 起） */
+  background: var(--gradient-accent-strong);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -6132,7 +6173,8 @@ pre code.hljs {
 }
 
 .projects-filter-btn--active {
-  background: var(--gradient-accent);
+  /* 同上：白字压 --gradient-accent 淡端只有 4.23:1，换 --gradient-accent-strong */
+  background: var(--gradient-accent-strong);
   border-color: transparent;
   color: #ffffff;
   box-shadow: 0 4px 16px var(--color-accent-glow);
@@ -6166,7 +6208,8 @@ pre code.hljs {
 .case-card-badge {
   display: inline-block;
   background: var(--color-accent-subtle);
-  color: var(--color-accent-primary);
+  /* accent 原色压 tint 底只有 3.53:1（深色 3.65:1），换 accent-text = 8.18:1 / 4.97:1 */
+  color: var(--color-accent-text);
   padding: 0.3rem 0.85rem;
   border-radius: var(--radius-full);
   font-size: var(--text-xs);
@@ -6206,7 +6249,8 @@ pre code.hljs {
 .case-section-title {
   font-size: var(--text-xs);
   font-weight: 700;
-  color: var(--color-accent-primary);
+  /* 12.1px 正文：accent 原色压 #111113 只有 4.22:1，换 accent-text = 9.46:1 */
+  color: var(--color-accent-text);
   margin-bottom: 0.6rem;
   text-transform: uppercase;
   letter-spacing: 0.06em;
@@ -6463,7 +6507,8 @@ pre code.hljs {
   gap: 0.4rem;
   font-size: 0.75rem;
   font-weight: 700;
-  color: var(--color-accent-primary);
+  /* 12px 正文：accent 原色压 #111113 只有 4.22:1，换 accent-text */
+  color: var(--color-accent-text);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -6585,10 +6630,15 @@ pre code.hljs {
 
 [data-theme="light"] .sr-chip-count {
   background: rgba(0, 0, 0, 0.07);
+  /* 浅色主题下 0.8 的透明会把 text-secondary 降到 #686876，对 #e0e2e4 只有 4.21:1；
+     恢复不透明后是 6.69:1（深色主题底色更暗，0.8 仍达标，不动） */
+  opacity: 1;
 }
 
 .sr-filter-chip.active .sr-chip-count {
-  background: rgba(255, 255, 255, 0.25);
+  /* 同样的白透层问题：rgba(255,255,255,0.25) 压 #5b5bd6 合成 #8484e0，白字只有 3.30:1（浅色主题 3.78:1）。
+     压暗透层后白字 = 9.61:1（深色）/ 10.68:1（浅色）。 */
+  background: rgba(0, 0, 0, 0.35);
   color: #ffffff;
   opacity: 1;
 }
@@ -6921,7 +6971,8 @@ html, body {
 
   .mobile-toolbar-btn.btn-toc {
     background: var(--color-accent-subtle);
-    color: var(--color-accent-primary);
+    /* 12.5px 正文：accent 原色压 tint 底 3.90:1，换 accent-text */
+    color: var(--color-accent-text);
   }
 
   body .back-to-top {
@@ -7000,4 +7051,78 @@ html, body {
     padding: 0.8rem 0;
     margin: -0.8rem 0;
   }
+}
+
+/* ==========================================================
+   交互态（:hover / :focus-visible）对比度对齐
+   ==========================================================
+   自建对比度审计用 CDP 的 CSS.forcePseudoState 强制 :hover 实测（axe 对这些态一律
+   返回 incomplete，只能自己量）后发现的、只在交互态才暴露的问题：
+
+   ① 「accent 当正文色」的 hover：tech-tag / bento-pill / filter-btn /
+      projects-filter-btn / pagination-btn / topic-tag / 文章目录(toc) / 复制引用按钮，
+      hover 时都写成 --color-accent-primary，实测 3.32:1(dark)~4.43:1(light)，
+      全部差一点不过 AA 正文 4.5:1。
+   ② 全局 a:hover（color: --color-accent-secondary）会顶掉链接型按钮自带的文字色
+      （它 0,1,1 的优先级高于 .btn-primary 的 0,1,0）：.btn-primary 白字被换成
+      #8b5cf6 压在 #7c3aed 渐变上只有 1.35:1（本次审计里最低的一处），
+      .btn-secondary 3.88~4.23:1、.nav-logo 4.23:1、.back-link 4.43:1。
+   ③ .view-toggle-btn.active 被 hover 时丢失渐变底（浅色主题那条
+      `[data-theme="light"] .view-toggle-btn:hover` 优先级 0,3,0 盖过了 .active 的
+      0,2,0），白字压 rgba(0,0,0,0.04)+白底只剩 1.20:1。
+
+   统一改法仍沿用仓库既有纪律：accent 作正文/图标色一律走 --color-accent-text
+   （深色 #a5b4fc / 浅色 #4f46e5），按钮与胶囊保持自己的底色，只把被抢走的文字色还回去。
+   纯配色修正，不动布局、尺寸与结构。
+   ========================================================== */
+
+/* ① hover 态把 accent 当正文色的那些控件 → accent-text */
+.tech-tag:hover,
+.tech-tag:focus-visible,
+.bento-pill:hover,
+.bento-pill:focus-visible,
+.filter-btn:hover,
+.filter-btn:focus-visible,
+.projects-filter-btn:hover,
+.projects-filter-btn:focus-visible,
+.pagination-btn:not(.active):hover,
+.pagination-btn:not(.active):focus-visible,
+.topic-tag:hover,
+.topic-tag:focus-visible,
+.toc-link:hover,
+.toc-link:focus-visible,
+.toc-link.active,
+.post-toc-list a:hover,
+.post-toc-list a:focus-visible,
+.back-link:hover,
+.back-link:focus-visible,
+.copyright-cite-btn:hover,
+.copyright-cite-btn:focus-visible,
+.copyright-cite-btn:hover span {
+  color: var(--color-accent-text);
+}
+
+/* ② 链接型按钮/标识不让全局 a:hover 抢走自己的文字色 */
+.btn-primary:hover,
+.btn-primary:focus-visible,
+.btn-primary:active {
+  color: #ffffff;
+}
+.btn-secondary:hover,
+.btn-secondary:focus-visible,
+.btn-secondary:active {
+  color: var(--color-text-primary);
+}
+.nav-logo:hover,
+.nav-logo:focus-visible {
+  /* 深色主题下 logo 的「loc」本来就是正文色，浅色主题下同一支也是 accent-text */
+  color: var(--color-accent-text);
+}
+
+/* ③ 激活态视图切换按钮：hover/聚焦时保留白字所需的深色渐变底 */
+.view-toggle-btn.active:hover,
+.view-toggle-btn.active:focus-visible,
+[data-theme="light"] .view-toggle-btn.active:hover,
+[data-theme="light"] .view-toggle-btn.active:focus-visible {
+  background: var(--gradient-accent-strong);
 }

@@ -18,7 +18,7 @@
   // ?v= 的内容哈希由 scripts/sync-widget-version.js 自动写入（勿手改）：
   // CSS 是本文件动态注入 <link> 的，不在 HTML 里，只能把版本拼在注入 URL 上，
   // 否则改了 CSS 之后边缘缓存（max-age=600）会继续吐旧样式最多 10 分钟。
-  const CSS_PATH = '/workers/comment-system/comment-widget.css?v=5a3bac66f8';
+  const CSS_PATH = '/workers/comment-system/comment-widget.css?v=e16ad49af6';
 
   // ========== 工具函数 ==========
 

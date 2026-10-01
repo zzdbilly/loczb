@@ -117,7 +117,8 @@
 }
 
 .comment-submit {
-  background: var(--gradient-accent, linear-gradient(135deg, #6366f1, #8b5cf6));
+  /* 白字压在渐变上：淡端 #8b5cf6 只有 4.23:1，换压深一档的 strong 渐变（5.70:1 起） */
+  background: var(--gradient-accent-strong, linear-gradient(135deg, #4f46e5, #7c3aed));
   color: #fff;
   border: none;
   padding: 0.65rem 1.5rem;
