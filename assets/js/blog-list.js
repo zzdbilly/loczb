@@ -141,6 +141,7 @@
     var emptyState = document.getElementById('blog-empty-state');
     if (emptyState) emptyState.style.display = filteredPosts.length === 0 ? 'block' : 'none';
     if (window.initSpotlightCards) window.initSpotlightCards();
+    if (window._cleanMetaIcons) window._cleanMetaIcons(listContainer);
     fillExcerpts(pagePosts, renderToken);
     updatePagination(currentPage);
   }
