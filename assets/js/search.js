@@ -163,31 +163,130 @@
     { icon: '💡', title: '程序员的工程思维与成长', url: 'blog/posts/程序员带娃把养孩子当成一个长期运维的系统工程.html' }
   ];
 
-  function getFilterBarHtml() {
-    const filters = [
-      { id: 'all', label: '全部' },
-      { id: 'ai', label: '🤖 AI' },
-      { id: 'android', label: '📱 Android' },
-      { id: 'kotlin', label: '⚡ Kotlin' },
-      { id: 'devops', label: '🛠️ DevOps' },
-      { id: 'thought', label: '💡 思考' }
-    ];
+  const CATEGORY_ICONS = {
+    'AI': '🤖',
+    'Android': '📱',
+    'Kotlin': '⚡',
+    '数据库': '🗄️',
+    'DevOps': '🛠️',
+    '思考': '💡',
+    '安全': '🛡️',
+    '前端': '🌐',
+    '系统编程': '⚙️',
+    '开发': '💻'
+  };
+
+  function getCategoryIcon(cat) {
+    if (!cat) return '🏷️';
+    return CATEGORY_ICONS[cat] || '🏷️';
+  }
+
+  function postMatchesCategory(post, filter) {
+    if (!filter || filter === 'all') return true;
+    const cat = (post.category || '').toLowerCase();
+    const f = filter.toLowerCase();
+    if (cat === f) return true;
+    if (f === 'ai' && (cat.includes('ai') || cat.includes('agent') || cat.includes('llm'))) return true;
+    if (f === 'devops' && (cat.includes('devops') || cat.includes('运维') || cat.includes('vps') || cat.includes('docker'))) return true;
+    if (f === 'thought' || f === '思考') return cat.includes('思考') || cat.includes('thought');
+    if (f === 'database' || f === '数据库') return cat.includes('数据库') || cat.includes('sql') || cat.includes('database');
+    if (f === 'security' || f === '安全') return cat.includes('安全') || cat.includes('security');
+    if (f === 'android') return cat.includes('android') || cat.includes('compose');
+    if (f === 'kotlin') return cat.includes('kotlin');
+    if (f === '前端') return cat.includes('前端') || cat.includes('web') || cat.includes('css') || cat.includes('js');
+    if (f === '系统编程') return cat.includes('系统编程') || cat.includes('linux') || cat.includes('c++') || cat.includes('rust');
+    if (f === '开发') return cat.includes('开发') || cat.includes('工程');
+
+    const tags = (post.tags || []).map(t => t.toLowerCase());
+    return tags.includes(f);
+  }
+
+  // 获取全站真实分类及其文章数量（用于未输入时的推荐分类栏）
+  function getAllCategoriesWithCounts() {
+    const counts = {};
+    const posts = searchData.posts || [];
+    posts.forEach(p => {
+      const c = p.category || '未分类';
+      counts[c] = (counts[c] || 0) + 1;
+    });
+
+    const priority = ['AI', 'Android', 'Kotlin', '数据库', 'DevOps', '思考', '安全', '前端', '系统编程', '开发'];
+    const cats = Object.keys(counts).sort((a, b) => {
+      const ia = priority.indexOf(a);
+      const ib = priority.indexOf(b);
+      if (ia !== -1 && ib !== -1) return ia - ib;
+      if (ia !== -1) return -1;
+      if (ib !== -1) return 1;
+      return counts[b] - counts[a];
+    });
+
+    return [{ id: 'all', label: '全部', count: posts.length }].concat(
+      cats.map(c => ({
+        id: c,
+        label: `${getCategoryIcon(c)} ${c}`,
+        count: counts[c]
+      }))
+    );
+  }
+
+  // 动态分面标签生成器：根据当前搜索词匹配的所有文章，动态提取命中的分类和篇数
+  function getDynamicFilterBarHtml(matchedPosts, activeFilter) {
+    if (!matchedPosts || matchedPosts.length === 0) return '';
+
+    const catCounts = {};
+    matchedPosts.forEach(p => {
+      const c = p.category || '未分类';
+      catCounts[c] = (catCounts[c] || 0) + 1;
+    });
+
+    const cats = Object.keys(catCounts).sort((a, b) => catCounts[b] - catCounts[a]);
+
+    const filters = [{
+      id: 'all',
+      label: '全部',
+      count: matchedPosts.length
+    }].concat(
+      cats.map(c => ({
+        id: c,
+        label: `${getCategoryIcon(c)} ${c}`,
+        count: catCounts[c]
+      }))
+    );
 
     return `
       <div class="sr-filter-bar">
         ${filters.map(f => `
-          <button type="button" class="sr-filter-chip ${currentFilter === f.id ? 'active' : ''}" data-filter="${f.id}">
-            ${f.label}
+          <button type="button" class="sr-filter-chip ${activeFilter === f.id ? 'active' : ''}" data-filter="${escapeHtml(f.id)}">
+            <span>${escapeHtml(f.label)}</span>
+            <span class="sr-chip-count">${f.count}</span>
           </button>
         `).join('')}
       </div>
     `;
   }
 
+  // 推荐状态下的分类栏
+  function getRecommendationFilterBarHtml(activeFilter) {
+    const filters = getAllCategoriesWithCounts();
+    return `
+      <div class="sr-filter-bar">
+        ${filters.map(f => `
+          <button type="button" class="sr-filter-chip ${activeFilter === f.id ? 'active' : ''}" data-filter="${escapeHtml(f.id)}">
+            <span>${escapeHtml(f.label)}</span>
+            <span class="sr-chip-count">${f.count}</span>
+          </button>
+        `).join('')}
+      </div>
+    `;
+  }
+
+  let lastMatchedPosts = [];
+  let lastSearchQuery = '';
+
   function displaySmartRecs() {
     if (!searchResults) return;
     const isBlogDir = window.location.pathname.includes('/blog/');
-    const filterBar = getFilterBarHtml();
+    const filterBar = getRecommendationFilterBarHtml(currentFilter);
 
     const seriesHtml = SERIES_QUICK_LINKS.map(s => {
       const href = isBlogDir ? s.url.replace(/^blog\//, '') : s.url;
@@ -212,29 +311,92 @@
       </div>
     `;
     searchResults.classList.add('active');
-    bindFilterChips();
+    bindFilterChips(false, '');
   }
 
-  function bindFilterChips() {
+  function displayCategoryPosts(category, posts) {
+    if (!searchResults) return;
+    const filterBar = getRecommendationFilterBarHtml(category);
+    const headerHtml = `
+      <div class="sr-header">
+        <span>分类「${escapeHtml(category)}」下共 ${posts.length} 篇精选文章</span>
+        <button type="button" class="sr-clear-filter" style="background:none;border:none;color:var(--color-accent-primary);cursor:pointer;font-size:0.75rem;font-weight:600;">清空筛选 ✕</button>
+      </div>`;
+
+    const isBlogDir = window.location.pathname.includes('/blog/');
+    const itemsHtml = posts.slice(0, 10).map((post, idx) => {
+      const title = escapeHtml(post.title);
+      const cat = escapeHtml(post.category || '');
+      const date = escapeHtml(post.date || '');
+      const postSlug = post.slug || (post.url || '').replace(/^blog\/posts\//, '').replace(/\.html$/, '');
+      const href = isBlogDir ? `posts/${postSlug}.html` : `blog/posts/${postSlug}.html`;
+      const tags = (post.tags || []).slice(0, 3).map(tag =>
+        `<span style="color: var(--color-text-muted);">#${escapeHtml(tag)}</span>`
+      ).join(' ');
+
+      return `
+      <a href="${href}" class="sr-item" data-index="${idx}">
+        <div class="sr-title">
+          <span>${title}</span>
+          <span style="font-size: 0.75rem; color: var(--color-accent-primary); opacity: 0.8;">➔</span>
+        </div>
+        <div class="sr-excerpt" data-meta-slug="${escapeHtml(postSlug)}"></div>
+        <div class="sr-meta">
+          <span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -1px; margin-right: 3px; opacity: 0.7;"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>${date}</span>
+          <span class="sr-category">${cat}</span>
+          ${tags ? `<span>${tags}</span>` : ''}
+        </div>
+      </a>`;
+    }).join('');
+
+    searchResults.innerHTML = filterBar + headerHtml + itemsHtml;
+    searchResults.classList.add('active');
+    bindFilterChips(false, '');
+    const clearBtn = searchResults.querySelector('.sr-clear-filter');
+    if (clearBtn) {
+      clearBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        currentFilter = 'all';
+        displaySmartRecs();
+      });
+    }
+    fillExcerpts(posts.slice(0, 10), '');
+  }
+
+  function bindFilterChips(isSearchMode, query) {
     if (!searchResults) return;
     const chips = searchResults.querySelectorAll('.sr-filter-chip');
     chips.forEach(chip => {
       chip.addEventListener('click', (e) => {
         e.preventDefault();
         e.stopPropagation();
-        currentFilter = chip.getAttribute('data-filter') || 'all';
-        chips.forEach(c => c.classList.toggle('active', c === chip));
-        if (searchInput && searchInput.value.trim()) {
-          performSearch(searchInput.value);
+        const selected = chip.getAttribute('data-filter') || 'all';
+        currentFilter = selected;
+
+        if (isSearchMode && query) {
+          let displayed = lastMatchedPosts;
+          if (currentFilter !== 'all') {
+            displayed = lastMatchedPosts.filter(p => postMatchesCategory(p, currentFilter));
+          }
+          displayResults(displayed, query, lastMatchedPosts, currentFilter);
         } else {
-          displaySmartRecs();
+          if (currentFilter === 'all') {
+            displaySmartRecs();
+          } else {
+            const catPosts = (searchData.posts || []).filter(p => postMatchesCategory(p, currentFilter));
+            displayCategoryPosts(currentFilter, catPosts);
+          }
         }
       });
     });
   }
 
-  async function performSearch(query) {
+  async function performSearch(query, keepFilter) {
     if (!query || !query.trim()) {
+      currentFilter = 'all';
+      lastMatchedPosts = [];
+      lastSearchQuery = '';
       displaySmartRecs();
       if (searchClear) searchClear.classList.remove('visible');
       if (searchKbd) searchKbd.style.display = '';
@@ -249,53 +411,46 @@
       await loadSearchData();
     }
 
-    // 自动检测 @ 前缀筛选
     let cleanQuery = query.trim();
-    if (cleanQuery.startsWith('@ai')) {
-      currentFilter = 'ai';
-      cleanQuery = cleanQuery.replace(/^@ai\s*/i, '');
-    } else if (cleanQuery.startsWith('@android')) {
-      currentFilter = 'android';
-      cleanQuery = cleanQuery.replace(/^@android\s*/i, '');
-    } else if (cleanQuery.startsWith('@kotlin')) {
-      currentFilter = 'kotlin';
-      cleanQuery = cleanQuery.replace(/^@kotlin\s*/i, '');
-    } else if (cleanQuery.startsWith('@devops')) {
-      currentFilter = 'devops';
-      cleanQuery = cleanQuery.replace(/^@devops\s*/i, '');
-    } else if (cleanQuery.startsWith('@thought')) {
-      currentFilter = 'thought';
-      cleanQuery = cleanQuery.replace(/^@thought\s*/i, '');
+
+    // 当搜索词变动且未强制保留分类时，重置分类为 'all'
+    if (cleanQuery !== lastSearchQuery && !keepFilter) {
+      currentFilter = 'all';
+    }
+    lastSearchQuery = cleanQuery;
+
+    // 自动检测 @ 前缀筛选
+    const atMatch = cleanQuery.match(/^@([a-zA-Z0-9_\u4e00-\u9fa5]+)\s*/);
+    if (atMatch) {
+      currentFilter = atMatch[1];
+      cleanQuery = cleanQuery.replace(/^@[^\s]+\s*/, '');
     }
 
-    let rawPosts = searchData.posts || [];
-    if (currentFilter !== 'all') {
-      rawPosts = rawPosts.filter(p => {
-        const cat = (p.category || '').toLowerCase();
-        const tags = (p.tags || []).join(' ').toLowerCase();
-        if (currentFilter === 'ai') return cat.includes('ai') || tags.includes('ai') || tags.includes('agent') || tags.includes('llm');
-        if (currentFilter === 'android') return cat.includes('android') || tags.includes('compose') || tags.includes('android');
-        if (currentFilter === 'kotlin') return cat.includes('kotlin') || tags.includes('coroutine') || tags.includes('flow') || tags.includes('kmp');
-        if (currentFilter === 'devops') return cat.includes('devops') || tags.includes('docker') || tags.includes('ci') || tags.includes('gradle');
-        if (currentFilter === 'thought') return cat.includes('思考') || cat.includes('thought') || tags.includes('成长') || tags.includes('思维');
-        return true;
-      });
-    }
-
+    const allPosts = searchData.posts || [];
     let matched = [];
+
     if (!cleanQuery) {
-      matched = rawPosts.slice(0, 8);
-    } else if (fuse && currentFilter === 'all') {
-      try {
-        matched = fuse.search(cleanQuery).slice(0, 8).map(r => r.item);
-      } catch (e) {
-        matched = nativeSearchWithPool(cleanQuery, rawPosts);
-      }
+      matched = allPosts.slice();
     } else {
-      matched = nativeSearchWithPool(cleanQuery, rawPosts);
+      if (fuse) {
+        try {
+          matched = fuse.search(cleanQuery).map(r => r.item);
+        } catch (e) {
+          matched = nativeSearchWithPool(cleanQuery, allPosts);
+        }
+      } else {
+        matched = nativeSearchWithPool(cleanQuery, allPosts);
+      }
     }
 
-    displayResults(matched, cleanQuery);
+    lastMatchedPosts = matched;
+
+    let displayedPosts = matched;
+    if (currentFilter && currentFilter !== 'all') {
+      displayedPosts = matched.filter(p => postMatchesCategory(p, currentFilter));
+    }
+
+    displayResults(displayedPosts, cleanQuery, matched, currentFilter);
   }
 
   function nativeSearchWithPool(query, pool) {
@@ -322,9 +477,12 @@
     return scored.slice(0, 8).map(s => s.post);
   }
 
-  function displayResults(results, query) {
+  function displayResults(results, query, allMatched, activeFilter) {
     if (!searchResults) return;
-    const filterBar = getFilterBarHtml();
+    allMatched = allMatched || results || [];
+    activeFilter = activeFilter || 'all';
+
+    const filterBar = getDynamicFilterBarHtml(allMatched, activeFilter);
 
     if (!results || results.length === 0) {
       searchResults.innerHTML = `
@@ -332,16 +490,17 @@
         <div class="sr-empty">
           <div class="sr-empty-icon">🔍</div>
           <div>未找到包含 <strong>"${escapeHtml(query)}"</strong> 的文章</div>
-          <div style="font-size: 0.75rem; color: var(--color-text-muted); margin-top: 0.25rem;">建议尝试切换顶部分类标签或尝试：Android、Kotlin、AI Agent、架构 等关键词</div>
+          <div style="font-size: 0.75rem; color: var(--color-text-muted); margin-top: 0.25rem;">建议尝试点击上方分类标签或尝试：数据库、Android、Kotlin、AI、架构 等关键词</div>
         </div>`;
       searchResults.classList.add('active');
-      bindFilterChips();
+      bindFilterChips(true, query);
       return;
     }
 
+    const filterLabel = activeFilter === 'all' ? '' : ` · 筛选「${activeFilter}」`;
     const headerHtml = `
       <div class="sr-header">
-        <span>找到 ${results.length} 篇相关文章</span>
+        <span>找到 ${results.length} 篇相关文章${escapeHtml(filterLabel)}</span>
         <span>↑↓ 导航 · Enter 确认 · ESC 关闭</span>
       </div>`;
 
@@ -357,7 +516,6 @@
         `<span style="color: var(--color-text-muted);">#${escapeHtml(tag)}</span>`
       ).join(' ');
 
-      // 摘要不再内联在索引里：先占位，由 fillExcerpts() 按需拉 sidecar 后回填（缓存）
       return `
       <a href="${href}" class="sr-item" data-index="${idx}">
         <div class="sr-title">
@@ -375,7 +533,7 @@
 
     searchResults.innerHTML = filterBar + headerHtml + itemsHtml;
     searchResults.classList.add('active');
-    bindFilterChips();
+    bindFilterChips(true, query);
     fillExcerpts(results, query);
   }
 
