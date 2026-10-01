@@ -104,24 +104,26 @@
 
   function highlightText(text, query) {
     if (!text) return '';
-    const safeText = escapeHtml(text);
-    if (!query || !query.trim()) return safeText;
+    if (!query || !query.trim()) return escapeHtml(text);
 
-    const terms = query.trim().split(/\s+/).filter(t => t.length > 0);
-    if (!terms.length) return safeText;
+    const terms = query.trim().split(/\s+/).filter(Boolean);
+    if (!terms.length) return escapeHtml(text);
 
     const pattern = terms
-      .map(t => escapeHtml(t).replace(/[.*+?^${}()|[\]\\\/]/g, '\\$&'))
+      .map(t => t.replace(/[.*+?^${}()|[\]\\\/]/g, '\\$&'))
       .filter(Boolean)
       .join('|');
 
-    if (!pattern) return safeText;
+    if (!pattern) return escapeHtml(text);
 
     try {
       const regex = new RegExp(`(${pattern})`, 'gi');
-      return safeText.replace(regex, '<mark>$1</mark>');
+      return text.split(regex).map(part => {
+        if (!part) return '';
+        return regex.test(part) ? `<mark>${escapeHtml(part)}</mark>` : escapeHtml(part);
+      }).join('');
     } catch (e) {
-      return safeText;
+      return escapeHtml(text);
     }
   }
 

@@ -15,7 +15,6 @@ const CORE_URLS = [
   '/assets/js/main.js',
   '/assets/js/search.js',
   '/assets/js/particles.js',
-  '/assets/js/time-progress.js',
   '/assets/vendor/highlight/highlight.min.js',
   '/assets/vendor/fuse/fuse.min.js',
   '/assets/vendor/marked/marked.min.js',

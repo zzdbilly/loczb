@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * 系列专栏聚合构建脚本 (Article Series Builder)
- * 为 111 篇博文中的核心文章注入专栏便当盒 (Series Widget) 与专栏上下篇直达卡片 (Series Nav)
+ * 为全站博文中的核心文章注入专栏便当盒 (Series Widget) 与专栏上下篇直达卡片 (Series Nav)
  *
  * 运行方式: node scripts/build-series.js
  */

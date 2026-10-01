@@ -42,6 +42,7 @@
 
     // === 键盘快捷键 ===
     document.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.isContentEditable || (e.target.closest && e.target.closest('input, textarea, select, [contenteditable="true"]'))) return;
       if (e.key === 'j') window.scrollBy({ top: 200, behavior: 'smooth' });
       else if (e.key === 'k') window.scrollBy({ top: -200, behavior: 'smooth' });
       else if (e.key === 'Escape') {

@@ -400,6 +400,52 @@ function contentCheck(name, count, samples) {
   }
 }
 
+// ── j) 全站文章数量锚点同步校验 ─────────────────────────────
+// 所有含 <!-- POSTS_COUNT -->N<!-- /POSTS_COUNT --> 的页面，N 必须等于 htmlSlugs.size。
+// 避免主页/关于页/项目页/404页在发布新文后出现数量滞后与漂移。
+{
+  const checkPages = ['index.html', 'blog/index.html', 'about/index.html', 'projects/index.html', '404.html'];
+  const expectedCount = String(htmlSlugs.size);
+  let totalAnchors = 0;
+  checkPages.forEach(p => {
+    if (!exists(p)) return;
+    const html = readText(p);
+    const matches = [...html.matchAll(/<!-- POSTS_COUNT -->([\s\S]*?)<!-- \/POSTS_COUNT -->/g)];
+    totalAnchors += matches.length;
+    matches.forEach(m => {
+      const val = m[1].trim();
+      if (val !== expectedCount) {
+        fail(`j) ${p}: 文章数锚点值 "${val}" ≠ 当前文章总数 ${expectedCount}`);
+      }
+    });
+  });
+  if (totalAnchors === 0) {
+    fail('j) 全站主页面找不到任何 <!-- POSTS_COUNT --> 锚点');
+  } else {
+    infos.push(`j) 全站文章数锚点已对齐最新数据（${expectedCount} 篇 / ${totalAnchors} 处锚点一致）`);
+  }
+}
+
+// ── k) 废弃脚本与冗余引用清理门禁 ─────────────────────────────
+// time-progress.js 已于 3c15377 移除页面展示，现已全站下线，禁止死灰复燃；
+// projects/index.html 不含搜索框，禁止引入 search.js / meta-cache.js。
+{
+  const TIME_PROGRESS_REF = /<script[^>]*src="[^"]*time-progress\.js[^"]*"[^>]*>/;
+  const badPages = [];
+  ['index.html', 'blog/index.html', 'about/index.html', 'projects/index.html', '404.html'].forEach(p => {
+    if (exists(p) && TIME_PROGRESS_REF.test(readText(p))) badPages.push(p);
+  });
+  if (badPages.length) {
+    fail(`k) 以下页面仍在引用已废弃的 time-progress.js: ${badPages.join(', ')}`);
+  }
+  if (exists('projects/index.html')) {
+    const projHtml = readText('projects/index.html');
+    if (projHtml.includes('search.js') || projHtml.includes('meta-cache.js')) {
+      fail('k) projects/index.html 仍在引用无用的 search.js 或 meta-cache.js');
+    }
+  }
+}
+
 // ── 结果 ─────────────────────────────────────────────────
 if (infos.length) {
   console.log('ℹ️  非阻断提示:');

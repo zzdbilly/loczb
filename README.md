@@ -14,7 +14,7 @@
   2. **核心技术雷达（Tech Radar）**：原生 Android 底座 + 端云协同全栈赋能；
   3. **6 大旗舰专题专栏便当盒（Curated Series）**：聚合展示 AI Agent、Android 16、Kotlin 协程、工程思维等专栏封面芯片；
   4. **工程技术原则（Engineering Principles）**：实用主义优先、毫秒级极致体验、AI 工具化闭环；
-  5. **量化影响力（Track Record）**：111 篇深度博文、6 大专题专栏、5+ 年移动端沉淀；
+  5. **量化影响力（Track Record）**：113 篇深度博文、6 大专题专栏、5+ 年移动端沉淀；
   6. **工程师哲学语录（Philosophy Quote）**：自适应双模引语便当盒。
 - ⌨️ **Hero 动态变幻打字机** — 流畅光标节奏循环变幻，传递鲜明的技术定位。
 - 🔍 **Raycast 级 ⌘K 即时全站微搜索** — 首页与博客页全局 Command Palette 支持，零卡顿毫秒级全文检索博文、专栏与项目，支持键盘 `↑↓` 导航与 `Enter` 秒开。
@@ -26,7 +26,7 @@
 ---
 
 ### 📝 博客与 6 大旗舰系列专栏
-- 📚 **111 篇全量深度文章** — 深度覆盖 `Android`、`Kotlin`、`AI Agent`、`前端`、`DevOps`、`思考`、`数据库`、`系统编程`、`安全`、`开发` 等 10 大垂直领域。
+- 📚 **113 篇全量深度文章** — 深度覆盖 `Android`、`Kotlin`、`AI Agent`、`前端`、`DevOps`、`思考`、`数据库`、`系统编程`、`安全`、`开发` 等 10 大垂直领域。
 - 📖 **6 大核心旗舰系列专栏**（自动化脚本 `scripts/build-series.js` 构建）：
   1. 🤖 **《AI Agent 与本地大模型实战》** (9 篇) — 工作区迁移、定时无废话直投、MCP 协议、本地 RAG 与端侧模型；
   2. 📱 **《Android 16 深度演进与系统适配》** (6 篇) — 前台服务新约束、通知大改、多媒体权限与性能深度优化；
@@ -41,7 +41,7 @@
 ---
 
 ### 🛠️ 基础设施与云端生态
-- 🩺 **自动化死链巡检医生（`scripts/check-links.js`）** — 极速全量扫描 126 个 HTML 页面中 3600+ 条内链与资源引用，保障 0 死链（2026-09-27 实测：126 个 HTML、3621 条内链、0 死链）。
+- 🩺 **自动化死链巡检医生（`scripts/check-links.js`）** — 极速全量扫描 129 个 HTML 页面中 3700+ 条内链与资源引用，保障 0 死链（2026-10-01 实测：129 个 HTML、3729 条内链、0 死链）。
 - 🔄 **Service Worker 离线强缓存与构建自动版本同步** — 每次构建自动生成 `YYYYMMDD-XXXX` 缓存版本，避免旧缓存残留。
 - 💬 **评论系统** — Cloudflare Workers + Cloudflare D1 边缘数据库，支持嵌套树状回复、Token 鉴权与独立管理后台。
 - 🤖 **AI 问答助手** — Cloudflare Workers 驱动，基于全站博文知识库进行 RAG 即时检索问答。
@@ -74,7 +74,7 @@ loczb/
 │   └── index.html                 # 项目案例展示页 (Android 16 Lab / Hermes Agent Toolkit 等)
 ├── blog/
 │   ├── index.html                 # 博客列表页 (全部文章 / 📚 专题专栏 / 时间归档三重视图)
-│   ├── articles-index.json        # 全站 111 篇博文索引与标签元数据
+│   ├── articles-index.json        # 全站 113 篇博文索引与标签元数据
 │   └── posts/                     # 博客详情 HTML 正文 (内嵌专栏卡片与上下篇直达)
 ├── assets/
 │   ├── css/
@@ -87,14 +87,14 @@ loczb/
 │   │   ├── blog-list.js           # 博客分页、3重视图切换与专栏渲染
 │   │   ├── search.js              # Command Palette 模糊检索引擎 (支持首页/博客/快捷键)
 │   │   ├── article.js             # 文章详情页 (macOS 代码块、TOC、Toast、返回顶部)
-│   │   ├── related-posts.js       # 相关文章推荐索引
+│   │   ├── meta-cache.js          # 文章元数据按需缓存与懒拉取
 │   │   └── particles.js           # 粒子动画背景
 │   └── vendor/                    # 本地化第三方基础库 (Fuse, marked, dompurify)
 ├── scripts/
 │   ├── generate-post.py           # Markdown 文章构建器 (支持 YAML Frontmatter & 单文件 CLI)
 │   ├── generate-index.js          # 全站 CI 全量索引重建管线
 │   ├── build-series.js            # 6 大旗舰系列专栏聚合构建器
-│   ├── check-links.js             # 自动化死链与静态资源巡检医生 (扫描 126 个 HTML 页面)
+│   ├── check-links.js             # 自动化死链与静态资源巡检医生 (扫描 129 个 HTML 页面)
 │   ├── refresh-posts.py           # 模板变更后批量刷新旧文章
 │   └── deploy-check.sh            # 部署状态自动验证脚本
 ├── workers/
