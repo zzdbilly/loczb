@@ -53,7 +53,7 @@
   <link rel="manifest" href="../site.webmanifest">
   <link rel="alternate" type="application/rss+xml" title="RSS 订阅" href="../rss.xml">
   <meta name="theme-color" content="#3b82f6">
-  <link rel="stylesheet" href="../assets/css/style.css?v=20261001-ui2">
+  <link rel="stylesheet" href="../assets/css/style.css?v=20261001-ui3">
 </head>
 <body>
   <!-- Navigation -->
@@ -128,12 +128,32 @@
   <!-- Blog Posts List -->
   <section class="section section-narrow" style="padding-top: 0.5rem;">
     <div class="container">
-      <div class="blog-list-header-bar">
-        <h2 class="blog-list-heading" id="blog-filter-title">全部文章</h2>
-        <div class="blog-view-toggle">
-          <button class="view-toggle-btn active" data-view="list" onclick="toggleBlogView('list')">全部文章</button>
-          <button class="view-toggle-btn" data-view="series" onclick="toggleBlogView('series')">📚 专题专栏</button>
-          <button class="view-toggle-btn" data-view="archive" onclick="toggleBlogView('archive')">时间归档</button>
+      <!-- Blog Control Hub -->
+      <div class="blog-control-hub">
+        <div class="blog-control-heading-group">
+          <div class="blog-view-indicator">
+            <span class="indicator-pulse"></span>
+            <span class="indicator-label" id="blog-current-view-label">VIEWPORT // POSTS</span>
+          </div>
+          <h2 class="blog-list-heading" id="blog-filter-title">全部文章</h2>
+          <p class="blog-list-subheading" id="blog-filter-subtitle">按时间倒序收录的完整技术沉淀与架构思考</p>
+        </div>
+        <div class="blog-view-toggle" role="tablist" aria-label="博客视图切换">
+          <button class="view-toggle-btn active" data-view="list" role="tab" aria-selected="true" aria-controls="blog-list">
+            <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h7"/></svg>
+            <span class="tab-text">全部文章</span>
+            <span class="tab-badge"><!-- POSTS_COUNT -->113<!-- /POSTS_COUNT --></span>
+          </button>
+          <button class="view-toggle-btn" data-view="series" role="tab" aria-selected="false" aria-controls="series-view">
+            <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><line x1="9" y1="7" x2="15" y2="7"/><line x1="9" y1="11" x2="13" y2="11"/></svg>
+            <span class="tab-text">专题专栏</span>
+            <span class="tab-badge">6</span>
+          </button>
+          <button class="view-toggle-btn" data-view="archive" role="tab" aria-selected="false" aria-controls="archive-view">
+            <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <span class="tab-text">时光归档</span>
+            <span class="tab-badge">Timeline</span>
+          </button>
         </div>
       </div>
       <div class="blog-list-container" id="blog-list">
@@ -157,7 +177,7 @@
             <div class="blog-list-tags">
               <span class="tag-pill">#VPS</span> <span class="tag-pill">#DevOps</span> <span class="tag-pill">#运维</span>
             </div>
-            <a href="posts/vps-选购与使用指南五个常见场景的配置与避坑.html" style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600; text-decoration: none;">阅读全文 ➔</a>
+            <a href="posts/vps-选购与使用指南五个常见场景的配置与避坑.html" class="blog-read-more" aria-label="阅读全文：VPS 选购与使用指南：五个常见场景的配置与避坑"><span>阅读全文</span><span class="read-more-arrow">➔</span></a>
           </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="数据库" data-tags="MySQL,数据库,索引优化,慢查询" data-page="5">
@@ -179,7 +199,7 @@
             <div class="blog-list-tags">
               <span class="tag-pill">#MySQL</span> <span class="tag-pill">#数据库</span> <span class="tag-pill">#索引优化</span>
             </div>
-            <a href="posts/mysql-索引优化实战从慢查询到最佳实践.html" style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600; text-decoration: none;">阅读全文 ➔</a>
+            <a href="posts/mysql-索引优化实战从慢查询到最佳实践.html" class="blog-read-more" aria-label="阅读全文：MySQL 索引优化实战：从慢查询到最佳实践"><span>阅读全文</span><span class="read-more-arrow">➔</span></a>
           </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="AI" data-tags="AI,Agent,AI 工具,编程助手" data-page="5">
@@ -201,7 +221,7 @@
             <div class="blog-list-tags">
               <span class="tag-pill">#AI</span> <span class="tag-pill">#Agent</span> <span class="tag-pill">#AI 工具</span>
             </div>
-            <a href="posts/ai-编程助手进化论从结对编程到自主编程团队-2026.html" style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600; text-decoration: none;">阅读全文 ➔</a>
+            <a href="posts/ai-编程助手进化论从结对编程到自主编程团队-2026.html" class="blog-read-more" aria-label="阅读全文：AI 编程助手进化论：从结对编程到自主编程团队 (2026)"><span>阅读全文</span><span class="read-more-arrow">➔</span></a>
           </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="系统编程" data-tags="Linux,文件系统,系统编程,运维" data-page="5">
@@ -223,7 +243,7 @@
             <div class="blog-list-tags">
               <span class="tag-pill">#Linux</span> <span class="tag-pill">#文件系统</span> <span class="tag-pill">#系统编程</span>
             </div>
-            <a href="posts/linux-inode-mechanism-deep-dive.html" style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600; text-decoration: none;">阅读全文 ➔</a>
+            <a href="posts/linux-inode-mechanism-deep-dive.html" class="blog-read-more" aria-label="阅读全文：Linux inode 机制深入理解：从数据结构到实战排查"><span>阅读全文</span><span class="read-more-arrow">➔</span></a>
           </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="DevOps" data-tags="GitHub Actions,CI/CD,DevOps,自动化" data-page="5">
@@ -245,7 +265,7 @@
             <div class="blog-list-tags">
               <span class="tag-pill">#GitHub Actions</span> <span class="tag-pill">#CI/CD</span> <span class="tag-pill">#DevOps</span>
             </div>
-            <a href="posts/github-actions-auto-index-blog-cicd.html" style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600; text-decoration: none;">阅读全文 ➔</a>
+            <a href="posts/github-actions-auto-index-blog-cicd.html" class="blog-read-more" aria-label="阅读全文：GitHub Actions 自动索引：我的静态博客 CI/CD 进化之路"><span>阅读全文</span><span class="read-more-arrow">➔</span></a>
           </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="思考" data-tags="工作方法,生活方式,自我管理" data-page="5">
@@ -267,7 +287,7 @@
             <div class="blog-list-tags">
               <span class="tag-pill">#工作方法</span> <span class="tag-pill">#生活方式</span> <span class="tag-pill">#自我管理</span>
             </div>
-            <a href="posts/programmers-should-learn-to-unplug.html" style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600; text-decoration: none;">阅读全文 ➔</a>
+            <a href="posts/programmers-should-learn-to-unplug.html" class="blog-read-more" aria-label="阅读全文：程序员应该学会「关机」：工作焦虑如何侵蚀你的休息时间"><span>阅读全文</span><span class="read-more-arrow">➔</span></a>
           </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="前端" data-tags="性能优化,静态网站,前端,CSS" data-page="5">
@@ -289,7 +309,7 @@
             <div class="blog-list-tags">
               <span class="tag-pill">#性能优化</span> <span class="tag-pill">#静态网站</span> <span class="tag-pill">#前端</span>
             </div>
-            <a href="posts/static-blog-performance-optimization-59mb.html" style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600; text-decoration: none;">阅读全文 ➔</a>
+            <a href="posts/static-blog-performance-optimization-59mb.html" class="blog-read-more" aria-label="阅读全文：静态博客性能优化实战：从 59MB 到精简高效"><span>阅读全文</span><span class="read-more-arrow">➔</span></a>
           </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="Android" data-tags="Gradle,Android,构建优化,性能优化" data-page="5">
@@ -311,7 +331,7 @@
             <div class="blog-list-tags">
               <span class="tag-pill">#Gradle</span> <span class="tag-pill">#Android</span> <span class="tag-pill">#构建优化</span>
             </div>
-            <a href="posts/gradle-build-acceleration-5min-to-30sec.html" style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600; text-decoration: none;">阅读全文 ➔</a>
+            <a href="posts/gradle-build-acceleration-5min-to-30sec.html" class="blog-read-more" aria-label="阅读全文：Gradle 构建加速实操：我从 5 分钟做到 30 秒"><span>阅读全文</span><span class="read-more-arrow">➔</span></a>
           </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="思考" data-tags="架构,系统思维,工程思维,思考" data-page="5">
@@ -333,7 +353,7 @@
             <div class="blog-list-tags">
               <span class="tag-pill">#架构</span> <span class="tag-pill">#系统思维</span> <span class="tag-pill">#工程思维</span>
             </div>
-            <a href="posts/urban-planning-inspires-software-architecture.html" style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600; text-decoration: none;">阅读全文 ➔</a>
+            <a href="posts/urban-planning-inspires-software-architecture.html" class="blog-read-more" aria-label="阅读全文：像规划城市一样设计系统：城市规划给软件架构的启示"><span>阅读全文</span><span class="read-more-arrow">➔</span></a>
           </div>
         </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="思考" data-tags="工程实践,思考,工程思维,工作法" data-page="5">
@@ -355,7 +375,7 @@
             <div class="blog-list-tags">
               <span class="tag-pill">#工程实践</span> <span class="tag-pill">#思考</span> <span class="tag-pill">#工程思维</span>
             </div>
-            <a href="posts/software-engineer-learns-from-manufacturing-lean.html" style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600; text-decoration: none;">阅读全文 ➔</a>
+            <a href="posts/software-engineer-learns-from-manufacturing-lean.html" class="blog-read-more" aria-label="阅读全文：软件工程师能从制造业学到什么：精益思维重塑开发流程"><span>阅读全文</span><span class="read-more-arrow">➔</span></a>
           </div>
         </article>
       <!-- /Post List -->
@@ -432,7 +452,7 @@
   </script>
 
   <script defer src="../assets/js/meta-cache.js?v=20260916-slim1"></script>
-  <script defer src="../assets/js/blog-list.js?v=20261001-ui2"></script>
+  <script defer src="../assets/js/blog-list.js?v=20261001-ui3"></script>
 
   <script defer src="../assets/js/search.js?v=20261001-ui2"></script>
   <!-- Back to Top & Reading Progress -->
