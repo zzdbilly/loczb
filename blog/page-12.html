@@ -52,7 +52,7 @@
   <link rel="manifest" href="../site.webmanifest">
   <link rel="alternate" type="application/rss+xml" title="RSS 订阅" href="../rss.xml">
   <meta name="theme-color" content="#3b82f6">
-  <link rel="stylesheet" href="../assets/css/style.css?v=20261001-ui1">
+  <link rel="stylesheet" href="../assets/css/style.css?v=20261001-ui2">
 </head>
 <body>
   <!-- Navigation -->
@@ -89,7 +89,7 @@
             <span class="pulse-dot"></span>
             <span><!-- POSTS_COUNT -->113<!-- /POSTS_COUNT --> 篇深度文章 · 持续迭代中</span>
           </div>
-          <h1 class="blog-hero-title">技术博客</h1>
+          <h1 class="blog-hero-title">技术<span class="gradient-text">博客</span></h1>
           <p class="blog-hero-subtitle">Android、Kotlin、端侧 AI、全栈架构与开发思考</p>
         </div>
         <div class="blog-search-bar">
@@ -249,23 +249,33 @@
   <script defer src="../assets/js/main.js?v=20260917-navtop1"></script>
 
   <script>
-    // 给博客列表 meta 加图标
+    // 给博客列表 meta 加图标（替换原始 emoji，避免双图标）
     (function() {
-      const calIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>';
-      const clockIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>';
-      document.querySelectorAll('.blog-list-meta .blog-date').forEach(el => {
-        el.insertAdjacentHTML('afterbegin', calIcon);
-      });
-      document.querySelectorAll('.blog-list-meta .blog-read-time').forEach(el => {
-        el.insertAdjacentHTML('afterbegin', clockIcon);
-      });
+      const calIcon = '<svg class="meta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>';
+      const clockIcon = '<svg class="meta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>';
+      function cleanMetaIcons(root) {
+        (root || document).querySelectorAll('.blog-list-meta .blog-date').forEach(el => {
+          if (!el.querySelector('svg')) {
+            const dateText = el.textContent.replace(/^[📅\s]+/, '').trim();
+            el.innerHTML = calIcon + ' ' + dateText;
+          }
+        });
+        (root || document).querySelectorAll('.blog-list-meta .blog-read-time').forEach(el => {
+          if (!el.querySelector('svg')) {
+            const timeText = el.textContent.replace(/^[⏱️\s]+/, '').trim();
+            el.innerHTML = clockIcon + ' ' + timeText;
+          }
+        });
+      }
+      cleanMetaIcons();
+      window._cleanMetaIcons = cleanMetaIcons;
     })();
   </script>
 
   <script defer src="../assets/js/meta-cache.js?v=20260916-slim1"></script>
-  <script defer src="../assets/js/blog-list.js?v=20260916-slim1"></script>
+  <script defer src="../assets/js/blog-list.js?v=20261001-ui2"></script>
 
-  <script defer src="../assets/js/search.js?v=20260916-slim1"></script>
+  <script defer src="../assets/js/search.js?v=20261001-ui2"></script>
   <!-- Back to Top & Reading Progress -->
   <button class="back-to-top" id="backToTop" aria-label="回到顶部">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
