@@ -166,7 +166,7 @@
   function getFilterBarHtml() {
     const filters = [
       { id: 'all', label: '全部' },
-      { id: 'ai', label: '🤖 AI Agent' },
+      { id: 'ai', label: '🤖 AI' },
       { id: 'android', label: '📱 Android' },
       { id: 'kotlin', label: '⚡ Kotlin' },
       { id: 'devops', label: '🛠️ DevOps' },
