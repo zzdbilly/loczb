@@ -108,7 +108,7 @@
       '            <div class="blog-list-tags">\n' +
       '              ' + pills + '\n' +
       '            </div>\n' +
-      '            <a href="posts/' + slug + '.html" style="font-size: var(--text-xs); color: var(--color-accent-primary); font-weight: 600; text-decoration: none;">阅读全文 ➔</a>\n' +
+      '            <a href="posts/' + slug + '.html" class="blog-read-more" aria-label="阅读全文：' + esc(post.title || '') + '"><span>阅读全文</span><span class="read-more-arrow">➔</span></a>\n' +
       '          </div>\n' +
       '        </article>';
   }
@@ -169,15 +169,23 @@
     var featuredSection = document.getElementById('featured-section');
     if (featuredSection) featuredSection.style.display = currentFilter === 'all' ? '' : 'none';
 
-    // 从归档/专栏视图切回列表时，先把视图容器收起来
+    // 从归档/专栏视图切回列表时，先把视图容器收起来，恢复筛选栏与工作台标识
     var archiveView = document.getElementById('archive-view');
     var seriesView = document.getElementById('series-view');
+    var filtersBar = document.querySelector('.blog-filters');
+    var viewLabel = document.getElementById('blog-current-view-label');
+    var subtitleEl = document.getElementById('blog-filter-subtitle');
+
+    if (filtersBar) filtersBar.classList.remove('hidden-filters');
+    if (viewLabel) viewLabel.textContent = 'VIEWPORT // POSTS';
     if (archiveView) archiveView.classList.remove('active');
     if (seriesView) seriesView.classList.remove('active');
     if (listContainer) listContainer.classList.remove('hidden');
     if (paginationEl) paginationEl.classList.remove('hidden');
     document.querySelectorAll('.view-toggle-btn').forEach(function(b) {
-      b.classList.toggle('active', b.dataset.view === 'list');
+      var isList = b.dataset.view === 'list';
+      b.classList.toggle('active', isList);
+      b.setAttribute('aria-selected', isList ? 'true' : 'false');
     });
 
     var token = ++renderToken;
@@ -188,6 +196,11 @@
       if (currentPage > totalPages) currentPage = 1;
       if (titleEl) {
         titleEl.textContent = currentFilter === 'all' ? '全部文章' : currentFilter + ' · ' + filteredPosts.length + ' 篇';
+      }
+      if (subtitleEl) {
+        subtitleEl.textContent = currentFilter === 'all'
+          ? '按时间倒序收录的完整技术沉淀与架构思考'
+          : '分类「' + currentFilter + '」下共收录 ' + filteredPosts.length + ' 篇深度沉淀';
       }
       renderDynamicList();
       if (opts.pushState !== false) pushStateForList();
@@ -385,23 +398,27 @@
     var html = '';
     SERIES_DATA.forEach(function(series) {
       var linksHtml = series.articles.map(function(a, idx) {
-        return '<div class="series-bento-link-item"><span style="color: var(--color-accent-primary); font-weight:600;">' + (idx + 1) + '.</span> <a href="' + a.url + '">' + a.title + '</a></div>';
+        var stepNum = (idx + 1) < 10 ? '0' + (idx + 1) : String(idx + 1);
+        return '<div class="series-roadmap-item">' +
+          '<span class="series-step-pill">' + stepNum + '</span>' +
+          '<a class="series-roadmap-link" href="' + esc(a.url) + '" title="' + esc(a.title) + '">' + esc(a.title) + '</a>' +
+          '</div>';
       }).join('');
 
-      html += '<div class="series-bento-card spotlight-card">';
+      html += '<article class="series-dossier-card spotlight-card">';
       html += '  <div>';
-      html += '    <div class="series-bento-header">';
-      html += '      <span class="series-bento-icon">' + series.icon + '</span>';
-      html += '      <span class="series-bento-count">共 ' + series.totalCount + ' 篇</span>';
+      html += '    <div class="series-dossier-header">';
+      html += '      <div class="series-dossier-icon-box">' + series.icon + '</div>';
+      html += '      <span class="series-dossier-badge">收录 ' + series.totalCount + ' 篇</span>';
       html += '    </div>';
-      html += '    <h3 class="series-bento-title">' + series.title + '</h3>';
-      html += '    <p class="series-bento-desc">' + series.desc + '</p>';
-      html += '    <div class="series-bento-articles">' + linksHtml + '</div>';
+      html += '    <h3 class="series-dossier-title">' + esc(series.title) + '</h3>';
+      html += '    <p class="series-dossier-desc">' + esc(series.desc) + '</p>';
+      html += '    <div class="series-roadmap-track">' + linksHtml + '</div>';
       html += '  </div>';
-      html += '  <div class="series-bento-footer">';
-      html += '    <a href="' + series.articles[0].url + '">开始阅读专栏 ➔</a>';
+      html += '  <div class="series-dossier-footer">';
+      html += '    <a class="series-explore-btn" href="' + esc(series.articles[0].url) + '"><span>进入专栏第一篇</span> <span class="read-more-arrow">➔</span></a>';
       html += '  </div>';
-      html += '</div>';
+      html += '</article>';
     });
     container.innerHTML = html;
     if (window.initSpotlightCards) window.initSpotlightCards();
@@ -410,29 +427,42 @@
   function renderArchive() {
     var container = document.getElementById('archive-view');
     if (!container || !archiveData) return;
-    var html = '';
+    var html = '<div class="archive-timeline-wrapper">';
     archiveData.forEach(function(yg) {
-      html += '<div class="archive-year">';
-      html += '<div class="archive-year-header">' + yg.year + ' <span class="archive-count">· ' + yg.count + ' 篇</span></div>';
-      html += '<div class="archive-year-body">';
+      html += '<section class="archive-year-section">';
+      html += '  <div class="archive-year-hub">';
+      html += '    <div class="archive-year-node" aria-hidden="true"></div>';
+      html += '    <h3 class="archive-year-title">' + esc(yg.year) + '</h3>';
+      html += '    <span class="archive-year-badge">' + yg.count + ' 篇归档</span>';
+      html += '    <span class="archive-year-watermark" aria-hidden="true">' + esc(yg.year) + '</span>';
+      html += '  </div>';
+
       yg.months.forEach(function(m) {
-        html += '<div class="archive-month spotlight-card">';
-        html += '<div class="archive-month-header"><span class="month-pill">' + parseInt(m.month.substring(5)) + ' 月</span> <span class="archive-count">' + m.count + ' 篇文章</span></div>';
-        html += '<div class="archive-month-body">';
+        var monthNum = parseInt(m.month.substring(5), 10);
+        html += '  <div class="archive-month-group spotlight-card">';
+        html += '    <div class="archive-month-header">';
+        html += '      <span class="archive-month-tag">' + monthNum + ' 月度归档</span>';
+        html += '      <span class="archive-month-stats">共 ' + m.count + ' 篇</span>';
+        html += '    </div>';
+        html += '    <div class="archive-month-body">';
         m.posts.forEach(function(p) {
           var dayStr = (p.date || '').substring(5);
-          html += '<div class="archive-post">';
-          html += '<span class="archive-post-date">' + dayStr + '</span>';
-          html += '<span class="archive-post-title"><a href="posts/' + String(p.url || '').replace('blog/posts/', '') + '">' + p.title + '</a></span>';
+          var slug = String(p.url || '').replace('blog/posts/', '');
+          html += '      <div class="archive-entry-row">';
+          html += '        <time class="archive-entry-date">' + esc(dayStr) + '</time>';
+          html += '        <span class="archive-entry-title"><a href="posts/' + esc(slug) + '">' + esc(p.title) + '</a></span>';
           if (p.category) {
-            html += '<span class="archive-post-cat">' + p.category + '</span>';
+            html += '        <span class="archive-entry-cat">' + esc(p.category) + '</span>';
           }
-          html += '</div>';
+          html += '      </div>';
         });
-        html += '</div></div>';
+        html += '    </div>';
+        html += '  </div>';
       });
-      html += '</div></div>';
+
+      html += '</section>';
     });
+    html += '</div>';
     container.innerHTML = html;
     if (window.initSpotlightCards) window.initSpotlightCards();
   }
@@ -441,6 +471,9 @@
     var archiveView = document.getElementById('archive-view');
     var seriesView = document.getElementById('series-view');
     var heading = document.getElementById('blog-filter-title');
+    var subheading = document.getElementById('blog-filter-subtitle');
+    var viewLabel = document.getElementById('blog-current-view-label');
+    var filtersBar = document.querySelector('.blog-filters');
 
     var listBtn = document.querySelector('[data-view="list"]');
     var seriesBtn = document.querySelector('[data-view="series"]');
@@ -451,28 +484,37 @@
     if (archiveView) archiveView.classList.remove('active');
     if (seriesView) seriesView.classList.remove('active');
 
-    if (listBtn) listBtn.classList.remove('active');
-    if (seriesBtn) seriesBtn.classList.remove('active');
-    if (archiveBtn) archiveBtn.classList.remove('active');
+    if (listBtn) { listBtn.classList.remove('active'); listBtn.setAttribute('aria-selected', 'false'); }
+    if (seriesBtn) { seriesBtn.classList.remove('active'); seriesBtn.setAttribute('aria-selected', 'false'); }
+    if (archiveBtn) { archiveBtn.classList.remove('active'); archiveBtn.setAttribute('aria-selected', 'false'); }
 
     if (view === 'archive') {
       if (listContainer) listContainer.classList.add('hidden');
       if (paginationEl) paginationEl.classList.add('hidden');
       if (archiveView) archiveView.classList.add('active');
-      if (archiveBtn) archiveBtn.classList.add('active');
-      if (heading) heading.textContent = '时间归档';
+      if (archiveBtn) { archiveBtn.classList.add('active'); archiveBtn.setAttribute('aria-selected', 'true'); }
+      if (heading) heading.textContent = '时光归档';
+      if (subheading) subheading.textContent = '按年份与月份演进的全站技术博文时光轨迹';
+      if (viewLabel) viewLabel.textContent = 'TIMELINE // ARCHIVE';
+      if (filtersBar) filtersBar.classList.add('hidden-filters');
       if (!archiveData) loadArchive().then(renderArchive).catch(function(e) { console.error(e); });
       else renderArchive();
     } else if (view === 'series') {
       if (listContainer) listContainer.classList.add('hidden');
       if (paginationEl) paginationEl.classList.add('hidden');
       if (seriesView) seriesView.classList.add('active');
-      if (seriesBtn) seriesBtn.classList.add('active');
-      if (heading) heading.textContent = '专题专栏 (6)';
+      if (seriesBtn) { seriesBtn.classList.add('active'); seriesBtn.setAttribute('aria-selected', 'true'); }
+      if (heading) heading.textContent = '专题专栏';
+      if (subheading) subheading.textContent = '6 大体系化工程专栏，涵盖端侧大模型、Android 演进、Kotlin 异步与工程实践';
+      if (viewLabel) viewLabel.textContent = 'DOSSIER // SERIES';
+      if (filtersBar) filtersBar.classList.add('hidden-filters');
       renderSeries();
     } else {
-      if (listBtn) listBtn.classList.add('active');
+      if (listBtn) { listBtn.classList.add('active'); listBtn.setAttribute('aria-selected', 'true'); }
       if (heading) heading.textContent = currentFilter === 'all' ? '全部文章' : currentFilter;
+      if (subheading) subheading.textContent = '按时间倒序收录的完整技术沉淀与架构思考';
+      if (viewLabel) viewLabel.textContent = 'VIEWPORT // POSTS';
+      if (filtersBar) filtersBar.classList.remove('hidden-filters');
       // 静态视图（未过滤过）无需重渲染；已切到客户端渲染则重建当前页
       if (dynamic) renderDynamicList();
     }
