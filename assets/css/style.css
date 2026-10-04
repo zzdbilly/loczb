@@ -4185,7 +4185,7 @@ pre code.hljs {
   flex-wrap: wrap;
   gap: 0.55rem;
   margin-bottom: var(--space-xl);
-  padding-bottom: 1.5rem;
+  padding: 6px 0 1.5rem;
   border-bottom: 1px solid var(--color-border);
 }
 
@@ -4513,13 +4513,11 @@ pre code.hljs {
     scrollbar-width: none;
     -ms-overflow-style: none;
     gap: 0.5rem;
-    padding-bottom: 0.85rem;
+    padding: 6px var(--space-lg) 0.85rem;
     margin-bottom: 1.25rem;
     margin-left: calc(-1 * var(--space-lg));
     margin-right: calc(-1 * var(--space-lg));
-    padding-left: var(--space-lg);
-    padding-right: var(--space-lg);
-    max-height: 60px;
+    max-height: 70px;
   }
   .blog-filters::-webkit-scrollbar {
     display: none;
@@ -6875,6 +6873,10 @@ html, body {
   }
 
   /* Safe Area Support */
+  :root {
+    --nav-height: calc(64px + max(0.5rem, env(safe-area-inset-top)));
+  }
+
   .footer {
     padding-bottom: max(2rem, env(safe-area-inset-bottom));
   }
@@ -6968,9 +6970,9 @@ html, body {
     margin: 2rem 0 !important;
   }
 
-  /* 博客列表页 Hero 与控制台间距紧凑化 */
+  /* 博客列表页 Hero 与控制台间距紧凑化（确保头部 status-pill 与吸顶导航保持舒适呼吸距离） */
   .blog-hero {
-    padding: calc(var(--nav-height) + 1.25rem) 0 1.25rem !important;
+    padding: calc(var(--nav-height) + 1.65rem) 0 1.25rem !important;
   }
 
   .blog-hero-bar {
