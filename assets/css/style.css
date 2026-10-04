@@ -5736,6 +5736,7 @@ pre code.hljs {
 
 .hero-search-bar input {
   flex: 1;
+  min-width: 0;
   background: none;
   border: none;
   outline: none;
@@ -6870,13 +6871,14 @@ html, body {
 /* 2. Hero Section on Mobile (<= 640px) */
 @media (max-width: 640px) {
   .hero {
-    padding: 4.5rem 0 2.5rem;
+    min-height: auto !important;
+    padding: calc(var(--nav-height) + 1.25rem) 0 1.5rem !important;
   }
 
   .hero-title {
     font-size: clamp(1.8rem, 1.5rem + 3vw, 2.75rem) !important;
     line-height: 1.25 !important;
-    margin-bottom: 1rem !important;
+    margin-bottom: 0.85rem !important;
   }
 
   .hero-typewriter {
@@ -6887,28 +6889,48 @@ html, body {
   .hero-description {
     font-size: 0.95rem !important;
     line-height: 1.65 !important;
-    margin-bottom: 1.25rem !important;
+    margin-bottom: 0.85rem !important;
   }
 
   .hero-search-wrapper {
-    margin-bottom: 1.25rem;
-    padding: 0 0.25rem;
+    margin: 0.75rem auto 1.15rem !important;
+    padding: 0;
+    max-width: 100%;
   }
 
   .hero-search-bar {
-    padding: 0.65rem 0.95rem;
+    padding: 0.55rem 0.85rem;
+    gap: 0.55rem;
+  }
+
+  .hero-search-bar input {
+    font-size: 0.88rem;
+  }
+
+  .hero-search-bar input::placeholder {
+    font-size: 0.84rem;
+  }
+
+  /* 移动端触摸屏无物理 Command 键，隐藏 ⌘K 徽章为文案腾出横向空间，杜绝右侧截断遮挡 */
+  .search-kbd {
+    display: none !important;
   }
 
   .hero-actions {
     flex-direction: column;
     width: 100%;
     gap: 0.75rem !important;
+    margin-bottom: 0 !important;
   }
 
   .hero-actions .btn {
     width: 100%;
     justify-content: center;
     padding: 0.75rem 1.25rem;
+  }
+
+  .bento-section {
+    padding: 1.25rem 0 2.5rem !important;
   }
 }
 
