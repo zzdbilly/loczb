@@ -917,11 +917,15 @@ a:hover {
   display: flex;
   gap: var(--space-xl);
   align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 .footer-social {
   display: flex;
   gap: var(--space-md);
   align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 .footer-social-link {
   display: flex;
@@ -951,12 +955,17 @@ a:hover {
 .footer-link:hover {
   color: var(--color-text-primary);
 }
-.footer-copyright {
-  color: #d1d5db;
+.footer-copyright,
+.footer-copy {
+  color: #94a3b8;
   font-size: var(--text-xs);
+  margin: 0;
+  line-height: 1.5;
+  text-align: center;
 }
-[data-theme="light"] .footer-copyright {
-  /* 浅色页脚上 #d1d5db 只有 1.40:1（全站最低的一处）；换正文次级色 */
+[data-theme="light"] .footer-copyright,
+[data-theme="light"] .footer-copy {
+  /* 浅色页脚上换正文次级色，对比度达标 */
   color: var(--color-text-secondary);
 }
 .blog-view-all {
@@ -2368,7 +2377,8 @@ pre code {
   font-size: var(--text-lg);
   color: var(--color-text-secondary);
   font-style: italic;
-  margin-bottom: var(--space-sm);
+  margin: 0;
+  text-align: center;
 }
 @media (max-width: 1024px) {
   .hero-grid-layout {

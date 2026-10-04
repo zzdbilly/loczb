@@ -71,8 +71,8 @@ function syncFilePartials(relPath, activeNav) {
   if (navPattern.test(html)) {
     html = html.replace(navPattern, navBlock);
   } else {
-    // 替换原生 <nav class="nav">...</nav>
-    const rawNavPattern = /[ \t]*<nav class="nav">[\s\S]*?<\/nav>/;
+    // 替换原生 <nav class="nav"...>...</nav>
+    const rawNavPattern = /[ \t]*<nav class="nav"[^>]*>[\s\S]*?<\/nav>/;
     if (rawNavPattern.test(html)) {
       html = html.replace(rawNavPattern, navBlock);
     }
