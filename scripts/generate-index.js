@@ -624,6 +624,80 @@ function injectStaticRelated() {
 }
 
 // ═══════════════════════════════════════════════
+// Phase 4.6: 为每篇文章内联静态「上一篇 / 下一篇」导航
+// ═══════════════════════════════════════════════
+
+const POST_NAV_PATTERN = /([ \t]*<!-- Post Nav Prev Next -->)[\s\S]*?([ \t]*<!-- \/Post Nav Prev Next -->)/;
+
+function renderPostNav(prev, next) {
+  const prevHtml = prev
+    ? `        <a href="${prev.slug}.html" class="post-nav-card post-nav-prev" rel="prev">
+          <span class="post-nav-label">← 上一篇</span>
+          <span class="post-nav-title">${escapeHtml(prev.title)}</span>
+        </a>`
+    : `        <div class="post-nav-card post-nav-prev disabled" aria-disabled="true">
+          <span class="post-nav-label">← 上一篇</span>
+          <span class="post-nav-title">已是第一篇博文</span>
+        </div>`;
+
+  const nextHtml = next
+    ? `        <a href="${next.slug}.html" class="post-nav-card post-nav-next" rel="next">
+          <span class="post-nav-label">下一篇 →</span>
+          <span class="post-nav-title">${escapeHtml(next.title)}</span>
+        </a>`
+    : `        <div class="post-nav-card post-nav-next disabled" aria-disabled="true">
+          <span class="post-nav-label">下一篇 →</span>
+          <span class="post-nav-title">已是最新篇博文</span>
+        </div>`;
+
+  return `      <nav class="post-nav" aria-label="文章翻页导航">
+${prevHtml}
+${nextHtml}
+      </nav>`;
+}
+
+function injectPostNavigation() {
+  let written = 0, inserted = 0, noTarget = 0;
+
+  posts.forEach((post, i) => {
+    const file = path.join(POSTS_DIR, post.slug + '.html');
+    if (!fs.existsSync(file)) return;
+    let html = fs.readFileSync(file, 'utf-8');
+
+    // posts 按发布时间降序（posts[0] 最新，posts[N-1] 最旧）
+    // 下一篇（更近/更新）：i - 1
+    // 上一篇（更早/更旧）：i + 1
+    const next = i > 0 ? posts[i - 1] : null;
+    const prev = i < posts.length - 1 ? posts[i + 1] : null;
+
+    const block = renderPostNav(prev, next);
+
+    if (POST_NAV_PATTERN.test(html)) {
+      const out = html.replace(POST_NAV_PATTERN, `$1\n${block}\n$2`);
+      if (out !== html) {
+        fs.writeFileSync(file, out, 'utf-8');
+        written++;
+      }
+    } else {
+      const sectionContainer = /(<section class="section" aria-label="读完之后"[^>]*>[\s\S]*?<div class="container container-narrow">)/;
+      if (sectionContainer.test(html)) {
+        const out = html.replace(sectionContainer, `$1\n      <!-- Post Nav Prev Next -->\n${block}\n      <!-- /Post Nav Prev Next -->`);
+        if (out !== html) {
+          fs.writeFileSync(file, out, 'utf-8');
+          written++;
+          inserted++;
+        }
+      } else {
+        noTarget++;
+      }
+    }
+  });
+
+  console.log(`✅ 静态上一篇/下一篇: ${posts.length} 篇处理，${written} 篇写入${inserted ? `（初始注入 ${inserted} 篇）` : ''}${noTarget ? `，缺少锚点 ${noTarget} 篇` : ''}`);
+}
+
+
+// ═══════════════════════════════════════════════
 // Phase 5: 生成 sitemap.xml
 // ═══════════════════════════════════════════════
 //
@@ -805,6 +879,13 @@ function syncAssetVersions() {
   }
 }
 
+function syncPartials() {
+  const script = path.join(__dirname, 'sync-partials.js');
+  if (!fs.existsSync(script)) return;
+  const { syncAllPartials } = require(script);
+  syncAllPartials();
+}
+
 // ═══════════════════════════════════════════════
 // Execute all phases
 // ═══════════════════════════════════════════════
@@ -816,11 +897,14 @@ rebuildBlogIndex();
 rebuildHomePage();
 syncOtherPagesPostCount();
 injectStaticRelated();
+injectPostNavigation();
 generateSitemap();
 generateRSS();
 updateServiceWorker();
-// 收尾：评论组件与静态资源引用版本号（必须在所有写文章页的步骤之后，见函数注释）
+// 收尾：布局片段、评论组件与静态资源引用版本号
+syncPartials();
 syncWidgetVersion();
 syncAssetVersions();
 
 console.log('\n🎉 完成！');
+

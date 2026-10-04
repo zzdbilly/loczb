@@ -1,4 +1,14 @@
 {
+  "name": "loczb",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "node scripts/generate-index.js",
+    "verify": "node scripts/verify.js",
+    "check-links": "node scripts/check-links.js",
+    "refresh": "python3 scripts/refresh-posts.py",
+    "sync-partials": "node scripts/sync-partials.js"
+  },
   "dependencies": {
     "fuse.js": "^7.0.0",
     "highlight.js": "^11.12.0"

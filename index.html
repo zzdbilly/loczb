@@ -64,45 +64,51 @@
   <link rel="sitemap" type="application/xml" title="Sitemap" href="sitemap.xml">
   
   <!-- Styles -->
-  <link rel="stylesheet" href="assets/css/style.css?v=09289c11b9">
+  <link rel="stylesheet" href="assets/css/style.css?v=9e2e67a8a1">
 </head>
 <body>
+  <!-- PARTIAL:SKIP_LINK -->
+  <a href="#main-content" class="skip-link">跳至主要内容</a>
+  <!-- /PARTIAL:SKIP_LINK -->
+
   <!-- Navigation -->
+<!-- PARTIAL:NAV -->
   <nav class="nav">
-    <div class="nav-inner">
-      <a href="index.html" class="nav-logo">
-        loc<span>zb</span>
-      </a>
-      <button class="nav-toggle" aria-label="打开菜单" aria-expanded="false" aria-controls="nav-links-menu">
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
-      <div class="nav-overlay"></div>
-      <ul class="nav-links" id="nav-links-menu">
-        <li><a href="index.html" class="nav-link active">首页</a></li>
-        <li><a href="projects/index.html" class="nav-link">项目</a></li>
-        <li><a href="blog/index.html" class="nav-link">博客</a></li>
-        <li><a href="about/index.html" class="nav-link">关于</a></li>
-      </ul>
-      <button class="theme-toggle" aria-label="切换主题" title="切换亮/暗模式">
-        <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="12" cy="12" r="5"></circle>
-          <line x1="12" y1="1" x2="12" y2="3"></line>
-          <line x1="12" y1="21" x2="12" y2="23"></line>
-          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-          <line x1="1" y1="12" x2="3" y2="12"></line>
-          <line x1="21" y1="12" x2="23" y2="12"></line>
-          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-        </svg>
-        <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-        </svg>
-      </button>
-    </div>
-  </nav>
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">
+      loc<span>zb</span>
+    </a>
+    <button class="nav-toggle" aria-label="打开菜单" aria-expanded="false" aria-controls="nav-links-menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <div class="nav-overlay"></div>
+    <ul class="nav-links" id="nav-links-menu">
+      <li><a href="/" class="nav-link active" data-nav="home">首页</a></li>
+      <li><a href="/projects/" class="nav-link" data-nav="projects">项目</a></li>
+      <li><a href="/blog/" class="nav-link" data-nav="blog">博客</a></li>
+      <li><a href="/about/" class="nav-link" data-nav="about">关于</a></li>
+    </ul>
+    <button class="theme-toggle" aria-label="切换主题" title="切换亮/暗模式">
+      <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="5"></circle>
+        <line x1="12" y1="1" x2="12" y2="3"></line>
+        <line x1="12" y1="21" x2="12" y2="23"></line>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+        <line x1="1" y1="12" x2="3" y2="12"></line>
+        <line x1="21" y1="12" x2="23" y2="12"></line>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+      </svg>
+      <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+      </svg>
+    </button>
+  </div>
+</nav>
+  <!-- /PARTIAL:NAV -->
 
   <!-- Particle Canvas Background -->
   <canvas id="particle-canvas" class="particle-canvas" aria-hidden="true"></canvas>
@@ -163,6 +169,99 @@
     </div>
   </section>
 
+  <!-- Blog Section -->
+  <section class="section" id="blog">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-label">Latest Posts</div>
+        <h2 class="section-title">最新博客与专栏</h2>
+        <p class="section-desc">专注原生 Android 架构演进、端侧 AI 与实用工程实战</p>
+      </div>
+      
+      <div class="blog-grid">
+        <!-- 代表文章大卡 -->
+        <article class="blog-card-featured animate-on-scroll" id="home-featured-post" style="display: block;">
+          <div class="blog-card-header">
+            <div class="blog-card-meta">
+              <span class="blog-date">2026-09-28</span>
+              <span>·</span>
+              <span class="blog-read-time">18 min</span>
+            </div>
+            <span class="blog-list-tag">思考</span>
+          </div>
+          <h3 class="blog-card-title">
+            <a href="blog/posts/纳指定投把一笔月供当成长期运维来跑.html">纳指定投：把一笔月供当成长期运维来跑</a>
+          </h3>
+          <p class="blog-card-excerpt">一个程序员对纳指100定投的完整记录：它是什么、摊平了什么、摩擦成本在哪、我给自己定了哪些执行规则，以及怎么验证自己没做错。...</p>
+          <div class="blog-card-tags">
+            <span class="tech-tag">理财</span>
+            <span class="tech-tag">指数基金</span>
+            <span class="tech-tag">定投</span>
+            <span class="tech-tag">投资</span>
+            <span class="tech-tag">个人财务</span>
+          </div>
+        </article>
+        
+        <!-- 最新文章列表 -->
+                <div class="blog-list">
+        <article class="blog-mini-card animate-on-scroll" data-category="开发" data-page="1">
+          <div class="blog-mini-card-header">
+            <div class="blog-list-meta">
+              <span class="blog-date">2026-09-27</span>
+              <span>·</span>
+              <span class="blog-read-time">14 min</span>
+            </div>
+            <span class="blog-list-tag">开发</span>
+          </div>
+          <h3 class="blog-mini-card-title">
+            <a href="blog/posts/idempotent-reproducible-builds.html">幂等与可复现：为什么你的构建总在产生无意义的 diff</a>
+          </h3>
+          <p class="blog-mini-card-excerpt">从 mtime 并列裁决、无条件写盘到不对称正则，拆开构建噪声的三个真实来源，给出元数据 sidecar 与「零改动」门禁的落地实现。</p>
+          <div class="blog-mini-card-tags">
+            <span class="tech-tag">构建</span>
+            <span class="tech-tag">幂等</span>
+            <span class="tech-tag">可复现</span>
+          </div>
+        </article>
+        <article class="blog-mini-card animate-on-scroll" data-category="思考" data-page="1">
+          <div class="blog-mini-card-header">
+            <div class="blog-list-meta">
+              <span class="blog-date">2026-09-21</span>
+              <span>·</span>
+              <span class="blog-read-time">12 min</span>
+            </div>
+            <span class="blog-list-tag">思考</span>
+          </div>
+          <h3 class="blog-mini-card-title">
+            <a href="blog/posts/tech-manager-vs-pm-vs-po.html">技术经理、项目经理、产品经理的区别</a>
+          </h3>
+          <p class="blog-mini-card-excerpt">三个都叫「经理」的岗位到底差在哪：对什么负责、权力从哪来、时间花在哪、失败长什么样，以及想转过去要提前补什么。</p>
+          <div class="blog-mini-card-tags">
+            <span class="tech-tag">职场</span>
+            <span class="tech-tag">团队管理</span>
+            <span class="tech-tag">角色认知</span>
+          </div>
+        </article>
+        </div>
+        <!-- /最新文章列表 --></div>
+
+      <div class="blog-view-all" style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+        <a href="blog/index.html" class="btn btn-secondary">
+          浏览全部文章 (<!-- POSTS_COUNT -->113<!-- /POSTS_COUNT --> 篇)
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </a>
+        <a href="blog/index.html?view=series" class="btn btn-secondary" style="border-color: rgba(99, 102, 241, 0.4); color: var(--color-accent-text);">
+          📚 探索 6 大专题专栏
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </a>
+      </div>
+      </div>
+  </section>
+
   <!-- Modern Bento Grid Showcase -->
   <section class="bento-section" id="bento">
     <div class="container container-wide">
@@ -192,7 +291,7 @@
               </div>
               <div class="terminal-line">
                 <span class="terminal-prompt">➜</span>
-                <span class="terminal-text"><span class="terminal-highlight">live_pulse</span> — 🟢 <!-- POSTS_COUNT -->113<!-- /POSTS_COUNT --> 篇博文 · 6 大专栏 · 0ms 预加载 · Cloudflare 边缘秒开</span>
+                <span class="terminal-text"><span class="terminal-highlight">live_pulse</span> — 🟢 <!-- POSTS_COUNT -->113<!-- /POSTS_COUNT --> 篇博文 · 6 大专栏 · 原生 Android / 系统架构 / 端侧 AI 实战</span>
               </div>
             </div>
           </div>
@@ -279,8 +378,8 @@
             <div class="principle-item">
               <span class="principle-bullet">⚡</span>
               <div>
-                <strong>毫秒级极致体验</strong>
-                <p>响应速度与流畅手势是对用户的最高尊重，做好每一个交互边界。</p>
+                <strong>克制且流畅的体验</strong>
+                <p>手势流畅与边界健壮是对用户的基本尊重，做好每一个交互与异常边界。</p>
               </div>
             </div>
             <div class="principle-item">
@@ -312,8 +411,8 @@
               <div class="bento-metric-title">年移动端研发沉淀</div>
             </div>
             <div class="bento-metric-item">
-              <div class="bento-metric-num">100%</div>
-              <div class="bento-metric-title">独立全栈落地实现</div>
+              <div class="bento-metric-num">290+</div>
+              <div class="bento-metric-title">个细分技术与思考标签</div>
             </div>
           </div>
         </div>
@@ -425,124 +524,34 @@
     </div>
   </section>
 
-  <!-- Blog Section -->
-  <section class="section" id="blog">
-    <div class="container">
-      <div class="section-header">
-        <div class="section-label">Latest Posts</div>
-        <h2 class="section-title">最新博客</h2>
-        <p class="section-desc">我的技术文章与思考</p>
-      </div>
-      
-      <div class="blog-grid">
-        <!-- 代表文章大卡 -->
-        <article class="blog-card-featured animate-on-scroll" id="home-featured-post" style="display: block;">
-          <div class="blog-card-header">
-            <div class="blog-card-meta">
-              <span class="blog-date">2026-09-28</span>
-              <span>·</span>
-              <span class="blog-read-time">18 min</span>
-            </div>
-            <span class="blog-list-tag">思考</span>
-          </div>
-          <h3 class="blog-card-title">
-            <a href="blog/posts/纳指定投把一笔月供当成长期运维来跑.html">纳指定投：把一笔月供当成长期运维来跑</a>
-          </h3>
-          <p class="blog-card-excerpt">一个程序员对纳指100定投的完整记录：它是什么、摊平了什么、摩擦成本在哪、我给自己定了哪些执行规则，以及怎么验证自己没做错。...</p>
-          <div class="blog-card-tags">
-            <span class="tech-tag">理财</span>
-            <span class="tech-tag">指数基金</span>
-            <span class="tech-tag">定投</span>
-            <span class="tech-tag">投资</span>
-            <span class="tech-tag">个人财务</span>
-          </div>
-        </article>
-        
-        <!-- 最新文章列表 -->
-                <div class="blog-list">
-        <article class="blog-mini-card animate-on-scroll" data-category="开发" data-page="1">
-          <div class="blog-mini-card-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-09-27</span>
-              <span>·</span>
-              <span class="blog-read-time">14 min</span>
-            </div>
-            <span class="blog-list-tag">开发</span>
-          </div>
-          <h3 class="blog-mini-card-title">
-            <a href="blog/posts/idempotent-reproducible-builds.html">幂等与可复现：为什么你的构建总在产生无意义的 diff</a>
-          </h3>
-          <p class="blog-mini-card-excerpt">从 mtime 并列裁决、无条件写盘到不对称正则，拆开构建噪声的三个真实来源，给出元数据 sidecar 与「零改动」门禁的落地实现。</p>
-          <div class="blog-mini-card-tags">
-            <span class="tech-tag">构建</span>
-            <span class="tech-tag">幂等</span>
-            <span class="tech-tag">可复现</span>
-          </div>
-        </article>
-        <article class="blog-mini-card animate-on-scroll" data-category="思考" data-page="1">
-          <div class="blog-mini-card-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-09-21</span>
-              <span>·</span>
-              <span class="blog-read-time">12 min</span>
-            </div>
-            <span class="blog-list-tag">思考</span>
-          </div>
-          <h3 class="blog-mini-card-title">
-            <a href="blog/posts/tech-manager-vs-pm-vs-po.html">技术经理、项目经理、产品经理的区别</a>
-          </h3>
-          <p class="blog-mini-card-excerpt">三个都叫「经理」的岗位到底差在哪：对什么负责、权力从哪来、时间花在哪、失败长什么样，以及想转过去要提前补什么。</p>
-          <div class="blog-mini-card-tags">
-            <span class="tech-tag">职场</span>
-            <span class="tech-tag">团队管理</span>
-            <span class="tech-tag">角色认知</span>
-          </div>
-        </article>
-        </div>
-        <!-- /最新文章列表 --></div>
-
-      <div class="blog-view-all" style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
-        <a href="blog/index.html" class="btn btn-secondary">
-          浏览全部文章 (<!-- POSTS_COUNT -->113<!-- /POSTS_COUNT --> 篇)
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M5 12h14M12 5l7 7-7 7"/>
-          </svg>
-        </a>
-        <a href="blog/index.html?view=series" class="btn btn-secondary" style="border-color: rgba(99, 102, 241, 0.4); color: var(--color-accent-text);">
-          📚 探索 6 大专题专栏
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M5 12h14M12 5l7 7-7 7"/>
-          </svg>
-        </a>
-      </div>
-      </div>
-  </section>
-
   </main>
 
   <!-- Footer -->
-  <footer class="footer">
-    <div class="footer-inner">
-      <p class="footer-signature">写代码，做产品，也认真生活。</p>
-      <div class="footer-social">
-        <a href="https://github.com/zzdbilly" class="footer-social-link" target="_blank" rel="noopener" aria-label="GitHub">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-        </a>
-        <a href="rss.xml" class="footer-social-link" aria-label="RSS">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
-        </a>
-      </div>
-      <div class="footer-links">
-        <a href="index.html" class="footer-link">首页</a>
-        <a href="projects/index.html" class="footer-link">项目</a>
-        <a href="blog/index.html" class="footer-link">博客</a>
-        <a href="about/index.html" class="footer-link">关于</a>
-      </div>
-      <p class="footer-copyright">
-        © 2026 张小猛
-      </p>
+<!-- PARTIAL:FOOTER -->
+  <footer class="footer" role="contentinfo">
+  <div class="footer-inner">
+    <p class="footer-signature">写代码，做产品，也认真生活。</p>
+    <div class="footer-social">
+      <a href="https://github.com/zzdbilly" class="footer-social-link" target="_blank" rel="noopener" aria-label="GitHub">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+      </a>
+      <a href="https://twitter.com/zzdbilly" class="footer-social-link" target="_blank" rel="noopener" aria-label="X (Twitter)">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      </a>
+      <a href="/rss.xml" class="footer-social-link" target="_blank" rel="noopener" aria-label="RSS 订阅">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+      </a>
     </div>
-  </footer>
+    <div class="footer-links">
+      <a href="/" class="footer-link">首页</a>
+      <a href="/projects/" class="footer-link">项目</a>
+      <a href="/blog/" class="footer-link">博客</a>
+      <a href="/about/" class="footer-link">关于</a>
+    </div>
+    <p class="footer-copy">&copy; 2026 张小猛 · loczb · Built with care</p>
+  </div>
+</footer>
+  <!-- /PARTIAL:FOOTER -->
 
   <!-- Scripts -->
   <script defer src="assets/js/main.js"></script>
