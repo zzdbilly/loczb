@@ -168,10 +168,10 @@ body {
   background: var(--color-text-tertiary);
 }
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-serif);
-  font-weight: 600;
-  line-height: 1.2;
-  letter-spacing: -0.02em;
+  font-family: var(--font-sans);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.025em;
 }
 h1 {
   font-size: var(--text-4xl);
@@ -1132,7 +1132,7 @@ a:hover {
   font-weight: 700;
   margin: 0.25rem 0;
   line-height: 1.2;
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
 }
 .blog-hero-subtitle {
   font-size: var(--text-sm);
@@ -1150,7 +1150,7 @@ a:hover {
   font-size: var(--text-xl);
   font-weight: 600;
   margin: 0;
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
 }
 .blog-filters {
   display: flex;
@@ -1329,7 +1329,8 @@ pre code {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
+  font-variant-numeric: tabular-nums;
   line-height: 1.2;
 }
 .stat-value::after {
@@ -1834,7 +1835,7 @@ pre code {
   font-weight: 700;
   color: var(--color-text-primary);
   margin-bottom: 0.6rem;
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
 }
 
 .project-card-desc {
@@ -1942,7 +1943,7 @@ pre code {
 .blog-card-title {
   font-size: clamp(1.35rem, 1.2rem + 0.6vw, 1.85rem);
   font-weight: 700;
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   line-height: 1.35;
   margin-bottom: 1rem;
 }
@@ -2018,7 +2019,7 @@ pre code {
 .blog-mini-card-title {
   font-size: var(--text-lg);
   font-weight: 700;
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   line-height: 1.4;
   margin-bottom: 0.5rem;
 }
@@ -3843,7 +3844,7 @@ pre code.hljs {
   font-size: clamp(2rem, 1.8rem + 1.5vw, 3.2rem);
   font-weight: 800;
   letter-spacing: -0.035em;
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   margin: 0.25rem 0 0.5rem;
   line-height: 1.2;
 }
@@ -4097,7 +4098,7 @@ pre code.hljs {
 .sr-title {
   font-size: 0.95rem;
   font-weight: 700;
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   color: var(--color-text-primary);
   margin-bottom: 0.3rem;
   line-height: 1.4;
@@ -4223,7 +4224,7 @@ pre code.hljs {
   font-size: var(--text-2xl);
   font-weight: 800;
   letter-spacing: -0.025em;
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   color: var(--color-text-primary);
   display: inline-flex;
   align-items: center;
@@ -4297,7 +4298,7 @@ pre code.hljs {
 .blog-control-hub .blog-list-heading {
   font-size: var(--text-2xl);
   font-weight: 800;
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   color: var(--color-text-primary);
   letter-spacing: -0.02em;
   line-height: 1.2;
@@ -4554,7 +4555,7 @@ pre code.hljs {
   font-size: 1.25rem;
   font-weight: 800;
   letter-spacing: -0.025em;
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   line-height: 1.38;
   margin-bottom: 0.75rem;
 }
@@ -4917,7 +4918,7 @@ pre code.hljs {
 .series-name {
   font-size: 1.15rem;
   font-weight: 700;
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   color: var(--color-text-primary);
   margin-bottom: 0.4rem;
   line-height: 1.35;
@@ -5165,7 +5166,7 @@ pre code.hljs {
 .series-bento-title {
   font-size: 1.25rem;
   font-weight: 800;
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   color: var(--color-text-primary);
   margin-bottom: 0.55rem;
   line-height: 1.35;
@@ -5379,7 +5380,7 @@ pre code.hljs {
 .archive-year-title {
   font-size: var(--text-4xl);
   font-weight: 900;
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   color: var(--color-text-primary);
   letter-spacing: -0.03em;
   line-height: 1;
@@ -5404,7 +5405,7 @@ pre code.hljs {
   right: 0;
   top: -1.75rem;
   font-size: 5.5rem;
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-weight: 900;
   color: var(--color-text-primary);
   opacity: 0.04;
@@ -6245,7 +6246,7 @@ pre code.hljs {
 .case-card-title {
   font-size: clamp(1.75rem, 1.5rem + 1vw, 2.25rem);
   font-weight: 700;
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   color: var(--color-text-primary);
   margin-bottom: 0.5rem;
 }
