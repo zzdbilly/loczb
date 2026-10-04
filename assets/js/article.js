@@ -7,38 +7,11 @@
   'use strict';
 
   document.addEventListener('DOMContentLoaded', () => {
-    // === 返回顶部 & 阅读进度 ===
-    const backToTop = document.getElementById('backToTop');
-
     // === macOS 风格代码块与复制功能 ===
     initCodeBlocks();
 
     // === 原创版权卡片与一键引用 ===
     initCopyrightCard();
-
-    window.addEventListener('scroll', () => {
-      if (backToTop) {
-        if (window.scrollY > 300) {
-          backToTop.classList.add('visible');
-        } else {
-          backToTop.classList.remove('visible');
-        }
-      }
-
-      const progressBar = document.getElementById('readingProgress');
-      if (progressBar && document.querySelector('.post-content')) {
-        const scrollTop = window.scrollY;
-        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-        const progress = (scrollTop / docHeight) * 100;
-        progressBar.style.width = progress + '%';
-      }
-    });
-
-    if (backToTop) {
-      backToTop.addEventListener('click', () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      });
-    }
 
     // === 键盘快捷键 ===
     document.addEventListener('keydown', (e) => {

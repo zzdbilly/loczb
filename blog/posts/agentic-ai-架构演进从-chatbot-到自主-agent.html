@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="zh-CN" data-theme="dark">
 <head>
-  <script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+  <script>document.documentElement.classList.add("js");try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
     <meta charset="UTF-8">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://static.cloudflareinsights.com https://loczb-comments.billycust716.workers.dev; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://loczb-comments.billycust716.workers.dev https://dashscope.aliyuncs.com https://709527.xyz https://www.709527.xyz https://cloudflareinsights.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
     <script>/* 反点击劫持兜底：GitHub Pages 无法下发 X-Frame-Options / CSP frame-ancestors */(function(){if(self===top)return;try{top.location=self.location}catch(e){}setTimeout(function(){if(self!==top){document.documentElement.style.display='none';}},400);})();</script>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Agentic AI 架构演进：从 Chatbot 到自主 Agent | 张小猛 - loczb</title>
     <meta name="description" content="从 Function Calling、MCP 到 Multi-Agent，梳理 AI Agent 架构的进化路径，以及当前面临的挑战和未来方向。">
 
@@ -55,7 +55,7 @@
 }
     </script>
 
-    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/style.css?v=20261004-spacing4">
     <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
     <link rel="alternate icon" href="../../assets/images/favicon.ico">
     <link rel="canonical" href="https://709527.xyz/blog/posts/agentic-ai-架构演进从-chatbot-到自主-agent.html">
@@ -88,8 +88,6 @@
   <!-- Particle Canvas Background -->
   <canvas id="particle-canvas" class="particle-canvas" aria-hidden="true"></canvas>
 
-  <div class="scroll-progress"></div>
-
   <main class="section" style="padding-bottom: 0; padding-top: var(--space-4xl);">
     <div class="container container-narrow">
       <a href="../index.html" class="back-link">
@@ -115,35 +113,6 @@
         </div>
 
         
-
-        <!-- Related Static -->
-        <div class="related-posts">
-          <div class="related-posts-title">📌 相关文章</div>
-          <div class="related-posts-list">
-          <a class="related-post-card" href="ai-编程助手进化论从结对编程到自主编程团队-2026.html">
-            <div class="related-post-card-title">AI 编程助手进化论：从结对编程到自主编程团队 (2026)</div>
-            <div class="related-post-card-tags"><span>AI</span><span>Agent</span><span>AI 工具</span></div>
-          </a>
-          <a class="related-post-card" href="google-io-2026-recap.html">
-            <div class="related-post-card-title">Google I/O 2026 完整回顾：AI 重塑一切</div>
-            <div class="related-post-card-tags"><span>AI</span><span>Android</span><span>Google I/O</span></div>
-          </a>
-          <a class="related-post-card" href="mcp-android-integration.html">
-            <div class="related-post-card-title">MCP 协议在 Android 端的应用：AI 工具调用新范式</div>
-            <div class="related-post-card-tags"><span>Android</span><span>MCP</span><span>AI</span></div>
-          </a>
-          <a class="related-post-card" href="openclaw-guide.html">
-            <div class="related-post-card-title">OpenClaw 深度使用指南：从 0 到 1 构建个人 AI Agent</div>
-            <div class="related-post-card-tags"><span>AI</span><span>OpenClaw</span><span>Agent</span></div>
-          </a>
-          <a class="related-post-card" href="2026-年了ai-编程助手到底能帮你干多少活.html">
-            <div class="related-post-card-title">2026 年了，AI 编程助手到底能帮你干多少活？</div>
-            <div class="related-post-card-tags"><span>AI</span><span>前端</span><span>开发</span></div>
-          </a>
-          </div>
-        </div>
-
-        <!-- /Related Static -->
 
         <h2>引言：Chatbot 还不够</h2>
 <p>2022 年底 ChatGPT 横空出世，全世界都在惊叹"AI 终于能正常聊天了"。但很快人们发现，纯对话模型有两个硬伤：</p>
@@ -529,6 +498,35 @@ metroAgent.on(&quot;arrived_at_metro&quot;, async (ctx) =&gt; {
 <p>Agentic AI 还在快速演进中，从 Function Calling 到 MCP 到 Multi-Agent 再到 Agent 市场，这条路远没到终点。但有一点是确定的：<strong>AI 不能只 talk，还得能 act。</strong> 能行动、能执行、能交付价值的 AI 才是有意义的。</p>
 <p>你有开始用 Agent 做实际工作了吗？如果还没有，动手写一个简单的 Tool Use 应用试试，感受一下那种"AI 真的在帮你做事"的体验。</p>
 
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="ai-编程助手进化论从结对编程到自主编程团队-2026.html">
+            <div class="related-post-card-title">AI 编程助手进化论：从结对编程到自主编程团队 (2026)</div>
+            <div class="related-post-card-tags"><span>AI</span><span>Agent</span><span>AI 工具</span></div>
+          </a>
+          <a class="related-post-card" href="google-io-2026-recap.html">
+            <div class="related-post-card-title">Google I/O 2026 完整回顾：AI 重塑一切</div>
+            <div class="related-post-card-tags"><span>AI</span><span>Android</span><span>Google I/O</span></div>
+          </a>
+          <a class="related-post-card" href="mcp-android-integration.html">
+            <div class="related-post-card-title">MCP 协议在 Android 端的应用：AI 工具调用新范式</div>
+            <div class="related-post-card-tags"><span>Android</span><span>MCP</span><span>AI</span></div>
+          </a>
+          <a class="related-post-card" href="openclaw-guide.html">
+            <div class="related-post-card-title">OpenClaw 深度使用指南：从 0 到 1 构建个人 AI Agent</div>
+            <div class="related-post-card-tags"><span>AI</span><span>OpenClaw</span><span>Agent</span></div>
+          </a>
+          <a class="related-post-card" href="2026-年了ai-编程助手到底能帮你干多少活.html">
+            <div class="related-post-card-title">2026 年了，AI 编程助手到底能帮你干多少活？</div>
+            <div class="related-post-card-tags"><span>AI</span><span>前端</span><span>开发</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
+
         <!-- Post Copyright & License Card -->
         <div class="post-copyright-card">
           <div class="copyright-header">
@@ -594,7 +592,6 @@ metroAgent.on(&quot;arrived_at_metro&quot;, async (ctx) =&gt; {
   <script defer src="../../assets/js/main.js"></script>
   <script defer src="../../assets/js/article.js"></script>
   <script defer src="../../assets/js/share.js"></script>
-  <script defer src="../../assets/js/back-to-top.js"></script>
   <!-- Back to Top & Reading Progress -->
   <button class="back-to-top" id="backToTop" aria-label="回到顶部">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -629,7 +626,7 @@ metroAgent.on(&quot;arrived_at_metro&quot;, async (ctx) =&gt; {
         <div class="post-info-links">
           <a href="../../blog/index.html?tag=AI" class="post-info-link"># AI</a>
           <a href="../../blog/index.html?tag=Agent" class="post-info-link"># Agent</a>
-          <a href="../../blog/index.html?tag=架构" class="post-info-link"># 架构</a>
+          <a href="../../blog/index.html?tag=%E6%9E%B6%E6%9E%84" class="post-info-link"># 架构</a>
         </div>
       </div>
     </div>

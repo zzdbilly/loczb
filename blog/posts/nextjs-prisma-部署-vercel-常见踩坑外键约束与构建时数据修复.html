@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="zh-CN" data-theme="dark">
 <head>
-  <script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+  <script>document.documentElement.classList.add("js");try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
     <meta charset="UTF-8">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://static.cloudflareinsights.com https://loczb-comments.billycust716.workers.dev; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://loczb-comments.billycust716.workers.dev https://dashscope.aliyuncs.com https://709527.xyz https://www.709527.xyz https://cloudflareinsights.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
     <script>/* 反点击劫持兜底：GitHub Pages 无法下发 X-Frame-Options / CSP frame-ancestors */(function(){if(self===top)return;try{top.location=self.location}catch(e){}setTimeout(function(){if(self!==top){document.documentElement.style.display='none';}},400);})();</script>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Next.js + Prisma 部署 Vercel 常见踩坑：外键约束与构建时数据修复 | 张小猛 - loczb</title>
     <meta name="description" content="Vercel 构建时 prisma db push 失败，外键约束报错怎么办？本文完整复盘一次真实的部署失败案例，从根因分析到构建时数据修复方案。">
 
@@ -55,7 +55,7 @@
 }
     </script>
 
-    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/style.css?v=20261004-spacing4">
     <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
     <link rel="alternate icon" href="../../assets/images/favicon.ico">
     <link rel="canonical" href="https://709527.xyz/blog/posts/nextjs-prisma-部署-vercel-常见踩坑外键约束与构建时数据修复.html">
@@ -88,8 +88,6 @@
   <!-- Particle Canvas Background -->
   <canvas id="particle-canvas" class="particle-canvas" aria-hidden="true"></canvas>
 
-  <div class="scroll-progress"></div>
-
   <main class="section" style="padding-bottom: 0; padding-top: var(--space-4xl);">
     <div class="container container-narrow">
       <a href="../index.html" class="back-link">
@@ -117,35 +115,6 @@
         </div>
 
         
-
-        <!-- Related Static -->
-        <div class="related-posts">
-          <div class="related-posts-title">📌 相关文章</div>
-          <div class="related-posts-list">
-          <a class="related-post-card" href="prisma-orm-完全指南从入门到实战.html">
-            <div class="related-post-card-title">Prisma ORM 完全指南：从入门到实战</div>
-            <div class="related-post-card-tags"><span>Prisma</span><span>TypeScript</span><span>PostgreSQL</span></div>
-          </a>
-          <a class="related-post-card" href="choosing-and-running-a-vps.html">
-            <div class="related-post-card-title">主流 VPS 的选择和使用</div>
-            <div class="related-post-card-tags"><span>VPS</span><span>DevOps</span><span>运维</span></div>
-          </a>
-          <a class="related-post-card" href="从-openclaw-到-hermesai-agent-工作区迁移完整记录.html">
-            <div class="related-post-card-title">从 OpenClaw 到 Hermes：AI Agent 工作区迁移完整记录</div>
-            <div class="related-post-card-tags"><span>OpenClaw</span><span>Hermes</span><span>AI Agent</span></div>
-          </a>
-          <a class="related-post-card" href="vps-选购与使用指南五个常见场景的配置与避坑.html">
-            <div class="related-post-card-title">VPS 选购与使用指南：五个常见场景的配置与避坑</div>
-            <div class="related-post-card-tags"><span>VPS</span><span>DevOps</span><span>运维</span></div>
-          </a>
-          <a class="related-post-card" href="github-actions-auto-index-blog-cicd.html">
-            <div class="related-post-card-title">GitHub Actions 自动索引：我的静态博客 CI/CD 进化之路</div>
-            <div class="related-post-card-tags"><span>GitHub Actions</span><span>CI/CD</span><span>DevOps</span></div>
-          </a>
-          </div>
-        </div>
-
-        <!-- /Related Static -->
 
         <p>将 Next.js + Prisma 项目部署到 Vercel 时，构建阶段的数据库操作常常踩坑。本文记录了一次真实的外键约束失败案例，从问题定位到根因分析再到解决方案，完整复盘整个过程。</p>
 <h2>问题背景</h2>
@@ -421,6 +390,35 @@ DELETE FROM habits WHERE id = 'default';
 <p>解决方案的关键思想是 <strong>构建时数据修复</strong>：在 CI/CD 的 build 阶段，schema 同步之前，先执行幂等的修复 SQL 确保数据一致性。这是一种通用的 CI/CD 模式，不限于 Prisma 或 Vercel。</p>
 <p>更长期的解决方案是做好数据迁移，将占位符数据（如 <code>habit_id = "default"</code>）替换为真实的数据关系，然后移除修复 SQL，保持构建流程的简洁。</p>
 
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="prisma-orm-完全指南从入门到实战.html">
+            <div class="related-post-card-title">Prisma ORM 完全指南：从入门到实战</div>
+            <div class="related-post-card-tags"><span>Prisma</span><span>TypeScript</span><span>PostgreSQL</span></div>
+          </a>
+          <a class="related-post-card" href="choosing-and-running-a-vps.html">
+            <div class="related-post-card-title">主流 VPS 的选择和使用</div>
+            <div class="related-post-card-tags"><span>VPS</span><span>DevOps</span><span>运维</span></div>
+          </a>
+          <a class="related-post-card" href="从-openclaw-到-hermesai-agent-工作区迁移完整记录.html">
+            <div class="related-post-card-title">从 OpenClaw 到 Hermes：AI Agent 工作区迁移完整记录</div>
+            <div class="related-post-card-tags"><span>OpenClaw</span><span>Hermes</span><span>AI Agent</span></div>
+          </a>
+          <a class="related-post-card" href="vps-选购与使用指南五个常见场景的配置与避坑.html">
+            <div class="related-post-card-title">VPS 选购与使用指南：五个常见场景的配置与避坑</div>
+            <div class="related-post-card-tags"><span>VPS</span><span>DevOps</span><span>运维</span></div>
+          </a>
+          <a class="related-post-card" href="github-actions-auto-index-blog-cicd.html">
+            <div class="related-post-card-title">GitHub Actions 自动索引：我的静态博客 CI/CD 进化之路</div>
+            <div class="related-post-card-tags"><span>GitHub Actions</span><span>CI/CD</span><span>DevOps</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
+
         <!-- Post Copyright & License Card -->
         <div class="post-copyright-card">
           <div class="copyright-header">
@@ -486,7 +484,6 @@ DELETE FROM habits WHERE id = 'default';
   <script defer src="../../assets/js/main.js"></script>
   <script defer src="../../assets/js/article.js"></script>
   <script defer src="../../assets/js/share.js"></script>
-  <script defer src="../../assets/js/back-to-top.js"></script>
   <!-- Back to Top & Reading Progress -->
   <button class="back-to-top" id="backToTop" aria-label="回到顶部">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -519,10 +516,10 @@ DELETE FROM habits WHERE id = 'default';
       <div class="post-info-section" id="postSidebarTags">
         <div class="post-info-label">标签</div>
         <div class="post-info-links">
-          <a href="../../blog/index.html?tag=Nextjs" class="post-info-link"># Next.js</a>
+          <a href="../../blog/index.html?tag=Next.js" class="post-info-link"># Next.js</a>
           <a href="../../blog/index.html?tag=Prisma" class="post-info-link"># Prisma</a>
           <a href="../../blog/index.html?tag=Vercel" class="post-info-link"># Vercel</a>
-          <a href="../../blog/index.html?tag=部署" class="post-info-link"># 部署</a>
+          <a href="../../blog/index.html?tag=%E9%83%A8%E7%BD%B2" class="post-info-link"># 部署</a>
           <a href="../../blog/index.html?tag=DevOps" class="post-info-link"># DevOps</a>
         </div>
       </div>

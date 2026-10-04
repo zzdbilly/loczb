@@ -76,11 +76,25 @@
     return loadingPromise;
   }
 
+  // 归一化：忽略大小写、空白与标点（保留中日韩字符）。用于兜底匹配旧版文章侧栏生成的
+  // 「去空格」标签链接（如 ?tag=ContainerQueries → "Container Queries"），这些链接可能
+  // 已被外部引用或搜索引擎收录，2026-10-05 修复生成端后仍需兼容。
+  function normTag(s) {
+    return String(s || '').toLowerCase().replace(/[^0-9a-z\u4e00-\u9fff]+/g, '');
+  }
+
   function postMatchesFilter(post, filter) {
     if (filter === 'all' || filter === '全部') return true;
     if ((post.category || '') === filter) return true;
     var tags = post.tags || [];
-    return tags.indexOf(filter) !== -1;
+    if (tags.indexOf(filter) !== -1) return true;
+    var nf = normTag(filter);
+    if (!nf) return false;
+    if (normTag(post.category) === nf) return true;
+    for (var i = 0; i < tags.length; i++) {
+      if (normTag(tags[i]) === nf) return true;
+    }
+    return false;
   }
 
   // 动态卡片（客户端渲染）：结构与构建期卡片一致，但不带 animate-on-scroll

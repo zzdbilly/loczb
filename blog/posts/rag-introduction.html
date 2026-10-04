@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="zh-CN" data-theme="dark">
 <head>
-  <script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+  <script>document.documentElement.classList.add("js");try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
     <meta charset="UTF-8">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://static.cloudflareinsights.com https://loczb-comments.billycust716.workers.dev; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://loczb-comments.billycust716.workers.dev https://dashscope.aliyuncs.com https://709527.xyz https://www.709527.xyz https://cloudflareinsights.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
     <script>/* 反点击劫持兜底：GitHub Pages 无法下发 X-Frame-Options / CSP frame-ancestors */(function(){if(self===top)return;try{top.location=self.location}catch(e){}setTimeout(function(){if(self!==top){document.documentElement.style.display='none';}},400);})();</script>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>RAG 检索增强生成入门：从理念到落地 | 张小猛 - loczb</title>
     <meta name="description" content="RAG 检索增强生成完整入门指南：文档分块策略、嵌入模型选型、向量数据库对比、LangChain 实现、HyDE/RAG-Fusion 高级优化与 RAGAS 评估框架">
 
@@ -54,7 +54,7 @@
     }
     </script>
 
-    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/style.css?v=20261004-spacing4">
     <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
     <link rel="alternate icon" href="../../assets/images/favicon.ico">
     <link rel="canonical" href="https://709527.xyz/blog/posts/rag-introduction.html">
@@ -86,8 +86,6 @@
   </nav>
   <!-- Particle Canvas Background -->
   <canvas id="particle-canvas" class="particle-canvas" aria-hidden="true"></canvas>
-
-  <div class="scroll-progress"></div>
 
   <main class="section" style="padding-bottom: 0; padding-top: var(--space-4xl);">
     <div class="container container-narrow">
@@ -144,35 +142,6 @@
           </details>
         </div>
         <!-- /Series Card Widget -->
-
-        <!-- Related Static -->
-        <div class="related-posts">
-          <div class="related-posts-title">📌 相关文章</div>
-          <div class="related-posts-list">
-          <a class="related-post-card" href="local-rag-ollama.html">
-            <div class="related-post-card-title">RAG 本地实践：用 Ollama + Embedding 搭建私有知识库</div>
-            <div class="related-post-card-tags"><span>RAG</span><span>Ollama</span><span>LLM</span></div>
-          </a>
-          <a class="related-post-card" href="agentic-ai-架构演进从-chatbot-到自主-agent.html">
-            <div class="related-post-card-title">Agentic AI 架构演进：从 Chatbot 到自主 Agent</div>
-            <div class="related-post-card-tags"><span>AI</span><span>Agent</span><span>架构</span></div>
-          </a>
-          <a class="related-post-card" href="ai-编程助手进化论从结对编程到自主编程团队-2026.html">
-            <div class="related-post-card-title">AI 编程助手进化论：从结对编程到自主编程团队 (2026)</div>
-            <div class="related-post-card-tags"><span>AI</span><span>Agent</span><span>AI 工具</span></div>
-          </a>
-          <a class="related-post-card" href="mcp-server-deep-dive.html">
-            <div class="related-post-card-title">MCP 协议深入实战：从入门到编写自定义 MCP Server</div>
-            <div class="related-post-card-tags"><span>AI</span><span>MCP</span><span>工具调用</span></div>
-          </a>
-          <a class="related-post-card" href="ai-code-editor-review-cursor-windsurf-copilot.html">
-            <div class="related-post-card-title">AI 代码编辑器深度横评：Cursor vs Windsurf vs Copilot</div>
-            <div class="related-post-card-tags"><span>AI</span><span>AI 工具</span><span>开发技巧</span></div>
-          </a>
-          </div>
-        </div>
-
-        <!-- /Related Static -->
 
         <p>大语言模型（LLM）能力很强，但有两个硬伤：知识截止——训练数据有截止日期，无法回答训练之后的事；幻觉问题——不知道的也敢编，一本正经地胡说八道。RAG（Retrieval-Augmented Generation，检索增强生成）就是解决这两个问题的主流方案。</p>
 
@@ -1227,6 +1196,35 @@ result = agent_executor.invoke({
         <strong>一句话总结</strong>：RAG 的核心是"先查资料再回答"。落地路径：分块选递归 → 嵌入选 BGE → 向量库选 Qdrant → 先加 Reranker → 再加混合检索 → 最后考虑 Agentic RAG。优化不是一步到位，而是逐层叠加。
       </div>
 
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="local-rag-ollama.html">
+            <div class="related-post-card-title">RAG 本地实践：用 Ollama + Embedding 搭建私有知识库</div>
+            <div class="related-post-card-tags"><span>RAG</span><span>Ollama</span><span>LLM</span></div>
+          </a>
+          <a class="related-post-card" href="agentic-ai-架构演进从-chatbot-到自主-agent.html">
+            <div class="related-post-card-title">Agentic AI 架构演进：从 Chatbot 到自主 Agent</div>
+            <div class="related-post-card-tags"><span>AI</span><span>Agent</span><span>架构</span></div>
+          </a>
+          <a class="related-post-card" href="ai-编程助手进化论从结对编程到自主编程团队-2026.html">
+            <div class="related-post-card-title">AI 编程助手进化论：从结对编程到自主编程团队 (2026)</div>
+            <div class="related-post-card-tags"><span>AI</span><span>Agent</span><span>AI 工具</span></div>
+          </a>
+          <a class="related-post-card" href="mcp-server-deep-dive.html">
+            <div class="related-post-card-title">MCP 协议深入实战：从入门到编写自定义 MCP Server</div>
+            <div class="related-post-card-tags"><span>AI</span><span>MCP</span><span>工具调用</span></div>
+          </a>
+          <a class="related-post-card" href="ai-code-editor-review-cursor-windsurf-copilot.html">
+            <div class="related-post-card-title">AI 代码编辑器深度横评：Cursor vs Windsurf vs Copilot</div>
+            <div class="related-post-card-tags"><span>AI</span><span>AI 工具</span><span>开发技巧</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
+
         <!-- Post Copyright & License Card -->
         <div class="post-copyright-card">
           <div class="copyright-header">
@@ -1306,7 +1304,6 @@ result = agent_executor.invoke({
   <script defer src="../../assets/js/main.js"></script>
   <script defer src="../../assets/js/article.js"></script>
   <script defer src="../../assets/js/share.js"></script>
-  <script defer src="../../assets/js/back-to-top.js"></script>
   <!-- Back to Top & Reading Progress -->
   <button class="back-to-top" id="backToTop" aria-label="回到顶部">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1340,9 +1337,9 @@ result = agent_executor.invoke({
         <div class="post-info-label">标签</div>
         <div class="post-info-links">
           <a href="../../blog/index.html?tag=RAG" class="post-info-link"># RAG</a>
-          <a href="../../blog/index.html?tag=检索增强生成" class="post-info-link"># 检索增强生成</a>
+          <a href="../../blog/index.html?tag=%E6%A3%80%E7%B4%A2%E5%A2%9E%E5%BC%BA%E7%94%9F%E6%88%90" class="post-info-link"># 检索增强生成</a>
           <a href="../../blog/index.html?tag=LLM" class="post-info-link"># LLM</a>
-          <a href="../../blog/index.html?tag=向量数据库" class="post-info-link"># 向量数据库</a>
+          <a href="../../blog/index.html?tag=%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93" class="post-info-link"># 向量数据库</a>
           <a href="../../blog/index.html?tag=Embedding" class="post-info-link"># Embedding</a>
           <a href="../../blog/index.html?tag=LangChain" class="post-info-link"># LangChain</a>
           <a href="../../blog/index.html?tag=AI" class="post-info-link"># AI</a>

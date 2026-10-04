@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="zh-CN" data-theme="dark">
 <head>
-  <script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+  <script>document.documentElement.classList.add("js");try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
     <meta charset="UTF-8">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://static.cloudflareinsights.com https://loczb-comments.billycust716.workers.dev; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://loczb-comments.billycust716.workers.dev https://dashscope.aliyuncs.com https://709527.xyz https://www.709527.xyz https://cloudflareinsights.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
     <script>/* 反点击劫持兜底：GitHub Pages 无法下发 X-Frame-Options / CSP frame-ancestors */(function(){if(self===top)return;try{top.location=self.location}catch(e){}setTimeout(function(){if(self!==top){document.documentElement.style.display='none';}},400);})();</script>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>程序员的周五晚上，如何有意义地度过 | 张小猛 - loczb</title>
     <meta name="description" content="周五晚不该是工作的延续，也不该是报复性熬夜。给每一个辛苦了一周的程序员一份可落地的框架：告别、转换、收尾，三件小事让周末真正休息过来。">
 
@@ -55,7 +55,7 @@
 }
     </script>
 
-    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/style.css?v=20261004-spacing4">
     <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
     <link rel="alternate icon" href="../../assets/images/favicon.ico">
     <link rel="canonical" href="https://709527.xyz/blog/posts/程序员的周五晚上如何有意义地度过.html">
@@ -88,8 +88,6 @@
   <!-- Particle Canvas Background -->
   <canvas id="particle-canvas" class="particle-canvas" aria-hidden="true"></canvas>
 
-  <div class="scroll-progress"></div>
-
   <main class="section" style="padding-bottom: 0; padding-top: var(--space-4xl);">
     <div class="container container-narrow">
       <a href="../index.html" class="back-link">
@@ -115,35 +113,6 @@
         </div>
 
         
-
-        <!-- Related Static -->
-        <div class="related-posts">
-          <div class="related-posts-title">📌 相关文章</div>
-          <div class="related-posts-list">
-          <a class="related-post-card" href="周末如何度过才有意义.html">
-            <div class="related-post-card-title">周末如何度过才有意义</div>
-            <div class="related-post-card-tags"><span>思考</span><span>生活方式</span></div>
-          </a>
-          <a class="related-post-card" href="how-engineers-report.html">
-            <div class="related-post-card-title">技术人员如何做好汇报</div>
-            <div class="related-post-card-tags"><span>职场</span><span>沟通</span><span>汇报</span></div>
-          </a>
-          <a class="related-post-card" href="quick-energy-recovery.html">
-            <div class="related-post-card-title">如何快速恢复能量，让自己快乐起来</div>
-            <div class="related-post-card-tags"><span>能量管理</span><span>情绪</span><span>生活方式</span></div>
-          </a>
-          <a class="related-post-card" href="和ai结对写代码这一年我学会了怎么放手.html">
-            <div class="related-post-card-title">和 AI 结对写代码这一年，我学会了怎么放手</div>
-            <div class="related-post-card-tags"><span>思考</span><span>AI</span><span>开发习惯</span></div>
-          </a>
-          <a class="related-post-card" href="如何维持好自己的健康写给程序员的长期运维指南.html">
-            <div class="related-post-card-title">如何维持好自己的健康：写给程序员的长期运维指南</div>
-            <div class="related-post-card-tags"><span>健康</span><span>生活方式</span><span>程序员</span></div>
-          </a>
-          </div>
-        </div>
-
-        <!-- /Related Static -->
 
         <p>周五晚上，你的键盘是不是还在发光？</p>
 <p>茶水间的咖啡机在下午五点半准时罢工，群里弹出最后一条 bug 修复通知，你点了「已解决」，屏幕暗了一下又亮起来——因为还有一行 TODO 等着你。</p>
@@ -228,6 +197,35 @@
 <p>从今晚开始，试着把周五晚上当成一周给自己的一个小小的交付仪式。你会发现，这不只是周末变舒服了，连下周上班的状态，都会从周一早上就慢半拍地好起来。</p>
 <p>祝你，周五愉快。今晚先关机。</p>
 
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="周末如何度过才有意义.html">
+            <div class="related-post-card-title">周末如何度过才有意义</div>
+            <div class="related-post-card-tags"><span>思考</span><span>生活方式</span></div>
+          </a>
+          <a class="related-post-card" href="how-engineers-report.html">
+            <div class="related-post-card-title">技术人员如何做好汇报</div>
+            <div class="related-post-card-tags"><span>职场</span><span>沟通</span><span>汇报</span></div>
+          </a>
+          <a class="related-post-card" href="quick-energy-recovery.html">
+            <div class="related-post-card-title">如何快速恢复能量，让自己快乐起来</div>
+            <div class="related-post-card-tags"><span>能量管理</span><span>情绪</span><span>生活方式</span></div>
+          </a>
+          <a class="related-post-card" href="和ai结对写代码这一年我学会了怎么放手.html">
+            <div class="related-post-card-title">和 AI 结对写代码这一年，我学会了怎么放手</div>
+            <div class="related-post-card-tags"><span>思考</span><span>AI</span><span>开发习惯</span></div>
+          </a>
+          <a class="related-post-card" href="如何维持好自己的健康写给程序员的长期运维指南.html">
+            <div class="related-post-card-title">如何维持好自己的健康：写给程序员的长期运维指南</div>
+            <div class="related-post-card-tags"><span>健康</span><span>生活方式</span><span>程序员</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
+
         <!-- Post Copyright & License Card -->
         <div class="post-copyright-card">
           <div class="copyright-header">
@@ -293,7 +291,6 @@
   <script defer src="../../assets/js/main.js"></script>
   <script defer src="../../assets/js/article.js"></script>
   <script defer src="../../assets/js/share.js"></script>
-  <script defer src="../../assets/js/back-to-top.js"></script>
   <!-- Back to Top & Reading Progress -->
   <button class="back-to-top" id="backToTop" aria-label="回到顶部">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -326,9 +323,9 @@
       <div class="post-info-section" id="postSidebarTags">
         <div class="post-info-label">标签</div>
         <div class="post-info-links">
-          <a href="../../blog/index.html?tag=思考" class="post-info-link"># 思考</a>
-          <a href="../../blog/index.html?tag=生活方式" class="post-info-link"># 生活方式</a>
-          <a href="../../blog/index.html?tag=效率" class="post-info-link"># 效率</a>
+          <a href="../../blog/index.html?tag=%E6%80%9D%E8%80%83" class="post-info-link"># 思考</a>
+          <a href="../../blog/index.html?tag=%E7%94%9F%E6%B4%BB%E6%96%B9%E5%BC%8F" class="post-info-link"># 生活方式</a>
+          <a href="../../blog/index.html?tag=%E6%95%88%E7%8E%87" class="post-info-link"># 效率</a>
         </div>
       </div>
     </div>

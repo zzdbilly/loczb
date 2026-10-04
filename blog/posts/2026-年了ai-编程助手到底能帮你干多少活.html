@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="zh-CN" data-theme="dark">
 <head>
-  <script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+  <script>document.documentElement.classList.add("js");try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
     <meta charset="UTF-8">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://static.cloudflareinsights.com https://loczb-comments.billycust716.workers.dev; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://loczb-comments.billycust716.workers.dev https://dashscope.aliyuncs.com https://709527.xyz https://www.709527.xyz https://cloudflareinsights.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
     <script>/* 反点击劫持兜底：GitHub Pages 无法下发 X-Frame-Options / CSP frame-ancestors */(function(){if(self===top)return;try{top.location=self.location}catch(e){}setTimeout(function(){if(self!==top){document.documentElement.style.display='none';}},400);})();</script>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>2026 年了，AI 编程助手到底能帮你干多少活？ | 张小猛 - loczb</title>
     <meta name="description" content="结合当前 Agent 编程趋势，聊聊 AI 助手能做/不能做/边界三层认知、五种实战协作心法，以及开发者如何重新定位自己">
 
@@ -55,7 +55,7 @@
 }
     </script>
 
-    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/style.css?v=20261004-spacing4">
     <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
     <link rel="alternate icon" href="../../assets/images/favicon.ico">
     <link rel="canonical" href="https://709527.xyz/blog/posts/2026-年了ai-编程助手到底能帮你干多少活.html">
@@ -88,8 +88,6 @@
   <!-- Particle Canvas Background -->
   <canvas id="particle-canvas" class="particle-canvas" aria-hidden="true"></canvas>
 
-  <div class="scroll-progress"></div>
-
   <main class="section" style="padding-bottom: 0; padding-top: var(--space-4xl);">
     <div class="container container-narrow">
       <a href="../index.html" class="back-link">
@@ -118,35 +116,6 @@
         </div>
 
         
-
-        <!-- Related Static -->
-        <div class="related-posts">
-          <div class="related-posts-title">📌 相关文章</div>
-          <div class="related-posts-list">
-          <a class="related-post-card" href="ai-助手定时任务投递指南从-agent-废话到-no-agent-脚本.html">
-            <div class="related-post-card-title">AI 助手定时任务投递指南：从 Agent 废话到 No-Agent 脚本</div>
-            <div class="related-post-card-tags"><span>AI</span><span>DevOps</span><span>前端</span></div>
-          </a>
-          <a class="related-post-card" href="ai-编程助手进化论从结对编程到自主编程团队-2026.html">
-            <div class="related-post-card-title">AI 编程助手进化论：从结对编程到自主编程团队 (2026)</div>
-            <div class="related-post-card-tags"><span>AI</span><span>Agent</span><span>AI 工具</span></div>
-          </a>
-          <a class="related-post-card" href="ai-编码代理实战从-copilot-到-agent.html">
-            <div class="related-post-card-title">AI 编码代理实战：从 Copilot 到 Agent</div>
-            <div class="related-post-card-tags"><span>AI</span><span>AI编程</span><span>Agent</span></div>
-          </a>
-          <a class="related-post-card" href="ai-agent-实战用子代理并行驱动多项目开发.html">
-            <div class="related-post-card-title">AI Agent 实战：用子代理并行驱动多项目开发</div>
-            <div class="related-post-card-tags"><span>AI</span><span>Agent</span><span>工程实践</span></div>
-          </a>
-          <a class="related-post-card" href="agentic-ai-架构演进从-chatbot-到自主-agent.html">
-            <div class="related-post-card-title">Agentic AI 架构演进：从 Chatbot 到自主 Agent</div>
-            <div class="related-post-card-tags"><span>AI</span><span>Agent</span><span>架构</span></div>
-          </a>
-          </div>
-        </div>
-
-        <!-- /Related Static -->
 
         <h2>2026 年了，AI 编程助手到底能帮你干多少活？</h2>
 <p>如果说 2024 年是 AI 编程助手的"尝鲜期"，2025 年是"工具期"，那么 2026 年已经彻底进入了"<strong>Agent 期</strong>"。这一年，GPT-5.6 三变体落地、Claude 在 SWE-bench 上持续刷榜、GLM-5.2 把上下文拉到 1M、多智能体协作从实验室走向生产环境。曾经那个"帮你补全代码"的玩具，已经进化成能独立跑测试、改 bug、提交 PR 的"数字同事"。</p>
@@ -315,6 +284,35 @@ agent-cli run \
 <p>所以，与其焦虑"程序员会不会失业"，不如问自己一个更实际的问题：<strong>"我今天有没有比昨天更擅长驾驭这套工具？"</strong> 答案如果是肯定的，那你根本不用担心失业——你正在变得更贵。</p>
 <p>AI 是你的加速器，不是你的掘墓人。前提是——<strong>你得学会骑它，而不是被它拖走。</strong></p>
 
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="ai-助手定时任务投递指南从-agent-废话到-no-agent-脚本.html">
+            <div class="related-post-card-title">AI 助手定时任务投递指南：从 Agent 废话到 No-Agent 脚本</div>
+            <div class="related-post-card-tags"><span>AI</span><span>DevOps</span><span>前端</span></div>
+          </a>
+          <a class="related-post-card" href="ai-编程助手进化论从结对编程到自主编程团队-2026.html">
+            <div class="related-post-card-title">AI 编程助手进化论：从结对编程到自主编程团队 (2026)</div>
+            <div class="related-post-card-tags"><span>AI</span><span>Agent</span><span>AI 工具</span></div>
+          </a>
+          <a class="related-post-card" href="ai-编码代理实战从-copilot-到-agent.html">
+            <div class="related-post-card-title">AI 编码代理实战：从 Copilot 到 Agent</div>
+            <div class="related-post-card-tags"><span>AI</span><span>AI编程</span><span>Agent</span></div>
+          </a>
+          <a class="related-post-card" href="ai-agent-实战用子代理并行驱动多项目开发.html">
+            <div class="related-post-card-title">AI Agent 实战：用子代理并行驱动多项目开发</div>
+            <div class="related-post-card-tags"><span>AI</span><span>Agent</span><span>工程实践</span></div>
+          </a>
+          <a class="related-post-card" href="agentic-ai-架构演进从-chatbot-到自主-agent.html">
+            <div class="related-post-card-title">Agentic AI 架构演进：从 Chatbot 到自主 Agent</div>
+            <div class="related-post-card-tags"><span>AI</span><span>Agent</span><span>架构</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
+
         <!-- Post Copyright & License Card -->
         <div class="post-copyright-card">
           <div class="copyright-header">
@@ -380,7 +378,6 @@ agent-cli run \
   <script defer src="../../assets/js/main.js"></script>
   <script defer src="../../assets/js/article.js"></script>
   <script defer src="../../assets/js/share.js"></script>
-  <script defer src="../../assets/js/back-to-top.js"></script>
   <!-- Back to Top & Reading Progress -->
   <button class="back-to-top" id="backToTop" aria-label="回到顶部">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -414,11 +411,11 @@ agent-cli run \
         <div class="post-info-label">标签</div>
         <div class="post-info-links">
           <a href="../../blog/index.html?tag=AI" class="post-info-link"># AI</a>
-          <a href="../../blog/index.html?tag=前端" class="post-info-link"># 前端</a>
-          <a href="../../blog/index.html?tag=开发" class="post-info-link"># 开发</a>
+          <a href="../../blog/index.html?tag=%E5%89%8D%E7%AB%AF" class="post-info-link"># 前端</a>
+          <a href="../../blog/index.html?tag=%E5%BC%80%E5%8F%91" class="post-info-link"># 开发</a>
           <a href="../../blog/index.html?tag=Agent" class="post-info-link"># Agent</a>
-          <a href="../../blog/index.html?tag=编程助手" class="post-info-link"># 编程助手</a>
-          <a href="../../blog/index.html?tag=效率" class="post-info-link"># 效率</a>
+          <a href="../../blog/index.html?tag=%E7%BC%96%E7%A8%8B%E5%8A%A9%E6%89%8B" class="post-info-link"># 编程助手</a>
+          <a href="../../blog/index.html?tag=%E6%95%88%E7%8E%87" class="post-info-link"># 效率</a>
         </div>
       </div>
     </div>

@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="zh-CN" data-theme="dark">
 <head>
-  <script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+  <script>document.documentElement.classList.add("js");try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
     <meta charset="UTF-8">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://static.cloudflareinsights.com https://loczb-comments.billycust716.workers.dev; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://loczb-comments.billycust716.workers.dev https://dashscope.aliyuncs.com https://709527.xyz https://www.709527.xyz https://cloudflareinsights.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
     <script>/* 反点击劫持兜底：GitHub Pages 无法下发 X-Frame-Options / CSP frame-ancestors */(function(){if(self===top)return;try{top.location=self.location}catch(e){}setTimeout(function(){if(self!==top){document.documentElement.style.display='none';}},400);})();</script>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>PostgreSQL 索引优化实战 | 张小猛 - loczb</title>
     <meta name="description" content="PostgreSQL 索引优化实战：B-Tree、GiST、GIN 索引类型对比，复合索引、部分索引设计，EXPLAIN 执行计划分析与慢查询优化">
 
@@ -54,7 +54,7 @@
     }
     </script>
 
-    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/style.css?v=20261004-spacing4">
     <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
     <link rel="alternate icon" href="../../assets/images/favicon.ico">
     <link rel="canonical" href="https://709527.xyz/blog/posts/postgresql-index-optimization.html">
@@ -86,8 +86,6 @@
   </nav>
   <!-- Particle Canvas Background -->
   <canvas id="particle-canvas" class="particle-canvas" aria-hidden="true"></canvas>
-
-  <div class="scroll-progress"></div>
 
   <main class="section" style="padding-bottom: 0; padding-top: var(--space-4xl);">
     <div class="container container-narrow">
@@ -141,31 +139,6 @@
           </details>
         </div>
         <!-- /Series Card Widget -->
-
-        <!-- Related Static -->
-        <div class="related-posts">
-          <div class="related-posts-title">📌 相关文章</div>
-          <div class="related-posts-list">
-          <a class="related-post-card" href="mysql-索引优化实战从慢查询到最佳实践.html">
-            <div class="related-post-card-title">MySQL 索引优化实战：从慢查询到最佳实践</div>
-            <div class="related-post-card-tags"><span>MySQL</span><span>数据库</span><span>索引优化</span></div>
-          </a>
-          <a class="related-post-card" href="postgresql-从-17-到-18生产环境升级实战.html">
-            <div class="related-post-card-title">PostgreSQL 从 17 到 18：生产环境升级实战</div>
-            <div class="related-post-card-tags"><span>PostgreSQL</span><span>数据库</span><span>DevOps</span></div>
-          </a>
-          <a class="related-post-card" href="prisma-orm-完全指南从入门到实战.html">
-            <div class="related-post-card-title">Prisma ORM 完全指南：从入门到实战</div>
-            <div class="related-post-card-tags"><span>Prisma</span><span>TypeScript</span><span>PostgreSQL</span></div>
-          </a>
-          <a class="related-post-card" href="sqlite-wal-performance.html">
-            <div class="related-post-card-title">SQLite 进阶：WAL 模式与性能优化</div>
-            <div class="related-post-card-tags"><span>SQLite</span><span>数据库</span><span>WAL</span></div>
-          </a>
-          </div>
-        </div>
-
-        <!-- /Related Static -->
 
         <p>数据库性能优化中，索引是最重要的手段——没有之一。PostgreSQL 提供了丰富的索引类型和灵活的索引策略，但用错了比不用更糟：不仅查询没变快，写入还变慢了，磁盘空间也白白浪费。</p>
 
@@ -1202,6 +1175,31 @@ SELECT * FROM orders WHERE id &gt; 999980 ORDER BY id LIMIT 21;
         <strong>一句话总结</strong>：索引设计 = 选对类型 + 排好列序 + 控好范围。B-Tree 是万金油但不是万能药；GIN 搞定 JSONB 和数组；部分索引省空间又省维护；覆盖索引免回表；EXPLAIN 是你的听诊器。建索引前先 EXPLAIN，建完后再 EXPLAIN 验证——永远不要猜。
       </div>
 
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="mysql-索引优化实战从慢查询到最佳实践.html">
+            <div class="related-post-card-title">MySQL 索引优化实战：从慢查询到最佳实践</div>
+            <div class="related-post-card-tags"><span>MySQL</span><span>数据库</span><span>索引优化</span></div>
+          </a>
+          <a class="related-post-card" href="postgresql-从-17-到-18生产环境升级实战.html">
+            <div class="related-post-card-title">PostgreSQL 从 17 到 18：生产环境升级实战</div>
+            <div class="related-post-card-tags"><span>PostgreSQL</span><span>数据库</span><span>DevOps</span></div>
+          </a>
+          <a class="related-post-card" href="prisma-orm-完全指南从入门到实战.html">
+            <div class="related-post-card-title">Prisma ORM 完全指南：从入门到实战</div>
+            <div class="related-post-card-tags"><span>Prisma</span><span>TypeScript</span><span>PostgreSQL</span></div>
+          </a>
+          <a class="related-post-card" href="sqlite-wal-performance.html">
+            <div class="related-post-card-title">SQLite 进阶：WAL 模式与性能优化</div>
+            <div class="related-post-card-tags"><span>SQLite</span><span>数据库</span><span>WAL</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
+
         <!-- Post Copyright & License Card -->
         <div class="post-copyright-card">
           <div class="copyright-header">
@@ -1281,7 +1279,6 @@ SELECT * FROM orders WHERE id &gt; 999980 ORDER BY id LIMIT 21;
   <script defer src="../../assets/js/main.js"></script>
   <script defer src="../../assets/js/article.js"></script>
   <script defer src="../../assets/js/share.js"></script>
-  <script defer src="../../assets/js/back-to-top.js"></script>
   <!-- Back to Top & Reading Progress -->
   <button class="back-to-top" id="backToTop" aria-label="回到顶部">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1315,12 +1312,12 @@ SELECT * FROM orders WHERE id &gt; 999980 ORDER BY id LIMIT 21;
         <div class="post-info-label">标签</div>
         <div class="post-info-links">
           <a href="../../blog/index.html?tag=PostgreSQL" class="post-info-link"># PostgreSQL</a>
-          <a href="../../blog/index.html?tag=索引优化" class="post-info-link"># 索引优化</a>
-          <a href="../../blog/index.html?tag=BTree" class="post-info-link"># B-Tree</a>
+          <a href="../../blog/index.html?tag=%E7%B4%A2%E5%BC%95%E4%BC%98%E5%8C%96" class="post-info-link"># 索引优化</a>
+          <a href="../../blog/index.html?tag=B-Tree" class="post-info-link"># B-Tree</a>
           <a href="../../blog/index.html?tag=GIN" class="post-info-link"># GIN</a>
           <a href="../../blog/index.html?tag=EXPLAIN" class="post-info-link"># EXPLAIN</a>
-          <a href="../../blog/index.html?tag=慢查询" class="post-info-link"># 慢查询</a>
-          <a href="../../blog/index.html?tag=数据库" class="post-info-link"># 数据库</a>
+          <a href="../../blog/index.html?tag=%E6%85%A2%E6%9F%A5%E8%AF%A2" class="post-info-link"># 慢查询</a>
+          <a href="../../blog/index.html?tag=%E6%95%B0%E6%8D%AE%E5%BA%93" class="post-info-link"># 数据库</a>
         </div>
       </div>
     </div>

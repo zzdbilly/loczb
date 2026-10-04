@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="zh-CN" data-theme="dark">
 <head>
-  <script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+  <script>document.documentElement.classList.add("js");try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
     <meta charset="UTF-8">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://static.cloudflareinsights.com https://loczb-comments.billycust716.workers.dev; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://loczb-comments.billycust716.workers.dev https://dashscope.aliyuncs.com https://709527.xyz https://www.709527.xyz https://cloudflareinsights.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
     <script>/* 反点击劫持兜底：GitHub Pages 无法下发 X-Frame-Options / CSP frame-ancestors */(function(){if(self===top)return;try{top.location=self.location}catch(e){}setTimeout(function(){if(self!==top){document.documentElement.style.display='none';}},400);})();</script>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>像规划城市一样设计系统：城市规划给软件架构的启示 | 张小猛 - loczb</title>
     <meta name="description" content="城市和软件系统的本质惊人相似——功能分区映射限界上下文、交通网络映射数据流、基础设施先行映射可观测性、有机更新映射演进式架构。从城市规划的百年智慧中，找到软件架构的跨界启发">
 
@@ -54,7 +54,7 @@
     }
     </script>
 
-    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/style.css?v=20261004-spacing4">
     <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
     <link rel="alternate icon" href="../../assets/images/favicon.ico">
     <link rel="canonical" href="https://709527.xyz/blog/posts/urban-planning-inspires-software-architecture.html">
@@ -87,8 +87,6 @@
   <!-- Particle Canvas Background -->
   <canvas id="particle-canvas" class="particle-canvas" aria-hidden="true"></canvas>
 
-  <div class="scroll-progress"></div>
-
   <main class="section" style="padding-bottom: 0; padding-top: var(--space-4xl);">
     <div class="container container-narrow">
       <a href="../index.html" class="back-link">
@@ -115,35 +113,6 @@
         </div>
 
         
-
-        <!-- Related Static -->
-        <div class="related-posts">
-          <div class="related-posts-title">📌 相关文章</div>
-          <div class="related-posts-list">
-          <a class="related-post-card" href="程序员带娃把养孩子当成一个长期运维的系统工程.html">
-            <div class="related-post-card-title">程序员带娃：把养孩子当成一个长期运维的系统工程</div>
-            <div class="related-post-card-tags"><span>程序员</span><span>带娃</span><span>工程思维</span></div>
-          </a>
-          <a class="related-post-card" href="software-engineer-learns-from-manufacturing-lean.html">
-            <div class="related-post-card-title">软件工程师能从制造业学到什么：精益思维重塑开发流程</div>
-            <div class="related-post-card-tags"><span>工程实践</span><span>思考</span><span>工程思维</span></div>
-          </a>
-          <a class="related-post-card" href="how-engineers-report.html">
-            <div class="related-post-card-title">技术人员如何做好汇报</div>
-            <div class="related-post-card-tags"><span>职场</span><span>沟通</span><span>汇报</span></div>
-          </a>
-          <a class="related-post-card" href="和ai结对写代码这一年我学会了怎么放手.html">
-            <div class="related-post-card-title">和 AI 结对写代码这一年，我学会了怎么放手</div>
-            <div class="related-post-card-tags"><span>思考</span><span>AI</span><span>开发习惯</span></div>
-          </a>
-          <a class="related-post-card" href="周末如何度过才有意义.html">
-            <div class="related-post-card-title">周末如何度过才有意义</div>
-            <div class="related-post-card-tags"><span>思考</span><span>生活方式</span></div>
-          </a>
-          </div>
-        </div>
-
-        <!-- /Related Static -->
 
         <blockquote>
 <p>50 万人的城市和 5 万人的城市，不只是规模不同，而是本质上不同的系统。软件也一样——当你从单体走向微服务，从千用户走向百万用户，问题已经不在"写代码"上了。城市规划师花了几百年研究如何让复杂系统有序运转，而这些智慧，恰好是每个架构师需要的。</p>
@@ -734,6 +703,35 @@ if order.amount &gt; 10000 and user.level == &quot;silver&quot; and order.type !
 - <em>《凤凰架构》— 周志明</em>
 - <em>《发布！软件的设计与部署》— Michael T. Nygard</em></p>
 
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="程序员带娃把养孩子当成一个长期运维的系统工程.html">
+            <div class="related-post-card-title">程序员带娃：把养孩子当成一个长期运维的系统工程</div>
+            <div class="related-post-card-tags"><span>程序员</span><span>带娃</span><span>工程思维</span></div>
+          </a>
+          <a class="related-post-card" href="software-engineer-learns-from-manufacturing-lean.html">
+            <div class="related-post-card-title">软件工程师能从制造业学到什么：精益思维重塑开发流程</div>
+            <div class="related-post-card-tags"><span>工程实践</span><span>思考</span><span>工程思维</span></div>
+          </a>
+          <a class="related-post-card" href="how-engineers-report.html">
+            <div class="related-post-card-title">技术人员如何做好汇报</div>
+            <div class="related-post-card-tags"><span>职场</span><span>沟通</span><span>汇报</span></div>
+          </a>
+          <a class="related-post-card" href="和ai结对写代码这一年我学会了怎么放手.html">
+            <div class="related-post-card-title">和 AI 结对写代码这一年，我学会了怎么放手</div>
+            <div class="related-post-card-tags"><span>思考</span><span>AI</span><span>开发习惯</span></div>
+          </a>
+          <a class="related-post-card" href="周末如何度过才有意义.html">
+            <div class="related-post-card-title">周末如何度过才有意义</div>
+            <div class="related-post-card-tags"><span>思考</span><span>生活方式</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
+
         <!-- Post Copyright & License Card -->
         <div class="post-copyright-card">
           <div class="copyright-header">
@@ -799,7 +797,6 @@ if order.amount &gt; 10000 and user.level == &quot;silver&quot; and order.type !
   <script defer src="../../assets/js/main.js"></script>
   <script defer src="../../assets/js/article.js"></script>
   <script defer src="../../assets/js/share.js"></script>
-  <script defer src="../../assets/js/back-to-top.js"></script>
   <!-- Back to Top & Reading Progress -->
   <button class="back-to-top" id="backToTop" aria-label="回到顶部">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -832,10 +829,10 @@ if order.amount &gt; 10000 and user.level == &quot;silver&quot; and order.type !
       <div class="post-info-section" id="postSidebarTags">
         <div class="post-info-label">标签</div>
         <div class="post-info-links">
-          <a href="../../blog/index.html?tag=架构" class="post-info-link"># 架构</a>
-          <a href="../../blog/index.html?tag=系统思维" class="post-info-link"># 系统思维</a>
-          <a href="../../blog/index.html?tag=工程思维" class="post-info-link"># 工程思维</a>
-          <a href="../../blog/index.html?tag=思考" class="post-info-link"># 思考</a>
+          <a href="../../blog/index.html?tag=%E6%9E%B6%E6%9E%84" class="post-info-link"># 架构</a>
+          <a href="../../blog/index.html?tag=%E7%B3%BB%E7%BB%9F%E6%80%9D%E7%BB%B4" class="post-info-link"># 系统思维</a>
+          <a href="../../blog/index.html?tag=%E5%B7%A5%E7%A8%8B%E6%80%9D%E7%BB%B4" class="post-info-link"># 工程思维</a>
+          <a href="../../blog/index.html?tag=%E6%80%9D%E8%80%83" class="post-info-link"># 思考</a>
         </div>
       </div>
     </div>

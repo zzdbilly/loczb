@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="zh-CN" data-theme="dark">
 <head>
-  <script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+  <script>document.documentElement.classList.add("js");try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
     <meta charset="UTF-8">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://static.cloudflareinsights.com https://loczb-comments.billycust716.workers.dev; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://loczb-comments.billycust716.workers.dev https://dashscope.aliyuncs.com https://709527.xyz https://www.709527.xyz https://cloudflareinsights.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
     <script>/* 反点击劫持兜底：GitHub Pages 无法下发 X-Frame-Options / CSP frame-ancestors */(function(){if(self===top)return;try{top.location=self.location}catch(e){}setTimeout(function(){if(self!==top){document.documentElement.style.display='none';}},400);})();</script>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>从 OpenClaw 到 Hermes：AI Agent 工作区迁移完整记录 | 张小猛 - loczb</title>
     <meta name="description" content="一次真实的 AI Agent 平台迁移复盘：身份、记忆、技能、项目与定时任务的全量迁移方向、踩坑与验证方法">
 
@@ -55,7 +55,7 @@
 }
     </script>
 
-    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/style.css?v=20261004-spacing4">
     <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
     <link rel="alternate icon" href="../../assets/images/favicon.ico">
     <link rel="canonical" href="https://709527.xyz/blog/posts/从-openclaw-到-hermesai-agent-工作区迁移完整记录.html">
@@ -87,8 +87,6 @@
   </nav>
   <!-- Particle Canvas Background -->
   <canvas id="particle-canvas" class="particle-canvas" aria-hidden="true"></canvas>
-
-  <div class="scroll-progress"></div>
 
   <main class="section" style="padding-bottom: 0; padding-top: var(--space-4xl);">
     <div class="container container-narrow">
@@ -143,35 +141,6 @@
           </details>
         </div>
         <!-- /Series Card Widget -->
-
-        <!-- Related Static -->
-        <div class="related-posts">
-          <div class="related-posts-title">📌 相关文章</div>
-          <div class="related-posts-list">
-          <a class="related-post-card" href="ai-agent-skill-development.html">
-            <div class="related-post-card-title">AI Agent 技能开发实战：从需求到上线的完整流程</div>
-            <div class="related-post-card-tags"><span>AI Agent</span><span>OpenClaw</span><span>Skill</span></div>
-          </a>
-          <a class="related-post-card" href="choosing-and-running-a-vps.html">
-            <div class="related-post-card-title">主流 VPS 的选择和使用</div>
-            <div class="related-post-card-tags"><span>VPS</span><span>DevOps</span><span>运维</span></div>
-          </a>
-          <a class="related-post-card" href="nextjs-prisma-部署-vercel-常见踩坑外键约束与构建时数据修复.html">
-            <div class="related-post-card-title">Next.js + Prisma 部署 Vercel 常见踩坑：外键约束与构建时数据修复</div>
-            <div class="related-post-card-tags"><span>Next.js</span><span>Prisma</span><span>Vercel</span></div>
-          </a>
-          <a class="related-post-card" href="vps-选购与使用指南五个常见场景的配置与避坑.html">
-            <div class="related-post-card-title">VPS 选购与使用指南：五个常见场景的配置与避坑</div>
-            <div class="related-post-card-tags"><span>VPS</span><span>DevOps</span><span>运维</span></div>
-          </a>
-          <a class="related-post-card" href="github-actions-auto-index-blog-cicd.html">
-            <div class="related-post-card-title">GitHub Actions 自动索引：我的静态博客 CI/CD 进化之路</div>
-            <div class="related-post-card-tags"><span>GitHub Actions</span><span>CI/CD</span><span>DevOps</span></div>
-          </a>
-          </div>
-        </div>
-
-        <!-- /Related Static -->
 
         <h2>写在前面</h2>
 <p>2026 年年中，我做了一个拖延了很久的决定：把跑了大半年的 AI Agent 工作区，从 OpenClaw 整体迁移到 Hermes Agent。</p>
@@ -623,6 +592,35 @@ grep -rl &quot;\.openclaw/workspace-xiaoma&quot; docs/ | xargs -I{} sed -i \
 <p>整个过程最大的感触是：<strong>平台迁移最大的敌人不是技术，是"以为搬完就完了"的侥幸心理</strong>。真正的迁移，是从验收清单全部打勾那一刻才开始的——之后每一次使用，都在检验迁移的质量。</p>
 <p>如果你也在考虑给 AI Agent 换底座，我的建议是：列清单、做备份、放双跑、留回滚，然后果断开始。迁移本身没有想象中那么可怕，可怕的是带着一屋子旧家具，永远不搬家。</p>
 
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="ai-agent-skill-development.html">
+            <div class="related-post-card-title">AI Agent 技能开发实战：从需求到上线的完整流程</div>
+            <div class="related-post-card-tags"><span>AI Agent</span><span>OpenClaw</span><span>Skill</span></div>
+          </a>
+          <a class="related-post-card" href="choosing-and-running-a-vps.html">
+            <div class="related-post-card-title">主流 VPS 的选择和使用</div>
+            <div class="related-post-card-tags"><span>VPS</span><span>DevOps</span><span>运维</span></div>
+          </a>
+          <a class="related-post-card" href="nextjs-prisma-部署-vercel-常见踩坑外键约束与构建时数据修复.html">
+            <div class="related-post-card-title">Next.js + Prisma 部署 Vercel 常见踩坑：外键约束与构建时数据修复</div>
+            <div class="related-post-card-tags"><span>Next.js</span><span>Prisma</span><span>Vercel</span></div>
+          </a>
+          <a class="related-post-card" href="vps-选购与使用指南五个常见场景的配置与避坑.html">
+            <div class="related-post-card-title">VPS 选购与使用指南：五个常见场景的配置与避坑</div>
+            <div class="related-post-card-tags"><span>VPS</span><span>DevOps</span><span>运维</span></div>
+          </a>
+          <a class="related-post-card" href="github-actions-auto-index-blog-cicd.html">
+            <div class="related-post-card-title">GitHub Actions 自动索引：我的静态博客 CI/CD 进化之路</div>
+            <div class="related-post-card-tags"><span>GitHub Actions</span><span>CI/CD</span><span>DevOps</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
+
         <!-- Post Copyright & License Card -->
         <div class="post-copyright-card">
           <div class="copyright-header">
@@ -702,7 +700,6 @@ grep -rl &quot;\.openclaw/workspace-xiaoma&quot; docs/ | xargs -I{} sed -i \
   <script defer src="../../assets/js/main.js"></script>
   <script defer src="../../assets/js/article.js"></script>
   <script defer src="../../assets/js/share.js"></script>
-  <script defer src="../../assets/js/back-to-top.js"></script>
   <!-- Back to Top & Reading Progress -->
   <button class="back-to-top" id="backToTop" aria-label="回到顶部">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -737,8 +734,8 @@ grep -rl &quot;\.openclaw/workspace-xiaoma&quot; docs/ | xargs -I{} sed -i \
         <div class="post-info-links">
           <a href="../../blog/index.html?tag=OpenClaw" class="post-info-link"># OpenClaw</a>
           <a href="../../blog/index.html?tag=Hermes" class="post-info-link"># Hermes</a>
-          <a href="../../blog/index.html?tag=AIAgent" class="post-info-link"># AI Agent</a>
-          <a href="../../blog/index.html?tag=迁移" class="post-info-link"># 迁移</a>
+          <a href="../../blog/index.html?tag=AI%20Agent" class="post-info-link"># AI Agent</a>
+          <a href="../../blog/index.html?tag=%E8%BF%81%E7%A7%BB" class="post-info-link"># 迁移</a>
           <a href="../../blog/index.html?tag=DevOps" class="post-info-link"># DevOps</a>
         </div>
       </div>

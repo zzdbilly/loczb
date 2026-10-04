@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="zh-CN" data-theme="dark">
 <head>
-  <script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+  <script>document.documentElement.classList.add("js");try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
     <meta charset="UTF-8">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://static.cloudflareinsights.com https://loczb-comments.billycust716.workers.dev; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://loczb-comments.billycust716.workers.dev https://dashscope.aliyuncs.com https://709527.xyz https://www.709527.xyz https://cloudflareinsights.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
     <script>/* 反点击劫持兜底：GitHub Pages 无法下发 X-Frame-Options / CSP frame-ancestors */(function(){if(self===top)return;try{top.location=self.location}catch(e){}setTimeout(function(){if(self!==top){document.documentElement.style.display='none';}},400);})();</script>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>HTTPS 与 TLS 1.3 深度解析 | 张小猛 - loczb</title>
     <meta name="description" content="HTTPS 与 TLS 1.3 深度解析：握手流程、ECDHE 密钥交换、证书体系、性能优化与 Nginx 配置最佳实践">
 
@@ -54,7 +54,7 @@
     }
     </script>
 
-    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/style.css?v=20261004-spacing4">
     <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
     <link rel="alternate icon" href="../../assets/images/favicon.ico">
     <link rel="canonical" href="https://709527.xyz/blog/posts/https-tls13-deep-dive.html">
@@ -87,8 +87,6 @@
   <!-- Particle Canvas Background -->
   <canvas id="particle-canvas" class="particle-canvas" aria-hidden="true"></canvas>
 
-  <div class="scroll-progress"></div>
-
   <main class="section" style="padding-bottom: 0; padding-top: var(--space-4xl);">
     <div class="container container-narrow">
       <a href="../index.html" class="back-link">
@@ -115,27 +113,6 @@
         </div>
 
         
-
-        <!-- Related Static -->
-        <div class="related-posts">
-          <div class="related-posts-title">📌 相关文章</div>
-          <div class="related-posts-list">
-          <a class="related-post-card" href="ssh-security-hardening.html">
-            <div class="related-post-card-title">云服务器 SSH 安全加固完整指南</div>
-            <div class="related-post-card-tags"><span>DevOps</span><span>安全</span><span>SSH</span></div>
-          </a>
-          <a class="related-post-card" href="nginx-reverse-proxy-tuning.html">
-            <div class="related-post-card-title">Nginx 反向代理性能调优：从入门到生产</div>
-            <div class="related-post-card-tags"><span>Nginx</span><span>反向代理</span><span>性能调优</span></div>
-          </a>
-          <a class="related-post-card" href="android-app-security-hardening.html">
-            <div class="related-post-card-title">Android 应用签名与安全加固完整指南</div>
-            <div class="related-post-card-tags"><span>Android</span><span>安全</span><span>签名</span></div>
-          </a>
-          </div>
-        </div>
-
-        <!-- /Related Static -->
 
         <p>当你在浏览器地址栏看到那把小锁图标时，背后是一场精密的密码学协作——TLS 协议在几十毫秒内完成了身份验证、密钥协商和加密通道建立。而 TLS 1.3 的出现，让这个过程更快、更安全、更简洁。</p>
 
@@ -842,6 +819,27 @@ curl -sI https://example.com | grep Strict-Transport-Security</code></pre>
         <strong>一句话总结</strong>：TLS 1.3 用 1-RTT 握手和 0-RTT 恢复解决了性能问题，用强制 ECDHE 和精简密码套件解决了安全问题，用降级保护机制解决了兼容性问题。对于 Web 服务，开启 TLS 1.3 + OCSP Stapling + HSTS + HTTP/2 是 2026 年的标配。
       </div>
 
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="ssh-security-hardening.html">
+            <div class="related-post-card-title">云服务器 SSH 安全加固完整指南</div>
+            <div class="related-post-card-tags"><span>DevOps</span><span>安全</span><span>SSH</span></div>
+          </a>
+          <a class="related-post-card" href="nginx-reverse-proxy-tuning.html">
+            <div class="related-post-card-title">Nginx 反向代理性能调优：从入门到生产</div>
+            <div class="related-post-card-tags"><span>Nginx</span><span>反向代理</span><span>性能调优</span></div>
+          </a>
+          <a class="related-post-card" href="android-app-security-hardening.html">
+            <div class="related-post-card-title">Android 应用签名与安全加固完整指南</div>
+            <div class="related-post-card-tags"><span>Android</span><span>安全</span><span>签名</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
+
         <!-- Post Copyright & License Card -->
         <div class="post-copyright-card">
           <div class="copyright-header">
@@ -907,7 +905,6 @@ curl -sI https://example.com | grep Strict-Transport-Security</code></pre>
   <script defer src="../../assets/js/main.js"></script>
   <script defer src="../../assets/js/article.js"></script>
   <script defer src="../../assets/js/share.js"></script>
-  <script defer src="../../assets/js/back-to-top.js"></script>
   <!-- Back to Top & Reading Progress -->
   <button class="back-to-top" id="backToTop" aria-label="回到顶部">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -940,9 +937,9 @@ curl -sI https://example.com | grep Strict-Transport-Security</code></pre>
       <div class="post-info-section" id="postSidebarTags">
         <div class="post-info-label">标签</div>
         <div class="post-info-links">
-          <a href="../../blog/index.html?tag=安全" class="post-info-link"># 安全</a>
+          <a href="../../blog/index.html?tag=%E5%AE%89%E5%85%A8" class="post-info-link"># 安全</a>
           <a href="../../blog/index.html?tag=HTTPS" class="post-info-link"># HTTPS</a>
-          <a href="../../blog/index.html?tag=TLS13" class="post-info-link"># TLS 1.3</a>
+          <a href="../../blog/index.html?tag=TLS%201.3" class="post-info-link"># TLS 1.3</a>
           <a href="../../blog/index.html?tag=Nginx" class="post-info-link"># Nginx</a>
         </div>
       </div>

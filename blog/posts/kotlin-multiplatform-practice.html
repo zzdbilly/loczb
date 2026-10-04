@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="zh-CN" data-theme="dark">
 <head>
-  <script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+  <script>document.documentElement.classList.add("js");try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
     <meta charset="UTF-8">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://static.cloudflareinsights.com https://loczb-comments.billycust716.workers.dev; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://loczb-comments.billycust716.workers.dev https://dashscope.aliyuncs.com https://709527.xyz https://www.709527.xyz https://cloudflareinsights.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
     <script>/* 反点击劫持兜底：GitHub Pages 无法下发 X-Frame-Options / CSP frame-ancestors */(function(){if(self===top)return;try{top.location=self.location}catch(e){}setTimeout(function(){if(self!==top){document.documentElement.style.display='none';}},400);})();</script>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Kotlin Multiplatform 实战：共享业务逻辑到 iOS | 张小猛 - loczb</title>
     <meta name="description" content="Kotlin Multiplatform 实战：将 Android 业务逻辑共享到 iOS - 架构设计、expect/actual、网络层、数据层完整实现">
 
@@ -54,7 +54,7 @@
     }
     </script>
 
-    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/style.css?v=20261004-spacing4">
     <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
     <link rel="alternate icon" href="../../assets/images/favicon.ico">
     <link rel="canonical" href="https://709527.xyz/blog/posts/kotlin-multiplatform-practice.html">
@@ -86,8 +86,6 @@
   </nav>
   <!-- Particle Canvas Background -->
   <canvas id="particle-canvas" class="particle-canvas" aria-hidden="true"></canvas>
-
-  <div class="scroll-progress"></div>
 
   <main class="section" style="padding-bottom: 0; padding-top: var(--space-4xl);">
     <div class="container container-narrow">
@@ -141,35 +139,6 @@
           </details>
         </div>
         <!-- /Series Card Widget -->
-
-        <!-- Related Static -->
-        <div class="related-posts">
-          <div class="related-posts-title">📌 相关文章</div>
-          <div class="related-posts-list">
-          <a class="related-post-card" href="kotlin-coroutines-并发实战从入门到优雅的并发编程.html">
-            <div class="related-post-card-title">Kotlin Coroutines 并发实战：从入门到优雅的并发编程</div>
-            <div class="related-post-card-tags"><span>Kotlin</span><span>协程</span><span>并发</span></div>
-          </a>
-          <a class="related-post-card" href="kotlin-scope-functions-实战选择五个函数一个决策树.html">
-            <div class="related-post-card-title">Kotlin Scope Functions 实战选择：五个函数一个决策树</div>
-            <div class="related-post-card-tags"><span>Kotlin</span><span>Android</span><span>最佳实践</span></div>
-          </a>
-          <a class="related-post-card" href="kotlin-coroutine-exception-handling.html">
-            <div class="related-post-card-title">Kotlin Coroutine 异常处理机制全面解析</div>
-            <div class="related-post-card-tags"><span>Kotlin</span><span>协程</span><span>异常处理</span></div>
-          </a>
-          <a class="related-post-card" href="android-gradle-kts-migration.html">
-            <div class="related-post-card-title">Android Gradle 迁移到 KTS 完整指南：从 Groovy 到 Kotlin DSL</div>
-            <div class="related-post-card-tags"><span>Android</span><span>Gradle</span><span>KTS</span></div>
-          </a>
-          <a class="related-post-card" href="kotlin-coroutines-best-practices.html">
-            <div class="related-post-card-title">Kotlin Coroutines 最佳实践</div>
-            <div class="related-post-card-tags"><span>Kotlin</span><span>Coroutines</span><span>异步编程</span></div>
-          </a>
-          </div>
-        </div>
-
-        <!-- /Related Static -->
 
         <p>Kotlin Multiplatform（KMP）已经从「实验特性」进化到「生产可用」。2024 年 Google 宣布 KMP 成为 Android 官方推荐的跨平台方案，2026 年 Compose Multiplatform for iOS 进入 Stable，KMP 的生态已经成熟到可以认真考虑在商业项目中使用了。</p>
 
@@ -858,6 +827,35 @@ val localDate = now.toLocalDateTime(TimeZone.currentSystemDefault())</code></pre
 
       <p>2026 年的 KMP 已经不是早期实验品了。Kotlin 2.0 的 K2 编译器让构建速度大幅提升，Compose Multiplatform for iOS 进入 Stable，Google 官方背书——如果你在做 Android 开发同时需要 iOS 端，现在是认真考虑 KMP 的时候了。</p>
 
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="kotlin-coroutines-并发实战从入门到优雅的并发编程.html">
+            <div class="related-post-card-title">Kotlin Coroutines 并发实战：从入门到优雅的并发编程</div>
+            <div class="related-post-card-tags"><span>Kotlin</span><span>协程</span><span>并发</span></div>
+          </a>
+          <a class="related-post-card" href="kotlin-scope-functions-实战选择五个函数一个决策树.html">
+            <div class="related-post-card-title">Kotlin Scope Functions 实战选择：五个函数一个决策树</div>
+            <div class="related-post-card-tags"><span>Kotlin</span><span>Android</span><span>最佳实践</span></div>
+          </a>
+          <a class="related-post-card" href="kotlin-coroutine-exception-handling.html">
+            <div class="related-post-card-title">Kotlin Coroutine 异常处理机制全面解析</div>
+            <div class="related-post-card-tags"><span>Kotlin</span><span>协程</span><span>异常处理</span></div>
+          </a>
+          <a class="related-post-card" href="android-gradle-kts-migration.html">
+            <div class="related-post-card-title">Android Gradle 迁移到 KTS 完整指南：从 Groovy 到 Kotlin DSL</div>
+            <div class="related-post-card-tags"><span>Android</span><span>Gradle</span><span>KTS</span></div>
+          </a>
+          <a class="related-post-card" href="kotlin-coroutines-best-practices.html">
+            <div class="related-post-card-title">Kotlin Coroutines 最佳实践</div>
+            <div class="related-post-card-tags"><span>Kotlin</span><span>Coroutines</span><span>异步编程</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
+
         <!-- Post Copyright & License Card -->
         <div class="post-copyright-card">
           <div class="copyright-header">
@@ -937,7 +935,6 @@ val localDate = now.toLocalDateTime(TimeZone.currentSystemDefault())</code></pre
   <script defer src="../../assets/js/main.js"></script>
   <script defer src="../../assets/js/article.js"></script>
   <script defer src="../../assets/js/share.js"></script>
-  <script defer src="../../assets/js/back-to-top.js"></script>
   <!-- Back to Top & Reading Progress -->
   <button class="back-to-top" id="backToTop" aria-label="回到顶部">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -970,11 +967,11 @@ val localDate = now.toLocalDateTime(TimeZone.currentSystemDefault())</code></pre
       <div class="post-info-section" id="postSidebarTags">
         <div class="post-info-label">标签</div>
         <div class="post-info-links">
-          <a href="../../blog/index.html?tag=KotlinMultiplatform" class="post-info-link"># Kotlin Multiplatform</a>
+          <a href="../../blog/index.html?tag=Kotlin%20Multiplatform" class="post-info-link"># Kotlin Multiplatform</a>
           <a href="../../blog/index.html?tag=KMP" class="post-info-link"># KMP</a>
           <a href="../../blog/index.html?tag=Android" class="post-info-link"># Android</a>
           <a href="../../blog/index.html?tag=iOS" class="post-info-link"># iOS</a>
-          <a href="../../blog/index.html?tag=跨平台" class="post-info-link"># 跨平台</a>
+          <a href="../../blog/index.html?tag=%E8%B7%A8%E5%B9%B3%E5%8F%B0" class="post-info-link"># 跨平台</a>
           <a href="../../blog/index.html?tag=Ktor" class="post-info-link"># Ktor</a>
         </div>
       </div>

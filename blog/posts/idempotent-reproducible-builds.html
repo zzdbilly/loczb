@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="zh-CN" data-theme="dark">
 <head>
-  <script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+  <script>document.documentElement.classList.add("js");try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
     <meta charset="UTF-8">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://static.cloudflareinsights.com https://loczb-comments.billycust716.workers.dev; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://loczb-comments.billycust716.workers.dev https://dashscope.aliyuncs.com https://709527.xyz https://www.709527.xyz https://cloudflareinsights.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
     <script>/* 反点击劫持兜底：GitHub Pages 无法下发 X-Frame-Options / CSP frame-ancestors */(function(){if(self===top)return;try{top.location=self.location}catch(e){}setTimeout(function(){if(self!==top){document.documentElement.style.display='none';}},400);})();</script>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>幂等与可复现：为什么你的构建总在产生无意义的 diff | 张小猛 - loczb</title>
     <meta name="description" content="从 mtime 并列裁决、无条件写盘到不对称正则，拆开构建噪声的三个真实来源，给出元数据 sidecar 与「零改动」门禁的落地实现。">
 
@@ -55,7 +55,7 @@
 }
     </script>
 
-    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/style.css?v=20261004-spacing4">
     <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
     <link rel="alternate icon" href="../../assets/images/favicon.ico">
     <link rel="canonical" href="https://709527.xyz/blog/posts/idempotent-reproducible-builds.html">
@@ -88,8 +88,6 @@
   <!-- Particle Canvas Background -->
   <canvas id="particle-canvas" class="particle-canvas" aria-hidden="true"></canvas>
 
-  <div class="scroll-progress"></div>
-
   <main class="section" style="padding-bottom: 0; padding-top: var(--space-4xl);">
     <div class="container container-narrow">
       <a href="../index.html" class="back-link">
@@ -116,35 +114,6 @@
         </div>
 
         
-
-        <!-- Related Static -->
-        <div class="related-posts">
-          <div class="related-posts-title">📌 相关文章</div>
-          <div class="related-posts-list">
-          <a class="related-post-card" href="技术文档编写指南写出别人真的会看的文档.html">
-            <div class="related-post-card-title">技术文档编写指南写出别人真的会看的文档</div>
-            <div class="related-post-card-tags"><span>技术写作</span><span>文档规范</span><span>工程实践</span></div>
-          </a>
-          <a class="related-post-card" href="ai-agent-实战用子代理并行驱动多项目开发.html">
-            <div class="related-post-card-title">AI Agent 实战：用子代理并行驱动多项目开发</div>
-            <div class="related-post-card-tags"><span>AI</span><span>Agent</span><span>工程实践</span></div>
-          </a>
-          <a class="related-post-card" href="software-engineer-learns-from-manufacturing-lean.html">
-            <div class="related-post-card-title">软件工程师能从制造业学到什么：精益思维重塑开发流程</div>
-            <div class="related-post-card-tags"><span>工程实践</span><span>思考</span><span>工程思维</span></div>
-          </a>
-          <a class="related-post-card" href="ai-助手定时任务投递指南从-agent-废话到-no-agent-脚本.html">
-            <div class="related-post-card-title">AI 助手定时任务投递指南：从 Agent 废话到 No-Agent 脚本</div>
-            <div class="related-post-card-tags"><span>AI</span><span>DevOps</span><span>前端</span></div>
-          </a>
-          <a class="related-post-card" href="2026-年了ai-编程助手到底能帮你干多少活.html">
-            <div class="related-post-card-title">2026 年了，AI 编程助手到底能帮你干多少活？</div>
-            <div class="related-post-card-tags"><span>AI</span><span>前端</span><span>开发</span></div>
-          </a>
-          </div>
-        </div>
-
-        <!-- /Related Static -->
 
         <p>这篇文章写给正在维护静态站点、代码生成器或任何「跑脚本产出文件」流水线的工程师。你大概见过这种场面：明明没有人改内容，<code>git status</code> 却列出一屏变更；review 的 diff 里 90% 是行序变化；CI 上的产物和本地对不上，谁也说不出哪边是对的。</p>
 <p>前置条件：Node 18+、Python 3.9+、git 2.30+，以及一个能跑构建脚本的仓库。文中所有命令都在 Linux 或 macOS 上执行，所有代码片段都可以直接复制运行并复现输出。</p>
@@ -612,6 +581,35 @@ curl -sS -o /dev/null -w '%{http_code}\n' -A 'Mozilla/5.0' https://example.com/b
 <p>预期的两条输出依次是约定的作者邮箱与 <code>200</code>。</p>
 <p>回到开头那个问题：构建为什么总在产生无意义的 diff。答案不是「工具不行」，而是构建的输入里混进了三样不属于内容的东西——文件的修改时间、目录的遍历顺序、以及「上一版产物被反解出来的字段」。把这三样逐一换成版本控制里的事实，diff 就会回到它本来的含义：只显示有人真的改了内容。</p>
 
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="技术文档编写指南写出别人真的会看的文档.html">
+            <div class="related-post-card-title">技术文档编写指南写出别人真的会看的文档</div>
+            <div class="related-post-card-tags"><span>技术写作</span><span>文档规范</span><span>工程实践</span></div>
+          </a>
+          <a class="related-post-card" href="ai-agent-实战用子代理并行驱动多项目开发.html">
+            <div class="related-post-card-title">AI Agent 实战：用子代理并行驱动多项目开发</div>
+            <div class="related-post-card-tags"><span>AI</span><span>Agent</span><span>工程实践</span></div>
+          </a>
+          <a class="related-post-card" href="software-engineer-learns-from-manufacturing-lean.html">
+            <div class="related-post-card-title">软件工程师能从制造业学到什么：精益思维重塑开发流程</div>
+            <div class="related-post-card-tags"><span>工程实践</span><span>思考</span><span>工程思维</span></div>
+          </a>
+          <a class="related-post-card" href="ai-助手定时任务投递指南从-agent-废话到-no-agent-脚本.html">
+            <div class="related-post-card-title">AI 助手定时任务投递指南：从 Agent 废话到 No-Agent 脚本</div>
+            <div class="related-post-card-tags"><span>AI</span><span>DevOps</span><span>前端</span></div>
+          </a>
+          <a class="related-post-card" href="2026-年了ai-编程助手到底能帮你干多少活.html">
+            <div class="related-post-card-title">2026 年了，AI 编程助手到底能帮你干多少活？</div>
+            <div class="related-post-card-tags"><span>AI</span><span>前端</span><span>开发</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
+
         <!-- Post Copyright & License Card -->
         <div class="post-copyright-card">
           <div class="copyright-header">
@@ -677,7 +675,6 @@ curl -sS -o /dev/null -w '%{http_code}\n' -A 'Mozilla/5.0' https://example.com/b
   <script defer src="../../assets/js/main.js"></script>
   <script defer src="../../assets/js/article.js"></script>
   <script defer src="../../assets/js/share.js"></script>
-  <script defer src="../../assets/js/back-to-top.js"></script>
   <!-- Back to Top & Reading Progress -->
   <button class="back-to-top" id="backToTop" aria-label="回到顶部">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -710,10 +707,10 @@ curl -sS -o /dev/null -w '%{http_code}\n' -A 'Mozilla/5.0' https://example.com/b
       <div class="post-info-section" id="postSidebarTags">
         <div class="post-info-label">标签</div>
         <div class="post-info-links">
-          <a href="../../blog/index.html?tag=构建" class="post-info-link"># 构建</a>
-          <a href="../../blog/index.html?tag=幂等" class="post-info-link"># 幂等</a>
-          <a href="../../blog/index.html?tag=可复现" class="post-info-link"># 可复现</a>
-          <a href="../../blog/index.html?tag=工程实践" class="post-info-link"># 工程实践</a>
+          <a href="../../blog/index.html?tag=%E6%9E%84%E5%BB%BA" class="post-info-link"># 构建</a>
+          <a href="../../blog/index.html?tag=%E5%B9%82%E7%AD%89" class="post-info-link"># 幂等</a>
+          <a href="../../blog/index.html?tag=%E5%8F%AF%E5%A4%8D%E7%8E%B0" class="post-info-link"># 可复现</a>
+          <a href="../../blog/index.html?tag=%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5" class="post-info-link"># 工程实践</a>
         </div>
       </div>
     </div>

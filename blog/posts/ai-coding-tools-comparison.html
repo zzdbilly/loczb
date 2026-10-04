@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="zh-CN" data-theme="dark">
 <head>
-  <script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+  <script>document.documentElement.classList.add("js");try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
     <meta charset="UTF-8">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://static.cloudflareinsights.com https://loczb-comments.billycust716.workers.dev; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://loczb-comments.billycust716.workers.dev https://dashscope.aliyuncs.com https://709527.xyz https://www.709527.xyz https://cloudflareinsights.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
     <script>/* 反点击劫持兜底：GitHub Pages 无法下发 X-Frame-Options / CSP frame-ancestors */(function(){if(self===top)return;try{top.location=self.location}catch(e){}setTimeout(function(){if(self!==top){document.documentElement.style.display='none';}},400);})();</script>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>主流 AI 编程工具深度对比：Cursor、Claude Code、OpenCode、GitHub Copilot | 张小猛 - loczb</title>
     <meta name="description" content="主流 AI 编程工具深度对比：Cursor、Claude Code、OpenCode、GitHub Copilot 选型指南">
 
@@ -54,7 +54,7 @@
     }
     </script>
 
-    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/style.css?v=20261004-spacing4">
     <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
     <link rel="alternate icon" href="../../assets/images/favicon.ico">
     <link rel="canonical" href="https://709527.xyz/blog/posts/ai-coding-tools-comparison.html">
@@ -87,8 +87,6 @@
   <!-- Particle Canvas Background -->
   <canvas id="particle-canvas" class="particle-canvas" aria-hidden="true"></canvas>
 
-  <div class="scroll-progress"></div>
-
   <main class="section" style="padding-bottom: 0; padding-top: var(--space-4xl);">
     <div class="container container-narrow">
       <a href="../index.html" class="back-link">
@@ -116,35 +114,6 @@
         </div>
 
         
-
-        <!-- Related Static -->
-        <div class="related-posts">
-          <div class="related-posts-title">📌 相关文章</div>
-          <div class="related-posts-list">
-          <a class="related-post-card" href="ai-编程助手进化论从结对编程到自主编程团队-2026.html">
-            <div class="related-post-card-title">AI 编程助手进化论：从结对编程到自主编程团队 (2026)</div>
-            <div class="related-post-card-tags"><span>AI</span><span>Agent</span><span>AI 工具</span></div>
-          </a>
-          <a class="related-post-card" href="cursor-rules-guide.html">
-            <div class="related-post-card-title">Cursor Rules 实战：自定义 AI 代码助手的进阶指南</div>
-            <div class="related-post-card-tags"><span>Cursor</span><span>AI编程</span><span>效率工具</span></div>
-          </a>
-          <a class="related-post-card" href="ai-code-editor-review-cursor-windsurf-copilot.html">
-            <div class="related-post-card-title">AI 代码编辑器深度横评：Cursor vs Windsurf vs Copilot</div>
-            <div class="related-post-card-tags"><span>AI</span><span>AI 工具</span><span>开发技巧</span></div>
-          </a>
-          <a class="related-post-card" href="gemini-notebooklm-integration.html">
-            <div class="related-post-card-title">Gemini Notebooks 深度体验：与 NotebookLM 无缝整合后的全新 AI 工作流</div>
-            <div class="related-post-card-tags"><span>AI 工具</span><span>Gemini</span><span>NotebookLM</span></div>
-          </a>
-          <a class="related-post-card" href="gemini-notebooklm-workflow.html">
-            <div class="related-post-card-title">Gemini + NotebookLM 结合使用指南</div>
-            <div class="related-post-card-tags"><span>AI 工具</span><span>Gemini</span><span>NotebookLM</span></div>
-          </a>
-          </div>
-        </div>
-
-        <!-- /Related Static -->
 
         <p>2026 年的 AI 编程工具市场已经百花齐放。从最早的 GitHub Copilot，到后来的 Cursor、Claude Code、OpenCode，每个工具都有自己的特色和优势。</p>
 
@@ -485,6 +454,35 @@ function formatDate(date) { ... }
         </ul>
       </div>
 
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="ai-编程助手进化论从结对编程到自主编程团队-2026.html">
+            <div class="related-post-card-title">AI 编程助手进化论：从结对编程到自主编程团队 (2026)</div>
+            <div class="related-post-card-tags"><span>AI</span><span>Agent</span><span>AI 工具</span></div>
+          </a>
+          <a class="related-post-card" href="cursor-rules-guide.html">
+            <div class="related-post-card-title">Cursor Rules 实战：自定义 AI 代码助手的进阶指南</div>
+            <div class="related-post-card-tags"><span>Cursor</span><span>AI编程</span><span>效率工具</span></div>
+          </a>
+          <a class="related-post-card" href="ai-code-editor-review-cursor-windsurf-copilot.html">
+            <div class="related-post-card-title">AI 代码编辑器深度横评：Cursor vs Windsurf vs Copilot</div>
+            <div class="related-post-card-tags"><span>AI</span><span>AI 工具</span><span>开发技巧</span></div>
+          </a>
+          <a class="related-post-card" href="gemini-notebooklm-integration.html">
+            <div class="related-post-card-title">Gemini Notebooks 深度体验：与 NotebookLM 无缝整合后的全新 AI 工作流</div>
+            <div class="related-post-card-tags"><span>AI 工具</span><span>Gemini</span><span>NotebookLM</span></div>
+          </a>
+          <a class="related-post-card" href="gemini-notebooklm-workflow.html">
+            <div class="related-post-card-title">Gemini + NotebookLM 结合使用指南</div>
+            <div class="related-post-card-tags"><span>AI 工具</span><span>Gemini</span><span>NotebookLM</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
+
         <!-- Post Copyright & License Card -->
         <div class="post-copyright-card">
           <div class="copyright-header">
@@ -550,7 +548,6 @@ function formatDate(date) { ... }
   <script defer src="../../assets/js/main.js"></script>
   <script defer src="../../assets/js/article.js"></script>
   <script defer src="../../assets/js/share.js"></script>
-  <script defer src="../../assets/js/back-to-top.js"></script>
   <!-- Back to Top & Reading Progress -->
   <button class="back-to-top" id="backToTop" aria-label="回到顶部">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -583,11 +580,11 @@ function formatDate(date) { ... }
       <div class="post-info-section" id="postSidebarTags">
         <div class="post-info-label">标签</div>
         <div class="post-info-links">
-          <a href="../../blog/index.html?tag=AI工具" class="post-info-link"># AI 工具</a>
+          <a href="../../blog/index.html?tag=AI%20%E5%B7%A5%E5%85%B7" class="post-info-link"># AI 工具</a>
           <a href="../../blog/index.html?tag=Cursor" class="post-info-link"># Cursor</a>
-          <a href="../../blog/index.html?tag=ClaudeCode" class="post-info-link"># Claude Code</a>
-          <a href="../../blog/index.html?tag=GitHubCopilot" class="post-info-link"># GitHub Copilot</a>
-          <a href="../../blog/index.html?tag=编程效率" class="post-info-link"># 编程效率</a>
+          <a href="../../blog/index.html?tag=Claude%20Code" class="post-info-link"># Claude Code</a>
+          <a href="../../blog/index.html?tag=GitHub%20Copilot" class="post-info-link"># GitHub Copilot</a>
+          <a href="../../blog/index.html?tag=%E7%BC%96%E7%A8%8B%E6%95%88%E7%8E%87" class="post-info-link"># 编程效率</a>
         </div>
       </div>
     </div>

@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="zh-CN" data-theme="dark">
 <head>
-  <script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+  <script>document.documentElement.classList.add("js");try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
     <meta charset="UTF-8">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://static.cloudflareinsights.com https://loczb-comments.billycust716.workers.dev; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://loczb-comments.billycust716.workers.dev https://dashscope.aliyuncs.com https://709527.xyz https://www.709527.xyz https://cloudflareinsights.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
     <script>/* 反点击劫持兜底：GitHub Pages 无法下发 X-Frame-Options / CSP frame-ancestors */(function(){if(self===top)return;try{top.location=self.location}catch(e){}setTimeout(function(){if(self!==top){document.documentElement.style.display='none';}},400);})();</script>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>程序员带娃：把养孩子当成一个长期运维的系统工程 | 张小猛 - loczb</title>
     <meta name="description" content="用工程师的思维看带娃：需求分析、状态监控、容错设计、灰度发布、日志排查——原来养孩子比写代码更像在做系统运维">
 
@@ -55,7 +55,7 @@
 }
     </script>
 
-    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/style.css?v=20261004-spacing4">
     <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
     <link rel="alternate icon" href="../../assets/images/favicon.ico">
     <link rel="canonical" href="https://709527.xyz/blog/posts/程序员带娃把养孩子当成一个长期运维的系统工程.html">
@@ -87,8 +87,6 @@
   </nav>
   <!-- Particle Canvas Background -->
   <canvas id="particle-canvas" class="particle-canvas" aria-hidden="true"></canvas>
-
-  <div class="scroll-progress"></div>
 
   <main class="section" style="padding-bottom: 0; padding-top: var(--space-4xl);">
     <div class="container container-narrow">
@@ -144,35 +142,6 @@
           </details>
         </div>
         <!-- /Series Card Widget -->
-
-        <!-- Related Static -->
-        <div class="related-posts">
-          <div class="related-posts-title">📌 相关文章</div>
-          <div class="related-posts-list">
-          <a class="related-post-card" href="urban-planning-inspires-software-architecture.html">
-            <div class="related-post-card-title">像规划城市一样设计系统：城市规划给软件架构的启示</div>
-            <div class="related-post-card-tags"><span>架构</span><span>系统思维</span><span>工程思维</span></div>
-          </a>
-          <a class="related-post-card" href="quick-energy-recovery.html">
-            <div class="related-post-card-title">如何快速恢复能量，让自己快乐起来</div>
-            <div class="related-post-card-tags"><span>能量管理</span><span>情绪</span><span>生活方式</span></div>
-          </a>
-          <a class="related-post-card" href="如何维持好自己的健康写给程序员的长期运维指南.html">
-            <div class="related-post-card-title">如何维持好自己的健康：写给程序员的长期运维指南</div>
-            <div class="related-post-card-tags"><span>健康</span><span>生活方式</span><span>程序员</span></div>
-          </a>
-          <a class="related-post-card" href="技术人员转行指南当写代码不再是你想做的事.html">
-            <div class="related-post-card-title">技术人员转行指南：当写代码不再是你想做的事</div>
-            <div class="related-post-card-tags"><span>转行</span><span>职业选择</span><span>思考</span></div>
-          </a>
-          <a class="related-post-card" href="打工人理财第一课从看懂钱去哪了到让钱自己长大.html">
-            <div class="related-post-card-title">打工人理财第一课：从看懂钱去哪了到让钱自己长大</div>
-            <div class="related-post-card-tags"><span>理财</span><span>打工人</span><span>程序员</span></div>
-          </a>
-          </div>
-        </div>
-
-        <!-- /Related Static -->
 
         <h2>深夜的第一次系统报警</h2>
 <p>凌晨三点，婴儿床里传来一声哭。我的第一反应不是困，而是一套熟悉的排查流程在脑子里自动展开：<strong>这是哪种类型的报警？是资源告警（饿了），还是异常告警（尿了、肠胀气、不舒服），或者是噪音误报（做噩梦哼两声）？</strong></p>
@@ -269,6 +238,35 @@
 <p>但工程师的那套底层能力——<strong>系统思维、精准定位、数据观察、容错心态、迭代复盘</strong>——确实让我在崩溃的边缘多了一点沉着，在焦虑的时候多了一点方法论。</p>
 <p>带娃这件事，最终考验的不是你会不会写代码，而是你有没有一颗愿意持续学习、持续迭代、能接受不确定性的心。而这，恰恰是每个写过几年代码的人，不经意间已经练过无数次的能力。</p>
 
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="urban-planning-inspires-software-architecture.html">
+            <div class="related-post-card-title">像规划城市一样设计系统：城市规划给软件架构的启示</div>
+            <div class="related-post-card-tags"><span>架构</span><span>系统思维</span><span>工程思维</span></div>
+          </a>
+          <a class="related-post-card" href="quick-energy-recovery.html">
+            <div class="related-post-card-title">如何快速恢复能量，让自己快乐起来</div>
+            <div class="related-post-card-tags"><span>能量管理</span><span>情绪</span><span>生活方式</span></div>
+          </a>
+          <a class="related-post-card" href="如何维持好自己的健康写给程序员的长期运维指南.html">
+            <div class="related-post-card-title">如何维持好自己的健康：写给程序员的长期运维指南</div>
+            <div class="related-post-card-tags"><span>健康</span><span>生活方式</span><span>程序员</span></div>
+          </a>
+          <a class="related-post-card" href="技术人员转行指南当写代码不再是你想做的事.html">
+            <div class="related-post-card-title">技术人员转行指南：当写代码不再是你想做的事</div>
+            <div class="related-post-card-tags"><span>转行</span><span>职业选择</span><span>思考</span></div>
+          </a>
+          <a class="related-post-card" href="打工人理财第一课从看懂钱去哪了到让钱自己长大.html">
+            <div class="related-post-card-title">打工人理财第一课：从看懂钱去哪了到让钱自己长大</div>
+            <div class="related-post-card-tags"><span>理财</span><span>打工人</span><span>程序员</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
+
         <!-- Post Copyright & License Card -->
         <div class="post-copyright-card">
           <div class="copyright-header">
@@ -348,7 +346,6 @@
   <script defer src="../../assets/js/main.js"></script>
   <script defer src="../../assets/js/article.js"></script>
   <script defer src="../../assets/js/share.js"></script>
-  <script defer src="../../assets/js/back-to-top.js"></script>
   <!-- Back to Top & Reading Progress -->
   <button class="back-to-top" id="backToTop" aria-label="回到顶部">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -381,12 +378,12 @@
       <div class="post-info-section" id="postSidebarTags">
         <div class="post-info-label">标签</div>
         <div class="post-info-links">
-          <a href="../../blog/index.html?tag=程序员" class="post-info-link"># 程序员</a>
-          <a href="../../blog/index.html?tag=带娃" class="post-info-link"># 带娃</a>
-          <a href="../../blog/index.html?tag=工程思维" class="post-info-link"># 工程思维</a>
-          <a href="../../blog/index.html?tag=系统思维" class="post-info-link"># 系统思维</a>
+          <a href="../../blog/index.html?tag=%E7%A8%8B%E5%BA%8F%E5%91%98" class="post-info-link"># 程序员</a>
+          <a href="../../blog/index.html?tag=%E5%B8%A6%E5%A8%83" class="post-info-link"># 带娃</a>
+          <a href="../../blog/index.html?tag=%E5%B7%A5%E7%A8%8B%E6%80%9D%E7%BB%B4" class="post-info-link"># 工程思维</a>
+          <a href="../../blog/index.html?tag=%E7%B3%BB%E7%BB%9F%E6%80%9D%E7%BB%B4" class="post-info-link"># 系统思维</a>
           <a href="../../blog/index.html?tag=DevOps" class="post-info-link"># DevOps</a>
-          <a href="../../blog/index.html?tag=养育" class="post-info-link"># 养育</a>
+          <a href="../../blog/index.html?tag=%E5%85%BB%E8%82%B2" class="post-info-link"># 养育</a>
         </div>
       </div>
     </div>

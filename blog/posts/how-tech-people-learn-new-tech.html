@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="zh-CN" data-theme="dark">
 <head>
-  <script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+  <script>document.documentElement.classList.add("js");try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
     <meta charset="UTF-8">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://static.cloudflareinsights.com https://loczb-comments.billycust716.workers.dev; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://loczb-comments.billycust716.workers.dev https://dashscope.aliyuncs.com https://709527.xyz https://www.709527.xyz https://cloudflareinsights.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
     <script>/* 反点击劫持兜底：GitHub Pages 无法下发 X-Frame-Options / CSP frame-ancestors */(function(){if(self===top)return;try{top.location=self.location}catch(e){}setTimeout(function(){if(self!==top){document.documentElement.style.display='none';}},400);})();</script>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>技术人如何学习新技术 | 张小猛 - loczb</title>
     <meta name="description" content="从被动输入到主动输出，80/20 法则选技术，知识体系建立，实践驱动学习，构建记忆宫殿，善用 AI 与社群">
 
@@ -54,7 +54,7 @@
     }
     </script>
 
-    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/style.css?v=20261004-spacing4">
     <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
     <link rel="alternate icon" href="../../assets/images/favicon.ico">
     <link rel="canonical" href="https://709527.xyz/blog/posts/how-tech-people-learn-new-tech.html">
@@ -86,8 +86,6 @@
   </nav>
   <!-- Particle Canvas Background -->
   <canvas id="particle-canvas" class="particle-canvas" aria-hidden="true"></canvas>
-
-  <div class="scroll-progress"></div>
 
   <main class="section" style="padding-bottom: 0; padding-top: var(--space-4xl);">
     <div class="container container-narrow">
@@ -142,35 +140,6 @@
           </details>
         </div>
         <!-- /Series Card Widget -->
-
-        <!-- Related Static -->
-        <div class="related-posts">
-          <div class="related-posts-title">📌 相关文章</div>
-          <div class="related-posts-list">
-          <a class="related-post-card" href="why-tech-people-should-write.html">
-            <div class="related-post-card-title">技术人为什么要写作</div>
-            <div class="related-post-card-tags"><span>思考</span><span>写作</span><span>个人成长</span></div>
-          </a>
-          <a class="related-post-card" href="如何好好工作从看起来很忙到真正产出.html">
-            <div class="related-post-card-title">如何好好工作：从看起来很忙到真正产出</div>
-            <div class="related-post-card-tags"><span>工作法</span><span>效率</span><span>深度工作</span></div>
-          </a>
-          <a class="related-post-card" href="心学不是鸡汤一个程序员的阳明心学实践手册.html">
-            <div class="related-post-card-title">心学不是鸡汤：一个程序员的阳明心学实践手册</div>
-            <div class="related-post-card-tags"><span>心学</span><span>王阳明</span><span>哲学</span></div>
-          </a>
-          <a class="related-post-card" href="程序员的周五晚上如何有意义地度过.html">
-            <div class="related-post-card-title">程序员的周五晚上，如何有意义地度过</div>
-            <div class="related-post-card-tags"><span>思考</span><span>生活方式</span><span>效率</span></div>
-          </a>
-          <a class="related-post-card" href="医生不会告诉你的健康习惯从睡眠到饮食的系统性方案.html">
-            <div class="related-post-card-title">医生不会告诉你的健康习惯：从睡眠到饮食的系统性方案</div>
-            <div class="related-post-card-tags"><span>健康</span><span>生活习惯</span><span>效率</span></div>
-          </a>
-          </div>
-        </div>
-
-        <!-- /Related Static -->
 
         <h2>引言</h2>
 <p>作为技术人，我们似乎永远在学习的路上。新框架、新语言、新工具层出不穷，稍有懈怠就会被时代甩下。</p>
@@ -283,6 +252,35 @@
 <p>技术的世界变化很快，但学习方法的核心逻辑是不变的：<strong>明确目标、动手实践、持续输出、定期回顾</strong>。</p>
 <p>愿每一份学习都有收获，每一份付出都有回报。</p>
 
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="why-tech-people-should-write.html">
+            <div class="related-post-card-title">技术人为什么要写作</div>
+            <div class="related-post-card-tags"><span>思考</span><span>写作</span><span>个人成长</span></div>
+          </a>
+          <a class="related-post-card" href="如何好好工作从看起来很忙到真正产出.html">
+            <div class="related-post-card-title">如何好好工作：从看起来很忙到真正产出</div>
+            <div class="related-post-card-tags"><span>工作法</span><span>效率</span><span>深度工作</span></div>
+          </a>
+          <a class="related-post-card" href="心学不是鸡汤一个程序员的阳明心学实践手册.html">
+            <div class="related-post-card-title">心学不是鸡汤：一个程序员的阳明心学实践手册</div>
+            <div class="related-post-card-tags"><span>心学</span><span>王阳明</span><span>哲学</span></div>
+          </a>
+          <a class="related-post-card" href="程序员的周五晚上如何有意义地度过.html">
+            <div class="related-post-card-title">程序员的周五晚上，如何有意义地度过</div>
+            <div class="related-post-card-tags"><span>思考</span><span>生活方式</span><span>效率</span></div>
+          </a>
+          <a class="related-post-card" href="医生不会告诉你的健康习惯从睡眠到饮食的系统性方案.html">
+            <div class="related-post-card-title">医生不会告诉你的健康习惯：从睡眠到饮食的系统性方案</div>
+            <div class="related-post-card-tags"><span>健康</span><span>生活习惯</span><span>效率</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
+
         <!-- Post Copyright & License Card -->
         <div class="post-copyright-card">
           <div class="copyright-header">
@@ -362,7 +360,6 @@
   <script defer src="../../assets/js/main.js"></script>
   <script defer src="../../assets/js/article.js"></script>
   <script defer src="../../assets/js/share.js"></script>
-  <script defer src="../../assets/js/back-to-top.js"></script>
   <!-- Back to Top & Reading Progress -->
   <button class="back-to-top" id="backToTop" aria-label="回到顶部">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -395,11 +392,11 @@
       <div class="post-info-section" id="postSidebarTags">
         <div class="post-info-label">标签</div>
         <div class="post-info-links">
-          <a href="../../blog/index.html?tag=学习方法" class="post-info-link"># 学习方法</a>
-          <a href="../../blog/index.html?tag=个人成长" class="post-info-link"># 个人成长</a>
-          <a href="../../blog/index.html?tag=技术人" class="post-info-link"># 技术人</a>
-          <a href="../../blog/index.html?tag=效率" class="post-info-link"># 效率</a>
-          <a href="../../blog/index.html?tag=知识管理" class="post-info-link"># 知识管理</a>
+          <a href="../../blog/index.html?tag=%E5%AD%A6%E4%B9%A0%E6%96%B9%E6%B3%95" class="post-info-link"># 学习方法</a>
+          <a href="../../blog/index.html?tag=%E4%B8%AA%E4%BA%BA%E6%88%90%E9%95%BF" class="post-info-link"># 个人成长</a>
+          <a href="../../blog/index.html?tag=%E6%8A%80%E6%9C%AF%E4%BA%BA" class="post-info-link"># 技术人</a>
+          <a href="../../blog/index.html?tag=%E6%95%88%E7%8E%87" class="post-info-link"># 效率</a>
+          <a href="../../blog/index.html?tag=%E7%9F%A5%E8%AF%86%E7%AE%A1%E7%90%86" class="post-info-link"># 知识管理</a>
         </div>
       </div>
     </div>

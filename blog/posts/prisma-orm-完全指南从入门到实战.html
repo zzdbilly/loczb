@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="zh-CN" data-theme="dark">
 <head>
-  <script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+  <script>document.documentElement.classList.add("js");try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
     <meta charset="UTF-8">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://static.cloudflareinsights.com https://loczb-comments.billycust716.workers.dev; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://loczb-comments.billycust716.workers.dev https://dashscope.aliyuncs.com https://709527.xyz https://www.709527.xyz https://cloudflareinsights.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
     <script>/* 反点击劫持兜底：GitHub Pages 无法下发 X-Frame-Options / CSP frame-ancestors */(function(){if(self===top)return;try{top.location=self.location}catch(e){}setTimeout(function(){if(self!==top){document.documentElement.style.display='none';}},400);})();</script>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Prisma ORM 完全指南：从入门到实战 | 张小猛 - loczb</title>
     <meta name="description" content="从 Prisma 的基础概念到项目实战，涵盖 Schema 设计、CRUD 操作、迁移管理、性能优化等核心话题，带你全面掌握 TypeScript 生态最流行的数据库 ORM。">
 
@@ -55,7 +55,7 @@
 }
     </script>
 
-    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/style.css?v=20261004-spacing4">
     <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
     <link rel="alternate icon" href="../../assets/images/favicon.ico">
     <link rel="canonical" href="https://709527.xyz/blog/posts/prisma-orm-完全指南从入门到实战.html">
@@ -88,8 +88,6 @@
   <!-- Particle Canvas Background -->
   <canvas id="particle-canvas" class="particle-canvas" aria-hidden="true"></canvas>
 
-  <div class="scroll-progress"></div>
-
   <main class="section" style="padding-bottom: 0; padding-top: var(--space-4xl);">
     <div class="container container-narrow">
       <a href="../index.html" class="back-link">
@@ -118,35 +116,6 @@
         </div>
 
         
-
-        <!-- Related Static -->
-        <div class="related-posts">
-          <div class="related-posts-title">📌 相关文章</div>
-          <div class="related-posts-list">
-          <a class="related-post-card" href="postgresql-从-17-到-18生产环境升级实战.html">
-            <div class="related-post-card-title">PostgreSQL 从 17 到 18：生产环境升级实战</div>
-            <div class="related-post-card-tags"><span>PostgreSQL</span><span>数据库</span><span>DevOps</span></div>
-          </a>
-          <a class="related-post-card" href="postgresql-index-optimization.html">
-            <div class="related-post-card-title">PostgreSQL 索引优化实战</div>
-            <div class="related-post-card-tags"><span>PostgreSQL</span><span>索引优化</span><span>B-Tree</span></div>
-          </a>
-          <a class="related-post-card" href="nextjs-prisma-部署-vercel-常见踩坑外键约束与构建时数据修复.html">
-            <div class="related-post-card-title">Next.js + Prisma 部署 Vercel 常见踩坑：外键约束与构建时数据修复</div>
-            <div class="related-post-card-tags"><span>Next.js</span><span>Prisma</span><span>Vercel</span></div>
-          </a>
-          <a class="related-post-card" href="mysql-索引优化实战从慢查询到最佳实践.html">
-            <div class="related-post-card-title">MySQL 索引优化实战：从慢查询到最佳实践</div>
-            <div class="related-post-card-tags"><span>MySQL</span><span>数据库</span><span>索引优化</span></div>
-          </a>
-          <a class="related-post-card" href="sqlite-wal-performance.html">
-            <div class="related-post-card-title">SQLite 进阶：WAL 模式与性能优化</div>
-            <div class="related-post-card-tags"><span>SQLite</span><span>数据库</span><span>WAL</span></div>
-          </a>
-          </div>
-        </div>
-
-        <!-- /Related Static -->
 
         <h2>为什么选择 Prisma</h2>
 <p>在现代 Node.js 和 TypeScript 后端开发中，数据库操作是一个绕不开的环节。从最早的裸 SQL 查询，到后来的 Active Record 模式（如 Sequelize、TypeORM），再到近年崛起的 Prisma，数据库 ORM 的演进路线清晰地指向了"类型安全"和"开发体验"这两个核心目标。</p>
@@ -644,6 +613,35 @@ CMD [&quot;node&quot;, &quot;dist/index.js&quot;]
 <p>当然，Prisma 也有它的局限性——对于超大规模的数据表（千万级+）和极度复杂的原生查询，直接使用 SQL 可能更合适。但对于绝大多数 Web 应用和中型项目，Prisma 是目前 TypeScript 生态中最值得推荐的数据库工具。</p>
 <p>如果你正在考虑为项目选择 ORM，或者从其他 ORM 迁移过来，Prisma 值得一试。从 Zest 项目的实践经验来看，它带来的类型安全和开发体验提升，是值得投入学习成本的。</p>
 
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="postgresql-从-17-到-18生产环境升级实战.html">
+            <div class="related-post-card-title">PostgreSQL 从 17 到 18：生产环境升级实战</div>
+            <div class="related-post-card-tags"><span>PostgreSQL</span><span>数据库</span><span>DevOps</span></div>
+          </a>
+          <a class="related-post-card" href="postgresql-index-optimization.html">
+            <div class="related-post-card-title">PostgreSQL 索引优化实战</div>
+            <div class="related-post-card-tags"><span>PostgreSQL</span><span>索引优化</span><span>B-Tree</span></div>
+          </a>
+          <a class="related-post-card" href="nextjs-prisma-部署-vercel-常见踩坑外键约束与构建时数据修复.html">
+            <div class="related-post-card-title">Next.js + Prisma 部署 Vercel 常见踩坑：外键约束与构建时数据修复</div>
+            <div class="related-post-card-tags"><span>Next.js</span><span>Prisma</span><span>Vercel</span></div>
+          </a>
+          <a class="related-post-card" href="mysql-索引优化实战从慢查询到最佳实践.html">
+            <div class="related-post-card-title">MySQL 索引优化实战：从慢查询到最佳实践</div>
+            <div class="related-post-card-tags"><span>MySQL</span><span>数据库</span><span>索引优化</span></div>
+          </a>
+          <a class="related-post-card" href="sqlite-wal-performance.html">
+            <div class="related-post-card-title">SQLite 进阶：WAL 模式与性能优化</div>
+            <div class="related-post-card-tags"><span>SQLite</span><span>数据库</span><span>WAL</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
+
         <!-- Post Copyright & License Card -->
         <div class="post-copyright-card">
           <div class="copyright-header">
@@ -709,7 +707,6 @@ CMD [&quot;node&quot;, &quot;dist/index.js&quot;]
   <script defer src="../../assets/js/main.js"></script>
   <script defer src="../../assets/js/article.js"></script>
   <script defer src="../../assets/js/share.js"></script>
-  <script defer src="../../assets/js/back-to-top.js"></script>
   <!-- Back to Top & Reading Progress -->
   <button class="back-to-top" id="backToTop" aria-label="回到顶部">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -746,8 +743,8 @@ CMD [&quot;node&quot;, &quot;dist/index.js&quot;]
           <a href="../../blog/index.html?tag=TypeScript" class="post-info-link"># TypeScript</a>
           <a href="../../blog/index.html?tag=PostgreSQL" class="post-info-link"># PostgreSQL</a>
           <a href="../../blog/index.html?tag=ORM" class="post-info-link"># ORM</a>
-          <a href="../../blog/index.html?tag=数据库" class="post-info-link"># 数据库</a>
-          <a href="../../blog/index.html?tag=Nextjs" class="post-info-link"># Next.js</a>
+          <a href="../../blog/index.html?tag=%E6%95%B0%E6%8D%AE%E5%BA%93" class="post-info-link"># 数据库</a>
+          <a href="../../blog/index.html?tag=Next.js" class="post-info-link"># Next.js</a>
         </div>
       </div>
     </div>

@@ -142,11 +142,15 @@ def render_with_template(template, data, slug=''):
     html = html.replace('{{ARTICLE_H3_COUNT}}', h3_count)
     html = html.replace('{{ARTICLE_CODE_BLOCKS}}', code_block_count)
     
-    # 标签链接
+    # 标签链接：href 必须是「原标签」的 URL 编码，与 blog-list.js 的标签匹配同口径。
+    # 旧写法 re.sub(r'[^\w\u4e00-\u9fff]', '', t) 会删空格/标点（"Container Queries" →
+    # "ContainerQueries"），导致 44 个标签点进去是空列表（2026-10-05 修复）。
+    # t 取自页面 <span class="tag">，是已转义文本，先反转义再编码。
+    from urllib.parse import quote as _quote
     tag_links = []
     for t in data.get('tags', []):
-        safe_t = _re.sub(r'[^\w\u4e00-\u9fff]', '', t)
-        tag_links.append(f'<a href="../../blog/index.html?tag={safe_t}" class="post-info-link"># {t}</a>')
+        href_t = _quote(html_lib.unescape(t), safe='')
+        tag_links.append(f'<a href="../../blog/index.html?tag={href_t}" class="post-info-link"># {t}</a>')
     html = html.replace('{{ARTICLE_TAG_LINKS}}', '\n          '.join(tag_links))
     html = html.replace('{{POST_SLUG}}', slug)
     

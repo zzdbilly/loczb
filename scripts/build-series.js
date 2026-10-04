@@ -167,10 +167,10 @@ SERIES_CONFIG.forEach(series => {
     // refresh-posts + generate-index 之后多出 3 行空白（2026-09-27 修复；旧写法要跑第二遍
     // 才收敛，导致「干净 HEAD 上跑一遍重建链 = 40 个文件被改」）。
     if (content.includes('class="post-tags"')) {
-      const RE_ANCHORED = /(<div class="post-tags">[\s\S]*?<\/div>)\s*(?=<!-- Related Static -->)/;
-      const RE_FALLBACK = /(<div class="post-tags">[\s\S]*?<\/div>)([ \t]*\n?)/;
-      const re = RE_ANCHORED.test(content) ? RE_ANCHORED : RE_FALLBACK;
-      content = content.replace(re, `$1\n\n        ${seriesCardHtml}\n\n        `);
+      // 2026-10-05：「相关文章」块已移到正文末尾，不再紧跟 post-tags，锚点改为只认 post-tags，
+      // 并吃掉其后全部空白再写回固定格式（与旧 RE_ANCHORED 同理，保证首次注入与重跑结果一致）。
+      const RE_ANCHORED = /(<div class="post-tags">[\s\S]*?<\/div>)\s*/;
+      content = content.replace(RE_ANCHORED, `$1\n\n        ${seriesCardHtml}\n\n        `);
     }
 
     // 构建底部专栏上一篇/下一篇

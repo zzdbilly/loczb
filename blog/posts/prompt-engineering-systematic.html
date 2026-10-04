@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="zh-CN" data-theme="dark">
 <head>
-  <script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+  <script>document.documentElement.classList.add("js");try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
     <meta charset="UTF-8">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://static.cloudflareinsights.com https://loczb-comments.billycust716.workers.dev; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://loczb-comments.billycust716.workers.dev https://dashscope.aliyuncs.com https://709527.xyz https://www.709527.xyz https://cloudflareinsights.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
     <script>/* 反点击劫持兜底：GitHub Pages 无法下发 X-Frame-Options / CSP frame-ancestors */(function(){if(self===top)return;try{top.location=self.location}catch(e){}setTimeout(function(){if(self!==top){document.documentElement.style.display='none';}},400);})();</script>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Prompt Engineering 系统化方法论 | 张小猛 - loczb</title>
     <meta name="description" content="Prompt Engineering 系统化方法论：从 CRISPE 框架到思维链、自一致性、Function Calling，覆盖评估与迭代的系统性指南">
 
@@ -54,7 +54,7 @@
     }
     </script>
 
-    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/style.css?v=20261004-spacing4">
     <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
     <link rel="alternate icon" href="../../assets/images/favicon.ico">
     <link rel="canonical" href="https://709527.xyz/blog/posts/prompt-engineering-systematic.html">
@@ -87,8 +87,6 @@
   <!-- Particle Canvas Background -->
   <canvas id="particle-canvas" class="particle-canvas" aria-hidden="true"></canvas>
 
-  <div class="scroll-progress"></div>
-
   <main class="section" style="padding-bottom: 0; padding-top: var(--space-4xl);">
     <div class="container container-narrow">
       <a href="../index.html" class="back-link">
@@ -116,35 +114,6 @@
         </div>
 
         
-
-        <!-- Related Static -->
-        <div class="related-posts">
-          <div class="related-posts-title">📌 相关文章</div>
-          <div class="related-posts-list">
-          <a class="related-post-card" href="agentic-ai-架构演进从-chatbot-到自主-agent.html">
-            <div class="related-post-card-title">Agentic AI 架构演进：从 Chatbot 到自主 Agent</div>
-            <div class="related-post-card-tags"><span>AI</span><span>Agent</span><span>架构</span></div>
-          </a>
-          <a class="related-post-card" href="ai-编程助手进化论从结对编程到自主编程团队-2026.html">
-            <div class="related-post-card-title">AI 编程助手进化论：从结对编程到自主编程团队 (2026)</div>
-            <div class="related-post-card-tags"><span>AI</span><span>Agent</span><span>AI 工具</span></div>
-          </a>
-          <a class="related-post-card" href="mcp-server-deep-dive.html">
-            <div class="related-post-card-title">MCP 协议深入实战：从入门到编写自定义 MCP Server</div>
-            <div class="related-post-card-tags"><span>AI</span><span>MCP</span><span>工具调用</span></div>
-          </a>
-          <a class="related-post-card" href="ai-code-editor-review-cursor-windsurf-copilot.html">
-            <div class="related-post-card-title">AI 代码编辑器深度横评：Cursor vs Windsurf vs Copilot</div>
-            <div class="related-post-card-tags"><span>AI</span><span>AI 工具</span><span>开发技巧</span></div>
-          </a>
-          <a class="related-post-card" href="rag-introduction.html">
-            <div class="related-post-card-title">RAG 检索增强生成入门：从理念到落地</div>
-            <div class="related-post-card-tags"><span>RAG</span><span>检索增强生成</span><span>LLM</span></div>
-          </a>
-          </div>
-        </div>
-
-        <!-- /Related Static -->
 
         <p>当 ChatGPT 刚爆火的时候，很多人以为 Prompt Engineering 就是「写一句好的提示词」。但随着 LLM 应用场景从聊天扩展到 Agent、RAG、代码生成、工具调用，仅靠灵感式写 Prompt 已经远远不够了。你需要的是一套<strong>系统化的方法论</strong>——从框架选择、结构设计、推理策略到评估迭代，形成闭环。</p>
 
@@ -1446,6 +1415,35 @@ class ConversationManager:
         <strong>一句话总结</strong>：Prompt Engineering 不是「写提示词」，而是一个<strong>工程化</strong>的过程——用 CRISPE 框架结构化思考，用 System/User 分层管理复杂度，用 CoT/Self-Consistency/ToT 提升推理质量，用 Function Calling 设计扩展能力，用版本管理和 A/B Test 保证可持续迭代。好 Prompt 是改出来的，不是写出来的。
       </div>
 
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="agentic-ai-架构演进从-chatbot-到自主-agent.html">
+            <div class="related-post-card-title">Agentic AI 架构演进：从 Chatbot 到自主 Agent</div>
+            <div class="related-post-card-tags"><span>AI</span><span>Agent</span><span>架构</span></div>
+          </a>
+          <a class="related-post-card" href="ai-编程助手进化论从结对编程到自主编程团队-2026.html">
+            <div class="related-post-card-title">AI 编程助手进化论：从结对编程到自主编程团队 (2026)</div>
+            <div class="related-post-card-tags"><span>AI</span><span>Agent</span><span>AI 工具</span></div>
+          </a>
+          <a class="related-post-card" href="mcp-server-deep-dive.html">
+            <div class="related-post-card-title">MCP 协议深入实战：从入门到编写自定义 MCP Server</div>
+            <div class="related-post-card-tags"><span>AI</span><span>MCP</span><span>工具调用</span></div>
+          </a>
+          <a class="related-post-card" href="ai-code-editor-review-cursor-windsurf-copilot.html">
+            <div class="related-post-card-title">AI 代码编辑器深度横评：Cursor vs Windsurf vs Copilot</div>
+            <div class="related-post-card-tags"><span>AI</span><span>AI 工具</span><span>开发技巧</span></div>
+          </a>
+          <a class="related-post-card" href="rag-introduction.html">
+            <div class="related-post-card-title">RAG 检索增强生成入门：从理念到落地</div>
+            <div class="related-post-card-tags"><span>RAG</span><span>检索增强生成</span><span>LLM</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
+
         <!-- Post Copyright & License Card -->
         <div class="post-copyright-card">
           <div class="copyright-header">
@@ -1511,7 +1509,6 @@ class ConversationManager:
   <script defer src="../../assets/js/main.js"></script>
   <script defer src="../../assets/js/article.js"></script>
   <script defer src="../../assets/js/share.js"></script>
-  <script defer src="../../assets/js/back-to-top.js"></script>
   <!-- Back to Top & Reading Progress -->
   <button class="back-to-top" id="backToTop" aria-label="回到顶部">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1544,10 +1541,10 @@ class ConversationManager:
       <div class="post-info-section" id="postSidebarTags">
         <div class="post-info-label">标签</div>
         <div class="post-info-links">
-          <a href="../../blog/index.html?tag=PromptEngineering" class="post-info-link"># Prompt Engineering</a>
+          <a href="../../blog/index.html?tag=Prompt%20Engineering" class="post-info-link"># Prompt Engineering</a>
           <a href="../../blog/index.html?tag=CRISPE" class="post-info-link"># CRISPE</a>
-          <a href="../../blog/index.html?tag=ChainofThought" class="post-info-link"># Chain-of-Thought</a>
-          <a href="../../blog/index.html?tag=FunctionCalling" class="post-info-link"># Function Calling</a>
+          <a href="../../blog/index.html?tag=Chain-of-Thought" class="post-info-link"># Chain-of-Thought</a>
+          <a href="../../blog/index.html?tag=Function%20Calling" class="post-info-link"># Function Calling</a>
           <a href="../../blog/index.html?tag=AI" class="post-info-link"># AI</a>
         </div>
       </div>
