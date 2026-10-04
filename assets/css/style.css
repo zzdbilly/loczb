@@ -1043,6 +1043,10 @@ a:hover {
 @media (max-width: 768px) {
   .about-grid {
     grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  .about-avatar {
+    margin: 0 auto 0.5rem;
   }
 }
 .about-avatar {
@@ -1252,10 +1256,14 @@ pre code {
 }
 @media (max-width: 640px) {
   .hero {
-    padding: var(--space-4xl) var(--space-md);
+    min-height: auto;
+    padding: calc(var(--nav-height) + 1.25rem) 0 1.5rem;
   }
   .section {
-    padding: var(--space-3xl) var(--space-md);
+    padding: 2.25rem var(--space-md);
+  }
+  .section.section-narrow {
+    padding: 1.5rem var(--space-md);
   }
   .container {
     padding: 0 var(--space-md);
@@ -6930,7 +6938,64 @@ html, body {
   }
 
   .bento-section {
-    padding: 1.25rem 0 2.5rem !important;
+    padding: 1.25rem 0 2.25rem !important;
+  }
+
+  /* 通用 Section 移动端间距收紧（消除 128px 级巨大跨区块虚位） */
+  .section {
+    padding: 2.25rem var(--space-md) !important;
+  }
+
+  .section.section-narrow {
+    padding: 1.5rem var(--space-md) !important;
+  }
+
+  /* 文章详情页顶部消除 169px 巨大断层 */
+  main.section {
+    padding-top: calc(var(--nav-height) + 1.25rem) !important;
+    padding-bottom: 0 !important;
+  }
+
+  .section hr {
+    margin: 2rem 0 !important;
+  }
+
+  /* 博客列表页 Hero 与控制台间距紧凑化 */
+  .blog-hero {
+    padding: calc(var(--nav-height) + 1.25rem) 0 1.25rem !important;
+  }
+
+  .blog-hero-bar {
+    gap: 1.25rem !important;
+    margin-bottom: 1.25rem !important;
+  }
+
+  .blog-control-hub {
+    margin-bottom: 1.5rem !important;
+    padding-bottom: 1rem !important;
+  }
+
+  /* 关于页与项目页 Hero 间距平滑衔接 */
+  .about-hero {
+    padding: calc(var(--nav-height) + 1.25rem) 0 1.5rem !important;
+  }
+
+  .projects-hero {
+    padding-top: calc(var(--nav-height) + 0.75rem) !important;
+    padding-bottom: 0.5rem !important;
+  }
+
+  .projects-filter-bar {
+    margin-bottom: 1.25rem !important;
+  }
+
+  /* 页脚移动端留白收拢 */
+  .footer {
+    padding: 2.25rem var(--space-md) max(2rem, env(safe-area-inset-bottom)) !important;
+  }
+
+  .footer-inner {
+    gap: 1.25rem !important;
   }
 }
 
