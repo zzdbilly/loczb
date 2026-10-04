@@ -1,6 +1,8 @@
 // Service Worker for loczb PWA
-// 版本号规则：修改内容后更新此版本号（格式：loczb-YYYYMMDD-N）
-// 每次部署有实质性变更时递增 N，重大改版更新日期
+// 版本号规则：内容哈希，自动生成——不要手改本行。
+//   SW_VERSION = 'c-' + sha256(blog/articles-index.json + assets/js/search.js + assets/css/style.css)[:8]
+//   由 scripts/generate-index.js 的重建管线在写盘末尾自动重算（内容不变则不落盘，幂等）。
+//   所以改了 style.css / search.js / 任何文章，只需跑重建（或发一次文），版本号会自己跟上。
 // 查看更新日志：https://github.com/zzdbilly/loczb/commits
 const SW_VERSION = 'c-51fdec17';
 const CACHE_NAME = 'loczb-' + SW_VERSION;
