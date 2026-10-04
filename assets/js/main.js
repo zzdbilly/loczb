@@ -421,23 +421,30 @@ function initLazyLoad() {
   lazyImages.forEach(img => imageObserver.observe(img));
 }
 
-// Scroll Progress Indicator
+// Scroll Progress Indicator (rAF 节流)
 function initScrollProgress() {
-  const progressBar = document.querySelector('.scroll-progress, #readingProgress, .reading-progress');
+  const progressBar = document.querySelector('#readingProgress, .reading-progress, .scroll-progress');
   if (!progressBar || progressBar._hasProgressInit) return;
   progressBar._hasProgressInit = true;
   
+  let ticking = false;
   window.addEventListener('scroll', () => {
-    const scrollTop = window.pageYOffset;
-    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-    if (docHeight > 0) {
-      const scrollPercent = (scrollTop / docHeight) * 100;
-      progressBar.style.width = `${Math.min(100, Math.max(0, scrollPercent))}%`;
+    if (!ticking) {
+      window.requestAnimationFrame(() => {
+        const scrollTop = window.pageYOffset;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        if (docHeight > 0) {
+          const scrollPercent = (scrollTop / docHeight) * 100;
+          progressBar.style.width = `${Math.min(100, Math.max(0, scrollPercent))}%`;
+        }
+        ticking = false;
+      });
+      ticking = true;
     }
   }, { passive: true });
 }
 
-// Back to Top Button
+// Back to Top Button (rAF 节流)
 function initBackToTop() {
   let btn = document.querySelector('.back-to-top, #backToTop');
   if (!btn) {
@@ -451,11 +458,18 @@ function initBackToTop() {
   if (btn._hasBackToTopInit) return;
   btn._hasBackToTopInit = true;
   
+  let ticking = false;
   window.addEventListener('scroll', () => {
-    if (window.pageYOffset > 300) {
-      btn.classList.add('visible');
-    } else {
-      btn.classList.remove('visible');
+    if (!ticking) {
+      window.requestAnimationFrame(() => {
+        if (window.pageYOffset > 300) {
+          btn.classList.add('visible');
+        } else {
+          btn.classList.remove('visible');
+        }
+        ticking = false;
+      });
+      ticking = true;
     }
   }, { passive: true });
   

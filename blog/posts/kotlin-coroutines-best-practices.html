@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="zh-CN" data-theme="dark">
 <head>
-  <script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+  <script>document.documentElement.classList.add("js");try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
     <meta charset="UTF-8">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://static.cloudflareinsights.com https://loczb-comments.billycust716.workers.dev; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://loczb-comments.billycust716.workers.dev https://dashscope.aliyuncs.com https://709527.xyz https://www.709527.xyz https://cloudflareinsights.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
     <script>/* 反点击劫持兜底：GitHub Pages 无法下发 X-Frame-Options / CSP frame-ancestors */(function(){if(self===top)return;try{top.location=self.location}catch(e){}setTimeout(function(){if(self!==top){document.documentElement.style.display='none';}},400);})();</script>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Kotlin Coroutines 最佳实践 | 张小猛 - loczb</title>
     <meta name="description" content="Kotlin Coroutines 最佳实践：从入门到精通，掌握异步编程的核心技巧与常见陷阱">
 
@@ -54,7 +54,7 @@
     }
     </script>
 
-    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/style.css?v=20261004-spacing4">
     <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
     <link rel="alternate icon" href="../../assets/images/favicon.ico">
     <link rel="canonical" href="https://709527.xyz/blog/posts/kotlin-coroutines-best-practices.html">
@@ -86,8 +86,6 @@
   </nav>
   <!-- Particle Canvas Background -->
   <canvas id="particle-canvas" class="particle-canvas" aria-hidden="true"></canvas>
-
-  <div class="scroll-progress"></div>
 
   <main class="section" style="padding-bottom: 0; padding-top: var(--space-4xl);">
     <div class="container container-narrow">
@@ -140,35 +138,6 @@
           </details>
         </div>
         <!-- /Series Card Widget -->
-
-        <!-- Related Static -->
-        <div class="related-posts">
-          <div class="related-posts-title">📌 相关文章</div>
-          <div class="related-posts-list">
-          <a class="related-post-card" href="kotlin-scope-functions-实战选择五个函数一个决策树.html">
-            <div class="related-post-card-title">Kotlin Scope Functions 实战选择：五个函数一个决策树</div>
-            <div class="related-post-card-tags"><span>Kotlin</span><span>Android</span><span>最佳实践</span></div>
-          </a>
-          <a class="related-post-card" href="kotlin-coroutines-并发实战从入门到优雅的并发编程.html">
-            <div class="related-post-card-title">Kotlin Coroutines 并发实战：从入门到优雅的并发编程</div>
-            <div class="related-post-card-tags"><span>Kotlin</span><span>协程</span><span>并发</span></div>
-          </a>
-          <a class="related-post-card" href="kotlin-coroutine-exception-handling.html">
-            <div class="related-post-card-title">Kotlin Coroutine 异常处理机制全面解析</div>
-            <div class="related-post-card-tags"><span>Kotlin</span><span>协程</span><span>异常处理</span></div>
-          </a>
-          <a class="related-post-card" href="android-testing-playbook.html">
-            <div class="related-post-card-title">别再从 Espresso 开始：Android 测试分层实战手册</div>
-            <div class="related-post-card-tags"><span>Android</span><span>测试</span><span>Kotlin</span></div>
-          </a>
-          <a class="related-post-card" href="compose-navigation-guide.html">
-            <div class="related-post-card-title">Jetpack Compose Navigation 进阶指南：从路由设计到深层链接</div>
-            <div class="related-post-card-tags"><span>Jetpack Compose</span><span>Android</span><span>Navigation</span></div>
-          </a>
-          </div>
-        </div>
-
-        <!-- /Related Static -->
 
         <p>协程（Coroutines）是 Kotlin 最强大的特性之一，它让异步编程变得像同步代码一样简洁。但在实际使用中，很多开发者容易踩坑：<strong>内存泄漏、异常丢失、线程阻塞</strong>等问题频发。</p>
 
@@ -428,6 +397,35 @@ suspend fun &lt;T> retry(
         Kotlin Coroutines 指南：<a href="https://github.com/Kotlin/kotlinx.coroutines" target="_blank">github.com/Kotlin/kotlinx.coroutines</a>
       </div>
 
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="kotlin-scope-functions-实战选择五个函数一个决策树.html">
+            <div class="related-post-card-title">Kotlin Scope Functions 实战选择：五个函数一个决策树</div>
+            <div class="related-post-card-tags"><span>Kotlin</span><span>Android</span><span>最佳实践</span></div>
+          </a>
+          <a class="related-post-card" href="kotlin-coroutines-并发实战从入门到优雅的并发编程.html">
+            <div class="related-post-card-title">Kotlin Coroutines 并发实战：从入门到优雅的并发编程</div>
+            <div class="related-post-card-tags"><span>Kotlin</span><span>协程</span><span>并发</span></div>
+          </a>
+          <a class="related-post-card" href="kotlin-coroutine-exception-handling.html">
+            <div class="related-post-card-title">Kotlin Coroutine 异常处理机制全面解析</div>
+            <div class="related-post-card-tags"><span>Kotlin</span><span>协程</span><span>异常处理</span></div>
+          </a>
+          <a class="related-post-card" href="android-testing-playbook.html">
+            <div class="related-post-card-title">别再从 Espresso 开始：Android 测试分层实战手册</div>
+            <div class="related-post-card-tags"><span>Android</span><span>测试</span><span>Kotlin</span></div>
+          </a>
+          <a class="related-post-card" href="compose-navigation-guide.html">
+            <div class="related-post-card-title">Jetpack Compose Navigation 进阶指南：从路由设计到深层链接</div>
+            <div class="related-post-card-tags"><span>Jetpack Compose</span><span>Android</span><span>Navigation</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
+
         <!-- Post Copyright & License Card -->
         <div class="post-copyright-card">
           <div class="copyright-header">
@@ -503,7 +501,6 @@ suspend fun &lt;T> retry(
   <script defer src="../../assets/js/main.js"></script>
   <script defer src="../../assets/js/article.js"></script>
   <script defer src="../../assets/js/share.js"></script>
-  <script defer src="../../assets/js/back-to-top.js"></script>
   <!-- Back to Top & Reading Progress -->
   <button class="back-to-top" id="backToTop" aria-label="回到顶部">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -538,9 +535,9 @@ suspend fun &lt;T> retry(
         <div class="post-info-links">
           <a href="../../blog/index.html?tag=Kotlin" class="post-info-link"># Kotlin</a>
           <a href="../../blog/index.html?tag=Coroutines" class="post-info-link"># Coroutines</a>
-          <a href="../../blog/index.html?tag=异步编程" class="post-info-link"># 异步编程</a>
+          <a href="../../blog/index.html?tag=%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B" class="post-info-link"># 异步编程</a>
           <a href="../../blog/index.html?tag=Android" class="post-info-link"># Android</a>
-          <a href="../../blog/index.html?tag=最佳实践" class="post-info-link"># 最佳实践</a>
+          <a href="../../blog/index.html?tag=%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5" class="post-info-link"># 最佳实践</a>
         </div>
       </div>
     </div>

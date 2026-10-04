@@ -991,21 +991,33 @@ a:hover {
     transform: translateX(0);
   }
 }
-.animate-on-scroll {
+/* 入场动画只在「确认 JS 在跑」时才先隐藏（html.js 由 <head> 内联脚本第一时间加上）。
+   否则脚本被拦截/加载失败/爬虫不执行 JS 时，带这些类的区块会永远 opacity:0 —— 首页几乎整页空白。
+   用 :where(.js) 包一层，特异性与原来的 .animate-on-scroll 完全相同（:where 计 0），
+   后面 .project-card:hover 之类按源码顺序覆盖 transform 的规则不受影响。 */
+:where(.js) .animate-on-scroll {
   opacity: 0;
   transform: translateY(30px);
   transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
-.animate-on-scroll.visible {
+:where(.js) .animate-on-scroll.visible {
   opacity: 1;
   transform: translateY(0);
 }
-.stagger-item {
+:where(.js) .stagger-item {
   opacity: 0;
   transform: translateY(20px);
 }
-.stagger-item.visible {
+:where(.js) .stagger-item.visible {
   animation: fadeInUp 0.6s ease forwards;
+}
+@media (prefers-reduced-motion: reduce) {
+  :where(.js) .animate-on-scroll,
+  :where(.js) .stagger-item {
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
 }
 .stagger-item:nth-child(1) { animation-delay: 0s; }
 .stagger-item:nth-child(2) { animation-delay: 0.1s; }
@@ -2541,6 +2553,7 @@ pre code {
   position: absolute;
   inset: 0;
   background: rgba(0, 0, 0, 0.6);
+  -webkit-backdrop-filter: blur(4px);
   backdrop-filter: blur(4px);
 }
 .search-modal-content {
@@ -3155,7 +3168,18 @@ button.share-btn {
   color: var(--color-text-secondary);
 }
 .post-sidebar-info {
-  display: none !important;
+  position: fixed;
+  left: max(1rem, calc((100% - 800px) / 2 - 230px));
+  top: 180px;
+  width: 200px;
+  display: none;
+  z-index: 50;
+}
+
+@media (min-width: 1366px) {
+  .post-sidebar-info {
+    display: block;
+  }
 }
 .post-info-card {
   background: var(--color-bg-secondary);
@@ -7362,3 +7386,24 @@ html, body {
   margin: 2rem 0 !important;
 }
 
+
+/* ========================================================
+   SAFE AREA · LEFT / RIGHT（2026-10-05）
+   全站 viewport 已加 viewport-fit=cover：此前 env(safe-area-inset-*) 恒为 0，上面那几条
+   top/bottom 规则其实从未生效。开启 cover 后横屏 iPhone 左右会出现刘海/圆角内缩区，
+   这里补左右：普通流内容统一由 body 内缩；fixed 元素不受 body padding 影响，单独处理。
+   fixed 按钮用 margin-right 叠加而非改写 right —— 不与各断点下的 right 覆盖互相打架。
+   非刘海设备 / 竖屏时 env() = 0，以下规则全部等价于无。
+   ======================================================== */
+body {
+  padding-left: env(safe-area-inset-left, 0px);
+  padding-right: env(safe-area-inset-right, 0px);
+}
+.nav {
+  padding-left: env(safe-area-inset-left, 0px);
+  padding-right: env(safe-area-inset-right, 0px);
+}
+.back-to-top,
+.mobile-reading-toolbar {
+  margin-right: env(safe-area-inset-right, 0px);
+}

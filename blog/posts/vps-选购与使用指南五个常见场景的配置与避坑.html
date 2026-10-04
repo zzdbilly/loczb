@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="zh-CN" data-theme="dark">
 <head>
-  <script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+  <script>document.documentElement.classList.add("js");try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
     <meta charset="UTF-8">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://static.cloudflareinsights.com https://loczb-comments.billycust716.workers.dev; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://loczb-comments.billycust716.workers.dev https://dashscope.aliyuncs.com https://709527.xyz https://www.709527.xyz https://cloudflareinsights.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
     <script>/* 反点击劫持兜底：GitHub Pages 无法下发 X-Frame-Options / CSP frame-ancestors */(function(){if(self===top)return;try{top.location=self.location}catch(e){}setTimeout(function(){if(self!==top){document.documentElement.style.display='none';}},400);})();</script>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>VPS 选购与使用指南：五个常见场景的配置与避坑 | 张小猛 - loczb</title>
     <meta name="description" content="从扶墙线路到生产环境部署，不同场景下 VPS 怎么选、怎么配、怎么不踩坑">
 
@@ -55,7 +55,7 @@
 }
     </script>
 
-    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/style.css?v=20261004-spacing4">
     <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
     <link rel="alternate icon" href="../../assets/images/favicon.ico">
     <link rel="canonical" href="https://709527.xyz/blog/posts/vps-选购与使用指南五个常见场景的配置与避坑.html">
@@ -88,8 +88,6 @@
   <!-- Particle Canvas Background -->
   <canvas id="particle-canvas" class="particle-canvas" aria-hidden="true"></canvas>
 
-  <div class="scroll-progress"></div>
-
   <main class="section" style="padding-bottom: 0; padding-top: var(--space-4xl);">
     <div class="container container-narrow">
       <a href="../index.html" class="back-link">
@@ -116,35 +114,6 @@
         </div>
 
         
-
-        <!-- Related Static -->
-        <div class="related-posts">
-          <div class="related-posts-title">📌 相关文章</div>
-          <div class="related-posts-list">
-          <a class="related-post-card" href="choosing-and-running-a-vps.html">
-            <div class="related-post-card-title">主流 VPS 的选择和使用</div>
-            <div class="related-post-card-tags"><span>VPS</span><span>DevOps</span><span>运维</span></div>
-          </a>
-          <a class="related-post-card" href="从-openclaw-到-hermesai-agent-工作区迁移完整记录.html">
-            <div class="related-post-card-title">从 OpenClaw 到 Hermes：AI Agent 工作区迁移完整记录</div>
-            <div class="related-post-card-tags"><span>OpenClaw</span><span>Hermes</span><span>AI Agent</span></div>
-          </a>
-          <a class="related-post-card" href="nextjs-prisma-部署-vercel-常见踩坑外键约束与构建时数据修复.html">
-            <div class="related-post-card-title">Next.js + Prisma 部署 Vercel 常见踩坑：外键约束与构建时数据修复</div>
-            <div class="related-post-card-tags"><span>Next.js</span><span>Prisma</span><span>Vercel</span></div>
-          </a>
-          <a class="related-post-card" href="github-actions-auto-index-blog-cicd.html">
-            <div class="related-post-card-title">GitHub Actions 自动索引：我的静态博客 CI/CD 进化之路</div>
-            <div class="related-post-card-tags"><span>GitHub Actions</span><span>CI/CD</span><span>DevOps</span></div>
-          </a>
-          <a class="related-post-card" href="nginx-reverse-proxy-tuning.html">
-            <div class="related-post-card-title">Nginx 反向代理性能调优：从入门到生产</div>
-            <div class="related-post-card-tags"><span>Nginx</span><span>反向代理</span><span>性能调优</span></div>
-          </a>
-          </div>
-        </div>
-
-        <!-- /Related Static -->
 
         <p>每次看到有人问"想薅羊毛怎么弄台便宜的服务器"，下面的回复一定少不了"搬瓦工""RN""绿云"这些名字。但如果你对 VPS 的定义就是一个月 5 块钱开个代理，那我建议你先别急着买低价 VPS——先搞清楚你需要什么，不然省下来的钱都会变成运维成本赔回去。</p>
 <p>这篇文章我想聊五个常见的 VPS 使用场景，分别对应是什么配置够用、怎么挑、有什么坑。不推荐具体商家（那东西变得太快），但给了思路至少不会被割。</p>
@@ -355,6 +324,35 @@ max_connections = 50
 <p>如果还是不确定，选一个<strong>口碑好、默认配置不超售、有月付选项</strong>的商家，先用一个月试试。不合适就换——VPS 市场的好处是切换成本很低。</p>
 <p>最后一句掏心窝的话：<strong>别为"可能以后用得上"多花钱</strong>。你永远不会因为"以后可能用得上"去用那些资源——VPS 就像买相机，大部分人最后用的还是自动档。</p>
 
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="choosing-and-running-a-vps.html">
+            <div class="related-post-card-title">主流 VPS 的选择和使用</div>
+            <div class="related-post-card-tags"><span>VPS</span><span>DevOps</span><span>运维</span></div>
+          </a>
+          <a class="related-post-card" href="从-openclaw-到-hermesai-agent-工作区迁移完整记录.html">
+            <div class="related-post-card-title">从 OpenClaw 到 Hermes：AI Agent 工作区迁移完整记录</div>
+            <div class="related-post-card-tags"><span>OpenClaw</span><span>Hermes</span><span>AI Agent</span></div>
+          </a>
+          <a class="related-post-card" href="nextjs-prisma-部署-vercel-常见踩坑外键约束与构建时数据修复.html">
+            <div class="related-post-card-title">Next.js + Prisma 部署 Vercel 常见踩坑：外键约束与构建时数据修复</div>
+            <div class="related-post-card-tags"><span>Next.js</span><span>Prisma</span><span>Vercel</span></div>
+          </a>
+          <a class="related-post-card" href="github-actions-auto-index-blog-cicd.html">
+            <div class="related-post-card-title">GitHub Actions 自动索引：我的静态博客 CI/CD 进化之路</div>
+            <div class="related-post-card-tags"><span>GitHub Actions</span><span>CI/CD</span><span>DevOps</span></div>
+          </a>
+          <a class="related-post-card" href="nginx-reverse-proxy-tuning.html">
+            <div class="related-post-card-title">Nginx 反向代理性能调优：从入门到生产</div>
+            <div class="related-post-card-tags"><span>Nginx</span><span>反向代理</span><span>性能调优</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
+
         <!-- Post Copyright & License Card -->
         <div class="post-copyright-card">
           <div class="copyright-header">
@@ -420,7 +418,6 @@ max_connections = 50
   <script defer src="../../assets/js/main.js"></script>
   <script defer src="../../assets/js/article.js"></script>
   <script defer src="../../assets/js/share.js"></script>
-  <script defer src="../../assets/js/back-to-top.js"></script>
   <!-- Back to Top & Reading Progress -->
   <button class="back-to-top" id="backToTop" aria-label="回到顶部">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -455,8 +452,8 @@ max_connections = 50
         <div class="post-info-links">
           <a href="../../blog/index.html?tag=VPS" class="post-info-link"># VPS</a>
           <a href="../../blog/index.html?tag=DevOps" class="post-info-link"># DevOps</a>
-          <a href="../../blog/index.html?tag=运维" class="post-info-link"># 运维</a>
-          <a href="../../blog/index.html?tag=服务器" class="post-info-link"># 服务器</a>
+          <a href="../../blog/index.html?tag=%E8%BF%90%E7%BB%B4" class="post-info-link"># 运维</a>
+          <a href="../../blog/index.html?tag=%E6%9C%8D%E5%8A%A1%E5%99%A8" class="post-info-link"># 服务器</a>
         </div>
       </div>
     </div>

@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="zh-CN" data-theme="dark">
 <head>
-  <script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+  <script>document.documentElement.classList.add("js");try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
     <meta charset="UTF-8">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://static.cloudflareinsights.com https://loczb-comments.billycust716.workers.dev; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://loczb-comments.billycust716.workers.dev https://dashscope.aliyuncs.com https://709527.xyz https://www.709527.xyz https://cloudflareinsights.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
     <script>/* 反点击劫持兜底：GitHub Pages 无法下发 X-Frame-Options / CSP frame-ancestors */(function(){if(self===top)return;try{top.location=self.location}catch(e){}setTimeout(function(){if(self!==top){document.documentElement.style.display='none';}},400);})();</script>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Android 16 后台任务新限制：开发者迁移指南 | 张小猛 - loczb</title>
     <meta name="description" content="Android 16 后台任务新限制完整解读：JobScheduler 强化、前台服务严格限制、WorkManager 迁移策略与兼容性适配指南">
 
@@ -54,7 +54,7 @@
     }
     </script>
 
-    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/style.css?v=20261004-spacing4">
     <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
     <link rel="alternate icon" href="../../assets/images/favicon.ico">
     <link rel="canonical" href="https://709527.xyz/blog/posts/android-16-background-tasks.html">
@@ -86,8 +86,6 @@
   </nav>
   <!-- Particle Canvas Background -->
   <canvas id="particle-canvas" class="particle-canvas" aria-hidden="true"></canvas>
-
-  <div class="scroll-progress"></div>
 
   <main class="section" style="padding-bottom: 0; padding-top: var(--space-4xl);">
     <div class="container container-narrow">
@@ -139,35 +137,6 @@
           </details>
         </div>
         <!-- /Series Card Widget -->
-
-        <!-- Related Static -->
-        <div class="related-posts">
-          <div class="related-posts-title">📌 相关文章</div>
-          <div class="related-posts-list">
-          <a class="related-post-card" href="android-16-foreground-service-constraints.html">
-            <div class="related-post-card-title">Android 16 前台服务类型全新限制：类型强制匹配与迁移指南</div>
-            <div class="related-post-card-tags"><span>Android 16</span><span>前台服务</span><span>后台任务</span></div>
-          </a>
-          <a class="related-post-card" href="android-16-notifications.html">
-            <div class="related-post-card-title">Android 16 通知系统新 API 详解</div>
-            <div class="related-post-card-tags"><span>Android 16</span><span>通知系统</span><span>Live Updates</span></div>
-          </a>
-          <a class="related-post-card" href="android-16-features.html">
-            <div class="related-post-card-title">Android 16 新特性详解：开发者需要知道的 8 件事</div>
-            <div class="related-post-card-tags"><span>Android</span><span>Android 16</span><span>Live Updates</span></div>
-          </a>
-          <a class="related-post-card" href="android-testing-playbook.html">
-            <div class="related-post-card-title">别再从 Espresso 开始：Android 测试分层实战手册</div>
-            <div class="related-post-card-tags"><span>Android</span><span>测试</span><span>Kotlin</span></div>
-          </a>
-          <a class="related-post-card" href="jetpack-compose-性能优化实战从卡顿到丝滑的-12-个技巧.html">
-            <div class="related-post-card-title">Jetpack Compose 性能优化实战：从卡顿到丝滑的 12 个技巧</div>
-            <div class="related-post-card-tags"><span>Jetpack Compose</span><span>Android</span><span>性能优化</span></div>
-          </a>
-          </div>
-        </div>
-
-        <!-- /Related Static -->
 
         <p>如果你从 Android Oreo 时代就开始做 Android 开发，一定对"后台限制"这个词不陌生——每隔一个大版本，Google 都在收紧后台任务的生存空间。Android 16 也不例外，而且这次力度空前：JobScheduler 执行时间被进一步压缩，前台服务新增 short-lived 类型和硬性超时，后台定位访问更加严格。</p>
 
@@ -954,6 +923,35 @@ adb shell dumpsys deviceidle whitelist</code></pre>
         <strong>一句话总结</strong>：Android 16 后台任务的核心思路是"能延迟就延迟，不能延迟就用 WorkManager，实在需要即时就用带类型的 FGS"。Short-lived FGS 是新的短时利器，但 3 分钟的硬限制意味着你必须认真评估任务的执行时间。FCM + WorkManager 的推拉组合是数据同步的黄金方案。
       </div>
 
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="android-16-foreground-service-constraints.html">
+            <div class="related-post-card-title">Android 16 前台服务类型全新限制：类型强制匹配与迁移指南</div>
+            <div class="related-post-card-tags"><span>Android 16</span><span>前台服务</span><span>后台任务</span></div>
+          </a>
+          <a class="related-post-card" href="android-16-notifications.html">
+            <div class="related-post-card-title">Android 16 通知系统新 API 详解</div>
+            <div class="related-post-card-tags"><span>Android 16</span><span>通知系统</span><span>Live Updates</span></div>
+          </a>
+          <a class="related-post-card" href="android-16-features.html">
+            <div class="related-post-card-title">Android 16 新特性详解：开发者需要知道的 8 件事</div>
+            <div class="related-post-card-tags"><span>Android</span><span>Android 16</span><span>Live Updates</span></div>
+          </a>
+          <a class="related-post-card" href="android-testing-playbook.html">
+            <div class="related-post-card-title">别再从 Espresso 开始：Android 测试分层实战手册</div>
+            <div class="related-post-card-tags"><span>Android</span><span>测试</span><span>Kotlin</span></div>
+          </a>
+          <a class="related-post-card" href="jetpack-compose-性能优化实战从卡顿到丝滑的-12-个技巧.html">
+            <div class="related-post-card-title">Jetpack Compose 性能优化实战：从卡顿到丝滑的 12 个技巧</div>
+            <div class="related-post-card-tags"><span>Jetpack Compose</span><span>Android</span><span>性能优化</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
+
         <!-- Post Copyright & License Card -->
         <div class="post-copyright-card">
           <div class="copyright-header">
@@ -1033,7 +1031,6 @@ adb shell dumpsys deviceidle whitelist</code></pre>
   <script defer src="../../assets/js/main.js"></script>
   <script defer src="../../assets/js/article.js"></script>
   <script defer src="../../assets/js/share.js"></script>
-  <script defer src="../../assets/js/back-to-top.js"></script>
   <!-- Back to Top & Reading Progress -->
   <button class="back-to-top" id="backToTop" aria-label="回到顶部">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1066,11 +1063,11 @@ adb shell dumpsys deviceidle whitelist</code></pre>
       <div class="post-info-section" id="postSidebarTags">
         <div class="post-info-label">标签</div>
         <div class="post-info-links">
-          <a href="../../blog/index.html?tag=Android16" class="post-info-link"># Android 16</a>
-          <a href="../../blog/index.html?tag=后台任务" class="post-info-link"># 后台任务</a>
+          <a href="../../blog/index.html?tag=Android%2016" class="post-info-link"># Android 16</a>
+          <a href="../../blog/index.html?tag=%E5%90%8E%E5%8F%B0%E4%BB%BB%E5%8A%A1" class="post-info-link"># 后台任务</a>
           <a href="../../blog/index.html?tag=WorkManager" class="post-info-link"># WorkManager</a>
-          <a href="../../blog/index.html?tag=前台服务" class="post-info-link"># 前台服务</a>
-          <a href="../../blog/index.html?tag=电池优化" class="post-info-link"># 电池优化</a>
+          <a href="../../blog/index.html?tag=%E5%89%8D%E5%8F%B0%E6%9C%8D%E5%8A%A1" class="post-info-link"># 前台服务</a>
+          <a href="../../blog/index.html?tag=%E7%94%B5%E6%B1%A0%E4%BC%98%E5%8C%96" class="post-info-link"># 电池优化</a>
         </div>
       </div>
     </div>

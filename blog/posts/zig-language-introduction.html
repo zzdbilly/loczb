@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="zh-CN" data-theme="dark">
 <head>
-  <script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+  <script>document.documentElement.classList.add("js");try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
     <meta charset="UTF-8">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://static.cloudflareinsights.com https://loczb-comments.billycust716.workers.dev; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://loczb-comments.billycust716.workers.dev https://dashscope.aliyuncs.com https://709527.xyz https://www.709527.xyz https://cloudflareinsights.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
     <script>/* 反点击劫持兜底：GitHub Pages 无法下发 X-Frame-Options / CSP frame-ancestors */(function(){if(self===top)return;try{top.location=self.location}catch(e){}setTimeout(function(){if(self!==top){document.documentElement.style.display='none';}},400);})();</script>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Zig 语言入门：比 C 更安全的系统编程 | 张小猛 - loczb</title>
     <meta name="description" content="Zig 语言入门完整指南：comptime 编译期计算、Allocator 模式、错误处理、C 互操作、交叉编译与构建系统深度解析">
 
@@ -54,7 +54,7 @@
     }
     </script>
 
-    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/style.css?v=20261004-spacing4">
     <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
     <link rel="alternate icon" href="../../assets/images/favicon.ico">
     <link rel="canonical" href="https://709527.xyz/blog/posts/zig-language-introduction.html">
@@ -87,8 +87,6 @@
   <!-- Particle Canvas Background -->
   <canvas id="particle-canvas" class="particle-canvas" aria-hidden="true"></canvas>
 
-  <div class="scroll-progress"></div>
-
   <main class="section" style="padding-bottom: 0; padding-top: var(--space-4xl);">
     <div class="container container-narrow">
       <a href="../index.html" class="back-link">
@@ -118,31 +116,6 @@
         </div>
 
         
-
-        <!-- Related Static -->
-        <div class="related-posts">
-          <div class="related-posts-title">📌 相关文章</div>
-          <div class="related-posts-list">
-          <a class="related-post-card" href="rust-入局2026-年的生态全景.html">
-            <div class="related-post-card-title">Rust 入局：2026 年的生态全景</div>
-            <div class="related-post-card-tags"><span>Rust</span><span>TIOBE</span><span>系统编程</span></div>
-          </a>
-          <a class="related-post-card" href="linux-inode-mechanism-deep-dive.html">
-            <div class="related-post-card-title">Linux inode 机制深入理解：从数据结构到实战排查</div>
-            <div class="related-post-card-tags"><span>Linux</span><span>文件系统</span><span>系统编程</span></div>
-          </a>
-          <a class="related-post-card" href="rust-getting-started.html">
-            <div class="related-post-card-title">Rust 入门：从零到生产</div>
-            <div class="related-post-card-tags"><span>Rust</span><span>系统编程</span><span>所有权</span></div>
-          </a>
-          <a class="related-post-card" href="linux-ebpf-getting-started.html">
-            <div class="related-post-card-title">Linux eBPF 入门：内核可观测性新范式</div>
-            <div class="related-post-card-tags"><span>eBPF</span><span>Linux 内核</span><span>可观测性</span></div>
-          </a>
-          </div>
-        </div>
-
-        <!-- /Related Static -->
 
         <p>如果你写 C 写了十年，厌倦了空指针崩溃、隐式转换陷阱和手动内存管理的刀尖跳舞；如果你觉得 Rust 的借用检查器和生命周期标注太过繁重，学习曲线陡峭到让人望而却步——那么 Zig 可能是你一直在找的那个平衡点。</p>
 
@@ -985,6 +958,31 @@ fn delay(cycles: u32) void {
         <strong>一句话总结</strong>：Zig 是 C 的精神继任者——它保留了 C 的简洁和直接，用 <code>comptime</code> 替代宏，用 <code>?T/!T</code> 替代空指针和错误码，用 Allocator 替代裸 malloc/free，用 build.zig 替代 Makefile。如果你觉得 C 太危险、Rust 太复杂，Zig 正是中间那个甜点。
       </div>
 
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="rust-入局2026-年的生态全景.html">
+            <div class="related-post-card-title">Rust 入局：2026 年的生态全景</div>
+            <div class="related-post-card-tags"><span>Rust</span><span>TIOBE</span><span>系统编程</span></div>
+          </a>
+          <a class="related-post-card" href="linux-inode-mechanism-deep-dive.html">
+            <div class="related-post-card-title">Linux inode 机制深入理解：从数据结构到实战排查</div>
+            <div class="related-post-card-tags"><span>Linux</span><span>文件系统</span><span>系统编程</span></div>
+          </a>
+          <a class="related-post-card" href="rust-getting-started.html">
+            <div class="related-post-card-title">Rust 入门：从零到生产</div>
+            <div class="related-post-card-tags"><span>Rust</span><span>系统编程</span><span>所有权</span></div>
+          </a>
+          <a class="related-post-card" href="linux-ebpf-getting-started.html">
+            <div class="related-post-card-title">Linux eBPF 入门：内核可观测性新范式</div>
+            <div class="related-post-card-tags"><span>eBPF</span><span>Linux 内核</span><span>可观测性</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
+
         <!-- Post Copyright & License Card -->
         <div class="post-copyright-card">
           <div class="copyright-header">
@@ -1050,7 +1048,6 @@ fn delay(cycles: u32) void {
   <script defer src="../../assets/js/main.js"></script>
   <script defer src="../../assets/js/article.js"></script>
   <script defer src="../../assets/js/share.js"></script>
-  <script defer src="../../assets/js/back-to-top.js"></script>
   <!-- Back to Top & Reading Progress -->
   <button class="back-to-top" id="backToTop" aria-label="回到顶部">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1084,12 +1081,12 @@ fn delay(cycles: u32) void {
         <div class="post-info-label">标签</div>
         <div class="post-info-links">
           <a href="../../blog/index.html?tag=Zig" class="post-info-link"># Zig</a>
-          <a href="../../blog/index.html?tag=系统编程" class="post-info-link"># 系统编程</a>
+          <a href="../../blog/index.html?tag=%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B" class="post-info-link"># 系统编程</a>
           <a href="../../blog/index.html?tag=comptime" class="post-info-link"># comptime</a>
           <a href="../../blog/index.html?tag=Allocator" class="post-info-link"># Allocator</a>
-          <a href="../../blog/index.html?tag=交叉编译" class="post-info-link"># 交叉编译</a>
-          <a href="../../blog/index.html?tag=buildzig" class="post-info-link"># build.zig</a>
-          <a href="../../blog/index.html?tag=C互操作" class="post-info-link"># C 互操作</a>
+          <a href="../../blog/index.html?tag=%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91" class="post-info-link"># 交叉编译</a>
+          <a href="../../blog/index.html?tag=build.zig" class="post-info-link"># build.zig</a>
+          <a href="../../blog/index.html?tag=C%20%E4%BA%92%E6%93%8D%E4%BD%9C" class="post-info-link"># C 互操作</a>
         </div>
       </div>
     </div>

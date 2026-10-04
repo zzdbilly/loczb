@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="zh-CN" data-theme="dark">
 <head>
-  <script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+  <script>document.documentElement.classList.add("js");try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
     <meta charset="UTF-8">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://static.cloudflareinsights.com https://loczb-comments.billycust716.workers.dev; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://loczb-comments.billycust716.workers.dev https://dashscope.aliyuncs.com https://709527.xyz https://www.709527.xyz https://cloudflareinsights.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
     <script>/* 反点击劫持兜底：GitHub Pages 无法下发 X-Frame-Options / CSP frame-ancestors */(function(){if(self===top)return;try{top.location=self.location}catch(e){}setTimeout(function(){if(self!==top){document.documentElement.style.display='none';}},400);})();</script>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>PWA 实战：从零打造离线可用 Web 应用 | 张小猛 - loczb</title>
     <meta name="description" content="PWA 实战：从零开始打造离线可用的 Web 应用，详解 Service Worker、manifest.json 配置与缓存策略">
 
@@ -54,7 +54,7 @@
     }
     </script>
 
-    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/style.css?v=20261004-spacing4">
     <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
     <link rel="alternate icon" href="../../assets/images/favicon.ico">
     <link rel="canonical" href="https://709527.xyz/blog/posts/pwa-offline-web-app.html">
@@ -87,8 +87,6 @@
   <!-- Particle Canvas Background -->
   <canvas id="particle-canvas" class="particle-canvas" aria-hidden="true"></canvas>
 
-  <div class="scroll-progress"></div>
-
   <main class="section" style="padding-bottom: 0; padding-top: var(--space-4xl);">
     <div class="container container-narrow">
       <a href="../index.html" class="back-link">
@@ -115,35 +113,6 @@
         </div>
 
         
-
-        <!-- Related Static -->
-        <div class="related-posts">
-          <div class="related-posts-title">📌 相关文章</div>
-          <div class="related-posts-list">
-          <a class="related-post-card" href="web-worker-与前端多线程开发把主线程从繁重计算中解放出来.html">
-            <div class="related-post-card-title">Web Worker 与前端多线程开发：把主线程从繁重计算中解放出来</div>
-            <div class="related-post-card-tags"><span>前端</span><span>前端开发</span><span>JavaScript</span></div>
-          </a>
-          <a class="related-post-card" href="static-blog-performance-optimization-59mb.html">
-            <div class="related-post-card-title">静态博客性能优化实战：从 59MB 到精简高效</div>
-            <div class="related-post-card-tags"><span>性能优化</span><span>静态网站</span><span>前端</span></div>
-          </a>
-          <a class="related-post-card" href="css-view-transitions.html">
-            <div class="related-post-card-title">CSS View Transitions API 实战：页面过渡动画新范式</div>
-            <div class="related-post-card-tags"><span>前端</span><span>CSS</span><span>View Transitions</span></div>
-          </a>
-          <a class="related-post-card" href="typescript-type-gymnastics.html">
-            <div class="related-post-card-title">TypeScript 类型体操指南</div>
-            <div class="related-post-card-tags"><span>TypeScript</span><span>类型体操</span><span>前端</span></div>
-          </a>
-          <a class="related-post-card" href="ai-助手定时任务投递指南从-agent-废话到-no-agent-脚本.html">
-            <div class="related-post-card-title">AI 助手定时任务投递指南：从 Agent 废话到 No-Agent 脚本</div>
-            <div class="related-post-card-tags"><span>AI</span><span>DevOps</span><span>前端</span></div>
-          </a>
-          </div>
-        </div>
-
-        <!-- /Related Static -->
 
         <header>
         </header><h2 id="intro">什么是 PWA？</h2>
@@ -394,6 +363,35 @@ self.addEventListener('notificationclick', (event) => {
         <li><a href="https://developers.google.com/web/tools/workbox" target="_blank">Workbox - Google 缓存工具库</a></li>
       </ul>
 
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="web-worker-与前端多线程开发把主线程从繁重计算中解放出来.html">
+            <div class="related-post-card-title">Web Worker 与前端多线程开发：把主线程从繁重计算中解放出来</div>
+            <div class="related-post-card-tags"><span>前端</span><span>前端开发</span><span>JavaScript</span></div>
+          </a>
+          <a class="related-post-card" href="static-blog-performance-optimization-59mb.html">
+            <div class="related-post-card-title">静态博客性能优化实战：从 59MB 到精简高效</div>
+            <div class="related-post-card-tags"><span>性能优化</span><span>静态网站</span><span>前端</span></div>
+          </a>
+          <a class="related-post-card" href="css-view-transitions.html">
+            <div class="related-post-card-title">CSS View Transitions API 实战：页面过渡动画新范式</div>
+            <div class="related-post-card-tags"><span>前端</span><span>CSS</span><span>View Transitions</span></div>
+          </a>
+          <a class="related-post-card" href="typescript-type-gymnastics.html">
+            <div class="related-post-card-title">TypeScript 类型体操指南</div>
+            <div class="related-post-card-tags"><span>TypeScript</span><span>类型体操</span><span>前端</span></div>
+          </a>
+          <a class="related-post-card" href="ai-助手定时任务投递指南从-agent-废话到-no-agent-脚本.html">
+            <div class="related-post-card-title">AI 助手定时任务投递指南：从 Agent 废话到 No-Agent 脚本</div>
+            <div class="related-post-card-tags"><span>AI</span><span>DevOps</span><span>前端</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
+
         <!-- Post Copyright & License Card -->
         <div class="post-copyright-card">
           <div class="copyright-header">
@@ -459,7 +457,6 @@ self.addEventListener('notificationclick', (event) => {
   <script defer src="../../assets/js/main.js"></script>
   <script defer src="../../assets/js/article.js"></script>
   <script defer src="../../assets/js/share.js"></script>
-  <script defer src="../../assets/js/back-to-top.js"></script>
   <!-- Back to Top & Reading Progress -->
   <button class="back-to-top" id="backToTop" aria-label="回到顶部">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -493,9 +490,9 @@ self.addEventListener('notificationclick', (event) => {
         <div class="post-info-label">标签</div>
         <div class="post-info-links">
           <a href="../../blog/index.html?tag=PWA" class="post-info-link"># PWA</a>
-          <a href="../../blog/index.html?tag=ServiceWorker" class="post-info-link"># Service Worker</a>
-          <a href="../../blog/index.html?tag=前端" class="post-info-link"># 前端</a>
-          <a href="../../blog/index.html?tag=离线应用" class="post-info-link"># 离线应用</a>
+          <a href="../../blog/index.html?tag=Service%20Worker" class="post-info-link"># Service Worker</a>
+          <a href="../../blog/index.html?tag=%E5%89%8D%E7%AB%AF" class="post-info-link"># 前端</a>
+          <a href="../../blog/index.html?tag=%E7%A6%BB%E7%BA%BF%E5%BA%94%E7%94%A8" class="post-info-link"># 离线应用</a>
         </div>
       </div>
     </div>

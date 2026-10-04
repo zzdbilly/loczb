@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="zh-CN" data-theme="dark">
 <head>
-  <script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+  <script>document.documentElement.classList.add("js");try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
     <meta charset="UTF-8">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://static.cloudflareinsights.com https://loczb-comments.billycust716.workers.dev; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://loczb-comments.billycust716.workers.dev https://dashscope.aliyuncs.com https://709527.xyz https://www.709527.xyz https://cloudflareinsights.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
     <script>/* 反点击劫持兜底：GitHub Pages 无法下发 X-Frame-Options / CSP frame-ancestors */(function(){if(self===top)return;try{top.location=self.location}catch(e){}setTimeout(function(){if(self!==top){document.documentElement.style.display='none';}},400);})();</script>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Linux inode 机制深入理解：从数据结构到实战排查 | 张小猛 - loczb</title>
     <meta name="description" content="inode 是 Linux 文件系统的核心概念。本文从 ext4 inode 数据结构、硬链接软链接原理、文件删除机制到 inode 耗尽排查，全面解析 inode 工作原理。">
 
@@ -55,7 +55,7 @@
 }
     </script>
 
-    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/style.css?v=20261004-spacing4">
     <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
     <link rel="alternate icon" href="../../assets/images/favicon.ico">
     <link rel="canonical" href="https://709527.xyz/blog/posts/linux-inode-mechanism-deep-dive.html">
@@ -88,8 +88,6 @@
   <!-- Particle Canvas Background -->
   <canvas id="particle-canvas" class="particle-canvas" aria-hidden="true"></canvas>
 
-  <div class="scroll-progress"></div>
-
   <main class="section" style="padding-bottom: 0; padding-top: var(--space-4xl);">
     <div class="container container-narrow">
       <a href="../index.html" class="back-link">
@@ -116,35 +114,6 @@
         </div>
 
         
-
-        <!-- Related Static -->
-        <div class="related-posts">
-          <div class="related-posts-title">📌 相关文章</div>
-          <div class="related-posts-list">
-          <a class="related-post-card" href="rust-入局2026-年的生态全景.html">
-            <div class="related-post-card-title">Rust 入局：2026 年的生态全景</div>
-            <div class="related-post-card-tags"><span>Rust</span><span>TIOBE</span><span>系统编程</span></div>
-          </a>
-          <a class="related-post-card" href="zig-language-introduction.html">
-            <div class="related-post-card-title">Zig 语言入门：比 C 更安全的系统编程</div>
-            <div class="related-post-card-tags"><span>Zig</span><span>系统编程</span><span>comptime</span></div>
-          </a>
-          <a class="related-post-card" href="rust-getting-started.html">
-            <div class="related-post-card-title">Rust 入门：从零到生产</div>
-            <div class="related-post-card-tags"><span>Rust</span><span>系统编程</span><span>所有权</span></div>
-          </a>
-          <a class="related-post-card" href="choosing-and-running-a-vps.html">
-            <div class="related-post-card-title">主流 VPS 的选择和使用</div>
-            <div class="related-post-card-tags"><span>VPS</span><span>DevOps</span><span>运维</span></div>
-          </a>
-          <a class="related-post-card" href="vps-选购与使用指南五个常见场景的配置与避坑.html">
-            <div class="related-post-card-title">VPS 选购与使用指南：五个常见场景的配置与避坑</div>
-            <div class="related-post-card-tags"><span>VPS</span><span>DevOps</span><span>运维</span></div>
-          </a>
-          </div>
-        </div>
-
-        <!-- /Related Static -->
 
         <h2>从一个经典问题说起</h2>
 <p>你有没有遇到过这种情况：磁盘 <code>df</code> 显示还有大量空间，但创建新文件却报 <code>No space left on device</code>？或者删除了一个大文件，但磁盘空间没有释放，直到关掉某个进程？</p>
@@ -747,6 +716,35 @@ docker container prune
 </ol>
 <p>掌握 inode 机制是每个 Linux 运维和开发者的必备技能。它不仅能帮你解决实际问题，更能让你深入理解 Linux 「一切皆文件」的设计哲学。</p>
 
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="rust-入局2026-年的生态全景.html">
+            <div class="related-post-card-title">Rust 入局：2026 年的生态全景</div>
+            <div class="related-post-card-tags"><span>Rust</span><span>TIOBE</span><span>系统编程</span></div>
+          </a>
+          <a class="related-post-card" href="zig-language-introduction.html">
+            <div class="related-post-card-title">Zig 语言入门：比 C 更安全的系统编程</div>
+            <div class="related-post-card-tags"><span>Zig</span><span>系统编程</span><span>comptime</span></div>
+          </a>
+          <a class="related-post-card" href="rust-getting-started.html">
+            <div class="related-post-card-title">Rust 入门：从零到生产</div>
+            <div class="related-post-card-tags"><span>Rust</span><span>系统编程</span><span>所有权</span></div>
+          </a>
+          <a class="related-post-card" href="choosing-and-running-a-vps.html">
+            <div class="related-post-card-title">主流 VPS 的选择和使用</div>
+            <div class="related-post-card-tags"><span>VPS</span><span>DevOps</span><span>运维</span></div>
+          </a>
+          <a class="related-post-card" href="vps-选购与使用指南五个常见场景的配置与避坑.html">
+            <div class="related-post-card-title">VPS 选购与使用指南：五个常见场景的配置与避坑</div>
+            <div class="related-post-card-tags"><span>VPS</span><span>DevOps</span><span>运维</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
+
         <!-- Post Copyright & License Card -->
         <div class="post-copyright-card">
           <div class="copyright-header">
@@ -812,7 +810,6 @@ docker container prune
   <script defer src="../../assets/js/main.js"></script>
   <script defer src="../../assets/js/article.js"></script>
   <script defer src="../../assets/js/share.js"></script>
-  <script defer src="../../assets/js/back-to-top.js"></script>
   <!-- Back to Top & Reading Progress -->
   <button class="back-to-top" id="backToTop" aria-label="回到顶部">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -846,9 +843,9 @@ docker container prune
         <div class="post-info-label">标签</div>
         <div class="post-info-links">
           <a href="../../blog/index.html?tag=Linux" class="post-info-link"># Linux</a>
-          <a href="../../blog/index.html?tag=文件系统" class="post-info-link"># 文件系统</a>
-          <a href="../../blog/index.html?tag=系统编程" class="post-info-link"># 系统编程</a>
-          <a href="../../blog/index.html?tag=运维" class="post-info-link"># 运维</a>
+          <a href="../../blog/index.html?tag=%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F" class="post-info-link"># 文件系统</a>
+          <a href="../../blog/index.html?tag=%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B" class="post-info-link"># 系统编程</a>
+          <a href="../../blog/index.html?tag=%E8%BF%90%E7%BB%B4" class="post-info-link"># 运维</a>
         </div>
       </div>
     </div>

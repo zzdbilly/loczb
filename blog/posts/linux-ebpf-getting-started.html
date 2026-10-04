@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="zh-CN" data-theme="dark">
 <head>
-  <script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+  <script>document.documentElement.classList.add("js");try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
     <meta charset="UTF-8">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://static.cloudflareinsights.com https://loczb-comments.billycust716.workers.dev; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://loczb-comments.billycust716.workers.dev https://dashscope.aliyuncs.com https://709527.xyz https://www.709527.xyz https://cloudflareinsights.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
     <script>/* 反点击劫持兜底：GitHub Pages 无法下发 X-Frame-Options / CSP frame-ancestors */(function(){if(self===top)return;try{top.location=self.location}catch(e){}setTimeout(function(){if(self!==top){document.documentElement.style.display='none';}},400);})();</script>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Linux eBPF 入门：内核可观测性新范式 | 张小猛 - loczb</title>
     <meta name="description" content="Linux eBPF 入门实战：内核可观测性新范式，从 BPF 程序编写到 bpftrace、BCC 工具链使用，覆盖网络、安全、性能分析场景">
 
@@ -54,7 +54,7 @@
     }
     </script>
 
-    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/style.css?v=20261004-spacing4">
     <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
     <link rel="alternate icon" href="../../assets/images/favicon.ico">
     <link rel="canonical" href="https://709527.xyz/blog/posts/linux-ebpf-getting-started.html">
@@ -87,8 +87,6 @@
   <!-- Particle Canvas Background -->
   <canvas id="particle-canvas" class="particle-canvas" aria-hidden="true"></canvas>
 
-  <div class="scroll-progress"></div>
-
   <main class="section" style="padding-bottom: 0; padding-top: var(--space-4xl);">
     <div class="container container-narrow">
       <a href="../index.html" class="back-link">
@@ -116,31 +114,6 @@
         </div>
 
         
-
-        <!-- Related Static -->
-        <div class="related-posts">
-          <div class="related-posts-title">📌 相关文章</div>
-          <div class="related-posts-list">
-          <a class="related-post-card" href="rust-入局2026-年的生态全景.html">
-            <div class="related-post-card-title">Rust 入局：2026 年的生态全景</div>
-            <div class="related-post-card-tags"><span>Rust</span><span>TIOBE</span><span>系统编程</span></div>
-          </a>
-          <a class="related-post-card" href="linux-inode-mechanism-deep-dive.html">
-            <div class="related-post-card-title">Linux inode 机制深入理解：从数据结构到实战排查</div>
-            <div class="related-post-card-tags"><span>Linux</span><span>文件系统</span><span>系统编程</span></div>
-          </a>
-          <a class="related-post-card" href="zig-language-introduction.html">
-            <div class="related-post-card-title">Zig 语言入门：比 C 更安全的系统编程</div>
-            <div class="related-post-card-tags"><span>Zig</span><span>系统编程</span><span>comptime</span></div>
-          </a>
-          <a class="related-post-card" href="rust-getting-started.html">
-            <div class="related-post-card-title">Rust 入门：从零到生产</div>
-            <div class="related-post-card-tags"><span>Rust</span><span>系统编程</span><span>所有权</span></div>
-          </a>
-          </div>
-        </div>
-
-        <!-- /Related Static -->
 
         <p>传统的 Linux 内核观测手段——printf 调试、内核模块、ftrace——要么侵入性强，要么能力有限。eBPF（extended Berkeley Packet Filter）改变了这一切：你可以在不修改内核源码、不加载内核模块的情况下，安全地在内核态运行自定义逻辑。它已经成为云原生可观测性、网络和安全领域的基石技术。</p>
 
@@ -904,6 +877,31 @@ sudo bpftool feature probe | grep "bpf_"</code></pre>
         <strong>一句话总结</strong>：eBPF 是 Linux 内核的可编程层，用安全、低开销的方式把可观测性、网络和安全能力从内核模块迁移到了沙箱运行时。掌握 bpftrace + BCC + libbpf 三件套，足以覆盖 90% 的生产场景。
       </div>
 
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="rust-入局2026-年的生态全景.html">
+            <div class="related-post-card-title">Rust 入局：2026 年的生态全景</div>
+            <div class="related-post-card-tags"><span>Rust</span><span>TIOBE</span><span>系统编程</span></div>
+          </a>
+          <a class="related-post-card" href="linux-inode-mechanism-deep-dive.html">
+            <div class="related-post-card-title">Linux inode 机制深入理解：从数据结构到实战排查</div>
+            <div class="related-post-card-tags"><span>Linux</span><span>文件系统</span><span>系统编程</span></div>
+          </a>
+          <a class="related-post-card" href="zig-language-introduction.html">
+            <div class="related-post-card-title">Zig 语言入门：比 C 更安全的系统编程</div>
+            <div class="related-post-card-tags"><span>Zig</span><span>系统编程</span><span>comptime</span></div>
+          </a>
+          <a class="related-post-card" href="rust-getting-started.html">
+            <div class="related-post-card-title">Rust 入门：从零到生产</div>
+            <div class="related-post-card-tags"><span>Rust</span><span>系统编程</span><span>所有权</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
+
         <!-- Post Copyright & License Card -->
         <div class="post-copyright-card">
           <div class="copyright-header">
@@ -969,7 +967,6 @@ sudo bpftool feature probe | grep "bpf_"</code></pre>
   <script defer src="../../assets/js/main.js"></script>
   <script defer src="../../assets/js/article.js"></script>
   <script defer src="../../assets/js/share.js"></script>
-  <script defer src="../../assets/js/back-to-top.js"></script>
   <!-- Back to Top & Reading Progress -->
   <button class="back-to-top" id="backToTop" aria-label="回到顶部">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1003,10 +1000,10 @@ sudo bpftool feature probe | grep "bpf_"</code></pre>
         <div class="post-info-label">标签</div>
         <div class="post-info-links">
           <a href="../../blog/index.html?tag=eBPF" class="post-info-link"># eBPF</a>
-          <a href="../../blog/index.html?tag=Linux内核" class="post-info-link"># Linux 内核</a>
-          <a href="../../blog/index.html?tag=可观测性" class="post-info-link"># 可观测性</a>
+          <a href="../../blog/index.html?tag=Linux%20%E5%86%85%E6%A0%B8" class="post-info-link"># Linux 内核</a>
+          <a href="../../blog/index.html?tag=%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7" class="post-info-link"># 可观测性</a>
           <a href="../../blog/index.html?tag=bpftrace" class="post-info-link"># bpftrace</a>
-          <a href="../../blog/index.html?tag=云原生" class="post-info-link"># 云原生</a>
+          <a href="../../blog/index.html?tag=%E4%BA%91%E5%8E%9F%E7%94%9F" class="post-info-link"># 云原生</a>
         </div>
       </div>
     </div>

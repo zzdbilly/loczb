@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="zh-CN" data-theme="dark">
 <head>
-  <script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+  <script>document.documentElement.classList.add("js");try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
     <meta charset="UTF-8">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://static.cloudflareinsights.com https://loczb-comments.billycust716.workers.dev; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://loczb-comments.billycust716.workers.dev https://dashscope.aliyuncs.com https://709527.xyz https://www.709527.xyz https://cloudflareinsights.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
     <script>/* 反点击劫持兜底：GitHub Pages 无法下发 X-Frame-Options / CSP frame-ancestors */(function(){if(self===top)return;try{top.location=self.location}catch(e){}setTimeout(function(){if(self!==top){document.documentElement.style.display='none';}},400);})();</script>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Kotlin Scope Functions 实战选择：五个函数一个决策树 | 张小猛 - loczb</title>
     <meta name="description" content="别再纠结 let 和 apply 的区别了——从 this/it 和返回值两个维度理清 Kotlin 的五个 Scope Functions，附反模式和团队规范">
 
@@ -55,7 +55,7 @@
 }
     </script>
 
-    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/style.css?v=20261004-spacing4">
     <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
     <link rel="alternate icon" href="../../assets/images/favicon.ico">
     <link rel="canonical" href="https://709527.xyz/blog/posts/kotlin-scope-functions-实战选择五个函数一个决策树.html">
@@ -87,8 +87,6 @@
   </nav>
   <!-- Particle Canvas Background -->
   <canvas id="particle-canvas" class="particle-canvas" aria-hidden="true"></canvas>
-
-  <div class="scroll-progress"></div>
 
   <main class="section" style="padding-bottom: 0; padding-top: var(--space-4xl);">
     <div class="container container-narrow">
@@ -139,35 +137,6 @@
           </details>
         </div>
         <!-- /Series Card Widget -->
-
-        <!-- Related Static -->
-        <div class="related-posts">
-          <div class="related-posts-title">📌 相关文章</div>
-          <div class="related-posts-list">
-          <a class="related-post-card" href="kotlin-coroutines-best-practices.html">
-            <div class="related-post-card-title">Kotlin Coroutines 最佳实践</div>
-            <div class="related-post-card-tags"><span>Kotlin</span><span>Coroutines</span><span>异步编程</span></div>
-          </a>
-          <a class="related-post-card" href="kotlin-coroutines-并发实战从入门到优雅的并发编程.html">
-            <div class="related-post-card-title">Kotlin Coroutines 并发实战：从入门到优雅的并发编程</div>
-            <div class="related-post-card-tags"><span>Kotlin</span><span>协程</span><span>并发</span></div>
-          </a>
-          <a class="related-post-card" href="kotlin-coroutine-exception-handling.html">
-            <div class="related-post-card-title">Kotlin Coroutine 异常处理机制全面解析</div>
-            <div class="related-post-card-tags"><span>Kotlin</span><span>协程</span><span>异常处理</span></div>
-          </a>
-          <a class="related-post-card" href="android-testing-playbook.html">
-            <div class="related-post-card-title">别再从 Espresso 开始：Android 测试分层实战手册</div>
-            <div class="related-post-card-tags"><span>Android</span><span>测试</span><span>Kotlin</span></div>
-          </a>
-          <a class="related-post-card" href="compose-navigation-guide.html">
-            <div class="related-post-card-title">Jetpack Compose Navigation 进阶指南：从路由设计到深层链接</div>
-            <div class="related-post-card-tags"><span>Jetpack Compose</span><span>Android</span><span>Navigation</span></div>
-          </a>
-          </div>
-        </div>
-
-        <!-- /Related Static -->
 
         <p>Kotlin 的 Scope Functions（<code>let</code>、<code>run</code>、<code>with</code>、<code>apply</code>、<code>also</code>）是日常开发中使用最频繁的特性之一。但很多人用它们只是"别人这么写我也这么写"，不清楚它们之间的细微区别，结果写出了一把剪刀可以搞定却用了砍刀的例子。</p>
 <p>这篇文章不是 Scope Functions 的入门教程——网上这类文章太多了。我想聊的是它们在实际项目中的<strong>选择逻辑</strong>和<strong>反模式</strong>，看完你至少不会再对着五个函数犹豫该用哪个。</p>
@@ -443,6 +412,35 @@ list?.let {
 </code></pre>
 <p>记得加一条：<strong>不要嵌套 scope functions</strong>。超过两层嵌套说明你的逻辑应该提取成独立函数了。</p>
 
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="kotlin-coroutines-best-practices.html">
+            <div class="related-post-card-title">Kotlin Coroutines 最佳实践</div>
+            <div class="related-post-card-tags"><span>Kotlin</span><span>Coroutines</span><span>异步编程</span></div>
+          </a>
+          <a class="related-post-card" href="kotlin-coroutines-并发实战从入门到优雅的并发编程.html">
+            <div class="related-post-card-title">Kotlin Coroutines 并发实战：从入门到优雅的并发编程</div>
+            <div class="related-post-card-tags"><span>Kotlin</span><span>协程</span><span>并发</span></div>
+          </a>
+          <a class="related-post-card" href="kotlin-coroutine-exception-handling.html">
+            <div class="related-post-card-title">Kotlin Coroutine 异常处理机制全面解析</div>
+            <div class="related-post-card-tags"><span>Kotlin</span><span>协程</span><span>异常处理</span></div>
+          </a>
+          <a class="related-post-card" href="android-testing-playbook.html">
+            <div class="related-post-card-title">别再从 Espresso 开始：Android 测试分层实战手册</div>
+            <div class="related-post-card-tags"><span>Android</span><span>测试</span><span>Kotlin</span></div>
+          </a>
+          <a class="related-post-card" href="compose-navigation-guide.html">
+            <div class="related-post-card-title">Jetpack Compose Navigation 进阶指南：从路由设计到深层链接</div>
+            <div class="related-post-card-tags"><span>Jetpack Compose</span><span>Android</span><span>Navigation</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
+
         <!-- Post Copyright & License Card -->
         <div class="post-copyright-card">
           <div class="copyright-header">
@@ -518,7 +516,6 @@ list?.let {
   <script defer src="../../assets/js/main.js"></script>
   <script defer src="../../assets/js/article.js"></script>
   <script defer src="../../assets/js/share.js"></script>
-  <script defer src="../../assets/js/back-to-top.js"></script>
   <!-- Back to Top & Reading Progress -->
   <button class="back-to-top" id="backToTop" aria-label="回到顶部">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -553,7 +550,7 @@ list?.let {
         <div class="post-info-links">
           <a href="../../blog/index.html?tag=Kotlin" class="post-info-link"># Kotlin</a>
           <a href="../../blog/index.html?tag=Android" class="post-info-link"># Android</a>
-          <a href="../../blog/index.html?tag=最佳实践" class="post-info-link"># 最佳实践</a>
+          <a href="../../blog/index.html?tag=%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5" class="post-info-link"># 最佳实践</a>
         </div>
       </div>
     </div>

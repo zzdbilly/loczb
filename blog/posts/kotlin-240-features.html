@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="zh-CN" data-theme="dark">
 <head>
-  <script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+  <script>document.documentElement.classList.add("js");try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
     <meta charset="UTF-8">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://static.cloudflareinsights.com https://loczb-comments.billycust716.workers.dev; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://loczb-comments.billycust716.workers.dev https://dashscope.aliyuncs.com https://709527.xyz https://www.709527.xyz https://cloudflareinsights.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
     <script>/* 反点击劫持兜底：GitHub Pages 无法下发 X-Frame-Options / CSP frame-ancestors */(function(){if(self===top)return;try{top.location=self.location}catch(e){}setTimeout(function(){if(self!==top){document.documentElement.style.display='none';}},400);})();</script>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Kotlin 2.4.0 重磅发布：Context Parameters 稳定、Destructuring 升级、Lombok 插件进入 Alpha | 张小猛 - loczb</title>
     <meta name="description" content="Kotlin 2.4.0 正式发布——Context Parameters 稳定、Name-based Destructuring、Lombok 编译器插件 Alpha、Compose Multiplatform 1.11 等重磅特性详解">
 
@@ -54,7 +54,7 @@
     }
     </script>
 
-    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/style.css?v=20261004-spacing4">
     <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
     <link rel="alternate icon" href="../../assets/images/favicon.ico">
     <link rel="canonical" href="https://709527.xyz/blog/posts/kotlin-240-features.html">
@@ -86,8 +86,6 @@
   </nav>
   <!-- Particle Canvas Background -->
   <canvas id="particle-canvas" class="particle-canvas" aria-hidden="true"></canvas>
-
-  <div class="scroll-progress"></div>
 
   <main class="section" style="padding-bottom: 0; padding-top: var(--space-4xl);">
     <div class="container container-narrow">
@@ -142,35 +140,6 @@
           </details>
         </div>
         <!-- /Series Card Widget -->
-
-        <!-- Related Static -->
-        <div class="related-posts">
-          <div class="related-posts-title">📌 相关文章</div>
-          <div class="related-posts-list">
-          <a class="related-post-card" href="compose-april-2026-update.html">
-            <div class="related-post-card-title">Jetpack Compose April 2026 Update 深度解读</div>
-            <div class="related-post-card-tags"><span>Jetpack Compose</span><span>Android</span><span>Compose Multiplatform</span></div>
-          </a>
-          <a class="related-post-card" href="kotlin-coroutines-并发实战从入门到优雅的并发编程.html">
-            <div class="related-post-card-title">Kotlin Coroutines 并发实战：从入门到优雅的并发编程</div>
-            <div class="related-post-card-tags"><span>Kotlin</span><span>协程</span><span>并发</span></div>
-          </a>
-          <a class="related-post-card" href="kotlin-scope-functions-实战选择五个函数一个决策树.html">
-            <div class="related-post-card-title">Kotlin Scope Functions 实战选择：五个函数一个决策树</div>
-            <div class="related-post-card-tags"><span>Kotlin</span><span>Android</span><span>最佳实践</span></div>
-          </a>
-          <a class="related-post-card" href="kotlin-coroutine-exception-handling.html">
-            <div class="related-post-card-title">Kotlin Coroutine 异常处理机制全面解析</div>
-            <div class="related-post-card-tags"><span>Kotlin</span><span>协程</span><span>异常处理</span></div>
-          </a>
-          <a class="related-post-card" href="kotlin-coroutines-best-practices.html">
-            <div class="related-post-card-title">Kotlin Coroutines 最佳实践</div>
-            <div class="related-post-card-tags"><span>Kotlin</span><span>Coroutines</span><span>异步编程</span></div>
-          </a>
-          </div>
-        </div>
-
-        <!-- /Related Static -->
 
         <p>2026 年 6 月，JetBrains 正式发布了 Kotlin 2.4.0。这是继 Kotlin 2.0（K2 编译器稳定）之后的又一个重要里程碑版本。从语言特性到编译器插件，从构建工具集成到标准库增强，这个版本带来了大量值得每一个 Kotlin 开发者关注的改进。</p>
 
@@ -692,6 +661,35 @@ plugins {
 
       <p>如果你还在观望，现在就是最佳升级时机。</p>
 
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="compose-april-2026-update.html">
+            <div class="related-post-card-title">Jetpack Compose April 2026 Update 深度解读</div>
+            <div class="related-post-card-tags"><span>Jetpack Compose</span><span>Android</span><span>Compose Multiplatform</span></div>
+          </a>
+          <a class="related-post-card" href="kotlin-coroutines-并发实战从入门到优雅的并发编程.html">
+            <div class="related-post-card-title">Kotlin Coroutines 并发实战：从入门到优雅的并发编程</div>
+            <div class="related-post-card-tags"><span>Kotlin</span><span>协程</span><span>并发</span></div>
+          </a>
+          <a class="related-post-card" href="kotlin-scope-functions-实战选择五个函数一个决策树.html">
+            <div class="related-post-card-title">Kotlin Scope Functions 实战选择：五个函数一个决策树</div>
+            <div class="related-post-card-tags"><span>Kotlin</span><span>Android</span><span>最佳实践</span></div>
+          </a>
+          <a class="related-post-card" href="kotlin-coroutine-exception-handling.html">
+            <div class="related-post-card-title">Kotlin Coroutine 异常处理机制全面解析</div>
+            <div class="related-post-card-tags"><span>Kotlin</span><span>协程</span><span>异常处理</span></div>
+          </a>
+          <a class="related-post-card" href="kotlin-coroutines-best-practices.html">
+            <div class="related-post-card-title">Kotlin Coroutines 最佳实践</div>
+            <div class="related-post-card-tags"><span>Kotlin</span><span>Coroutines</span><span>异步编程</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
+
         <!-- Post Copyright & License Card -->
         <div class="post-copyright-card">
           <div class="copyright-header">
@@ -771,7 +769,6 @@ plugins {
   <script defer src="../../assets/js/main.js"></script>
   <script defer src="../../assets/js/article.js"></script>
   <script defer src="../../assets/js/share.js"></script>
-  <script defer src="../../assets/js/back-to-top.js"></script>
   <!-- Back to Top & Reading Progress -->
   <button class="back-to-top" id="backToTop" aria-label="回到顶部">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -805,12 +802,12 @@ plugins {
         <div class="post-info-label">标签</div>
         <div class="post-info-links">
           <a href="../../blog/index.html?tag=Kotlin" class="post-info-link"># Kotlin</a>
-          <a href="../../blog/index.html?tag=编程语言" class="post-info-link"># 编程语言</a>
+          <a href="../../blog/index.html?tag=%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80" class="post-info-link"># 编程语言</a>
           <a href="../../blog/index.html?tag=JetBrains" class="post-info-link"># JetBrains</a>
           <a href="../../blog/index.html?tag=JVM" class="post-info-link"># JVM</a>
-          <a href="../../blog/index.html?tag=Kotlin240" class="post-info-link"># Kotlin 2.4.0</a>
-          <a href="../../blog/index.html?tag=ContextParameters" class="post-info-link"># Context Parameters</a>
-          <a href="../../blog/index.html?tag=ComposeMultiplatform" class="post-info-link"># Compose Multiplatform</a>
+          <a href="../../blog/index.html?tag=Kotlin%202.4.0" class="post-info-link"># Kotlin 2.4.0</a>
+          <a href="../../blog/index.html?tag=Context%20Parameters" class="post-info-link"># Context Parameters</a>
+          <a href="../../blog/index.html?tag=Compose%20Multiplatform" class="post-info-link"># Compose Multiplatform</a>
         </div>
       </div>
     </div>

@@ -335,7 +335,10 @@ def generate_article(title, description, article_date, read_time, tags, content_
         tag_list = []
 
     tags_html = '\n          '.join([f'<span class="tag">{html_escape(str(t), quote=True)}</span>' for t in tag_list])
-    tag_links_html = '\n          '.join([f'<a href="../../blog/index.html?tag={html_escape(str(t), quote=True)}" class="post-info-link"># {html_escape(str(t), quote=True)}</a>' for t in tag_list])
+    # href 用 URL 编码（与 refresh-posts.py 同口径，保证发文/回刷产物逐字节一致）；
+    # 旧版用 html_escape，遇到 C++ / C# / & 这类标签时 query 会被截断或误解析。
+    from urllib.parse import quote as url_quote
+    tag_links_html = '\n          '.join([f'<a href="../../blog/index.html?tag={url_quote(str(t), safe="")}" class="post-info-link"># {html_escape(str(t), quote=True)}</a>' for t in tag_list])
     
     # 计算文章统计
     text_only = re.sub(r'<[^>]+>', '', content_html) if content_html else ''

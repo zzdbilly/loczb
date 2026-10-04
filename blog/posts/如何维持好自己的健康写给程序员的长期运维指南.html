@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="zh-CN" data-theme="dark">
 <head>
-  <script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+  <script>document.documentElement.classList.add("js");try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
     <meta charset="UTF-8">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://static.cloudflareinsights.com https://loczb-comments.billycust716.workers.dev; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://loczb-comments.billycust716.workers.dev https://dashscope.aliyuncs.com https://709527.xyz https://www.709527.xyz https://cloudflareinsights.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
     <script>/* 反点击劫持兜底：GitHub Pages 无法下发 X-Frame-Options / CSP frame-ancestors */(function(){if(self===top)return;try{top.location=self.location}catch(e){}setTimeout(function(){if(self!==top){document.documentElement.style.display='none';}},400);})();</script>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>如何维持好自己的健康：写给程序员的长期运维指南 | 张小猛 - loczb</title>
     <meta name="description" content="久坐、熬夜、高压是程序员的职业三件套，但健康和代码一样可以工程化管理。从颈椎腰椎到睡眠饮食，从运动体检到心理减压，一份可以直接落地的健康维护方案。">
 
@@ -55,7 +55,7 @@
 }
     </script>
 
-    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/style.css?v=20261004-spacing4">
     <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
     <link rel="alternate icon" href="../../assets/images/favicon.ico">
     <link rel="canonical" href="https://709527.xyz/blog/posts/如何维持好自己的健康写给程序员的长期运维指南.html">
@@ -87,8 +87,6 @@
   </nav>
   <!-- Particle Canvas Background -->
   <canvas id="particle-canvas" class="particle-canvas" aria-hidden="true"></canvas>
-
-  <div class="scroll-progress"></div>
 
   <main class="section" style="padding-bottom: 0; padding-top: var(--space-4xl);">
     <div class="container container-narrow">
@@ -141,35 +139,6 @@
           </details>
         </div>
         <!-- /Series Card Widget -->
-
-        <!-- Related Static -->
-        <div class="related-posts">
-          <div class="related-posts-title">📌 相关文章</div>
-          <div class="related-posts-list">
-          <a class="related-post-card" href="quick-energy-recovery.html">
-            <div class="related-post-card-title">如何快速恢复能量，让自己快乐起来</div>
-            <div class="related-post-card-tags"><span>能量管理</span><span>情绪</span><span>生活方式</span></div>
-          </a>
-          <a class="related-post-card" href="程序员带娃把养孩子当成一个长期运维的系统工程.html">
-            <div class="related-post-card-title">程序员带娃：把养孩子当成一个长期运维的系统工程</div>
-            <div class="related-post-card-tags"><span>程序员</span><span>带娃</span><span>工程思维</span></div>
-          </a>
-          <a class="related-post-card" href="周末如何度过才有意义.html">
-            <div class="related-post-card-title">周末如何度过才有意义</div>
-            <div class="related-post-card-tags"><span>思考</span><span>生活方式</span></div>
-          </a>
-          <a class="related-post-card" href="程序员的周五晚上如何有意义地度过.html">
-            <div class="related-post-card-title">程序员的周五晚上，如何有意义地度过</div>
-            <div class="related-post-card-tags"><span>思考</span><span>生活方式</span><span>效率</span></div>
-          </a>
-          <a class="related-post-card" href="医生不会告诉你的健康习惯从睡眠到饮食的系统性方案.html">
-            <div class="related-post-card-title">医生不会告诉你的健康习惯：从睡眠到饮食的系统性方案</div>
-            <div class="related-post-card-tags"><span>健康</span><span>生活习惯</span><span>效率</span></div>
-          </a>
-          </div>
-        </div>
-
-        <!-- /Related Static -->
 
         <p>我们习惯了对服务器做监控、对代码做 review、对数据库做备份，却常常忽略了一个事实：<strong>我们自己，才是那台最不能宕机的机器。</strong></p>
 <p>程序员是一个很特殊的职业——久坐、熬夜、高压、缺乏运动，几乎每一条都是健康的反面教材。颈椎病、腰肌劳损、干眼症、腱鞘炎、肥胖、焦虑……这些词对我们来说都不陌生。很多人三十岁不到，体检报告就已经开始出现异常指标了。</p>
@@ -350,6 +319,35 @@
 <p>身体是我们唯一无法重装的机器。愿每个写代码的人，都能把自己的「硬件」维护好——毕竟后面还有很长的路要走，还有很多想做的事要做。</p>
 <p>从今天开始，先站起来活动五分钟吧。</p>
 
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="quick-energy-recovery.html">
+            <div class="related-post-card-title">如何快速恢复能量，让自己快乐起来</div>
+            <div class="related-post-card-tags"><span>能量管理</span><span>情绪</span><span>生活方式</span></div>
+          </a>
+          <a class="related-post-card" href="程序员带娃把养孩子当成一个长期运维的系统工程.html">
+            <div class="related-post-card-title">程序员带娃：把养孩子当成一个长期运维的系统工程</div>
+            <div class="related-post-card-tags"><span>程序员</span><span>带娃</span><span>工程思维</span></div>
+          </a>
+          <a class="related-post-card" href="周末如何度过才有意义.html">
+            <div class="related-post-card-title">周末如何度过才有意义</div>
+            <div class="related-post-card-tags"><span>思考</span><span>生活方式</span></div>
+          </a>
+          <a class="related-post-card" href="程序员的周五晚上如何有意义地度过.html">
+            <div class="related-post-card-title">程序员的周五晚上，如何有意义地度过</div>
+            <div class="related-post-card-tags"><span>思考</span><span>生活方式</span><span>效率</span></div>
+          </a>
+          <a class="related-post-card" href="医生不会告诉你的健康习惯从睡眠到饮食的系统性方案.html">
+            <div class="related-post-card-title">医生不会告诉你的健康习惯：从睡眠到饮食的系统性方案</div>
+            <div class="related-post-card-tags"><span>健康</span><span>生活习惯</span><span>效率</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
+
         <!-- Post Copyright & License Card -->
         <div class="post-copyright-card">
           <div class="copyright-header">
@@ -429,7 +427,6 @@
   <script defer src="../../assets/js/main.js"></script>
   <script defer src="../../assets/js/article.js"></script>
   <script defer src="../../assets/js/share.js"></script>
-  <script defer src="../../assets/js/back-to-top.js"></script>
   <!-- Back to Top & Reading Progress -->
   <button class="back-to-top" id="backToTop" aria-label="回到顶部">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -462,9 +459,9 @@
       <div class="post-info-section" id="postSidebarTags">
         <div class="post-info-label">标签</div>
         <div class="post-info-links">
-          <a href="../../blog/index.html?tag=健康" class="post-info-link"># 健康</a>
-          <a href="../../blog/index.html?tag=生活方式" class="post-info-link"># 生活方式</a>
-          <a href="../../blog/index.html?tag=程序员" class="post-info-link"># 程序员</a>
+          <a href="../../blog/index.html?tag=%E5%81%A5%E5%BA%B7" class="post-info-link"># 健康</a>
+          <a href="../../blog/index.html?tag=%E7%94%9F%E6%B4%BB%E6%96%B9%E5%BC%8F" class="post-info-link"># 生活方式</a>
+          <a href="../../blog/index.html?tag=%E7%A8%8B%E5%BA%8F%E5%91%98" class="post-info-link"># 程序员</a>
         </div>
       </div>
     </div>

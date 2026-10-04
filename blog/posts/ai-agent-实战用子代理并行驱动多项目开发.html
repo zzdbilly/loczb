@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="zh-CN" data-theme="dark">
 <head>
-  <script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+  <script>document.documentElement.classList.add("js");try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
     <meta charset="UTF-8">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://static.cloudflareinsights.com https://loczb-comments.billycust716.workers.dev; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://loczb-comments.billycust716.workers.dev https://dashscope.aliyuncs.com https://709527.xyz https://www.709527.xyz https://cloudflareinsights.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
     <script>/* 反点击劫持兜底：GitHub Pages 无法下发 X-Frame-Options / CSP frame-ancestors */(function(){if(self===top)return;try{top.location=self.location}catch(e){}setTimeout(function(){if(self!==top){document.documentElement.style.display='none';}},400);})();</script>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>AI Agent 实战：用子代理并行驱动多项目开发 | 张小猛 - loczb</title>
     <meta name="description" content="子代理并行调度是 AI 辅助开发的高效模式。本文分享一套经过实战验证的调度策略，涵盖任务拆分、并行执行、结果汇总和验证闭环。">
 
@@ -55,7 +55,7 @@
 }
     </script>
 
-    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/style.css?v=20261004-spacing4">
     <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
     <link rel="alternate icon" href="../../assets/images/favicon.ico">
     <link rel="canonical" href="https://709527.xyz/blog/posts/ai-agent-实战用子代理并行驱动多项目开发.html">
@@ -88,8 +88,6 @@
   <!-- Particle Canvas Background -->
   <canvas id="particle-canvas" class="particle-canvas" aria-hidden="true"></canvas>
 
-  <div class="scroll-progress"></div>
-
   <main class="section" style="padding-bottom: 0; padding-top: var(--space-4xl);">
     <div class="container container-narrow">
       <a href="../index.html" class="back-link">
@@ -116,35 +114,6 @@
         </div>
 
         
-
-        <!-- Related Static -->
-        <div class="related-posts">
-          <div class="related-posts-title">📌 相关文章</div>
-          <div class="related-posts-list">
-          <a class="related-post-card" href="2026-年了ai-编程助手到底能帮你干多少活.html">
-            <div class="related-post-card-title">2026 年了，AI 编程助手到底能帮你干多少活？</div>
-            <div class="related-post-card-tags"><span>AI</span><span>前端</span><span>开发</span></div>
-          </a>
-          <a class="related-post-card" href="agentic-ai-架构演进从-chatbot-到自主-agent.html">
-            <div class="related-post-card-title">Agentic AI 架构演进：从 Chatbot 到自主 Agent</div>
-            <div class="related-post-card-tags"><span>AI</span><span>Agent</span><span>架构</span></div>
-          </a>
-          <a class="related-post-card" href="ai-编码代理实战从-copilot-到-agent.html">
-            <div class="related-post-card-title">AI 编码代理实战：从 Copilot 到 Agent</div>
-            <div class="related-post-card-tags"><span>AI</span><span>AI编程</span><span>Agent</span></div>
-          </a>
-          <a class="related-post-card" href="ai-编程助手进化论从结对编程到自主编程团队-2026.html">
-            <div class="related-post-card-title">AI 编程助手进化论：从结对编程到自主编程团队 (2026)</div>
-            <div class="related-post-card-tags"><span>AI</span><span>Agent</span><span>AI 工具</span></div>
-          </a>
-          <a class="related-post-card" href="google-io-2026-recap.html">
-            <div class="related-post-card-title">Google I/O 2026 完整回顾：AI 重塑一切</div>
-            <div class="related-post-card-tags"><span>AI</span><span>Android</span><span>Google I/O</span></div>
-          </a>
-          </div>
-        </div>
-
-        <!-- /Related Static -->
 
         <p>在 2026 年的 AI 辅助开发实践中，"一个 Agent 干所有事"已经不再是唯一选择。随着项目复杂度增长，<strong>子代理并行调度</strong> 成了一种高效的工作模式。本文将分享一套经过实战验证的子代理调度策略，涵盖任务拆分、并行执行、结果汇总和验证闭环。</p>
 <h2>为什么需要子代理并行</h2>
@@ -380,6 +349,35 @@ yield(&quot;等待子代理完成&quot;);
 <p>关键工程实践包括：合理的任务拆分粒度、明确的输入输出约定、yield 而非轮询的等待机制、以及统一的验证和提交流程。</p>
 <p>这种模式特别适合维护多个独立项目的场景。随着 AI Agent 能力的提升，子代理调度会成为越来越多开发团队的标准工作流。</p>
 
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="2026-年了ai-编程助手到底能帮你干多少活.html">
+            <div class="related-post-card-title">2026 年了，AI 编程助手到底能帮你干多少活？</div>
+            <div class="related-post-card-tags"><span>AI</span><span>前端</span><span>开发</span></div>
+          </a>
+          <a class="related-post-card" href="agentic-ai-架构演进从-chatbot-到自主-agent.html">
+            <div class="related-post-card-title">Agentic AI 架构演进：从 Chatbot 到自主 Agent</div>
+            <div class="related-post-card-tags"><span>AI</span><span>Agent</span><span>架构</span></div>
+          </a>
+          <a class="related-post-card" href="ai-编码代理实战从-copilot-到-agent.html">
+            <div class="related-post-card-title">AI 编码代理实战：从 Copilot 到 Agent</div>
+            <div class="related-post-card-tags"><span>AI</span><span>AI编程</span><span>Agent</span></div>
+          </a>
+          <a class="related-post-card" href="ai-编程助手进化论从结对编程到自主编程团队-2026.html">
+            <div class="related-post-card-title">AI 编程助手进化论：从结对编程到自主编程团队 (2026)</div>
+            <div class="related-post-card-tags"><span>AI</span><span>Agent</span><span>AI 工具</span></div>
+          </a>
+          <a class="related-post-card" href="google-io-2026-recap.html">
+            <div class="related-post-card-title">Google I/O 2026 完整回顾：AI 重塑一切</div>
+            <div class="related-post-card-tags"><span>AI</span><span>Android</span><span>Google I/O</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
+
         <!-- Post Copyright & License Card -->
         <div class="post-copyright-card">
           <div class="copyright-header">
@@ -445,7 +443,6 @@ yield(&quot;等待子代理完成&quot;);
   <script defer src="../../assets/js/main.js"></script>
   <script defer src="../../assets/js/article.js"></script>
   <script defer src="../../assets/js/share.js"></script>
-  <script defer src="../../assets/js/back-to-top.js"></script>
   <!-- Back to Top & Reading Progress -->
   <button class="back-to-top" id="backToTop" aria-label="回到顶部">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -480,8 +477,8 @@ yield(&quot;等待子代理完成&quot;);
         <div class="post-info-links">
           <a href="../../blog/index.html?tag=AI" class="post-info-link"># AI</a>
           <a href="../../blog/index.html?tag=Agent" class="post-info-link"># Agent</a>
-          <a href="../../blog/index.html?tag=工程实践" class="post-info-link"># 工程实践</a>
-          <a href="../../blog/index.html?tag=并行开发" class="post-info-link"># 并行开发</a>
+          <a href="../../blog/index.html?tag=%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5" class="post-info-link"># 工程实践</a>
+          <a href="../../blog/index.html?tag=%E5%B9%B6%E8%A1%8C%E5%BC%80%E5%8F%91" class="post-info-link"># 并行开发</a>
         </div>
       </div>
     </div>

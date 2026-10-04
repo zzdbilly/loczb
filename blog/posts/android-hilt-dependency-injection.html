@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="zh-CN" data-theme="dark">
 <head>
-  <script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+  <script>document.documentElement.classList.add("js");try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
     <meta charset="UTF-8">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://static.cloudflareinsights.com https://loczb-comments.billycust716.workers.dev; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://loczb-comments.billycust716.workers.dev https://dashscope.aliyuncs.com https://709527.xyz https://www.709527.xyz https://cloudflareinsights.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
     <script>/* 反点击劫持兜底：GitHub Pages 无法下发 X-Frame-Options / CSP frame-ancestors */(function(){if(self===top)return;try{top.location=self.location}catch(e){}setTimeout(function(){if(self!==top){document.documentElement.style.display='none';}},400);})();</script>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Android Hilt 依赖注入最佳实践：从入门到架构 | 张小猛 - loczb</title>
     <meta name="description" content="Android Hilt 依赖注入完整指南：核心注解、ViewModel 注入、多模块架构、作用域管理、第三方库集成与测试最佳实践">
 
@@ -54,7 +54,7 @@
     }
     </script>
 
-    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/style.css?v=20261004-spacing4">
     <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
     <link rel="alternate icon" href="../../assets/images/favicon.ico">
     <link rel="canonical" href="https://709527.xyz/blog/posts/android-hilt-dependency-injection.html">
@@ -87,8 +87,6 @@
   <!-- Particle Canvas Background -->
   <canvas id="particle-canvas" class="particle-canvas" aria-hidden="true"></canvas>
 
-  <div class="scroll-progress"></div>
-
   <main class="section" style="padding-bottom: 0; padding-top: var(--space-4xl);">
     <div class="container container-narrow">
       <a href="../index.html" class="back-link">
@@ -117,35 +115,6 @@
         </div>
 
         
-
-        <!-- Related Static -->
-        <div class="related-posts">
-          <div class="related-posts-title">📌 相关文章</div>
-          <div class="related-posts-list">
-          <a class="related-post-card" href="android-testing-playbook.html">
-            <div class="related-post-card-title">别再从 Espresso 开始：Android 测试分层实战手册</div>
-            <div class="related-post-card-tags"><span>Android</span><span>测试</span><span>Kotlin</span></div>
-          </a>
-          <a class="related-post-card" href="jetpack-compose-性能优化实战从卡顿到丝滑的-12-个技巧.html">
-            <div class="related-post-card-title">Jetpack Compose 性能优化实战：从卡顿到丝滑的 12 个技巧</div>
-            <div class="related-post-card-tags"><span>Jetpack Compose</span><span>Android</span><span>性能优化</span></div>
-          </a>
-          <a class="related-post-card" href="gradle-构建加速全攻略从-5-分钟到-30-秒.html">
-            <div class="related-post-card-title">Gradle 构建加速全攻略：从 5 分钟到 30 秒</div>
-            <div class="related-post-card-tags"><span>Gradle</span><span>Android</span><span>构建优化</span></div>
-          </a>
-          <a class="related-post-card" href="gradle-build-acceleration-5min-to-30sec.html">
-            <div class="related-post-card-title">Gradle 构建加速实操：我从 5 分钟做到 30 秒</div>
-            <div class="related-post-card-tags"><span>Gradle</span><span>Android</span><span>构建优化</span></div>
-          </a>
-          <a class="related-post-card" href="android-15-privacy-media-visual-permission.html">
-            <div class="related-post-card-title">Android 15 隐私新特性：所有文件都需要 MEDIA_VISUAL_PERMISSION</div>
-            <div class="related-post-card-tags"><span>Android</span><span>隐私</span><span>Android 15</span></div>
-          </a>
-          </div>
-        </div>
-
-        <!-- /Related Static -->
 
         <p>依赖注入（Dependency Injection）是现代 Android 架构的基石。从手写工厂到 Dagger 2 的编译期注入，再到 Hilt 的简化封装——这条路的终点是让开发者用最少的样板代码获得最可靠的依赖管理。Hilt 不是 Dagger 的替代品，而是站在 Dagger 肩膀上的「标准答案」，它把 Android 团队多年积累的最佳实践固化成了注解和约定。</p>
 
@@ -1359,6 +1328,35 @@ object NetworkModule {
         <strong>一句话总结</strong>：Hilt 的核心公式 = <code>@HiltAndroidApp</code>（入口）+ <code>@AndroidEntryPoint</code>（注入点）+ <code>@Module/@InstallIn</code>（绑定规则）+ <code>@Scope</code>（生命周期）。记住这条链路，其他都是衍生。
       </div>
 
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="android-testing-playbook.html">
+            <div class="related-post-card-title">别再从 Espresso 开始：Android 测试分层实战手册</div>
+            <div class="related-post-card-tags"><span>Android</span><span>测试</span><span>Kotlin</span></div>
+          </a>
+          <a class="related-post-card" href="jetpack-compose-性能优化实战从卡顿到丝滑的-12-个技巧.html">
+            <div class="related-post-card-title">Jetpack Compose 性能优化实战：从卡顿到丝滑的 12 个技巧</div>
+            <div class="related-post-card-tags"><span>Jetpack Compose</span><span>Android</span><span>性能优化</span></div>
+          </a>
+          <a class="related-post-card" href="gradle-构建加速全攻略从-5-分钟到-30-秒.html">
+            <div class="related-post-card-title">Gradle 构建加速全攻略：从 5 分钟到 30 秒</div>
+            <div class="related-post-card-tags"><span>Gradle</span><span>Android</span><span>构建优化</span></div>
+          </a>
+          <a class="related-post-card" href="gradle-build-acceleration-5min-to-30sec.html">
+            <div class="related-post-card-title">Gradle 构建加速实操：我从 5 分钟做到 30 秒</div>
+            <div class="related-post-card-tags"><span>Gradle</span><span>Android</span><span>构建优化</span></div>
+          </a>
+          <a class="related-post-card" href="android-15-privacy-media-visual-permission.html">
+            <div class="related-post-card-title">Android 15 隐私新特性：所有文件都需要 MEDIA_VISUAL_PERMISSION</div>
+            <div class="related-post-card-tags"><span>Android</span><span>隐私</span><span>Android 15</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
+
         <!-- Post Copyright & License Card -->
         <div class="post-copyright-card">
           <div class="copyright-header">
@@ -1424,7 +1422,6 @@ object NetworkModule {
   <script defer src="../../assets/js/main.js"></script>
   <script defer src="../../assets/js/article.js"></script>
   <script defer src="../../assets/js/share.js"></script>
-  <script defer src="../../assets/js/back-to-top.js"></script>
   <!-- Back to Top & Reading Progress -->
   <button class="back-to-top" id="backToTop" aria-label="回到顶部">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1458,11 +1455,11 @@ object NetworkModule {
         <div class="post-info-label">标签</div>
         <div class="post-info-links">
           <a href="../../blog/index.html?tag=Hilt" class="post-info-link"># Hilt</a>
-          <a href="../../blog/index.html?tag=依赖注入" class="post-info-link"># 依赖注入</a>
+          <a href="../../blog/index.html?tag=%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5" class="post-info-link"># 依赖注入</a>
           <a href="../../blog/index.html?tag=Android" class="post-info-link"># Android</a>
           <a href="../../blog/index.html?tag=Dagger" class="post-info-link"># Dagger</a>
           <a href="../../blog/index.html?tag=ViewModel" class="post-info-link"># ViewModel</a>
-          <a href="../../blog/index.html?tag=模块化" class="post-info-link"># 模块化</a>
+          <a href="../../blog/index.html?tag=%E6%A8%A1%E5%9D%97%E5%8C%96" class="post-info-link"># 模块化</a>
         </div>
       </div>
     </div>

@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="zh-CN" data-theme="dark">
 <head>
-  <script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+  <script>document.documentElement.classList.add("js");try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
     <meta charset="UTF-8">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://static.cloudflareinsights.com https://loczb-comments.billycust716.workers.dev; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://loczb-comments.billycust716.workers.dev https://dashscope.aliyuncs.com https://709527.xyz https://www.709527.xyz https://cloudflareinsights.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
     <script>/* 反点击劫持兜底：GitHub Pages 无法下发 X-Frame-Options / CSP frame-ancestors */(function(){if(self===top)return;try{top.location=self.location}catch(e){}setTimeout(function(){if(self!==top){document.documentElement.style.display='none';}},400);})();</script>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>和 AI 结对写代码这一年，我学会了怎么放手 | 张小猛 - loczb</title>
     <meta name="description" content="一个移动端开发者和 AI 编程助手协作一年的真实复盘：从不敢信、到滥信踩坑、再到建立边界和验收习惯。">
 
@@ -55,7 +55,7 @@
 }
     </script>
 
-    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/style.css?v=20261004-spacing4">
     <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
     <link rel="alternate icon" href="../../assets/images/favicon.ico">
     <link rel="canonical" href="https://709527.xyz/blog/posts/和ai结对写代码这一年我学会了怎么放手.html">
@@ -88,8 +88,6 @@
   <!-- Particle Canvas Background -->
   <canvas id="particle-canvas" class="particle-canvas" aria-hidden="true"></canvas>
 
-  <div class="scroll-progress"></div>
-
   <main class="section" style="padding-bottom: 0; padding-top: var(--space-4xl);">
     <div class="container container-narrow">
       <a href="../index.html" class="back-link">
@@ -116,35 +114,6 @@
         </div>
 
         
-
-        <!-- Related Static -->
-        <div class="related-posts">
-          <div class="related-posts-title">📌 相关文章</div>
-          <div class="related-posts-list">
-          <a class="related-post-card" href="how-engineers-report.html">
-            <div class="related-post-card-title">技术人员如何做好汇报</div>
-            <div class="related-post-card-tags"><span>职场</span><span>沟通</span><span>汇报</span></div>
-          </a>
-          <a class="related-post-card" href="周末如何度过才有意义.html">
-            <div class="related-post-card-title">周末如何度过才有意义</div>
-            <div class="related-post-card-tags"><span>思考</span><span>生活方式</span></div>
-          </a>
-          <a class="related-post-card" href="程序员的周五晚上如何有意义地度过.html">
-            <div class="related-post-card-title">程序员的周五晚上，如何有意义地度过</div>
-            <div class="related-post-card-tags"><span>思考</span><span>生活方式</span><span>效率</span></div>
-          </a>
-          <a class="related-post-card" href="300-万能躺平吗.html">
-            <div class="related-post-card-title">300 万能躺平吗</div>
-            <div class="related-post-card-tags"><span>思考</span><span>理财</span><span>躺平</span></div>
-          </a>
-          <a class="related-post-card" href="技术人员转行指南当写代码不再是你想做的事.html">
-            <div class="related-post-card-title">技术人员转行指南：当写代码不再是你想做的事</div>
-            <div class="related-post-card-tags"><span>转行</span><span>职业选择</span><span>思考</span></div>
-          </a>
-          </div>
-        </div>
-
-        <!-- /Related Static -->
 
         <h2>一年三个阶段</h2>
 <p>去年这个时候，我让 AI 写一段列表性能优化代码，逐行审了四十分钟，最后只留了三行。今年这个时候，我一个下午合并七八个 PR，每个平均花不到十分钟。中间这段路，我把它拆成三个阶段：不敢信、滥信、有边界地信。坑主要踩在第二个阶段。</p>
@@ -182,6 +151,35 @@
 <p>这一年它替我省了大约三分之一的时间。如果这些时间用来少看代码，事故率会替我找回平衡；它真正的去处应该更高——想清楚需求、写更准的设计说明、读线上数据。它把实现的边际成本打下来之后，瓶颈整个挪到了「定义问题」上，这才是我今年最大的职业体感。</p>
 <h3>有一条底线没有松过</h3>
 <p>无论多信它，我始终对合并进主分支的每一行代码负责。名义上可以写「Co-authored-by」，责任栏里不能这么写。它没有工牌，出了事站不到复盘会上。</p>
+
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="how-engineers-report.html">
+            <div class="related-post-card-title">技术人员如何做好汇报</div>
+            <div class="related-post-card-tags"><span>职场</span><span>沟通</span><span>汇报</span></div>
+          </a>
+          <a class="related-post-card" href="周末如何度过才有意义.html">
+            <div class="related-post-card-title">周末如何度过才有意义</div>
+            <div class="related-post-card-tags"><span>思考</span><span>生活方式</span></div>
+          </a>
+          <a class="related-post-card" href="程序员的周五晚上如何有意义地度过.html">
+            <div class="related-post-card-title">程序员的周五晚上，如何有意义地度过</div>
+            <div class="related-post-card-tags"><span>思考</span><span>生活方式</span><span>效率</span></div>
+          </a>
+          <a class="related-post-card" href="300-万能躺平吗.html">
+            <div class="related-post-card-title">300 万能躺平吗</div>
+            <div class="related-post-card-tags"><span>思考</span><span>理财</span><span>躺平</span></div>
+          </a>
+          <a class="related-post-card" href="技术人员转行指南当写代码不再是你想做的事.html">
+            <div class="related-post-card-title">技术人员转行指南：当写代码不再是你想做的事</div>
+            <div class="related-post-card-tags"><span>转行</span><span>职业选择</span><span>思考</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
 
         <!-- Post Copyright & License Card -->
         <div class="post-copyright-card">
@@ -248,7 +246,6 @@
   <script defer src="../../assets/js/main.js"></script>
   <script defer src="../../assets/js/article.js"></script>
   <script defer src="../../assets/js/share.js"></script>
-  <script defer src="../../assets/js/back-to-top.js"></script>
   <!-- Back to Top & Reading Progress -->
   <button class="back-to-top" id="backToTop" aria-label="回到顶部">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -281,10 +278,10 @@
       <div class="post-info-section" id="postSidebarTags">
         <div class="post-info-label">标签</div>
         <div class="post-info-links">
-          <a href="../../blog/index.html?tag=思考" class="post-info-link"># 思考</a>
+          <a href="../../blog/index.html?tag=%E6%80%9D%E8%80%83" class="post-info-link"># 思考</a>
           <a href="../../blog/index.html?tag=AI" class="post-info-link"># AI</a>
-          <a href="../../blog/index.html?tag=开发习惯" class="post-info-link"># 开发习惯</a>
-          <a href="../../blog/index.html?tag=代码质量" class="post-info-link"># 代码质量</a>
+          <a href="../../blog/index.html?tag=%E5%BC%80%E5%8F%91%E4%B9%A0%E6%83%AF" class="post-info-link"># 开发习惯</a>
+          <a href="../../blog/index.html?tag=%E4%BB%A3%E7%A0%81%E8%B4%A8%E9%87%8F" class="post-info-link"># 代码质量</a>
         </div>
       </div>
     </div>

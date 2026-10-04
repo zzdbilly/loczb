@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="zh-CN" data-theme="dark">
 <head>
-  <script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+  <script>document.documentElement.classList.add("js");try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
     <meta charset="UTF-8">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://static.cloudflareinsights.com https://loczb-comments.billycust716.workers.dev; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://loczb-comments.billycust716.workers.dev https://dashscope.aliyuncs.com https://709527.xyz https://www.709527.xyz https://cloudflareinsights.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
     <script>/* 反点击劫持兜底：GitHub Pages 无法下发 X-Frame-Options / CSP frame-ancestors */(function(){if(self===top)return;try{top.location=self.location}catch(e){}setTimeout(function(){if(self!==top){document.documentElement.style.display='none';}},400);})();</script>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>软件工程师能从制造业学到什么：精益思维重塑开发流程 | 张小猛 - loczb</title>
     <meta name="description" content="制造业精益思想如何重塑软件开发流程——从丰田生产系统到敏捷开发，从5S方法论到持续交付，跨行业视角下的效率革命">
 
@@ -54,7 +54,7 @@
     }
     </script>
 
-    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/style.css?v=20261004-spacing4">
     <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
     <link rel="alternate icon" href="../../assets/images/favicon.ico">
     <link rel="canonical" href="https://709527.xyz/blog/posts/software-engineer-learns-from-manufacturing-lean.html">
@@ -87,8 +87,6 @@
   <!-- Particle Canvas Background -->
   <canvas id="particle-canvas" class="particle-canvas" aria-hidden="true"></canvas>
 
-  <div class="scroll-progress"></div>
-
   <main class="section" style="padding-bottom: 0; padding-top: var(--space-4xl);">
     <div class="container container-narrow">
       <a href="../index.html" class="back-link">
@@ -115,35 +113,6 @@
         </div>
 
         
-
-        <!-- Related Static -->
-        <div class="related-posts">
-          <div class="related-posts-title">📌 相关文章</div>
-          <div class="related-posts-list">
-          <a class="related-post-card" href="urban-planning-inspires-software-architecture.html">
-            <div class="related-post-card-title">像规划城市一样设计系统：城市规划给软件架构的启示</div>
-            <div class="related-post-card-tags"><span>架构</span><span>系统思维</span><span>工程思维</span></div>
-          </a>
-          <a class="related-post-card" href="how-engineers-report.html">
-            <div class="related-post-card-title">技术人员如何做好汇报</div>
-            <div class="related-post-card-tags"><span>职场</span><span>沟通</span><span>汇报</span></div>
-          </a>
-          <a class="related-post-card" href="和ai结对写代码这一年我学会了怎么放手.html">
-            <div class="related-post-card-title">和 AI 结对写代码这一年，我学会了怎么放手</div>
-            <div class="related-post-card-tags"><span>思考</span><span>AI</span><span>开发习惯</span></div>
-          </a>
-          <a class="related-post-card" href="程序员带娃把养孩子当成一个长期运维的系统工程.html">
-            <div class="related-post-card-title">程序员带娃：把养孩子当成一个长期运维的系统工程</div>
-            <div class="related-post-card-tags"><span>程序员</span><span>带娃</span><span>工程思维</span></div>
-          </a>
-          <a class="related-post-card" href="周末如何度过才有意义.html">
-            <div class="related-post-card-title">周末如何度过才有意义</div>
-            <div class="related-post-card-tags"><span>思考</span><span>生活方式</span></div>
-          </a>
-          </div>
-        </div>
-
-        <!-- /Related Static -->
 
         <blockquote>
 <p>当我们谈论软件开发效率时，很少会想到丰田的生产车间。但事实上，制造业几十年积累的精益思想，正在深刻影响着现代软件工程的方方面面——从敏捷开发到 DevOps，从持续交付到故障复盘。本文从跨行业视角，探讨制造业的精益哲学如何重塑软件开发流程，以及技术人能从中获得哪些启发。</p>
@@ -479,6 +448,35 @@ Bug 修复时间：5 天              Bug 修复时间：1 天
 - <em>《加速》— Nicole Forsgren 等（DORA 指标的学术基础）</em>
 - <em>《看板方法》— David J Anderson</em></p>
 
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="urban-planning-inspires-software-architecture.html">
+            <div class="related-post-card-title">像规划城市一样设计系统：城市规划给软件架构的启示</div>
+            <div class="related-post-card-tags"><span>架构</span><span>系统思维</span><span>工程思维</span></div>
+          </a>
+          <a class="related-post-card" href="how-engineers-report.html">
+            <div class="related-post-card-title">技术人员如何做好汇报</div>
+            <div class="related-post-card-tags"><span>职场</span><span>沟通</span><span>汇报</span></div>
+          </a>
+          <a class="related-post-card" href="和ai结对写代码这一年我学会了怎么放手.html">
+            <div class="related-post-card-title">和 AI 结对写代码这一年，我学会了怎么放手</div>
+            <div class="related-post-card-tags"><span>思考</span><span>AI</span><span>开发习惯</span></div>
+          </a>
+          <a class="related-post-card" href="程序员带娃把养孩子当成一个长期运维的系统工程.html">
+            <div class="related-post-card-title">程序员带娃：把养孩子当成一个长期运维的系统工程</div>
+            <div class="related-post-card-tags"><span>程序员</span><span>带娃</span><span>工程思维</span></div>
+          </a>
+          <a class="related-post-card" href="周末如何度过才有意义.html">
+            <div class="related-post-card-title">周末如何度过才有意义</div>
+            <div class="related-post-card-tags"><span>思考</span><span>生活方式</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
+
         <!-- Post Copyright & License Card -->
         <div class="post-copyright-card">
           <div class="copyright-header">
@@ -544,7 +542,6 @@ Bug 修复时间：5 天              Bug 修复时间：1 天
   <script defer src="../../assets/js/main.js"></script>
   <script defer src="../../assets/js/article.js"></script>
   <script defer src="../../assets/js/share.js"></script>
-  <script defer src="../../assets/js/back-to-top.js"></script>
   <!-- Back to Top & Reading Progress -->
   <button class="back-to-top" id="backToTop" aria-label="回到顶部">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -577,10 +574,10 @@ Bug 修复时间：5 天              Bug 修复时间：1 天
       <div class="post-info-section" id="postSidebarTags">
         <div class="post-info-label">标签</div>
         <div class="post-info-links">
-          <a href="../../blog/index.html?tag=工程实践" class="post-info-link"># 工程实践</a>
-          <a href="../../blog/index.html?tag=思考" class="post-info-link"># 思考</a>
-          <a href="../../blog/index.html?tag=工程思维" class="post-info-link"># 工程思维</a>
-          <a href="../../blog/index.html?tag=工作法" class="post-info-link"># 工作法</a>
+          <a href="../../blog/index.html?tag=%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5" class="post-info-link"># 工程实践</a>
+          <a href="../../blog/index.html?tag=%E6%80%9D%E8%80%83" class="post-info-link"># 思考</a>
+          <a href="../../blog/index.html?tag=%E5%B7%A5%E7%A8%8B%E6%80%9D%E7%BB%B4" class="post-info-link"># 工程思维</a>
+          <a href="../../blog/index.html?tag=%E5%B7%A5%E4%BD%9C%E6%B3%95" class="post-info-link"># 工作法</a>
         </div>
       </div>
     </div>

@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="zh-CN" data-theme="dark">
 <head>
-  <script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+  <script>document.documentElement.classList.add("js");try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
     <meta charset="UTF-8">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://static.cloudflareinsights.com https://loczb-comments.billycust716.workers.dev; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://loczb-comments.billycust716.workers.dev https://dashscope.aliyuncs.com https://709527.xyz https://www.709527.xyz https://cloudflareinsights.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
     <script>/* 反点击劫持兜底：GitHub Pages 无法下发 X-Frame-Options / CSP frame-ancestors */(function(){if(self===top)return;try{top.location=self.location}catch(e){}setTimeout(function(){if(self!==top){document.documentElement.style.display='none';}},400);})();</script>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>MCP 协议深入实战：从入门到编写自定义 MCP Server | 张小猛 - loczb</title>
     <meta name="description" content="3000字完整教程，从零搭建 MCP Server，涵盖协议核心、SDK 使用、调试技巧和生产部署最佳实践">
 
@@ -54,7 +54,7 @@
     }
     </script>
 
-    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/style.css?v=20261004-spacing4">
     <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
     <link rel="alternate icon" href="../../assets/images/favicon.ico">
     <link rel="canonical" href="https://709527.xyz/blog/posts/mcp-server-deep-dive.html">
@@ -86,8 +86,6 @@
   </nav>
   <!-- Particle Canvas Background -->
   <canvas id="particle-canvas" class="particle-canvas" aria-hidden="true"></canvas>
-
-  <div class="scroll-progress"></div>
 
   <main class="section" style="padding-bottom: 0; padding-top: var(--space-4xl);">
     <div class="container container-narrow">
@@ -141,35 +139,6 @@
           </details>
         </div>
         <!-- /Series Card Widget -->
-
-        <!-- Related Static -->
-        <div class="related-posts">
-          <div class="related-posts-title">📌 相关文章</div>
-          <div class="related-posts-list">
-          <a class="related-post-card" href="mcp-android-integration.html">
-            <div class="related-post-card-title">MCP 协议在 Android 端的应用：AI 工具调用新范式</div>
-            <div class="related-post-card-tags"><span>Android</span><span>MCP</span><span>AI</span></div>
-          </a>
-          <a class="related-post-card" href="当-ai-编程-agent-有了眼睛safari-mcp-server-深度解读.html">
-            <div class="related-post-card-title">当 AI 编程 Agent 有了&quot;眼睛&quot;：Safari MCP Server 深度解读</div>
-            <div class="related-post-card-tags"><span>AI</span><span>MCP</span><span>WebKit</span></div>
-          </a>
-          <a class="related-post-card" href="agentic-ai-架构演进从-chatbot-到自主-agent.html">
-            <div class="related-post-card-title">Agentic AI 架构演进：从 Chatbot 到自主 Agent</div>
-            <div class="related-post-card-tags"><span>AI</span><span>Agent</span><span>架构</span></div>
-          </a>
-          <a class="related-post-card" href="ai-编程助手进化论从结对编程到自主编程团队-2026.html">
-            <div class="related-post-card-title">AI 编程助手进化论：从结对编程到自主编程团队 (2026)</div>
-            <div class="related-post-card-tags"><span>AI</span><span>Agent</span><span>AI 工具</span></div>
-          </a>
-          <a class="related-post-card" href="ai-code-editor-review-cursor-windsurf-copilot.html">
-            <div class="related-post-card-title">AI 代码编辑器深度横评：Cursor vs Windsurf vs Copilot</div>
-            <div class="related-post-card-tags"><span>AI</span><span>AI 工具</span><span>开发技巧</span></div>
-          </a>
-          </div>
-        </div>
-
-        <!-- /Related Static -->
 
         <section>
 <h2>引言</h2>
@@ -625,6 +594,35 @@ server.tool(
 </ul>
 </section>
 
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="mcp-android-integration.html">
+            <div class="related-post-card-title">MCP 协议在 Android 端的应用：AI 工具调用新范式</div>
+            <div class="related-post-card-tags"><span>Android</span><span>MCP</span><span>AI</span></div>
+          </a>
+          <a class="related-post-card" href="当-ai-编程-agent-有了眼睛safari-mcp-server-深度解读.html">
+            <div class="related-post-card-title">当 AI 编程 Agent 有了&quot;眼睛&quot;：Safari MCP Server 深度解读</div>
+            <div class="related-post-card-tags"><span>AI</span><span>MCP</span><span>WebKit</span></div>
+          </a>
+          <a class="related-post-card" href="agentic-ai-架构演进从-chatbot-到自主-agent.html">
+            <div class="related-post-card-title">Agentic AI 架构演进：从 Chatbot 到自主 Agent</div>
+            <div class="related-post-card-tags"><span>AI</span><span>Agent</span><span>架构</span></div>
+          </a>
+          <a class="related-post-card" href="ai-编程助手进化论从结对编程到自主编程团队-2026.html">
+            <div class="related-post-card-title">AI 编程助手进化论：从结对编程到自主编程团队 (2026)</div>
+            <div class="related-post-card-tags"><span>AI</span><span>Agent</span><span>AI 工具</span></div>
+          </a>
+          <a class="related-post-card" href="ai-code-editor-review-cursor-windsurf-copilot.html">
+            <div class="related-post-card-title">AI 代码编辑器深度横评：Cursor vs Windsurf vs Copilot</div>
+            <div class="related-post-card-tags"><span>AI</span><span>AI 工具</span><span>开发技巧</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
+
         <!-- Post Copyright & License Card -->
         <div class="post-copyright-card">
           <div class="copyright-header">
@@ -704,7 +702,6 @@ server.tool(
   <script defer src="../../assets/js/main.js"></script>
   <script defer src="../../assets/js/article.js"></script>
   <script defer src="../../assets/js/share.js"></script>
-  <script defer src="../../assets/js/back-to-top.js"></script>
   <!-- Back to Top & Reading Progress -->
   <button class="back-to-top" id="backToTop" aria-label="回到顶部">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -739,8 +736,8 @@ server.tool(
         <div class="post-info-links">
           <a href="../../blog/index.html?tag=AI" class="post-info-link"># AI</a>
           <a href="../../blog/index.html?tag=MCP" class="post-info-link"># MCP</a>
-          <a href="../../blog/index.html?tag=工具调用" class="post-info-link"># 工具调用</a>
-          <a href="../../blog/index.html?tag=协议" class="post-info-link"># 协议</a>
+          <a href="../../blog/index.html?tag=%E5%B7%A5%E5%85%B7%E8%B0%83%E7%94%A8" class="post-info-link"># 工具调用</a>
+          <a href="../../blog/index.html?tag=%E5%8D%8F%E8%AE%AE" class="post-info-link"># 协议</a>
         </div>
       </div>
     </div>

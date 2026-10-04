@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="zh-CN" data-theme="dark">
 <head>
-  <script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+  <script>document.documentElement.classList.add("js");try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
     <meta charset="UTF-8">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://static.cloudflareinsights.com https://loczb-comments.billycust716.workers.dev; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://loczb-comments.billycust716.workers.dev https://dashscope.aliyuncs.com https://709527.xyz https://www.709527.xyz https://cloudflareinsights.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
     <script>/* 反点击劫持兜底：GitHub Pages 无法下发 X-Frame-Options / CSP frame-ancestors */(function(){if(self===top)return;try{top.location=self.location}catch(e){}setTimeout(function(){if(self!==top){document.documentElement.style.display='none';}},400);})();</script>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Web Worker 与前端多线程开发：把主线程从繁重计算中解放出来 | 张小猛 - loczb</title>
     <meta name="description" content="深入解析 Web Worker 的原理与实践，涵盖 Dedicated Worker、Shared Worker、Service Worker 的区别与使用场景，以及 Comlink、Worker 池、Transferable Objects 等进阶技巧">
 
@@ -55,7 +55,7 @@
 }
     </script>
 
-    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/style.css?v=20261004-spacing4">
     <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
     <link rel="alternate icon" href="../../assets/images/favicon.ico">
     <link rel="canonical" href="https://709527.xyz/blog/posts/web-worker-与前端多线程开发把主线程从繁重计算中解放出来.html">
@@ -88,8 +88,6 @@
   <!-- Particle Canvas Background -->
   <canvas id="particle-canvas" class="particle-canvas" aria-hidden="true"></canvas>
 
-  <div class="scroll-progress"></div>
-
   <main class="section" style="padding-bottom: 0; padding-top: var(--space-4xl);">
     <div class="container container-narrow">
       <a href="../index.html" class="back-link">
@@ -118,35 +116,6 @@
         </div>
 
         
-
-        <!-- Related Static -->
-        <div class="related-posts">
-          <div class="related-posts-title">📌 相关文章</div>
-          <div class="related-posts-list">
-          <a class="related-post-card" href="static-blog-performance-optimization-59mb.html">
-            <div class="related-post-card-title">静态博客性能优化实战：从 59MB 到精简高效</div>
-            <div class="related-post-card-tags"><span>性能优化</span><span>静态网站</span><span>前端</span></div>
-          </a>
-          <a class="related-post-card" href="当-ai-编程-agent-有了眼睛safari-mcp-server-深度解读.html">
-            <div class="related-post-card-title">当 AI 编程 Agent 有了&quot;眼睛&quot;：Safari MCP Server 深度解读</div>
-            <div class="related-post-card-tags"><span>AI</span><span>MCP</span><span>WebKit</span></div>
-          </a>
-          <a class="related-post-card" href="css-view-transitions.html">
-            <div class="related-post-card-title">CSS View Transitions API 实战：页面过渡动画新范式</div>
-            <div class="related-post-card-tags"><span>前端</span><span>CSS</span><span>View Transitions</span></div>
-          </a>
-          <a class="related-post-card" href="css-container-queries.html">
-            <div class="related-post-card-title">CSS Container Queries 实战</div>
-            <div class="related-post-card-tags"><span>CSS</span><span>Container Queries</span><span>响应式设计</span></div>
-          </a>
-          <a class="related-post-card" href="typescript-type-gymnastics.html">
-            <div class="related-post-card-title">TypeScript 类型体操指南</div>
-            <div class="related-post-card-tags"><span>TypeScript</span><span>类型体操</span><span>前端</span></div>
-          </a>
-          </div>
-        </div>
-
-        <!-- /Related Static -->
 
         <p>JavaScript 从诞生之初就被设计为单线程语言，这在当时是合理的——浏览器的页面交互逻辑并不需要多线程的复杂性。然而，随着 Web 应用变得越来越复杂，Canvas 动画、大数据处理、密码学运算、音视频编码等计算密集型任务不断涌现，"单线程"这把双刃剑开始显露出它的另一面：一个长任务就能让整个页面卡死，用户的点击、滚动、输入全都得不到响应。</p>
 <p>Web Worker 正是浏览器为应对这一困境提供的解决方案。它允许开发者在后台线程中运行 JavaScript，让主线程专注于 UI 渲染和用户交互，把繁重的计算任务交给 Worker 线程去处理。本文将从基础概念到进阶实践，全面解析 Web Worker 在前端开发中的应用。</p>
@@ -1762,6 +1731,35 @@ importScripts('/heavy-lib.js', '/utils.js', '/helpers.js');
 <p>Web Worker 把主线程从繁重计算中解放出来，让前端应用保持流畅的 60fps 体验。随着 WebAssembly 和 OffscreenCanvas 等 API 的成熟，Worker 的能力边界的不断扩展，未来在浏览器中处理更复杂的任务将越来越可行。</p>
 <p>记住：好的用户体验不仅是功能完整，更是丝滑流畅——而这，正是 Web Worker 的用武之地。</p>
 
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="static-blog-performance-optimization-59mb.html">
+            <div class="related-post-card-title">静态博客性能优化实战：从 59MB 到精简高效</div>
+            <div class="related-post-card-tags"><span>性能优化</span><span>静态网站</span><span>前端</span></div>
+          </a>
+          <a class="related-post-card" href="当-ai-编程-agent-有了眼睛safari-mcp-server-深度解读.html">
+            <div class="related-post-card-title">当 AI 编程 Agent 有了&quot;眼睛&quot;：Safari MCP Server 深度解读</div>
+            <div class="related-post-card-tags"><span>AI</span><span>MCP</span><span>WebKit</span></div>
+          </a>
+          <a class="related-post-card" href="css-view-transitions.html">
+            <div class="related-post-card-title">CSS View Transitions API 实战：页面过渡动画新范式</div>
+            <div class="related-post-card-tags"><span>前端</span><span>CSS</span><span>View Transitions</span></div>
+          </a>
+          <a class="related-post-card" href="css-container-queries.html">
+            <div class="related-post-card-title">CSS Container Queries 实战</div>
+            <div class="related-post-card-tags"><span>CSS</span><span>Container Queries</span><span>响应式设计</span></div>
+          </a>
+          <a class="related-post-card" href="typescript-type-gymnastics.html">
+            <div class="related-post-card-title">TypeScript 类型体操指南</div>
+            <div class="related-post-card-tags"><span>TypeScript</span><span>类型体操</span><span>前端</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
+
         <!-- Post Copyright & License Card -->
         <div class="post-copyright-card">
           <div class="copyright-header">
@@ -1827,7 +1825,6 @@ importScripts('/heavy-lib.js', '/utils.js', '/helpers.js');
   <script defer src="../../assets/js/main.js"></script>
   <script defer src="../../assets/js/article.js"></script>
   <script defer src="../../assets/js/share.js"></script>
-  <script defer src="../../assets/js/back-to-top.js"></script>
   <!-- Back to Top & Reading Progress -->
   <button class="back-to-top" id="backToTop" aria-label="回到顶部">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1860,12 +1857,12 @@ importScripts('/heavy-lib.js', '/utils.js', '/helpers.js');
       <div class="post-info-section" id="postSidebarTags">
         <div class="post-info-label">标签</div>
         <div class="post-info-links">
-          <a href="../../blog/index.html?tag=前端" class="post-info-link"># 前端</a>
-          <a href="../../blog/index.html?tag=前端开发" class="post-info-link"># 前端开发</a>
+          <a href="../../blog/index.html?tag=%E5%89%8D%E7%AB%AF" class="post-info-link"># 前端</a>
+          <a href="../../blog/index.html?tag=%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91" class="post-info-link"># 前端开发</a>
           <a href="../../blog/index.html?tag=JavaScript" class="post-info-link"># JavaScript</a>
-          <a href="../../blog/index.html?tag=WebWorker" class="post-info-link"># Web Worker</a>
-          <a href="../../blog/index.html?tag=性能优化" class="post-info-link"># 性能优化</a>
-          <a href="../../blog/index.html?tag=多线程" class="post-info-link"># 多线程</a>
+          <a href="../../blog/index.html?tag=Web%20Worker" class="post-info-link"># Web Worker</a>
+          <a href="../../blog/index.html?tag=%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96" class="post-info-link"># 性能优化</a>
+          <a href="../../blog/index.html?tag=%E5%A4%9A%E7%BA%BF%E7%A8%8B" class="post-info-link"># 多线程</a>
         </div>
       </div>
     </div>

@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="zh-CN" data-theme="dark">
 <head>
-  <script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+  <script>document.documentElement.classList.add("js");try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
     <meta charset="UTF-8">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://static.cloudflareinsights.com https://loczb-comments.billycust716.workers.dev; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://loczb-comments.billycust716.workers.dev https://dashscope.aliyuncs.com https://709527.xyz https://www.709527.xyz https://cloudflareinsights.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
     <script>/* 反点击劫持兜底：GitHub Pages 无法下发 X-Frame-Options / CSP frame-ancestors */(function(){if(self===top)return;try{top.location=self.location}catch(e){}setTimeout(function(){if(self!==top){document.documentElement.style.display='none';}},400);})();</script>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>纳指定投：把一笔月供当成长期运维来跑 | 张小猛 - loczb</title>
     <meta name="description" content="一个程序员对纳指100定投的完整记录：它是什么、摊平了什么、摩擦成本在哪、我给自己定了哪些执行规则，以及怎么验证自己没做错。">
 
@@ -55,7 +55,7 @@
 }
     </script>
 
-    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/style.css?v=20261004-spacing4">
     <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
     <link rel="alternate icon" href="../../assets/images/favicon.ico">
     <link rel="canonical" href="https://709527.xyz/blog/posts/纳指定投把一笔月供当成长期运维来跑.html">
@@ -88,8 +88,6 @@
   <!-- Particle Canvas Background -->
   <canvas id="particle-canvas" class="particle-canvas" aria-hidden="true"></canvas>
 
-  <div class="scroll-progress"></div>
-
   <main class="section" style="padding-bottom: 0; padding-top: var(--space-4xl);">
     <div class="container container-narrow">
       <a href="../index.html" class="back-link">
@@ -117,35 +115,6 @@
         </div>
 
         
-
-        <!-- Related Static -->
-        <div class="related-posts">
-          <div class="related-posts-title">📌 相关文章</div>
-          <div class="related-posts-list">
-          <a class="related-post-card" href="打工人理财第一课从看懂钱去哪了到让钱自己长大.html">
-            <div class="related-post-card-title">打工人理财第一课：从看懂钱去哪了到让钱自己长大</div>
-            <div class="related-post-card-tags"><span>理财</span><span>打工人</span><span>程序员</span></div>
-          </a>
-          <a class="related-post-card" href="300-万能躺平吗.html">
-            <div class="related-post-card-title">300 万能躺平吗</div>
-            <div class="related-post-card-tags"><span>思考</span><span>理财</span><span>躺平</span></div>
-          </a>
-          <a class="related-post-card" href="tech-manager-vs-pm-vs-po.html">
-            <div class="related-post-card-title">技术经理、项目经理、产品经理的区别</div>
-            <div class="related-post-card-tags"><span>职场</span><span>团队管理</span><span>角色认知</span></div>
-          </a>
-          <a class="related-post-card" href="how-engineers-report.html">
-            <div class="related-post-card-title">技术人员如何做好汇报</div>
-            <div class="related-post-card-tags"><span>职场</span><span>沟通</span><span>汇报</span></div>
-          </a>
-          <a class="related-post-card" href="quick-energy-recovery.html">
-            <div class="related-post-card-title">如何快速恢复能量，让自己快乐起来</div>
-            <div class="related-post-card-tags"><span>能量管理</span><span>情绪</span><span>生活方式</span></div>
-          </a>
-          </div>
-        </div>
-
-        <!-- /Related Static -->
 
         <h2>先分清这篇写给谁，以及它不是什么</h2>
 <p>这篇写给一种具体的人：有稳定的月收入，日常开销和投资账户是分开的两笔钱，手上有一笔至少五年内不打算动用的闲钱，职业大概率是 Android、大前端或者别的什么需要长时间盯着复杂系统的工程岗。</p>
@@ -271,6 +240,35 @@
 <p>必须说清楚的三件事：定投不能消除亏损风险，它只是把买入时点的风险分散到不同的时间上；纳斯达克100 这类资产在历史上有过 -70% 级别的深度回撤，2000 到 2002 年那一段的下跌幅度在 78% 到 83% 这个量级，恢复周期长达十余年；历史上出现过深度回撤，不代表未来不会出现，也不代表下次的幅度和恢复时间会与过去相同。</p>
 <p>文中所有具体数字都标注了来源与查阅日期，或者明确标注为假设性算术演示。两类数字不能混用：标注为演示的复利和费率计算只是算术，不是收益预测。任何投资决策请基于你自己的资金状况、时间尺度和风险承受能力，必要时咨询有资质的专业人士。</p>
 
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="打工人理财第一课从看懂钱去哪了到让钱自己长大.html">
+            <div class="related-post-card-title">打工人理财第一课：从看懂钱去哪了到让钱自己长大</div>
+            <div class="related-post-card-tags"><span>理财</span><span>打工人</span><span>程序员</span></div>
+          </a>
+          <a class="related-post-card" href="300-万能躺平吗.html">
+            <div class="related-post-card-title">300 万能躺平吗</div>
+            <div class="related-post-card-tags"><span>思考</span><span>理财</span><span>躺平</span></div>
+          </a>
+          <a class="related-post-card" href="tech-manager-vs-pm-vs-po.html">
+            <div class="related-post-card-title">技术经理、项目经理、产品经理的区别</div>
+            <div class="related-post-card-tags"><span>职场</span><span>团队管理</span><span>角色认知</span></div>
+          </a>
+          <a class="related-post-card" href="how-engineers-report.html">
+            <div class="related-post-card-title">技术人员如何做好汇报</div>
+            <div class="related-post-card-tags"><span>职场</span><span>沟通</span><span>汇报</span></div>
+          </a>
+          <a class="related-post-card" href="quick-energy-recovery.html">
+            <div class="related-post-card-title">如何快速恢复能量，让自己快乐起来</div>
+            <div class="related-post-card-tags"><span>能量管理</span><span>情绪</span><span>生活方式</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
+
         <!-- Post Copyright & License Card -->
         <div class="post-copyright-card">
           <div class="copyright-header">
@@ -336,7 +334,6 @@
   <script defer src="../../assets/js/main.js"></script>
   <script defer src="../../assets/js/article.js"></script>
   <script defer src="../../assets/js/share.js"></script>
-  <script defer src="../../assets/js/back-to-top.js"></script>
   <!-- Back to Top & Reading Progress -->
   <button class="back-to-top" id="backToTop" aria-label="回到顶部">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -369,11 +366,11 @@
       <div class="post-info-section" id="postSidebarTags">
         <div class="post-info-label">标签</div>
         <div class="post-info-links">
-          <a href="../../blog/index.html?tag=理财" class="post-info-link"># 理财</a>
-          <a href="../../blog/index.html?tag=指数基金" class="post-info-link"># 指数基金</a>
-          <a href="../../blog/index.html?tag=定投" class="post-info-link"># 定投</a>
-          <a href="../../blog/index.html?tag=投资" class="post-info-link"># 投资</a>
-          <a href="../../blog/index.html?tag=个人财务" class="post-info-link"># 个人财务</a>
+          <a href="../../blog/index.html?tag=%E7%90%86%E8%B4%A2" class="post-info-link"># 理财</a>
+          <a href="../../blog/index.html?tag=%E6%8C%87%E6%95%B0%E5%9F%BA%E9%87%91" class="post-info-link"># 指数基金</a>
+          <a href="../../blog/index.html?tag=%E5%AE%9A%E6%8A%95" class="post-info-link"># 定投</a>
+          <a href="../../blog/index.html?tag=%E6%8A%95%E8%B5%84" class="post-info-link"># 投资</a>
+          <a href="../../blog/index.html?tag=%E4%B8%AA%E4%BA%BA%E8%B4%A2%E5%8A%A1" class="post-info-link"># 个人财务</a>
         </div>
       </div>
     </div>

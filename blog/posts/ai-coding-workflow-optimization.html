@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="zh-CN" data-theme="dark">
 <head>
-  <script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+  <script>document.documentElement.classList.add("js");try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
     <meta charset="UTF-8">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://static.cloudflareinsights.com https://loczb-comments.billycust716.workers.dev; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://loczb-comments.billycust716.workers.dev https://dashscope.aliyuncs.com https://709527.xyz https://www.709527.xyz https://cloudflareinsights.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
     <script>/* 反点击劫持兜底：GitHub Pages 无法下发 X-Frame-Options / CSP frame-ancestors */(function(){if(self===top)return;try{top.location=self.location}catch(e){}setTimeout(function(){if(self!==top){document.documentElement.style.display='none';}},400);})();</script>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>AI 编程工作流优化：从 Prompt 设计到上下文管理 | 张小猛 - loczb</title>
     <meta name="description" content="AI 编程工作流优化 - 从 Prompt 设计到上下文管理的实战指南，提升 AI 辅助编程效率">
 
@@ -54,7 +54,7 @@
     }
     </script>
 
-    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/style.css?v=20261004-spacing4">
     <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
     <link rel="alternate icon" href="../../assets/images/favicon.ico">
     <link rel="canonical" href="https://709527.xyz/blog/posts/ai-coding-workflow-optimization.html">
@@ -87,8 +87,6 @@
   <!-- Particle Canvas Background -->
   <canvas id="particle-canvas" class="particle-canvas" aria-hidden="true"></canvas>
 
-  <div class="scroll-progress"></div>
-
   <main class="section" style="padding-bottom: 0; padding-top: var(--space-4xl);">
     <div class="container container-narrow">
       <a href="../index.html" class="back-link">
@@ -115,35 +113,6 @@
         </div>
 
         
-
-        <!-- Related Static -->
-        <div class="related-posts">
-          <div class="related-posts-title">📌 相关文章</div>
-          <div class="related-posts-list">
-          <a class="related-post-card" href="ai-编码代理实战从-copilot-到-agent.html">
-            <div class="related-post-card-title">AI 编码代理实战：从 Copilot 到 Agent</div>
-            <div class="related-post-card-tags"><span>AI</span><span>AI编程</span><span>Agent</span></div>
-          </a>
-          <a class="related-post-card" href="agentic-ai-架构演进从-chatbot-到自主-agent.html">
-            <div class="related-post-card-title">Agentic AI 架构演进：从 Chatbot 到自主 Agent</div>
-            <div class="related-post-card-tags"><span>AI</span><span>Agent</span><span>架构</span></div>
-          </a>
-          <a class="related-post-card" href="ai-编程助手进化论从结对编程到自主编程团队-2026.html">
-            <div class="related-post-card-title">AI 编程助手进化论：从结对编程到自主编程团队 (2026)</div>
-            <div class="related-post-card-tags"><span>AI</span><span>Agent</span><span>AI 工具</span></div>
-          </a>
-          <a class="related-post-card" href="mcp-server-deep-dive.html">
-            <div class="related-post-card-title">MCP 协议深入实战：从入门到编写自定义 MCP Server</div>
-            <div class="related-post-card-tags"><span>AI</span><span>MCP</span><span>工具调用</span></div>
-          </a>
-          <a class="related-post-card" href="ai-code-editor-review-cursor-windsurf-copilot.html">
-            <div class="related-post-card-title">AI 代码编辑器深度横评：Cursor vs Windsurf vs Copilot</div>
-            <div class="related-post-card-tags"><span>AI</span><span>AI 工具</span><span>开发技巧</span></div>
-          </a>
-          </div>
-        </div>
-
-        <!-- /Related Static -->
 
         <p>用 AI 写代码很简单，但<strong>用好 AI</strong> 是另一回事。很多人只是把 AI 当「更智能的搜索引擎」，忽略了它作为编程助手的真正潜力。本文分享我两年多 AI 辅助编程的经验，从 Prompt 设计到上下文管理，帮你建立一套高效的 AI 编程工作流。</p>
 
@@ -453,6 +422,35 @@ java.lang.NullPointerException: user is null
         <strong>📌 进阶阅读</strong>：如果你想深入学习 Prompt Engineering，推荐阅读 OpenAI 的 <a href="https://platform.openai.com/docs/guides/prompt-engineering" target="_blank" style="color: var(--color-accent-primary);">Prompt Engineering Guide</a> 和 Anthropic 的 <a href="https://docs.anthropic.com/claude/docs/prompt-engineering" target="_blank" style="color: var(--color-accent-primary);">Claude Prompt Engineering</a>。
       </div>
 
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="ai-编码代理实战从-copilot-到-agent.html">
+            <div class="related-post-card-title">AI 编码代理实战：从 Copilot 到 Agent</div>
+            <div class="related-post-card-tags"><span>AI</span><span>AI编程</span><span>Agent</span></div>
+          </a>
+          <a class="related-post-card" href="agentic-ai-架构演进从-chatbot-到自主-agent.html">
+            <div class="related-post-card-title">Agentic AI 架构演进：从 Chatbot 到自主 Agent</div>
+            <div class="related-post-card-tags"><span>AI</span><span>Agent</span><span>架构</span></div>
+          </a>
+          <a class="related-post-card" href="ai-编程助手进化论从结对编程到自主编程团队-2026.html">
+            <div class="related-post-card-title">AI 编程助手进化论：从结对编程到自主编程团队 (2026)</div>
+            <div class="related-post-card-tags"><span>AI</span><span>Agent</span><span>AI 工具</span></div>
+          </a>
+          <a class="related-post-card" href="mcp-server-deep-dive.html">
+            <div class="related-post-card-title">MCP 协议深入实战：从入门到编写自定义 MCP Server</div>
+            <div class="related-post-card-tags"><span>AI</span><span>MCP</span><span>工具调用</span></div>
+          </a>
+          <a class="related-post-card" href="ai-code-editor-review-cursor-windsurf-copilot.html">
+            <div class="related-post-card-title">AI 代码编辑器深度横评：Cursor vs Windsurf vs Copilot</div>
+            <div class="related-post-card-tags"><span>AI</span><span>AI 工具</span><span>开发技巧</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
+
         <!-- Post Copyright & License Card -->
         <div class="post-copyright-card">
           <div class="copyright-header">
@@ -518,7 +516,6 @@ java.lang.NullPointerException: user is null
   <script defer src="../../assets/js/main.js"></script>
   <script defer src="../../assets/js/article.js"></script>
   <script defer src="../../assets/js/share.js"></script>
-  <script defer src="../../assets/js/back-to-top.js"></script>
   <!-- Back to Top & Reading Progress -->
   <button class="back-to-top" id="backToTop" aria-label="回到顶部">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -552,9 +549,9 @@ java.lang.NullPointerException: user is null
         <div class="post-info-label">标签</div>
         <div class="post-info-links">
           <a href="../../blog/index.html?tag=AI" class="post-info-link"># AI</a>
-          <a href="../../blog/index.html?tag=工作流" class="post-info-link"># 工作流</a>
-          <a href="../../blog/index.html?tag=Prompt设计" class="post-info-link"># Prompt设计</a>
-          <a href="../../blog/index.html?tag=效率提升" class="post-info-link"># 效率提升</a>
+          <a href="../../blog/index.html?tag=%E5%B7%A5%E4%BD%9C%E6%B5%81" class="post-info-link"># 工作流</a>
+          <a href="../../blog/index.html?tag=Prompt%E8%AE%BE%E8%AE%A1" class="post-info-link"># Prompt设计</a>
+          <a href="../../blog/index.html?tag=%E6%95%88%E7%8E%87%E6%8F%90%E5%8D%87" class="post-info-link"># 效率提升</a>
         </div>
       </div>
     </div>
