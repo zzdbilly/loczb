@@ -108,7 +108,7 @@
       '            <div class="blog-list-tags">\n' +
       '              ' + pills + '\n' +
       '            </div>\n' +
-      '            <a href="posts/' + slug + '.html" class="blog-read-more" aria-label="阅读全文：' + esc(post.title || '') + '"><span>阅读全文</span><span class="read-more-arrow">➔</span></a>\n' +
+      '            <a href="posts/' + slug + '.html" class="blog-read-more" aria-label="阅读全文：' + esc(post.title || '') + '"><span>阅读全文</span><span class="read-more-arrow">→</span></a>\n' +
       '          </div>\n' +
       '        </article>';
   }

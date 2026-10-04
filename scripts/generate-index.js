@@ -285,7 +285,7 @@ function renderListCard(p, pageNo) {
             <div class="blog-list-tags">
               ${tagsHtml}
             </div>
-            <a href="posts/${p.slug}.html" class="blog-read-more" aria-label="阅读全文：${escapeHtml(p.title)}"><span>阅读全文</span><span class="read-more-arrow">➔</span></a>
+            <a href="posts/${p.slug}.html" class="blog-read-more" aria-label="阅读全文：${escapeHtml(p.title)}"><span>阅读全文</span><span class="read-more-arrow">→</span></a>
           </div>
         </article>`;
 }

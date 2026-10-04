@@ -4621,46 +4621,68 @@ pre code.hljs {
   color: var(--color-text-secondary);
 }
 
-/* 现代化阅读全文胶囊微交互按键 */
+/* ========================================================
+   MODERN MINIMAL TEXT LINK READ MORE (LINEAR / VERCEL STYLE)
+   ======================================================== */
 .blog-read-more,
 .blog-list-footer a {
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
-  font-size: 0.8rem !important;
-  font-weight: 700 !important;
-  /* accent 原色 #6366f1 压 rgba(99,102,241,0.1)+卡片底 只有 3.85:1，换 accent-text（8.63:1） */
+  font-size: 0.85rem !important;
+  font-weight: 600 !important;
   color: var(--color-accent-text) !important;
   text-decoration: none !important;
-  padding: 0.35rem 0.8rem;
-  border-radius: var(--radius-full);
-  background: var(--color-accent-subtle);
-  border: 1px solid rgba(99, 102, 241, 0.2);
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  padding: 0.4rem 0.2rem;
+  margin: -0.4rem -0.2rem;
+  border-radius: var(--radius-sm);
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  transition: color 0.2s ease, opacity 0.2s ease;
   white-space: nowrap;
+  position: relative;
+}
+
+[data-theme="light"] .blog-read-more,
+[data-theme="light"] .blog-list-footer a {
+  color: var(--color-accent-text) !important;
 }
 
 .blog-read-more .read-more-arrow,
 .blog-list-footer a .read-more-arrow {
   display: inline-block;
-  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  font-size: 0.95rem;
+  line-height: 1;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), color 0.2s ease;
 }
 
+/* 整卡悬停或文本悬停：箭头平滑右移4px，颜色微亮，消除大块沉重实心底色与厚重投影 */
 .blog-read-more:hover,
 .blog-list-item:hover .blog-read-more,
 .blog-list-item:hover .blog-list-footer a {
-  /* hover 态白字压 accent 原色只有 4.47:1，同样压深一档 */
-  background: #4f46e5;
-  color: #ffffff !important;
-  border-color: #4f46e5;
-  box-shadow: 0 4px 14px rgba(99, 102, 241, 0.4);
-  transform: translateY(-1px);
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  transform: none !important;
+  color: #c7d2fe !important; /* 深色底 12.5:1 */
+}
+
+[data-theme="light"] .blog-read-more:hover,
+[data-theme="light"] .blog-list-item:hover .blog-read-more,
+[data-theme="light"] .blog-list-item:hover .blog-list-footer a {
+  color: #3730a3 !important; /* 浅色底 9.95:1，压深优雅紫 */
 }
 
 .blog-read-more:hover .read-more-arrow,
 .blog-list-item:hover .blog-read-more .read-more-arrow,
 .blog-list-item:hover .blog-list-footer a .read-more-arrow {
-  transform: translateX(3px);
+  transform: translateX(4px);
+}
+
+.blog-read-more:focus-visible {
+  outline: 2px solid var(--color-accent-primary);
+  outline-offset: 3px;
 }
 
 /* ========================================================
