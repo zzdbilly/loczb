@@ -1,0 +1,258 @@
+---
+title: "PWA 实战：从零打造离线可用 Web 应用"
+description: "PWA 实战：从零开始打造离线可用的 Web 应用，详解 Service Worker、manifest.json 配置与缓存策略"
+date: 2026-03-22 15:00:01
+category: 前端
+tags: ["PWA", "Service Worker", "前端", "离线应用"]
+read_time: 10
+slug: pwa-offline-web-app
+---
+
+<header>
+        </header><h2 id="intro">什么是 PWA？</h2>
+      <p>PWA（Progressive Web App）是一种结合了 Web 和原生 App 优势的技术方案。它让 Web 应用能够：</p>
+      <ul>
+        <li>📱 <strong>添加到桌面</strong>：像原生 App 一样安装</li>
+        <li>🔌 <strong>离线可用</strong>：没有网络也能访问</li>
+        <li>🔔 <strong>推送通知</strong>：接收后台消息推送</li>
+        <li>⚡ <strong>秒开体验</strong>：缓存策略优化加载速度</li>
+      </ul>
+
+      <div class="highlight-box">
+        <strong>核心三要素：</strong>
+        <ol>
+          <li><code>manifest.json</code> - 应用配置文件</li>
+          <li><code>Service Worker</code> - 离线与缓存核心</li>
+          <li>HTTPS - 安全传输（开发环境 localhost 除外）</li>
+        </ol>
+        </div>
+
+      <h2 id="manifest">manifest.json 配置</h2>
+      <p>这是 PWA 的「身份证」，告诉浏览器如何展示你的应用：</p>
+
+      <pre><code>{
+  "name": "戒色打卡",
+  "short_name": "打卡",
+  "description": "自律给我自由 - 习惯追踪器",
+  "theme_color": "#6366f1",
+  "background_color": "#030712",
+  "display": "standalone",
+  "orientation": "portrait",
+  "scope": "/",
+  "start_url": "/",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}</code></pre>
+
+      <h3>关键配置说明</h3>
+      <ul>
+        <li><code>display: "standalone"</code> - 隐藏浏览器地址栏，像原生 App</li>
+        <li><code>theme_color</code> - 顶部状态栏颜色</li>
+        <li><code>purpose: "maskable"</code> - 支持 Android 自适应图标</li>
+      </ul>
+
+      <div class="warning-box">
+        <strong>⚠️ 图标要求：</strong>
+        <ul>
+          <li>至少提供 192x192 和 512x512 两个尺寸</li>
+          <li>推荐 PNG 格式，支持透明背景</li>
+          <li>maskable 图标需要安全区域设计（中心 80%）</li>
+        </ul>
+      </div>
+
+      <h2 id="sw">Service Worker 核心</h2>
+      <p>Service Worker 是 PWA 的「大脑」，运行在独立线程，拦截所有网络请求。</p>
+
+      <h3>1. 注册 Service Worker</h3>
+      <p>在 HTML 中注册：</p>
+      <pre><code>&lt;script&gt;
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () =&gt; {
+    navigator.serviceWorker.register('/sw.js')
+      .then((registration) =&gt; {
+        console.log('✅ Service Worker 注册成功');
+      })
+      .catch((error) =&gt; {
+        console.log('❌ 注册失败:', error);
+      });
+  });
+}
+&lt;/script&gt;</code></pre>
+
+      <h3>2. Service Worker 生命周期</h3>
+      <pre><code>// 安装事件 - 预缓存静态资源
+self.addEventListener('install', (event) => {
+  event.waitUntil(
+    caches.open(CACHE_NAME).then((cache) => {
+      return cache.addAll([
+        '/',
+        '/index.html',
+        '/manifest.json',
+        '/favicon.svg'
+      ]);
+    })
+  );
+  self.skipWaiting(); // 跳过等待，立即激活
+});
+
+// 激活事件 - 清理旧缓存
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
+    caches.keys().then((cacheNames) => {
+      return Promise.all(
+        cacheNames
+          .filter((name) => name !== CACHE_NAME)
+          .map((name) => caches.delete(name))
+      );
+    })
+  );
+  self.clients.claim(); // 立即控制所有页面
+});</code></pre>
+
+      <h2 id="cache">缓存策略详解</h2>
+      <p>选择正确的缓存策略是 PWA 性能的关键：</p>
+
+      <h3>策略一：缓存优先（Cache First）</h3>
+      <p>适用于不常变化的静态资源：</p>
+      <pre><code>self.addEventListener('fetch', (event) => {
+  event.respondWith(
+    caches.match(event.request).then((cached) => {
+      return cached || fetch(event.request);
+    })
+  );
+});</code></pre>
+
+      <h3>策略二：网络优先（Network First）</h3>
+      <p>适用于需要实时性的 API 请求：</p>
+      <pre><code>self.addEventListener('fetch', (event) => {
+  if (event.request.url.includes('/api/')) {
+    event.respondWith(
+      fetch(event.request)
+        .then((response) => {
+          // 缓存成功响应
+          const clone = response.clone();
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(event.request, clone);
+          });
+          return response;
+        })
+        .catch(() => caches.match(event.request)) // 离线用缓存
+    );
+  }
+});</code></pre>
+
+      <h3>策略三：Stale While Revalidate</h3>
+      <p>先返回缓存，后台更新：</p>
+      <pre><code>self.addEventListener('fetch', (event) => {
+  event.respondWith(
+    caches.match(event.request).then((cached) => {
+      const fetchPromise = fetch(event.request).then((response) => {
+        caches.open(CACHE_NAME).then((cache) => {
+          cache.put(event.request, response.clone());
+        });
+        return response;
+      });
+      return cached || fetchPromise;
+    })
+  );
+});</code></pre>
+
+      <div class="success-box">
+        <strong>✅ 最佳实践：</strong>
+        <ul>
+          <li>静态资源（JS/CSS/图片）→ 缓存优先</li>
+          <li>API 数据 → 网络优先 + 离线缓存</li>
+          <li>HTML 页面 → Stale While Revalidate</li>
+        </ul>
+      </div>
+
+      <h2 id="push">推送通知</h2>
+      <p>PWA 支持后台推送，即使应用未打开也能收到通知：</p>
+
+      <pre><code>// 监听推送事件
+self.addEventListener('push', (event) => {
+  const data = event.data?.json() || {};
+  
+  event.waitUntil(
+    self.registration.showNotification(data.title || '新消息', {
+      body: data.body || '您有一条新通知',
+      icon: '/icon-192.png',
+      badge: '/favicon-32x32.png',
+      tag: 'notification-' + Date.now(),
+      vibrate: [200, 100, 200],
+      data: { url: data.url || '/' }
+    })
+  );
+});
+
+// 点击通知跳转
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+  event.waitUntil(
+    clients.openWindow(event.notification.data.url)
+  );
+});</code></pre>
+
+      <h2 id="deploy">部署与测试</h2>
+
+      <h3>1. 本地测试</h3>
+      <p>Chrome DevTools 提供了完整的 PWA 调试工具：</p>
+      <ul>
+        <li>打开 DevTools → Application 面板</li>
+        <li>查看 Manifest、Service Workers、Cache Storage</li>
+        <li>使用 Lighthouse 跑 PWA 审计</li>
+      </ul>
+
+      <h3>2. 常见问题</h3>
+      <div class="warning-box">
+        <strong>⚠️ Service Worker 不更新？</strong>
+        <p>修改 <code>CACHE_NAME</code> 版本号，或者：</p>
+        <ul>
+          <li>DevTools → Application → Service Workers → Update</li>
+          <li>勾选「Update on reload」开发模式</li>
+          <li>清除浏览器缓存后刷新</li>
+        </ul>
+      </div>
+
+      <h3>3. Lighthouse 审计</h3>
+      <p>运行 Lighthouse 审计确保 PWA 标准：</p>
+      <ul>
+        <li>✅ installable - 可安装</li>
+        <li>✅ offline - 离线可用</li>
+        <li>✅ splash-screen - 启动画面</li>
+        <li>✅ themed-omnibox - 地址栏主题色</li>
+      </ul>
+
+      <h2 id="summary">总结</h2>
+      <p>PWA 让 Web 应用拥有了原生 App 的体验，核心是：</p>
+      <ol>
+        <li><strong>manifest.json</strong> 定义应用元数据</li>
+        <li><strong>Service Worker</strong> 实现离线与缓存</li>
+        <li><strong>缓存策略</strong> 根据资源类型选择</li>
+        <li><strong>推送通知</strong> 提升用户粘性</li>
+      </ol>
+
+      <div class="highlight-box">
+        <p>🎉 在我的项目 <a href="https://github.com/zzdbilly/zest">zest</a>中，已完整实现 PWA 支持，欢迎参考源码！</p>
+      </div>
+
+      <hr>
+
+      <p><strong>参考资料：</strong></p>
+      <ul>
+        <li><a href="https://web.dev/progressive-web-apps/" target="_blank">web.dev - Progressive Web Apps</a></li>
+        <li><a href="https://developer.mozilla.org/zh-CN/docs/Web/Progressive_web_apps" target="_blank">MDN - PWA 指南</a></li>
+        <li><a href="https://developers.google.com/web/tools/workbox" target="_blank">Workbox - Google 缓存工具库</a></li>
+      </ul>

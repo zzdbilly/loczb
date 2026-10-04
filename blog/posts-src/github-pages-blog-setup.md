@@ -1,0 +1,282 @@
+---
+title: "从零搭建个人博客系统（GitHub Pages + 自定义域名 + 自动化部署）"
+description: "从零搭建个人博客系统：GitHub Pages + 自定义域名 + 自动化部署完整指南"
+date: 2026-04-09 20:50:17
+category: DevOps
+tags: ["GitHub Pages", "博客系统", "自动化部署", "CI/CD", "静态网站"]
+read_time: 20
+slug: github-pages-blog-setup
+---
+
+<p>搭建个人博客有很多选择：WordPress、Hexo、Hugo、Ghost... 但我最终选择了<strong>纯静态方案</strong>：GitHub Pages + 自定义域名 + GitHub Actions 自动化部署。</p>
+
+      <p>这套方案的优势非常明显：</p>
+
+      <ul>
+        <li>✅ <strong>零成本</strong>：GitHub Pages 免费托管</li>
+        <li>✅ <strong>零运维</strong>：无需管理服务器</li>
+        <li>✅ <strong>自动化</strong>：git push 自动部署</li>
+        <li>✅ <strong>高性能</strong>：全球 CDN 加速</li>
+        <li>✅ <strong>版本控制</strong>：所有内容 git 管理</li>
+      </ul>
+
+      <div class="tip-box">
+        <strong>最终效果</strong>：写文章 → git commit → git push → 自动部署，全程无需手动操作。
+      </div>
+
+      <h2>技术选型</h2>
+
+      <table>
+        <tr><th>组件</th><th>选型</th><th>理由</th></tr>
+        <tr><td>托管平台</td><td>GitHub Pages</td><td>免费、稳定、与 git 无缝集成</td></tr>
+        <tr><td>域名</td><td>阿里云/腾讯云</td><td>国内购买方便，备案可选</td></tr>
+        <tr><td>CI/CD</td><td>GitHub Actions</td><td>原生支持，配置简单</td></tr>
+        <tr><td>构建工具</td><td>纯 HTML/CSS/JS</td><td>简单可控，无框架依赖</td></tr>
+      </table>
+
+      <h2>第一步：创建 GitHub 仓库</h2>
+
+      <pre><code># 仓库命名规则：
+# 用户名.github.io
+
+# 例如我的仓库：
+# https://github.com/zzdbilly/loczb</code></pre>
+
+      <p>GitHub Pages 有两种部署方式：</p>
+
+      <ul>
+        <li><strong>用户名.github.io</strong>：仓库名必须与用户名一致，访问地址为 <code>https://用户名.github.io</code></li>
+        <li><strong>项目页面</strong>：任意仓库名，访问地址为 <code>https://用户名.github.io/仓库名</code></li>
+      </ul>
+
+      <div class="tip-box">
+        <strong>建议</strong>：选择第一种，拥有独立域名，以后迁移更方便。
+      </div>
+
+      <h2>第二步：购买和配置域名</h2>
+
+      <h3>1. 购买域名</h3>
+
+      <p>在阿里云/腾讯云购买域名，推荐 <code>.xyz</code>、<code>.top</code> 等便宜后缀（首年约 10 元）。</p>
+
+      <h3>2. 配置 DNS</h3>
+
+      <p>在域名控制台添加 DNS 记录：</p>
+
+      <pre><code># 类型：A
+# 主机记录：@
+# 记录值：185.199.108.153
+#        185.199.109.153
+#        185.199.110.153
+#        185.199.111.153
+
+# 类型：CNAME
+# 主机记录：www
+# 记录值：用户名.github.io</code></pre>
+
+      <p>这四个 IP 是 GitHub Pages 的服务器地址，官方文档会实时更新。</p>
+
+      <h3>3. GitHub 配置自定义域名</h3>
+
+      <p>在仓库 Settings → Pages → Custom domain 中填写你的域名，保存后会自动生成 <code>CNAME</code> 文件。</p>
+
+      <div class="warning-box">
+        <strong>注意</strong>：DNS 生效需要时间，通常几分钟到几小时不等。可以用 <code>ping 你的域名</code> 检查是否生效。
+      </div>
+
+      <h2>第三步：配置 HTTPS</h2>
+
+      <p>GitHub Pages 默认提供 HTTPS，在 Settings → Pages 中勾选 <strong>Enforce HTTPS</strong> 即可。</p>
+
+      <div class="tip-box">
+        <strong>强烈建议</strong>：启用 HTTPS，提升安全性，避免浏览器显示"不安全"警告。
+      </div>
+
+      <h2>第四步：配置自动化部署</h2>
+
+      <p>在 <code>.github/workflows/</code> 目录下创建 <code>deploy.yml</code>：</p>
+
+      <pre><code>name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [ main ]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4</code></pre>
+
+      <p>这个配置会在每次 push 到 main 分支时自动部署。</p>
+
+      <h2>第五步：博客系统架构</h2>
+
+      <p>我的博客采用纯静态架构：</p>
+
+      <pre><code>loczb/
+├── index.html              # 首页
+├── blog/
+│   ├── index.html          # 博客列表页
+│   ├── posts/              # 文章目录
+│   │   ├── article-1.html
+│   │   └── article-2.html
+│   └── articles.json       # 文章索引（自动生成）
+├── assets/
+│   ├── css/style.css       # 样式文件
+│   ├── js/main.js          # JavaScript
+│   └── images/             # 图片资源
+└── scripts/
+    └── generate-articles.js # 自动生成索引脚本</code></pre>
+
+      <h3>自动生成文章索引</h3>
+
+      <p>每篇文章的 meta 信息（标题、日期、标签等）都写在 HTML 的 <code>&lt;meta&gt;</code> 标签中，用脚本自动扫描生成索引：</p>
+
+      <pre><code>// scripts/generate-articles.js
+const fs = require('fs');
+const path = require('path');
+
+const postsDir = './blog/posts';
+const files = fs.readdirSync(postsDir)
+  .filter(f => f.endsWith('.html'));
+
+const articles = files.map(file => {
+  const content = fs.readFileSync(
+    path.join(postsDir, file), 'utf8'
+  );
+  return {
+    title: extractMeta(content, 'title'),
+    date: extractMeta(content, 'publish-date'),
+    url: `posts/${file}`,
+    // ... 其他字段
+  };
+});
+
+// 按日期排序
+articles.sort((a, b) => 
+  new Date(b.date) - new Date(a.date)
+);
+
+fs.writeFileSync(
+  './blog/articles.json',
+  JSON.stringify(articles, null, 2)
+);</code></pre>
+
+      <p>首页用 JavaScript 动态加载最新 3 篇文章，无需手动更新。</p>
+
+      <h2>第六步：写文章和发布</h2>
+
+      <p>发布新文章的完整流程：</p>
+
+      <ol>
+        <li>创建文章文件：<code>blog/posts/my-article.html</code></li>
+        <li>运行生成索引脚本：<code>node scripts/generate-articles.js</code></li>
+        <li>提交并推送：<code>git add -A && git commit && git push</code></li>
+        <li>等待 GitHub Actions 自动部署（约 30 秒）</li>
+      </ol>
+
+      <div class="tip-box">
+        <strong>优化建议</strong>：可以把生成索引脚本集成到 CI/CD 中，进一步简化流程。
+      </div>
+
+      <h2>性能优化</h2>
+
+      <h3>1. 图片优化</h3>
+
+      <ul>
+        <li>使用 WebP 格式（比 JPEG 小 30%）</li>
+        <li>添加 <code>loading="lazy"</code> 懒加载</li>
+        <li>使用 CDN 托管大图片</li>
+      </ul>
+
+      <h3>2. CSS/JS 优化</h3>
+
+      <ul>
+        <li>生产环境使用压缩版本</li>
+        <li>使用 <code>&lt;link rel="preload"&gt;</code> 预加载关键资源</li>
+        <li>非关键 JS 使用 <code>defer</code> 或 <code>async</code></li>
+      </ul>
+
+      <h3>3. Lighthouse 优化</h3>
+
+      <ul>
+        <li>确保颜色对比度达到 WCAG AA 标准（4.5:1）</li>
+        <li>添加 <code>robots.txt</code> 和 <code>sitemap.xml</code></li>
+        <li>确保所有表单元素有 <code>id</code> 和 <code>name</code></li>
+      </ul>
+
+      <h2>踩坑记录</h2>
+
+      <div class="warning-box">
+        <strong>坑 1：DNS 不生效</strong><br>
+        原因：DNS 缓存未更新。解决：等待或使用 <code>dig @8.8.8.8 你的域名</code> 检查。
+      </div>
+
+      <div class="warning-box">
+        <strong>坑 2：HTTPS 证书错误</strong><br>
+        原因：CNAME 配置后未等待证书生成。解决：等待几分钟，GitHub 会自动签发证书。
+      </div>
+
+      <div class="warning-box">
+        <strong>坑 3：GitHub Actions 部署失败</strong><br>
+        原因：权限配置不正确。解决：检查 <code>permissions</code> 配置，确保有 <code>pages: write</code>。
+      </div>
+
+      <div class="warning-box">
+        <strong>坑 4：首页博客列表不更新</strong><br>
+        原因：浏览器缓存。解决：添加版本号或使用 <code>Cache-Control</code> 头。
+      </div>
+
+      <h2>成本分析</h2>
+
+      <table>
+        <tr><th>项目</th><th>费用</th></tr>
+        <tr><td>域名</td><td>10-80 元/年（取决于后缀）</td></tr>
+        <tr><td>托管</td><td>免费（GitHub Pages）</td></tr>
+        <tr><td>CDN</td><td>免费（GitHub 全球 CDN）</td></tr>
+        <tr><td>HTTPS 证书</td><td>免费（Let's Encrypt）</td></tr>
+        <tr><td>CI/CD</td><td>免费（GitHub Actions 2000 分钟/月）</td></tr>
+      </table>
+
+      <p><strong>总计</strong>：仅需域名费用，约 10-80 元/年。</p>
+
+      <h2>总结</h2>
+
+      <p>GitHub Pages + 自定义域名 + 自动化部署是一套<strong>零成本、零运维、高性能</strong>的博客解决方案，非常适合个人开发者和技术博主。</p>
+
+      <p>核心优势：</p>
+      <ul>
+        <li>✅ 写文章就像写代码，git 管理版本</li>
+        <li>✅ 无需关心服务器、数据库、备份</li>
+        <li>✅ 全球 CDN 加速，访问速度快</li>
+        <li>✅ 自动化部署，专注内容创作</li>
+      </ul>
+
+      <div class="tip-box">
+        <strong>参考资源</strong>：<br>
+        GitHub Pages 官方文档：<a href="https://pages.github.com/" target="_blank">pages.github.com</a><br>
+        GitHub Actions 文档：<a href="https://docs.github.com/en/actions" target="_blank">docs.github.com/actions</a><br>
+        我的博客源码：<a href="https://github.com/zzdbilly/loczb" target="_blank">github.com/zzdbilly/loczb</a>
+      </div>

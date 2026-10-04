@@ -29,32 +29,33 @@
       "description": "TypeScript 类型体操指南：从基础到高级，掌握条件类型、映射类型、模板字面量类型等核心技巧",
       "image": "https://709527.xyz/assets/images/og-image.png",
       "author": {
-        "@type": "Person",
-        "name": "张小猛",
-        "url": "https://709527.xyz/about/"
+            "@type": "Person",
+            "name": "张小猛",
+            "url": "https://709527.xyz/about/"
       },
       "publisher": {
-        "@type": "Organization",
-        "name": "loczb",
-        "logo": {
-          "@type": "ImageObject",
-          "url": "https://709527.xyz/assets/images/favicon.svg"
-        }
+            "@type": "Organization",
+            "name": "loczb",
+            "logo": {
+                  "@type": "ImageObject",
+                  "url": "https://709527.xyz/assets/images/favicon.svg"
+            }
       },
       "datePublished": "2026-04-25T15:27:53+08:00",
       "dateModified": "2026-04-25T15:27:53+08:00",
       "url": "https://709527.xyz/blog/posts/typescript-type-gymnastics.html",
       "mainEntityOfPage": {
-        "@type": "WebPage",
-        "@id": "https://709527.xyz/blog/posts/typescript-type-gymnastics.html"
+            "@type": "WebPage",
+            "@id": "https://709527.xyz/blog/posts/typescript-type-gymnastics.html"
       },
       "keywords": "TypeScript, 类型体操, 前端, 类型安全",
       "articleSection": "前端",
+      "timeRequired": "PT20M",
       "inLanguage": "zh-CN"
-    }
+}
     </script>
 
-    <link rel="stylesheet" href="../../assets/css/style.css?v=231fa9f71a">
+    <link rel="stylesheet" href="../../assets/css/style.css?v=27743e398e">
     <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
     <link rel="alternate icon" href="../../assets/images/favicon.ico">
     <link rel="canonical" href="https://709527.xyz/blog/posts/typescript-type-gymnastics.html">
@@ -130,335 +131,251 @@
         
 
         <p>TypeScript 的类型系统是图灵完备的，这意味着你可以在类型层面完成复杂的逻辑运算。"类型体操"虽然听起来像炫技，但掌握它能让你写出更安全、更智能的类型定义。</p>
-
-      <div class="tip-box">
-        <strong>核心价值</strong>：编译时捕获错误、智能提示增强、减少运行时检查、API 类型安全
-        </div>
-
-      <h2>基础工具类型</h2>
-
-      <p>TypeScript 内置了一些实用工具类型：</p>
-
-      <table>
-        <tr><th>工具类型</th><th>作用</th><th>示例</th></tr>
-        <tr><td>Partial&lt;T&gt;</td><td>所有属性可选</td><td>Partial&lt;User&gt;</td></tr>
-        <tr><td>Required&lt;T&gt;</td><td>所有属性必选</td><td>Required&lt;User&gt;</td></tr>
-        <tr><td>Readonly&lt;T&gt;</td><td>所有属性只读</td><td>Readonly&lt;Config&gt;</td></tr>
-        <tr><td>Pick&lt;T, K&gt;</td><td>选取部分属性</td><td>Pick&lt;User, 'id' | 'name'&gt;</td></tr>
-        <tr><td>Omit&lt;T, K&gt;</td><td>排除部分属性</td><td>Omit&lt;User, 'password'&gt;</td></tr>
-        <tr><td>Record&lt;K, V&gt;</td><td>构造对象类型</td><td>Record&lt;string, number&gt;</td></tr>
-      </table>
-
-      <h2>条件类型</h2>
-
-      <h3>基础语法</h3>
-
-      <pre><code>// 条件类型基本形式
-type IsString&lt;T&gt; = T extends string ? true : false;
-
-type A = IsString&lt;string&gt;;  // true
-type B = IsString&lt;number&gt;;  // false
-
-// 嵌套条件类型
-type TypeName&lt;T&gt; = 
-    T extends string ? 'string' :
-    T extends number ? 'number' :
-    T extends boolean ? 'boolean' :
-    T extends undefined ? 'undefined' :
-    T extends Function ? 'function' :
-    'object';</code></pre>
-
-      <h3>分布式条件类型</h3>
-
-      <p>当条件类型作用于联合类型时，会自动分配到每个成员：</p>
-
-      <pre><code>// 分布式条件类型
-type ToArray&lt;T&gt; = T extends any ? T[] : never;
-
-type Result = ToArray&lt;string | number&gt;;  
-// string[] | number[]，不是 (string | number)[]
-
-// 避免分布式行为
-type ToArrayNonDist&lt;T&gt; = [T] extends [any] ? T[] : never;
-
-type Result2 = ToArrayNonDist&lt;string | number&gt;;  
-// (string | number)[]</code></pre>
-
-      <div class="warning-box">
-        <strong>注意</strong>：用 <code>[T]</code> 包裹可以阻止分布式行为，这在某些场景下很有用。
-      </div>
-
-      <h2>infer 关键字</h2>
-
-      <p><code>infer</code> 用于在条件类型中推断类型：</p>
-
-      <pre><code>// 提取函数返回类型
-type ReturnType&lt;T&gt; = T extends (...args: any[]) => infer R ? R : never;
-
-function getUser() {
-    return { id: 1, name: 'Alice' };
-}
-
-type UserReturn = ReturnType&lt;typeof getUser&gt;;  
-// { id: number; name: string; }
-
-// 提取函数参数类型
-type Parameters&lt;T&gt; = T extends (...args: infer P) => any ? P : never;
-
-type Params = Parameters&lt;(a: string, b: number) => void&gt;;  
-// [a: string, b: number]
-
-// 提取 Promise 值类型
-type UnwrapPromise&lt;T&gt; = T extends Promise&lt;infer U&gt; ? U : T;
-
-type Result = UnwrapPromise&lt;Promise&lt;string&gt;&gt;;  // string
-
-// 提取数组元素类型
-type ElementType&lt;T&gt; = T extends (infer E)[] ? E : T;
-
-type Item = ElementType&lt;string[]&gt;;  // string</code></pre>
-
-      <h2>映射类型</h2>
-
-      <h3>基础映射</h3>
-
-      <pre><code>// 将所有属性变为可选
-type MyPartial&lt;T&gt; = {
-    [K in keyof T]?: T[K];
-};
-
-// 将所有属性变为只读
-type MyReadonly&lt;T&gt; = {
-    readonly [K in keyof T]: T[K];
-};
-
-// 添加前缀
-type Prefixed&lt;T, P extends string&gt; = {
-    [K in keyof T as `${P}${Capitalize&lt;string &amp; K&gt;}`]: T[K];
-};
-
-interface User {
-    id: number;
-    name: string;
-}
-
-type ApiUser = Prefixed&lt;User, 'api'&gt;;
-// { apiId: number; apiName: string; }</code></pre>
-
-      <h3>高级映射技巧</h3>
-
-      <pre><code>// 过滤属性
-type OnlyStrings&lt;T&gt; = {
-    [K in keyof T as T[K] extends string ? K : never]: T[K];
-};
-
-interface Mixed {
-    id: number;
-    name: string;
-    email: string;
-    age: number;
-}
-
-type StringProps = OnlyStrings&lt;Mixed&gt;;
-// { name: string; email: string; }
-
-// 根据 key 过滤
-type ExcludeId&lt;T&gt; = {
-    [K in keyof T as Exclude&lt;K, 'id'&gt;]: T[K];
-};
-
-// 递归映射（深度 readonly）
-type DeepReadonly&lt;T&gt; = {
-    readonly [K in keyof T]: T[K] extends object 
-        ? DeepReadonly&lt;T[K]&gt; 
-        : T[K];
-};
-
-interface Config {
-    server: {
-        host: string;
-        port: number;
-    };
-    db: {
-        name: string;
-        tables: string[];
-    };
-}
-
-type ReadonlyConfig = DeepReadonly&lt;Config&gt;;
-// 所有层级都是 readonly</code></pre>
-
-      <h2>模板字面量类型</h2>
-
-      <h3>基础用法</h3>
-
-      <pre><code>// 字符串拼接
-type Greeting&lt;T extends string&gt; = `Hello, ${T}!`;
-
-type Message = Greeting&lt;'World'&gt;;  // "Hello, World!"
-
-// 联合类型展开
-type Color = 'red' | 'blue' | 'green';
-type Size = 'small' | 'medium' | 'large';
-
-type Button = `${Size}-${Color}`;
-// "small-red" | "small-blue" | "small-green" | 
-// "medium-red" | "medium-blue" | "medium-green" | 
-// "large-red" | "large-blue" | "large-green"</code></pre>
-
-      <h3>内置字符串工具</h3>
-
-      <pre><code>type Str = 'hello world';
-
-type Upper = Uppercase&lt;Str&gt;;      // "HELLO WORLD"
-type Lower = Lowercase&lt;Str&gt;;      // "hello world"
-type Cap = Capitalize&lt;Str&gt;;      // "Hello world"
-type Uncap = Uncapitalize&lt;Str&gt;;  // "hello world"
-
-// 实际应用：事件处理器类型
-type EventName = 'click' | 'focus' | 'blur';
-type EventHandler = `on${Capitalize&lt;EventName&gt;}`;
-// "onClick" | "onFocus" | "onBlur"</code></pre>
-
-      <h3>高级模式匹配</h3>
-
-      <pre><code>// 提取字符串前缀
-type RemovePrefix&lt;T extends string, P extends string&gt; = 
-    T extends `${P}${infer Rest}` ? Rest : T;
-
-type Result = RemovePrefix&lt;'getUserById', 'get'&gt;;  // "UserById"
-
-// 提取字符串后缀
-type RemoveSuffix&lt;T extends string, S extends string&gt; =
-    T extends `${infer Rest}${S}` ? Rest : T;
-
-type Result2 = RemoveSuffix&lt;'UserController', 'Controller'&gt;;  // "User"
-
-// 驼峰转连字符
-type CamelToKebab&lt;S extends string&gt; = 
-    S extends `${infer First}${infer Rest}`
-        ? First extends Uppercase&lt;First&gt;
-            ? `-${Lowercase&lt;First&gt;}${CamelToKebab&lt;Rest&gt;}`
-            : `${First}${CamelToKebab&lt;Rest&gt;}`
-        : S;
-
-type Kebab = CamelToKebab&lt;'backgroundColor'&gt;;  // "background-color"</code></pre>
-
-      <h2>实战案例</h2>
-
-      <h3>1. 路由参数推断</h3>
-
-      <pre><code>// 从路由路径提取参数类型
-type ExtractParams&lt;T extends string&gt; = 
-    T extends `${string}:${infer Param}/${infer Rest}`
-        ? Param | ExtractParams&lt;`/${Rest}`&gt;
-        : T extends `${string}:${infer Param}`
-            ? Param
-            : never;
-
-type Params = ExtractParams&lt;'/users/:id/posts/:postId'&gt;;
-// "id" | "postId"
-
-// 构建参数对象类型
-type RouteParams&lt;Path extends string&gt; = {
-    [K in ExtractParams&lt;Path&gt;]: string;
-};
-
-function get&lt;Path extends string&gt;(
-    path: Path,
-    params: RouteParams&lt;Path&gt;
-) {
-    // 实现...
-}
-
-get('/users/:id/posts/:postId', { id: '1', postId: '2' });  // ✅ 类型安全</code></pre>
-
-      <h3>2. API 响应类型推导</h3>
-
-      <pre><code>// 根据 API 路径自动推导响应类型
-interface ApiEndpoints {
-    '/users': User[];
-    '/users/:id': User;
-    '/posts': Post[];
-    '/posts/:id': Post;
-}
-
-type Endpoint = keyof ApiEndpoints;
-
-type ApiResponse&lt;Path extends Endpoint&gt; = ApiEndpoints[Path];
-
-async function fetchApi&lt;Path extends Endpoint&gt;(
-    path: Path
-): Promise&lt;ApiResponse&lt;Path&gt;&gt; {
-    const response = await fetch(path);
-    return response.json();
-}
-
-const users = await fetchApi('/users');      // User[]
-const user = await fetchApi('/users/:id');   // User</code></pre>
-
-      <h3>3. 深度 Pick</h3>
-
-      <pre><code>// 支持嵌套路径的 Pick
-type DeepPick&lt;T, Path extends string&gt; = 
-    Path extends `${infer Key}.${infer Rest}`
-        ? Key extends keyof T
-            ? { [K in Key]: DeepPick&lt;T[K], Rest&gt; }
-            : never
-        : Path extends keyof T
-            ? Pick&lt;T, Path&gt;
-            : never;
-
-interface User {
-    id: number;
-    profile: {
-        name: string;
-        email: string;
-        address: {
-            city: string;
-            country: string;
-        };
-    };
-}
-
-type UserName = DeepPick&lt;User, 'profile.name'&gt;;
-// { profile: { name: string } }
-
-type UserAddress = DeepPick&lt;User, 'profile.address.city'&gt;;
-// { profile: { address: { city: string } } }</code></pre>
-
-      <h2>性能与最佳实践</h2>
-
-      <div class="warning-box">
-        <strong>性能警告</strong>：复杂的递归类型可能显著增加编译时间。TypeScript 有递归深度限制（约 1000 层）。
-      </div>
-
-      <ul>
-        <li><strong>避免过度复杂</strong>：类型体操应服务于实际需求，而非炫技</li>
-        <li><strong>添加类型注释</strong>：复杂类型添加注释说明用途</li>
-        <li><strong>拆分类型</strong>：将复杂类型拆分为可复用的小类型</li>
-        <li><strong>善用工具类型</strong>：优先使用内置工具类型</li>
-        <li><strong>测试类型</strong>：使用 <code>expectType</code> 等工具验证类型正确性</li>
-      </ul>
-
-      <h2>总结</h2>
-
-      <p>TypeScript 类型体操的核心技能：</p>
-
-      <ul>
-        <li>✅ 条件类型：<code>T extends U ? X : Y</code></li>
-        <li>✅ 类型推断：<code>infer</code> 关键字</li>
-        <li>✅ 映射类型：<code>[K in keyof T]</code></li>
-        <li>✅ 模板字面量：<code>`${T}`</code></li>
-        <li>✅ 递归类型：注意性能和深度限制</li>
-      </ul>
-
-      <div class="tip-box">
-        <strong>学习资源</strong>：<br>
-        TypeScript 官方文档：<a href="https://www.typescriptlang.org/docs/handbook/2/types-from-types.html" target="_blank">types-from-types</a><br>
-        类型体操练习：<a href="https://github.com/type-challenges/type-challenges" target="_blank">type-challenges</a><br>
-        utility-types：<a href="https://github.com/piotrwitek/utility-types" target="_blank">utility-types</a>
-      </div>
+<div class="tip-box">
+<p><strong>核心价值</strong>：编译时捕获错误、智能提示增强、减少运行时检查、API 类型安全</p>
+</div>
+<h2>基础工具类型</h2>
+<p>TypeScript 内置了一些实用工具类型：</p>
+<table>
+<tr><th>工具类型</th><th>作用</th><th>示例</th></tr>
+<tr><td>Partial&lt;T&gt;</td><td>所有属性可选</td><td>Partial&lt;User&gt;</td></tr>
+<tr><td>Required&lt;T&gt;</td><td>所有属性必选</td><td>Required&lt;User&gt;</td></tr>
+<tr><td>Readonly&lt;T&gt;</td><td>所有属性只读</td><td>Readonly&lt;Config&gt;</td></tr>
+<tr><td>Pick&lt;T, K&gt;</td><td>选取部分属性</td><td>Pick&lt;User, 'id' | 'name'&gt;</td></tr>
+<tr><td>Omit&lt;T, K&gt;</td><td>排除部分属性</td><td>Omit&lt;User, 'password'&gt;</td></tr>
+<tr><td>Record&lt;K, V&gt;</td><td>构造对象类型</td><td>Record&lt;string, number&gt;</td></tr>
+</table>
+<h2>条件类型</h2>
+<h3>基础语法</h3>
+<pre><code>// 条件类型基本形式
+<p>type IsString&lt;T&gt; = T extends string ? true : false;</p>
+<p>type A = IsString&lt;string&gt;;  // true</p>
+<p>type B = IsString&lt;number&gt;;  // false</p>
+<p>// 嵌套条件类型</p>
+<p>type TypeName&lt;T&gt; =</p>
+<p>T extends string ? 'string' :</p>
+<p>T extends number ? 'number' :</p>
+<p>T extends boolean ? 'boolean' :</p>
+<p>T extends undefined ? 'undefined' :</p>
+<p>T extends Function ? 'function' :</p>
+<p>'object';</code></pre></p>
+<h3>分布式条件类型</h3>
+<p>当条件类型作用于联合类型时，会自动分配到每个成员：</p>
+<pre><code>// 分布式条件类型
+<p>type ToArray&lt;T&gt; = T extends any ? T[] : never;</p>
+<p>type Result = ToArray&lt;string | number&gt;;</p>
+<p>// string[] | number[]，不是 (string | number)[]</p>
+<p>// 避免分布式行为</p>
+<p>type ToArrayNonDist&lt;T&gt; = [T] extends [any] ? T[] : never;</p>
+<p>type Result2 = ToArrayNonDist&lt;string | number&gt;;</p>
+<p>// (string | number)[]</code></pre></p>
+<div class="warning-box">
+<p><strong>注意</strong>：用 <code>[T]</code> 包裹可以阻止分布式行为，这在某些场景下很有用。</p>
+</div>
+<h2>infer 关键字</h2>
+<p><code>infer</code> 用于在条件类型中推断类型：</p>
+<pre><code>// 提取函数返回类型
+<p>type ReturnType&lt;T&gt; = T extends (...args: any[]) => infer R ? R : never;</p>
+<p>function getUser() {</p>
+<p>return { id: 1, name: 'Alice' };</p>
+<p>}</p>
+<p>type UserReturn = ReturnType&lt;typeof getUser&gt;;</p>
+<p>// { id: number; name: string; }</p>
+<p>// 提取函数参数类型</p>
+<p>type Parameters&lt;T&gt; = T extends (...args: infer P) => any ? P : never;</p>
+<p>type Params = Parameters&lt;(a: string, b: number) => void&gt;;</p>
+<p>// [a: string, b: number]</p>
+<p>// 提取 Promise 值类型</p>
+<p>type UnwrapPromise&lt;T&gt; = T extends Promise&lt;infer U&gt; ? U : T;</p>
+<p>type Result = UnwrapPromise&lt;Promise&lt;string&gt;&gt;;  // string</p>
+<p>// 提取数组元素类型</p>
+<p>type ElementType&lt;T&gt; = T extends (infer E)[] ? E : T;</p>
+<p>type Item = ElementType&lt;string[]&gt;;  // string</code></pre></p>
+<h2>映射类型</h2>
+<h3>基础映射</h3>
+<pre><code>// 将所有属性变为可选
+<p>type MyPartial&lt;T&gt; = {</p>
+<p>[K in keyof T]?: T[K];</p>
+<p>};</p>
+<p>// 将所有属性变为只读</p>
+<p>type MyReadonly&lt;T&gt; = {</p>
+<p>readonly [K in keyof T]: T[K];</p>
+<p>};</p>
+<p>// 添加前缀</p>
+<p>type Prefixed&lt;T, P extends string&gt; = {</p>
+<p>[K in keyof T as <strong>INLINE<em>CODE</em>0</strong>]: T[K];</p>
+<p>};</p>
+<p>interface User {</p>
+<p>id: number;</p>
+<p>name: string;</p>
+<p>}</p>
+<p>type ApiUser = Prefixed&lt;User, 'api'&gt;;</p>
+<p>// { apiId: number; apiName: string; }</code></pre></p>
+<h3>高级映射技巧</h3>
+<pre><code>// 过滤属性
+<p>type OnlyStrings&lt;T&gt; = {</p>
+<p>[K in keyof T as T[K] extends string ? K : never]: T[K];</p>
+<p>};</p>
+<p>interface Mixed {</p>
+<p>id: number;</p>
+<p>name: string;</p>
+<p>email: string;</p>
+<p>age: number;</p>
+<p>}</p>
+<p>type StringProps = OnlyStrings&lt;Mixed&gt;;</p>
+<p>// { name: string; email: string; }</p>
+<p>// 根据 key 过滤</p>
+<p>type ExcludeId&lt;T&gt; = {</p>
+<p>[K in keyof T as Exclude&lt;K, 'id'&gt;]: T[K];</p>
+<p>};</p>
+<p>// 递归映射（深度 readonly）</p>
+<p>type DeepReadonly&lt;T&gt; = {</p>
+<p>readonly [K in keyof T]: T[K] extends object</p>
+<p>? DeepReadonly&lt;T[K]&gt;</p>
+<p>: T[K];</p>
+<p>};</p>
+<p>interface Config {</p>
+<p>server: {</p>
+<p>host: string;</p>
+<p>port: number;</p>
+<p>};</p>
+<p>db: {</p>
+<p>name: string;</p>
+<p>tables: string[];</p>
+<p>};</p>
+<p>}</p>
+<p>type ReadonlyConfig = DeepReadonly&lt;Config&gt;;</p>
+<p>// 所有层级都是 readonly</code></pre></p>
+<h2>模板字面量类型</h2>
+<h3>基础用法</h3>
+<pre><code>// 字符串拼接
+<p>type Greeting&lt;T extends string&gt; = <strong>INLINE<em>CODE</em>1</strong>;</p>
+<p>type Message = Greeting&lt;'World'&gt;;  // "Hello, World!"</p>
+<p>// 联合类型展开</p>
+<p>type Color = 'red' | 'blue' | 'green';</p>
+<p>type Size = 'small' | 'medium' | 'large';</p>
+<p>type Button = <strong>INLINE<em>CODE</em>2</strong>;</p>
+<p>// "small-red" | "small-blue" | "small-green" |</p>
+<p>// "medium-red" | "medium-blue" | "medium-green" |</p>
+<p>// "large-red" | "large-blue" | "large-green"</code></pre></p>
+<h3>内置字符串工具</h3>
+<pre><code>type Str = 'hello world';
+<p>type Upper = Uppercase&lt;Str&gt;;      // "HELLO WORLD"</p>
+<p>type Lower = Lowercase&lt;Str&gt;;      // "hello world"</p>
+<p>type Cap = Capitalize&lt;Str&gt;;      // "Hello world"</p>
+<p>type Uncap = Uncapitalize&lt;Str&gt;;  // "hello world"</p>
+<p>// 实际应用：事件处理器类型</p>
+<p>type EventName = 'click' | 'focus' | 'blur';</p>
+<p>type EventHandler = <strong>INLINE<em>CODE</em>3</strong>;</p>
+<p>// "onClick" | "onFocus" | "onBlur"</code></pre></p>
+<h3>高级模式匹配</h3>
+<pre><code>// 提取字符串前缀
+<p>type RemovePrefix&lt;T extends string, P extends string&gt; =</p>
+<p>T extends <strong>INLINE<em>CODE</em>4</strong> ? Rest : T;</p>
+<p>type Result = RemovePrefix&lt;'getUserById', 'get'&gt;;  // "UserById"</p>
+<p>// 提取字符串后缀</p>
+<p>type RemoveSuffix&lt;T extends string, S extends string&gt; =</p>
+<p>T extends <strong>INLINE<em>CODE</em>5</strong> ? Rest : T;</p>
+<p>type Result2 = RemoveSuffix&lt;'UserController', 'Controller'&gt;;  // "User"</p>
+<p>// 驼峰转连字符</p>
+<p>type CamelToKebab&lt;S extends string&gt; =</p>
+<p>S extends <strong>INLINE<em>CODE</em>6</strong></p>
+<p>? First extends Uppercase&lt;First&gt;</p>
+<p>? <strong>INLINE<em>CODE</em>7</strong></p>
+<p>: <strong>INLINE<em>CODE</em>8</strong></p>
+<p>: S;</p>
+<p>type Kebab = CamelToKebab&lt;'backgroundColor'&gt;;  // "background-color"</code></pre></p>
+<h2>实战案例</h2>
+<h3>1. 路由参数推断</h3>
+<pre><code>// 从路由路径提取参数类型
+<p>type ExtractParams&lt;T extends string&gt; =</p>
+<p>T extends <strong>INLINE<em>CODE</em>9</strong></p>
+<p>? Param | ExtractParams&lt;<strong>INLINE<em>CODE</em>10</strong>&gt;</p>
+<p>: T extends <strong>INLINE<em>CODE</em>11</strong></p>
+<p>? Param</p>
+<p>: never;</p>
+<p>type Params = ExtractParams&lt;'/users/:id/posts/:postId'&gt;;</p>
+<p>// "id" | "postId"</p>
+<p>// 构建参数对象类型</p>
+<p>type RouteParams&lt;Path extends string&gt; = {</p>
+<p>[K in ExtractParams&lt;Path&gt;]: string;</p>
+<p>};</p>
+<p>function get&lt;Path extends string&gt;(</p>
+<p>path: Path,</p>
+<p>params: RouteParams&lt;Path&gt;</p>
+<p>) {</p>
+<p>// 实现...</p>
+<p>}</p>
+<p>get('/users/:id/posts/:postId', { id: '1', postId: '2' });  // ✅ 类型安全</code></pre></p>
+<h3>2. API 响应类型推导</h3>
+<pre><code>// 根据 API 路径自动推导响应类型
+<p>interface ApiEndpoints {</p>
+<p>'/users': User[];</p>
+<p>'/users/:id': User;</p>
+<p>'/posts': Post[];</p>
+<p>'/posts/:id': Post;</p>
+<p>}</p>
+<p>type Endpoint = keyof ApiEndpoints;</p>
+<p>type ApiResponse&lt;Path extends Endpoint&gt; = ApiEndpoints[Path];</p>
+<p>async function fetchApi&lt;Path extends Endpoint&gt;(</p>
+<p>path: Path</p>
+<p>): Promise&lt;ApiResponse&lt;Path&gt;&gt; {</p>
+<p>const response = await fetch(path);</p>
+<p>return response.json();</p>
+<p>}</p>
+<p>const users = await fetchApi('/users');      // User[]</p>
+<p>const user = await fetchApi('/users/:id');   // User</code></pre></p>
+<h3>3. 深度 Pick</h3>
+<pre><code>// 支持嵌套路径的 Pick
+<p>type DeepPick&lt;T, Path extends string&gt; =</p>
+<p>Path extends <strong>INLINE<em>CODE</em>12</strong></p>
+<p>? Key extends keyof T</p>
+<p>? { [K in Key]: DeepPick&lt;T[K], Rest&gt; }</p>
+<p>: never</p>
+<p>: Path extends keyof T</p>
+<p>? Pick&lt;T, Path&gt;</p>
+<p>: never;</p>
+<p>interface User {</p>
+<p>id: number;</p>
+<p>profile: {</p>
+<p>name: string;</p>
+<p>email: string;</p>
+<p>address: {</p>
+<p>city: string;</p>
+<p>country: string;</p>
+<p>};</p>
+<p>};</p>
+<p>}</p>
+<p>type UserName = DeepPick&lt;User, 'profile.name'&gt;;</p>
+<p>// { profile: { name: string } }</p>
+<p>type UserAddress = DeepPick&lt;User, 'profile.address.city'&gt;;</p>
+<p>// { profile: { address: { city: string } } }</code></pre></p>
+<h2>性能与最佳实践</h2>
+<div class="warning-box">
+<p><strong>性能警告</strong>：复杂的递归类型可能显著增加编译时间。TypeScript 有递归深度限制（约 1000 层）。</p>
+</div>
+<ul>
+<li><strong>避免过度复杂</strong>：类型体操应服务于实际需求，而非炫技</li>
+<li><strong>添加类型注释</strong>：复杂类型添加注释说明用途</li>
+<li><strong>拆分类型</strong>：将复杂类型拆分为可复用的小类型</li>
+<li><strong>善用工具类型</strong>：优先使用内置工具类型</li>
+<li><strong>测试类型</strong>：使用 <code>expectType</code> 等工具验证类型正确性</li>
+</ul>
+<h2>总结</h2>
+<p>TypeScript 类型体操的核心技能：</p>
+<ul>
+<li>✅ 条件类型：<code>T extends U ? X : Y</code></li>
+<li>✅ 类型推断：<code>infer</code> 关键字</li>
+<li>✅ 映射类型：<code>[K in keyof T]</code></li>
+<li>✅ 模板字面量：<code><strong>INLINE<em>CODE</em>13</strong></code></li>
+<li>✅ 递归类型：注意性能和深度限制</li>
+</ul>
+<div class="tip-box">
+<p><strong>学习资源</strong>：<br></p>
+<p>TypeScript 官方文档：<a href="https://www.typescriptlang.org/docs/handbook/2/types-from-types.html" target="_blank">types-from-types</a><br></p>
+<p>类型体操练习：<a href="https://github.com/type-challenges/type-challenges" target="_blank">type-challenges</a><br></p>
+<p>utility-types：<a href="https://github.com/piotrwitek/utility-types" target="_blank">utility-types</a></p>
+</div>
 
         <!-- Related Static -->
         <div class="related-posts">
@@ -598,7 +515,7 @@ type UserAddress = DeepPick&lt;User, 'profile.address.city'&gt;;
         <div class="post-info-label">文章信息</div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📅</span> 发布日期</span><span class="post-info-stat-value">2026-04-25</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">⏱️</span> 阅读时间</span><span class="post-info-stat-value">20 min read</span></div>
-        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">1498 字</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">1460 字</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📊</span> 章节数</span><span class="post-info-stat-value">8 节 · 10 子节</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">💻</span> 代码块</span><span class="post-info-stat-value">11 段</span></div>
       </div>

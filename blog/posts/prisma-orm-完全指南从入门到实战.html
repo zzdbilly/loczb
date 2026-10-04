@@ -50,12 +50,12 @@
       },
       "keywords": "Prisma, TypeScript, PostgreSQL, ORM, 数据库, Next.js",
       "articleSection": "数据库",
-      "timeRequired": "PT5M",
+      "timeRequired": "PT10M",
       "inLanguage": "zh-CN"
 }
     </script>
 
-    <link rel="stylesheet" href="../../assets/css/style.css?v=231fa9f71a">
+    <link rel="stylesheet" href="../../assets/css/style.css?v=27743e398e">
     <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
     <link rel="alternate icon" href="../../assets/images/favicon.ico">
     <link rel="canonical" href="https://709527.xyz/blog/posts/prisma-orm-完全指南从入门到实战.html">
@@ -117,7 +117,7 @@
 
         <div class="post-meta">
           <span class="meta-item"><span aria-hidden="true">📅</span> 2026-07-07 15:47:51</span>
-          <span class="meta-item"><span aria-hidden="true">⏱️</span> 5 min read</span>
+          <span class="meta-item"><span aria-hidden="true">⏱️</span> 10 min read</span>
           <span class="meta-item"><span aria-hidden="true">👤</span> 张小猛</span>
         </div>
 
@@ -148,334 +148,311 @@
 <h3>安装与配置</h3>
 <p>以 Next.js 项目为例，Prisma 的安装非常简单：</p>
 <pre><code class="language-bash">pnpm add prisma @prisma/client
-pnpm add -D prisma
-npx prisma init
-</code></pre>
+<p>pnpm add -D prisma</p>
+<p>npx prisma init</p>
+<p></code></pre></p>
 <p><code>prisma init</code> 会创建两个关键文件：</p>
 <pre><code>prisma/
-  └── schema.prisma    # 数据模型定义
-.env                    # 数据库连接字符串
-</code></pre>
+<p>└── schema.prisma    # 数据模型定义</p>
+<p>.env                    # 数据库连接字符串</p>
+<p></code></pre></p>
 <p>以 PostgreSQL 为例，<code>.env</code> 文件的内容如下：</p>
 <pre><code>DATABASE_URL=&quot;postgresql://user:password@localhost:5432/zest?schema=public&quot;
-</code></pre>
+<p></code></pre></p>
 <h3>Schema 文件结构</h3>
 <p><code>schema.prisma</code> 是 Prisma 的核心配置文件，分为三个部分：</p>
 <pre><code class="language-prisma">// 1. 数据源配置
-datasource db {
-  provider = &quot;postgresql&quot;
-  url      = env(&quot;DATABASE_URL&quot;)
-}
-
-// 2. 生成器配置
-generator client {
-  provider = &quot;prisma-client-js&quot;
-}
-
-// 3. 数据模型定义
-model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  name      String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-</code></pre>
+<p>datasource db {</p>
+<p>provider = &quot;postgresql&quot;</p>
+<p>url      = env(&quot;DATABASE_URL&quot;)</p>
+<p>}</p>
+<p>// 2. 生成器配置</p>
+<p>generator client {</p>
+<p>provider = &quot;prisma-client-js&quot;</p>
+<p>}</p>
+<p>// 3. 数据模型定义</p>
+<p>model User {</p>
+<p>id        String   @id @default(cuid())</p>
+<p>email     String   @unique</p>
+<p>name      String?</p>
+<p>createdAt DateTime @default(now())</p>
+<p>updatedAt DateTime @updatedAt</p>
+<p>}</p>
+<p></code></pre></p>
 <h3>数据库迁移</h3>
 <p>Prisma 提供了两种数据库操作方式：<strong>Push</strong> 和 <strong>Migrate</strong>。</p>
 <p>Push 适合开发阶段快速同步 Schema：</p>
 <pre><code class="language-bash">npx prisma db push
-</code></pre>
+<p></code></pre></p>
 <p>Migrate 适合生产环境，会生成完整的迁移历史：</p>
 <pre><code class="language-bash">npx prisma migrate dev --name init
-</code></pre>
+<p></code></pre></p>
 <p>两者的核心区别在于：
-- <code>db push</code>：直接将 Schema 同步到数据库，不生成迁移文件
-- <code>migrate dev</code>：生成迁移文件，可版本控制和回滚</p>
+<ul>
+<li><code>db push</code>：直接将 Schema 同步到数据库，不生成迁移文件</li>
+<li><code>migrate dev</code>：生成迁移文件，可版本控制和回滚</p></li>
+</ul>
 <p>生产环境部署时使用：</p>
 <pre><code class="language-bash">npx prisma migrate deploy
-</code></pre>
+<p></code></pre></p>
 <h2>数据模型设计</h2>
 <h3>基础字段类型</h3>
 <p>Prisma 支持的数据类型非常丰富，覆盖了常见数据库的全部需求：</p>
 <pre><code class="language-prisma">model Example {
-  id        String   @id @default(cuid())   // 主键，CUID 生成
-  autoId    Int      @id @default(autoincrement())  // 自增主键
-  uuid      String   @id @default(uuid())   // UUID 主键
-  bigInt    BigInt                           // 大整数
-  float     Float                            // 浮点数
-  decimal   Decimal  @db.Decimal(10, 2)     // 精确小数
-  boolean   Boolean  @default(false)         // 布尔值
-  json      Json                             // JSON 类型
-  dateOnly  DateTime @db.Date                // 仅日期
-  ts       DateTime @default(now())          // 时间戳
-}
-</code></pre>
+<p>id        String   @id @default(cuid())   // 主键，CUID 生成</p>
+<p>autoId    Int      @id @default(autoincrement())  // 自增主键</p>
+<p>uuid      String   @id @default(uuid())   // UUID 主键</p>
+<p>bigInt    BigInt                           // 大整数</p>
+<p>float     Float                            // 浮点数</p>
+<p>decimal   Decimal  @db.Decimal(10, 2)     // 精确小数</p>
+<p>boolean   Boolean  @default(false)         // 布尔值</p>
+<p>json      Json                             // JSON 类型</p>
+<p>dateOnly  DateTime @db.Date                // 仅日期</p>
+<p>ts       DateTime @default(now())          // 时间戳</p>
+<p>}</p>
+<p></code></pre></p>
 <h3>枚举与关系</h3>
 <p>枚举类型在 Prisma 中是一等公民，可以直接在 Schema 中定义：</p>
 <pre><code class="language-prisma">enum HabitStatus {
-  ACTIVE
-  PAUSED
-  ARCHIVED
-}
-
-model Habit {
-  id        String      @id @default(cuid())
-  title     String
-  status    HabitStatus @default(ACTIVE)
-  color     String      @default(&quot;#6366f1&quot;)
-  userId    String
-  user      User        @relation(fields: [userId], references: [id])
-  logs      Log[]
-  createdAt DateTime    @default(now())
-  updatedAt DateTime    @updatedAt
-}
-</code></pre>
+<p>ACTIVE</p>
+<p>PAUSED</p>
+<p>ARCHIVED</p>
+<p>}</p>
+<p>model Habit {</p>
+<p>id        String      @id @default(cuid())</p>
+<p>title     String</p>
+<p>status    HabitStatus @default(ACTIVE)</p>
+<p>color     String      @default(&quot;#6366f1&quot;)</p>
+<p>userId    String</p>
+<p>user      User        @relation(fields: [userId], references: [id])</p>
+<p>logs      Log[]</p>
+<p>createdAt DateTime    @default(now())</p>
+<p>updatedAt DateTime    @updatedAt</p>
+<p>}</p>
+<p></code></pre></p>
 <h3>关联关系的三种形态</h3>
 <p>一对一：</p>
 <pre><code class="language-prisma">model User {
-  id      String   @id @default(cuid())
-  profile Profile?
-}
-
-model Profile {
-  id     String @id @default(cuid())
-  bio    String
-  userId String @unique
-  user   User   @relation(fields: [userId], references: [id])
-}
-</code></pre>
+<p>id      String   @id @default(cuid())</p>
+<p>profile Profile?</p>
+<p>}</p>
+<p>model Profile {</p>
+<p>id     String @id @default(cuid())</p>
+<p>bio    String</p>
+<p>userId String @unique</p>
+<p>user   User   @relation(fields: [userId], references: [id])</p>
+<p>}</p>
+<p></code></pre></p>
 <p>一对多：</p>
 <pre><code class="language-prisma">model User {
-  id     String   @id @default(cuid())
-  habits Habit[]
-}
-
-model Habit {
-  id     String @id @default(cuid())
-  userId String
-  user   User   @relation(fields: [userId], references: [id])
-}
-</code></pre>
+<p>id     String   @id @default(cuid())</p>
+<p>habits Habit[]</p>
+<p>}</p>
+<p>model Habit {</p>
+<p>id     String @id @default(cuid())</p>
+<p>userId String</p>
+<p>user   User   @relation(fields: [userId], references: [id])</p>
+<p>}</p>
+<p></code></pre></p>
 <p>多对多：</p>
 <pre><code class="language-prisma">model Post {
-  id       String       @id @default(cuid())
-  title    String
-  tags     TagOnPost[]
-}
-
-model Tag {
-  id    String       @id @default(cuid())
-  name  String       @unique
-  posts TagOnPost[]
-}
-
-model TagOnPost {
-  postId String
-  tagId  String
-  post   Post @relation(fields: [postId], references: [id])
-  tag    Tag  @relation(fields: [tagId], references: [id])
-
-  @@id([postId, tagId])
-}
-</code></pre>
+<p>id       String       @id @default(cuid())</p>
+<p>title    String</p>
+<p>tags     TagOnPost[]</p>
+<p>}</p>
+<p>model Tag {</p>
+<p>id    String       @id @default(cuid())</p>
+<p>name  String       @unique</p>
+<p>posts TagOnPost[]</p>
+<p>}</p>
+<p>model TagOnPost {</p>
+<p>postId String</p>
+<p>tagId  String</p>
+<p>post   Post @relation(fields: [postId], references: [id])</p>
+<p>tag    Tag  @relation(fields: [tagId], references: [id])</p>
+<p>@@id([postId, tagId])</p>
+<p>}</p>
+<p></code></pre></p>
 <h2>CRUD 操作实战</h2>
 <h3>创建记录</h3>
 <p>Prisma Client 的创建操作非常直观：</p>
 <pre><code class="language-typescript">import { PrismaClient } from '@prisma/client'
-
-const prisma = new PrismaClient()
-
-// 创建单条
-const user = await prisma.user.create({
-  data: {
-    email: 'user@example.com',
-    name: '张三',
-  },
-})
-
-// 创建并关联子表
-const habit = await prisma.habit.create({
-  data: {
-    title: '每天跑步',
-    color: '#10b981',
-    user: { connect: { id: userId } },
-  },
-  include: { user: true },
-})
-</code></pre>
+<p>const prisma = new PrismaClient()</p>
+<p>// 创建单条</p>
+<p>const user = await prisma.user.create({</p>
+<p>data: {</p>
+<p>email: 'user@example.com',</p>
+<p>name: '张三',</p>
+<p>},</p>
+<p>})</p>
+<p>// 创建并关联子表</p>
+<p>const habit = await prisma.habit.create({</p>
+<p>data: {</p>
+<p>title: '每天跑步',</p>
+<p>color: '#10b981',</p>
+<p>user: { connect: { id: userId } },</p>
+<p>},</p>
+<p>include: { user: true },</p>
+<p>})</p>
+<p></code></pre></p>
 <h3>查询数据</h3>
 <p>Prisma 的查询 API 设计得既灵活又类型安全：</p>
 <pre><code class="language-typescript">// 查询单条
-const user = await prisma.user.findUnique({
-  where: { email: 'user@example.com' },
-})
-
-// 条件查询
-const habits = await prisma.habit.findMany({
-  where: {
-    status: 'ACTIVE',
-    userId: currentUserId,
-    title: { contains: '跑步' },
-  },
-  orderBy: { createdAt: 'desc' },
-  take: 10,
-  skip: 0,
-})
-
-// 关联预加载
-const userWithHabits = await prisma.user.findUnique({
-  where: { id: userId },
-  include: {
-    habits: {
-      where: { status: 'ACTIVE' },
-      orderBy: { createdAt: 'desc' },
-    },
-  },
-})
-</code></pre>
+<p>const user = await prisma.user.findUnique({</p>
+<p>where: { email: 'user@example.com' },</p>
+<p>})</p>
+<p>// 条件查询</p>
+<p>const habits = await prisma.habit.findMany({</p>
+<p>where: {</p>
+<p>status: 'ACTIVE',</p>
+<p>userId: currentUserId,</p>
+<p>title: { contains: '跑步' },</p>
+<p>},</p>
+<p>orderBy: { createdAt: 'desc' },</p>
+<p>take: 10,</p>
+<p>skip: 0,</p>
+<p>})</p>
+<p>// 关联预加载</p>
+<p>const userWithHabits = await prisma.user.findUnique({</p>
+<p>where: { id: userId },</p>
+<p>include: {</p>
+<p>habits: {</p>
+<p>where: { status: 'ACTIVE' },</p>
+<p>orderBy: { createdAt: 'desc' },</p>
+<p>},</p>
+<p>},</p>
+<p>})</p>
+<p></code></pre></p>
 <h3>更新与删除</h3>
 <pre><code class="language-typescript">// 更新
-const updated = await prisma.habit.update({
-  where: { id: habitId },
-  data: { title: '新标题', status: 'PAUSED' },
-})
-
-// 批量更新（updateMany 不支持关联更新）
-await prisma.habit.updateMany({
-  where: { userId, status: 'ACTIVE' },
-  data: { status: 'PAUSED' },
-})
-
-// 删除
-await prisma.habit.delete({ where: { id: habitId } })
-
-// 批量删除
-await prisma.habit.deleteMany({
-  where: { userId, status: 'ARCHIVED' },
-})
-</code></pre>
+<p>const updated = await prisma.habit.update({</p>
+<p>where: { id: habitId },</p>
+<p>data: { title: '新标题', status: 'PAUSED' },</p>
+<p>})</p>
+<p>// 批量更新（updateMany 不支持关联更新）</p>
+<p>await prisma.habit.updateMany({</p>
+<p>where: { userId, status: 'ACTIVE' },</p>
+<p>data: { status: 'PAUSED' },</p>
+<p>})</p>
+<p>// 删除</p>
+<p>await prisma.habit.delete({ where: { id: habitId } })</p>
+<p>// 批量删除</p>
+<p>await prisma.habit.deleteMany({</p>
+<p>where: { userId, status: 'ARCHIVED' },</p>
+<p>})</p>
+<p></code></pre></p>
 <h3>事务处理</h3>
 <p>Prisma 支持两种事务模式：</p>
 <pre><code class="language-typescript">// 1. 批量操作事务
-const [user, habit] = await prisma.$transaction([
-  prisma.user.create({ data: { email, name } }),
-  prisma.habit.create({ data: { title, userId: newUserId } }),
-])
-
-// 2. 交互式事务（推荐）
-await prisma.$transaction(async (tx) =&gt; {
-  const user = await tx.user.findUnique({ where: { id: userId } })
-  if (!user) throw new Error('User not found')
-
-  await tx.habit.create({
-    data: { title: '新习惯', userId: user.id },
-  })
-
-  await tx.user.update({
-    where: { id: userId },
-    data: { habitCount: { increment: 1 } },
-  })
-})
-</code></pre>
+<p>const [user, habit] = await prisma.$transaction([</p>
+<p>prisma.user.create({ data: { email, name } }),</p>
+<p>prisma.habit.create({ data: { title, userId: newUserId } }),</p>
+<p>])</p>
+<p>// 2. 交互式事务（推荐）</p>
+<p>await prisma.$transaction(async (tx) =&gt; {</p>
+<p>const user = await tx.user.findUnique({ where: { id: userId } })</p>
+<p>if (!user) throw new Error('User not found')</p>
+<p>await tx.habit.create({</p>
+<p>data: { title: '新习惯', userId: user.id },</p>
+<p>})</p>
+<p>await tx.user.update({</p>
+<p>where: { id: userId },</p>
+<p>data: { habitCount: { increment: 1 } },</p>
+<p>})</p>
+<p>})</p>
+<p></code></pre></p>
 <p>交互式事务的最大优势是支持条件逻辑和错误回滚，事务中任何一步失败都会自动回滚所有更改。</p>
 <h2>高级特性</h2>
 <h3>部分更新与字段选择</h3>
 <p>Prisma 提供了精确控制查询结果的机制：</p>
 <pre><code class="language-typescript">// 只返回指定字段
-const user = await prisma.user.findUnique({
-  where: { id: userId },
-  select: {
-    id: true,
-    name: true,
-    email: true,
-    // 不返回密码等敏感字段
-  },
-})
-
-// 嵌套选择
-const result = await prisma.habit.findMany({
-  select: {
-    title: true,
-    logs: {
-      select: { date: true, completed: true },
-      take: 7,
-      orderBy: { date: 'desc' },
-    },
-  },
-})
-</code></pre>
+<p>const user = await prisma.user.findUnique({</p>
+<p>where: { id: userId },</p>
+<p>select: {</p>
+<p>id: true,</p>
+<p>name: true,</p>
+<p>email: true,</p>
+<p>// 不返回密码等敏感字段</p>
+<p>},</p>
+<p>})</p>
+<p>// 嵌套选择</p>
+<p>const result = await prisma.habit.findMany({</p>
+<p>select: {</p>
+<p>title: true,</p>
+<p>logs: {</p>
+<p>select: { date: true, completed: true },</p>
+<p>take: 7,</p>
+<p>orderBy: { date: 'desc' },</p>
+<p>},</p>
+<p>},</p>
+<p>})</p>
+<p></code></pre></p>
 <h3>原生 SQL 查询</h3>
 <p>当 Prisma 的查询 API 无法满足复杂需求时，可以直接执行原生 SQL：</p>
 <pre><code class="language-typescript">// 原生查询
-const users = await prisma.$queryRaw`
-  SELECT u.*, COUNT(h.id) as habit_count
-  FROM &quot;User&quot; u
-  LEFT JOIN &quot;Habit&quot; h ON h.&quot;userId&quot; = u.id
-  GROUP BY u.id
-  HAVING COUNT(h.id) &gt; 5
-  ORDER BY habit_count DESC
-`
-
-// 原生执行（INSERT/UPDATE/DELETE）
-await prisma.$executeRaw`
-  UPDATE &quot;Habit&quot;
-  SET status = 'ARCHIVED'
-  WHERE &quot;updatedAt&quot; &lt; NOW() - INTERVAL '90 days'
-`
-</code></pre>
+<p>const users = await prisma.$queryRaw`</p>
+<p>SELECT u.*, COUNT(h.id) as habit_count</p>
+<p>FROM &quot;User&quot; u</p>
+<p>LEFT JOIN &quot;Habit&quot; h ON h.&quot;userId&quot; = u.id</p>
+<p>GROUP BY u.id</p>
+<p>HAVING COUNT(h.id) &gt; 5</p>
+<p>ORDER BY habit_count DESC</p>
+<p>`</p>
+<p>// 原生执行（INSERT/UPDATE/DELETE）</p>
+<p>await prisma.$executeRaw`</p>
+<p>UPDATE &quot;Habit&quot;</p>
+<p>SET status = 'ARCHIVED'</p>
+<p>WHERE &quot;updatedAt&quot; &lt; NOW() - INTERVAL '90 days'</p>
+<p>`</p>
+<p></code></pre></p>
 <p>⚠️ 使用原生 SQL 时有几个注意事项：
-- <code>$queryRaw</code> 返回的是无类型结果，需要手动定义类型
-- 始终使用参数化查询避免 SQL 注入
-- 不要在循环中调用 <code>$executeRaw</code></p>
+<ul>
+<li><code>$queryRaw</code> 返回的是无类型结果，需要手动定义类型</li>
+<li>始终使用参数化查询避免 SQL 注入</li>
+<li>不要在循环中调用 <code>$executeRaw</code></p></li>
+</ul>
 <h3>Middleware 与日志</h3>
 <p>Prisma 支持中间件机制，非常适合做审计日志和性能监控：</p>
 <pre><code class="language-typescript">const prisma = new PrismaClient()
-
-// 查询日志中间件
-prisma.$use(async (params, next) =&gt; {
-  const before = Date.now()
-  const result = await next(params)
-  const after = Date.now()
-
-  console.log(`Query ${params.model}.${params.action} took ${after - before}ms`)
-
-  return result
-})
-
-// 软删除中间件
-prisma.$use(async (params, next) =&gt; {
-  if (params.action === 'delete') {
-    params.action = 'update'
-    params.args['data'] = { deletedAt: new Date() }
-  }
-  return next(params)
-})
-</code></pre>
+<p>// 查询日志中间件</p>
+<p>prisma.$use(async (params, next) =&gt; {</p>
+<p>const before = Date.now()</p>
+<p>const result = await next(params)</p>
+<p>const after = Date.now()</p>
+<p>console.log(<strong>INLINE<em>CODE</em>0</strong>)</p>
+<p>return result</p>
+<p>})</p>
+<p>// 软删除中间件</p>
+<p>prisma.$use(async (params, next) =&gt; {</p>
+<p>if (params.action === 'delete') {</p>
+<p>params.action = 'update'</p>
+<p>params.args['data'] = { deletedAt: new Date() }</p>
+<p>}</p>
+<p>return next(params)</p>
+<p>})</p>
+<p></code></pre></p>
 <h2>项目实战：Zest 习惯追踪器</h2>
 <p>在 Zest 项目中，Prisma 的应用贯穿了整个数据层。这里分享几个实际使用中遇到的问题和解决方案。</p>
 <h3>模型设计</h3>
 <pre><code class="language-prisma">model Achievement {
-  id          String   @id @default(cuid())
-  name        String
-  description String
-  icon        String   @default(&quot;🏆&quot;)
-  type        String   // streak, total, milestone
-  threshold   Int      // 达成条件
-  createdAt   DateTime @default(now())
-}
-
-model UserAchievement {
-  id            String      @id @default(cuid())
-  userId        String
-  achievementId String
-  unlockedAt    DateTime    @default(now())
-  user          User        @relation(fields: [userId], references: [id])
-  achievement   Achievement @relation(fields: [achievementId], references: [id])
-
-  @@unique([userId, achievementId])
-}
-</code></pre>
+<p>id          String   @id @default(cuid())</p>
+<p>name        String</p>
+<p>description String</p>
+<p>icon        String   @default(&quot;🏆&quot;)</p>
+<p>type        String   // streak, total, milestone</p>
+<p>threshold   Int      // 达成条件</p>
+<p>createdAt   DateTime @default(now())</p>
+<p>}</p>
+<p>model UserAchievement {</p>
+<p>id            String      @id @default(cuid())</p>
+<p>userId        String</p>
+<p>achievementId String</p>
+<p>unlockedAt    DateTime    @default(now())</p>
+<p>user          User        @relation(fields: [userId], references: [id])</p>
+<p>achievement   Achievement @relation(fields: [achievementId], references: [id])</p>
+<p>@@unique([userId, achievementId])</p>
+<p>}</p>
+<p></code></pre></p>
 <h3>多对多关系的最佳实践</h3>
 <p>Zest 中用户和成就的关系是一个典型的多对多场景。上面的 <code>UserAchievement</code> 中间表方案相比 Prisma 的隐式多对多，优势在于：</p>
 <ol>
@@ -485,125 +462,118 @@ model UserAchievement {
 </ol>
 <p>查询用户已解锁的成就：</p>
 <pre><code class="language-typescript">const achieved = await prisma.userAchievement.findMany({
-  where: { userId },
-  include: {
-    achievement: true,
-  },
-  orderBy: { unlockedAt: 'desc' },
-})
-</code></pre>
+<p>where: { userId },</p>
+<p>include: {</p>
+<p>achievement: true,</p>
+<p>},</p>
+<p>orderBy: { unlockedAt: 'desc' },</p>
+<p>})</p>
+<p></code></pre></p>
 <h3>事务处理的坑</h3>
 <p>在实现"创建习惯 + 检查是否达成新成就"这个原子操作时，PRISMA 的交互式事务是这个场景的理想选择：</p>
 <pre><code class="language-typescript">await prisma.$transaction(async (tx) =&gt; {
-  // 1. 创建打卡记录
-  const log = await tx.log.create({
-    data: { habitId, date: today, completed: true },
-  })
-
-  // 2. 更新习惯的连续天数
-  await tx.habit.update({
-    where: { id: habitId },
-    data: { streak: { increment: 1 } },
-  })
-
-  // 3. 检查是否达成新成就
-  const habit = await tx.habit.findUnique({
-    where: { id: habitId },
-    select: { streak: true },
-  })
-
-  if (habit.streak === 7) {
-    await tx.userAchievement.create({
-      data: {
-        userId,
-        achievementId: 'week_streak',
-      },
-    })
-  }
-})
-</code></pre>
+<p>// 1. 创建打卡记录</p>
+<p>const log = await tx.log.create({</p>
+<p>data: { habitId, date: today, completed: true },</p>
+<p>})</p>
+<p>// 2. 更新习惯的连续天数</p>
+<p>await tx.habit.update({</p>
+<p>where: { id: habitId },</p>
+<p>data: { streak: { increment: 1 } },</p>
+<p>})</p>
+<p>// 3. 检查是否达成新成就</p>
+<p>const habit = await tx.habit.findUnique({</p>
+<p>where: { id: habitId },</p>
+<p>select: { streak: true },</p>
+<p>})</p>
+<p>if (habit.streak === 7) {</p>
+<p>await tx.userAchievement.create({</p>
+<p>data: {</p>
+<p>userId,</p>
+<p>achievementId: 'week_streak',</p>
+<p>},</p>
+<p>})</p>
+<p>}</p>
+<p>})</p>
+<p></code></pre></p>
 <p>这里的 <code>$transaction</code> 保证了三步操作的原子性：如果成就创建失败，打卡记录也不会写入。</p>
 <h2>性能优化</h2>
 <h3>连接池管理</h3>
 <p>在生产环境中，正确管理数据库连接至关重要：</p>
 <pre><code class="language-typescript">// 全局单例模式（推荐用于 Next.js / Serverless）
-const globalForPrisma = globalThis as unknown as {
-  prisma: PrismaClient | undefined
-}
-
-export const prisma = globalForPrisma.prisma ?? new PrismaClient({
-  log: process.env.NODE_ENV === 'development' 
-    ? ['query', 'info', 'warn', 'error']
-    : ['error'],
-})
-
-if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma
-</code></pre>
+<p>const globalForPrisma = globalThis as unknown as {</p>
+<p>prisma: PrismaClient | undefined</p>
+<p>}</p>
+<p>export const prisma = globalForPrisma.prisma ?? new PrismaClient({</p>
+<p>log: process.env.NODE_ENV === 'development'</p>
+<p>? ['query', 'info', 'warn', 'error']</p>
+<p>: ['error'],</p>
+<p>})</p>
+<p>if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma</p>
+<p></code></pre></p>
 <p>这个模式解决了两个关键问题：
-- Next.js 热重载时不会创建多个 PrismaClient 实例
-- Serverless 环境中复用已建立的连接</p>
+<ul>
+<li>Next.js 热重载时不会创建多个 PrismaClient 实例</li>
+<li>Serverless 环境中复用已建立的连接</p></li>
+</ul>
 <h3>查询优化技巧</h3>
 <pre><code class="language-typescript">// ❌ 避免 N+1 查询
-for (const habit of habits) {
-  await prisma.log.findMany({ where: { habitId: habit.id } })
-}
-
-// ✅ 使用 include 预加载
-const habitsWithLogs = await prisma.habit.findMany({
-  where: { userId },
-  include: { logs: { take: 30, orderBy: { date: 'desc' } } },
-})
-
-// ✅ 或者用批量查询
-const allLogs = await prisma.log.findMany({
-  where: { habitId: { in: habits.map(h =&gt; h.id) } },
-})
-</code></pre>
+<p>for (const habit of habits) {</p>
+<p>await prisma.log.findMany({ where: { habitId: habit.id } })</p>
+<p>}</p>
+<p>// ✅ 使用 include 预加载</p>
+<p>const habitsWithLogs = await prisma.habit.findMany({</p>
+<p>where: { userId },</p>
+<p>include: { logs: { take: 30, orderBy: { date: 'desc' } } },</p>
+<p>})</p>
+<p>// ✅ 或者用批量查询</p>
+<p>const allLogs = await prisma.log.findMany({</p>
+<p>where: { habitId: { in: habits.map(h =&gt; h.id) } },</p>
+<p>})</p>
+<p></code></pre></p>
 <h3>分页策略</h3>
 <pre><code class="language-typescript">// 游标分页（推荐）
-const page = await prisma.log.findMany({
-  take: 20,
-  orderBy: { createdAt: 'desc' },
-  cursor: cursor ? { id: cursor } : undefined,
-  skip: cursor ? 1 : 0,  // 跳过游标记录
-  where: { habitId },
-})
-
-// 传统偏移分页
-const page = await prisma.log.findMany({
-  take: 20,
-  skip: (pageIndex - 1) * 20,
-  orderBy: { createdAt: 'desc' },
-  where: { habitId },
-})
-</code></pre>
+<p>const page = await prisma.log.findMany({</p>
+<p>take: 20,</p>
+<p>orderBy: { createdAt: 'desc' },</p>
+<p>cursor: cursor ? { id: cursor } : undefined,</p>
+<p>skip: cursor ? 1 : 0,  // 跳过游标记录</p>
+<p>where: { habitId },</p>
+<p>})</p>
+<p>// 传统偏移分页</p>
+<p>const page = await prisma.log.findMany({</p>
+<p>take: 20,</p>
+<p>skip: (pageIndex - 1) * 20,</p>
+<p>orderBy: { createdAt: 'desc' },</p>
+<p>where: { habitId },</p>
+<p>})</p>
+<p></code></pre></p>
 <p>游标分页的优势在于大数据集下的稳定性——新增数据不会导致页码偏移。</p>
 <h2>常见问题</h2>
 <h3>Schema 变更与迁移冲突</h3>
 <p>团队开发中最常见的问题是多人同时修改 Schema 导致的迁移冲突。解决方案是频繁运行 <code>prisma migrate dev</code> 并及时提交迁移文件。</p>
 <p>如果出现迁移历史不一致：</p>
 <pre><code class="language-bash"># 重置数据库（开发环境）
-npx prisma migrate reset
-
-# 标记迁移已应用（生产环境需谨慎）
-npx prisma migrate resolve --applied 20240101000000_init
-</code></pre>
+<p>npx prisma migrate reset</p>
+<h1>标记迁移已应用（生产环境需谨慎）</h1>
+<p>npx prisma migrate resolve --applied 20240101000000_init</p>
+<p></code></pre></p>
 <h3>跨表查询性能</h3>
 <p>Prisma 的 <code>include</code> 虽然方便，但滥用会导致查询性能下降。对于复杂的聚合查询，考虑使用原生 SQL 或者数据库视图。</p>
 <pre><code class="language-typescript">// 复杂聚合用原生 SQL
-const stats = await prisma.$queryRaw`
-  SELECT 
-    h.id,
-    h.title,
-    COUNT(l.id) FILTER (WHERE l.completed) as completed_count,
-    COUNT(l.id) as total_count
-  FROM &quot;Habit&quot; h
-  LEFT JOIN &quot;Log&quot; l ON l.&quot;habitId&quot; = h.id
-    AND l.date &gt;= NOW() - INTERVAL '30 days'
-  WHERE h.&quot;userId&quot; = ${userId}
-  GROUP BY h.id, h.title
-`
-</code></pre>
+<p>const stats = await prisma.$queryRaw`</p>
+<p>SELECT</p>
+<p>h.id,</p>
+<p>h.title,</p>
+<p>COUNT(l.id) FILTER (WHERE l.completed) as completed_count,</p>
+<p>COUNT(l.id) as total_count</p>
+<p>FROM &quot;Habit&quot; h</p>
+<p>LEFT JOIN &quot;Log&quot; l ON l.&quot;habitId&quot; = h.id</p>
+<p>AND l.date &gt;= NOW() - INTERVAL '30 days'</p>
+<p>WHERE h.&quot;userId&quot; = ${userId}</p>
+<p>GROUP BY h.id, h.title</p>
+<p>`</p>
+<p></code></pre></p>
 <h3>部署注意事项</h3>
 <p>生产环境部署需要关注以下几点：</p>
 <ol>
@@ -613,10 +583,10 @@ const stats = await prisma.$queryRaw`
 <li><strong>连接池</strong>：Serverless 环境设置合理的连接池大小</li>
 </ol>
 <pre><code class="language-bash"># Dockerfile 中的典型部署步骤
-RUN npx prisma generate
-RUN npx prisma migrate deploy
-CMD [&quot;node&quot;, &quot;dist/index.js&quot;]
-</code></pre>
+<p>RUN npx prisma generate</p>
+<p>RUN npx prisma migrate deploy</p>
+<p>CMD [&quot;node&quot;, &quot;dist/index.js&quot;]</p>
+<p></code></pre></p>
 <h2>总结</h2>
 <p>Prisma 通过类型安全的 Schema 定义和自动生成的客户端代码，解决了传统 ORM 在 TypeScript 生态中的类型缺失问题。它的核心价值在于：</p>
 <ul>
@@ -765,8 +735,8 @@ CMD [&quot;node&quot;, &quot;dist/index.js&quot;]
       <div class="post-info-section">
         <div class="post-info-label">文章信息</div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📅</span> 发布日期</span><span class="post-info-stat-value">2026-07-07</span></div>
-        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">⏱️</span> 阅读时间</span><span class="post-info-stat-value">5 min read</span></div>
-        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">2903 字</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">⏱️</span> 阅读时间</span><span class="post-info-stat-value">10 min read</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">2895 字</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📊</span> 章节数</span><span class="post-info-stat-value">9 节 · 23 子节</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">💻</span> 代码块</span><span class="post-info-stat-value">28 段</span></div>
       </div>

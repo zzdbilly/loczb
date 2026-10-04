@@ -29,32 +29,33 @@
       "description": "Git Worktree 让你同时检出多个分支，切换零成本，告别 stash 和冲突的烦恼。本文详解 worktree 的使用场景和最佳实践。",
       "image": "https://709527.xyz/assets/images/og-image.png",
       "author": {
-        "@type": "Person",
-        "name": "张小猛",
-        "url": "https://709527.xyz/about/"
+            "@type": "Person",
+            "name": "张小猛",
+            "url": "https://709527.xyz/about/"
       },
       "publisher": {
-        "@type": "Organization",
-        "name": "loczb",
-        "logo": {
-          "@type": "ImageObject",
-          "url": "https://709527.xyz/assets/images/favicon.svg"
-        }
+            "@type": "Organization",
+            "name": "loczb",
+            "logo": {
+                  "@type": "ImageObject",
+                  "url": "https://709527.xyz/assets/images/favicon.svg"
+            }
       },
       "datePublished": "2026-06-28T16:00:04+08:00",
       "dateModified": "2026-06-28T16:00:04+08:00",
       "url": "https://709527.xyz/blog/posts/git-worktree-multi-branch-guide.html",
       "mainEntityOfPage": {
-        "@type": "WebPage",
-        "@id": "https://709527.xyz/blog/posts/git-worktree-multi-branch-guide.html"
+            "@type": "WebPage",
+            "@id": "https://709527.xyz/blog/posts/git-worktree-multi-branch-guide.html"
       },
       "keywords": "Git, 开发技巧, 效率工具",
       "articleSection": "开发",
+      "timeRequired": "PT12M",
       "inLanguage": "zh-CN"
-    }
+}
     </script>
 
-    <link rel="stylesheet" href="../../assets/css/style.css?v=231fa9f71a">
+    <link rel="stylesheet" href="../../assets/css/style.css?v=27743e398e">
     <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
     <link rel="alternate icon" href="../../assets/images/favicon.ico">
     <link rel="canonical" href="https://709527.xyz/blog/posts/git-worktree-multi-branch-guide.html">
@@ -129,70 +130,48 @@
         
 
         <p>在日常开发中，我们经常面临这样的场景：正在 A 分支上写代码，突然需要切到 B 分支修一个紧急 bug。这时候要么 stash 当前工作（然后忘记它），要么提交半成品。Git Worktree 优雅解决了这个问题。</p>
-
 <h2 id="what">什么是 Git Worktree</h2>
-
 <p>Git Worktree 允许你在同一仓库中同时检出多个分支，每个分支有独立的工作目录。所有 worktree 共享同一份 .git 对象存储，不会增加仓库体积。</p>
-
 <p>核心命令：</p>
-
 <pre><code class="language-bash"># 创建一个新 worktree
-git worktree add ../project-feature feature-branch
-
-# 列出所有 worktree
-git worktree list
-
-# 删除 worktree
-git worktree remove ../project-feature
-
-# 清理过期 worktree
-git worktree prune</code></pre>
-
+<p>git worktree add ../project-feature feature-branch</p>
+<h1>列出所有 worktree</h1>
+<p>git worktree list</p>
+<h1>删除 worktree</h1>
+<p>git worktree remove ../project-feature</p>
+<h1>清理过期 worktree</h1>
+<p>git worktree prune</code></pre></p>
 <h2 id="scenarios">核心使用场景</h2>
-
 <h3>1. 修bug同时继续开发</h3>
-
 <p>正在开发新功能时，线上突然报 bug：</p>
-
 <pre><code class="language-bash"># 在当前目录继续开发新功能
-# 在新目录检出版本分支修 bug
-git worktree add ../hotfix release/v2.1
-cd ../hotfix
-# 修 bug、commit、push
-cd -  # 切回原来目录继续开发</code></pre>
-
+<h1>在新目录检出版本分支修 bug</h1>
+<p>git worktree add ../hotfix release/v2.1</p>
+<p>cd ../hotfix</p>
+<h1>修 bug、commit、push</h1>
+<p>cd -  # 切回原来目录继续开发</code></pre></p>
 <p>整个过程不需要 stash，不需要担心工作丢失。</p>
-
 <h3>2. 并行 review</h3>
-
 <p>同时 review 多个 PR 时非常方便：</p>
-
 <pre><code class="language-bash">git worktree add ../pr-review-1 pr/feature-a
-git worktree add ../pr-review-2 pr/feature-b
-git worktree add ../pr-review-3 pr/feature-c</code></pre>
-
+<p>git worktree add ../pr-review-2 pr/feature-b</p>
+<p>git worktree add ../pr-review-3 pr/feature-c</code></pre></p>
 <p>在三个 IDE 窗口打开，互不干扰。</p>
-
 <h2 id="tips">最佳实践</h2>
-
 <ul>
-  <li><strong>命名规范</strong>：worktree 目录名用项目名+分支名，如 <code>myapp-feature-x</code></li>
-  <li><strong>磁盘清理</strong>：定期执行 <code>git worktree prune</code> 清理过期记录</li>
-  <li><strong>避免主 worktree 直接开发</strong>：把主检出当作 hub，用子 worktree 开发实际工作</li>
-  <li><strong>自动化脚本</strong>：配合 shell alias 快速创建/切换 worktree</li>
+<li><strong>命名规范</strong>：worktree 目录名用项目名+分支名，如 <code>myapp-feature-x</code></li>
+<li><strong>磁盘清理</strong>：定期执行 <code>git worktree prune</code> 清理过期记录</li>
+<li><strong>避免主 worktree 直接开发</strong>：把主检出当作 hub，用子 worktree 开发实际工作</li>
+<li><strong>自动化脚本</strong>：配合 shell alias 快速创建/切换 worktree</li>
 </ul>
-
 <h2 id="vs-other">与其他方案的对比</h2>
-
 <table>
-  <tr><th>方案</th><th>切换速度</th><th>冲突风险</th><th>磁盘占用</th></tr>
-  <tr><td>git stash</td><td>快</td><td>高（容易忘）</td><td>低</td></tr>
-  <tr><td>git clone 新仓库</td><td>慢</td><td>无</td><td>高（重复下载）</td></tr>
-  <tr><td>git worktree</td><td>极快</td><td>无</td><td>低（共享对象）</td></tr>
+<tr><th>方案</th><th>切换速度</th><th>冲突风险</th><th>磁盘占用</th></tr>
+<tr><td>git stash</td><td>快</td><td>高（容易忘）</td><td>低</td></tr>
+<tr><td>git clone 新仓库</td><td>慢</td><td>无</td><td>高（重复下载）</td></tr>
+<tr><td>git worktree</td><td>极快</td><td>无</td><td>低（共享对象）</td></tr>
 </table>
-
 <h2 id="conclusion">总结</h2>
-
 <p>Git Worktree 是每个开发者都应该掌握的高效技巧。它解决了多分支并行开发的核心痛点，尤其适合需要频繁切分支修 hotfix 的场景。下次遇到切分支需求时，试试 <code>git worktree add</code>，你会爱上这个功能。</p>
 
         <!-- Related Static -->

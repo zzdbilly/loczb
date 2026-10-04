@@ -1,0 +1,358 @@
+---
+title: "Docker Compose 最佳实践"
+description: "Docker Compose 最佳实践：多容器编排、网络配置、数据持久化、环境变量管理、健康检查等实战技巧"
+date: 2026-04-26 15:11:29
+category: DevOps
+tags: ["Docker", "Docker Compose", "容器化", "DevOps"]
+read_time: 16
+slug: docker-compose-best-practices
+---
+
+<p>Docker Compose 是定义和运行多容器应用的工具。通过一个 YAML 文件配置所有服务，一条命令就能启动整个应用栈。本文分享 Docker Compose 的最佳实践，帮助你构建可维护、可扩展的容器化应用。</p>
+
+      <div class="tip-box">
+        <strong>核心价值</strong>：统一配置管理、一键启动/停止、服务依赖编排、网络自动配置、数据持久化。
+        </div>
+
+      <h2>一、基础结构</h2>
+
+      <h3>compose.yaml 文件结构</h3>
+
+      <pre><code># compose.yaml (或 docker-compose.yml)
+services:
+  web:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./html:/usr/share/nginx/html
+    depends_on:
+      - api
+  
+  api:
+    build: ./api
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+    depends_on:
+      - db
+  
+  db:
+    image: postgres:16-alpine
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: example
+
+volumes:
+  pgdata:
+
+networks:
+  default:
+    name: myapp-network</code></pre>
+
+      <h3>版本选择</h3>
+
+      <pre><code># 现代 Docker Compose 不需要 version 字段
+# 旧格式（已废弃）：
+# version: '3.8'
+
+# 当前最佳实践：直接定义 services
+services:
+  app:
+    image: myapp</code></pre>
+
+      <div class="warning-box">
+        <strong>注意</strong>：<code>version</code> 字段在 Docker Compose V2 中已废弃，不再需要指定。
+      </div>
+
+      <h2>二、服务定义最佳实践</h2>
+
+      <h3>1. 使用 build 而非 image（开发环境）</h3>
+
+      <pre><code>services:
+  app:
+    build:
+      context: ./app          # 构建上下文
+      dockerfile: Dockerfile  # Dockerfile 名称
+      args:
+        NODE_VERSION: 20      # 构建参数
+    ports:
+      - "3000:3000"</code></pre>
+
+      <h3>2. 合理命名服务</h3>
+
+      <pre><code># 使用清晰的服务名
+services:
+  frontend:      # 前端
+  backend-api:   # 后端 API
+  backend-worker: # 后台任务
+  database:      # 数据库
+  cache:         # 缓存
+  queue:         # 消息队列</code></pre>
+
+      <h3>3. 端口映射规范</h3>
+
+      <pre><code>services:
+  web:
+    ports:
+      # 格式："HOST_PORT:CONTAINER_PORT"
+      - "80:80"       # 标准 HTTP
+      - "443:443"     # 标准 HTTPS
+      
+      # 只指定容器端口（随机主机端口）
+      - "3000"
+      
+      # 指定 IP 和端口
+      - "127.0.0.1:8000:8000"  # 只本地访问</code></pre>
+
+      <div class="tip-box">
+        <strong>安全建议</strong>：数据库等服务只绑定到 127.0.0.1，避免外部访问：<code>- "127.0.0.1:5432:5432"</code>
+      </div>
+
+      <h2>三、网络配置</h2>
+
+      <h3>默认网络</h3>
+
+      <pre><code># 所有服务自动加入默认网络
+# 服务间可通过服务名互相访问
+services:
+  api:
+    # 可直接访问 db:5432
+  db:
+    # 可直接访问 api:3000</code></pre>
+
+      <h3>自定义网络</h3>
+
+      <pre><code>services:
+  frontend:
+    networks:
+      - public
+      
+  backend:
+    networks:
+      - public
+      - private
+      
+  database:
+    networks:
+      - private  # 只能被 backend 访问
+
+networks:
+  public:
+    name: app-public
+  private:
+    name: app-private
+    internal: true  # 无法访问外部网络</code></pre>
+
+      <h3>网络别名</h3>
+
+      <pre><code>services:
+  db:
+    networks:
+      default:
+        aliases:
+          - database
+          - postgres
+    # 其他服务可以用 db、database 或 postgres 访问</code></pre>
+
+      <h2>四、数据持久化</h2>
+
+      <h3>命名卷（推荐）</h3>
+
+      <pre><code>services:
+  db:
+    image: postgres:16
+    volumes:
+      - pgdata:/var/lib/postgresql/data  # 命名卷
+
+volumes:
+  pgdata:
+    name: myapp-pgdata  # 自定义名称</code></pre>
+
+      <h3>绑定挂载（开发环境）</h3>
+
+      <pre><code>services:
+  app:
+    volumes:
+      - ./src:/app/src          # 代码同步
+      - ./config:/app/config:ro # 只读配置
+      
+      # 匿名卷（临时数据）
+      - /app/tmp</code></pre>
+
+      <div class="warning-box">
+        <strong>生产环境警告</strong>：避免使用绑定挂载（<code>./path</code>），使用命名卷更可靠。
+      </div>
+
+      <h3>卷驱动配置</h3>
+
+      <pre><code>volumes:
+  pgdata:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /data/postgres</code></pre>
+
+      <h2>五、环境变量管理</h2>
+
+      <h3>方式一：直接定义</h3>
+
+      <pre><code>services:
+  app:
+    environment:
+      - NODE_ENV=production
+      - DEBUG=false</code></pre>
+
+      <h3>方式二：使用 env_file</h3>
+
+      <pre><code>services:
+  app:
+    env_file:
+      - .env              # 默认环境变量
+      - .env.production   # 生产环境覆盖
+      
+# .env 文件
+NODE_ENV=production
+DB_HOST=db
+DB_PORT=5432</code></pre>
+
+      <h3>方式三：从宿主机传递</h3>
+
+      <pre><code>services:
+  app:
+    environment:
+      - NODE_ENV=${NODE_ENV}  # 从宿主机 .env 读取
+      - API_KEY=${API_KEY:-default}  # 默认值</code></pre>
+
+      <div class="danger-box">
+        <strong>安全警告</strong>：敏感信息（密码、密钥）不要直接写在 compose.yaml，使用环境变量或 secrets。
+      </div>
+
+      <h2>六、健康检查</h2>
+
+      <pre><code>services:
+  web:
+    image: nginx
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost"]
+      interval: 30s      # 检查间隔
+      timeout: 10s       # 超时时间
+      retries: 3         # 重试次数
+      start_period: 40s  # 启动等待
+      
+  db:
+    image: postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5</code></pre>
+
+      <h3>依赖健康状态</h3>
+
+      <pre><code>services:
+  api:
+    depends_on:
+      db:
+        condition: service_healthy  # 等待 db 健康
+      cache:
+        condition: service_started  # 只等待启动</code></pre>
+
+      <h2>七、资源限制</h2>
+
+      <pre><code>services:
+  app:
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'      # 最大 CPU
+          memory: 512M     # 最大内存
+        reservations:
+          cpus: '0.25'     # 保留 CPU
+          memory: 256M     # 保留内存
+    
+    # 或使用旧格式（单容器）
+    mem_limit: 512m
+    cpus: 0.5</code></pre>
+
+      <h2>八、常用命令</h2>
+
+      <pre><code># 启动所有服务
+docker compose up -d
+
+# 停止所有服务
+docker compose down
+
+# 停止并删除卷
+docker compose down -v
+
+# 查看服务状态
+docker compose ps
+
+# 查看日志
+docker compose logs -f app
+
+# 进入容器
+docker compose exec app bash
+
+# 重新构建
+docker compose build --no-cache
+
+# 拉取所有镜像
+docker compose pull
+
+# 验证配置
+docker compose config
+
+# 查看服务进程
+docker compose top</code></pre>
+
+      <h2>九、多环境配置</h2>
+
+      <h3>使用多个 compose 文件</h3>
+
+      <pre><code># compose.yaml（基础配置）
+services:
+  app:
+    image: myapp
+    ports:
+      - "3000:3000"
+
+# compose.prod.yaml（生产覆盖）
+services:
+  app:
+    image: myapp:v1.0
+    environment:
+      - NODE_ENV=production
+    deploy:
+      replicas: 3
+
+# 启动生产环境
+docker compose -f compose.yaml -f compose.prod.yaml up -d</code></pre>
+
+      <h3>使用 override 文件</h3>
+
+      <pre><code># compose.override.yaml 自动合并
+# Docker Compose 自动加载 compose.yaml + compose.override.yaml
+
+services:
+  app:
+    build: ./app  # 开发环境本地构建
+    volumes:
+      - ./src:/app/src  # 代码热更新</code></pre>
+
+      <h2>十、最佳实践总结</h2>
+
+      <ul>
+        <li><strong>命名规范</strong>：服务名清晰、卷名带项目前缀</li>
+        <li><strong>网络隔离</strong>：数据库等服务使用内部网络</li>
+        <li><strong>健康检查</strong>：关键服务配置 healthcheck</li>
+        <li><strong>资源限制</strong>：防止容器占用过多资源</li>
+        <li><strong>环境变量</strong>：敏感信息用 .env 或 secrets</li>
+        <li><strong>数据持久化</strong>：生产环境用命名卷</li>
+        <li><strong>多环境</strong>：使用多个 compose 文件覆盖</li>
+        <li><strong>版本控制</strong>：compose.yaml 提交到 Git，.env 不提交</li>
+      </ul>

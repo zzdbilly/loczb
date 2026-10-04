@@ -280,6 +280,12 @@ def pure_python_markdown_to_html(md_text):
             output.append(s)
             continue
 
+        # 原生 HTML 块级标签与注释直通，防止嵌套出 <p><p>...</p></p>
+        if re.match(r'^</?(p|div|section|article|table|thead|tbody|tr|th|td|ul|ol|li|h[1-6]|blockquote|pre|figure|figcaption|hr|details|summary|canvas|svg)(\s|>|/|$)', s, re.IGNORECASE) or s.startswith('<!--'):
+            close_list()
+            output.append(s)
+            continue
+
         close_list()
         output.append(f'<p>{s}</p>')
 

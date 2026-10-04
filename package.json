@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "build": "node scripts/generate-index.js",
+    "build:posts": "python3 scripts/build-posts.py",
     "verify": "node scripts/verify.js",
     "check-links": "node scripts/check-links.js",
     "refresh": "python3 scripts/refresh-posts.py",

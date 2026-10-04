@@ -1,0 +1,463 @@
+---
+title: "MCP 协议深入实战：从入门到编写自定义 MCP Server"
+description: "3000字完整教程，从零搭建 MCP Server，涵盖协议核心、SDK 使用、调试技巧和生产部署最佳实践"
+date: 2026-06-30 11:24:15
+category: AI
+tags: ["AI", "MCP", "工具调用", "协议"]
+read_time: 14
+slug: mcp-server-deep-dive
+---
+
+<section>
+<h2>引言</h2>
+<p>2024 年底，Anthropic 开源的 <strong>Model Context Protocol (MCP)</strong> 迅速成为 AI 开发社区的热门话题。它定义了 AI 客户端与大模型之间标准化的工具调用和上下文交换协议，被业界称为"AI 领域的 USB-C 接口"。</p>
+<p>截至 2026 年中期，MCP 已经发展到了 <strong>v1.2</strong> 版本，获得了 OpenAI、Google、JetBrains 等主流厂商的官方支持。VS Code、Cursor、Windsurf、JetBrains IDE 等开发工具都已原生集成 MCP 协议。</p>
+<p>本文将带你从零开始构建一个完整的 MCP Server，涵盖协议核心概念、SDK 使用、调试技巧和生产部署的最佳实践。</p>
+</section>
+
+<section>
+<h2>MCP 协议核心概念</h2>
+
+<h3>协议架构</h3>
+<p>MCP 采用客户端-服务端架构，通信基于 JSON-RPC 2.0 协议：</p>
+<pre><code>┌─────────────────┐          JSON-RPC 2.0         ┌─────────────────┐
+│                 │  ════════════════════════       │                 │
+│  AI 客户端        │  ← request/response →         │  MCP Server     │
+│  (Cursor/IDE)    │  ← notification/event →        │  (自定义工具)     │
+│                 │                                │                 │
+└─────────────────┘                                └─────────────────┘</code></pre>
+
+<h3>核心概念</h3>
+<table>
+<thead><tr><th>概念</th><th>说明</th></tr></thead>
+<tbody>
+<tr><td><strong>Tool</strong></td><td>可被 LLM 调用的函数，类似 Function Calling</td></tr>
+<tr><td><strong>Resource</strong></td><td>可被读取的数据源（文件、API、数据库）</td></tr>
+<tr><td><strong>Prompt</strong></td><td>预定义的可复用提示词模板</td></tr>
+<tr><td><strong>Transport</strong></td><td>传输层，支持 stdio（本地）和 SSE（远程）</td></tr>
+<tr><td><strong>Session</strong></td><td>客户端与服务端之间的连接会话</td></tr>
+</tbody>
+</table>
+</section>
+
+<section>
+<h2>环境准备</h2>
+
+<h3>安装 MCP SDK</h3>
+<p>MCP 官方 SDK 支持 TypeScript 和 Python。我们以 TypeScript 为例：</p>
+<pre><code class="language-bash"># 创建项目
+mkdir my-mcp-server &amp;&amp; cd my-mcp-server
+npm init -y
+npm install @modelcontextprotocol/sdk zod
+
+# 也可以使用 pnpm
+pnpm add @modelcontextprotocol/sdk zod</code></pre>
+
+<h3>项目结构</h3>
+<pre><code>my-mcp-server/
+├── src/
+│   ├── index.ts          # 入口
+│   ├── tools/            # 工具实现
+│   │   ├── git.ts
+│   │   ├── weather.ts
+│   │   └── search.ts
+│   └── utils.ts          # 工具函数
+├── package.json
+├── tsconfig.json
+└── README.md</code></pre>
+</section>
+
+<section>
+<h2>编写第一个 MCP Server</h2>
+
+<h3>1. 基础骨架</h3>
+<pre><code class="language-typescript">import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+import { z } from "zod";
+
+// 创建 MCP Server 实例
+const server = new McpServer({
+  name: "my-tools",
+  version: "1.0.0",
+  description: "我的第一个 MCP 工具服务",
+});
+
+// 启动服务
+async function main() {
+  const transport = new StdioServerTransport();
+  await server.connect(transport);
+  console.error("MCP Server 已启动");
+}
+
+main().catch((error) => {
+  console.error("Fatal error:", error);
+  process.exit(1);
+});</code></pre>
+
+<h3>2. 注册工具（Tool）</h3>
+<p>Tool 是最核心的功能。让我们注册一个代码审查工具：</p>
+<pre><code class="language-typescript">server.tool(
+  "code-review",
+  "对指定代码进行自动化代码审查",
+  {
+    code: z.string().describe("待审查的代码"),
+    language: z.string().describe("编程语言，如 typescript, python, rust"),
+    severity: z.enum(["all", "error", "warning"]).default("all").describe("审查级别"),
+  },
+  async ({ code, language, severity }) => {
+    // 模拟代码审查逻辑
+    const issues = [];
+
+    if (code.includes("var ")) {
+      issues.push({ line: "N/A", type: "warning", message: `使用 let/const 替代 var` });
+    }
+    if (code.length > 500) {
+      issues.push({ line: "N/A", type: "warning", message: "函数过长，建议拆分为多个小函数" });
+    }
+    if (code.includes("console.log")) {
+      issues.push({ line: "N/A", type: "info", message: "生产环境建议移除 console.log" });
+    }
+    if (code.includes("any") &amp;&amp; language === "typescript") {
+      issues.push({ line: "N/A", type: "error", message: "避免使用 any 类型，改用具体类型" });
+    }
+
+    return {
+      content: [
+        {
+          type: "text",
+          text: JSON.stringify({
+            language,
+            totalIssues: issues.length,
+            issues: severity === "all" ? issues : issues.filter(i => i.type === severity),
+            score: Math.max(0, 100 - issues.length * 15),
+          }, null, 2),
+        },
+      ],
+    };
+  }
+);</code></pre>
+
+<h3>3. 添加 Resource（资源）</h3>
+<p>Resource 让 LLM 可以直接读取数据，类似可读的文件系统：</p>
+<pre><code class="language-typescript">server.resource(
+  "project-config",
+  "project://config",
+  {
+    description: "项目配置文件",
+    mimeType: "application/json",
+  },
+  async (uri) => ({
+    contents: [
+      {
+        uri: uri.href,
+        mimeType: "application/json",
+        text: JSON.stringify({
+          name: "my-project",
+          version: "2.0.0",
+          engines: { node: ">=18" },
+          scripts: {
+            dev: "vite",
+            build: "tsc &amp;&amp; vite build",
+            test: "vitest",
+          },
+        }, null, 2),
+      },
+    ],
+  })
+);</code></pre>
+
+<h3>4. 注册 Prompt 模板</h3>
+<p>Prompt 可以让用户一键生成高质量的上下文：</p>
+<pre><code class="language-typescript">server.prompt(
+  "commit-message",
+  "生成符合 Conventional Commits 规范的提交信息",
+  {
+    type: z.enum(["feat", "fix", "chore", "docs", "refactor", "test"]).describe("提交类型"),
+    scope: z.string().optional().describe("影响范围"),
+    description: z.string().describe("变更描述"),
+  },
+  ({ type, scope, description }) => ({
+    messages: [
+      {
+        role: "user",
+        content: {
+          type: "text",
+          text: `生成一个 Conventional Commits 提交信息:\n类型: ${type}\n范围: ${scope || "无"}\n描述: ${description}\n\n格式: &lt;type>(&lt;scope>): &lt;description>`,
+        },
+      },
+    ],
+  })
+);</code></pre>
+</section>
+
+<section>
+<h2>本地调试与测试</h2>
+
+<h3>方案一：MCP Inspector（官方调试工具）</h3>
+<pre><code class="language-bash"># 全局安装 MCP Inspector
+npx @modelcontextprotocol/inspector \
+  node dist/index.js
+
+# 或指定 Node 参数
+npx @modelcontextprotocol/inspector \
+  --env NODE_OPTIONS="--loader ts-node/esm" \
+  node src/index.ts</code></pre>
+<p>Inspector 提供 Web 界面，可以：</p>
+<ul>
+<li>列出所有注册的 Tool / Resource / Prompt</li>
+<li>手动调用工具并查看返回结果</li>
+<li>查看 JSON-RPC 通信日志</li>
+<li>模拟客户端连接行为</li>
+</ul>
+
+<h3>方案二：使用 curl 测试（自建 HTTP 服务）</h3>
+<p>如果使用 SSE Transport，可以直接用 curl 测试：</p>
+<pre><code class="language-bash"># 发送工具调用请求
+curl -X POST http://localhost:3000/mcp \
+  -H "Content-Type: application/json" \
+  -d '{
+    "jsonrpc": "2.0",
+    "id": 1,
+    "method": "tools/call",
+    "params": {
+      "name": "code-review",
+      "arguments": {
+        "code": "var x = 1",
+        "language": "typescript"
+      }
+    }
+  }'</code></pre>
+</section>
+
+<section>
+<h2>集成到 AI 客户端</h2>
+
+<h3>Cursor 配置</h3>
+<pre><code class="language-json">// .cursor/mcp.json
+{
+  "mcpServers": {
+    "my-tools": {
+      "command": "node",
+      "args": ["dist/index.js"],
+      "env": {
+        "NODE_ENV": "production"
+      }
+    }
+  }
+}</code></pre>
+
+<h3>VS Code 配置</h3>
+<pre><code class="language-json">// .vscode/mcp.json
+{
+  "servers": {
+    "my-tools": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["dist/index.js"]
+    }
+  }
+}</code></pre>
+
+<h3>Claude Desktop 配置</h3>
+<pre><code class="language-json">// claude_desktop_config.json
+{
+  "mcpServers": {
+    "my-tools": {
+      "command": "node",
+      "args": ["-e", "require('./dist/index.js')"],
+      "env": {}
+    }
+  }
+}</code></pre>
+</section>
+
+<section>
+<h2>高级模式：SSE Transport</h2>
+<p>本地开发常用 stdio，但生产环境需要远程调用。SSE（Server-Sent Events）Transport 支持远程连接：</p>
+
+<pre><code class="language-typescript">import express from "express";
+import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js";
+import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+
+const app = express();
+const server = new McpServer({
+  name: "remote-tools",
+  version: "1.0.0",
+});
+
+// SSE 端点
+app.get("/sse", async (req, res) => {
+  const transport = new SSEServerTransport("/messages", res);
+  await server.connect(transport);
+});
+
+// 消息端点
+app.post("/messages", async (req, res) => {
+  // 处理传入的 JSON-RPC 消息
+  res.json({ ok: true });
+});
+
+app.listen(3000);
+console.log("MCP Server (SSE) running on port 3000");</code></pre>
+</section>
+
+<section>
+<h2>生产部署最佳实践</h2>
+
+<h3>1. 日志与监控</h3>
+<ul>
+<li>所有 stderr 输出自动被客户端捕获，利用这个特性做日志</li>
+<li>推荐使用 <code>pino</code> 等结构化日志库</li>
+<li>监控调用次数、延迟、错误率</li>
+</ul>
+
+<h3>2. 输入验证</h3>
+<ul>
+<li>使用 Zod 进行严格的输入校验</li>
+<li>不要信任 LLM 传入的参数</li>
+<li>设置合理的超时和限流</li>
+</ul>
+
+<h3>3. 错误处理</h3>
+<pre><code class="language-typescript">server.tool(
+  "fetch-url",
+  "获取 URL 内容",
+  { url: z.string().url() },
+  async ({ url }) => {
+    try {
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+      const text = await response.text();
+      return { content: [{ type: "text", text }] };
+    } catch (error) {
+      return {
+        isError: true,
+        content: [{ type: "text", text: `错误: ${error.message}` }],
+      };
+    }
+  }
+);</code></pre>
+
+<h3>4. 安全审计</h3>
+<ul>
+<li>最小权限原则：只暴露必要的能力</li>
+<li>对文件系统操作添加路径白名单</li>
+<li>对网络请求限制 IP 和域名范围</li>
+<li>敏感操作添加二次确认（通过 Prompt）</li>
+</ul>
+
+<pre><code class="language-typescript">const ALLOWED_PATHS = ["/home/user/projects", "/tmp"];
+const ALLOWED_DOMAINS = ["api.github.com", "registry.npmjs.org"];
+
+server.tool(
+  "read-file",
+  "安全的文件读取",
+  {
+    path: z.string().refine(p => ALLOWED_PATHS.some(a => p.startsWith(a)), {
+      message: "路径不在白名单中",
+    }),
+  },
+  async ({ path }) => {
+    // 安全读取
+  }
+);</code></pre>
+</section>
+
+<section>
+<h2>实战案例：Git 工作流工具</h2>
+<p>让我们实现一个实用的 Git MCP Server：</p>
+
+<pre><code class="language-typescript">import { execSync } from "child_process";
+
+server.tool(
+  "git-log",
+  "查看最近 Git 提交记录",
+  {
+    count: z.number().min(1).max(50).default(10),
+    branch: z.string().optional(),
+  },
+  async ({ count, branch }) => {
+    const branchOpt = branch ? ` ${branch}` : "";
+    const output = execSync(`git log --oneline --max-count=${count}${branchOpt}`, {
+      encoding: "utf-8",
+    });
+    return {
+      content: [{ type: "text", text: output }],
+    };
+  }
+);
+
+server.tool(
+  "git-diff",
+  "查看文件变更差异",
+  {
+    file: z.string().optional(),
+    staged: z.boolean().default(false),
+  },
+  async ({ file, staged }) => {
+    const stagedOpt = staged ? "--staged" : "";
+    const fileOpt = file ? ` -- "${file}"` : "";
+    const output = execSync(`git diff ${stagedOpt}${fileOpt}`, {
+      encoding: "utf-8",
+    });
+    return {
+      content: [{ type: "text", text: output }],
+    };
+  }
+);</code></pre>
+</section>
+
+<section>
+<h2>常见问题与调试</h2>
+
+<table>
+<thead><tr><th>问题</th><th>原因</th><th>解决</th></tr></thead>
+<tbody>
+<tr>
+<td>Tool 返回空结果</td>
+<td>参数校验失败导致异常被吞</td>
+<td>检查 Zod schema 是否正确</td>
+</tr>
+<tr>
+<td>Client 连接后无响应</td>
+<td>Transport 未正确初始化</td>
+<td>确认走 stdio 还是 SSE，检查端口占用</td>
+</tr>
+<tr>
+<td>Tool 调用超时</td>
+<td>异步操作时间过长</td>
+<td>设置合理超时，或者将耗时操作拆分为多步</td>
+</tr>
+<tr>
+<td>类型错误</td>
+<td>参数类型与 Zod 定义不匹配</td>
+<td>LLM 可能生成错误类型，用 zod 做兜底解析</td>
+</tr>
+<tr>
+<td>SSE 连接断开</td>
+<td>HTTP 连接超时或代理问题</td>
+<td>开启 keep-alive，审查反向代理配置</td>
+</tr>
+</tbody>
+</table>
+</section>
+
+<section>
+<h2>总结</h2>
+<p>MCP 协议正在成为 AI 工具调用的标准协议，掌握 MCP Server 开发能力意味着能够：</p>
+<ul>
+<li>将任意业务逻辑暴露给 AI 客户端调用</li>
+<li>构建自定义的代码分析、CI/CD、运维工具链</li>
+<li>将私有数据源安全地接入 AI 工作流</li>
+</ul>
+<p>随着更多厂商接入 MCP 协议，它的生态系统会越来越丰富。现在开始编写自己的 MCP Server，就是为 AI 时代的工具生态做好准备。</p>
+
+<p><strong>相关阅读：</strong></p>
+<ul>
+<li><a href="https://modelcontextprotocol.io">MCP 官方文档</a></li>
+<li><a href="https://github.com/modelcontextprotocol">MCP GitHub 仓库</a></li>
+<li><a href="../posts/mcp-android-integration.html">MCP 协议在 Android 端的应用：AI 工具调用新范式</a></li>
+</ul>
+</section>

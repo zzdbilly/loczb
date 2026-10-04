@@ -29,32 +29,33 @@
       "description": "3000字完整教程，从零搭建 MCP Server，涵盖协议核心、SDK 使用、调试技巧和生产部署最佳实践",
       "image": "https://709527.xyz/assets/images/og-image.png",
       "author": {
-        "@type": "Person",
-        "name": "张小猛",
-        "url": "https://709527.xyz/about/"
+            "@type": "Person",
+            "name": "张小猛",
+            "url": "https://709527.xyz/about/"
       },
       "publisher": {
-        "@type": "Organization",
-        "name": "loczb",
-        "logo": {
-          "@type": "ImageObject",
-          "url": "https://709527.xyz/assets/images/favicon.svg"
-        }
+            "@type": "Organization",
+            "name": "loczb",
+            "logo": {
+                  "@type": "ImageObject",
+                  "url": "https://709527.xyz/assets/images/favicon.svg"
+            }
       },
       "datePublished": "2026-06-30T11:24:15+08:00",
       "dateModified": "2026-06-30T11:24:15+08:00",
       "url": "https://709527.xyz/blog/posts/mcp-server-deep-dive.html",
       "mainEntityOfPage": {
-        "@type": "WebPage",
-        "@id": "https://709527.xyz/blog/posts/mcp-server-deep-dive.html"
+            "@type": "WebPage",
+            "@id": "https://709527.xyz/blog/posts/mcp-server-deep-dive.html"
       },
       "keywords": "AI, MCP, 工具调用, 协议",
       "articleSection": "AI",
+      "timeRequired": "PT14M",
       "inLanguage": "zh-CN"
-    }
+}
     </script>
 
-    <link rel="stylesheet" href="../../assets/css/style.css?v=231fa9f71a">
+    <link rel="stylesheet" href="../../assets/css/style.css?v=27743e398e">
     <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
     <link rel="alternate icon" href="../../assets/images/favicon.ico">
     <link rel="canonical" href="https://709527.xyz/blog/posts/mcp-server-deep-dive.html">
@@ -161,19 +162,16 @@
 <p>截至 2026 年中期，MCP 已经发展到了 <strong>v1.2</strong> 版本，获得了 OpenAI、Google、JetBrains 等主流厂商的官方支持。VS Code、Cursor、Windsurf、JetBrains IDE 等开发工具都已原生集成 MCP 协议。</p>
 <p>本文将带你从零开始构建一个完整的 MCP Server，涵盖协议核心概念、SDK 使用、调试技巧和生产部署的最佳实践。</p>
 </section>
-
 <section>
 <h2>MCP 协议核心概念</h2>
-
 <h3>协议架构</h3>
 <p>MCP 采用客户端-服务端架构，通信基于 JSON-RPC 2.0 协议：</p>
 <pre><code>┌─────────────────┐          JSON-RPC 2.0         ┌─────────────────┐
-│                 │  ════════════════════════       │                 │
-│  AI 客户端        │  ← request/response →         │  MCP Server     │
-│  (Cursor/IDE)    │  ← notification/event →        │  (自定义工具)     │
-│                 │                                │                 │
-└─────────────────┘                                └─────────────────┘</code></pre>
-
+<p>│                 │  ════════════════════════       │                 │</p>
+<p>│  AI 客户端        │  ← request/response →         │  MCP Server     │</p>
+<p>│  (Cursor/IDE)    │  ← notification/event →        │  (自定义工具)     │</p>
+<p>│                 │                                │                 │</p>
+<p>└─────────────────┘                                └─────────────────┘</code></pre></p>
 <h3>核心概念</h3>
 <table>
 <thead><tr><th>概念</th><th>说明</th></tr></thead>
@@ -186,169 +184,152 @@
 </tbody>
 </table>
 </section>
-
 <section>
 <h2>环境准备</h2>
-
 <h3>安装 MCP SDK</h3>
 <p>MCP 官方 SDK 支持 TypeScript 和 Python。我们以 TypeScript 为例：</p>
 <pre><code class="language-bash"># 创建项目
-mkdir my-mcp-server &amp;&amp; cd my-mcp-server
-npm init -y
-npm install @modelcontextprotocol/sdk zod
-
-# 也可以使用 pnpm
-pnpm add @modelcontextprotocol/sdk zod</code></pre>
-
+<p>mkdir my-mcp-server &amp;&amp; cd my-mcp-server</p>
+<p>npm init -y</p>
+<p>npm install @modelcontextprotocol/sdk zod</p>
+<h1>也可以使用 pnpm</h1>
+<p>pnpm add @modelcontextprotocol/sdk zod</code></pre></p>
 <h3>项目结构</h3>
 <pre><code>my-mcp-server/
-├── src/
-│   ├── index.ts          # 入口
-│   ├── tools/            # 工具实现
-│   │   ├── git.ts
-│   │   ├── weather.ts
-│   │   └── search.ts
-│   └── utils.ts          # 工具函数
-├── package.json
-├── tsconfig.json
-└── README.md</code></pre>
+<p>├── src/</p>
+<p>│   ├── index.ts          # 入口</p>
+<p>│   ├── tools/            # 工具实现</p>
+<p>│   │   ├── git.ts</p>
+<p>│   │   ├── weather.ts</p>
+<p>│   │   └── search.ts</p>
+<p>│   └── utils.ts          # 工具函数</p>
+<p>├── package.json</p>
+<p>├── tsconfig.json</p>
+<p>└── README.md</code></pre></p>
 </section>
-
 <section>
 <h2>编写第一个 MCP Server</h2>
-
 <h3>1. 基础骨架</h3>
 <pre><code class="language-typescript">import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import { z } from "zod";
-
-// 创建 MCP Server 实例
-const server = new McpServer({
-  name: "my-tools",
-  version: "1.0.0",
-  description: "我的第一个 MCP 工具服务",
-});
-
-// 启动服务
-async function main() {
-  const transport = new StdioServerTransport();
-  await server.connect(transport);
-  console.error("MCP Server 已启动");
-}
-
-main().catch((error) => {
-  console.error("Fatal error:", error);
-  process.exit(1);
-});</code></pre>
-
+<p>import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";</p>
+<p>import { z } from "zod";</p>
+<p>// 创建 MCP Server 实例</p>
+<p>const server = new McpServer({</p>
+<p>name: "my-tools",</p>
+<p>version: "1.0.0",</p>
+<p>description: "我的第一个 MCP 工具服务",</p>
+<p>});</p>
+<p>// 启动服务</p>
+<p>async function main() {</p>
+<p>const transport = new StdioServerTransport();</p>
+<p>await server.connect(transport);</p>
+<p>console.error("MCP Server 已启动");</p>
+<p>}</p>
+<p>main().catch((error) => {</p>
+<p>console.error("Fatal error:", error);</p>
+<p>process.exit(1);</p>
+<p>});</code></pre></p>
 <h3>2. 注册工具（Tool）</h3>
 <p>Tool 是最核心的功能。让我们注册一个代码审查工具：</p>
 <pre><code class="language-typescript">server.tool(
-  "code-review",
-  "对指定代码进行自动化代码审查",
-  {
-    code: z.string().describe("待审查的代码"),
-    language: z.string().describe("编程语言，如 typescript, python, rust"),
-    severity: z.enum(["all", "error", "warning"]).default("all").describe("审查级别"),
-  },
-  async ({ code, language, severity }) => {
-    // 模拟代码审查逻辑
-    const issues = [];
-
-    if (code.includes("var ")) {
-      issues.push({ line: "N/A", type: "warning", message: `使用 let/const 替代 var` });
-    }
-    if (code.length > 500) {
-      issues.push({ line: "N/A", type: "warning", message: "函数过长，建议拆分为多个小函数" });
-    }
-    if (code.includes("console.log")) {
-      issues.push({ line: "N/A", type: "info", message: "生产环境建议移除 console.log" });
-    }
-    if (code.includes("any") &amp;&amp; language === "typescript") {
-      issues.push({ line: "N/A", type: "error", message: "避免使用 any 类型，改用具体类型" });
-    }
-
-    return {
-      content: [
-        {
-          type: "text",
-          text: JSON.stringify({
-            language,
-            totalIssues: issues.length,
-            issues: severity === "all" ? issues : issues.filter(i => i.type === severity),
-            score: Math.max(0, 100 - issues.length * 15),
-          }, null, 2),
-        },
-      ],
-    };
-  }
-);</code></pre>
-
+<p>"code-review",</p>
+<p>"对指定代码进行自动化代码审查",</p>
+<p>{</p>
+<p>code: z.string().describe("待审查的代码"),</p>
+<p>language: z.string().describe("编程语言，如 typescript, python, rust"),</p>
+<p>severity: z.enum(["all", "error", "warning"]).default("all").describe("审查级别"),</p>
+<p>},</p>
+<p>async ({ code, language, severity }) => {</p>
+<p>// 模拟代码审查逻辑</p>
+<p>const issues = [];</p>
+<p>if (code.includes("var ")) {</p>
+<p>issues.push({ line: "N/A", type: "warning", message: <strong>INLINE<em>CODE</em>0</strong> });</p>
+<p>}</p>
+<p>if (code.length > 500) {</p>
+<p>issues.push({ line: "N/A", type: "warning", message: "函数过长，建议拆分为多个小函数" });</p>
+<p>}</p>
+<p>if (code.includes("console.log")) {</p>
+<p>issues.push({ line: "N/A", type: "info", message: "生产环境建议移除 console.log" });</p>
+<p>}</p>
+<p>if (code.includes("any") &amp;&amp; language === "typescript") {</p>
+<p>issues.push({ line: "N/A", type: "error", message: "避免使用 any 类型，改用具体类型" });</p>
+<p>}</p>
+<p>return {</p>
+<p>content: [</p>
+<p>{</p>
+<p>type: "text",</p>
+<p>text: JSON.stringify({</p>
+<p>language,</p>
+<p>totalIssues: issues.length,</p>
+<p>issues: severity === "all" ? issues : issues.filter(i => i.type === severity),</p>
+<p>score: Math.max(0, 100 - issues.length * 15),</p>
+<p>}, null, 2),</p>
+<p>},</p>
+<p>],</p>
+<p>};</p>
+<p>}</p>
+<p>);</code></pre></p>
 <h3>3. 添加 Resource（资源）</h3>
 <p>Resource 让 LLM 可以直接读取数据，类似可读的文件系统：</p>
 <pre><code class="language-typescript">server.resource(
-  "project-config",
-  "project://config",
-  {
-    description: "项目配置文件",
-    mimeType: "application/json",
-  },
-  async (uri) => ({
-    contents: [
-      {
-        uri: uri.href,
-        mimeType: "application/json",
-        text: JSON.stringify({
-          name: "my-project",
-          version: "2.0.0",
-          engines: { node: ">=18" },
-          scripts: {
-            dev: "vite",
-            build: "tsc &amp;&amp; vite build",
-            test: "vitest",
-          },
-        }, null, 2),
-      },
-    ],
-  })
-);</code></pre>
-
+<p>"project-config",</p>
+<p>"project://config",</p>
+<p>{</p>
+<p>description: "项目配置文件",</p>
+<p>mimeType: "application/json",</p>
+<p>},</p>
+<p>async (uri) => ({</p>
+<p>contents: [</p>
+<p>{</p>
+<p>uri: uri.href,</p>
+<p>mimeType: "application/json",</p>
+<p>text: JSON.stringify({</p>
+<p>name: "my-project",</p>
+<p>version: "2.0.0",</p>
+<p>engines: { node: ">=18" },</p>
+<p>scripts: {</p>
+<p>dev: "vite",</p>
+<p>build: "tsc &amp;&amp; vite build",</p>
+<p>test: "vitest",</p>
+<p>},</p>
+<p>}, null, 2),</p>
+<p>},</p>
+<p>],</p>
+<p>})</p>
+<p>);</code></pre></p>
 <h3>4. 注册 Prompt 模板</h3>
 <p>Prompt 可以让用户一键生成高质量的上下文：</p>
 <pre><code class="language-typescript">server.prompt(
-  "commit-message",
-  "生成符合 Conventional Commits 规范的提交信息",
-  {
-    type: z.enum(["feat", "fix", "chore", "docs", "refactor", "test"]).describe("提交类型"),
-    scope: z.string().optional().describe("影响范围"),
-    description: z.string().describe("变更描述"),
-  },
-  ({ type, scope, description }) => ({
-    messages: [
-      {
-        role: "user",
-        content: {
-          type: "text",
-          text: `生成一个 Conventional Commits 提交信息:\n类型: ${type}\n范围: ${scope || "无"}\n描述: ${description}\n\n格式: &lt;type>(&lt;scope>): &lt;description>`,
-        },
-      },
-    ],
-  })
-);</code></pre>
+<p>"commit-message",</p>
+<p>"生成符合 Conventional Commits 规范的提交信息",</p>
+<p>{</p>
+<p>type: z.enum(["feat", "fix", "chore", "docs", "refactor", "test"]).describe("提交类型"),</p>
+<p>scope: z.string().optional().describe("影响范围"),</p>
+<p>description: z.string().describe("变更描述"),</p>
+<p>},</p>
+<p>({ type, scope, description }) => ({</p>
+<p>messages: [</p>
+<p>{</p>
+<p>role: "user",</p>
+<p>content: {</p>
+<p>type: "text",</p>
+<p>text: <strong>INLINE<em>CODE</em>1</strong>,</p>
+<p>},</p>
+<p>},</p>
+<p>],</p>
+<p>})</p>
+<p>);</code></pre></p>
 </section>
-
 <section>
 <h2>本地调试与测试</h2>
-
 <h3>方案一：MCP Inspector（官方调试工具）</h3>
 <pre><code class="language-bash"># 全局安装 MCP Inspector
-npx @modelcontextprotocol/inspector \
-  node dist/index.js
-
-# 或指定 Node 参数
-npx @modelcontextprotocol/inspector \
-  --env NODE_OPTIONS="--loader ts-node/esm" \
-  node src/index.ts</code></pre>
+<p>npx @modelcontextprotocol/inspector \</p>
+<p>node dist/index.js</p>
+<h1>或指定 Node 参数</h1>
+<p>npx @modelcontextprotocol/inspector \</p>
+<p>--env NODE_OPTIONS="--loader ts-node/esm" \</p>
+<p>node src/index.ts</code></pre></p>
 <p>Inspector 提供 Web 界面，可以：</p>
 <ul>
 <li>列出所有注册的 Tool / Resource / Prompt</li>
@@ -356,137 +337,121 @@ npx @modelcontextprotocol/inspector \
 <li>查看 JSON-RPC 通信日志</li>
 <li>模拟客户端连接行为</li>
 </ul>
-
 <h3>方案二：使用 curl 测试（自建 HTTP 服务）</h3>
 <p>如果使用 SSE Transport，可以直接用 curl 测试：</p>
 <pre><code class="language-bash"># 发送工具调用请求
-curl -X POST http://localhost:3000/mcp \
-  -H "Content-Type: application/json" \
-  -d '{
-    "jsonrpc": "2.0",
-    "id": 1,
-    "method": "tools/call",
-    "params": {
-      "name": "code-review",
-      "arguments": {
-        "code": "var x = 1",
-        "language": "typescript"
-      }
-    }
-  }'</code></pre>
+<p>curl -X POST http://localhost:3000/mcp \</p>
+<p>-H "Content-Type: application/json" \</p>
+<p>-d '{</p>
+<p>"jsonrpc": "2.0",</p>
+<p>"id": 1,</p>
+<p>"method": "tools/call",</p>
+<p>"params": {</p>
+<p>"name": "code-review",</p>
+<p>"arguments": {</p>
+<p>"code": "var x = 1",</p>
+<p>"language": "typescript"</p>
+<p>}</p>
+<p>}</p>
+<p>}'</code></pre></p>
 </section>
-
 <section>
 <h2>集成到 AI 客户端</h2>
-
 <h3>Cursor 配置</h3>
 <pre><code class="language-json">// .cursor/mcp.json
-{
-  "mcpServers": {
-    "my-tools": {
-      "command": "node",
-      "args": ["dist/index.js"],
-      "env": {
-        "NODE_ENV": "production"
-      }
-    }
-  }
-}</code></pre>
-
+<p>{</p>
+<p>"mcpServers": {</p>
+<p>"my-tools": {</p>
+<p>"command": "node",</p>
+<p>"args": ["dist/index.js"],</p>
+<p>"env": {</p>
+<p>"NODE_ENV": "production"</p>
+<p>}</p>
+<p>}</p>
+<p>}</p>
+<p>}</code></pre></p>
 <h3>VS Code 配置</h3>
 <pre><code class="language-json">// .vscode/mcp.json
-{
-  "servers": {
-    "my-tools": {
-      "type": "stdio",
-      "command": "node",
-      "args": ["dist/index.js"]
-    }
-  }
-}</code></pre>
-
+<p>{</p>
+<p>"servers": {</p>
+<p>"my-tools": {</p>
+<p>"type": "stdio",</p>
+<p>"command": "node",</p>
+<p>"args": ["dist/index.js"]</p>
+<p>}</p>
+<p>}</p>
+<p>}</code></pre></p>
 <h3>Claude Desktop 配置</h3>
-<pre><code class="language-json">// claude_desktop_config.json
-{
-  "mcpServers": {
-    "my-tools": {
-      "command": "node",
-      "args": ["-e", "require('./dist/index.js')"],
-      "env": {}
-    }
-  }
-}</code></pre>
+<pre><code class="language-json">// claude<em>desktop</em>config.json
+<p>{</p>
+<p>"mcpServers": {</p>
+<p>"my-tools": {</p>
+<p>"command": "node",</p>
+<p>"args": ["-e", "require('./dist/index.js')"],</p>
+<p>"env": {}</p>
+<p>}</p>
+<p>}</p>
+<p>}</code></pre></p>
 </section>
-
 <section>
 <h2>高级模式：SSE Transport</h2>
 <p>本地开发常用 stdio，但生产环境需要远程调用。SSE（Server-Sent Events）Transport 支持远程连接：</p>
-
 <pre><code class="language-typescript">import express from "express";
-import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js";
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-
-const app = express();
-const server = new McpServer({
-  name: "remote-tools",
-  version: "1.0.0",
-});
-
-// SSE 端点
-app.get("/sse", async (req, res) => {
-  const transport = new SSEServerTransport("/messages", res);
-  await server.connect(transport);
-});
-
-// 消息端点
-app.post("/messages", async (req, res) => {
-  // 处理传入的 JSON-RPC 消息
-  res.json({ ok: true });
-});
-
-app.listen(3000);
-console.log("MCP Server (SSE) running on port 3000");</code></pre>
+<p>import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js";</p>
+<p>import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";</p>
+<p>const app = express();</p>
+<p>const server = new McpServer({</p>
+<p>name: "remote-tools",</p>
+<p>version: "1.0.0",</p>
+<p>});</p>
+<p>// SSE 端点</p>
+<p>app.get("/sse", async (req, res) => {</p>
+<p>const transport = new SSEServerTransport("/messages", res);</p>
+<p>await server.connect(transport);</p>
+<p>});</p>
+<p>// 消息端点</p>
+<p>app.post("/messages", async (req, res) => {</p>
+<p>// 处理传入的 JSON-RPC 消息</p>
+<p>res.json({ ok: true });</p>
+<p>});</p>
+<p>app.listen(3000);</p>
+<p>console.log("MCP Server (SSE) running on port 3000");</code></pre></p>
 </section>
-
 <section>
 <h2>生产部署最佳实践</h2>
-
 <h3>1. 日志与监控</h3>
 <ul>
 <li>所有 stderr 输出自动被客户端捕获，利用这个特性做日志</li>
 <li>推荐使用 <code>pino</code> 等结构化日志库</li>
 <li>监控调用次数、延迟、错误率</li>
 </ul>
-
 <h3>2. 输入验证</h3>
 <ul>
 <li>使用 Zod 进行严格的输入校验</li>
 <li>不要信任 LLM 传入的参数</li>
 <li>设置合理的超时和限流</li>
 </ul>
-
 <h3>3. 错误处理</h3>
 <pre><code class="language-typescript">server.tool(
-  "fetch-url",
-  "获取 URL 内容",
-  { url: z.string().url() },
-  async ({ url }) => {
-    try {
-      const response = await fetch(url);
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}`);
-      }
-      const text = await response.text();
-      return { content: [{ type: "text", text }] };
-    } catch (error) {
-      return {
-        isError: true,
-        content: [{ type: "text", text: `错误: ${error.message}` }],
-      };
-    }
-  }
-);</code></pre>
-
+<p>"fetch-url",</p>
+<p>"获取 URL 内容",</p>
+<p>{ url: z.string().url() },</p>
+<p>async ({ url }) => {</p>
+<p>try {</p>
+<p>const response = await fetch(url);</p>
+<p>if (!response.ok) {</p>
+<p>throw new Error(<strong>INLINE<em>CODE</em>2</strong>);</p>
+<p>}</p>
+<p>const text = await response.text();</p>
+<p>return { content: [{ type: "text", text }] };</p>
+<p>} catch (error) {</p>
+<p>return {</p>
+<p>isError: true,</p>
+<p>content: [{ type: "text", text: <strong>INLINE<em>CODE</em>3</strong> }],</p>
+<p>};</p>
+<p>}</p>
+<p>}</p>
+<p>);</code></pre></p>
 <h3>4. 安全审计</h3>
 <ul>
 <li>最小权限原则：只暴露必要的能力</li>
@@ -494,71 +459,63 @@ console.log("MCP Server (SSE) running on port 3000");</code></pre>
 <li>对网络请求限制 IP 和域名范围</li>
 <li>敏感操作添加二次确认（通过 Prompt）</li>
 </ul>
-
 <pre><code class="language-typescript">const ALLOWED_PATHS = ["/home/user/projects", "/tmp"];
-const ALLOWED_DOMAINS = ["api.github.com", "registry.npmjs.org"];
-
-server.tool(
-  "read-file",
-  "安全的文件读取",
-  {
-    path: z.string().refine(p => ALLOWED_PATHS.some(a => p.startsWith(a)), {
-      message: "路径不在白名单中",
-    }),
-  },
-  async ({ path }) => {
-    // 安全读取
-  }
-);</code></pre>
+<p>const ALLOWED_DOMAINS = ["api.github.com", "registry.npmjs.org"];</p>
+<p>server.tool(</p>
+<p>"read-file",</p>
+<p>"安全的文件读取",</p>
+<p>{</p>
+<p>path: z.string().refine(p => ALLOWED_PATHS.some(a => p.startsWith(a)), {</p>
+<p>message: "路径不在白名单中",</p>
+<p>}),</p>
+<p>},</p>
+<p>async ({ path }) => {</p>
+<p>// 安全读取</p>
+<p>}</p>
+<p>);</code></pre></p>
 </section>
-
 <section>
 <h2>实战案例：Git 工作流工具</h2>
 <p>让我们实现一个实用的 Git MCP Server：</p>
-
 <pre><code class="language-typescript">import { execSync } from "child_process";
-
-server.tool(
-  "git-log",
-  "查看最近 Git 提交记录",
-  {
-    count: z.number().min(1).max(50).default(10),
-    branch: z.string().optional(),
-  },
-  async ({ count, branch }) => {
-    const branchOpt = branch ? ` ${branch}` : "";
-    const output = execSync(`git log --oneline --max-count=${count}${branchOpt}`, {
-      encoding: "utf-8",
-    });
-    return {
-      content: [{ type: "text", text: output }],
-    };
-  }
-);
-
-server.tool(
-  "git-diff",
-  "查看文件变更差异",
-  {
-    file: z.string().optional(),
-    staged: z.boolean().default(false),
-  },
-  async ({ file, staged }) => {
-    const stagedOpt = staged ? "--staged" : "";
-    const fileOpt = file ? ` -- "${file}"` : "";
-    const output = execSync(`git diff ${stagedOpt}${fileOpt}`, {
-      encoding: "utf-8",
-    });
-    return {
-      content: [{ type: "text", text: output }],
-    };
-  }
-);</code></pre>
+<p>server.tool(</p>
+<p>"git-log",</p>
+<p>"查看最近 Git 提交记录",</p>
+<p>{</p>
+<p>count: z.number().min(1).max(50).default(10),</p>
+<p>branch: z.string().optional(),</p>
+<p>},</p>
+<p>async ({ count, branch }) => {</p>
+<p>const branchOpt = branch ? <strong>INLINE<em>CODE</em>4</strong> : "";</p>
+<p>const output = execSync(<strong>INLINE<em>CODE</em>5</strong>, {</p>
+<p>encoding: "utf-8",</p>
+<p>});</p>
+<p>return {</p>
+<p>content: [{ type: "text", text: output }],</p>
+<p>};</p>
+<p>}</p>
+<p>);</p>
+<p>server.tool(</p>
+<p>"git-diff",</p>
+<p>"查看文件变更差异",</p>
+<p>{</p>
+<p>file: z.string().optional(),</p>
+<p>staged: z.boolean().default(false),</p>
+<p>},</p>
+<p>async ({ file, staged }) => {</p>
+<p>const stagedOpt = staged ? "--staged" : "";</p>
+<p>const fileOpt = file ? <strong>INLINE<em>CODE</em>6</strong> : "";</p>
+<p>const output = execSync(<strong>INLINE<em>CODE</em>7</strong>, {</p>
+<p>encoding: "utf-8",</p>
+<p>});</p>
+<p>return {</p>
+<p>content: [{ type: "text", text: output }],</p>
+<p>};</p>
+<p>}</p>
+<p>);</code></pre></p>
 </section>
-
 <section>
 <h2>常见问题与调试</h2>
-
 <table>
 <thead><tr><th>问题</th><th>原因</th><th>解决</th></tr></thead>
 <tbody>
@@ -590,7 +547,6 @@ server.tool(
 </tbody>
 </table>
 </section>
-
 <section>
 <h2>总结</h2>
 <p>MCP 协议正在成为 AI 工具调用的标准协议，掌握 MCP Server 开发能力意味着能够：</p>
@@ -600,7 +556,6 @@ server.tool(
 <li>将私有数据源安全地接入 AI 工作流</li>
 </ul>
 <p>随着更多厂商接入 MCP 协议，它的生态系统会越来越丰富。现在开始编写自己的 MCP Server，就是为 AI 时代的工具生态做好准备。</p>
-
 <p><strong>相关阅读：</strong></p>
 <ul>
 <li><a href="https://modelcontextprotocol.io">MCP 官方文档</a></li>
@@ -618,7 +573,7 @@ server.tool(
             <div class="related-post-card-tags"><span>Android</span><span>MCP</span><span>AI</span></div>
           </a>
           <a class="related-post-card" href="当-ai-编程-agent-有了眼睛safari-mcp-server-深度解读.html">
-            <div class="related-post-card-title">当 AI 编程 Agent 有了&quot;眼睛&quot;：Safari MCP Server 深度解读</div>
+            <div class="related-post-card-title">当 AI 编程 Agent 有了\&quot;眼睛\&quot;：Safari MCP Server 深度解读</div>
             <div class="related-post-card-tags"><span>AI</span><span>MCP</span><span>WebKit</span></div>
           </a>
           <a class="related-post-card" href="agentic-ai-架构演进从-chatbot-到自主-agent.html">
@@ -761,7 +716,7 @@ server.tool(
         <div class="post-info-label">文章信息</div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📅</span> 发布日期</span><span class="post-info-stat-value">2026-06-30</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">⏱️</span> 阅读时间</span><span class="post-info-stat-value">14 min read</span></div>
-        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">1899 字</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">1857 字</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📊</span> 章节数</span><span class="post-info-stat-value">11 节 · 17 子节</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">💻</span> 代码块</span><span class="post-info-stat-value">16 段</span></div>
       </div>

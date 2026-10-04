@@ -50,12 +50,12 @@
       },
       "keywords": "Rust, TIOBE, 系统编程, 编程语言",
       "articleSection": "系统编程",
-      "timeRequired": "PT5M",
+      "timeRequired": "PT11M",
       "inLanguage": "zh-CN"
 }
     </script>
 
-    <link rel="stylesheet" href="../../assets/css/style.css?v=231fa9f71a">
+    <link rel="stylesheet" href="../../assets/css/style.css?v=27743e398e">
     <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
     <link rel="alternate icon" href="../../assets/images/favicon.ico">
     <link rel="canonical" href="https://709527.xyz/blog/posts/rust-入局2026-年的生态全景.html">
@@ -117,7 +117,7 @@
 
         <div class="post-meta">
           <span class="meta-item"><span aria-hidden="true">📅</span> 2026-07-19 18:48:21</span>
-          <span class="meta-item"><span aria-hidden="true">⏱️</span> 5 min read</span>
+          <span class="meta-item"><span aria-hidden="true">⏱️</span> 11 min read</span>
           <span class="meta-item"><span aria-hidden="true">👤</span> 张小猛</span>
         </div>
 
@@ -188,48 +188,50 @@
 <h3>基础设施的不可逆迁移</h3>
 <p>过去几年，一批重量级项目用 Rust 重写了核心组件：</p>
 <pre><code class="language-bash"># 2026 年的基础设施栈
-- Linux 内核：30+ 个 Rust 模块
-- Android：500 万+ 行 Rust 代码
-- Cloudflare Pingora：替代 Nginx
-- Discord：Go → Rust 重写关键路径
-- Firefox：CSS 引擎 Servo（Rust）
-- Google：Chrome 中的 QUIC 实现
-</code></pre>
+<ul>
+<li>Linux 内核：30+ 个 Rust 模块</li>
+<li>Android：500 万+ 行 Rust 代码</li>
+<li>Cloudflare Pingora：替代 Nginx</li>
+<li>Discord：Go → Rust 重写关键路径</li>
+<li>Firefox：CSS 引擎 Servo（Rust）</li>
+<li>Google：Chrome 中的 QUIC 实现</li>
+</ul>
+<p></code></pre></p>
 <p>这些迁移一旦完成，就没有回头路了。它们为 Rust 提供了稳定的「基座」用户群。</p>
 <h2>语言本体的进化</h2>
 <p>2026 年的 Rust 语言本身已经和 2023 年大不相同。</p>
 <h3>trait 和异步的成熟</h3>
 <p>Rust 2024 Edition 带来的改进完全落地。最大的变化是异步生态：</p>
 <pre><code class="language-rust">// 2026：trait 原生支持异步
-trait DataProcessor {
-    async fn process(&amp;self, input: &amp;[u8]) -&gt; Result&lt;Vec&lt;u8&gt;, Error&gt;;
-    async fn stream(&amp;self) -&gt; impl AsyncIterator&lt;Item = Vec&lt;u8&gt;&gt;;
-}
-</code></pre>
+<p>trait DataProcessor {</p>
+<p>async fn process(&amp;self, input: &amp;[u8]) -&gt; Result&lt;Vec&lt;u8&gt;, Error&gt;;</p>
+<p>async fn stream(&amp;self) -&gt; impl AsyncIterator&lt;Item = Vec&lt;u8&gt;&gt;;</p>
+<p>}</p>
+<p></code></pre></p>
 <p>不再需要 <code>#[async_trait]</code> 外部 crate，编译器原生支持异步 trait 方法。<code>AsyncIterator</code> trait 也已稳定，异步流处理变得和同步迭代一样自然。</p>
 <p><code>impl Trait</code> 在返回值位置的能力增强：</p>
 <pre><code class="language-rust">// 2026：返回复杂泛型类型不再需要 Box
-fn build_pipeline() -&gt; impl Pipeline&lt;Input = String, Output = Result&lt;Vec&lt;u8&gt;, Error&gt;&gt; + Send + Sync {
-    Compose::new()
-        .add(ParseStage::new())
-        .add(TransformStage::new())
-        .add(EncodeStage::new())
-}
-</code></pre>
+<p>fn build_pipeline() -&gt; impl Pipeline&lt;Input = String, Output = Result&lt;Vec&lt;u8&gt;, Error&gt;&gt; + Send + Sync {</p>
+<p>Compose::new()</p>
+<p>.add(ParseStage::new())</p>
+<p>.add(TransformStage::new())</p>
+<p>.add(EncodeStage::new())</p>
+<p>}</p>
+<p></code></pre></p>
 <h3>特化的有限落地</h3>
 <p>RFC 3623 在标准库内部启用了有限特化。用户层面最直观的感受是：<code>Vec::sort</code> 现在能根据元素类型自动选择最优排序算法。</p>
 <pre><code class="language-rust">let mut numbers = vec![3, 1, 4, 1, 5, 9, 2, 6];
-numbers.sort(); // 对于整数，自动使用基数排序
-</code></pre>
+<p>numbers.sort(); // 对于整数，自动使用基数排序</p>
+<p></code></pre></p>
 <p>这在性能敏感场景下能节省约 30% 的排序时间。</p>
 <h3>编译速度的改善</h3>
 <p>编译速度一直 Rust 的痛点。2026 年的改善是实质性的：</p>
 <pre><code class="language-toml"># Cargo.toml：2026 年的编译器优化选项
-[profile.release]
-lto = &quot;thin&quot;    # thin LTO 现在是默认推荐
-codegen-units = 16
-pgo = true      # 原生 PGO 支持
-</code></pre>
+<p>[profile.release]</p>
+<p>lto = &quot;thin&quot;    # thin LTO 现在是默认推荐</p>
+<p>codegen-units = 16</p>
+<p>pgo = true      # 原生 PGO 支持</p>
+<p></code></pre></p>
 <ul>
 <li>并行前端：解析和类型检查可以多线程执行</li>
 <li>增量编译：跟踪文件粒度依赖变化</li>
@@ -247,18 +249,17 @@ pgo = true      # 原生 PGO 支持
 </ul>
 <p>tower 中间件栈已经成为 Rust 异步网络的事实标准：</p>
 <pre><code class="language-rust">use tower::{ServiceBuilder, ServiceExt};
-use tower_http::{
-    cors::CorsLayer,
-    trace::TraceLayer,
-    compression::CompressionLayer,
-};
-
-let service = ServiceBuilder::new()
-    .layer(TraceLayer::new_for_http())
-    .layer(CorsLayer::permissive())
-    .layer(CompressionLayer::new())
-    .service(handle_request);
-</code></pre>
+<p>use tower_http::{</p>
+<p>cors::CorsLayer,</p>
+<p>trace::TraceLayer,</p>
+<p>compression::CompressionLayer,</p>
+<p>};</p>
+<p>let service = ServiceBuilder::new()</p>
+<p>.layer(TraceLayer::new<em>for</em>http())</p>
+<p>.layer(CorsLayer::permissive())</p>
+<p>.layer(CompressionLayer::new())</p>
+<p>.service(handle_request);</p>
+<p></code></pre></p>
 <h3>Web 框架格局</h3>
 <p>2026 年 Rust Web 框架的生态已经相当成熟：</p>
 <table>
@@ -294,170 +295,151 @@ let service = ServiceBuilder::new()
 </table>
 <p>axum 在 2026 年已经成为 Rust Web 开发的第一选择。它的 <code>tower::Service</code> 设计让中间件链非常优雅：</p>
 <pre><code class="language-rust">use axum::{
-    Router, routing::get,
-    response::Json,
-    extract::State,
-};
-use serde::Serialize;
-
-#[derive(Serialize)]
-struct HealthResponse {
-    status: String,
-    version: String,
-}
-
-#[derive(Clone)]
-struct AppState {
-    db: sqlx::PgPool,
-}
-
-async fn health_check(
-    State(state): State&lt;AppState&gt;,
-) -&gt; Json&lt;HealthResponse&gt; {
-    // 检查数据库连接
-    sqlx::query(&quot;SELECT 1&quot;).execute(&amp;state.db).await.unwrap();
-    Json(HealthResponse {
-        status: &quot;ok&quot;.into(),
-        version: env!(&quot;CARGO_PKG_VERSION&quot;).into(),
-    })
-}
-
-#[tokio::main]
-async fn main() {
-    let pool = sqlx::PgPool::connect(&amp;std::env::var(&quot;DATABASE_URL&quot;).unwrap())
-        .await.unwrap();
-
-    let app = Router::new()
-        .route(&quot;/health&quot;, get(health_check))
-        .with_state(pool);
-
-    let listener = tokio::net::TcpListener::bind(&quot;0.0.0.0:3000&quot;).await.unwrap();
-    axum::serve(listener, app).await.unwrap();
-}
-</code></pre>
+<p>Router, routing::get,</p>
+<p>response::Json,</p>
+<p>extract::State,</p>
+<p>};</p>
+<p>use serde::Serialize;</p>
+<p>#[derive(Serialize)]</p>
+<p>struct HealthResponse {</p>
+<p>status: String,</p>
+<p>version: String,</p>
+<p>}</p>
+<p>#[derive(Clone)]</p>
+<p>struct AppState {</p>
+<p>db: sqlx::PgPool,</p>
+<p>}</p>
+<p>async fn health_check(</p>
+<p>State(state): State&lt;AppState&gt;,</p>
+<p>) -&gt; Json&lt;HealthResponse&gt; {</p>
+<p>// 检查数据库连接</p>
+<p>sqlx::query(&quot;SELECT 1&quot;).execute(&amp;state.db).await.unwrap();</p>
+<p>Json(HealthResponse {</p>
+<p>status: &quot;ok&quot;.into(),</p>
+<p>version: env!(&quot;CARGO<em>PKG</em>VERSION&quot;).into(),</p>
+<p>})</p>
+<p>}</p>
+<p>#[tokio::main]</p>
+<p>async fn main() {</p>
+<p>let pool = sqlx::PgPool::connect(&amp;std::env::var(&quot;DATABASE_URL&quot;).unwrap())</p>
+<p>.await.unwrap();</p>
+<p>let app = Router::new()</p>
+<p>.route(&quot;/health&quot;, get(health_check))</p>
+<p>.with_state(pool);</p>
+<p>let listener = tokio::net::TcpListener::bind(&quot;0.0.0.0:3000&quot;).await.unwrap();</p>
+<p>axum::serve(listener, app).await.unwrap();</p>
+<p>}</p>
+<p></code></pre></p>
 <h3>数据库生态</h3>
 <p>2026 年的 Rust 数据库生态不再是短板：</p>
 <pre><code class="language-rust">use sqlx::postgres::PgPoolOptions;
-use serde::{Serialize, Deserialize};
-
-#[derive(Debug, Serialize, Deserialize, sqlx::FromRow)]
-struct User {
-    id: i64,
-    name: String,
-    email: String,
-}
-
-async fn get_user(pool: &amp;PgPool, user_id: i64) -&gt; Result&lt;User, sqlx::Error&gt; {
-    sqlx::query_as::&lt;_, User&gt;(
-        &quot;SELECT id, name, email FROM users WHERE id = $1&quot;
-    )
-    .bind(user_id)
-    .fetch_one(pool)
-    .await
-}
-
-async fn create_user(pool: &amp;PgPool, name: &amp;str, email: &amp;str) -&gt; Result&lt;User, sqlx::Error&gt; {
-    sqlx::query_as::&lt;_, User&gt;(
-        &quot;INSERT INTO users (name, email) VALUES ($1, $2) RETURNING id, name, email&quot;
-    )
-    .bind(name)
-    .bind(email)
-    .fetch_one(pool)
-    .await
-}
-</code></pre>
+<p>use serde::{Serialize, Deserialize};</p>
+<p>#[derive(Debug, Serialize, Deserialize, sqlx::FromRow)]</p>
+<p>struct User {</p>
+<p>id: i64,</p>
+<p>name: String,</p>
+<p>email: String,</p>
+<p>}</p>
+<p>async fn get<em>user(pool: &amp;PgPool, user</em>id: i64) -&gt; Result&lt;User, sqlx::Error&gt; {</p>
+<p>sqlx::query<em>as::&lt;</em>, User&gt;(</p>
+<p>&quot;SELECT id, name, email FROM users WHERE id = $1&quot;</p>
+<p>)</p>
+<p>.bind(user_id)</p>
+<p>.fetch_one(pool)</p>
+<p>.await</p>
+<p>}</p>
+<p>async fn create_user(pool: &amp;PgPool, name: &amp;str, email: &amp;str) -&gt; Result&lt;User, sqlx::Error&gt; {</p>
+<p>sqlx::query<em>as::&lt;</em>, User&gt;(</p>
+<p>&quot;INSERT INTO users (name, email) VALUES ($1, $2) RETURNING id, name, email&quot;</p>
+<p>)</p>
+<p>.bind(name)</p>
+<p>.bind(email)</p>
+<p>.fetch_one(pool)</p>
+<p>.await</p>
+<p>}</p>
+<p></code></pre></p>
 <p>sqlx 已经支持 PostgreSQL 18 的 MERGE、增量物化视图等原生特性。Sea-ORM 在 ORM 层面也变得更加成熟。</p>
 <h3>Cargo 生态里程碑</h3>
 <p>crates.io 在 2026 年 7 月拥有超过 18 万个包。虽然远不及 npm 的 300 万，但 Rust 社区的哲学是「少而精」——很多功能可以直接内联编码，而不是依赖第三方包。</p>
 <p>Cargo 的重要更新：</p>
 <pre><code class="language-bash"># Cargo Script：直接运行 .rs 文件
-cargo script run.rs
-
-# PGO 原生支持（在 Cargo.toml 中）
-# [profile.release]
-# pgo = true
-
-# Workspace 并行处理改进
-cargo test --workspace --parallel
-</code></pre>
+<p>cargo script run.rs</p>
+<h1>PGO 原生支持（在 Cargo.toml 中）</h1>
+<h1>[profile.release]</h1>
+<h1>pgo = true</h1>
+<h1>Workspace 并行处理改进</h1>
+<p>cargo test --workspace --parallel</p>
+<p></code></pre></p>
 <p>Workspace 的依赖解析和并行测试速度提升显著，大型 monorepo 的体验好了很多。</p>
 <h2>AI 与 Rust 的交叉</h2>
 <p>2026 年，AI 和 Rust 的关系在两个方向上深化。</p>
 <h3>Rust 作为 AI 推理运行时</h3>
 <p>随着端侧 AI 和边缘计算的爆发，Rust 在模型推理环节找到了独特定位：</p>
 <pre><code class="language-rust">use candle_core::{Device, Tensor};
-
-// 加载 ONNX 模型并进行推理
-fn run_inference(model_bytes: &amp;[u8], input: &amp;[f32]) -&gt; Result&lt;Vec&lt;f32&gt;, Box&lt;dyn Error&gt;&gt; {
-    let device = Device::Cpu;
-    let model = candle_nn::ops::load_onnx(model_bytes, &amp;device)?;
-    let input_tensor = Tensor::from_slice(input, (1, input.len()), &amp;device)?;
-    let output = model.forward(&amp;input_tensor)?;
-    Ok(output.to_vec1()?)
-}
-</code></pre>
+<p>// 加载 ONNX 模型并进行推理</p>
+<p>fn run<em>inference(model</em>bytes: &amp;[u8], input: &amp;[f32]) -&gt; Result&lt;Vec&lt;f32&gt;, Box&lt;dyn Error&gt;&gt; {</p>
+<p>let device = Device::Cpu;</p>
+<p>let model = candle<em>nn::ops::load</em>onnx(model_bytes, &amp;device)?;</p>
+<p>let input<em>tensor = Tensor::from</em>slice(input, (1, input.len()), &amp;device)?;</p>
+<p>let output = model.forward(&amp;input_tensor)?;</p>
+<p>Ok(output.to_vec1()?)</p>
+<p>}</p>
+<p></code></pre></p>
 <p>Candle（纯 Rust ML 框架）和 Burn 让 Rust 在 ML 场景下有了自己的话语权。特别是 Candle，性能接近 PyTorch 但不需要 Python 运行时。</p>
 <h3>AI 辅助 Rust 开发</h3>
 <p>2026 年的 AI 代码工具对 Rust 的支持达到可用水平：</p>
 <pre><code class="language-rust">// 提示：实现一个线程安全的 LRU Cache
-// AI 生成代码（2026 年水平）：
-use std::collections::HashMap;
-use std::sync::{Arc, Mutex};
-
-struct LruCache&lt;K, V&gt; {
-    inner: Arc&lt;Mutex&lt;Inner&lt;K, V&gt;&gt;&gt;,
-}
-
-struct Inner&lt;K, V&gt; {
-    map: HashMap&lt;K, V&gt;,
-    order: Vec&lt;K&gt;,
-    capacity: usize,
-}
-
-impl&lt;K: Eq + Hash + Clone, V: Clone&gt; LruCache&lt;K, V&gt; {
-    fn new(capacity: usize) -&gt; Self {
-        Self {
-            inner: Arc::new(Mutex::new(Inner {
-                map: HashMap::new(),
-                order: Vec::with_capacity(capacity),
-                capacity,
-            })),
-        }
-    }
-    // ... get, put 实现
-}
-</code></pre>
+<p>// AI 生成代码（2026 年水平）：</p>
+<p>use std::collections::HashMap;</p>
+<p>use std::sync::{Arc, Mutex};</p>
+<p>struct LruCache&lt;K, V&gt; {</p>
+<p>inner: Arc&lt;Mutex&lt;Inner&lt;K, V&gt;&gt;&gt;,</p>
+<p>}</p>
+<p>struct Inner&lt;K, V&gt; {</p>
+<p>map: HashMap&lt;K, V&gt;,</p>
+<p>order: Vec&lt;K&gt;,</p>
+<p>capacity: usize,</p>
+<p>}</p>
+<p>impl&lt;K: Eq + Hash + Clone, V: Clone&gt; LruCache&lt;K, V&gt; {</p>
+<p>fn new(capacity: usize) -&gt; Self {</p>
+<p>Self {</p>
+<p>inner: Arc::new(Mutex::new(Inner {</p>
+<p>map: HashMap::new(),</p>
+<p>order: Vec::with_capacity(capacity),</p>
+<p>capacity,</p>
+<p>})),</p>
+<p>}</p>
+<p>}</p>
+<p>// ... get, put 实现</p>
+<p>}</p>
+<p></code></pre></p>
 <p>Rust 的类型系统其实比动态语言更适合 AI 代码生成——类型提供了天然约束，减少了生成结果的不确定性。</p>
 <h2>行业落地案例</h2>
 <p>说点具体的——2026 年谁在用 Rust 做什么。</p>
 <h3>系统和网络层</h3>
 <p>Linux 内核中的 Rust 支持已进入第 3 年。2026 年，已有超过 30 个内核模块使用 Rust：</p>
 <pre><code class="language-rust">// Rust Linux 内核模块（简化示意）
-use kernel::prelude::*;
-
-module! {
-    type: MyDriver,
-    name: &quot;my_rust_driver&quot;,
-    author: &quot;Your Name&quot;,
-    description: &quot;A Rust kernel module&quot;,
-    license: &quot;GPL&quot;,
-}
-
-struct MyDriver;
-
-impl KernelModule for MyDriver {
-    fn init(_name: &amp;'static CStr, _module: &amp;'static ThisModule) -&gt; Result&lt;Self&gt; {
-        pr_info!(&quot;Rust driver loaded!\n&quot;);
-        Ok(MyDriver)
-    }
-}
-
-impl Drop for MyDriver {
-    fn drop(&amp;mut self) {
-        pr_info!(&quot;Rust driver unloaded!\n&quot;);
-    }
-}
-</code></pre>
+<p>use kernel::prelude::*;</p>
+<p>module! {</p>
+<p>type: MyDriver,</p>
+<p>name: &quot;my<em>rust</em>driver&quot;,</p>
+<p>author: &quot;Your Name&quot;,</p>
+<p>description: &quot;A Rust kernel module&quot;,</p>
+<p>license: &quot;GPL&quot;,</p>
+<p>}</p>
+<p>struct MyDriver;</p>
+<p>impl KernelModule for MyDriver {</p>
+<p>fn init(<em>name: &amp;'static CStr, </em>module: &amp;'static ThisModule) -&gt; Result&lt;Self&gt; {</p>
+<p>pr_info!(&quot;Rust driver loaded!\n&quot;);</p>
+<p>Ok(MyDriver)</p>
+<p>}</p>
+<p>}</p>
+<p>impl Drop for MyDriver {</p>
+<p>fn drop(&amp;mut self) {</p>
+<p>pr_info!(&quot;Rust driver unloaded!\n&quot;);</p>
+<p>}</p>
+<p>}</p>
+<p></code></pre></p>
 <p>Cloudflare 使用 Pingora（Rust）替代 Nginx 在 CDN 层处理 HTTP 流量。Google 的 Android 团队累计编写了超过 500 万行 Rust 代码，覆盖蓝牙、WiFi、NFC 等安全敏感子系统。</p>
 <h3>WebAssembly 和边缘计算</h3>
 <p>Rust + WASM 在边缘计算领域几乎没有对手：</p>
@@ -491,44 +473,40 @@ impl Drop for MyDriver {
 <h3>嵌入式与 IoT</h3>
 <p>Rust 在嵌入式领域的进展同样迅猛：</p>
 <pre><code class="language-rust">// 使用 embassy 的嵌入式 Rust
-#![no_std]
-#![no_main]
-
-use embassy_executor::Spawner;
-use embassy_time::{Timer, Duration};
-use esp32c3_hal::gpio::{Level, Output};
-
-#[embassy_executor::main]
-async fn main(_spawner: Spawner) {
-    let peripherals = esp32c3_hal::take().unwrap();
-    let mut led = Output::new(peripherals.pins.gpio8, Level::Low);
-
-    loop {
-        led.set_high();
-        Timer::after(Duration::from_millis(500)).await;
-        led.set_low();
-        Timer::after(Duration::from_millis(500)).await;
-    }
-}
-</code></pre>
+<p>#![no_std]</p>
+<p>#![no_main]</p>
+<p>use embassy_executor::Spawner;</p>
+<p>use embassy_time::{Timer, Duration};</p>
+<p>use esp32c3_hal::gpio::{Level, Output};</p>
+<p>#[embassy_executor::main]</p>
+<p>async fn main(_spawner: Spawner) {</p>
+<p>let peripherals = esp32c3_hal::take().unwrap();</p>
+<p>let mut led = Output::new(peripherals.pins.gpio8, Level::Low);</p>
+<p>loop {</p>
+<p>led.set_high();</p>
+<p>Timer::after(Duration::from_millis(500)).await;</p>
+<p>led.set_low();</p>
+<p>Timer::after(Duration::from_millis(500)).await;</p>
+<p>}</p>
+<p>}</p>
+<p></code></pre></p>
 <p>embassy 框架让嵌入式异步编程变得直观，且 <code>#![no_std]</code> 特性意味着它可以在最小只有 64KB RAM 的设备上运行。</p>
 <h2>Rust 的挑战</h2>
 <p>客观地说，Rust 进前十并不代表它没有短板。</p>
 <h3>学习曲线的现实</h3>
 <p>借用检查器虽然有了更好的错误提示，但仍然不够友好：</p>
 <pre><code class="language-rust">// 一个典型的借用检查器困惑
-struct Container {
-    items: Vec&lt;String&gt;,
-}
-
-impl Container {
-    fn get_first(&amp;mut self) -&gt; &amp;str {
-        // 编译错误：不能在可变引用后返回不可变引用
-        self.items.push(&quot;new&quot;.into());  // 可变借用
-        &amp;self.items[0]                  // 不可变借用，相互冲突
-    }
-}
-</code></pre>
+<p>struct Container {</p>
+<p>items: Vec&lt;String&gt;,</p>
+<p>}</p>
+<p>impl Container {</p>
+<p>fn get_first(&amp;mut self) -&gt; &amp;str {</p>
+<p>// 编译错误：不能在可变引用后返回不可变引用</p>
+<p>self.items.push(&quot;new&quot;.into());  // 可变借用</p>
+<p>&amp;self.items[0]                  // 不可变借用，相互冲突</p>
+<p>}</p>
+<p>}</p>
+<p></code></pre></p>
 <p>异步编程的认知负载也比其他语言高很多。除了生命周期和所有权，你还要考虑 Send、Sync、<code>'static</code> 和 task 取消的安全性。</p>
 <h3>编译速度的差距</h3>
 <p>虽然 2026 年改善了，但和 Go、Java 的差距依然明显：</p>
@@ -697,8 +675,8 @@ impl Container {
       <div class="post-info-section">
         <div class="post-info-label">文章信息</div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📅</span> 发布日期</span><span class="post-info-stat-value">2026-07-19</span></div>
-        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">⏱️</span> 阅读时间</span><span class="post-info-stat-value">5 min read</span></div>
-        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">3182 字</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">⏱️</span> 阅读时间</span><span class="post-info-stat-value">11 min read</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">3166 字</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📊</span> 章节数</span><span class="post-info-stat-value">10 节 · 17 子节</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">💻</span> 代码块</span><span class="post-info-stat-value">14 段</span></div>
       </div>

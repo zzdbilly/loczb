@@ -1,0 +1,437 @@
+---
+title: "Rust 入门：从零到生产"
+description: "Rust 入门指南：从零开始学习 Rust，掌握所有权、借用、生命周期等核心概念，构建高性能安全程序"
+date: 2026-04-26 15:11:29
+category: 系统编程
+tags: ["Rust", "系统编程", "所有权", "内存安全"]
+read_time: 20
+slug: rust-getting-started
+---
+
+<p>Rust 是一门专注于安全性、并发性和性能的系统编程语言。它通过所有权系统在编译时保证内存安全，无需垃圾回收器。本文将带你从零开始学习 Rust 的核心概念。</p>
+
+      <div class="tip-box">
+        <strong>为什么学习 Rust</strong>：连续多年 Stack Overflow 最受喜爱语言第一名，被 Linux 内核接纳，广泛用于系统工具、WebAssembly、嵌入式开发。
+        </div>
+
+      <h2>一、安装与 Hello World</h2>
+
+      <h3>安装 Rust</h3>
+
+      <pre><code># macOS / Linux
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
+# 验证安装
+rustc --version
+cargo --version</code></pre>
+
+      <h3>第一个程序</h3>
+
+      <pre><code>// main.rs
+fn main() {
+    println!("Hello, Rust!");
+}
+
+// 编译运行
+// $ rustc main.rs
+// $ ./main
+// Hello, Rust!</code></pre>
+
+      <h3>使用 Cargo</h3>
+
+      <pre><code># 创建项目
+cargo new hello_rust
+
+# 项目结构
+# hello_rust/
+# ├── Cargo.toml    # 配置文件
+# └── src/
+#     └── main.rs   # 源代码
+
+# 运行项目
+cargo run
+
+# 构建发布版本
+cargo build --release</code></pre>
+
+      <h2>二、变量与数据类型</h2>
+
+      <h3>变量声明</h3>
+
+      <pre><code>fn main() {
+    // 不可变变量（默认）
+    let x = 5;
+    // x = 6; // 错误！不能修改
+    
+    // 可变变量
+    let mut y = 10;
+    y = 20; // OK
+    
+    // 常量（必须注明类型）
+    const MAX_POINTS: u32 = 100_000;
+    
+    // 变量遮蔽（shadowing）
+    let z = 5;
+    let z = z + 1; // 新变量，遮蔽了旧的
+    let z = "hello"; // 甚至可以改变类型
+}</code></pre>
+
+      <h3>基本数据类型</h3>
+
+      <pre><code>fn main() {
+    // 整数：i8, i16, i32, i64, i128, isize（有符号）
+    //       u8, u16, u32, u64, u128, usize（无符号）
+    let a: i32 = -42;
+    let b: u8 = 255;
+    
+    // 浮点数
+    let c: f64 = 3.14;
+    
+    // 布尔
+    let d: bool = true;
+    
+    // 字符（Unicode）
+    let e: char = '🦀';
+    
+    // 元组
+    let tuple: (i32, f64, char) = (1, 2.0, 'a');
+    let (x, y, z) = tuple; // 解构
+    let first = tuple.0;   // 索引访问
+    
+    // 数组（固定长度）
+    let arr: [i32; 3] = [1, 2, 3];
+    let first = arr[0];
+    let repeat = [0; 5]; // [0, 0, 0, 0, 0]
+}</code></pre>
+
+      <h2>三、所有权（Ownership）</h2>
+
+      <p>所有权是 Rust 最独特的特性，是内存安全的基石。</p>
+
+      <h3>所有权规则</h3>
+
+      <ul>
+        <li>每个值都有一个所有者（owner）</li>
+        <li>同一时间只能有一个所有者</li>
+        <li>所有者离开作用域时，值被丢弃</li>
+      </ul>
+
+      <pre><code>fn main() {
+    // 移动（Move）
+    let s1 = String::from("hello");
+    let s2 = s1; // s1 的所有权转移给 s2
+    // println!("{}", s1); // 错误！s1 已失效
+    
+    // 克隆（Clone）
+    let s3 = String::from("world");
+    let s4 = s3.clone(); // 深拷贝
+    println!("{} {}", s3, s4); // 两者都有效
+    
+    // 栈上的数据：拷贝
+    let x = 5;
+    let y = x; // 整数实现了 Copy trait，是拷贝而非移动
+    println!("{} {}", x, y); // 两者都有效
+}</code></pre>
+
+      <h3>函数与所有权</h3>
+
+      <pre><code>fn main() {
+    let s = String::from("hello");
+    takes_ownership(s); // s 的所有权移动到函数
+    // println!("{}", s); // 错误！s 已失效
+    
+    let x = 5;
+    makes_copy(x); // x 是拷贝
+    println!("{}", x); // OK
+}
+
+fn takes_ownership(s: String) {
+    println!("{}", s);
+} // s 在这里被丢弃
+
+fn makes_copy(i: i32) {
+    println!("{}", i);
+}</code></pre>
+
+      <h2>四、引用与借用</h2>
+
+      <h3>不可变引用</h3>
+
+      <pre><code>fn main() {
+    let s = String::from("hello");
+    
+    // 借用：不获取所有权
+    let len = calculate_length(&amp;s);
+    
+    println!("'{}' 的长度是 {}", s, len); // s 仍然有效
+}
+
+fn calculate_length(s: &amp;String) -> usize {
+    s.len()
+} // s 是引用，不丢弃值</code></pre>
+
+      <h3>可变引用</h3>
+
+      <pre><code>fn main() {
+    let mut s = String::from("hello");
+    
+    change(&amp;mut s);
+    println!("{}", s); // "hello, world"
+}
+
+fn change(s: &amp;mut String) {
+    s.push_str(", world");
+}</code></pre>
+
+      <div class="warning-box">
+        <strong>可变引用限制</strong>：同一时间只能有一个可变引用，防止数据竞争。
+      </div>
+
+      <pre><code>fn main() {
+    let mut s = String::from("hello");
+    
+    // 错误！不能同时有多个可变引用
+    let r1 = &amp;mut s;
+    let r2 = &amp;mut s; // 编译错误
+    
+    // 正确：引用作用域结束后再创建新的
+    {
+        let r1 = &amp;mut s;
+    } // r1 结束
+    let r2 = &amp;mut s; // OK
+    
+    // 错误！有不可变引用时不能有可变引用
+    let r1 = &s;
+    let r2 = &s;
+    let r3 = &amp;mut s; // 编译错误
+}</code></pre>
+
+      <h2>五、结构体</h2>
+
+      <pre><code>// 定义结构体
+struct User {
+    username: String,
+    email: String,
+    active: bool,
+    sign_in_count: u64,
+}
+
+// 元组结构体
+struct Color(i32, i32, i32);
+
+// 单元结构体
+struct AlwaysEqual;
+
+fn main() {
+    // 创建实例
+    let user1 = User {
+        email: String::from("user@example.com"),
+        username: String::from("user123"),
+        active: true,
+        sign_in_count: 1,
+    };
+    
+    // 访问字段
+    println!("{}", user1.email);
+    
+    // 结构体更新语法
+    let user2 = User {
+        email: String::from("another@example.com"),
+        ..user1 // 其余字段来自 user1
+    };
+    
+    // 元组结构体
+    let black = Color(0, 0, 0);
+    println!("{}", black.0);
+}
+
+// 方法
+impl User {
+    // 关联函数（构造器）
+    fn new(email: String, username: String) -> Self {
+        Self {
+            email,
+            username,
+            active: true,
+            sign_in_count: 0,
+        }
+    }
+    
+    // 方法
+    fn is_active(&amp;self) -> bool {
+        self.active
+    }
+    
+    fn deactivate(&amp;mut self) {
+        self.active = false;
+    }
+}</code></pre>
+
+      <h2>六、枚举与模式匹配</h2>
+
+      <pre><code>// 定义枚举
+enum Message {
+    Quit,
+    Move { x: i32, y: i32 },
+    Write(String),
+    ChangeColor(i32, i32, i32),
+}
+
+// Option：Rust 没有空值
+enum Option&lt;T&gt; {
+    Some(T),
+    None,
+}
+
+// Result：错误处理
+enum Result&lt;T, E&gt; {
+    Ok(T),
+    Err(E),
+}
+
+fn main() {
+    // match 匹配
+    let msg = Message::Write(String::from("hello"));
+    
+    match msg {
+        Message::Quit => println!("Quit"),
+        Message::Move { x, y } => println!("Move to ({}, {})", x, y),
+        Message::Write(text) => println!("Text: {}", text),
+        Message::ChangeColor(r, g, b) => println!("Color: ({}, {}, {})", r, g, b),
+    }
+    
+    // if let 简化
+    let some_value = Some(3);
+    if let Some(x) = some_value {
+        println!("{}", x);
+    }
+    
+    // 错误处理
+    let result: Result&lt;i32, &amp;str> = Ok(42);
+    match result {
+        Ok(v) => println!("Success: {}", v),
+        Err(e) => println!("Error: {}", e),
+    }
+    
+    // ? 运算符
+    fn read_file() -> Result&lt;String, std::io::Error> {
+        let content = std::fs::read_to_string("file.txt")?; // 自动处理错误
+        Ok(content)
+    }
+}</code></pre>
+
+      <h2>七、错误处理</h2>
+
+      <pre><code>use std::fs::File;
+use std::io::ErrorKind;
+
+fn main() {
+    // 可恢复错误：Result
+    let f = File::open("hello.txt");
+    
+    let f = match f {
+        Ok(file) => file,
+        Err(error) => match error.kind() {
+            ErrorKind::NotFound => match File::create("hello.txt") {
+                Ok(fc) => fc,
+                Err(e) => panic!("创建文件失败: {:?}", e),
+            },
+            other_error => panic!("打开文件失败: {:?}", other_error),
+        },
+    };
+    
+    // unwrap：成功返回值，失败 panic
+    let f = File::open("hello.txt").unwrap();
+    
+    // expect：自定义错误信息
+    let f = File::open("hello.txt")
+        .expect("无法打开文件");
+    
+    // 不可恢复错误：panic!
+    // panic!("程序崩溃！");
+}</code></pre>
+
+      <h2>八、泛型、Trait 与生命周期</h2>
+
+      <h3>泛型</h3>
+
+      <pre><code>// 泛型函数
+fn largest&lt;T: PartialOrd&gt;(list: &amp;[T]) -> &amp;T {
+    let mut largest = &amp;list[0];
+    for item in list {
+        if item > largest {
+            largest = item;
+        }
+    }
+    largest
+}
+
+// 泛型结构体
+struct Point&lt;T&gt; {
+    x: T,
+    y: T,
+}</code></pre>
+
+      <h3>Trait</h3>
+
+      <pre><code>// 定义 Trait
+trait Summary {
+    fn summarize(&amp;self) -> String;
+    
+    // 默认实现
+    fn author(&amp;self) -> String {
+        String::from("Unknown")
+    }
+}
+
+// 实现 Trait
+struct Article {
+    title: String,
+    content: String,
+}
+
+impl Summary for Article {
+    fn summarize(&amp;self) -> String {
+        format!("{}: {}", self.title, self.content)
+    }
+}
+
+// Trait 作为参数
+fn notify(item: &amp;impl Summary) {
+    println!("{}", item.summarize());
+}</code></pre>
+
+      <h3>生命周期</h3>
+
+      <pre><code>// 生命周期标注
+fn longest&lt;'a&gt;(x: &amp;'a str, y: &amp;'a str) -> &amp;'a str {
+    if x.len() > y.len() { x } else { y }
+}
+
+// 结构体中的生命周期
+struct ImportantExcerpt&lt;'a&gt; {
+    part: &amp;'a str,
+}
+
+fn main() {
+    let novel = String::from("Call me Ishmael. Some years ago...");
+    let first_sentence = novel.split('.').next().unwrap();
+    
+    let excerpt = ImportantExcerpt {
+        part: first_sentence,
+    };
+}</code></pre>
+
+      <h2>总结</h2>
+
+      <p>Rust 的学习曲线较陡，但掌握后收益巨大：</p>
+      <ul>
+        <li>所有权系统保证内存安全，无需 GC</li>
+        <li>类型系统和编译器帮助在编译时捕获错误</li>
+        <li>零成本抽象，性能媲美 C/C++</li>
+        <li>优秀的工具链（Cargo、rustfmt、clippy）</li>
+      </ul>
+
+      <div class="tip-box">
+        <strong>下一步</strong>：尝试用 Rust 重写一个简单的命令行工具，或学习异步编程（tokio）、Web 开发（axum/actix-web）。
+      </div>

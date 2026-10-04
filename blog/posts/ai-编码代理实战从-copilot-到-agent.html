@@ -50,12 +50,12 @@
       },
       "keywords": "AI, AI编程, Agent, 开发规范, 效率提升",
       "articleSection": "开发",
-      "timeRequired": "PT5M",
+      "timeRequired": "PT12M",
       "inLanguage": "zh-CN"
 }
     </script>
 
-    <link rel="stylesheet" href="../../assets/css/style.css?v=231fa9f71a">
+    <link rel="stylesheet" href="../../assets/css/style.css?v=27743e398e">
     <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
     <link rel="alternate icon" href="../../assets/images/favicon.ico">
     <link rel="canonical" href="https://709527.xyz/blog/posts/ai-编码代理实战从-copilot-到-agent.html">
@@ -117,7 +117,7 @@
 
         <div class="post-meta">
           <span class="meta-item"><span aria-hidden="true">📅</span> 2026-07-19 18:50:02</span>
-          <span class="meta-item"><span aria-hidden="true">⏱️</span> 5 min read</span>
+          <span class="meta-item"><span aria-hidden="true">⏱️</span> 12 min read</span>
           <span class="meta-item"><span aria-hidden="true">👤</span> 张小猛</span>
         </div>
 
@@ -192,12 +192,11 @@
 <p>Claude Code 是 Anthropic 在 2025 年推出的一款终端工具。它的设计哲学和别人不太一样——它不是 IDE 插件，而是一个终端应用。</p>
 <h3>安装和配置</h3>
 <pre><code class="language-bash"># 安装 Claude Code
-npm install -g @anthropic-ai/claude-code
-
-# 在项目目录中启动
-cd my-project
-claude
-</code></pre>
+<p>npm install -g @anthropic-ai/claude-code</p>
+<h1>在项目目录中启动</h1>
+<p>cd my-project</p>
+<p>claude</p>
+<p></code></pre></p>
 <p>启动后，你会获得一个类似于 REPL 的命令行对话界面。它的核心能力包括：</p>
 <ul>
 <li>读取项目文件和目录结构</li>
@@ -209,8 +208,8 @@ claude
 <h3>真实场景：大规模重构</h3>
 <p>让我用一个真实的例子来说明——将一个 React 组件从 Class Component 迁移到 Function Component：</p>
 <pre><code>claude&gt; 将 src/components/UserProfile.jsx 从 Class Component 重写为 Function Component，
-       使用 React Hooks 替代生命周期方法，保持所有 props 和功能不变
-</code></pre>
+<p>使用 React Hooks 替代生命周期方法，保持所有 props 和功能不变</p>
+<p></code></pre></p>
 <p>Claude Code 会：</p>
 <ol>
 <li>读取 <code>UserProfile.jsx</code> 和所有依赖的组件</li>
@@ -220,26 +219,23 @@ claude
 <li>输出改动的 diff</li>
 </ol>
 <pre><code class="language-bash"># Claude Code 会先读取文件
-🔍 Reading src/components/UserProfile.jsx
-📄 Found 2 related files: UserProfile.css, UserProfile.test.jsx
-
-# 然后分析
-🔧 Converting componentWillMount → useEffect([], [])
-🔧 Converting componentDidUpdate → useEffect(…, [deps])
-🔧 Converting componentWillUnmount → useEffect cleanup
-
-# 之后修改文件
-✏️ Updated UserProfile.jsx (240 lines → 185 lines)
-✅ Tests passed: 12/12
-
-# 提供 diff 供审查
-</code></pre>
+<p>🔍 Reading src/components/UserProfile.jsx</p>
+<p>📄 Found 2 related files: UserProfile.css, UserProfile.test.jsx</p>
+<h1>然后分析</h1>
+<p>🔧 Converting componentWillMount → useEffect([], [])</p>
+<p>🔧 Converting componentDidUpdate → useEffect(…, [deps])</p>
+<p>🔧 Converting componentWillUnmount → useEffect cleanup</p>
+<h1>之后修改文件</h1>
+<p>✏️ Updated UserProfile.jsx (240 lines → 185 lines)</p>
+<p>✅ Tests passed: 12/12</p>
+<h1>提供 diff 供审查</h1>
+<p></code></pre></p>
 <p>这不仅仅是一个代码转换器——它理解了项目中的上下文（import 路径、变量引用关系、测试文件位置），然后自主完成了整个转换。</p>
 <h3>调试工作流</h3>
 <p>Claude Code 在调试场景下也表现出色：</p>
 <pre><code>claude&gt; 运行测试时 user.test.js 报错 &quot;Cannot read properties of undefined&quot;
-       (reading 'email')，帮我调试这个错误
-</code></pre>
+<p>(reading 'email')，帮我调试这个错误</p>
+<p></code></pre></p>
 <p>它的流程：</p>
 <ol>
 <li>找到测试输出中的错误信息和堆栈</li>
@@ -250,19 +246,16 @@ claude
 <li>再次运行确认通过</li>
 </ol>
 <pre><code class="language-bash"># Claude Code 的调试流程
-🔍 Error: TypeError: Cannot read properties of undefined (reading 'email')
-   at Object.&lt;anonymous&gt; (src/__tests__/user.test.js:42)
-
-📖 Reading src/__tests__/user.test.js:42
-   expect(user.email).toBe('test@example.com')
-
-🔍 追溯 user 对象来源...
-   → mockUser in src/__mocks__/user.js
-   → 发现 mockUser.email 未定义
-
-✏️ Fixed src/__mocks__/user.js (added email field)
-✅ Tests passed: user.test.js
-</code></pre>
+<p>🔍 Error: TypeError: Cannot read properties of undefined (reading 'email')</p>
+<p>at Object.&lt;anonymous&gt; (src/<strong>tests</strong>/user.test.js:42)</p>
+<p>📖 Reading src/<strong>tests</strong>/user.test.js:42</p>
+<p>expect(user.email).toBe('test@example.com')</p>
+<p>🔍 追溯 user 对象来源...</p>
+<p>→ mockUser in src/<strong>mocks</strong>/user.js</p>
+<p>→ 发现 mockUser.email 未定义</p>
+<p>✏️ Fixed src/<strong>mocks</strong>/user.js (added email field)</p>
+<p>✅ Tests passed: user.test.js</p>
+<p></code></pre></p>
 <p>这个流程的关键是：Claude Code 不需要我手动提供上下文。它自己读文件、搜代码、跑命令，就像是团队里的一个 junior 工程师说「我去查一下」。</p>
 <h2>Cursor Agent 模式</h2>
 <p>Cursor 在 2025 年推出的 Agent 模式是另一个重大进化。与 Claude Code 的终端界面不同，Cursor 的 Agent 直接在编辑器中操作。</p>
@@ -275,14 +268,14 @@ claude
 <li><strong>即时反馈</strong>：修改后可以自动运行 lint 和测试检查</li>
 </ol>
 <pre><code class="language-bash"># Cursor Agent 的典型命令
-&quot;给我的 API 路由添加请求日志中间件，使用现有的 logger 工具&quot;
-&quot;将这个 Electron 项目迁移到 Tauri&quot;
-&quot;为这个 Prisma schema 生成对应的 Zod validation schemas&quot;
-</code></pre>
+<p>&quot;给我的 API 路由添加请求日志中间件，使用现有的 logger 工具&quot;</p>
+<p>&quot;将这个 Electron 项目迁移到 Tauri&quot;</p>
+<p>&quot;为这个 Prisma schema 生成对应的 Zod validation schemas&quot;</p>
+<p></code></pre></p>
 <h3>真实场景：API 开发</h3>
 <p>以添加一个用户管理 API 为例：</p>
 <pre><code>用户请求: &quot;添加一个 /api/users/:id 端点，返回用户详情，从 PostgreSQL 查询&quot;
-</code></pre>
+<p></code></pre></p>
 <p>Cursor Agent 的工作链：</p>
 <ol>
 <li>读取当前 API 路由结构，确认代码风格和模式</li>
@@ -293,41 +286,35 @@ claude
 <li>可选：生成测试文件</li>
 </ol>
 <pre><code class="language-typescript">// Cursor Agent 生成的代码
-import { Router, Request, Response } from 'express';
-import { PrismaClient } from '@prisma/client';
-
-const router = Router();
-const prisma = new PrismaClient();
-
-// GET /api/users/:id
-router.get('/:id', async (req: Request, res: Response) =&gt; {
-  try {
-    const { id } = req.params;
-
-    const user = await prisma.user.findUnique({
-      where: { id },
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        createdAt: true,
-        // 不返回密码等敏感字段
-      },
-    });
-
-    if (!user) {
-      return res.status(404).json({ error: 'User not found' });
-    }
-
-    return res.json(user);
-  } catch (error) {
-    console.error('Error fetching user:', error);
-    return res.status(500).json({ error: 'Internal server error' });
-  }
-});
-
-export default router;
-</code></pre>
+<p>import { Router, Request, Response } from 'express';</p>
+<p>import { PrismaClient } from '@prisma/client';</p>
+<p>const router = Router();</p>
+<p>const prisma = new PrismaClient();</p>
+<p>// GET /api/users/:id</p>
+<p>router.get('/:id', async (req: Request, res: Response) =&gt; {</p>
+<p>try {</p>
+<p>const { id } = req.params;</p>
+<p>const user = await prisma.user.findUnique({</p>
+<p>where: { id },</p>
+<p>select: {</p>
+<p>id: true,</p>
+<p>name: true,</p>
+<p>email: true,</p>
+<p>createdAt: true,</p>
+<p>// 不返回密码等敏感字段</p>
+<p>},</p>
+<p>});</p>
+<p>if (!user) {</p>
+<p>return res.status(404).json({ error: 'User not found' });</p>
+<p>}</p>
+<p>return res.json(user);</p>
+<p>} catch (error) {</p>
+<p>console.error('Error fetching user:', error);</p>
+<p>return res.status(500).json({ error: 'Internal server error' });</p>
+<p>}</p>
+<p>});</p>
+<p>export default router;</p>
+<p></code></pre></p>
 <p>更强大的功能是跨文件上下文。当我请求「将这个 handler 改成使用 Service 层模式」，Cursor 会读取 Service 层的现有代码，理解其模式，然后重构——不是机械替换，而是理解代码库的架构风格。</p>
 <h2>MCP 协议与工具生态</h2>
 <p>如果只有两个工具，那就不成生态了。2026 年 AI 编码代理最关键的底层变化是 <strong>MCP（Model Context Protocol）</strong> 的普及。</p>
@@ -335,34 +322,34 @@ export default router;
 <p>MCP 是由 Anthropic 提出的开放协议，定义了 AI 模型与外部工具之间的标准化接口。用一句话说：<strong>MCP 让 AI 能像人一样使用工具</strong>。</p>
 <p>一个 MCP server 暴露一组资源（文件、数据、API）和工具（命令、查询、操作）。AI 客户端通过 MCP 协议发现并使用这些工具。</p>
 <pre><code class="language-typescript">// MCP Server 的简化示意
-const server = new MCPServer({
-  name: &quot;database-tools&quot;,
-  tools: [
-    {
-      name: &quot;query_database&quot;,
-      description: &quot;执行 SQL 查询并返回结果&quot;,
-      params: {
-        query: { type: &quot;string&quot;, description: &quot;SQL 查询语句&quot; },
-      },
-      handler: async ({ query }) =&gt; {
-        const result = await db.execute(query);
-        return result;
-      },
-    },
-    {
-      name: &quot;get_schema&quot;,
-      description: &quot;获取数据库表结构&quot;,
-      params: {
-        table: { type: &quot;string&quot;, description: &quot;表名&quot; },
-      },
-      handler: async ({ table }) =&gt; {
-        const schema = await db.getSchema(table);
-        return schema;
-      },
-    },
-  ],
-});
-</code></pre>
+<p>const server = new MCPServer({</p>
+<p>name: &quot;database-tools&quot;,</p>
+<p>tools: [</p>
+<p>{</p>
+<p>name: &quot;query_database&quot;,</p>
+<p>description: &quot;执行 SQL 查询并返回结果&quot;,</p>
+<p>params: {</p>
+<p>query: { type: &quot;string&quot;, description: &quot;SQL 查询语句&quot; },</p>
+<p>},</p>
+<p>handler: async ({ query }) =&gt; {</p>
+<p>const result = await db.execute(query);</p>
+<p>return result;</p>
+<p>},</p>
+<p>},</p>
+<p>{</p>
+<p>name: &quot;get_schema&quot;,</p>
+<p>description: &quot;获取数据库表结构&quot;,</p>
+<p>params: {</p>
+<p>table: { type: &quot;string&quot;, description: &quot;表名&quot; },</p>
+<p>},</p>
+<p>handler: async ({ table }) =&gt; {</p>
+<p>const schema = await db.getSchema(table);</p>
+<p>return schema;</p>
+<p>},</p>
+<p>},</p>
+<p>],</p>
+<p>});</p>
+<p></code></pre></p>
 <h3>2026 年的 MCP 生态</h3>
 <p>2026 年，MCP 已经从边缘协议变成了 AI 开发工具的标准协议之一：</p>
 <table>
@@ -410,69 +397,68 @@ const server = new MCPServer({
 <h3>自建 MCP 工具</h3>
 <p>对我们开发者来说，MCP 意味着可以自己写工具让 AI 调用：</p>
 <pre><code class="language-typescript">// 命令行工具的 MCP Server
-const server = new MCPServer({
-  name: &quot;deployment-tools&quot;,
-  tools: [
-    {
-      name: &quot;deploy&quot;,
-      description: &quot;部署到指定环境&quot;,
-      params: {
-        env: { type: &quot;enum&quot;, values: [&quot;staging&quot;, &quot;production&quot;] },
-        tag: { type: &quot;string&quot; },
-      },
-      handler: async ({ env, tag }) =&gt; {
-        const result = await execAsync(`deploy.sh ${env} ${tag}`);
-        return { success: true, output: result.stdout };
-      },
-    },
-  ],
-});
-</code></pre>
+<p>const server = new MCPServer({</p>
+<p>name: &quot;deployment-tools&quot;,</p>
+<p>tools: [</p>
+<p>{</p>
+<p>name: &quot;deploy&quot;,</p>
+<p>description: &quot;部署到指定环境&quot;,</p>
+<p>params: {</p>
+<p>env: { type: &quot;enum&quot;, values: [&quot;staging&quot;, &quot;production&quot;] },</p>
+<p>tag: { type: &quot;string&quot; },</p>
+<p>},</p>
+<p>handler: async ({ env, tag }) =&gt; {</p>
+<p>const result = await execAsync(<strong>INLINE<em>CODE</em>0</strong>);</p>
+<p>return { success: true, output: result.stdout };</p>
+<p>},</p>
+<p>},</p>
+<p>],</p>
+<p>});</p>
+<p></code></pre></p>
 <p>有了这个，AI 就可以在开发完成后一键部署——不再需要人手动切终端打命令。</p>
 <h2>对开发工作流的改变</h2>
 <p>有了这些工具，2026 年的开发流程变成了什么样子？</p>
 <h3>PR 驱动开发</h3>
 <p>我之前写一个功能的工作流是：</p>
 <pre><code>写代码 → 本地测试 → 提交 → PR → 审查 → 部署
-</code></pre>
+<p></code></pre></p>
 <p>现在：</p>
 <pre><code>描述需求（AI 生成代码）→ 审查并调整 → 提交测试 → PR
-</code></pre>
+<p></code></pre></p>
 <p>AI 承担了「写代码」这个环节，而开发者更多地在「描述需求」和「审查代码」之间切换。</p>
 <h3>改变最大的场景</h3>
 <p><strong>场景 1：新项目脚手架</strong></p>
 <pre><code>开发者: &quot;创建一个 Next.js App Router 的项目，配置好 Prisma + Vercel Postgres + Tailwind，
-        加上用户认证（NextAuth），首页放一个 Dashboard&quot;
-</code></pre>
+<p>加上用户认证（NextAuth），首页放一个 Dashboard&quot;</p>
+<p></code></pre></p>
 <p>AI Agent 可以在一分钟内完成之前需要 30 分钟甚至更久的脚手架搭建——创建配置文件、安装依赖、初始化 Prisma schema、编写基础的认证路由。</p>
 <p><strong>场景 2：跨仓库重构</strong></p>
 <pre><code>开发者: &quot;将 shared-components 仓库中的所有 Button 组件改为新设计系统的 TanStack 风格&quot;
-</code></pre>
+<p></code></pre></p>
 <p>AI Agent 可以遍历仓库、找到所有 Button 组件、逐一修改并验证编译。</p>
 <p><strong>场景 3：SQL 优化</strong></p>
 <pre><code>开发者: &quot;这个查询跑了 8 秒，帮我查一下慢在哪并优化&quot;
-</code></pre>
+<p></code></pre></p>
 <p>AI 可以直接连数据库跑 EXPLAIN ANALYZE，分析执行计划，然后调整查询：</p>
 <pre><code class="language-sql">-- 原始查询（8.2 秒）
-SELECT u.*, COUNT(o.id) as order_count
-FROM users u
-LEFT JOIN orders o ON u.id = o.user_id
-WHERE u.created_at &gt; '2025-01-01'
-GROUP BY u.id
-ORDER BY order_count DESC;
-
--- AI 优化后（0.3 秒）
-SELECT u.*, COALESCE(order_counts.cnt, 0) as order_count
-FROM users u
-LEFT JOIN (
-    SELECT user_id, COUNT(*) as cnt
-    FROM orders
-    WHERE created_at &gt; '2025-01-01'
-    GROUP BY user_id
-) order_counts ON u.id = order_counts.user_id
-WHERE u.created_at &gt; '2025-01-01'
-ORDER BY order_counts.cnt DESC NULLS LAST;
-</code></pre>
+<p>SELECT u.*, COUNT(o.id) as order_count</p>
+<p>FROM users u</p>
+<p>LEFT JOIN orders o ON u.id = o.user_id</p>
+<p>WHERE u.created_at &gt; '2025-01-01'</p>
+<p>GROUP BY u.id</p>
+<p>ORDER BY order_count DESC;</p>
+<p>-- AI 优化后（0.3 秒）</p>
+<p>SELECT u.*, COALESCE(order<em>counts.cnt, 0) as order</em>count</p>
+<p>FROM users u</p>
+<p>LEFT JOIN (</p>
+<p>SELECT user_id, COUNT(*) as cnt</p>
+<p>FROM orders</p>
+<p>WHERE created_at &gt; '2025-01-01'</p>
+<p>GROUP BY user_id</p>
+<p>) order<em>counts ON u.id = order</em>counts.user_id</p>
+<p>WHERE u.created_at &gt; '2025-01-01'</p>
+<p>ORDER BY order_counts.cnt DESC NULLS LAST;</p>
+<p></code></pre></p>
 <h3>没有改变的事情</h3>
 <p>然而，有些事情并没有变：</p>
 <ol>
@@ -491,36 +477,39 @@ ORDER BY order_counts.cnt DESC NULLS LAST;
 <h3>把 AI 当作结对编程搭档</h3>
 <p>把它当作一个 junior 搭档——它擅长写样板代码、搜索文档、跑测试和解释错误。但它不擅长架构决策、领域理解和权衡。</p>
 <pre><code class="language-bash"># 好的请求方式
-claude&gt; 帮我写一个 SQLAlchemy 的 User Model，参考项目中现有的 department.py 的代码风格
-
-# 不好的请求方式
-claude&gt; 给我一个用户表
-</code></pre>
+<p>claude&gt; 帮我写一个 SQLAlchemy 的 User Model，参考项目中现有的 department.py 的代码风格</p>
+<h1>不好的请求方式</h1>
+<p>claude&gt; 给我一个用户表</p>
+<p></code></pre></p>
 <h3>为 AI 写项目文档</h3>
 <p>就像你为同事写文档一样，在项目根目录维护一个 <code>CONTRIBUTING.md</code> 或 <code>AI_CONTEXT.md</code>：</p>
 <pre><code class="language-markdown"># AI_CONTEXT.md
-
-## 项目结构
-- app/ - Next.js App Router 页面
-- lib/ - 共享工具函数
-- prisma/ - 数据库 schema
-
-## 代码风格
-- 使用 TypeScript strict 模式
-- 函数式组件 + React Hooks
-- 优先使用 Server Components
-- API 路由使用 Zod 做输入校验
-</code></pre>
+<h2>项目结构</h2>
+<ul>
+<li>app/ - Next.js App Router 页面</li>
+<li>lib/ - 共享工具函数</li>
+<li>prisma/ - 数据库 schema</li>
+</ul>
+<h2>代码风格</h2>
+<ul>
+<li>使用 TypeScript strict 模式</li>
+<li>函数式组件 + React Hooks</li>
+<li>优先使用 Server Components</li>
+<li>API 路由使用 Zod 做输入校验</li>
+</ul>
+<p></code></pre></p>
 <p>很多 Agent 工具（特别是 Claude Code）会自动读取这个文件作为系统提示的一部分。</p>
 <h3>让 AI 做代码预审查</h3>
 <p>在提交 PR 给人类同事之前，先让 AI Agent 审查一遍：</p>
 <pre><code>claude&gt; 审查这个 PR 的变更，检查潜在问题：
-       - 类型安全性
-       - 边界条件处理
-       - 性能问题
-       - 与现有 API 的兼容性
-       - 测试覆盖率
-</code></pre>
+<ul>
+<li>类型安全性</li>
+<li>边界条件处理</li>
+<li>性能问题</li>
+<li>与现有 API 的兼容性</li>
+<li>测试覆盖率</li>
+</ul>
+<p></code></pre></p>
 <p>AI 可以在 30 秒内完成一个人类 reviewer 需要 15 分钟的审查。它还能根据项目中已有的模式来验证一致性。</p>
 <h3>构建团队的 MCP 工具集</h3>
 <p>如果你的团队有特定的部署工具、监控系统、数据库管理工具，把它们封装为 MCP Server，让 AI 可以直接调用。开始的方式很简单：</p>
@@ -534,11 +523,13 @@ claude&gt; 给我一个用户表
 <p>站在 2026 年年中，有几个趋势已经清晰：</p>
 <h3>多 Agent 协作</h3>
 <p>不是单个 AI Agent 做所有事，而是多个 Specialist Agent 协作：
-- 一个 Agent 负责前端 UI
-- 一个 Agent 负责 API 层
-- 一个 Agent 负责数据库迁移
-- 一个 Agent 专门写测试
-- 一个 Agent 做安全审查</p>
+<ul>
+<li>一个 Agent 负责前端 UI</li>
+<li>一个 Agent 负责 API 层</li>
+<li>一个 Agent 负责数据库迁移</li>
+<li>一个 Agent 专门写测试</li>
+<li>一个 Agent 做安全审查</p></li>
+</ul>
 <p>这些 Agent 通过共享的上下文和任务队列协作，就像人的团队一样。</p>
 <h3>审查 Agent 的独立化</h3>
 <p>专门审查 PR 的 AI Agent 会从「写代码的 Agent」中分离出来，形成独立的审查流水线。这种架构的好处是：<strong>写代码的 Agent 可以更激进地尝试，而审查 Agent 作为安全网捕获问题。</strong></p>
@@ -690,9 +681,9 @@ claude&gt; 给我一个用户表
       <div class="post-info-section">
         <div class="post-info-label">文章信息</div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📅</span> 发布日期</span><span class="post-info-stat-value">2026-07-19</span></div>
-        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">⏱️</span> 阅读时间</span><span class="post-info-stat-value">5 min read</span></div>
-        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">3636 字</span></div>
-        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📊</span> 章节数</span><span class="post-info-stat-value">9 节 · 21 子节</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">⏱️</span> 阅读时间</span><span class="post-info-stat-value">12 min read</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">3629 字</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📊</span> 章节数</span><span class="post-info-stat-value">11 节 · 21 子节</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">💻</span> 代码块</span><span class="post-info-stat-value">19 段</span></div>
       </div>
       <div class="post-info-section" id="postSidebarTags">

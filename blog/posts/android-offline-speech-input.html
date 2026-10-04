@@ -29,32 +29,33 @@
       "description": "Android 离线语音输入实现方案：Sherpa ONNX、Whisper、Vosk 三大主流方案深度对比",
       "image": "https://709527.xyz/assets/images/og-image.png",
       "author": {
-        "@type": "Person",
-        "name": "张小猛",
-        "url": "https://709527.xyz/about/"
+            "@type": "Person",
+            "name": "张小猛",
+            "url": "https://709527.xyz/about/"
       },
       "publisher": {
-        "@type": "Organization",
-        "name": "loczb",
-        "logo": {
-          "@type": "ImageObject",
-          "url": "https://709527.xyz/assets/images/favicon.svg"
-        }
+            "@type": "Organization",
+            "name": "loczb",
+            "logo": {
+                  "@type": "ImageObject",
+                  "url": "https://709527.xyz/assets/images/favicon.svg"
+            }
       },
       "datePublished": "2026-04-03T16:07:15+08:00",
       "dateModified": "2026-04-03T16:07:15+08:00",
       "url": "https://709527.xyz/blog/posts/android-offline-speech-input.html",
       "mainEntityOfPage": {
-        "@type": "WebPage",
-        "@id": "https://709527.xyz/blog/posts/android-offline-speech-input.html"
+            "@type": "WebPage",
+            "@id": "https://709527.xyz/blog/posts/android-offline-speech-input.html"
       },
       "keywords": "Android, 离线语音识别, Sherpa ONNX, Whisper, 端侧AI",
       "articleSection": "Android",
+      "timeRequired": "PT10M",
       "inLanguage": "zh-CN"
-    }
+}
     </script>
 
-    <link rel="stylesheet" href="../../assets/css/style.css?v=231fa9f71a">
+    <link rel="stylesheet" href="../../assets/css/style.css?v=27743e398e">
     <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
     <link rel="alternate icon" href="../../assets/images/favicon.ico">
     <link rel="canonical" href="https://709527.xyz/blog/posts/android-offline-speech-input.html">
@@ -131,114 +132,87 @@
         
 
         <p>在移动应用开发中，语音输入已成为提升用户体验的重要交互方式。然而，传统的云端语音识别方案存在明显的痛点：<strong>网络依赖、隐私风险、延迟抖动、成本不可控</strong>。对于需要高隐私保护、弱网环境可用、或实时性要求高的场景，<strong>真正的离线语音识别</strong>成为必需。</p>
-
-      <div class="warning-box">
-        <strong>⚠️ 注意</strong>：本文讨论的"离线语音识别"指的是<strong>完全端侧运行</strong>的方案，模型文件打包在 APK 中或下载到本地，识别过程不依赖任何网络请求。Google SpeechRecognizer 的"离线模式"并非真正的离线方案。
-      </div>
-
-      <h2>三大主流方案对比</h2>
-
-      <table>
-        <tr><th>方案</th><th>模型大小</th><th>准确率</th><th>实时性</th><th>推荐指数</th></tr>
-        <tr><td><strong>Sherpa ONNX</strong></td><td>30MB-200MB</td><td>⭐⭐⭐⭐⭐</td><td>优秀</td><td>⭐⭐⭐⭐⭐ 首选</td></tr>
-        <tr><td><strong>Whisper</strong></td><td>39MB-155MB</td><td>⭐⭐⭐⭐⭐</td><td>一般</td><td>⭐⭐⭐⭐ 适合转写</td></tr>
-        <tr><td><strong>Vosk</strong></td><td>50MB-1GB</td><td>⭐⭐⭐⭐</td><td>优秀</td><td>⭐⭐⭐⭐ 备选</td></tr>
-      </table>
-
-      <h2>Sherpa ONNX（强烈推荐）</h2>
-
-      <p><a href="https://github.com/k2-fsa/sherpa-onnx" target="_blank">Sherpa ONNX</a> 是新一代开源语音识别工具包，基于下一代 Kaldi（k2）和 ONNX Runtime，专为嵌入式和移动设备优化。</p>
-
-      <div class="tip-box">
-        <strong>核心优势</strong>：模型小巧、支持流式识别、延迟极低、中文效果优异、活跃社区维护。
-      </div>
-
-      <h3>快速集成</h3>
-
-      <ol>
-        <li><strong>下载模型</strong>：从 <a href="https://github.com/k2-fsa/sherpa-onnx/releases" target="_blank">Releases</a> 下载中文模型（推荐 20M 版本，约 60MB）</li>
-        <li><strong>添加依赖</strong>：<code>implementation 'com.github.k2-fsa:sherpa-onnx-android:1.10.0'</code></li>
-        <li><strong>初始化识别器</strong>：加载模型并创建 <code>OfflineRecognizer</code></li>
-        <li><strong>录音识别</strong>：使用 <code>AudioRecord</code> 采集音频，调用 <code>recognizer.decode()</code></li>
-      </ol>
-
-      <h3>核心代码</h3>
-
-      <pre><code>// 初始化识别器
-val config = OfflineRecognizerConfig().apply {
-    modelConfig = OfflineModelConfig().apply {
-        transducer = OfflineTransducerModelConfig().apply {
-            encoder = "$modelDir/encoder.onnx"
-            decoder = "$modelDir/decoder.onnx"
-            joiner = "$modelDir/joiner.onnx"
-        }
-        tokens = "$modelDir/tokens.txt"
-        numThreads = 4
-    }
-}
-val recognizer = OfflineRecognizer(config)
-
-// 识别音频
-val result = recognizer.decode(audioData, 16000f)
-println(result.text)</code></pre>
-
-      <p>完整实现参考官方 <a href="https://github.com/k2-fsa/sherpa-onnx/tree/master/android" target="_blank">Android 示例项目</a>。</p>
-
-      <h3>模型选择</h3>
-
-      <table>
-        <tr><th>场景</th><th>推荐模型</th><th>大小</th><th>RTF*</th></tr>
-        <tr><td>实时语音输入</td><td>Zipformer 20M</td><td>~60MB</td><td>0.1</td></tr>
-        <tr><td>低功耗设备</td><td>Zipformer 14M</td><td>~40MB</td><td>0.05</td></tr>
-        <tr><td>高准确率</td><td>Paraformer</td><td>~200MB</td><td>0.3</td></tr>
-      </table>
-
-      <p><em>* RTF：处理 1 秒音频所需时间，&lt; 1 表示实时</em></p>
-
-      <h2>Whisper（适合转写）</h2>
-
-      <p>Whisper 是 OpenAI 开源的通用语音识别模型。需要通过 <a href="https://github.com/ggerganov/whisper.cpp" target="_blank">whisper.cpp</a> 移植到 Android。</p>
-
-      <div class="warning-box">
-        <strong>局限</strong>：不支持流式识别，需要完整音频文件，延迟较高（RTF ≈ 1.0），不适合实时语音输入。
-      </div>
-
-      <h2>Vosk（备选）</h2>
-
-      <p>Vosk 基于传统 Kaldi，API 设计简洁，适合快速原型开发。但模型相对老旧，Sherpa ONNX 是更好的选择。</p>
-
-      <pre><code>// Vosk 简洁 API
-val model = Model("/path/to/model")
-val recognizer = Recognizer(model, 16000f)
-recognizer.acceptWaveform(buffer)
-val result = recognizer.result()</code></pre>
-
-      <h2>性能优化建议</h2>
-
-      <ul>
-        <li><strong>减小 APK 体积</strong>：首次启动时从服务器下载模型</li>
-        <li><strong>提升准确率</strong>：确保 16kHz 采样率，添加降噪和 VAD</li>
-        <li><strong>内存优化</strong>：延迟加载模型，识别器实例复用</li>
-        <li><strong>热词优化</strong>：使用热词文件提升领域词汇识别率</li>
-      </ul>
-
-      <h2>总结</h2>
-
-      <p>Android 离线语音识别技术已经相当成熟，<strong>Sherpa ONNX</strong> 凭借出色的性能、小巧的模型体积和活跃的社区，成为当前最推荐的方案。</p>
-
-      <table>
-        <tr><th>方案</th><th>推荐场景</th><th>注意事项</th></tr>
-        <tr><td>Sherpa ONNX</td><td>实时语音输入、低延迟场景</td><td>首选方案，中文效果优异</td></tr>
-        <tr><td>Whisper</td><td>语音转写、多语言支持</td><td>不支持流式，延迟较高</td></tr>
-        <tr><td>Vosk</td><td>快速原型、简单集成</td><td>模型较老，建议迁移到 Sherpa</td></tr>
-      </table>
-
-      <div class="tip-box">
-        <strong>官方仓库</strong>：<br>
-        Sherpa ONNX：<a href="https://github.com/k2-fsa/sherpa-onnx" target="_blank">github.com/k2-fsa/sherpa-onnx</a><br>
-        Whisper.cpp：<a href="https://github.com/ggerganov/whisper.cpp" target="_blank">github.com/ggerganov/whisper.cpp</a><br>
-        Vosk：<a href="https://github.com/alphacephei/vosk-api" target="_blank">github.com/alphacephei/vosk-api</a>
-      </div>
+<div class="warning-box">
+<p><strong>⚠️ 注意</strong>：本文讨论的"离线语音识别"指的是<strong>完全端侧运行</strong>的方案，模型文件打包在 APK 中或下载到本地，识别过程不依赖任何网络请求。Google SpeechRecognizer 的"离线模式"并非真正的离线方案。</p>
+</div>
+<h2>三大主流方案对比</h2>
+<table>
+<tr><th>方案</th><th>模型大小</th><th>准确率</th><th>实时性</th><th>推荐指数</th></tr>
+<tr><td><strong>Sherpa ONNX</strong></td><td>30MB-200MB</td><td>⭐⭐⭐⭐⭐</td><td>优秀</td><td>⭐⭐⭐⭐⭐ 首选</td></tr>
+<tr><td><strong>Whisper</strong></td><td>39MB-155MB</td><td>⭐⭐⭐⭐⭐</td><td>一般</td><td>⭐⭐⭐⭐ 适合转写</td></tr>
+<tr><td><strong>Vosk</strong></td><td>50MB-1GB</td><td>⭐⭐⭐⭐</td><td>优秀</td><td>⭐⭐⭐⭐ 备选</td></tr>
+</table>
+<h2>Sherpa ONNX（强烈推荐）</h2>
+<p><a href="https://github.com/k2-fsa/sherpa-onnx" target="_blank">Sherpa ONNX</a> 是新一代开源语音识别工具包，基于下一代 Kaldi（k2）和 ONNX Runtime，专为嵌入式和移动设备优化。</p>
+<div class="tip-box">
+<p><strong>核心优势</strong>：模型小巧、支持流式识别、延迟极低、中文效果优异、活跃社区维护。</p>
+</div>
+<h3>快速集成</h3>
+<ol>
+<li><strong>下载模型</strong>：从 <a href="https://github.com/k2-fsa/sherpa-onnx/releases" target="_blank">Releases</a> 下载中文模型（推荐 20M 版本，约 60MB）</li>
+<li><strong>添加依赖</strong>：<code>implementation 'com.github.k2-fsa:sherpa-onnx-android:1.10.0'</code></li>
+<li><strong>初始化识别器</strong>：加载模型并创建 <code>OfflineRecognizer</code></li>
+<li><strong>录音识别</strong>：使用 <code>AudioRecord</code> 采集音频，调用 <code>recognizer.decode()</code></li>
+</ol>
+<h3>核心代码</h3>
+<pre><code>// 初始化识别器
+<p>val config = OfflineRecognizerConfig().apply {</p>
+<p>modelConfig = OfflineModelConfig().apply {</p>
+<p>transducer = OfflineTransducerModelConfig().apply {</p>
+<p>encoder = "$modelDir/encoder.onnx"</p>
+<p>decoder = "$modelDir/decoder.onnx"</p>
+<p>joiner = "$modelDir/joiner.onnx"</p>
+<p>}</p>
+<p>tokens = "$modelDir/tokens.txt"</p>
+<p>numThreads = 4</p>
+<p>}</p>
+<p>}</p>
+<p>val recognizer = OfflineRecognizer(config)</p>
+<p>// 识别音频</p>
+<p>val result = recognizer.decode(audioData, 16000f)</p>
+<p>println(result.text)</code></pre></p>
+<p>完整实现参考官方 <a href="https://github.com/k2-fsa/sherpa-onnx/tree/master/android" target="_blank">Android 示例项目</a>。</p>
+<h3>模型选择</h3>
+<table>
+<tr><th>场景</th><th>推荐模型</th><th>大小</th><th>RTF*</th></tr>
+<tr><td>实时语音输入</td><td>Zipformer 20M</td><td>~60MB</td><td>0.1</td></tr>
+<tr><td>低功耗设备</td><td>Zipformer 14M</td><td>~40MB</td><td>0.05</td></tr>
+<tr><td>高准确率</td><td>Paraformer</td><td>~200MB</td><td>0.3</td></tr>
+</table>
+<p><em>* RTF：处理 1 秒音频所需时间，&lt; 1 表示实时</em></p>
+<h2>Whisper（适合转写）</h2>
+<p>Whisper 是 OpenAI 开源的通用语音识别模型。需要通过 <a href="https://github.com/ggerganov/whisper.cpp" target="_blank">whisper.cpp</a> 移植到 Android。</p>
+<div class="warning-box">
+<p><strong>局限</strong>：不支持流式识别，需要完整音频文件，延迟较高（RTF ≈ 1.0），不适合实时语音输入。</p>
+</div>
+<h2>Vosk（备选）</h2>
+<p>Vosk 基于传统 Kaldi，API 设计简洁，适合快速原型开发。但模型相对老旧，Sherpa ONNX 是更好的选择。</p>
+<pre><code>// Vosk 简洁 API
+<p>val model = Model("/path/to/model")</p>
+<p>val recognizer = Recognizer(model, 16000f)</p>
+<p>recognizer.acceptWaveform(buffer)</p>
+<p>val result = recognizer.result()</code></pre></p>
+<h2>性能优化建议</h2>
+<ul>
+<li><strong>减小 APK 体积</strong>：首次启动时从服务器下载模型</li>
+<li><strong>提升准确率</strong>：确保 16kHz 采样率，添加降噪和 VAD</li>
+<li><strong>内存优化</strong>：延迟加载模型，识别器实例复用</li>
+<li><strong>热词优化</strong>：使用热词文件提升领域词汇识别率</li>
+</ul>
+<h2>总结</h2>
+<p>Android 离线语音识别技术已经相当成熟，<strong>Sherpa ONNX</strong> 凭借出色的性能、小巧的模型体积和活跃的社区，成为当前最推荐的方案。</p>
+<table>
+<tr><th>方案</th><th>推荐场景</th><th>注意事项</th></tr>
+<tr><td>Sherpa ONNX</td><td>实时语音输入、低延迟场景</td><td>首选方案，中文效果优异</td></tr>
+<tr><td>Whisper</td><td>语音转写、多语言支持</td><td>不支持流式，延迟较高</td></tr>
+<tr><td>Vosk</td><td>快速原型、简单集成</td><td>模型较老，建议迁移到 Sherpa</td></tr>
+</table>
+<div class="tip-box">
+<p><strong>官方仓库</strong>：<br></p>
+<p>Sherpa ONNX：<a href="https://github.com/k2-fsa/sherpa-onnx" target="_blank">github.com/k2-fsa/sherpa-onnx</a><br></p>
+<p>Whisper.cpp：<a href="https://github.com/ggerganov/whisper.cpp" target="_blank">github.com/ggerganov/whisper.cpp</a><br></p>
+<p>Vosk：<a href="https://github.com/alphacephei/vosk-api" target="_blank">github.com/alphacephei/vosk-api</a></p>
+</div>
 
         <!-- Related Static -->
         <div class="related-posts">

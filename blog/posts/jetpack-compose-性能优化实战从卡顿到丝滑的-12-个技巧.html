@@ -55,7 +55,7 @@
 }
     </script>
 
-    <link rel="stylesheet" href="../../assets/css/style.css?v=231fa9f71a">
+    <link rel="stylesheet" href="../../assets/css/style.css?v=27743e398e">
     <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
     <link rel="alternate icon" href="../../assets/images/favicon.ico">
     <link rel="canonical" href="https://709527.xyz/blog/posts/jetpack-compose-性能优化实战从卡顿到丝滑的-12-个技巧.html">
@@ -146,20 +146,20 @@
 <h3>重组（Recomposition）的开销</h3>
 <p>来看一个简单的例子：</p>
 <pre><code class="language-kotlin">@Composable
-fun UserProfile(user: User) {
-    Column {
-        Text(&quot;姓名：${user.name}&quot;)
-        Text(&quot;邮箱：${user.email}&quot;)
-        Text(&quot;积分：${user.points}&quot;)
-        // 头像加载昂贵
-        AsyncImage(
-            model = user.avatarUrl,
-            contentDescription = &quot;头像&quot;,
-            modifier = Modifier.size(48.dp)
-        )
-    }
-}
-</code></pre>
+<p>fun UserProfile(user: User) {</p>
+<p>Column {</p>
+<p>Text(&quot;姓名：${user.name}&quot;)</p>
+<p>Text(&quot;邮箱：${user.email}&quot;)</p>
+<p>Text(&quot;积分：${user.points}&quot;)</p>
+<p>// 头像加载昂贵</p>
+<p>AsyncImage(</p>
+<p>model = user.avatarUrl,</p>
+<p>contentDescription = &quot;头像&quot;,</p>
+<p>modifier = Modifier.size(48.dp)</p>
+<p>)</p>
+<p>}</p>
+<p>}</p>
+<p></code></pre></p>
 <p>当 <code>user</code> 对象引用变化时（比如从网络请求获取的新对象），即使 <code>name</code>、<code>email</code>、<code>points</code> 字段完全相同，整个 <code>UserProfile</code> 都会重组——包括重新加载头像。在一次帧内（16ms），如果能完成重组倒也无妨；但如果列表中有 50 个这样的 Composable 同时重组，丢帧几乎是必然的。</p>
 <h3>Compose 编译器的优化边界</h3>
 <p>Compose Compiler 在编译期做了大量优化工作：</p>
@@ -172,68 +172,63 @@ fun UserProfile(user: User) {
 <h3>稳定类型的本质</h3>
 <p>什么叫"稳定类型"？Compose 编译器在编译时通过静态分析判断：</p>
 <pre><code class="language-kotlin">// Kotlin 基本类型和 String 都是稳定的
-val name: String       // 稳定
-val count: Int         // 稳定
-val enabled: Boolean   // 稳定
-
-// 不可变的数据类也是稳定的
-data class User(
-    val id: Long,
-    val name: String,
-    val email: String
-) // 所有字段稳定 → User 也稳定
-
-// 但包含了可变集合，就不稳定了
-data class UserGroup(
-    val users: List&lt;User&gt;  // OK
-)
-
-data class UserGroup(     // ❌ 不稳定
-    val users: MutableList&lt;User&gt;  // MutableList 不稳定
-)
-</code></pre>
+<p>val name: String       // 稳定</p>
+<p>val count: Int         // 稳定</p>
+<p>val enabled: Boolean   // 稳定</p>
+<p>// 不可变的数据类也是稳定的</p>
+<p>data class User(</p>
+<p>val id: Long,</p>
+<p>val name: String,</p>
+<p>val email: String</p>
+<p>) // 所有字段稳定 → User 也稳定</p>
+<p>// 但包含了可变集合，就不稳定了</p>
+<p>data class UserGroup(</p>
+<p>val users: List&lt;User&gt;  // OK</p>
+<p>)</p>
+<p>data class UserGroup(     // ❌ 不稳定</p>
+<p>val users: MutableList&lt;User&gt;  // MutableList 不稳定</p>
+<p>)</p>
+<p></code></pre></p>
 <h3>快照状态系统（Snapshot State）与重组</h3>
 <p>Compose 的状态管理基于快照系统（Snapshot System），这是理解性能的关键：</p>
 <pre><code class="language-kotlin">val state = mutableStateOf(0)  // 初始快照
-
-// 在一个事务中批量修改
-Snapshot.withMutableSnapshot {
-    state.value = 1
-    state.value = 2
-    state.value = 3
-}
-// 事务提交后只触发一次重组，value = 3
-</code></pre>
+<p>// 在一个事务中批量修改</p>
+<p>Snapshot.withMutableSnapshot {</p>
+<p>state.value = 1</p>
+<p>state.value = 2</p>
+<p>state.value = 3</p>
+<p>}</p>
+<p>// 事务提交后只触发一次重组，value = 3</p>
+<p></code></pre></p>
 <p>快照系统会自动合并同一事务内的多次修改，避免不必要的重组。但如果你在多个协程中分散修改状态，每次修改都会触发独立重组。</p>
 <h2>技巧 1-4：减少不必要的重组</h2>
 <h3>1. 使用 remember 和 derivedStateOf</h3>
 <p><code>remember</code> 是 Compose 中最基本的记忆化机制：</p>
 <pre><code class="language-kotlin">@Composable
-fun ExpensiveCalculation(input: Int) {
-    val result = remember(input) {
-        // 只在 input 变化时重新计算
-        performHeavyCalculation(input)
-    }
-    Text(&quot;结果：$result&quot;)
-}
-</code></pre>
+<p>fun ExpensiveCalculation(input: Int) {</p>
+<p>val result = remember(input) {</p>
+<p>// 只在 input 变化时重新计算</p>
+<p>performHeavyCalculation(input)</p>
+<p>}</p>
+<p>Text(&quot;结果：$result&quot;)</p>
+<p>}</p>
+<p></code></pre></p>
 <p><code>derivedStateOf</code> 更进一步——当源状态频繁变化但派生值不变时，它能阻止重组：</p>
 <pre><code class="language-kotlin">@Composable
-fun SearchList(query: String, allItems: List&lt;Item&gt;) {
-    // 只有当过滤结果真正改变时才触发重组
-    val filteredItems by remember {
-        derivedStateOf {
-            allItems.filter { it.name.contains(query, ignoreCase = true) }
-        }
-    }
-
-    LazyColumn {
-        items(filteredItems) { item -&gt;
-            SearchResultItem(item)
-        }
-    }
-}
-</code></pre>
+<p>fun SearchList(query: String, allItems: List&lt;Item&gt;) {</p>
+<p>// 只有当过滤结果真正改变时才触发重组</p>
+<p>val filteredItems by remember {</p>
+<p>derivedStateOf {</p>
+<p>allItems.filter { it.name.contains(query, ignoreCase = true) }</p>
+<p>}</p>
+<p>}</p>
+<p>LazyColumn {</p>
+<p>items(filteredItems) { item -&gt;</p>
+<p>SearchResultItem(item)</p>
+<p>}</p>
+<p>}</p>
+<p>}</p>
+<p></code></pre></p>
 <p>这里的关键区别：<code>query</code> 每次输入一个字符都会变化，但 <code>derivedStateOf</code> 只在过滤结果的列表引用变化时才通知重组。如果新增字符没有改变过滤结果，就不会触发 <code>LazyColumn</code> 的重组。</p>
 <h3>2. 稳定类型与 @Stable/@Immutable 注解</h3>
 <p>Compose Compiler 在编译期通过稳定性推断决定是否跳过重组。一个类型被视为"稳定"需要满足：</p>
@@ -244,174 +239,169 @@ fun SearchList(query: String, allItems: List&lt;Item&gt;) {
 </ul>
 <p>看一个典型的不稳定类型：</p>
 <pre><code class="language-kotlin">// ❌ 不稳定：MutableList 可变 + 没有状态通知
-data class UserList(
-    val users: MutableList&lt;User&gt;  // MutableList 被视为不稳定
-)
-
-// ✅ 稳定：不可变列表
-data class UserList(
-    val users: List&lt;User&gt;  // List 被视为稳定
-)
-</code></pre>
+<p>data class UserList(</p>
+<p>val users: MutableList&lt;User&gt;  // MutableList 被视为不稳定</p>
+<p>)</p>
+<p>// ✅ 稳定：不可变列表</p>
+<p>data class UserList(</p>
+<p>val users: List&lt;User&gt;  // List 被视为稳定</p>
+<p>)</p>
+<p></code></pre></p>
 <p>当你使用外部库的数据类时，手动添加注解：</p>
 <pre><code class="language-kotlin">@Immutable
-data class User(
-    val id: Long,
-    val name: String,
-    val avatarUrl: String
-)
-</code></pre>
+<p>data class User(</p>
+<p>val id: Long,</p>
+<p>val name: String,</p>
+<p>val avatarUrl: String</p>
+<p>)</p>
+<p></code></pre></p>
 <p><code>@Immutable</code> 向编译器承诺：该类型的值一旦创建就永不改变。<code>@Stable</code> 更灵活——允许值变化，但承诺 Compose 能收到通知。</p>
 <h3>3. 合理使用 key 参数</h3>
 <p>在列表中使用 <code>key</code> 是性能优化的基础：</p>
 <pre><code class="language-kotlin">LazyColumn {
-    items(
-        items = userList,
-        key = { user -&gt; user.id }  // 使用稳定的唯一标识
-    ) { user -&gt;
-        UserItem(user)
-    }
-}
-</code></pre>
+<p>items(</p>
+<p>items = userList,</p>
+<p>key = { user -&gt; user.id }  // 使用稳定的唯一标识</p>
+<p>) { user -&gt;</p>
+<p>UserItem(user)</p>
+<p>}</p>
+<p>}</p>
+<p></code></pre></p>
 <p>没有 key 时，Compose 只能用位置（index）来匹配 item。如果列表头部插入一条新数据，所有 item 都会重组。有了 key，Compose 能精确识别哪些 item 发生了变化。</p>
 <h3>4. 避免在 Composable 中直接读取可变状态</h3>
 <p>一个常见的性能陷阱：</p>
 <pre><code class="language-kotlin">// ❌ 每次 DrawerState 改变都重组整个 Screen
-@Composable
-fun MainScreen(drawerState: DrawerState) {
-    ModalDrawerSheet(
-        drawerState = drawerState,
-        content = {
-            NavigationContent()
-        }
-    )
-}
-
-// ✅ 将状态读取推迟到真正需要的地方
-@Composable
-fun MainScreen(drawerState: DrawerState) {
-    ModalDrawerSheet(
-        drawerState = drawerState,
-        content = {
-            val isOpen by remember { derivedStateOf { drawerState.isOpen } }
-            // 现在重组范围缩小了
-        }
-    )
-}
-</code></pre>
+<p>@Composable</p>
+<p>fun MainScreen(drawerState: DrawerState) {</p>
+<p>ModalDrawerSheet(</p>
+<p>drawerState = drawerState,</p>
+<p>content = {</p>
+<p>NavigationContent()</p>
+<p>}</p>
+<p>)</p>
+<p>}</p>
+<p>// ✅ 将状态读取推迟到真正需要的地方</p>
+<p>@Composable</p>
+<p>fun MainScreen(drawerState: DrawerState) {</p>
+<p>ModalDrawerSheet(</p>
+<p>drawerState = drawerState,</p>
+<p>content = {</p>
+<p>val isOpen by remember { derivedStateOf { drawerState.isOpen } }</p>
+<p>// 现在重组范围缩小了</p>
+<p>}</p>
+<p>)</p>
+<p>}</p>
+<p></code></pre></p>
 <p>原则是：<strong>尽可能在状态使用的最深层读取状态</strong>，而不是在顶层传递整个 State 对象。</p>
 <h2>技巧 5-8：延迟布局优化</h2>
 <h3>5. LazyColumn key 与 contentType</h3>
 <p><code>contentType</code> 允许 Compose 按类型复用 Composition：</p>
 <pre><code class="language-kotlin">LazyColumn {
-    items(
-        items = feedItems,
-        key = { it.id },
-        contentType = { it.type }  // &quot;header&quot; / &quot;post&quot; / &quot;ad&quot; / &quot;footer&quot;
-    ) { item -&gt;
-        when (item.type) {
-            &quot;header&quot; -&gt; FeedHeader(item)
-            &quot;post&quot; -&gt; FeedPost(item)
-            &quot;ad&quot; -&gt; FeedAd(item)
-            else -&gt; FeedFooter(item)
-        }
-    }
-}
-</code></pre>
+<p>items(</p>
+<p>items = feedItems,</p>
+<p>key = { it.id },</p>
+<p>contentType = { it.type }  // &quot;header&quot; / &quot;post&quot; / &quot;ad&quot; / &quot;footer&quot;</p>
+<p>) { item -&gt;</p>
+<p>when (item.type) {</p>
+<p>&quot;header&quot; -&gt; FeedHeader(item)</p>
+<p>&quot;post&quot; -&gt; FeedPost(item)</p>
+<p>&quot;ad&quot; -&gt; FeedAd(item)</p>
+<p>else -&gt; FeedFooter(item)</p>
+<p>}</p>
+<p>}</p>
+<p>}</p>
+<p></code></pre></p>
 <p><code>contentType</code> 让 Compose 按类别复用 Composition 槽位，避免不同类型之间适配带来的测量开销。</p>
 <h3>6. 避免 0 尺寸的 item</h3>
 <p>当过滤条件导致某些 item 不需要显示时，不要返回 0 尺寸的空布局：</p>
 <pre><code class="language-kotlin">// ❌ 仍然占用 LazyColumn 的 item 槽位
-LazyColumn {
-    items(allItems) { item -&gt;
-        if (item.isVisible) {
-            ItemContent(item)
-        } else {
-            Box(modifier = Modifier.size(0.dp))  // 浪费
-        }
-    }
-}
-
-// ✅ 在传参前就过滤掉
-val visibleItems = remember(allItems) {
-    allItems.filter { it.isVisible }
-}
-LazyColumn {
-    items(visibleItems) { item -&gt;
-        ItemContent(item)
-    }
-}
-</code></pre>
+<p>LazyColumn {</p>
+<p>items(allItems) { item -&gt;</p>
+<p>if (item.isVisible) {</p>
+<p>ItemContent(item)</p>
+<p>} else {</p>
+<p>Box(modifier = Modifier.size(0.dp))  // 浪费</p>
+<p>}</p>
+<p>}</p>
+<p>}</p>
+<p>// ✅ 在传参前就过滤掉</p>
+<p>val visibleItems = remember(allItems) {</p>
+<p>allItems.filter { it.isVisible }</p>
+<p>}</p>
+<p>LazyColumn {</p>
+<p>items(visibleItems) { item -&gt;</p>
+<p>ItemContent(item)</p>
+<p>}</p>
+<p>}</p>
+<p></code></pre></p>
 <h3>7. 预取策略与 beyondBoundsItemCount</h3>
 <p>LazyColumn 默认在可视区域外预加载一些 item，可以通过 <code>beyondBoundsItemCount</code> 调节：</p>
 <pre><code class="language-kotlin">LazyColumn {
-    items(
-        items = largeList,
-        key = { it.id }
-    ) { item -&gt;
-        ComplicatedItem(item)
-    }
-}
-
-// 增加预取范围，减少滑动时的白屏
-// 但也要权衡——每次预取更多 item 意味着更高的内存和重组开销
-LazyColumn {
-    items(
-        items = largeList,
-        key = { it.id },
-        contentType = { it.type }
-    ) { item -&gt;
-        ComplicatedItem(item)
-    }
-}
-</code></pre>
+<p>items(</p>
+<p>items = largeList,</p>
+<p>key = { it.id }</p>
+<p>) { item -&gt;</p>
+<p>ComplicatedItem(item)</p>
+<p>}</p>
+<p>}</p>
+<p>// 增加预取范围，减少滑动时的白屏</p>
+<p>// 但也要权衡——每次预取更多 item 意味着更高的内存和重组开销</p>
+<p>LazyColumn {</p>
+<p>items(</p>
+<p>items = largeList,</p>
+<p>key = { it.id },</p>
+<p>contentType = { it.type }</p>
+<p>) { item -&gt;</p>
+<p>ComplicatedItem(item)</p>
+<p>}</p>
+<p>}</p>
+<p></code></pre></p>
 <h3>8. 使用 LazyLayout 自定义布局</h3>
 <p>当 LazyColumn/LazyRow 无法满足需求时，可以用 <code>LazyLayout</code> 实现完全自定义的惰性布局：</p>
 <pre><code class="language-kotlin">@Composable
-fun CustomLazyGrid(
-    items: List&lt;GridItem&gt;,
-    columns: Int
-) {
-    LazyLayout(
-        modifier = Modifier.fillMaxSize()
-    ) {
-        items(
-            count = items.size,
-            key = { items[it].id }
-        ) { index -&gt;
-            val item = items[index]
-            GridCell(
-                item = item,
-                measurePolicy = rememberGridMeasurePolicy(columns)
-            )
-        }
-    }
-}
-</code></pre>
+<p>fun CustomLazyGrid(</p>
+<p>items: List&lt;GridItem&gt;,</p>
+<p>columns: Int</p>
+<p>) {</p>
+<p>LazyLayout(</p>
+<p>modifier = Modifier.fillMaxSize()</p>
+<p>) {</p>
+<p>items(</p>
+<p>count = items.size,</p>
+<p>key = { items[it].id }</p>
+<p>) { index -&gt;</p>
+<p>val item = items[index]</p>
+<p>GridCell(</p>
+<p>item = item,</p>
+<p>measurePolicy = rememberGridMeasurePolicy(columns)</p>
+<p>)</p>
+<p>}</p>
+<p>}</p>
+<p>}</p>
+<p></code></pre></p>
 <p><code>LazyLayout</code> 暴露了测量和放置的底层 API，适合瀑布流、交错网格等场景。</p>
 <h2>技巧 9-11：资源与渲染优化</h2>
 <h3>9. 图片加载最佳实践</h3>
 <p>Compose 中图片加载的首选库是 Coil，基于 Kotlin 协程设计，天然适配 Compose：</p>
 <pre><code class="language-kotlin">// ✅ 好的实践
-AsyncImage(
-    model = ImageRequest.Builder(LocalContext.current)
-        .data(url)
-        .crossfade(true)
-        .size(300, 300)            // 明确请求尺寸，避免解码完整大图
-        .memoryCachePolicy(CachePolicy.ENABLED)
-        .diskCachePolicy(CachePolicy.ENABLED)
-        .build(),
-    contentDescription = null,
-    contentScale = ContentScale.Crop,
-    modifier = Modifier.fillMaxWidth()
-)
-
-// ❌ 坏的实践
-AsyncImage(
-    model = &quot;https://example.com/4000x3000.jpg&quot;,  // 原始大图
-    contentDescription = null
-)
-</code></pre>
+<p>AsyncImage(</p>
+<p>model = ImageRequest.Builder(LocalContext.current)</p>
+<p>.data(url)</p>
+<p>.crossfade(true)</p>
+<p>.size(300, 300)            // 明确请求尺寸，避免解码完整大图</p>
+<p>.memoryCachePolicy(CachePolicy.ENABLED)</p>
+<p>.diskCachePolicy(CachePolicy.ENABLED)</p>
+<p>.build(),</p>
+<p>contentDescription = null,</p>
+<p>contentScale = ContentScale.Crop,</p>
+<p>modifier = Modifier.fillMaxWidth()</p>
+<p>)</p>
+<p>// ❌ 坏的实践</p>
+<p>AsyncImage(</p>
+<p>model = &quot;https://example.com/4000x3000.jpg&quot;,  // 原始大图</p>
+<p>contentDescription = null</p>
+<p>)</p>
+<p></code></pre></p>
 <p>关键优化点：</p>
 <ul>
 <li><strong>明确指定 <code>size()</code></strong>：避免加载原始大图到内存</li>
@@ -422,19 +412,18 @@ AsyncImage(
 <h3>10. Modifier 顺序与布局测量成本</h3>
 <p>Modifier 链的顺序直接影响性能：</p>
 <pre><code class="language-kotlin">// ❌ 坏的顺序：padding 在前，clip 在后
-// 每次重组都重新计算 padding 后的尺寸，然后裁剪
-Modifier
-    .padding(16.dp)
-    .clip(RoundedCornerShape(8.dp))
-    .background(Color.Gray)
-
-// ✅ 好的顺序：background → padding → clip
-// background 在 padding 之前，减少测量开销
-Modifier
-    .background(Color.Gray)
-    .padding(16.dp)
-    .clip(RoundedCornerShape(8.dp))
-</code></pre>
+<p>// 每次重组都重新计算 padding 后的尺寸，然后裁剪</p>
+<p>Modifier</p>
+<p>.padding(16.dp)</p>
+<p>.clip(RoundedCornerShape(8.dp))</p>
+<p>.background(Color.Gray)</p>
+<p>// ✅ 好的顺序：background → padding → clip</p>
+<p>// background 在 padding 之前，减少测量开销</p>
+<p>Modifier</p>
+<p>.background(Color.Gray)</p>
+<p>.padding(16.dp)</p>
+<p>.clip(RoundedCornerShape(8.dp))</p>
+<p></code></pre></p>
 <p>通用规则：</p>
 <ol>
 <li><code>size</code> / <code>fillMaxSize</code> 最外层</li>
@@ -445,79 +434,75 @@ Modifier
 <h3>11. 使用 GraphicsLayer 做属性动画</h3>
 <p>对于 alpha、scale、rotation、translation 等属性动画，使用 <code>graphicsLayer</code> 而不是重组：</p>
 <pre><code class="language-kotlin">// ❌ 通过重组改变 alpha（每次值变化都重组整个内容）
-var alpha by remember { mutableFloatStateOf(0f) }
-LaunchedEffect(Unit) {
-    animate(0f, 1f, animationSpec = tween(1000)) { value, _ -&gt;
-        alpha = value  // 触发重组
-    }
-}
-Box(modifier = Modifier.alpha(alpha)) {
-    HeavyContent()  // 每次 alpha 改变都重组
-}
-
-// ✅ 通过 GraphicsLayer 改变 alpha（不重组）
-val alpha = remember { Animatable(0f) }
-LaunchedEffect(Unit) {
-    alpha.animateTo(1f, animationSpec = tween(1000))
-}
-Box(
-    modifier = Modifier.graphicsLayer {
-        alpha = this@...  // 在渲染层处理，不触发重组
-    }
-) {
-    HeavyContent()  // 只组合一次
-}
-</code></pre>
+<p>var alpha by remember { mutableFloatStateOf(0f) }</p>
+<p>LaunchedEffect(Unit) {</p>
+<p>animate(0f, 1f, animationSpec = tween(1000)) { value, _ -&gt;</p>
+<p>alpha = value  // 触发重组</p>
+<p>}</p>
+<p>}</p>
+<p>Box(modifier = Modifier.alpha(alpha)) {</p>
+<p>HeavyContent()  // 每次 alpha 改变都重组</p>
+<p>}</p>
+<p>// ✅ 通过 GraphicsLayer 改变 alpha（不重组）</p>
+<p>val alpha = remember { Animatable(0f) }</p>
+<p>LaunchedEffect(Unit) {</p>
+<p>alpha.animateTo(1f, animationSpec = tween(1000))</p>
+<p>}</p>
+<p>Box(</p>
+<p>modifier = Modifier.graphicsLayer {</p>
+<p>alpha = this@...  // 在渲染层处理，不触发重组</p>
+<p>}</p>
+<p>) {</p>
+<p>HeavyContent()  // 只组合一次</p>
+<p>}</p>
+<p></code></pre></p>
 <p><code>graphicsLayer</code> 是渲染层的变换，不经过测量/布局/重组流程，性能极高。</p>
 <h2>技巧 12：编译期优化</h2>
 <h3>Baseline Profile 与 R8 配置</h3>
 <p>Baseline Profile 能让 ART 在安装时就预编译关键代码路径，避免 JIT 编译带来的启动延迟和运行时性能开销：</p>
 <pre><code class="language-kotlin">// baselines-prof.txt
-HSPLandroidx/compose/runtime/ComposerImpl;-&gt;startRestartGroup
-HSPLandroidx/compose/runtime/RecomposeScopeImpl;-&gt;invalidate
-HSPLandroidx/compose/foundation/lazy/LazyListState$scrollPosition$1
-</code></pre>
+<p>HSPLandroidx/compose/runtime/ComposerImpl;-&gt;startRestartGroup</p>
+<p>HSPLandroidx/compose/runtime/RecomposeScopeImpl;-&gt;invalidate</p>
+<p>HSPLandroidx/compose/foundation/lazy/LazyListState$scrollPosition$1</p>
+<p></code></pre></p>
 <p>配合 R8 优化：</p>
 <pre><code class="language-kotlin"># proguard-rules.pro
-# 保留 Compose 运行时必要的类
--keep class androidx.compose.runtime.** { *; }
--dontwarn androidx.compose.**
-
-# 启用 Compose 特定的 R8 优化
--optimizations *otheroptimizations*,class/merging/*
-</code></pre>
+<h1>保留 Compose 运行时必要的类</h1>
+<p>-keep class androidx.compose.runtime.*<em> { </em>; }</p>
+<p>-dontwarn androidx.compose.**</p>
+<h1>启用 Compose 特定的 R8 优化</h1>
+<p>-optimizations <em>otheroptimizations</em>,class/merging/*</p>
+<p></code></pre></p>
 <h3>Compose Compiler Metrics 分析</h3>
 <p>启用 Compose Compiler Metrics 生成可跳过的 Composable 报告：</p>
 <pre><code class="language-gradle">// app/build.gradle.kts
-composeCompiler {
-    reportsDestination = layout.buildDirectory.dir(&quot;compose_compiler&quot;)
-    metricsDestination = layout.buildDirectory.dir(&quot;compose_compiler&quot;)
-}
-
-kotlinOptions {
-    freeCompilerArgs += listOf(
-        &quot;-P&quot;,
-        &quot;plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=&quot; +
-                layout.buildDirectory.dir(&quot;compose_compiler&quot;).get().asFile.absolutePath
-    )
-}
-</code></pre>
+<p>composeCompiler {</p>
+<p>reportsDestination = layout.buildDirectory.dir(&quot;compose_compiler&quot;)</p>
+<p>metricsDestination = layout.buildDirectory.dir(&quot;compose_compiler&quot;)</p>
+<p>}</p>
+<p>kotlinOptions {</p>
+<p>freeCompilerArgs += listOf(</p>
+<p>&quot;-P&quot;,</p>
+<p>&quot;plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=&quot; +</p>
+<p>layout.buildDirectory.dir(&quot;compose_compiler&quot;).get().asFile.absolutePath</p>
+<p>)</p>
+<p>}</p>
+<p></code></pre></p>
 <p>生成的报告中可以查看每个 Composable 的稳定性状态，找出哪些函数因为不稳定参数而无法跳过重组。</p>
 <h3>Compose Compiler 1.5.0+ 的新优化</h3>
 <p>Compose Compiler 从 Kotlin 2.0 起合并为 Kotlin 编译器插件，带来了新的优化：</p>
 <pre><code class="language-kotlin">// 强跳过模式（Strong Skipping Mode）默认启用
-// 现在连&quot;参数没变但内部 State 变了&quot;的场景也能跳过
-
-@Composable
-fun Counter(name: String) {
-    var count by remember { mutableIntStateOf(0) }
-    Text(&quot;$name: $count&quot;)
-    Button(onClick = { count++ }) {
-        Text(&quot;+1&quot;)
-    }
-    // 在强跳过模式下，name 不变时点击按钮不会引起上层重组
-}
-</code></pre>
+<p>// 现在连&quot;参数没变但内部 State 变了&quot;的场景也能跳过</p>
+<p>@Composable</p>
+<p>fun Counter(name: String) {</p>
+<p>var count by remember { mutableIntStateOf(0) }</p>
+<p>Text(&quot;$name: $count&quot;)</p>
+<p>Button(onClick = { count++ }) {</p>
+<p>Text(&quot;+1&quot;)</p>
+<p>}</p>
+<p>// 在强跳过模式下，name 不变时点击按钮不会引起上层重组</p>
+<p>}</p>
+<p></code></pre></p>
 <h2>性能测量与调试工具</h2>
 <h3>Compose Layout Inspector</h3>
 <p>Android Studio 的 Layout Inspector 专门为 Compose 做了适配：</p>
@@ -530,45 +515,43 @@ fun Counter(name: String) {
 <h3>Macrobenchmark 与 Tracing</h3>
 <p>精确量化性能改进需要 Macrobenchmark：</p>
 <pre><code class="language-kotlin">@RunWith(AndroidJUnit4::class)
-class ComposeBenchmark {
-    @get:Rule
-    val benchmarkRule = MacrobenchmarkRule()
-
-    @Test
-    fun scrollList() = benchmarkRule.measureRepeated(
-        packageName = &quot;com.example.app&quot;,
-        metrics = listOf(FrameTimingMetric()),
-        iterations = 10,
-        setupBlock = {
-            pressHome()
-            startActivityAndWait()
-        }
-    ) {
-        val list = device.findObject(By.res(&quot;itemList&quot;))
-        list.setGestureMargin(device.displayMetrics.widthPixels / 5)
-        list.fling(Direction.DOWN)
-        device.waitForIdle()
-    }
-}
-</code></pre>
+<p>class ComposeBenchmark {</p>
+<p>@get:Rule</p>
+<p>val benchmarkRule = MacrobenchmarkRule()</p>
+<p>@Test</p>
+<p>fun scrollList() = benchmarkRule.measureRepeated(</p>
+<p>packageName = &quot;com.example.app&quot;,</p>
+<p>metrics = listOf(FrameTimingMetric()),</p>
+<p>iterations = 10,</p>
+<p>setupBlock = {</p>
+<p>pressHome()</p>
+<p>startActivityAndWait()</p>
+<p>}</p>
+<p>) {</p>
+<p>val list = device.findObject(By.res(&quot;itemList&quot;))</p>
+<p>list.setGestureMargin(device.displayMetrics.widthPixels / 5)</p>
+<p>list.fling(Direction.DOWN)</p>
+<p>device.waitForIdle()</p>
+<p>}</p>
+<p>}</p>
+<p></code></pre></p>
 <p>关键关注 P50、P90、P99 帧耗时。16ms 是 60fps 的底线，如果 P90 超过 16ms，说明 10% 的帧在掉帧。</p>
 <h3>Android Studio System Trace</h3>
 <p>System Trace 可以深入分析帧耗时：</p>
 <pre><code class="language-bash"># 使用 Perfetto 抓取 trace
-adb shell perfetto \
-  -c - --txt \
-  -o /data/misc/perfetto-traces/trace \
-  &lt;&lt;EOF
-buffers: {
-  size_kb: 65536
-  fill_policy: DISCARD
-}
-duration_ms: 10000
-EOF
-
-# 拉取 trace 文件
-adb pull /data/misc/perfetto-traces/trace
-</code></pre>
+<p>adb shell perfetto \</p>
+<p>-c - --txt \</p>
+<p>-o /data/misc/perfetto-traces/trace \</p>
+<p>&lt;&lt;EOF</p>
+<p>buffers: {</p>
+<p>size_kb: 65536</p>
+<p>fill_policy: DISCARD</p>
+<p>}</p>
+<p>duration_ms: 10000</p>
+<p>EOF</p>
+<h1>拉取 trace 文件</h1>
+<p>adb pull /data/misc/perfetto-traces/trace</p>
+<p></code></pre></p>
 <p>在 Perfetto UI 中可以看到每个帧的测量、布局、绘制耗时，定位瓶颈在哪一环节。</p>
 <h3>常见性能陷阱总结</h3>
 <table>
@@ -637,107 +620,102 @@ adb pull /data/misc/perfetto-traces/trace
 <p>一个社交 App 的好友列表，每页 20 个 item，每个 item 含头像、姓名、状态标签、最后在线时间。</p>
 <p><strong>优化前（P90 帧耗时 200ms）</strong>：</p>
 <pre><code class="language-kotlin">// 问题代码
-@Composable
-fun FriendList(viewModel: FriendListViewModel) {
-    val friends by viewModel.friends.collectAsState()
-
-    LazyColumn {
-        items(friends) { friend -&gt;  // 无 key，无 contentType
-            FriendItem(friend)
-        }
-    }
-}
-
-@Composable
-fun FriendItem(friend: Friend) {  // Friend 类型不稳定！
-    Row(modifier = Modifier.padding(12.dp)) {
-        AsyncImage(model = friend.avatarUrl)  // 无尺寸限制
-        Text(friend.name)
-        Text(friend.status)
-        Text(friend.lastOnline)
-    }
-}
-</code></pre>
+<p>@Composable</p>
+<p>fun FriendList(viewModel: FriendListViewModel) {</p>
+<p>val friends by viewModel.friends.collectAsState()</p>
+<p>LazyColumn {</p>
+<p>items(friends) { friend -&gt;  // 无 key，无 contentType</p>
+<p>FriendItem(friend)</p>
+<p>}</p>
+<p>}</p>
+<p>}</p>
+<p>@Composable</p>
+<p>fun FriendItem(friend: Friend) {  // Friend 类型不稳定！</p>
+<p>Row(modifier = Modifier.padding(12.dp)) {</p>
+<p>AsyncImage(model = friend.avatarUrl)  // 无尺寸限制</p>
+<p>Text(friend.name)</p>
+<p>Text(friend.status)</p>
+<p>Text(friend.lastOnline)</p>
+<p>}</p>
+<p>}</p>
+<p></code></pre></p>
 <p><strong>优化后（P90 帧耗时 16ms）</strong>：</p>
 <pre><code class="language-kotlin">@Immutable
-data class Friend(
-    val id: Long,
-    val name: String,
-    val avatarUrl: String,
-    val status: String,
-    val lastOnline: String
-)
-
-@Composable
-fun FriendList(viewModel: FriendListViewModel) {
-    val friends by viewModel.friends.collectAsState()
-
-    LazyColumn {
-        items(
-            items = friends,
-            key = { it.id },
-            contentType = { &quot;friend&quot; }
-        ) { friend -&gt;
-            FriendItem(friend)
-        }
-    }
-}
-
-@Composable
-fun FriendItem(friend: Friend) {
-    Row(modifier = Modifier.padding(12.dp)) {
-        AsyncImage(
-            model = ImageRequest.Builder(LocalContext.current)
-                .data(friend.avatarUrl)
-                .size(48, 48)
-                .crossfade(true)
-                .build(),
-            contentDescription = null,
-            modifier = Modifier
-                .size(48.dp)
-                .clip(CircleShape)
-        )
-        Text(friend.name)
-        Text(friend.status)
-        Text(friend.lastOnline)
-    }
-}
-</code></pre>
+<p>data class Friend(</p>
+<p>val id: Long,</p>
+<p>val name: String,</p>
+<p>val avatarUrl: String,</p>
+<p>val status: String,</p>
+<p>val lastOnline: String</p>
+<p>)</p>
+<p>@Composable</p>
+<p>fun FriendList(viewModel: FriendListViewModel) {</p>
+<p>val friends by viewModel.friends.collectAsState()</p>
+<p>LazyColumn {</p>
+<p>items(</p>
+<p>items = friends,</p>
+<p>key = { it.id },</p>
+<p>contentType = { &quot;friend&quot; }</p>
+<p>) { friend -&gt;</p>
+<p>FriendItem(friend)</p>
+<p>}</p>
+<p>}</p>
+<p>}</p>
+<p>@Composable</p>
+<p>fun FriendItem(friend: Friend) {</p>
+<p>Row(modifier = Modifier.padding(12.dp)) {</p>
+<p>AsyncImage(</p>
+<p>model = ImageRequest.Builder(LocalContext.current)</p>
+<p>.data(friend.avatarUrl)</p>
+<p>.size(48, 48)</p>
+<p>.crossfade(true)</p>
+<p>.build(),</p>
+<p>contentDescription = null,</p>
+<p>modifier = Modifier</p>
+<p>.size(48.dp)</p>
+<p>.clip(CircleShape)</p>
+<p>)</p>
+<p>Text(friend.name)</p>
+<p>Text(friend.status)</p>
+<p>Text(friend.lastOnline)</p>
+<p>}</p>
+<p>}</p>
+<p></code></pre></p>
 <p>三项改动：<code>@Immutable</code> 数据类、LazyColumn key + contentType、图片尺寸限制。P90 从 200ms 降到 16ms。</p>
 <h3>案例二：动画帧率从 45fps 到 60fps</h3>
 <p>一个轮播 Banner，半径 300dp 的圆形图片自动旋转。使用 <code>animateFloatAsState</code> 改变 <code>rotation</code> 值导致持续重组。</p>
 <p><strong>优化前</strong>：</p>
 <pre><code class="language-kotlin">var rotation by remember { mutableFloatStateOf(0f) }
-LaunchedEffect(Unit) {
-    while (true) {
-        animate(0f, 360f, infiniteRepeatable(tween(3000))) { value, _ -&gt;
-            rotation = value
-        }
-    }
-}
-Box(modifier = Modifier.rotate(rotation)) {
-    AsyncImage(model = bannerUrl)
-}
-</code></pre>
+<p>LaunchedEffect(Unit) {</p>
+<p>while (true) {</p>
+<p>animate(0f, 360f, infiniteRepeatable(tween(3000))) { value, _ -&gt;</p>
+<p>rotation = value</p>
+<p>}</p>
+<p>}</p>
+<p>}</p>
+<p>Box(modifier = Modifier.rotate(rotation)) {</p>
+<p>AsyncImage(model = bannerUrl)</p>
+<p>}</p>
+<p></code></pre></p>
 <p><strong>优化后</strong>：</p>
 <pre><code class="language-kotlin">val rotation = remember { Animatable(0f) }
-LaunchedEffect(Unit) {
-    rotation.animateTo(
-        targetValue = 360f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(3000),
-            repeatMode = RepeatMode.Restart
-        )
-    )
-}
-Box(
-    modifier = Modifier.graphicsLayer {
-        rotationZ = rotation.value
-    }
-) {
-    AsyncImage(model = bannerUrl)
-}
-</code></pre>
+<p>LaunchedEffect(Unit) {</p>
+<p>rotation.animateTo(</p>
+<p>targetValue = 360f,</p>
+<p>animationSpec = infiniteRepeatable(</p>
+<p>animation = tween(3000),</p>
+<p>repeatMode = RepeatMode.Restart</p>
+<p>)</p>
+<p>)</p>
+<p>}</p>
+<p>Box(</p>
+<p>modifier = Modifier.graphicsLayer {</p>
+<p>rotationZ = rotation.value</p>
+<p>}</p>
+<p>) {</p>
+<p>AsyncImage(model = bannerUrl)</p>
+<p>}</p>
+<p></code></pre></p>
 <p>帧率从 45fps 稳定到 60fps。<code>graphicsLayer.rotationZ</code> 在 GPU 渲染层处理，不经过 Compose 的测量/布局/重组管线。</p>
 <h2>Jetpack Compose 性能优化检查清单</h2>
 <p>在发布前，过一遍这个清单：</p>

@@ -12,16 +12,21 @@ loczb/
 │   ├── page-2.html ... page-N.html  # 静态分页页（每页 10 张卡 + 写死的 <a> 分页导航，无 JS 可翻页）
 │   ├── articles-index.json       # 文章索引与元数据（瘦身版：posts/categories/stats，无 excerpt/archives/tagCloud）
 │   ├── meta/{slug}.json          # 每篇文章元数据 sidecar（摘要按需拉取，单一真相源）
-│   └── posts/                    # 所有文章 HTML（支持专栏便当盒注入 + 静态「相关文章」内联）
+│   ├── posts-src/{slug}.md       # ★ 每篇文章 Markdown 原文与 Frontmatter（正文源唯一真相源）
+│   └── posts/                    # 编译产出的文章 HTML（支持专栏便当盒注入 + 静态「相关文章」内联）
 ├── templates/
-│   └── blog-post-template.html   # 文章骨架模板（含 <!-- Related Static --> 相关文章标记区间）
+│   ├── blog-post-template.html   # 文章骨架模板（含 <!-- Related Static --> 相关文章标记区间）
+│   └── partials/                 # 公共布局片段（nav / footer / skip-link）
 ├── scripts/
-│   ├── generate-post.py          # ★ 主生成脚本（Python 单文件 CLI / Frontmatter）
-│   ├── generate-index.js         # 全站 CI 全量索引重建管线（Node.js）
-│   ├── build-series.js           # 6 大核心旗舰专栏聚合构建器
-│   └── check-links.js            # 自动化死链与静态资源巡检医生
+│   ├── generate-post.py          # 单篇发文脚本（CLI / Frontmatter 模式）
+│   ├── build-posts.py            # ★ 文章批量编译脚本 (npm run build:posts)
+│   ├── generate-index.js         # 全站 CI 全量索引重建管线 (npm run build)
+│   ├── sync-partials.js          # 公共布局片段同步脚本 (npm run sync-partials)
+│   ├── verify.js                 # 核心门禁校验脚本 (npm run verify，含 a-o 项校验)
+│   ├── check-links.js            # 自动化死链与静态资源巡检医生 (npm run check-links)
+│   └── refresh-posts.py          # 全量文章骨架回刷脚本 (npm run refresh)
 ├── assets/
-│   ├── css/style.css             # 全局核心样式 (Bento 2.0, Spotlight, 高对比度双模)
+│   ├── css/style.css             # 全局核心样式 (@layer 层叠分层，Bento 2.0，双模高对比度)
 │   ├── js/
 │   │   ├── main.js               # 核心交互、打字机、Instant Prefetch 预加载引擎
 │   │   ├── blog-list.js          # 列表页：默认走静态卡/静态分页，筛选/归档/专栏才回退 JSON 渲染
@@ -29,7 +34,7 @@ loczb/
 │   │   └── search.js             # 全局 Command Palette 模糊检索 (⌘K / Ctrl+K)
 │   └── images/                   # 图片资源
 ├── .github/workflows/
-│   └── update-index.yml          # CI: 自动化测试与全站索引校验
+│   └── verify.yml                # CI: push / PR 自动化全站门禁与死链巡检
 ├── BLOG-SYSTEM.md                # 博客系统完整规范（本文件）
 └── README.md                     # 项目全局品牌说明与架构指南
 ```

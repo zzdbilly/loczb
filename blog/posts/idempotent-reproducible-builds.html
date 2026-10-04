@@ -55,7 +55,7 @@
 }
     </script>
 
-    <link rel="stylesheet" href="../../assets/css/style.css?v=231fa9f71a">
+    <link rel="stylesheet" href="../../assets/css/style.css?v=27743e398e">
     <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
     <link rel="alternate icon" href="../../assets/images/favicon.ico">
     <link rel="canonical" href="https://709527.xyz/blog/posts/idempotent-reproducible-builds.html">
@@ -138,24 +138,20 @@
 <h3>用两连跑把噪声量出来</h3>
 <p>连续跑两次全量构建，中间不做任何内容改动，然后看工作区有没有变化：</p>
 <pre><code class="language-bash"># 记录基线指纹
-md5sum blog/articles-index.json blog/index.html index.html sitemap.xml rss.xml &gt; /tmp/before.md5
-
-# 第一遍
-node scripts/generate-index.js &gt; /tmp/run1.log
-
-# 第二遍
-node scripts/generate-index.js &gt; /tmp/run2.log
-
-# 工作区是否出现「无内容变化」的改动
-git status --porcelain
-</code></pre>
+<p>md5sum blog/articles-index.json blog/index.html index.html sitemap.xml rss.xml &gt; /tmp/before.md5</p>
+<h1>第一遍</h1>
+<p>node scripts/generate-index.js &gt; /tmp/run1.log</p>
+<h1>第二遍</h1>
+<p>node scripts/generate-index.js &gt; /tmp/run2.log</p>
+<h1>工作区是否出现「无内容变化」的改动</h1>
+<p>git status --porcelain</p>
+<p></code></pre></p>
 <p>在一个已经收敛的仓库里，这三条命令的输出是这样的：</p>
 <pre><code class="language-text">$ git status --porcelain
-（没有任何输出）
-
-$ diff /tmp/run1.log /tmp/run2.log
-（没有差异）
-</code></pre>
+<p>（没有任何输出）</p>
+<p>$ diff /tmp/run1.log /tmp/run2.log</p>
+<p>（没有差异）</p>
+<p></code></pre></p>
 <p>如果 <code>git status --porcelain</code> 打印了文件名，说明第二次构建写了一些字节不同的东西。注意这里是「字节不同」而不是「内容语义不同」——排序换了、空白多了一个换行、时间戳字段被刷新，都算。</p>
 <h3>把 diff 分成三类噪声</h3>
 <p>把 <code>git diff</code> 的内容按性质归类，后面每一类都有独立的成因和对策：</p>
@@ -168,15 +164,15 @@ $ diff /tmp/run1.log /tmp/run2.log
 <h3>量出噪声的规模再动手</h3>
 <p>在样本仓库里统计一次就发现，问题不是边角料。111 篇文章里有 27 篇的发布时间戳完全并列：</p>
 <pre><code class="language-bash">python3 - &lt;&lt;'PY'
-import json, collections
-posts = json.load(open('blog/articles-index.json'))['posts']
-groups = {k: v for k, v in collections.Counter(p['dateTime'] for p in posts).items() if v &gt; 1}
-print(f&quot;并列时间戳分组: {len(groups)} 组, 覆盖 {sum(groups.values())} 篇 / 共 {len(posts)} 篇&quot;)
-PY
-</code></pre>
+<p>import json, collections</p>
+<p>posts = json.load(open('blog/articles-index.json'))['posts']</p>
+<p>groups = {k: v for k, v in collections.Counter(p['dateTime'] for p in posts).items() if v &gt; 1}</p>
+<p>print(f&quot;并列时间戳分组: {len(groups)} 组, 覆盖 {sum(groups.values())} 篇 / 共 {len(posts)} 篇&quot;)</p>
+<p>PY</p>
+<p></code></pre></p>
 <p>输出：</p>
 <pre><code class="language-text">并列时间戳分组: 9 组, 覆盖 27 篇 / 共 111 篇
-</code></pre>
+<p></code></pre></p>
 <p>27 篇、接近四分之一，全部落在同一个排序分支上。这意味着只要这个分支的裁决依据不稳定，四分之一的文章在每次构建里都可能换位置——而它们恰恰是列表页第一屏和 sitemap 前段的常客。</p>
 <h2>二、把四个被混用的词分开</h2>
 <p>「幂等」「可复现」「确定性」「字节比对写盘」经常被当成同义词用。它们描述的是四个不同层次的保证，混用会导致你修错地方。</p>
@@ -233,25 +229,25 @@ PY
 <h3>问题代码长什么样</h3>
 <p>下面这段比较器在本地跑一个月都不会出问题：</p>
 <pre><code class="language-js">// ❌ 用文件 mtime 作并列裁决
-posts.sort((a, b) =&gt; {
-  if (a.timestamp !== b.timestamp) return b.timestamp - a.timestamp;
-  return fs.statSync(a.file).mtimeMs - fs.statSync(b.file).mtimeMs;
-});
-</code></pre>
+<p>posts.sort((a, b) =&gt; {</p>
+<p>if (a.timestamp !== b.timestamp) return b.timestamp - a.timestamp;</p>
+<p>return fs.statSync(a.file).mtimeMs - fs.statSync(b.file).mtimeMs;</p>
+<p>});</p>
+<p></code></pre></p>
 <p>在开发机上，你写完一篇文章就构建一次，文件的 mtime 大致反映了写作先后，所以顺序满足直觉。这个正反馈会掩盖一个事实：mtime 描述的是「文件被写入的时刻」，而你想表达的是「条目的发布时间」。</p>
 <h3>mtime 在全新检出上为什么必然失效</h3>
 <p>git 不保存 mtime。检出时所有文件被一次性写下，它们的 mtime 等于检出时刻。用一个三点小实验验证这一点：</p>
 <pre><code class="language-bash">mkdir work &amp;&amp; cd work &amp;&amp; git init -q .
-for n in 1 2 3; do printf 'post %s\n' $n &gt; &quot;post-$n.html&quot;; done
-git add -A &amp;&amp; git -c user.name=t -c user.email=t@t commit -qm init
-cd .. &amp;&amp; git clone -q work clone
-find clone -maxdepth 1 -name '*.html' -printf '%T@ %p\n' | sort
-</code></pre>
+<p>for n in 1 2 3; do printf 'post %s\n' $n &gt; &quot;post-$n.html&quot;; done</p>
+<p>git add -A &amp;&amp; git -c user.name=t -c user.email=t@t commit -qm init</p>
+<p>cd .. &amp;&amp; git clone -q work clone</p>
+<p>find clone -maxdepth 1 -name '*.html' -printf '%T@ %p\n' | sort</p>
+<p></code></pre></p>
 <p>输出（三行 mtime 精确到纳秒完全相同）：</p>
 <pre><code class="language-text">1790495702.3200957370 clone/post-1.html
-1790495702.3200957370 clone/post-2.html
-1790495702.3200957370 clone/post-3.html
-</code></pre>
+<p>1790495702.3200957370 clone/post-2.html</p>
+<p>1790495702.3200957370 clone/post-3.html</p>
+<p></code></pre></p>
 <p>三个文件的 mtime 一模一样。回到上面的比较器：并列裁决返回 <code>0</code>，排序退化为「引擎稳定性未知」的状态——V8 现在会保持原顺序，但原顺序来自 <code>readdirSync</code>，而目录遍历顺序由文件系统决定，不在你的控制范围内。于是：</p>
 <ul>
 <li>开发机上 27 篇并列文章有一个顺序；</li>
@@ -262,21 +258,20 @@ find clone -maxdepth 1 -name '*.html' -printf '%T@ %p\n' | sort
 <h3>换成既有索引位次做裁决</h3>
 <p>稳定的做法是把裁决依据放进版本控制。读上一次已提交的索引，记录每个条目的既有位次，并列时按位次升序——位次是仓库里的数据，跨机器一致：</p>
 <pre><code class="language-js">// ✅ 用已提交索引中的既有位次作并列裁决
-const prevOrder = {};
-try {
-  const prevIndex = JSON.parse(fs.readFileSync(OUTPUT_FILE, 'utf-8'));
-  prevIndex.posts.forEach((p, i) =&gt; { prevOrder[p.slug] = i; });
-} catch (e) { /* 首次构建时无锚点，退化为 slug 字典序 */ }
-
-posts.sort((a, b) =&gt; {
-  if (a._ts !== b._ts) return b._ts - a._ts;          // 主键：发布时间降序
-  const ra = prevOrder[a.slug], rb = prevOrder[b.slug];
-  if (ra !== undefined &amp;&amp; rb !== undefined &amp;&amp; ra !== rb) return ra - rb;
-  if (ra === undefined &amp;&amp; rb !== undefined) return 1;  // 新条目排在同刻旧条目之后
-  if (rb === undefined &amp;&amp; ra !== undefined) return -1;
-  return a.slug &lt; b.slug ? -1 : a.slug &gt; b.slug ? 1 : 0; // 兜底：slug 字典序
-});
-</code></pre>
+<p>const prevOrder = {};</p>
+<p>try {</p>
+<p>const prevIndex = JSON.parse(fs.readFileSync(OUTPUT_FILE, 'utf-8'));</p>
+<p>prevIndex.posts.forEach((p, i) =&gt; { prevOrder[p.slug] = i; });</p>
+<p>} catch (e) { /<em> 首次构建时无锚点，退化为 slug 字典序 </em>/ }</p>
+<p>posts.sort((a, b) =&gt; {</p>
+<p>if (a.<em>ts !== b.</em>ts) return b.<em>ts - a.</em>ts;          // 主键：发布时间降序</p>
+<p>const ra = prevOrder[a.slug], rb = prevOrder[b.slug];</p>
+<p>if (ra !== undefined &amp;&amp; rb !== undefined &amp;&amp; ra !== rb) return ra - rb;</p>
+<p>if (ra === undefined &amp;&amp; rb !== undefined) return 1;  // 新条目排在同刻旧条目之后</p>
+<p>if (rb === undefined &amp;&amp; ra !== undefined) return -1;</p>
+<p>return a.slug &lt; b.slug ? -1 : a.slug &gt; b.slug ? 1 : 0; // 兜底：slug 字典序</p>
+<p>});</p>
+<p></code></pre></p>
 <p>这个比较器有三个值得注意的性质：</p>
 <ol>
 <li><strong>自映射</strong>：用产物自己作为下一次构建的锚点。内容不变时位次不变，位次不变时顺序不变，顺序不变时产物字节不变——闭环一遍收敛。</li>
@@ -286,44 +281,42 @@ posts.sort((a, b) =&gt; {
 <p>顺带一句维护提醒：这段逻辑迁移完成后，文件头部的注释里还留着一句「同日无精确时间时，用文件 mtime 作 tiebreaker」的旧描述，而实现已经不再读 mtime。注释漂移本身不产生 bug，但它会让下一个读到这段代码的人按旧注释推理。迁移完排序依据后，同步改掉注释是流程的一部分。</p>
 <h3>验证并列裁决稳定</h3>
 <pre><code class="language-bash">node scripts/generate-index.js
-md5sum blog/articles-index.json
-node scripts/generate-index.js
-md5sum blog/articles-index.json
-git status --porcelain
-</code></pre>
+<p>md5sum blog/articles-index.json</p>
+<p>node scripts/generate-index.js</p>
+<p>md5sum blog/articles-index.json</p>
+<p>git status --porcelain</p>
+<p></code></pre></p>
 <p>两行 md5 必须相同，<code>git status --porcelain</code> 必须为空。如果第一次 md5 不同、第二次才相同，说明顺序还在依赖某个未被锚定的输入。</p>
 <h2>四、生成物无条件写盘，把 mtime 刷成噪声</h2>
 <p>顺序修好之后，<code>git status</code> 干净了，但事情只走完一半。还有一类噪声对 git 不可见：文件内容一字未改，写入操作却照常发生，于是 mtime 被刷新。</p>
 <h3>观察一次「什么都没变」的写盘</h3>
 <p>用一段最小脚本观察 mtime 是否被刷新：</p>
 <pre><code class="language-js">const fs = require('fs');
-
-function writeIfChanged(filePath, content) {
-  let old = null;
-  try { old = fs.readFileSync(filePath, 'utf-8'); } catch (e) { /* 文件不存在则直接写 */ }
-  if (old === content) return false;
-  fs.writeFileSync(filePath, content, 'utf-8');
-  return true;
-}
-
-const target = 'out.txt';
-console.log(`首次写入: ${writeIfChanged(target, 'same bytes\n')}`);
-console.log(`内容相同: ${writeIfChanged(target, 'same bytes\n')}`);
-</code></pre>
+<p>function writeIfChanged(filePath, content) {</p>
+<p>let old = null;</p>
+<p>try { old = fs.readFileSync(filePath, 'utf-8'); } catch (e) { /<em> 文件不存在则直接写 </em>/ }</p>
+<p>if (old === content) return false;</p>
+<p>fs.writeFileSync(filePath, content, 'utf-8');</p>
+<p>return true;</p>
+<p>}</p>
+<p>const target = 'out.txt';</p>
+<p>console.log(<strong>INLINE<em>CODE</em>0</strong>);</p>
+<p>console.log(<strong>INLINE<em>CODE</em>1</strong>);</p>
+<p></code></pre></p>
 <p>连续跑两次并观察 mtime：</p>
 <pre><code class="language-bash">rm -f out.txt
-node wic.js &amp;&amp; stat -c '%Y %n' out.txt
-sleep 1.1
-node wic.js &amp;&amp; stat -c '%Y %n' out.txt
-</code></pre>
+<p>node wic.js &amp;&amp; stat -c '%Y %n' out.txt</p>
+<p>sleep 1.1</p>
+<p>node wic.js &amp;&amp; stat -c '%Y %n' out.txt</p>
+<p></code></pre></p>
 <p>输出：</p>
 <pre><code class="language-text">首次写入: true
-内容相同: false
-1790495675 out.txt
-首次写入: false
-内容相同: false
-1790495675 out.txt
-</code></pre>
+<p>内容相同: false</p>
+<p>1790495675 out.txt</p>
+<p>首次写入: false</p>
+<p>内容相同: false</p>
+<p>1790495675 out.txt</p>
+<p></code></pre></p>
 <p>两次输出的时间戳完全相同（<code>1790495675</code>），说明第二次调用虽然跑完了 <code>writeIfChanged</code>，但没有落盘，mtime 原地不动。这就是字节比对写盘的全部机制，二十行不到。</p>
 <h3>谁在依赖 mtime</h3>
 <p>mtime 漂移之所以危险，是因为依赖它的逻辑通常不在同一个文件里，甚至不在同一个仓库里。</p>
@@ -334,16 +327,16 @@ node wic.js &amp;&amp; stat -c '%Y %n' out.txt
 <li><strong>读取端</strong>：<code>lastmod</code> 从元数据的发布日期取值，不再取文件系统 mtime。</li>
 </ol>
 <pre><code class="language-js">// sitemap 的 lastmod 使用文章发布日期（来自元数据），不再取 fs mtime
-posts.forEach(p =&gt; {
-  lines.push('  &lt;url&gt;');
-  lines.push(`    &lt;loc&gt;${BASE_URL}/blog/posts/${p.slug}.html&lt;/loc&gt;`);
-  lines.push(`    &lt;lastmod&gt;${p.date}&lt;/lastmod&gt;`);   // 发布日期，YYYY-MM-DD
-  lines.push('    &lt;changefreq&gt;monthly&lt;/changefreq&gt;');
-  lines.push('    &lt;priority&gt;0.6&lt;/priority&gt;');
-  lines.push('  &lt;/url&gt;');
-});
-writeIfChanged(SITEMAP_XML, lines.join('\n') + '\n');
-</code></pre>
+<p>posts.forEach(p =&gt; {</p>
+<p>lines.push('  &lt;url&gt;');</p>
+<p>lines.push(<strong>INLINE<em>CODE</em>2</strong>);</p>
+<p>lines.push(<strong>INLINE<em>CODE</em>3</strong>);   // 发布日期，YYYY-MM-DD</p>
+<p>lines.push('    &lt;changefreq&gt;monthly&lt;/changefreq&gt;');</p>
+<p>lines.push('    &lt;priority&gt;0.6&lt;/priority&gt;');</p>
+<p>lines.push('  &lt;/url&gt;');</p>
+<p>});</p>
+<p>writeIfChanged(SITEMAP_XML, lines.join('\n') + '\n');</p>
+<p></code></pre></p>
 <p>除了 sitemap，还有一批常见依赖方需要检查：</p>
 <ul>
 <li><code>make</code>、<code>gradle</code>、<code>webpack</code> 等工具的增量判断；</li>
@@ -356,71 +349,68 @@ writeIfChanged(SITEMAP_XML, lines.join('\n') + '\n');
 <h3>写一份 Python 版本</h3>
 <p>同一份纪律在 Python 侧需要显式处理编码与原子性：</p>
 <pre><code class="language-python">import os
-import tempfile
-
-
-def write_if_changed(file_path: str, content: str, encoding: str = 'utf-8') -&gt; bool:
-    &quot;&quot;&quot;内容逐字节相同时跳过写盘，返回本次是否真的写入。&quot;&quot;&quot;
-    try:
-        with open(file_path, 'r', encoding=encoding) as f:
-            if f.read() == content:
-                return False
-    except FileNotFoundError:
-        pass
-
-    # 原子写：先写同目录临时文件，再 rename 覆盖，避免半截文件被读到
-    directory = os.path.dirname(os.path.abspath(file_path))
-    fd, tmp_path = tempfile.mkstemp(dir=directory, suffix='.tmp')
-    try:
-        with os.fdopen(fd, 'w', encoding=encoding) as f:
-            f.write(content)
-        os.replace(tmp_path, file_path)
-    except BaseException:
-        try:
-            os.unlink(tmp_path)
-        except OSError:
-            pass
-        raise
-    return True
-</code></pre>
+<p>import tempfile</p>
+<p>def write<em>if</em>changed(file_path: str, content: str, encoding: str = 'utf-8') -&gt; bool:</p>
+<p>&quot;&quot;&quot;内容逐字节相同时跳过写盘，返回本次是否真的写入。&quot;&quot;&quot;</p>
+<p>try:</p>
+<p>with open(file_path, 'r', encoding=encoding) as f:</p>
+<p>if f.read() == content:</p>
+<p>return False</p>
+<p>except FileNotFoundError:</p>
+<p>pass</p>
+<h1>原子写：先写同目录临时文件，再 rename 覆盖，避免半截文件被读到</h1>
+<p>directory = os.path.dirname(os.path.abspath(file_path))</p>
+<p>fd, tmp_path = tempfile.mkstemp(dir=directory, suffix='.tmp')</p>
+<p>try:</p>
+<p>with os.fdopen(fd, 'w', encoding=encoding) as f:</p>
+<p>f.write(content)</p>
+<p>os.replace(tmp<em>path, file</em>path)</p>
+<p>except BaseException:</p>
+<p>try:</p>
+<p>os.unlink(tmp_path)</p>
+<p>except OSError:</p>
+<p>pass</p>
+<p>raise</p>
+<p>return True</p>
+<p></code></pre></p>
 <p>原子写这一步在构建脚本里容易被省掉，代价是：当构建被别人在写入中途读到产物时，会读到半截文件。注意 <code>os.replace</code> 会改变 mtime——这是对的，因为这次确实写入了新内容。</p>
 <h2>五、注入与移除正则不对称，一遍就不收敛</h2>
 <p>顺序锚定了、写盘也加了比对，还是可能剩下「第一遍洗噪、第二遍才稳」。这类问题的根源通常在注入与移除的一对正则上。</p>
 <h3>「第一遍洗噪、第二遍才稳」是怎么来的</h3>
 <p>考虑一个构建期注入的组件块，它的更新方式是「先删旧的、再写新的」：</p>
 <pre><code class="language-js">// ❌ 移除端吃掉块两侧的空白，写入端只写回单侧 —— 两端不对称
-let out = orig.replace(/\s*&lt;!-- Widget --&gt;[\s\S]*?&lt;!-- \/Widget --&gt;\s*/g, '');
-out = out.replace(/(&lt;div class=&quot;post-tags&quot;&gt;[\s\S]*?&lt;\/div&gt;)/,
-  `$1\n&lt;!-- Widget --&gt;\n&lt;span&gt;w&lt;/span&gt;\n&lt;!-- /Widget --&gt;`);
-</code></pre>
+<p>let out = orig.replace(/\s<em>&lt;!-- Widget --&gt;[\s\S]</em>?&lt;!-- \/Widget --&gt;\s*/g, '');</p>
+<p>out = out.replace(/(&lt;div class=&quot;post-tags&quot;&gt;[\s\S]*?&lt;\/div&gt;)/,</p>
+<p><strong>INLINE<em>CODE</em>4</strong>);</p>
+<p></code></pre></p>
 <p>移除端用 <code>\s*</code> 吃掉了块前后的空白，写入端却不负责把这些空白补回去。跑三次的实际输出：</p>
 <pre><code class="language-text">run1: len=121
-run2: len=119
-run3: len=119
-</code></pre>
+<p>run2: len=119</p>
+<p>run3: len=119</p>
+<p></code></pre></p>
 <p>第一遍和第二遍的长度不同，第二遍之后才稳定。原因很直白：第一遍是「删除什么都不做、只做注入」，此时块后面的空白还是文件原有的；第二遍先把块连同两侧空白一起吃掉，再写回一份不带尾部空白的版本，长度因此短了 2 个字符。</p>
 <p>这种模式下，<code>git status</code> 会出现一次「无意义的空白 diff」，reviewer 会以为有人手改过文件；而如果构建产物被部署，第一遍的产物和稳定态产物是两个不同版本。</p>
 <h3>让吃掉的空白等于写回的空白</h3>
 <p>对称规则可以用一句话表达：<strong>移除端吃掉的空白，必须与写入端写回的空白逐字节相同</strong>。实现上，让两端只处理「锚点之后到块结尾」这一段，不碰块之外属于文件自身的分离空白：</p>
 <pre><code class="language-js">// ✅ 两端严格对称：移除吃掉锚点后的空白，注入写回同量的空白
-let out = orig.replace(/\n*[ \t]*&lt;!-- Widget --&gt;[\s\S]*?&lt;!-- \/Widget --&gt;/g, '');
-out = out.replace(/(&lt;div class=&quot;post-tags&quot;&gt;[\s\S]*?&lt;\/div&gt;)/,
-  `$1\n\n        &lt;!-- Widget --&gt;\n        &lt;span&gt;w&lt;/span&gt;\n        &lt;!-- /Widget --&gt;`);
-</code></pre>
+<p>let out = orig.replace(/\n<em>[ \t]</em>&lt;!-- Widget --&gt;[\s\S]*?&lt;!-- \/Widget --&gt;/g, '');</p>
+<p>out = out.replace(/(&lt;div class=&quot;post-tags&quot;&gt;[\s\S]*?&lt;\/div&gt;)/,</p>
+<p><strong>INLINE<em>CODE</em>5</strong>);</p>
+<p></code></pre></p>
 <p>同样的三次连跑：</p>
 <pre><code class="language-text">run1: len=146 md5=8da03c4d1fec879e21413ebb8485b23a
-run2: len=146 md5=8da03c4d1fec879e21413ebb8485b23a
-run3: len=146 md5=8da03c4d1fec879e21413ebb8485b23a
-</code></pre>
+<p>run2: len=146 md5=8da03c4d1fec879e21413ebb8485b23a</p>
+<p>run3: len=146 md5=8da03c4d1fec879e21413ebb8485b23a</p>
+<p></code></pre></p>
 <p>三次结果的长度和 md5 完全一致，第一遍就是不动点。样本仓库的专栏注入脚本里，这条规则是以注释的形式写下来的：「缩进与移除正则严格对称：吃掉的空白 == 写回的空白」。</p>
 <h3>用两连跑断言收敛</h3>
 <p>改成对称之后，把「一遍收敛」变成可以自动判定的条件：</p>
 <pre><code class="language-bash">node scripts/generate-index.js
-FINGERPRINT_1=$(md5sum blog/index.html index.html sitemap.xml | md5sum)
-node scripts/generate-index.js
-FINGERPRINT_2=$(md5sum blog/index.html index.html sitemap.xml | md5sum)
-[ &quot;$FINGERPRINT_1&quot; = &quot;$FINGERPRINT_2&quot; ] &amp;&amp; echo &quot;PASS: 一遍收敛&quot; || echo &quot;FAIL: 需要第二次构建才稳定&quot;
-</code></pre>
+<p>FINGERPRINT_1=$(md5sum blog/index.html index.html sitemap.xml | md5sum)</p>
+<p>node scripts/generate-index.js</p>
+<p>FINGERPRINT_2=$(md5sum blog/index.html index.html sitemap.xml | md5sum)</p>
+<p>[ &quot;$FINGERPRINT<em>1&quot; = &quot;$FINGERPRINT</em>2&quot; ] &amp;&amp; echo &quot;PASS: 一遍收敛&quot; || echo &quot;FAIL: 需要第二次构建才稳定&quot;</p>
+<p></code></pre></p>
 <p>输出的期望结果是 <code>PASS: 一遍收敛</code>。这条断言比「看 git diff」更严格，因为它在同一次会话里排除了「git 忽略了某个产物」的可能性。</p>
 <h2>六、把元数据抽成 sidecar，让真相源唯一</h2>
 <p>前五节解决的是「相同的输入产生相同的输出」。这一节解决另一个方向的问题：<strong>输入本身从哪来</strong>。如果元数据是靠正则从生成物里反解的，那么构建的正确性依赖于模板的 HTML 细节，模板一改，元数据解读就集体漂移。</p>
@@ -435,41 +425,40 @@ FINGERPRINT_2=$(md5sum blog/index.html index.html sitemap.xml | md5sum)
 <h3>让 sidecar 成为唯一真相源</h3>
 <p>做法是每篇文章配一份独立的元数据文件，与文章 HTML 同步落盘，索引重建优先读它：</p>
 <pre><code class="language-json">{
-  &quot;slug&quot;: &quot;idempotent-reproducible-builds&quot;,
-  &quot;title&quot;: &quot;幂等与可复现：为什么你的构建总在产生无意义的 diff&quot;,
-  &quot;description&quot;: &quot;从 mtime 并列裁决、无条件写盘到不对称正则，拆开构建噪声的三个真实来源……&quot;,
-  &quot;date&quot;: &quot;2026-09-27&quot;,
-  &quot;dateTime&quot;: &quot;2026-09-27 15:52:00&quot;,
-  &quot;category&quot;: &quot;开发&quot;,
-  &quot;tags&quot;: [&quot;构建&quot;, &quot;幂等&quot;, &quot;可复现&quot;, &quot;工程实践&quot;],
-  &quot;readTime&quot;: 14
-}
-</code></pre>
+<p>&quot;slug&quot;: &quot;idempotent-reproducible-builds&quot;,</p>
+<p>&quot;title&quot;: &quot;幂等与可复现：为什么你的构建总在产生无意义的 diff&quot;,</p>
+<p>&quot;description&quot;: &quot;从 mtime 并列裁决、无条件写盘到不对称正则，拆开构建噪声的三个真实来源……&quot;,</p>
+<p>&quot;date&quot;: &quot;2026-09-27&quot;,</p>
+<p>&quot;dateTime&quot;: &quot;2026-09-27 15:52:00&quot;,</p>
+<p>&quot;category&quot;: &quot;开发&quot;,</p>
+<p>&quot;tags&quot;: [&quot;构建&quot;, &quot;幂等&quot;, &quot;可复现&quot;, &quot;工程实践&quot;],</p>
+<p>&quot;readTime&quot;: 14</p>
+<p>}</p>
+<p></code></pre></p>
 <p>放在 <code>blog/meta/&lt;slug&gt;.json</code>，与 <code>blog/posts/&lt;slug&gt;.html</code> 一一对应。读取端按「sidecar 优先、正则回退」的顺序取字段，而且回退粒度是字段级而不是文件级——这样部分字段缺失时仍然可以工作：</p>
 <pre><code class="language-js">// 元数据 sidecar 优先：字段取 sidecar，缺失字段回退正则
-function readSidecar(slug) {
-  const p = path.join(META_DIR, slug + '.json');
-  if (!fs.existsSync(p)) return null;
-  try {
-    return JSON.parse(fs.readFileSync(p, 'utf-8'));
-  } catch (e) {
-    console.warn(`⚠️ blog/meta/${slug}.json 解析失败，回退正则: ${e.message}`);
-    return null;
-  }
-}
-
-const sidecar = readSidecar(slug);
-const title = (sidecar &amp;&amp; sidecar.title) || regexTitle(html);
-const date  = (sidecar &amp;&amp; sidecar.date)  || regexDate(html);
-</code></pre>
+<p>function readSidecar(slug) {</p>
+<p>const p = path.join(META_DIR, slug + '.json');</p>
+<p>if (!fs.existsSync(p)) return null;</p>
+<p>try {</p>
+<p>return JSON.parse(fs.readFileSync(p, 'utf-8'));</p>
+<p>} catch (e) {</p>
+<p>console.warn(<strong>INLINE<em>CODE</em>6</strong>);</p>
+<p>return null;</p>
+<p>}</p>
+<p>}</p>
+<p>const sidecar = readSidecar(slug);</p>
+<p>const title = (sidecar &amp;&amp; sidecar.title) || regexTitle(html);</p>
+<p>const date  = (sidecar &amp;&amp; sidecar.date)  || regexDate(html);</p>
+<p></code></pre></p>
 <p>配套要做两件事：<strong>存量回填</strong>（给已有文章批量生成 sidecar，并逐字段核对与正则结果一致）和<strong>门禁断言</strong>（见下节 b 组），否则 sidecar 会慢慢变成一份没人维护的平行数据。</p>
 <h3>回填之后用门禁守住一致性</h3>
 <p>回填一次脚本就能完成，难的是此后不再漂移。门禁里至少要断言三件事：sidecar 与文章文件一一对应（不能多、不能少）、<code>slug</code> 字段与文件名一致、<code>dateTime</code> 可以被解析成合法时间。</p>
 <pre><code class="language-bash">node scripts/verify.js
-</code></pre>
+<p></code></pre></p>
 <pre><code class="language-text">✅ verify.js 全部通过（posts/index/meta 各 111 条对齐，静态相关与静态分页门禁通过，主页面版本一致）
-</code></pre>
-<p>这条输出里的「各 111 条对齐」就是集合对账的结论：<code>blog/posts/*.html</code> 的文件名集合、索引 JSON 里的 slug 集合、<code>blog/meta/*.json</code> 的 slug 集合，两两双向相等。</p>
+<p></code></pre></p>
+<p>这条输出里的「各 111 条对齐」就是集合对账的结论：<code>blog/posts/<em>.html</code> 的文件名集合、索引 JSON 里的 slug 集合、<code>blog/meta/</em>.json</code> 的 slug 集合，两两双向相等。</p>
 <h2>七、把「零改动」写成可执行的门禁</h2>
 <p>前面所有修法都有一个共同弱点：它们靠人记得。人一忙，绕过校验直接 push 的路径就会出现。把纪律变成退出码，才算落地。</p>
 <h3>门禁要断言的五件事</h3>
@@ -485,68 +474,63 @@ const date  = (sidecar &amp;&amp; sidecar.date)  || regexDate(html);
 <h3>用 md5 做一遍收敛断言</h3>
 <p>门禁脚本之外，再加一条幂等断言，成本极低：</p>
 <pre><code class="language-bash">#!/usr/bin/env bash
-set -euo pipefail
-
-ARTIFACTS=&quot;blog/articles-index.json blog/index.html index.html sitemap.xml rss.xml&quot;
-
-node scripts/generate-index.js &gt; /dev/null
-md5sum $ARTIFACTS &gt; /tmp/idem-1.md5
-node scripts/generate-index.js &gt; /dev/null
-md5sum $ARTIFACTS &gt; /tmp/idem-2.md5
-
-diff /tmp/idem-1.md5 /tmp/idem-2.md5 &amp;&amp; echo &quot;PASS: 两连跑产物一致&quot;
-test -z &quot;$(git status --porcelain)&quot; &amp;&amp; echo &quot;PASS: 无内容变化时零 git 改动&quot;
-</code></pre>
+<p>set -euo pipefail</p>
+<p>ARTIFACTS=&quot;blog/articles-index.json blog/index.html index.html sitemap.xml rss.xml&quot;</p>
+<p>node scripts/generate-index.js &gt; /dev/null</p>
+<p>md5sum $ARTIFACTS &gt; /tmp/idem-1.md5</p>
+<p>node scripts/generate-index.js &gt; /dev/null</p>
+<p>md5sum $ARTIFACTS &gt; /tmp/idem-2.md5</p>
+<p>diff /tmp/idem-1.md5 /tmp/idem-2.md5 &amp;&amp; echo &quot;PASS: 两连跑产物一致&quot;</p>
+<p>test -z &quot;$(git status --porcelain)&quot; &amp;&amp; echo &quot;PASS: 无内容变化时零 git 改动&quot;</p>
+<p></code></pre></p>
 <p>在样本仓库上跑出来的完整结果：</p>
 <pre><code class="language-text">✅ 静态相关文章: 111 篇处理，0 篇写入，每篇 top 5（&lt;3 条的 0 篇）
-✅ sitemap.xml: 111 articles
-✅ sw.js: cache version unchanged (c-8aecd35c), skip write
-PASS: 两连跑产物一致
-PASS: 无内容变化时零 git 改动
-</code></pre>
+<p>✅ sitemap.xml: 111 articles</p>
+<p>✅ sw.js: cache version unchanged (c-8aecd35c), skip write</p>
+<p>PASS: 两连跑产物一致</p>
+<p>PASS: 无内容变化时零 git 改动</p>
+<p></code></pre></p>
 <p>两行关键证据：<code>0 篇写入</code> 说明相关文章内联步骤在内容不变时没有任何落盘动作；<code>cache version unchanged, skip write</code> 说明 Service Worker 的缓存版本号是按内容哈希算的，哈希不变就不写文件。这两条加上前面 md5 的比对，构成完整的幂等证据链。</p>
 <h3>把门禁接进发文链</h3>
 <p>门禁不能是「可选的一步」。把它挂在构建脚本的末尾，让发布流程无法跳过：</p>
 <pre><code class="language-python"># 索引重建成功后跑门禁，不通过则以同码退出（阻断发布）
-vresult = subprocess.run(['node', 'scripts/verify.js'], capture_output=True, text=True, cwd=proj_root)
-for line in (vresult.stdout + vresult.stderr).strip().split('\n'):
-    if line.strip():
-        print(f&quot;  {line}&quot;)
-if vresult.returncode != 0:
-    print(&quot;❌ 一致性校验未通过，请修复后重新运行&quot;)
-    sys.exit(vresult.returncode)
-</code></pre>
+<p>vresult = subprocess.run(['node', 'scripts/verify.js'], capture<em>output=True, text=True, cwd=proj</em>root)</p>
+<p>for line in (vresult.stdout + vresult.stderr).strip().split('\n'):</p>
+<p>if line.strip():</p>
+<p>print(f&quot;  {line}&quot;)</p>
+<p>if vresult.returncode != 0:</p>
+<p>print(&quot;❌ 一致性校验未通过，请修复后重新运行&quot;)</p>
+<p>sys.exit(vresult.returncode)</p>
+<p></code></pre></p>
 <p>同一份构建脚本里还有一条值得抄的纪律：目标文件已存在时拒绝覆盖，必须显式传 <code>--force</code> 才允许，否则以 <code>exit 2</code> 退出。这条保护挡住的是最昂贵的一类事故——同名覆盖让一篇已发布文章整篇消失，而 git 历史里只剩一次「内容替换」。</p>
 <h2>八、带状态的任务必须成功后才推进</h2>
 <p>前面讨论的都是「无状态构建」：输入是仓库内容，输出是产物，跑多少次都一样。还有一类任务天生带状态——增量抓取、增量日报、断点续传的同步。这类任务里最常见的顺序错误，就是先推进状态、再执行动作。</p>
 <h3>先推进状态再执行，失败就丢事件</h3>
 <pre><code class="language-python"># ❌ 先写水位线，再处理数据：中途失败就永久丢掉一段事件
-def run_daily():
-    last_seen = read_watermark('watermark.txt')
-    new_events = fetch_events(since=last_seen)
-    write_watermark('watermark.txt', latest_ts(new_events))   # 水位线先推进
-    for event in new_events:
-        render_and_send(event)                                  # 这里抛异常…
-</code></pre>
+<p>def run_daily():</p>
+<p>last<em>seen = read</em>watermark('watermark.txt')</p>
+<p>new<em>events = fetch</em>events(since=last_seen)</p>
+<p>write<em>watermark('watermark.txt', latest</em>ts(new_events))   # 水位线先推进</p>
+<p>for event in new_events:</p>
+<p>render<em>and</em>send(event)                                  # 这里抛异常…</p>
+<p></code></pre></p>
 <p>如果第 7 行的发送因为网络抖动抛了异常，水位线已经写到了最新时间戳。下一次运行会从新的水位线开始拉取，那些没发出去的事件不会重来——数据静默丢失，而且没有任何日志会显示丢失，因为「拉到过、也推进过」。</p>
 <h3>用状态锚点做幂等重放</h3>
 <p>正确顺序是把水位线的推进放在成功之后，并且锚点本身要能表达「处理到哪」，而不是一个单调的时间水位：</p>
 <pre><code class="language-python"># ✅ 成功后才推进水位线；锚点写入走字节比对，重放安全
-def run_daily():
-    anchor = read_anchor('anchor.json')          # {&quot;last_id&quot;: &quot;...&quot;, &quot;date&quot;: &quot;2026-09-27&quot;}
-    events = fetch_events(after_id=anchor['last_id'])
-
-    processed = []
-    for event in events:
-        render_and_send(event)                    # 先完成副作用
-        processed.append(event['id'])             # 全部成功才记录
-
-    if processed:
-        write_if_changed('anchor.json', json.dumps({
-            'last_id': processed[-1],
-            'date': today(),
-        }, ensure_ascii=False, indent=2))
-</code></pre>
+<p>def run_daily():</p>
+<p>anchor = read<em>anchor('anchor.json')          # {&quot;last</em>id&quot;: &quot;...&quot;, &quot;date&quot;: &quot;2026-09-27&quot;}</p>
+<p>events = fetch<em>events(after</em>id=anchor['last_id'])</p>
+<p>processed = []</p>
+<p>for event in events:</p>
+<p>render<em>and</em>send(event)                    # 先完成副作用</p>
+<p>processed.append(event['id'])             # 全部成功才记录</p>
+<p>if processed:</p>
+<p>write<em>if</em>changed('anchor.json', json.dumps({</p>
+<p>'last_id': processed[-1],</p>
+<p>'date': today(),</p>
+<p>}, ensure_ascii=False, indent=2))</p>
+<p></code></pre></p>
 <p>三个设计要点：</p>
 <ol>
 <li><strong>锚点用稳定 ID 而非时间戳</strong>。时间戳会并列（和第三节的排序问题同源），并列就会漏事件或重复事件；单调递增的 ID 没有这个问题。</li>
@@ -556,13 +540,13 @@ def run_daily():
 <h3>补一条可观测的校验</h3>
 <p>顺序改对之后，加一条能断言的校验，避免回归：</p>
 <pre><code class="language-bash">python3 - &lt;&lt;'PY'
-import json, datetime
-anchor = json.load(open('anchor.json'))
-# 锚点时间不得晚于当前时间，且必须早于或等于最后一次产物的覆盖时间
-assert anchor['date'] &lt;= datetime.date.today().isoformat(), &quot;锚点跑到未来了&quot;
-print(f&quot;PASS: 锚点 date={anchor['date']} last_id={anchor['last_id']}&quot;)
-PY
-</code></pre>
+<p>import json, datetime</p>
+<p>anchor = json.load(open('anchor.json'))</p>
+<h1>锚点时间不得晚于当前时间，且必须早于或等于最后一次产物的覆盖时间</h1>
+<p>assert anchor['date'] &lt;= datetime.date.today().isoformat(), &quot;锚点跑到未来了&quot;</p>
+<p>print(f&quot;PASS: 锚点 date={anchor['date']} last<em>id={anchor['last</em>id']}&quot;)</p>
+<p>PY</p>
+<p></code></pre></p>
 <p>这条断言检查的是锚点语义而不是语法：锚点一旦跑到未来，说明某次推进写入了不该写入的时间，后续拉取会长期空转。</p>
 <h2>九、发布前照这份清单逐条打勾</h2>
 <p>把上面九节的结论压成一份可以直接照做的清单。每一条都对应一条命令或一个可判定的结果。</p>
@@ -590,9 +574,9 @@ PY
 <li>若线上持续 404，先看首页响应头的 <code>last-modified</code>：它若不包含本次构建时间，说明站点构建没有被触发，用一次空提交触发重建，而不是归因于内容错误。</li>
 </ul>
 <pre><code class="language-bash">git -c user.name=zzdbilly -c user.email=billycust716@gmail.com commit -m &quot;新增文章：示例标题（example-slug）&quot;
-git log -1 --format='%ae'
-curl -sS -o /dev/null -w '%{http_code}\n' -A 'Mozilla/5.0' https://example.com/blog/posts/example-slug.html
-</code></pre>
+<p>git log -1 --format='%ae'</p>
+<p>curl -sS -o /dev/null -w '%{http_code}\n' -A 'Mozilla/5.0' https://example.com/blog/posts/example-slug.html</p>
+<p></code></pre></p>
 <p>预期的两条输出依次是约定的作者邮箱与 <code>200</code>。</p>
 <p>回到开头那个问题：构建为什么总在产生无意义的 diff。答案不是「工具不行」，而是构建的输入里混进了三样不属于内容的东西——文件的修改时间、目录的遍历顺序、以及「上一版产物被反解出来的字段」。把这三样逐一换成版本控制里的事实，diff 就会回到它本来的含义：只显示有人真的改了内容。</p>
 
@@ -734,7 +718,7 @@ curl -sS -o /dev/null -w '%{http_code}\n' -A 'Mozilla/5.0' https://example.com/b
         <div class="post-info-label">文章信息</div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📅</span> 发布日期</span><span class="post-info-stat-value">2026-09-27</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">⏱️</span> 阅读时间</span><span class="post-info-stat-value">14 min read</span></div>
-        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">7736 字</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">7633 字</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📊</span> 章节数</span><span class="post-info-stat-value">9 节 · 29 子节</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">💻</span> 代码块</span><span class="post-info-stat-value">30 段</span></div>
       </div>
