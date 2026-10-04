@@ -6,7 +6,6 @@
 
 | 脚本 | 归档日期 | 为什么不能跑 |
 |------|----------|--------------|
-| `gen_projects.py` | 2026-09-27 | 数据源 `projects/projects.json` 只剩 2 条，而线上 `projects/index.html` 是手维的 4 张案例卡。跑一次会删掉 2 张卡（Android 16 AICore & Compose Lab、Hermes Agent Toolkit），并插回已清理的 loading 遮罩 + Google Fonts，还把 `style.css?v=` 退回旧值。实测 diff：51 insertions / 143 deletions。 |
 | `perf-cleanup.py` | 2026-09-27 | 全站生效已完成（重跑新增 0）。但第 45 行的全局 `re.sub(r'\n{3,}', '\n\n', text)` 会作用到**正文**：实跑一次即改掉一篇文章 `<pre><code>` 里的空行；glob 也不含 `blog/page-*.html`。 |
 | `quick-fix.sh` | 2026-09-27 | 一次性 P0 链接修复，目标串已全站落地。它对整个仓库所有 `*.html` 做**无备份**的全局 `sed -i`，目标串一变就会静默改坏文件。 |
 | `inject-comments.py` | 2026-09-27 | 112/112 篇文章已注入评论组件，重跑 0 变更（本身幂等，风险最低，归档只为收口“一次性脚本”）。 |
@@ -15,8 +14,15 @@
 
 ## 归档后的正确做法
 
-- **项目页**：直接手维 `projects/index.html`。若日后要恢复脚本化，先把 `projects/projects.json`
-  补齐到与页面完全一致，再删掉脚本里的守卫。
+- **项目页**：直接手维 `projects/index.html`。原本的脚本化链路已**彻底删除**（2026-10-04）：
+  `projects/projects.json`（数据源）与 `scripts/archive/gen_projects.py`（生成器）都不再存在，
+  项目页的唯一真相源就是 `projects/index.html` 本身。删除原因：该生成器不只是数据过期，
+  它的模板本身也是旧的（会插回 loading 遮罩、Google Fonts 外链，并把 `style.css?v=` 退回旧值），
+  线上实测重跑一次即 `52 insertions / 144 deletions`——即便补齐数据也得整体重写模板才能与现页对齐，
+  而案例卡是编辑性内容、更新频率极低，维护成本反而更高。
+  若日后确需恢复脚本化：从 git 历史取回这两个文件（`git log -- projects/projects.json`），
+  **先按当前页面规范重写模板**（`<!-- POSTS_COUNT -->` 锚点、CSP meta、无外链字体、`?v=` 同步），
+  再删掉脚本里的守卫，并在一次性 worktree 里与 HEAD 逐字节比对通过后才允许进主树。
 - **head 批量手术**：不要复用 `perf-cleanup.py` 的空行收敛逻辑。参考
   `~/.hermes/profiles/xiaoma/skills/software-development/blog-site-maintenance/` 的规范：
   逐变体正则 + `--dry` 计数 + 残留扫描 + 标签平衡抽查，且**空行收敛仅限 `<head>` 区间**。
