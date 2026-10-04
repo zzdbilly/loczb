@@ -64,7 +64,7 @@
   <link rel="sitemap" type="application/xml" title="Sitemap" href="sitemap.xml">
   
   <!-- Styles -->
-  <link rel="stylesheet" href="assets/css/style.css?v=20261004-spacing4">
+  <link rel="stylesheet" href="assets/css/style.css?v=09289c11b9">
 </head>
 <body>
   <!-- Navigation -->
@@ -547,102 +547,6 @@
   <!-- Scripts -->
   <script defer src="assets/js/main.js"></script>
   <script defer src="assets/js/particles.js"></script>
-  <script>
-    // 首页随机选择代表文章
-    const posts = [
-      {
-        url: 'blog/posts/纳指定投把一笔月供当成长期运维来跑.html',
-        title: '纳指定投：把一笔月供当成长期运维来跑',
-        date: '2026-09-28',
-        readTime: '18 min',
-        category: '思考',
-        category2: '思考',
-        desc: '一个程序员对纳指100定投的完整记录：它是什么、摊平了什么、摩擦成本在哪、我给自己定了哪些执行规则，以及怎么验证自己没做错。'
-      },
-      {
-        url: 'blog/posts/idempotent-reproducible-builds.html',
-        title: '幂等与可复现：为什么你的构建总在产生无意义的 diff',
-        date: '2026-09-27',
-        readTime: '14 min',
-        category: '开发',
-        category2: '开发',
-        desc: '从 mtime 并列裁决、无条件写盘到不对称正则，拆开构建噪声的三个真实来源，给出元数据 sidecar 与「零改动」门禁的落地实现。'
-      },
-      {
-        url: 'blog/posts/tech-manager-vs-pm-vs-po.html',
-        title: '技术经理、项目经理、产品经理的区别',
-        date: '2026-09-21',
-        readTime: '12 min',
-        category: '思考',
-        category2: '思考',
-        desc: '三个都叫「经理」的岗位到底差在哪：对什么负责、权力从哪来、时间花在哪、失败长什么样，以及想转过去要提前补什么。'
-      },
-      {
-        url: 'blog/posts/how-engineers-report.html',
-        title: '技术人员如何做好汇报',
-        date: '2026-09-16',
-        readTime: '10 min',
-        category: '思考',
-        category2: '思考',
-        desc: '写给"干活行、汇报不行"的工程师：把汇报当成降低对方决策成本的产品来做，附可直接抄的四个模板。'
-      },
-      {
-        url: 'blog/posts/quick-energy-recovery.html',
-        title: '如何快速恢复能量，让自己快乐起来',
-        date: '2026-09-13',
-        readTime: '12 min',
-        category: '思考',
-        category2: '思考',
-        desc: '电量见底时怎么用几十分钟把自己拉回来：先分清是累还是空，再抓住低谷里的十分钟，把光照、社交和任务切换的顺序排对，末尾附一份十分钟能做完的最短路径清单。'
-      },
-      {
-        url: 'blog/posts/seek-long-term-desires.html',
-        title: '欲望也要看周期：把长期欲望当成你的核心资产',
-        date: '2026-09-11',
-        readTime: '14 min',
-        category: '思考',
-        category2: '思考',
-        desc: '自律失败不是道德问题，是机制问题。本文从双曲贴现、多巴胺预期误差和享乐跑步机出发，解释为什么短期欲望总是赢，然后给出一套不靠意志力的欲望组合管理方法：摩擦调节、身份驱动、中间兑现点和每周欲望审计。'
-      },
-      {
-        url: 'blog/posts/android-testing-playbook.html',
-        title: '别再从 Espresso 开始：Android 测试分层实战手册',
-        date: '2026-09-10',
-        readTime: '18 min',
-        category: 'Android',
-        category2: 'Android',
-        desc: '从 JUnit 5 + MockK 到 Compose 语义树断言，从 Robolectric 到 Firebase Test Lab——一个老 Android 开发对测试金字塔的分层打法、Flaky 治理与 CI 取舍，全是踩坑后留下的判断。'
-      },
-      {
-        url: 'blog/posts/choosing-and-running-a-vps.html',
-        title: '主流 VPS 的选择和使用',
-        date: '2026-09-08',
-        readTime: '14 min',
-        category: 'DevOps',
-        category2: 'DevOps',
-        desc: '截至 2026 年 9 月的主流 VPS 厂商盘点、选型维度、下单开机、新机安全加固、Docker/Caddy 日常使用与费用控制的全流程实操指南。'
-      },
-      {
-        url: 'blog/posts/技术文档编写指南写出别人真的会看的文档.html',
-        title: '技术文档编写指南写出别人真的会看的文档',
-        date: '2026-09-03',
-        readTime: '18 min',
-        category: '开发',
-        category2: '开发',
-        desc: '写了没人看、看了找不到答案、找到了已经过期——技术文档的三大死法。这篇把我维护博客和项目文档攒下的规范全摊开：读者画像、Diátaxis 分层、结构措辞红线、代码示例标准、docs-as-code 工作流、常见反模式和发布前检查清单。'
-      },
-      {
-        url: 'blog/posts/和ai结对写代码这一年我学会了怎么放手.html',
-        title: '和 AI 结对写代码这一年，我学会了怎么放手',
-        date: '2026-09-01',
-        readTime: '5 min',
-        category: '思考',
-        category2: '思考',
-        desc: '一个移动端开发者和 AI 编程助手协作一年的真实复盘：从不敢信、到滥信踩坑、再到建立边界和验收习惯。'
-      }
-    ];
-  </script>
-  
   <!-- Back to Top & Reading Progress -->
   <button class="back-to-top" id="backToTop" aria-label="回到顶部">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">

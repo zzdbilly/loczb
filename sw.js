@@ -13,6 +13,7 @@ const CORE_URLS = [
   '/blog/',
   '/projects/',
   '/about/',
+  '/offline.html',
   '/assets/css/style.css',
   '/assets/js/main.js',
   '/assets/js/search.js',
@@ -69,7 +70,11 @@ self.addEventListener('fetch', (event) => {
       .catch(() => {
         // Fallback to cache when offline (ignore search params like ?v=...)
         return caches.match(event.request, { ignoreSearch: true }).then((cached) => {
-          return cached || new Response('离线不可用', { status: 503 });
+          if (cached) return cached;
+          if (event.request.mode === 'navigate') {
+            return caches.match('/offline.html');
+          }
+          return new Response('离线不可用', { status: 503 });
         });
       })
   );

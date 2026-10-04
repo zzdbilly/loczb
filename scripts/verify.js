@@ -100,15 +100,24 @@ for (const slug of metaSlugs) {
   if (!meta.category) infos.push(`b) ${slug}: category 为空（建议补 JSON-LD articleSection）`);
 }
 
-// ── c) 4 个主页面 style.css ?v= 一致 ─────────────────────
+// ── c) 全站主页面及模板 style.css ?v= 与内容哈希一致 ─────────────────────
 {
-  const pages = ['index.html', 'blog/index.html', 'about/index.html', 'projects/index.html'];
+  const crypto = require('crypto');
+  const stylePath = 'assets/css/style.css';
+  const expectedHash = exists(stylePath)
+    ? crypto.createHash('sha256').update(fs.readFileSync(stylePath)).digest('hex').slice(0, 10)
+    : null;
+
+  const pages = ['index.html', 'blog/index.html', 'about/index.html', 'projects/index.html', 'templates/blog-post-template.html'];
   const versions = {};
   pages.forEach(page => {
     if (!exists(page)) { fail(`c) ${page} 不存在`); return; }
     const m = readText(page).match(/style\.css\?v=([^"']+)"/);
     versions[page] = m ? m[1] : null;
     if (!m) fail(`c) ${page} 的 style.css 引用缺少 ?v= 版本参数`);
+    else if (expectedHash && m[1] !== expectedHash) {
+      fail(`c) ${page} 的 style.css ?v=${m[1]} 与内容哈希 ${expectedHash} 不一致`);
+    }
   });
   const vals = new Set(Object.values(versions).filter(Boolean));
   if (vals.size > 1) {

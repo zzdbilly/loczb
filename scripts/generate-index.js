@@ -526,29 +526,11 @@ function rebuildHomePage() {
     }
   }
 
-  // 更新 JS posts 数组
-  const topPosts = posts.slice(0, 10);
-  const postsJsArray = '[\n' + topPosts.map(p => {
-    const url = p.url.startsWith('blog/') ? p.url : 'blog/' + p.url;
-    return `      {
-        url: '${jsEscape(url)}',
-        title: '${jsEscape(p.title)}',
-        date: '${jsEscape(p.date)}',
-        readTime: '${p.readTime} min',
-        category: '${jsEscape(p.category)}',
-        category2: '${jsEscape(p.category)}',
-        desc: '${jsEscape(p.excerpt)}'
-      }`;
-  }).join(',\n') + '\n    ]';
-
-  const postsArrayPattern = /const posts = \[[\s\S]*?\];/;
-  html = html.replace(postsArrayPattern, 'const posts = ' + postsJsArray + ';');
-
   // 数量同步：替换 <!-- POSTS_COUNT --> 锚点
   html = syncPostCount(html);
 
   writeIfChanged(HOME_INDEX, html);
-  console.log(`✅ index.html: featured="${latest.title}", list=${listArticles.length} posts, JS array=${topPosts.length} posts`);
+  console.log(`✅ index.html: featured="${latest.title}", list=${listArticles.length} posts`);
 }
 
 function syncOtherPagesPostCount() {
@@ -813,6 +795,16 @@ function syncWidgetVersion() {
   if (!r.ok) process.exit(1);
 }
 
+function syncAssetVersions() {
+  const script = path.join(__dirname, 'sync-asset-versions.js');
+  if (!fs.existsSync(script)) return;
+  const { syncAssetVersions: run } = require(script);
+  const r = run({ dry: false });
+  if (r.ok) {
+    console.log(`🔖 静态资源版本号同步: style.css -> ?v=${r.styleHash} (${r.scanned} 个 HTML 扫描, ${r.updated} 个写入)`);
+  }
+}
+
 // ═══════════════════════════════════════════════
 // Execute all phases
 // ═══════════════════════════════════════════════
@@ -827,7 +819,8 @@ injectStaticRelated();
 generateSitemap();
 generateRSS();
 updateServiceWorker();
-// 收尾：评论组件引用版本号（必须在所有写文章页的步骤之后，见函数注释）
+// 收尾：评论组件与静态资源引用版本号（必须在所有写文章页的步骤之后，见函数注释）
 syncWidgetVersion();
+syncAssetVersions();
 
 console.log('\n🎉 完成！');

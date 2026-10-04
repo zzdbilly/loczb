@@ -401,25 +401,6 @@ function initThemeToggle() {
   });
 }
 
-// Lazy Load Images
-function initLazyLoad() {
-  const lazyImages = document.querySelectorAll('[data-src]');
-  
-  const imageObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const img = entry.target;
-        img.src = img.dataset.src;
-        img.removeAttribute('data-src');
-        imageObserver.unobserve(img);
-      }
-    });
-  }, {
-    rootMargin: '50px 0px'
-  });
-  
-  lazyImages.forEach(img => imageObserver.observe(img));
-}
 
 // Scroll Progress Indicator (rAF 节流)
 function initScrollProgress() {
@@ -478,28 +459,6 @@ function initBackToTop() {
   });
 }
 
-// Cursor Effect (Optional)
-function initCursorEffect() {
-  const cursor = document.querySelector('.cursor');
-  if (!cursor) return;
-  
-  document.addEventListener('mousemove', (e) => {
-    cursor.style.left = e.clientX + 'px';
-    cursor.style.top = e.clientY + 'px';
-  });
-  
-  const interactiveElements = document.querySelectorAll('a, button, .card');
-  
-  interactiveElements.forEach(el => {
-    el.addEventListener('mouseenter', () => {
-      cursor.classList.add('cursor-hover');
-    });
-    
-    el.addEventListener('mouseleave', () => {
-      cursor.classList.remove('cursor-hover');
-    });
-  });
-}
 
 // Spotlight Mouse Glow for modern cards
 // 仅在真正有指针悬停能力的设备启用（触屏设备省掉全部 mousemove 监听）
@@ -528,40 +487,6 @@ function initSpotlightCards() {
 }
 window.initSpotlightCards = initSpotlightCards;
 
-// Form Validation
-function validateEmail(email) {
-  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return re.test(email);
-}
-
-function validateForm(form) {
-  let isValid = true;
-  const inputs = form.querySelectorAll('[required]');
-  
-  inputs.forEach(input => {
-    if (!input.value.trim()) {
-      isValid = false;
-      input.classList.add('error');
-    } else {
-      input.classList.remove('error');
-    }
-    
-    if (input.type === 'email' && !validateEmail(input.value)) {
-      isValid = false;
-      input.classList.add('error');
-    }
-  });
-  
-  return isValid;
-}
-
-// Blog Filters
-// Blog filtering, pagination, and tag cloud are fully handled by blog-list.js.
-// This function is kept as a no-op stub for backward compatibility.
-function initBlogFilters() {
-  // All blog filter logic is handled by blog-list.js
-  return;
-}
 
 // Code Block Copy Button + Language Label
 function initCodeCopy() {
@@ -746,7 +671,6 @@ function initInstantPrefetch() {
 // Initialize Everything
 document.addEventListener('DOMContentLoaded', () => {
   initCountUp();
-  initLazyLoad();
   initScrollProgress();
   initBackToTop();
   setActiveNavLink();
@@ -765,7 +689,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Export utilities
 window.loczb = {
-  copyToClipboard,
-  validateForm,
-  validateEmail
+  copyToClipboard
 };
