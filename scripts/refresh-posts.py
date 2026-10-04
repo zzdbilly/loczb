@@ -58,11 +58,11 @@ def extract_post_data(html):
     data['article_title'] = m.group(1) if m else data.get('title', '')
     
     # date
-    m = re.search(r'📅 (.*?)</span>', html)
+    m = re.search(r'📅(?:</span>)?\s*(.*?)</span>', html)
     data['article_date'] = m.group(1).strip() if m else ''
     
     # read time
-    m = re.search(r'⏱️ (.*?)</span>', html)
+    m = re.search(r'⏱️(?:</span>)?\s*(.*?)</span>', html)
     data['read_time'] = m.group(1).strip() if m else '5 min read'
 
     # 文章字数：沿用页面上已有的值，不重算。

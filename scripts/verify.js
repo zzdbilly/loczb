@@ -455,6 +455,42 @@ function contentCheck(name, count, samples) {
   }
 }
 
+// ── l) 文章静态上一篇/下一篇导航门禁 ─────────────────────────────
+// 每篇文章必须包含 <!-- Post Nav Prev Next --> 块，且包含有效导航结构
+{
+  const missingNav = [];
+  for (const slug of htmlSlugs) {
+    const p = `blog/posts/${slug}.html`;
+    if (!exists(p)) continue;
+    const html = readText(p);
+    if (!html.includes('<!-- Post Nav Prev Next -->') || !html.includes('class="post-nav"')) {
+      missingNav.push(slug);
+    }
+  }
+  if (missingNav.length) {
+    fail(`l) ${missingNav.length} 篇文章缺少静态「上一篇/下一篇」导航: ${missingNav.slice(0, 5).join(', ')}${missingNav.length > 5 ? ' …' : ''}`);
+  } else {
+    infos.push(`l) 静态上一篇/下一篇导航已覆盖全量 ${htmlSlugs.size} 篇博文`);
+  }
+}
+
+// ── m) 无障碍跳至正文 (skip-link) 门禁 ─────────────────────────────
+// 核心页面与文章模板必须包含 <a href="#main-content" class="skip-link">
+{
+  const corePages = ['index.html', 'blog/index.html', 'about/index.html', 'projects/index.html', 'offline.html', '404.html', 'templates/blog-post-template.html'];
+  const missingSkip = [];
+  corePages.forEach(p => {
+    if (!exists(p)) return;
+    const html = readText(p);
+    if (!html.includes('class="skip-link"') || !html.includes('href="#main-content"')) {
+      missingSkip.push(p);
+    }
+  });
+  if (missingSkip.length) {
+    fail(`m) ${missingSkip.length} 个核心页面缺少 skip-link: ${missingSkip.join(', ')}`);
+  }
+}
+
 // ── 结果 ─────────────────────────────────────────────────
 if (infos.length) {
   console.log('ℹ️  非阻断提示:');
