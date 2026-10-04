@@ -4,7 +4,7 @@
 //   由 scripts/generate-index.js 的重建管线在写盘末尾自动重算（内容不变则不落盘，幂等）。
 //   所以改了 style.css / search.js / 任何文章，只需跑重建（或发一次文），版本号会自己跟上。
 // 查看更新日志：https://github.com/zzdbilly/loczb/commits
-const SW_VERSION = 'c-278b233d';
+const SW_VERSION = 'c-fd61a16f';
 const CACHE_NAME = 'loczb-' + SW_VERSION;
 
 // Core pages to cache on install

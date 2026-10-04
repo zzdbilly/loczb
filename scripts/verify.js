@@ -491,6 +491,38 @@ function contentCheck(name, count, samples) {
   }
 }
 
+// ── n) 全站导航与页脚片段一致性门禁 ─────────────────────────────
+{
+  const corePartialPages = ['index.html', 'blog/index.html', 'about/index.html', 'projects/index.html', '404.html', 'templates/blog-post-template.html'];
+  const missingFooter = [];
+  const missingNav = [];
+  const unstyledCopy = [];
+
+  corePartialPages.forEach(p => {
+    if (!exists(p)) return;
+    const html = readText(p);
+    if (!html.includes('<!-- PARTIAL:FOOTER -->') || !html.includes('class="footer"')) {
+      missingFooter.push(p);
+    }
+    if (!html.includes('<!-- PARTIAL:NAV -->') || !html.includes('class="nav"')) {
+      missingNav.push(p);
+    }
+    if (html.includes('class="footer-copy"') && !html.includes('footer-copyright')) {
+      unstyledCopy.push(p);
+    }
+  });
+
+  if (missingFooter.length) {
+    fail(`n) ${missingFooter.length} 个核心页面缺少页脚 Partial: ${missingFooter.join(', ')}`);
+  }
+  if (missingNav.length) {
+    fail(`n) ${missingNav.length} 个核心页面缺少导航 Partial: ${missingNav.join(', ')}`);
+  }
+  if (unstyledCopy.length) {
+    fail(`n) ${unstyledCopy.length} 个页面包含未声明样式的 footer-copy 类名: ${unstyledCopy.join(', ')}`);
+  }
+}
+
 // ── 结果 ─────────────────────────────────────────────────
 if (infos.length) {
   console.log('ℹ️  非阻断提示:');

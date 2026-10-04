@@ -39,7 +39,7 @@
   <link rel="apple-touch-icon" sizes="180x180" href="../assets/images/apple-touch-icon.png">
   <link rel="manifest" href="../site.webmanifest">
   <meta name="theme-color" content="#3b82f6">
-  <link rel="stylesheet" href="../assets/css/style.css?v=9e2e67a8a1">
+  <link rel="stylesheet" href="../assets/css/style.css?v=231fa9f71a">
 </head>
 <body>
   <!-- PARTIAL:SKIP_LINK -->
@@ -47,41 +47,43 @@
   <!-- /PARTIAL:SKIP_LINK -->
 
   <!-- Navigation -->
-  <nav class="nav" role="navigation" aria-label="主导航">
-    <div class="nav-inner">
-      <a href="../index.html" class="nav-logo">
-        loc<span>zb</span>
-      </a>
-      <button class="nav-toggle" aria-label="打开菜单" aria-expanded="false" aria-controls="nav-links-menu">
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
-      <div class="nav-overlay"></div>
-      <ul class="nav-links" id="nav-links-menu">
-        <li><a href="../index.html" class="nav-link">首页</a></li>
-        <li><a href="../projects/index.html" class="nav-link">项目</a></li>
-        <li><a href="../blog/index.html" class="nav-link">博客</a></li>
-        <li><a href="index.html" class="nav-link active">关于</a></li>
-      </ul>
-      <button class="theme-toggle" aria-label="切换主题" title="切换亮/暗模式">
-        <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="12" cy="12" r="5"></circle>
-          <line x1="12" y1="1" x2="12" y2="3"></line>
-          <line x1="12" y1="21" x2="12" y2="23"></line>
-          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-          <line x1="1" y1="12" x2="3" y2="12"></line>
-          <line x1="21" y1="12" x2="23" y2="12"></line>
-          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-        </svg>
-        <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-        </svg>
-      </button>
-    </div>
-  </nav>
+<!-- PARTIAL:NAV -->
+  <nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">
+      loc<span>zb</span>
+    </a>
+    <button class="nav-toggle" aria-label="打开菜单" aria-expanded="false" aria-controls="nav-links-menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <div class="nav-overlay"></div>
+    <ul class="nav-links" id="nav-links-menu">
+      <li><a href="/" class="nav-link" data-nav="home">首页</a></li>
+      <li><a href="/projects/" class="nav-link" data-nav="projects">项目</a></li>
+      <li><a href="/blog/" class="nav-link" data-nav="blog">博客</a></li>
+      <li><a href="/about/" class="nav-link active" data-nav="about">关于</a></li>
+    </ul>
+    <button class="theme-toggle" aria-label="切换主题" title="切换亮/暗模式">
+      <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="5"></circle>
+        <line x1="12" y1="1" x2="12" y2="3"></line>
+        <line x1="12" y1="21" x2="12" y2="23"></line>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+        <line x1="1" y1="12" x2="3" y2="12"></line>
+        <line x1="21" y1="12" x2="23" y2="12"></line>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+      </svg>
+      <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+      </svg>
+    </button>
+  </div>
+</nav>
+  <!-- /PARTIAL:NAV -->
   <!-- Particle Canvas Background -->
   <canvas id="particle-canvas" class="particle-canvas" aria-hidden="true"></canvas>
 
@@ -282,7 +284,7 @@
       <a href="/blog/" class="footer-link">博客</a>
       <a href="/about/" class="footer-link">关于</a>
     </div>
-    <p class="footer-copy">&copy; 2026 张小猛 · loczb · Built with care</p>
+    <p class="footer-copyright">&copy; 2026 张小猛 · loczb · Built with care</p>
   </div>
 </footer>
   <!-- /PARTIAL:FOOTER -->
