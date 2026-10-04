@@ -55,7 +55,7 @@
 }
     </script>
 
-    <link rel="stylesheet" href="../../assets/css/style.css?v=231fa9f71a">
+    <link rel="stylesheet" href="../../assets/css/style.css?v=27743e398e">
     <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
     <link rel="alternate icon" href="../../assets/images/favicon.ico">
     <link rel="canonical" href="https://709527.xyz/blog/posts/rust-在-ai-基础设施中的崛起为什么大模型框架纷纷拥抱-rust.html">
@@ -211,503 +211,442 @@
 <h3>为什么是现在？</h3>
 <p>AI 基础设施正在经历三个关键转变，让 Rust 的时机成熟了：</p>
 <pre><code class="language-rust">// 1. 推理优化需求激增
-// 生产环境中，推理效率和部署简洁性压倒训练灵活性
-// Rust 的零成本抽象 + 无 GC 特性完美匹配
-
-// 2. 边缘设备部署
-// 从手机到嵌入式设备需要无运行时依赖
-// Rust 编译为原生二进制，不依赖 Python runtime
-
-// 3. 安全性和正确性
-// 内存安全 + 类型系统在关键基础设施中至关重要
-// Rust 的所有权系统从编译层面消除了数据竞争
-</code></pre>
+<p>// 生产环境中，推理效率和部署简洁性压倒训练灵活性</p>
+<p>// Rust 的零成本抽象 + 无 GC 特性完美匹配</p>
+<p>// 2. 边缘设备部署</p>
+<p>// 从手机到嵌入式设备需要无运行时依赖</p>
+<p>// Rust 编译为原生二进制，不依赖 Python runtime</p>
+<p>// 3. 安全性和正确性</p>
+<p>// 内存安全 + 类型系统在关键基础设施中至关重要</p>
+<p>// Rust 的所有权系统从编译层面消除了数据竞争</p>
+<p></code></pre></p>
 <h2>性能优势：C 和 C++ 的替代者</h2>
 <h3>零成本抽象</h3>
 <p>Rust 对 AI 工作负载最直接的吸引力就是性能。与 C++ 相比，Rust 在绝大多数场景下性能相当甚至更好，同时提供了更高层次的安全保证。</p>
 <pre><code class="language-rust">// Rust 实现矩阵乘法（简化示例）
-fn matmul_f32(a: &amp;[f32], b: &amp;[f32], m: usize, n: usize, k: usize) -&gt; Vec&lt;f32&gt; {
-    let mut c = vec![0.0f32; m * n];
-    for i in 0..m {
-        for j in 0..n {
-            let sum: f32 = (0..k)
-                .map(|l| a[i * k + l] * b[l * n + j])
-                .sum();
-            c[i * n + j] = sum;
-        }
-    }
-    c
-}
-</code></pre>
+<p>fn matmul_f32(a: &amp;[f32], b: &amp;[f32], m: usize, n: usize, k: usize) -&gt; Vec&lt;f32&gt; {</p>
+<p>let mut c = vec![0.0f32; m * n];</p>
+<p>for i in 0..m {</p>
+<p>for j in 0..n {</p>
+<p>let sum: f32 = (0..k)</p>
+<p>.map(|l| a[i <em> k + l] </em> b[l * n + j])</p>
+<p>.sum();</p>
+<p>c[i * n + j] = sum;</p>
+<p>}</p>
+<p>}</p>
+<p>c</p>
+<p>}</p>
+<p></code></pre></p>
 <h3>SIMD 和向量化</h3>
 <p>Rust 通过 <code>std::simd</code> 和 <code>portable_simd</code> 提供平台无关的 SIMD 操作：</p>
 <pre><code class="language-rust">use std::simd::f32x8;
-
-// SIMD 优化的向量点积
-fn dot_product_simd(a: &amp;[f32], b: &amp;[f32]) -&gt; f32 {
-    let chunks = a.len() / 8;
-    let mut sum = f32x8::splat(0.0);
-
-    for i in 0..chunks {
-        let va = f32x8::from_slice(&amp;a[i * 8..]);
-        let vb = f32x8::from_slice(&amp;b[i * 8..]);
-        sum += va * vb;
-    }
-
-    // Sum reduction
-    sum.reduce_sum()
-}
-</code></pre>
+<p>// SIMD 优化的向量点积</p>
+<p>fn dot<em>product</em>simd(a: &amp;[f32], b: &amp;[f32]) -&gt; f32 {</p>
+<p>let chunks = a.len() / 8;</p>
+<p>let mut sum = f32x8::splat(0.0);</p>
+<p>for i in 0..chunks {</p>
+<p>let va = f32x8::from_slice(&amp;a[i * 8..]);</p>
+<p>let vb = f32x8::from_slice(&amp;b[i * 8..]);</p>
+<p>sum += va * vb;</p>
+<p>}</p>
+<p>// Sum reduction</p>
+<p>sum.reduce_sum()</p>
+<p>}</p>
+<p></code></pre></p>
 <h3>内存效率</h3>
 <p>AI 模型的核心是张量运算，这意味着大量的内存访问。Rust 的所有权系统让开发者能够精确控制内存布局，减少缓存未命中：</p>
 <pre><code class="language-rust">// 连续内存布局：更适合 SIMD 和缓存
-#[repr(C)]
-struct TensorView&lt;'a, T&gt; {
-    data: &amp;'a [T],
-    shape: &amp;'a [usize],
-    strides: &amp;'a [usize],
-}
-
-// 与 PyTorch 的 Tensor 元数据等价
-// 但 Rust 版本零开销，编译时验证
-</code></pre>
+<p>#[repr(C)]</p>
+<p>struct TensorView&lt;'a, T&gt; {</p>
+<p>data: &amp;'a [T],</p>
+<p>shape: &amp;'a [usize],</p>
+<p>strides: &amp;'a [usize],</p>
+<p>}</p>
+<p>// 与 PyTorch 的 Tensor 元数据等价</p>
+<p>// 但 Rust 版本零开销，编译时验证</p>
+<p></code></pre></p>
 <h2>安全保证：消除内存错误</h2>
 <h3>内存安全的代价</h3>
 <p>AI 框架（尤其是 PyTorch、TensorFlow）C++ 核心中内存安全问题层出不穷。Rust 的所有权模型从根本上解决了这些问题：</p>
 <pre><code class="language-rust">// C++ 中的典型 Bug
-// float* data = new float[size];
-// delete[] data;
-// data[0] = 1.0f;  // Use-after-free!
-
-// Rust 中的等价代码 — 编译失败
-// let data = vec![0.0f32; size];
-// drop(data);
-// data[0] = 1.0;  // ❌ borrow of moved value
-</code></pre>
+<p>// float* data = new float[size];</p>
+<p>// delete[] data;</p>
+<p>// data[0] = 1.0f;  // Use-after-free!</p>
+<p>// Rust 中的等价代码 — 编译失败</p>
+<p>// let data = vec![0.0f32; size];</p>
+<p>// drop(data);</p>
+<p>// data[0] = 1.0;  // ❌ borrow of moved value</p>
+<p></code></pre></p>
 <h3>并发安全</h3>
 <p>在 AI 推理中，并行计算是常态。Rust 的 Send + Sync trait 在编译时保证线程安全：</p>
 <pre><code class="language-rust">use std::sync::Arc;
-use std::thread;
-
-// 安全并发：多个线程同时读取模型权重
-struct InferenceEngine {
-    weights: Arc&lt;Vec&lt;f32&gt;&gt;,
-    config: Arc&lt;InferenceConfig&gt;,
-}
-
-impl InferenceEngine {
-    fn parallel_infer(&amp;self, inputs: Vec&lt;Input&gt;) -&gt; Vec&lt;Output&gt; {
-        inputs.into_par_iter()
-            .map(|input| self.forward(&amp;input))
-            .collect()
-    }
-}
-
-// 编译器保证：Arc&lt;T&gt; 是 Send + Sync
-// 数据竞争在编译时就被消除了
-</code></pre>
+<p>use std::thread;</p>
+<p>// 安全并发：多个线程同时读取模型权重</p>
+<p>struct InferenceEngine {</p>
+<p>weights: Arc&lt;Vec&lt;f32&gt;&gt;,</p>
+<p>config: Arc&lt;InferenceConfig&gt;,</p>
+<p>}</p>
+<p>impl InferenceEngine {</p>
+<p>fn parallel_infer(&amp;self, inputs: Vec&lt;Input&gt;) -&gt; Vec&lt;Output&gt; {</p>
+<p>inputs.into<em>par</em>iter()</p>
+<p>.map(|input| self.forward(&amp;input))</p>
+<p>.collect()</p>
+<p>}</p>
+<p>}</p>
+<p>// 编译器保证：Arc&lt;T&gt; 是 Send + Sync</p>
+<p>// 数据竞争在编译时就被消除了</p>
+<p></code></pre></p>
 <h2>Python 生态的完美互补</h2>
 <h3>PyO3 和 maturin：Rust → Python 绑定</h3>
 <p>Rust 在 AI 领域的崛起不是因为要取代 Python，而是成为 Python 的"性能后盾"。PyO3 + maturin 让这个结合变得异常简单：</p>
 <pre><code class="language-rust">use pyo3::prelude::*;
-
-// 在 Rust 中实现高性能 tokenizer
-#[pyclass]
-struct FastTokenizer {
-    vocab: HashMap&lt;String, u32&gt;,
-}
-
-#[pymethods]
-impl FastTokenizer {
-    #[new]
-    fn new(vocab: HashMap&lt;String, u32&gt;) -&gt; Self {
-        FastTokenizer { vocab }
-    }
-
-    // 比纯 Python 快 10-100x 的方法
-    fn encode(&amp;self, text: &amp;str) -&gt; Vec&lt;u32&gt; {
-        text.split_whitespace()
-            .map(|w| self.vocab.get(w).copied().unwrap_or(0))
-            .collect()
-    }
-}
-
-#[pymodule]
-fn fast_tokenizer(m: &amp;Bound&lt;'_, PyModule&gt;) -&gt; PyResult&lt;()&gt; {
-    m.add_class::&lt;FastTokenizer&gt;()?;
-    Ok(())
-}
-</code></pre>
+<p>// 在 Rust 中实现高性能 tokenizer</p>
+<p>#[pyclass]</p>
+<p>struct FastTokenizer {</p>
+<p>vocab: HashMap&lt;String, u32&gt;,</p>
+<p>}</p>
+<p>#[pymethods]</p>
+<p>impl FastTokenizer {</p>
+<p>#[new]</p>
+<p>fn new(vocab: HashMap&lt;String, u32&gt;) -&gt; Self {</p>
+<p>FastTokenizer { vocab }</p>
+<p>}</p>
+<p>// 比纯 Python 快 10-100x 的方法</p>
+<p>fn encode(&amp;self, text: &amp;str) -&gt; Vec&lt;u32&gt; {</p>
+<p>text.split_whitespace()</p>
+<p>.map(|w| self.vocab.get(w).copied().unwrap_or(0))</p>
+<p>.collect()</p>
+<p>}</p>
+<p>}</p>
+<p>#[pymodule]</p>
+<p>fn fast<em>tokenizer(m: &amp;Bound&lt;'</em>, PyModule&gt;) -&gt; PyResult&lt;()&gt; {</p>
+<p>m.add_class::&lt;FastTokenizer&gt;()?;</p>
+<p>Ok(())</p>
+<p>}</p>
+<p></code></pre></p>
 <pre><code class="language-bash"># 一行命令构建
-maturin develop
-</code></pre>
+<p>maturin develop</p>
+<p></code></pre></p>
 <h3>性能对比</h3>
 <pre><code class="language-python"># Python 实现
-def slow_tokenize(text, vocab):
-    return [vocab.get(w, 0) for w in text.split()]
-
-# 调用 Rust 实现
-from fast_tokenizer import FastTokenizer
-
-tokenizer = FastTokenizer(vocab)
-tokens = tokenizer.encode(&quot;Hello world&quot;)
-
-# 速度对比（100 万次调用）：
-# Python: 12.4s
-# Rust:   0.18s ← 69x 更快
-</code></pre>
+<p>def slow_tokenize(text, vocab):</p>
+<p>return [vocab.get(w, 0) for w in text.split()]</p>
+<h1>调用 Rust 实现</h1>
+<p>from fast_tokenizer import FastTokenizer</p>
+<p>tokenizer = FastTokenizer(vocab)</p>
+<p>tokens = tokenizer.encode(&quot;Hello world&quot;)</p>
+<h1>速度对比（100 万次调用）：</h1>
+<h1>Python: 12.4s</h1>
+<h1>Rust:   0.18s ← 69x 更快</h1>
+<p></code></pre></p>
 <h3>npy / safetensors：序列化格式</h3>
 <p>HuggingFace 的 safetensors 格式使用 Rust 重写其核心序列化逻辑，实现了比 pickle 更安全、更高效的张量存储：</p>
 <pre><code class="language-rust">// safetensors 核心数据结构
-#[derive(Serialize, Deserialize)]
-struct SafeTensorsHeader {
-    metadata: HashMap&lt;String, String&gt;,
-    tensors: Vec&lt;TensorInfo&gt;,
-}
-
-#[derive(Serialize, Deserialize)]
-struct TensorInfo {
-    name: String,
-    dtype: DType,
-    shape: Vec&lt;usize&gt;,
-    data_offsets: (usize, usize),
-}
-
-// 零拷贝反序列化（mmap 友好）
-fn load_safetensors(path: &amp;Path) -&gt; Result&lt;HashMap&lt;String, Tensor&gt;&gt; {
-    let file = std::fs::File::open(path)?;
-    let mmap = unsafe { memmap2::Mmap::map(&amp;file)? };
-    // ... 直接读取 mmap 数据
-}
-</code></pre>
+<p>#[derive(Serialize, Deserialize)]</p>
+<p>struct SafeTensorsHeader {</p>
+<p>metadata: HashMap&lt;String, String&gt;,</p>
+<p>tensors: Vec&lt;TensorInfo&gt;,</p>
+<p>}</p>
+<p>#[derive(Serialize, Deserialize)]</p>
+<p>struct TensorInfo {</p>
+<p>name: String,</p>
+<p>dtype: DType,</p>
+<p>shape: Vec&lt;usize&gt;,</p>
+<p>data_offsets: (usize, usize),</p>
+<p>}</p>
+<p>// 零拷贝反序列化（mmap 友好）</p>
+<p>fn load_safetensors(path: &amp;Path) -&gt; Result&lt;HashMap&lt;String, Tensor&gt;&gt; {</p>
+<p>let file = std::fs::File::open(path)?;</p>
+<p>let mmap = unsafe { memmap2::Mmap::map(&amp;file)? };</p>
+<p>// ... 直接读取 mmap 数据</p>
+<p>}</p>
+<p></code></pre></p>
 <h2>LLM 推理框架的 Rust 实践</h2>
 <h3>Candle：最小化依赖的 LLM 推理</h3>
 <p>Candle 是 HuggingFace 推出的纯 Rust LLM 推理框架，设计目标是无 CUDA 依赖 + 最小化二进制体积：</p>
 <pre><code class="language-rust">use candle_core::{Device, Tensor};
-use candle_nn::{Linear, VarBuilder};
-use candle_transformers::models::llama as model;
-
-// 加载 LLaMA 模型进行推理
-fn main() -&gt; Result&lt;()&gt; {
-    // 使用 CPU（也可指定 CUDA）
-    let device = Device::Cpu;
-
-    // 加载 safetensors 权重
-    let vb = unsafe {
-        VarBuilder::from_mmaped_safetensors(
-            &amp;[&quot;model.safetensors&quot;],
-            DType::F32,
-            &amp;device,
-        )?
-    };
-
-    let config = model::Config::config_7b_v1();
-    let llama = model::Llama::load(vb, &amp;config)?;
-
-    // 推理
-    let input = Tensor::new(&amp;[1u32, 100, 200], &amp;device)?;
-    let output = llama.forward(&amp;input, 0)?;
-
-    println!(&quot;Output shape: {:?}&quot;, output.shape());
-    Ok(())
-}
-</code></pre>
+<p>use candle_nn::{Linear, VarBuilder};</p>
+<p>use candle_transformers::models::llama as model;</p>
+<p>// 加载 LLaMA 模型进行推理</p>
+<p>fn main() -&gt; Result&lt;()&gt; {</p>
+<p>// 使用 CPU（也可指定 CUDA）</p>
+<p>let device = Device::Cpu;</p>
+<p>// 加载 safetensors 权重</p>
+<p>let vb = unsafe {</p>
+<p>VarBuilder::from<em>mmaped</em>safetensors(</p>
+<p>&amp;[&quot;model.safetensors&quot;],</p>
+<p>DType::F32,</p>
+<p>&amp;device,</p>
+<p>)?</p>
+<p>};</p>
+<p>let config = model::Config::config<em>7b</em>v1();</p>
+<p>let llama = model::Llama::load(vb, &amp;config)?;</p>
+<p>// 推理</p>
+<p>let input = Tensor::new(&amp;[1u32, 100, 200], &amp;device)?;</p>
+<p>let output = llama.forward(&amp;input, 0)?;</p>
+<p>println!(&quot;Output shape: {:?}&quot;, output.shape());</p>
+<p>Ok(())</p>
+<p>}</p>
+<p></code></pre></p>
 <p>Candle 的几个关键优势：</p>
 <pre><code class="language-rust">// 1. 无 CUDA 运行时依赖
-// 编译即运行，天然支持 CPU、Metal、Vulkan
-// 二进制体积 &lt; 10MB（不含模型权重）
-
-// 2. 支持 WASM
-// 可在浏览器中运行推理
-// 示例：hf.co/chat 的 Web 版推理就用 Candle WASM
-
-// 3. 量化支持（通过 Candle-quant）
-// #[cfg(feature = &quot;quantized&quot;)]
-// fn load_quantized(path: &amp;str) -&gt; Result&lt;QuantizedModel&gt; {
-//     QMatMul::from_qtensor(&amp;qmatmul)?
-// }
-</code></pre>
+<p>// 编译即运行，天然支持 CPU、Metal、Vulkan</p>
+<p>// 二进制体积 &lt; 10MB（不含模型权重）</p>
+<p>// 2. 支持 WASM</p>
+<p>// 可在浏览器中运行推理</p>
+<p>// 示例：hf.co/chat 的 Web 版推理就用 Candle WASM</p>
+<p>// 3. 量化支持（通过 Candle-quant）</p>
+<p>// #[cfg(feature = &quot;quantized&quot;)]</p>
+<p>// fn load_quantized(path: &amp;str) -&gt; Result&lt;QuantizedModel&gt; {</p>
+<p>//     QMatMul::from_qtensor(&amp;qmatmul)?</p>
+<p>// }</p>
+<p></code></pre></p>
 <h3>Mistral.rs：生产级推理引擎</h3>
 <p>Mistral.rs 是一个完全用 Rust 实现的 LLM 推理引擎，支持 GGUF、GGML、Safetensors 格式，以及 ISQ（原位量化）：</p>
 <pre><code class="language-rust">use mistralrs::{
-    IsqType, MistralRs, MistralRsBuilder,
-    ModelSelected, Loader, GGUFLoaderBuilder,
-};
-
-#[tokio::main]
-async fn main() -&gt; Result&lt;()&gt; {
-    // 配置加载器
-    let loader = GGUFLoaderBuilder::new(
-        &quot;models/Phi-3-mini-4k-instruct-q4.gguf&quot;,
-    )
-    .with_isq(IsqType::Q4_0)
-    .build();
-
-    // 初始化引擎
-    let mistralrs = MistralRsBuilder::new(loader, 1)
-        .with_isq(IsqType::Q4K)
-        .build()
-        .await?;
-
-    // 流式推理
-    let mut stream = mistralrs
-        .send(Messages::new(&quot;你是谁?&quot;))
-        .await?;
-
-    // 逐 token 输出
-    while let Some(chunk) = stream.next().await {
-        print!(&quot;{}&quot;, chunk);
-    }
-
-    Ok(())
-}
-</code></pre>
+<p>IsqType, MistralRs, MistralRsBuilder,</p>
+<p>ModelSelected, Loader, GGUFLoaderBuilder,</p>
+<p>};</p>
+<p>#[tokio::main]</p>
+<p>async fn main() -&gt; Result&lt;()&gt; {</p>
+<p>// 配置加载器</p>
+<p>let loader = GGUFLoaderBuilder::new(</p>
+<p>&quot;models/Phi-3-mini-4k-instruct-q4.gguf&quot;,</p>
+<p>)</p>
+<p>.with<em>isq(IsqType::Q4</em>0)</p>
+<p>.build();</p>
+<p>// 初始化引擎</p>
+<p>let mistralrs = MistralRsBuilder::new(loader, 1)</p>
+<p>.with_isq(IsqType::Q4K)</p>
+<p>.build()</p>
+<p>.await?;</p>
+<p>// 流式推理</p>
+<p>let mut stream = mistralrs</p>
+<p>.send(Messages::new(&quot;你是谁?&quot;))</p>
+<p>.await?;</p>
+<p>// 逐 token 输出</p>
+<p>while let Some(chunk) = stream.next().await {</p>
+<p>print!(&quot;{}&quot;, chunk);</p>
+<p>}</p>
+<p>Ok(())</p>
+<p>}</p>
+<p></code></pre></p>
 <h2>向量数据库的 Rust 选择</h2>
 <h3>Qdrant：性能与可靠性的平衡</h3>
 <p>在向量数据库领域，Qdrant 是 Rust 实力的最佳证明。它比 Milvus（Go）和 Pinecone 的底层更高效：</p>
 <pre><code class="language-rust">// Qdrant 核心索引结构
-pub struct HNSWIndex {
-    // 分层可导航小世界图
-    levels: Vec&lt;Vec&lt;Node&gt;&gt;,
-    ef_construction: usize,
-    m: usize,  // 每层最大连接数
-}
-
-impl HNSWIndex {
-    // 近似最近邻搜索
-    pub fn search(&amp;self, query: &amp;[f32], k: usize) -&gt; Vec&lt;ScoredPoint&gt; {
-        let entry = self.levels.last().unwrap()
-            .first().unwrap();
-
-        // 贪婪搜索
-        let mut candidates: Vec&lt;ScoredPoint&gt; = vec![];
-        // ... HNSW 算法实现
-        candidates.truncate(k);
-        candidates
-    }
-}
-</code></pre>
+<p>pub struct HNSWIndex {</p>
+<p>// 分层可导航小世界图</p>
+<p>levels: Vec&lt;Vec&lt;Node&gt;&gt;,</p>
+<p>ef_construction: usize,</p>
+<p>m: usize,  // 每层最大连接数</p>
+<p>}</p>
+<p>impl HNSWIndex {</p>
+<p>// 近似最近邻搜索</p>
+<p>pub fn search(&amp;self, query: &amp;[f32], k: usize) -&gt; Vec&lt;ScoredPoint&gt; {</p>
+<p>let entry = self.levels.last().unwrap()</p>
+<p>.first().unwrap();</p>
+<p>// 贪婪搜索</p>
+<p>let mut candidates: Vec&lt;ScoredPoint&gt; = vec![];</p>
+<p>// ... HNSW 算法实现</p>
+<p>candidates.truncate(k);</p>
+<p>candidates</p>
+<p>}</p>
+<p>}</p>
+<p></code></pre></p>
 <pre><code class="language-rust">// Rust 的 match + enum 处理向量距离计算
-#[derive(Clone, Copy)]
-enum Distance {
-    Cosine,
-    Dot,
-    Euclid,
-}
-
-impl Distance {
-    fn compute(&amp;self, a: &amp;[f32], b: &amp;[f32]) -&gt; f32 {
-        match self {
-            Distance::Cosine =&gt; {
-                let dot = dot_product(a, b);
-                let norm_a = norm(a);
-                let norm_b = norm(b);
-                1.0 - dot / (norm_a * norm_b)
-            }
-            Distance::Dot =&gt; -dot_product(a, b),
-            Distance::Euclid =&gt; {
-                a.iter().zip(b)
-                    .map(|(x, y)| (x - y).powi(2))
-                    .sum::&lt;f32&gt;()
-                    .sqrt()
-            }
-        }
-    }
-}
-</code></pre>
+<p>#[derive(Clone, Copy)]</p>
+<p>enum Distance {</p>
+<p>Cosine,</p>
+<p>Dot,</p>
+<p>Euclid,</p>
+<p>}</p>
+<p>impl Distance {</p>
+<p>fn compute(&amp;self, a: &amp;[f32], b: &amp;[f32]) -&gt; f32 {</p>
+<p>match self {</p>
+<p>Distance::Cosine =&gt; {</p>
+<p>let dot = dot_product(a, b);</p>
+<p>let norm_a = norm(a);</p>
+<p>let norm_b = norm(b);</p>
+<p>1.0 - dot / (norm<em>a * norm</em>b)</p>
+<p>}</p>
+<p>Distance::Dot =&gt; -dot_product(a, b),</p>
+<p>Distance::Euclid =&gt; {</p>
+<p>a.iter().zip(b)</p>
+<p>.map(|(x, y)| (x - y).powi(2))</p>
+<p>.sum::&lt;f32&gt;()</p>
+<p>.sqrt()</p>
+<p>}</p>
+<p>}</p>
+<p>}</p>
+<p>}</p>
+<p></code></pre></p>
 <h2>边缘计算与 WASM 部署</h2>
 <h3>在浏览器中运行 AI</h3>
 <p>Rust 的 WASM 支持让在浏览器中运行 AI 模型变得可行：</p>
 <pre><code class="language-rust">use wasm_bindgen::prelude::*;
-
-#[wasm_bindgen]
-pub struct WasmTokenizer {
-    tokenizer: tokenizers::Tokenizer,
-}
-
-#[wasm_bindgen]
-impl WasmTokenizer {
-    #[wasm_bindgen(constructor)]
-    pub fn new(json: &amp;str) -&gt; Result&lt;WasmTokenizer, JsValue&gt; {
-        let tokenizer = tokenizers::Tokenizer::from_str(json)
-            .map_err(|e| JsValue::from_str(&amp;e.to_string()))?;
-        Ok(WasmTokenizer { tokenizer })
-    }
-
-    pub fn encode(&amp;self, text: &amp;str) -&gt; Result&lt;Vec&lt;u32&gt;, JsValue&gt; {
-        let encoding = self.tokenizer
-            .encode(text, true)
-            .map_err(|e| JsValue::from_str(&amp;e.to_string()))?;
-        Ok(encoding.get_ids().to_vec())
-    }
-}
-</code></pre>
+<p>#[wasm_bindgen]</p>
+<p>pub struct WasmTokenizer {</p>
+<p>tokenizer: tokenizers::Tokenizer,</p>
+<p>}</p>
+<p>#[wasm_bindgen]</p>
+<p>impl WasmTokenizer {</p>
+<p>#[wasm_bindgen(constructor)]</p>
+<p>pub fn new(json: &amp;str) -&gt; Result&lt;WasmTokenizer, JsValue&gt; {</p>
+<p>let tokenizer = tokenizers::Tokenizer::from_str(json)</p>
+<p>.map<em>err(|e| JsValue::from</em>str(&amp;e.to_string()))?;</p>
+<p>Ok(WasmTokenizer { tokenizer })</p>
+<p>}</p>
+<p>pub fn encode(&amp;self, text: &amp;str) -&gt; Result&lt;Vec&lt;u32&gt;, JsValue&gt; {</p>
+<p>let encoding = self.tokenizer</p>
+<p>.encode(text, true)</p>
+<p>.map<em>err(|e| JsValue::from</em>str(&amp;e.to_string()))?;</p>
+<p>Ok(encoding.get<em>ids().to</em>vec())</p>
+<p>}</p>
+<p>}</p>
+<p></code></pre></p>
 <pre><code class="language-javascript">// 浏览器端使用
-const response = await fetch('tokenizer.json');
-const json = await response.text();
-const tokenizer = WasmTokenizer.new(json);
-
-// 分词发生在浏览器本地
-const tokens = tokenizer.encode(&quot;Hello from browser!&quot;);
-console.log(tokens);  // Uint32Array
-</code></pre>
+<p>const response = await fetch('tokenizer.json');</p>
+<p>const json = await response.text();</p>
+<p>const tokenizer = WasmTokenizer.new(json);</p>
+<p>// 分词发生在浏览器本地</p>
+<p>const tokens = tokenizer.encode(&quot;Hello from browser!&quot;);</p>
+<p>console.log(tokens);  // Uint32Array</p>
+<p></code></pre></p>
 <h3>嵌入式设备推理</h3>
 <pre><code class="language-rust">// 在嵌入式 Linux 设备上运行 tiny model
-// 总二进制大小 &lt; 5MB，无需 Python 运行时
-#![no_std]
-#![no_main]
-
-use cortex_m_rt::entry;
-use embedded_nal::TcpStack;
-
-#[entry]
-fn main() -&gt; ! {
-    // 加载量化后的微型模型
-    let model = TinyLlama::from_bytes(include_bytes!(&quot;model.q4&quot;));
-    let input = b&quot;how are you&quot;;
-
-    // 推理
-    let output = model.predict(input);
-    print_output(&amp;output);
-
-    loop {}
-}
-</code></pre>
+<p>// 总二进制大小 &lt; 5MB，无需 Python 运行时</p>
+<p>#![no_std]</p>
+<p>#![no_main]</p>
+<p>use cortex<em>m</em>rt::entry;</p>
+<p>use embedded_nal::TcpStack;</p>
+<p>#[entry]</p>
+<p>fn main() -&gt; ! {</p>
+<p>// 加载量化后的微型模型</p>
+<p>let model = TinyLlama::from<em>bytes(include</em>bytes!(&quot;model.q4&quot;));</p>
+<p>let input = b&quot;how are you&quot;;</p>
+<p>// 推理</p>
+<p>let output = model.predict(input);</p>
+<p>print_output(&amp;output);</p>
+<p>loop {}</p>
+<p>}</p>
+<p></code></pre></p>
 <h2>数据管道：Polars + Lance</h2>
 <h3>Polars：比 Pandas 快 30x</h3>
 <p>Polars 是完全用 Rust 实现的数据框架库，其 API 与 Pandas 相似但性能差一个数量级：</p>
 <pre><code class="language-rust">use polars::prelude::*;
-
-fn process_training_data() -&gt; Result&lt;DataFrame&gt; {
-    // 惰性查询：Polars 自动优化执行计划
-    let df = LazyCsvReader::new(&quot;training_data.csv&quot;)
-        .has_header(true)
-        .finish()?
-        .filter(col(&quot;label&quot;).eq(lit(1)))  // 只处理正样本
-        .group_by([col(&quot;category&quot;)])
-        .agg([
-            col(&quot;features&quot;).apply(|s| {
-                Ok(Some(normalize(s)))
-            }).alias(&quot;normalized&quot;),
-            col(&quot;weight&quot;).sum().alias(&quot;total_weight&quot;),
-        ])
-        .collect()?;  // 在此处统一执行
-
-    // 转换为张量数据
-    let tensor = df_to_tensor(&amp;df)?;
-    Ok(df)
-}
-
-fn normalize(s: &amp;Series) -&gt; Series {
-    let arr = s.f32().unwrap();
-    let mean = arr.mean();
-    let std = arr.std(1);
-    (arr - mean) / std
-}
-</code></pre>
+<p>fn process<em>training</em>data() -&gt; Result&lt;DataFrame&gt; {</p>
+<p>// 惰性查询：Polars 自动优化执行计划</p>
+<p>let df = LazyCsvReader::new(&quot;training_data.csv&quot;)</p>
+<p>.has_header(true)</p>
+<p>.finish()?</p>
+<p>.filter(col(&quot;label&quot;).eq(lit(1)))  // 只处理正样本</p>
+<p>.group_by([col(&quot;category&quot;)])</p>
+<p>.agg([</p>
+<p>col(&quot;features&quot;).apply(|s| {</p>
+<p>Ok(Some(normalize(s)))</p>
+<p>}).alias(&quot;normalized&quot;),</p>
+<p>col(&quot;weight&quot;).sum().alias(&quot;total_weight&quot;),</p>
+<p>])</p>
+<p>.collect()?;  // 在此处统一执行</p>
+<p>// 转换为张量数据</p>
+<p>let tensor = df<em>to</em>tensor(&amp;df)?;</p>
+<p>Ok(df)</p>
+<p>}</p>
+<p>fn normalize(s: &amp;Series) -&gt; Series {</p>
+<p>let arr = s.f32().unwrap();</p>
+<p>let mean = arr.mean();</p>
+<p>let std = arr.std(1);</p>
+<p>(arr - mean) / std</p>
+<p>}</p>
+<p></code></pre></p>
 <pre><code class="language-python"># 等效的 Pandas 代码
-# pandas 要大 10-30x 内存和 3-10x 时间
-import pandas as pd
-df = pd.read_csv(&quot;training_data.csv&quot;)
-df = df[df['label'] == 1]
-# ... 处理慢
-</code></pre>
+<h1>pandas 要大 10-30x 内存和 3-10x 时间</h1>
+<p>import pandas as pd</p>
+<p>df = pd.read<em>csv(&quot;training</em>data.csv&quot;)</p>
+<p>df = df[df['label'] == 1]</p>
+<h1>... 处理慢</h1>
+<p></code></pre></p>
 <h3>Lance：列式存储的现代选择</h3>
 <pre><code class="language-rust">// Lance 用 Rust 重写了列式存储格式
-// 比 Parquet 快 100x 的随机访问
-use lance::dataset::Dataset;
-
-#[tokio::main]
-async fn main() -&gt; Result&lt;()&gt; {
-    // 创建数据集
-    let dataset = Dataset::write(
-        records,
-        &quot;s3://training-data/embeddings.lance&quot;,
-        None,
-    ).await?;
-
-    // 快速随机访问（无需扫描整个文件）
-    let rows = dataset
-        .take(&amp;[100, 200, 300], None)
-        .await?;
-
-    // 向量相似度搜索
-    let results = dataset
-        .scan()
-        .nearest(&quot;embedding&quot;, &amp;query_embedding, 10)
-        .await?;
-
-    Ok(())
-}
-</code></pre>
+<p>// 比 Parquet 快 100x 的随机访问</p>
+<p>use lance::dataset::Dataset;</p>
+<p>#[tokio::main]</p>
+<p>async fn main() -&gt; Result&lt;()&gt; {</p>
+<p>// 创建数据集</p>
+<p>let dataset = Dataset::write(</p>
+<p>records,</p>
+<p>&quot;s3://training-data/embeddings.lance&quot;,</p>
+<p>None,</p>
+<p>).await?;</p>
+<p>// 快速随机访问（无需扫描整个文件）</p>
+<p>let rows = dataset</p>
+<p>.take(&amp;[100, 200, 300], None)</p>
+<p>.await?;</p>
+<p>// 向量相似度搜索</p>
+<p>let results = dataset</p>
+<p>.scan()</p>
+<p>.nearest(&quot;embedding&quot;, &amp;query_embedding, 10)</p>
+<p>.await?;</p>
+<p>Ok(())</p>
+<p>}</p>
+<p></code></pre></p>
 <h2>工具链和生态</h2>
 <h3>Cargo 的包管理优势</h3>
 <p>Rust 的包管理系统对 AI 基础设施开发来说是巨大的生产力提升：</p>
 <pre><code class="language-toml"># Cargo.toml — AI 项目依赖管理
-[package]
-name = &quot;my-inference-engine&quot;
-version = &quot;0.1.0&quot;
-edition = &quot;2024&quot;
-
-[dependencies]
-# 深度学习框架
-candle-core = &quot;0.8&quot;
-candle-nn = &quot;0.8&quot;
-candle-transformers = &quot;0.8&quot;
-
-# 数据处理
-polars = { version = &quot;0.44&quot;, features = [&quot;lazy&quot;, &quot;series&quot;] }
-tokenizers = &quot;0.21&quot;
-
-# 序列化
-safetensors = &quot;0.6&quot;
-serde = { version = &quot;1&quot;, features = [&quot;derive&quot;] }
-
-# 数值计算
-nalgebra = &quot;0.33&quot;
-rand = &quot;0.8&quot;
-
-# 测试
-[dev-dependencies]
-criterion = &quot;0.5&quot;  # 基准测试
-</code></pre>
+<p>[package]</p>
+<p>name = &quot;my-inference-engine&quot;</p>
+<p>version = &quot;0.1.0&quot;</p>
+<p>edition = &quot;2024&quot;</p>
+<p>[dependencies]</p>
+<h1>深度学习框架</h1>
+<p>candle-core = &quot;0.8&quot;</p>
+<p>candle-nn = &quot;0.8&quot;</p>
+<p>candle-transformers = &quot;0.8&quot;</p>
+<h1>数据处理</h1>
+<p>polars = { version = &quot;0.44&quot;, features = [&quot;lazy&quot;, &quot;series&quot;] }</p>
+<p>tokenizers = &quot;0.21&quot;</p>
+<h1>序列化</h1>
+<p>safetensors = &quot;0.6&quot;</p>
+<p>serde = { version = &quot;1&quot;, features = [&quot;derive&quot;] }</p>
+<h1>数值计算</h1>
+<p>nalgebra = &quot;0.33&quot;</p>
+<p>rand = &quot;0.8&quot;</p>
+<h1>测试</h1>
+<p>[dev-dependencies]</p>
+<p>criterion = &quot;0.5&quot;  # 基准测试</p>
+<p></code></pre></p>
 <h3>跨平台编译</h3>
 <pre><code class="language-bash"># Rust 的一键交叉编译
-# 对比 Python：每平台都需要单独安装 Python + CUDA toolkit
-
-# 编译到 Linux ARM（树莓派）
-cargo build --target aarch64-unknown-linux-gnu --release
-
-# 编译到 macOS（x86 + ARM 通用）
-cargo build --target universal-apple-darwin --release
-
-# 编译到 WASM
-cargo build --target wasm32-unknown-unknown --release
-
-# 编译到 Windows
-cargo build --target x86_64-pc-windows-gnu --release
-
-# 单条命令 = 完整的跨平台二进制
-</code></pre>
+<h1>对比 Python：每平台都需要单独安装 Python + CUDA toolkit</h1>
+<h1>编译到 Linux ARM（树莓派）</h1>
+<p>cargo build --target aarch64-unknown-linux-gnu --release</p>
+<h1>编译到 macOS（x86 + ARM 通用）</h1>
+<p>cargo build --target universal-apple-darwin --release</p>
+<h1>编译到 WASM</h1>
+<p>cargo build --target wasm32-unknown-unknown --release</p>
+<h1>编译到 Windows</h1>
+<p>cargo build --target x86_64-pc-windows-gnu --release</p>
+<h1>单条命令 = 完整的跨平台二进制</h1>
+<p></code></pre></p>
 <h2>挑战与不足</h2>
 <h3>生态系统成熟度</h3>
 <p>Rust 在 AI 领域也有明显的不足，需要客观看待：</p>
 <pre><code class="language-rust">// 1. 缺少成熟的自动微分框架
-// 当前状态：正在发展中，但远不及 PyTorch
-// candle_nn 提供有限的 autograd
-let x = Tensor::new(&amp;[1.0, 2.0, 3.0], &amp;device)?;
-let y = x.sin()?;  // 支持
-// y.backward()?;  // ❌ Candle 不支持自动求导
-
-// 2. GPU 算子支持有限
-// CUDA kernel 需要写 cu 或通过 cuda_std
-// 相比 PyTorch 的数千个算子差距巨大
-
-// 3 编译时间
-// 第一次编译：3-5 分钟
-// 增量编译：30-60 秒
-// 🔄 正在改进（增量编译、并行前端）
-</code></pre>
+<p>// 当前状态：正在发展中，但远不及 PyTorch</p>
+<p>// candle_nn 提供有限的 autograd</p>
+<p>let x = Tensor::new(&amp;[1.0, 2.0, 3.0], &amp;device)?;</p>
+<p>let y = x.sin()?;  // 支持</p>
+<p>// y.backward()?;  // ❌ Candle 不支持自动求导</p>
+<p>// 2. GPU 算子支持有限</p>
+<p>// CUDA kernel 需要写 cu 或通过 cuda_std</p>
+<p>// 相比 PyTorch 的数千个算子差距巨大</p>
+<p>// 3 编译时间</p>
+<p>// 第一次编译：3-5 分钟</p>
+<p>// 增量编译：30-60 秒</p>
+<p>// 🔄 正在改进（增量编译、并行前端）</p>
+<p></code></pre></p>
 <h3>社区和人才储备</h3>
 <table>
 <thead>
@@ -756,32 +695,33 @@ let y = x.sin()?;  // 支持
 <h3>趋势二：WebGPU + WASM 推理</h3>
 <p>Rust 的 WASM 支持 + WebGPU 标准，让在浏览器中运行大模型推理成为现实：</p>
 <pre><code class="language-rust">// 未来的 WebGPU 推理
-// 使用 WGPU（Rust 的 WebGPU 实现）
-async fn run_inference_webgpu(model: &amp;WgpuModel) -&gt; Result&lt;Vec&lt;f32&gt;&gt; {
-    let device = wgpu::Device::request(&amp;wgpu::RequestAdapterOptions {
-        power_preference: wgpu::PowerPreference::HighPerformance,
-        ..Default::default()
-    }).await?;
-
-    // 直接在 GPU 上推理
-    let output = model.forward(&amp;input_tensor).await?;
-    Ok(output)
-}
-</code></pre>
+<p>// 使用 WGPU（Rust 的 WebGPU 实现）</p>
+<p>async fn run<em>inference</em>webgpu(model: &amp;WgpuModel) -&gt; Result&lt;Vec&lt;f32&gt;&gt; {</p>
+<p>let device = wgpu::Device::request(&amp;wgpu::RequestAdapterOptions {</p>
+<p>power_preference: wgpu::PowerPreference::HighPerformance,</p>
+<p>..Default::default()</p>
+<p>}).await?;</p>
+<p>// 直接在 GPU 上推理</p>
+<p>let output = model.forward(&amp;input_tensor).await?;</p>
+<p>Ok(output)</p>
+<p>}</p>
+<p></code></pre></p>
 <h3>趋势三：Candle 生态成熟</h3>
 <p>HuggingFace 正在全力推动 Candle 成为 Rust 领域的 PyTorch：</p>
 <pre><code>Candle + Tokenizers + Safetensors + Diffusers (Rust 版)
-                    ↓
-            完整的 Rust AI 工具链
-                    ↓
-       最终用户：不用碰一行 Python 代码
-</code></pre>
+<p>↓</p>
+<p>完整的 Rust AI 工具链</p>
+<p>↓</p>
+<p>最终用户：不用碰一行 Python 代码</p>
+<p></code></pre></p>
 <h2>总结</h2>
 <p>Rust 在 AI 基础设施中的崛起不是一个偶然事件，而是开发者对性能、安全性和可维护性持续追求的自然结果。它的核心价值不在于发明新的范式，而在于<strong>用更好的工程实现承载已有的 AI 理论</strong>。</p>
 <p>对于团队来说，最佳策略是<strong>混合架构</strong>：
-- <strong>顶层</strong>：Python — 原型开发、实验、数据分析
-- <strong>中间层</strong>：Rust — 高性能核心、推理引擎、数据管道
-- <strong>底层</strong>：CUDA/Metal — GPU 加速计算</p>
+<ul>
+<li><strong>顶层</strong>：Python — 原型开发、实验、数据分析</li>
+<li><strong>中间层</strong>：Rust — 高性能核心、推理引擎、数据管道</li>
+<li><strong>底层</strong>：CUDA/Metal — GPU 加速计算</p></li>
+</ul>
 <p>如果你正在构建 AI 基础设施，现在正是认真考虑 Rust 的时候。不需要全盘迁移，但至少可以让它成为你工具箱中的重要一员。</p>
 <blockquote>
 <p><strong>建议</strong>：从 tokenizer 重写或推理引擎加速开始，用 Rust 替换最消耗 CPU 的那几个函数，你的用户会感谢你。</p>
@@ -925,7 +865,7 @@ async fn run_inference_webgpu(model: &amp;WgpuModel) -&gt; Result&lt;Vec&lt;f32&
         <div class="post-info-label">文章信息</div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📅</span> 发布日期</span><span class="post-info-stat-value">2026-07-14</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">⏱️</span> 阅读时间</span><span class="post-info-stat-value">12 min read</span></div>
-        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">3440 字</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">3411 字</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📊</span> 章节数</span><span class="post-info-stat-value">12 节 · 24 子节</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">💻</span> 代码块</span><span class="post-info-stat-value">26 段</span></div>
       </div>

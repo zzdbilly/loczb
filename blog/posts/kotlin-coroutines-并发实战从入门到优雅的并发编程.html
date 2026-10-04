@@ -50,12 +50,12 @@
       },
       "keywords": "Kotlin, 协程, 并发, Android",
       "articleSection": "Kotlin",
-      "timeRequired": "PT5M",
+      "timeRequired": "PT19M",
       "inLanguage": "zh-CN"
 }
     </script>
 
-    <link rel="stylesheet" href="../../assets/css/style.css?v=231fa9f71a">
+    <link rel="stylesheet" href="../../assets/css/style.css?v=27743e398e">
     <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
     <link rel="alternate icon" href="../../assets/images/favicon.ico">
     <link rel="canonical" href="https://709527.xyz/blog/posts/kotlin-coroutines-并发实战从入门到优雅的并发编程.html">
@@ -117,7 +117,7 @@
 
         <div class="post-meta">
           <span class="meta-item"><span aria-hidden="true">📅</span> 2026-08-07 20:42:59</span>
-          <span class="meta-item"><span aria-hidden="true">⏱️</span> 5 min read</span>
+          <span class="meta-item"><span aria-hidden="true">⏱️</span> 19 min read</span>
           <span class="meta-item"><span aria-hidden="true">👤</span> 张小猛</span>
         </div>
 
@@ -163,39 +163,37 @@
 <h3>线程是操作系统调度的单位</h3>
 <p>线程是由操作系统内核管理的，每个线程都有自己独立的栈空间（默认通常 1MB 左右），线程的创建、销毁、上下文切换都涉及内核态的系统调用，成本不低。一台普通服务器上，同时运行几千个线程就会明显吃力；移动端虽然主线程很轻，但任何耗时操作放到主线程都会导致 UI 卡顿甚至 ANR。</p>
 <pre><code class="language-kotlin">// 线程的创建与启动
-val thread = Thread {
-    println(&quot;在子线程中执行: ${Thread.currentThread().name}&quot;)
-}
-thread.start()
-thread.join()
-</code></pre>
+<p>val thread = Thread {</p>
+<p>println(&quot;在子线程中执行: ${Thread.currentThread().name}&quot;)</p>
+<p>}</p>
+<p>thread.start()</p>
+<p>thread.join()</p>
+<p></code></pre></p>
 <p>上面的代码创建并启动了一个线程。注意 <code>thread.join()</code> 会<strong>阻塞当前线程</strong>直到子线程结束——这就是线程的一个特点：同步等待必须阻塞。</p>
 <h3>协程是代码层面的调度单元</h3>
 <p>协程则完全处于用户态，由 Kotlin 运行时（或者说协程调度器）管理。协程不绑定某个固定的线程，它可以被调度器挂起（suspend）和恢复（resume）。一个协程挂起时，它占用的线程会被释放出来给别的协程用，所以一个线程上可以同时运行成千上万个协程而没有任何压力。</p>
 <pre><code class="language-kotlin">// 协程的创建与启动
-import kotlinx.coroutines.*
-
-fun main() = runBlocking {
-    launch {
-        println(&quot;在协程中执行: ${Thread.currentThread().name}&quot;)
-    }
-}
-</code></pre>
+<p>import kotlinx.coroutines.*</p>
+<p>fun main() = runBlocking {</p>
+<p>launch {</p>
+<p>println(&quot;在协程中执行: ${Thread.currentThread().name}&quot;)</p>
+<p>}</p>
+<p>}</p>
+<p></code></pre></p>
 <p>对比上面两段代码，协程的写法更简洁，而且 <code>launch</code> 不会阻塞当前线程。</p>
 <h3>挂起与恢复：协程的核心机制</h3>
 <p>协程最神奇的一点是 <code>suspend</code> 函数。一个用 <code>suspend</code> 修饰的函数可以被"挂起"——挂起时它让出线程，等到异步操作完成后再"恢复"继续执行，而这一切对调用方看起来就像同步代码一样自然。</p>
 <pre><code class="language-kotlin">suspend fun fetchData(): String {
-    // delay 是挂起函数，会让出当前线程而不阻塞
-    delay(1000L)
-    return &quot;数据&quot;
-}
-
-fun main() = runBlocking {
-    println(&quot;开始: ${Thread.currentThread().name}&quot;)
-    val data = fetchData() // 看起来像同步调用
-    println(&quot;拿到结果: $data&quot;)
-}
-</code></pre>
+<p>// delay 是挂起函数，会让出当前线程而不阻塞</p>
+<p>delay(1000L)</p>
+<p>return &quot;数据&quot;</p>
+<p>}</p>
+<p>fun main() = runBlocking {</p>
+<p>println(&quot;开始: ${Thread.currentThread().name}&quot;)</p>
+<p>val data = fetchData() // 看起来像同步调用</p>
+<p>println(&quot;拿到结果: $data&quot;)</p>
+<p>}</p>
+<p></code></pre></p>
 <p><code>delay(1000L)</code> 会挂起当前协程，但<strong>不会阻塞线程</strong>——线程在这 1 秒里可以去执行别的协程。这就是协程轻量的本质：挂起几乎零成本，恢复也只是在调度器里排个队。</p>
 <h3>为什么协程在 Android / 服务端这么受欢迎</h3>
 <p>协程能成为现代 Kotlin 并发的事实标准，原因是多方面的：</p>
@@ -211,38 +209,37 @@ fun main() = runBlocking {
 <h3>runBlocking：桥接阻塞世界</h3>
 <p><code>runBlocking</code> 会阻塞当前线程，直到块内的所有协程执行完毕。它主要用于 <code>main</code> 函数测试、或者从同步代码桥接到协程世界。在 Android 主线程或真实业务代码里，<strong>绝不建议</strong>使用 <code>runBlocking</code>，因为它会阻塞调用线程。</p>
 <pre><code class="language-kotlin">fun main() {
-    // 阻塞 main 线程，等待内部协程完成
-    runBlocking {
-        launch { println(&quot;A&quot;) }
-        launch { println(&quot;B&quot;) }
-    }
-    println(&quot;全部完成&quot;)
-}
-</code></pre>
+<p>// 阻塞 main 线程，等待内部协程完成</p>
+<p>runBlocking {</p>
+<p>launch { println(&quot;A&quot;) }</p>
+<p>launch { println(&quot;B&quot;) }</p>
+<p>}</p>
+<p>println(&quot;全部完成&quot;)</p>
+<p>}</p>
+<p></code></pre></p>
 <p>输出顺序：A、B 可能交错，但"全部完成"一定在最后。</p>
 <h3>launch：启动一个"即发即忘"的协程</h3>
 <p><code>launch</code> 启动一个协程并立刻返回一个 <code>Job</code>，它不返回结果。适合做"触发后不关心返回值"的任务，比如写入日志、刷新缓存、发送埋点等。</p>
 <pre><code class="language-kotlin">fun main() = runBlocking {
-    val job: Job = launch {
-        delay(100L)
-        println(&quot;任务执行中&quot;)
-    }
-    println(&quot;launch 返回了，job 还没完成&quot;)
-    job.join() // 等待 job 完成
-}
-</code></pre>
+<p>val job: Job = launch {</p>
+<p>delay(100L)</p>
+<p>println(&quot;任务执行中&quot;)</p>
+<p>}</p>
+<p>println(&quot;launch 返回了，job 还没完成&quot;)</p>
+<p>job.join() // 等待 job 完成</p>
+<p>}</p>
+<p></code></pre></p>
 <h3>async：返回结果的并发协程</h3>
 <p><code>async</code> 和 <code>launch</code> 类似，但它返回一个 <code>Deferred</code>（可理解为带结果的 Job），通过 <code>await()</code> 拿到结果。这是实现<strong>并发</strong>的核心工具——多个独立任务可以同时开始，最后统一取结果。</p>
 <pre><code class="language-kotlin">fun main() = runBlocking {
-    val deferred1 = async { fetchUser() }
-    val deferred2 = async { fetchSettings() }
-
-    // 两个任务已经并发执行，这里只是等待结果
-    val user = deferred1.await()
-    val settings = deferred2.await()
-    println(&quot;用户: $user, 设置: $settings&quot;)
-}
-</code></pre>
+<p>val deferred1 = async { fetchUser() }</p>
+<p>val deferred2 = async { fetchSettings() }</p>
+<p>// 两个任务已经并发执行，这里只是等待结果</p>
+<p>val user = deferred1.await()</p>
+<p>val settings = deferred2.await()</p>
+<p>println(&quot;用户: $user, 设置: $settings&quot;)</p>
+<p>}</p>
+<p></code></pre></p>
 <h3>三个构建器的选择</h3>
 <table>
 <thead>
@@ -280,55 +277,53 @@ fun main() = runBlocking {
 <h3>什么是结构化并发</h3>
 <p>结构化并发意味着：每个协程都有明确的父协程和生命周期，父协程会等待所有子协程完成，父协程被取消时所有子协程一并取消。这套机制避免了"协程泄漏"——协程不会在没人管理的情况下偷偷运行。</p>
 <pre><code class="language-kotlin">fun main() = runBlocking {
-    coroutineScope {
-        launch { delay(1000); println(&quot;子任务1完成&quot;) }
-        launch { delay(500); println(&quot;子任务2完成&quot;) }
-        println(&quot;coroutineScope 会等待所有子协程&quot;)
-    }
-    println(&quot;作用域内全部完成&quot;)
-}
-</code></pre>
+<p>coroutineScope {</p>
+<p>launch { delay(1000); println(&quot;子任务1完成&quot;) }</p>
+<p>launch { delay(500); println(&quot;子任务2完成&quot;) }</p>
+<p>println(&quot;coroutineScope 会等待所有子协程&quot;)</p>
+<p>}</p>
+<p>println(&quot;作用域内全部完成&quot;)</p>
+<p>}</p>
+<p></code></pre></p>
 <p><code>coroutineScope</code> 会<strong>挂起</strong>直到其内部所有子协程完成，但它<strong>不阻塞</strong>线程。</p>
 <h3>全局作用域是个陷阱</h3>
 <p><code>GlobalScope</code> 是全局单例作用域，它的协程生命周期和整个应用一样长，且不受任何调用方控制。滥用它会导致协程泄漏、难以测试。除非你非常清楚后果，否则不要用 <code>GlobalScope</code>。</p>
 <pre><code class="language-kotlin">// ❌ 不好的实践：GlobalScope 长生命周期，容易泄漏
-GlobalScope.launch {
-    while (true) {
-        delay(1000)
-        println(&quot;后台循环&quot;)
-    }
-}
-</code></pre>
+<p>GlobalScope.launch {</p>
+<p>while (true) {</p>
+<p>delay(1000)</p>
+<p>println(&quot;后台循环&quot;)</p>
+<p>}</p>
+<p>}</p>
+<p></code></pre></p>
 <h3>自定义 Scope：让生命周期可控</h3>
 <p>在生产代码里，你应该创建自己的 Scope 并显式管理它的取消时机，让协程和业务组件同生共死。</p>
 <pre><code class="language-kotlin">class DataRepository {
-    // 每个实例持有自己的 Scope
-    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
-
-    fun loadData() {
-        scope.launch {
-            val data = fetchFromNetwork()
-            println(&quot;拿到数据: $data&quot;)
-        }
-    }
-
-    fun onCleared() {
-        scope.cancel() // 组件销毁时取消所有协程
-    }
-}
-</code></pre>
+<p>// 每个实例持有自己的 Scope</p>
+<p>private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)</p>
+<p>fun loadData() {</p>
+<p>scope.launch {</p>
+<p>val data = fetchFromNetwork()</p>
+<p>println(&quot;拿到数据: $data&quot;)</p>
+<p>}</p>
+<p>}</p>
+<p>fun onCleared() {</p>
+<p>scope.cancel() // 组件销毁时取消所有协程</p>
+<p>}</p>
+<p>}</p>
+<p></code></pre></p>
 <h3>在 Android 中绑定生命周期</h3>
 <p>Android 的 Activity / Fragment / ViewModel 都有生命周期。ViewModel 是协程最自然的宿主——<code>viewModelScope</code> 已经内置，在 ViewModel 被 clear 时自动取消。</p>
 <pre><code class="language-kotlin">class MainViewModel : ViewModel() {
-    // viewModelScope 随 ViewModel 销毁而自动取消
-    fun fetchData() {
-        viewModelScope.launch {
-            val data = repository.getData()
-            _uiState.value = data
-        }
-    }
-}
-</code></pre>
+<p>// viewModelScope 随 ViewModel 销毁而自动取消</p>
+<p>fun fetchData() {</p>
+<p>viewModelScope.launch {</p>
+<p>val data = repository.getData()</p>
+<p>_uiState.value = data</p>
+<p>}</p>
+<p>}</p>
+<p>}</p>
+<p></code></pre></p>
 <p>如果你用 Activity/Fragment 而非 ViewModel，可以在 <code>onStart</code> 创建 scope、<code>onStop</code> 取消，或者用 LifecycleScope。</p>
 <h2>Dispatcher：协程跑在哪个线程</h2>
 <p>协程本身不干活，它最终还是要调度到某个线程上执行。<strong>Dispatcher</strong> 就是决定"协程在哪个线程池上跑"的组件。选择正确的 Dispatcher 是高性能协程的关键。</p>
@@ -360,41 +355,39 @@ GlobalScope.launch {
 </tbody>
 </table>
 <pre><code class="language-kotlin">// 默认调度器：CPU 密集型
-runBlocking {
-    launch(Dispatchers.Default) {
-        // 大数据计算
-        val result = heavyComputation()
-        println(result)
-    }
-
-    launch(Dispatchers.IO) {
-        // 网络请求
-        val data = api.fetchPosts()
-        println(data)
-    }
-}
-</code></pre>
+<p>runBlocking {</p>
+<p>launch(Dispatchers.Default) {</p>
+<p>// 大数据计算</p>
+<p>val result = heavyComputation()</p>
+<p>println(result)</p>
+<p>}</p>
+<p>launch(Dispatchers.IO) {</p>
+<p>// 网络请求</p>
+<p>val data = api.fetchPosts()</p>
+<p>println(data)</p>
+<p>}</p>
+<p>}</p>
+<p></code></pre></p>
 <h3>Main 与 IO/Default 的无缝切换</h3>
 <p>协程最优雅的地方之一是 <code>withContext</code>：在协程内部，你可以随时切换线程上下文，而且切换后代码看起来依然是顺序的。这在 Android 里尤其常用——在 IO 线程请求，回到主线程更新 UI。</p>
 <pre><code class="language-kotlin">viewModelScope.launch {
-    // 默认在 Main 线程启动
-    val result = withContext(Dispatchers.IO) {
-        // 切到 IO 线程做网络请求
-        api.fetchData()
-    }
-    // withContext 返回后自动回到 Main 线程
-    textView.text = result
-}
-</code></pre>
+<p>// 默认在 Main 线程启动</p>
+<p>val result = withContext(Dispatchers.IO) {</p>
+<p>// 切到 IO 线程做网络请求</p>
+<p>api.fetchData()</p>
+<p>}</p>
+<p>// withContext 返回后自动回到 Main 线程</p>
+<p>textView.text = result</p>
+<p>}</p>
+<p></code></pre></p>
 <p><code>withContext</code> 会挂起并等待内部代码执行完，然后带着返回值切回原来的上下文。它不代表"并发"，而是"切换执行位置"。</p>
 <h3>为什么不要自己 new 线程池</h3>
 <p>很多初学者会自己 <code>Executors.newFixedThreadPool(...)</code>，然后再包一层 Dispatcher。这通常是多余的——Kotlin 的 Dispatchers.IO/Default 已经基于共享线程池做了充分优化，并且在协程挂起时能高效复用线程。</p>
 <pre><code class="language-kotlin">// ❌ 过度设计：自己建线程池再转 Dispatcher
-val myPool = Executors.newFixedThreadPool(4).asCoroutineDispatcher()
-
-// ✅ 直接用内置调度器
-launch(Dispatchers.IO) { ... }
-</code></pre>
+<p>val myPool = Executors.newFixedThreadPool(4).asCoroutineDispatcher()</p>
+<p>// ✅ 直接用内置调度器</p>
+<p>launch(Dispatchers.IO) { ... }</p>
+<p></code></pre></p>
 <p>除非你有明确的线程隔离需求（比如必须独占一组线程），否则优先使用内置 Dispatcher。</p>
 <h3>IO 与 Default 的自动共享优化</h3>
 <p>从 Kotlin 1.6 起，<code>Dispatchers.IO</code> 和 <code>Dispatchers.Default</code> 共享同一个底层线程池，可以自动进行负载均衡。这意味着你可以放心地混合使用它们，而不用担心各自创建独立线程池造成资源浪费。</p>
@@ -402,9 +395,9 @@ launch(Dispatchers.IO) { ... }
 <p>每个协程都对应一个 <code>Job</code>，它代表了协程的<strong>生命周期状态</strong>。理解 Job 的状态机，是掌握取消和结构化并发的基础。</p>
 <h3>Job 的生命周期状态</h3>
 <pre><code>New → Active → Completing → Completed
-        ↓ 取消
-      Cancelling → Cancelled
-</code></pre>
+<p>↓ 取消</p>
+<p>Cancelling → Cancelled</p>
+<p></code></pre></p>
 <ul>
 <li><strong>New</strong>：刚创建，还没开始</li>
 <li><strong>Active</strong>：运行中（默认状态）</li>
@@ -414,14 +407,13 @@ launch(Dispatchers.IO) { ... }
 <li><strong>Cancelled</strong>：已取消</li>
 </ul>
 <pre><code class="language-kotlin">fun main() = runBlocking {
-    val job = launch { delay(1000) }
-    println(&quot;isActive: ${job.isActive}&quot;)    // true
-    println(&quot;isCompleted: ${job.isCompleted}&quot;) // false
-
-    job.join()
-    println(&quot;isCompleted: ${job.isCompleted}&quot;) // true
-}
-</code></pre>
+<p>val job = launch { delay(1000) }</p>
+<p>println(&quot;isActive: ${job.isActive}&quot;)    // true</p>
+<p>println(&quot;isCompleted: ${job.isCompleted}&quot;) // false</p>
+<p>job.join()</p>
+<p>println(&quot;isCompleted: ${job.isCompleted}&quot;) // true</p>
+<p>}</p>
+<p></code></pre></p>
 <h3>Job 的父子关系</h3>
 <p>一个 Job 可以有子 Job。父子关系的关键规则：</p>
 <ul>
@@ -430,161 +422,158 @@ launch(Dispatchers.IO) { ... }
 <li>子 Job 抛异常 → 父 Job 取消（除非是 SupervisorJob）</li>
 </ul>
 <pre><code class="language-kotlin">fun main() = runBlocking {
-    val parent = launch {
-        launch { delay(1000); println(&quot;子1&quot;) }
-        launch { delay(500); println(&quot;子2&quot;) }
-    }
-    parent.join()
-    println(&quot;父协程等所有子协程完成&quot;)
-}
-</code></pre>
+<p>val parent = launch {</p>
+<p>launch { delay(1000); println(&quot;子1&quot;) }</p>
+<p>launch { delay(500); println(&quot;子2&quot;) }</p>
+<p>}</p>
+<p>parent.join()</p>
+<p>println(&quot;父协程等所有子协程完成&quot;)</p>
+<p>}</p>
+<p></code></pre></p>
 <h3>Deferred：带结果的 Job</h3>
 <p><code>async</code> 返回的 <code>Deferred</code> 就是一个携带结果值的 Job。除了 Job 的全部特性（取消、父子关系），它还有 <code>await()</code> 来取结果。</p>
 <pre><code class="language-kotlin">fun main() = runBlocking {
-    val deferred = async(Dispatchers.IO) {
-        // 模拟耗时计算
-        delay(500)
-        42
-    }
-    println(&quot;结果: ${deferred.await()}&quot;) // 42
-
-    // Deferred 也是 Job
-    println(&quot;isCompleted: ${deferred.isCompleted}&quot;)
-}
-</code></pre>
+<p>val deferred = async(Dispatchers.IO) {</p>
+<p>// 模拟耗时计算</p>
+<p>delay(500)</p>
+<p>42</p>
+<p>}</p>
+<p>println(&quot;结果: ${deferred.await()}&quot;) // 42</p>
+<p>// Deferred 也是 Job</p>
+<p>println(&quot;isCompleted: ${deferred.isCompleted}&quot;)</p>
+<p>}</p>
+<p></code></pre></p>
 <h2>结构化并发实战：并行请求、集合并发与并发限制</h2>
 <p>掌握了基础概念，现在看真实场景中协程如何优雅地处理并发。</p>
 <h3>场景一：多个请求并行，全部结果一起用</h3>
 <p>最常见的场景：首页需要同时请求用户信息、推荐列表、消息数，三个接口互不依赖，可以并发执行。</p>
 <pre><code class="language-kotlin">suspend fun loadHomePage() {
-    coroutineScope {
-        val user = async { api.getUser() }        // 并行
-        val posts = async { api.getRecommend() }  // 并行
-        val msgCount = async { api.getUnreadCount() } // 并行
-
-        val homeData = HomeData(
-            user = user.await(),
-            posts = posts.await(),
-            unread = msgCount.await()
-        )
-        renderHomePage(homeData)
-    }
-}
-</code></pre>
+<p>coroutineScope {</p>
+<p>val user = async { api.getUser() }        // 并行</p>
+<p>val posts = async { api.getRecommend() }  // 并行</p>
+<p>val msgCount = async { api.getUnreadCount() } // 并行</p>
+<p>val homeData = HomeData(</p>
+<p>user = user.await(),</p>
+<p>posts = posts.await(),</p>
+<p>unread = msgCount.await()</p>
+<p>)</p>
+<p>renderHomePage(homeData)</p>
+<p>}</p>
+<p>}</p>
+<p></code></pre></p>
 <p>三个请求同时发出，等待最慢的一个完成后统一渲染，总耗时 ≈ 最慢接口的耗时，而不是三者之和。</p>
 <h3>场景二：并发处理集合元素</h3>
 <p><code>kotlinx.coroutines</code> 提供了 <code>map</code>、<code>filter</code> 等集合操作的挂起版本，可以轻松把集合处理并行化。</p>
 <pre><code class="language-kotlin">suspend fun processAll(ids: List&lt;Int&gt;): List&lt;String&gt; {
-    // map 的挂起版本，所有元素并发处理
-    return ids.map { id -&gt;
-        async(Dispatchers.IO) { fetchDetail(id) }
-    }.awaitAll() // 等待全部完成，返回结果列表
-}
-</code></pre>
+<p>// map 的挂起版本，所有元素并发处理</p>
+<p>return ids.map { id -&gt;</p>
+<p>async(Dispatchers.IO) { fetchDetail(id) }</p>
+<p>}.awaitAll() // 等待全部完成，返回结果列表</p>
+<p>}</p>
+<p></code></pre></p>
 <p><code>awaitAll()</code> 是处理 <code>List&lt;Deferred&gt;</code> 的利器，它会等待所有 Deferred 完成并返回结果列表；如果有任何一个失败则抛出异常。</p>
 <h3>场景三：限制并发数量（信号量思路）</h3>
 <p>当任务很多但不想一次性全部并发（怕打爆服务器或耗光资源）时，需要限制并发度。可以用一个共享的 Mutex 或限制线程池实现。一个常见做法是使用 <code>Semaphore</code>（Kotlin 1.8+ 提供了协程版）。</p>
 <pre><code class="language-kotlin">import kotlinx.coroutines.sync.Semaphore
-import kotlinx.coroutines.sync.withPermit
-
-suspend fun downloadAll(urls: List&lt;String&gt;) {
-    // 最多同时 3 个下载
-    val semaphore = Semaphore(3)
-    coroutineScope {
-        urls.forEach { url -&gt;
-            launch(Dispatchers.IO) {
-                semaphore.withPermit {
-                    download(url)
-                }
-            }
-        }
-    }
-}
-</code></pre>
+<p>import kotlinx.coroutines.sync.withPermit</p>
+<p>suspend fun downloadAll(urls: List&lt;String&gt;) {</p>
+<p>// 最多同时 3 个下载</p>
+<p>val semaphore = Semaphore(3)</p>
+<p>coroutineScope {</p>
+<p>urls.forEach { url -&gt;</p>
+<p>launch(Dispatchers.IO) {</p>
+<p>semaphore.withPermit {</p>
+<p>download(url)</p>
+<p>}</p>
+<p>}</p>
+<p>}</p>
+<p>}</p>
+<p>}</p>
+<p></code></pre></p>
 <p><code>Semaphore(3)</code> 保证同时最多 3 个协程拿到"许可"执行 <code>download</code>，其余排队等待。这是控制并发度、保护下游资源的优雅方案。</p>
 <h3>场景四：超时控制</h3>
 <p>真实网络请求绝不能无限等待。用 <code>withTimeout</code> 给操作加一个截止时间。</p>
 <pre><code class="language-kotlin">suspend fun fetchDataWithTimeout() {
-    try {
-        withTimeout(3000) { // 3 秒超时
-            api.fetchData()
-        }
-    } catch (e: TimeoutCancellationException) {
-        println(&quot;请求超时，做降级处理&quot;)
-    }
-}
-</code></pre>
+<p>try {</p>
+<p>withTimeout(3000) { // 3 秒超时</p>
+<p>api.fetchData()</p>
+<p>}</p>
+<p>} catch (e: TimeoutCancellationException) {</p>
+<p>println(&quot;请求超时，做降级处理&quot;)</p>
+<p>}</p>
+<p>}</p>
+<p></code></pre></p>
 <p>超时后会抛出 <code>TimeoutCancellationException</code>（它是 <code>CancellationException</code> 的子类），通常需要捕获它做降级或重试。</p>
 <h2>协程的取消与协作：优雅地停下来</h2>
 <p>取消是协程里最容易踩坑的地方。很多人以为调用了 <code>cancel()</code> 协程就会立刻消失，实际上协程的取消是<strong>协作式</strong>的——协程必须主动配合才能被取消。</p>
 <h3>取消协作机制</h3>
 <p>协程默认在<strong>挂起点</strong>（如 <code>delay</code>、<code>withContext</code>、挂起的 I/O）检查取消。如果一个协程是纯 CPU 计算、从不挂起，那么调用 <code>cancel()</code> 后它其实还会继续跑完。</p>
 <pre><code class="language-kotlin">fun main() = runBlocking {
-    val job = launch {
-        repeat(1000) {
-            Thread.sleep(100) // 阻塞操作，不响应取消!
-            println(&quot;计算中: $it&quot;)
-        }
-    }
-    delay(300)
-    job.cancelAndJoin()
-    println(&quot;已取消，但上面的循环仍在跑?&quot;)
-}
-</code></pre>
+<p>val job = launch {</p>
+<p>repeat(1000) {</p>
+<p>Thread.sleep(100) // 阻塞操作，不响应取消!</p>
+<p>println(&quot;计算中: $it&quot;)</p>
+<p>}</p>
+<p>}</p>
+<p>delay(300)</p>
+<p>job.cancelAndJoin()</p>
+<p>println(&quot;已取消，但上面的循环仍在跑?&quot;)</p>
+<p>}</p>
+<p></code></pre></p>
 <p>上面用 <code>Thread.sleep</code> 阻塞，协程不会响应取消，会一直跑完。这就是"非协作"代码的典型问题。</p>
 <h3>让计算任务支持取消</h3>
 <p>要让 CPU 密集型任务响应取消，需要定期检查 <code>isActive</code> 或调用 <code>ensureActive()</code>。</p>
 <pre><code class="language-kotlin">fun main() = runBlocking {
-    val job = launch(Dispatchers.Default) {
-        var i = 0
-        while (isActive) { // 每次循环检查取消状态
-            i++
-            if (i % 100_000 == 0) println(&quot;进度: $i&quot;)
-        }
-        println(&quot;协作式取消: 循环停止了&quot;)
-    }
-    delay(50)
-    job.cancelAndJoin()
-}
-</code></pre>
+<p>val job = launch(Dispatchers.Default) {</p>
+<p>var i = 0</p>
+<p>while (isActive) { // 每次循环检查取消状态</p>
+<p>i++</p>
+<p>if (i % 100_000 == 0) println(&quot;进度: $i&quot;)</p>
+<p>}</p>
+<p>println(&quot;协作式取消: 循环停止了&quot;)</p>
+<p>}</p>
+<p>delay(50)</p>
+<p>job.cancelAndJoin()</p>
+<p>}</p>
+<p></code></pre></p>
 <p><code>isActive</code> 是 <code>CoroutineScope</code> 的扩展属性，在循环体里检查它，被取消时返回 false，循环自然退出。</p>
 <h3>挂起函数自动协作</h3>
 <p>挂起函数（如 <code>delay</code>、挂起的 I/O、<code>suspendCancellableCoroutine</code> 转换的 API）默认支持取消。在取消的协程里调用它们，会立刻抛出 <code>CancellationException</code>。</p>
 <pre><code class="language-kotlin">fun main() = runBlocking {
-    val job = launch {
-        try {
-            repeat(10) {
-                delay(100) // 挂起函数，取消时抛 CancellationException
-                println(&quot;第 $it 次&quot;)
-            }
-        } finally {
-            // finally 里的清理代码会执行
-            println(&quot;清理资源&quot;)
-        }
-    }
-    delay(300)
-    job.cancelAndJoin()
-    println(&quot;主协程结束&quot;)
-}
-</code></pre>
+<p>val job = launch {</p>
+<p>try {</p>
+<p>repeat(10) {</p>
+<p>delay(100) // 挂起函数，取消时抛 CancellationException</p>
+<p>println(&quot;第 $it 次&quot;)</p>
+<p>}</p>
+<p>} finally {</p>
+<p>// finally 里的清理代码会执行</p>
+<p>println(&quot;清理资源&quot;)</p>
+<p>}</p>
+<p>}</p>
+<p>delay(300)</p>
+<p>job.cancelAndJoin()</p>
+<p>println(&quot;主协程结束&quot;)</p>
+<p>}</p>
+<p></code></pre></p>
 <p>注意：要捕获取消时抛出的 <code>CancellationException</code>，记得在 <code>finally</code> 中做资源清理，但<strong>不要</strong>在 <code>finally</code> 里做挂起操作（否则需要 <code>withContext(NonCancellable)</code>）。</p>
 <h3>非取消上下文里的清理</h3>
 <p>如果在取消后的 <code>finally</code> 里仍需挂起（比如关闭数据库连接需要异步），要用 <code>withContext(NonCancellable)</code>，否则取消状态会让挂起直接失败。</p>
 <pre><code class="language-kotlin">fun main() = runBlocking {
-    val job = launch {
-        try {
-            repeat(10) { delay(100) }
-        } finally {
-            withContext(NonCancellable) {
-                // 即使协程已取消，这里也能正常挂起
-                closeResource()
-            }
-        }
-    }
-    delay(300)
-    job.cancelAndJoin()
-}
-</code></pre>
+<p>val job = launch {</p>
+<p>try {</p>
+<p>repeat(10) { delay(100) }</p>
+<p>} finally {</p>
+<p>withContext(NonCancellable) {</p>
+<p>// 即使协程已取消，这里也能正常挂起</p>
+<p>closeResource()</p>
+<p>}</p>
+<p>}</p>
+<p>}</p>
+<p>delay(300)</p>
+<p>job.cancelAndJoin()</p>
+<p>}</p>
+<p></code></pre></p>
 <h2>协程异常处理：让错误可控</h2>
 <p>异常处理是协程生产级应用的重头戏。协程的异常传播机制和普通代码不太一样，理解它才能写出不会"悄悄失败"或"意外崩溃"的程序。</p>
 <h3>异常传播：launch 与 async 的区别</h3>
@@ -593,130 +582,124 @@ suspend fun downloadAll(urls: List&lt;String&gt;) {
 <li><code>async</code> 的异常会被<strong>保存</strong>在 Deferred 里，直到 <code>await()</code> 时再抛出</li>
 </ul>
 <pre><code class="language-kotlin">fun main() = runBlocking {
-    // launch：异常直接抛到顶层
-    val job = launch {
-        throw RuntimeException(&quot;launch 里的异常&quot;)
-    }
-    job.join() // 这里异常已经冒泡，程序会崩溃
-
-    // async：异常延迟到 await 才抛
-    val deferred = async {
-        throw RuntimeException(&quot;async 里的异常&quot;)
-    }
-    // 不 await 就不会暴露
-    try {
-        deferred.await()
-    } catch (e: RuntimeException) {
-        println(&quot;捕获到 async 的异常: ${e.message}&quot;)
-    }
-}
-</code></pre>
+<p>// launch：异常直接抛到顶层</p>
+<p>val job = launch {</p>
+<p>throw RuntimeException(&quot;launch 里的异常&quot;)</p>
+<p>}</p>
+<p>job.join() // 这里异常已经冒泡，程序会崩溃</p>
+<p>// async：异常延迟到 await 才抛</p>
+<p>val deferred = async {</p>
+<p>throw RuntimeException(&quot;async 里的异常&quot;)</p>
+<p>}</p>
+<p>// 不 await 就不会暴露</p>
+<p>try {</p>
+<p>deferred.await()</p>
+<p>} catch (e: RuntimeException) {</p>
+<p>println(&quot;捕获到 async 的异常: ${e.message}&quot;)</p>
+<p>}</p>
+<p>}</p>
+<p></code></pre></p>
 <h3>让 async 也获得异常处理能力</h3>
 <p>如果想用 <code>async</code> 但又不想让异常延迟传播，<code>SupervisorJob</code> + 让 async 自己处理错误是常见组合。更直接的做法是：在 async 内部 try-catch 或使用 <code>runCatching</code>。</p>
 <pre><code class="language-kotlin">fun main() = runBlocking {
-    val deferred = async {
-        runCatching { riskyOperation() }
-            .getOrElse { defaultValue() } // 出错时返回兜底值
-    }
-    val result = deferred.await()
-    println(&quot;结果: $result&quot;)
-}
-</code></pre>
+<p>val deferred = async {</p>
+<p>runCatching { riskyOperation() }</p>
+<p>.getOrElse { defaultValue() } // 出错时返回兜底值</p>
+<p>}</p>
+<p>val result = deferred.await()</p>
+<p>println(&quot;结果: $result&quot;)</p>
+<p>}</p>
+<p></code></pre></p>
 <h3>CoroutineExceptionHandler：全局兜底</h3>
 <p>对于 <code>launch</code> 的未捕获异常，可以设置 <code>CoroutineExceptionHandler</code> 作为兜底处理（比如上报日志）。</p>
 <pre><code class="language-kotlin">val handler = CoroutineExceptionHandler { _, throwable -&gt;
-    println(&quot;捕获到未处理异常: ${throwable.message}&quot;)
-}
-
-fun main() = runBlocking {
-    // handler 需在顶层协程设置才生效（作为 context 传入）
-    val scope = CoroutineScope(Dispatchers.Default + handler)
-    scope.launch {
-        throw RuntimeException(&quot;boom&quot;)
-    }
-    // 睡一会让异常抛出来
-    delay(500)
-}
-</code></pre>
+<p>println(&quot;捕获到未处理异常: ${throwable.message}&quot;)</p>
+<p>}</p>
+<p>fun main() = runBlocking {</p>
+<p>// handler 需在顶层协程设置才生效（作为 context 传入）</p>
+<p>val scope = CoroutineScope(Dispatchers.Default + handler)</p>
+<p>scope.launch {</p>
+<p>throw RuntimeException(&quot;boom&quot;)</p>
+<p>}</p>
+<p>// 睡一会让异常抛出来</p>
+<p>delay(500)</p>
+<p>}</p>
+<p></code></pre></p>
 <p>注意：<code>CoroutineExceptionHandler</code> 只对 <code>launch</code> 创建的<strong>根协程</strong>（没有父协程的协程）生效，对子协程或 <code>async</code> 不生效。</p>
 <h3>SupervisorJob：隔离子协程的失败</h3>
 <p>默认情况下，子协程抛异常会连带取消父协程和其他兄弟协程。如果你希望"一个任务失败不影响其他任务"，用 <code>SupervisorJob()</code> 替代普通 Job。</p>
 <pre><code class="language-kotlin">fun main() = runBlocking {
-    val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
-
-    scope.launch {
-        delay(100)
-        throw RuntimeException(&quot;任务1失败&quot;)
-    }
-    scope.launch {
-        delay(200)
-        println(&quot;任务2不受影响，正常完成&quot;)
-    }
-    delay(500)
-}
-</code></pre>
+<p>val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)</p>
+<p>scope.launch {</p>
+<p>delay(100)</p>
+<p>throw RuntimeException(&quot;任务1失败&quot;)</p>
+<p>}</p>
+<p>scope.launch {</p>
+<p>delay(200)</p>
+<p>println(&quot;任务2不受影响，正常完成&quot;)</p>
+<p>}</p>
+<p>delay(500)</p>
+<p>}</p>
+<p></code></pre></p>
 <p>有了 <code>SupervisorJob</code>，并行任务中单个失败不会拖垮全部——这在"多任务互不影响"的场景（比如并行上传多个文件）非常有用。</p>
 <h3>supervisorScope：局部隔离</h3>
 <p>如果你不想创建独立的 scope，只想在某个代码块内隔离异常，可以用 <code>supervisorScope</code>，它提供父级作用域但子任务之间互相隔离。</p>
 <pre><code class="language-kotlin">fun main() = runBlocking {
-    supervisorScope {
-        launch {
-            throw RuntimeException(&quot;子任务1失败&quot;)
-        }
-        launch {
-            delay(100)
-            println(&quot;子任务2完成&quot;)
-        }
-    }
-    println(&quot;父协程继续执行&quot;)
-}
-</code></pre>
+<p>supervisorScope {</p>
+<p>launch {</p>
+<p>throw RuntimeException(&quot;子任务1失败&quot;)</p>
+<p>}</p>
+<p>launch {</p>
+<p>delay(100)</p>
+<p>println(&quot;子任务2完成&quot;)</p>
+<p>}</p>
+<p>}</p>
+<p>println(&quot;父协程继续执行&quot;)</p>
+<p>}</p>
+<p></code></pre></p>
 <h2>常见陷阱与最佳实践</h2>
 <p>掌握基础后，还需要了解工程实践中的坑，避免写出"看起来对但运行就炸"的代码。</p>
 <h3>陷阱一：在主线程做耗时操作</h3>
 <p>协程默认继承启动它的上下文。如果你在 <code>Dispatchers.Main</code> 里直接做耗时计算，即使用了协程也会卡 UI。</p>
 <pre><code class="language-kotlin">// ❌ 错误：async 没指定 Dispatcher，跑在 Main
-viewModelScope.launch {
-    val result = async { heavyComputation() }.await() // 卡主线程!
-}
-
-// ✅ 正确：显式用 Dispatchers.Default
-viewModelScope.launch {
-    val result = withContext(Dispatchers.Default) { heavyComputation() }
-}
-</code></pre>
+<p>viewModelScope.launch {</p>
+<p>val result = async { heavyComputation() }.await() // 卡主线程!</p>
+<p>}</p>
+<p>// ✅ 正确：显式用 Dispatchers.Default</p>
+<p>viewModelScope.launch {</p>
+<p>val result = withContext(Dispatchers.Default) { heavyComputation() }</p>
+<p>}</p>
+<p></code></pre></p>
 <h3>陷阱二：忘记处理取消异常导致误判</h3>
 <p>捕获异常时如果把 <code>CancellationException</code> 也 catch 了，会破坏协程的取消机制。</p>
 <pre><code class="language-kotlin">// ❌ 错误：catch 所有异常会把取消也吞掉
-try {
-    delay(1000)
-} catch (e: Exception) {
-    println(&quot;异常&quot;) // 取消时也会进这里，掩盖了取消
-}
-
-// ✅ 正确：CancellationException 需要重新抛出
-try {
-    delay(1000)
-} catch (e: CancellationException) {
-    throw e // 重新抛出，保持取消语义
-} catch (e: Exception) {
-    println(&quot;真正的异常&quot;)
-}
-</code></pre>
+<p>try {</p>
+<p>delay(1000)</p>
+<p>} catch (e: Exception) {</p>
+<p>println(&quot;异常&quot;) // 取消时也会进这里，掩盖了取消</p>
+<p>}</p>
+<p>// ✅ 正确：CancellationException 需要重新抛出</p>
+<p>try {</p>
+<p>delay(1000)</p>
+<p>} catch (e: CancellationException) {</p>
+<p>throw e // 重新抛出，保持取消语义</p>
+<p>} catch (e: Exception) {</p>
+<p>println(&quot;真正的异常&quot;)</p>
+<p>}</p>
+<p></code></pre></p>
 <h3>陷阱三：GlobalScope 泄漏</h3>
 <p>如前所述，<code>GlobalScope</code> 的协程生命周期与应用一致，滥用会泄漏资源。始终使用生命周期可控的 Scope。</p>
 <h3>陷阱四：在非 suspend 函数里调用 suspend 函数</h3>
 <p>suspend 函数只能在 suspend 函数或协程里调用。如果非协程代码需要调用，可以通过 <code>runBlocking</code>（同步）或把逻辑包进协程。</p>
 <pre><code class="language-kotlin">// ❌ 编译错误：suspend 函数不能在普通函数调用
-fun normalFunction() {
-    delay(1000) // 编译不过
-}
-
-// ✅ 正确：包进协程或用 runBlocking（谨慎）
-fun normalFunction() = runBlocking {
-    delay(1000)
-}
-</code></pre>
+<p>fun normalFunction() {</p>
+<p>delay(1000) // 编译不过</p>
+<p>}</p>
+<p>// ✅ 正确：包进协程或用 runBlocking（谨慎）</p>
+<p>fun normalFunction() = runBlocking {</p>
+<p>delay(1000)</p>
+<p>}</p>
+<p></code></pre></p>
 <h3>最佳实践清单</h3>
 <ul>
 <li>业务代码用 <code>viewModelScope</code> / 自定义 Scope，<strong>禁止</strong> <code>GlobalScope</code></li>
@@ -731,45 +714,40 @@ fun normalFunction() = runBlocking {
 <h2>实战：构建一个带并发控制的网络请求模块</h2>
 <p>最后，把前面所有知识点整合成一个实战示例：一个支持并发上限、超时、取消、异常隔离的网络请求模块。</p>
 <pre><code class="language-kotlin">import kotlinx.coroutines.*
-import kotlinx.coroutines.sync.Semaphore
-import kotlinx.coroutines.sync.withPermit
-
-class ApiClient(private val scope: CoroutineScope) {
-    // 限制并发请求数，保护后端
-    private val semaphore = Semaphore(5)
-
-    // SupervisorJob 隔离：单个失败不影响其他请求
-    private val requestScope = CoroutineScope(
-        SupervisorJob() + Dispatchers.IO
-    )
-
-    suspend fun &lt;T&gt; request(block: suspend () -&gt; T): T {
-        return withTimeout(10_000) { // 全局 10 秒超时
-            semaphore.withPermit { // 并发限制
-                block()
-            }
-        }
-    }
-
-    // 并发拉取多个资源，失败独立处理
-    fun loadBatch(ids: List&lt;String&gt;) {
-        scope.launch {
-            ids.map { id -&gt;
-                async {
-                    runCatching { request { fetchResource(id) } }
-                }
-            }.awaitAll().forEach { result -&gt;
-                result.onSuccess { println(&quot;成功: $it&quot;) }
-                      .onFailure { println(&quot;失败: ${it.message}&quot;) }
-            }
-        }
-    }
-
-    fun onDestroy() {
-        requestScope.cancel() // 清理
-    }
-}
-</code></pre>
+<p>import kotlinx.coroutines.sync.Semaphore</p>
+<p>import kotlinx.coroutines.sync.withPermit</p>
+<p>class ApiClient(private val scope: CoroutineScope) {</p>
+<p>// 限制并发请求数，保护后端</p>
+<p>private val semaphore = Semaphore(5)</p>
+<p>// SupervisorJob 隔离：单个失败不影响其他请求</p>
+<p>private val requestScope = CoroutineScope(</p>
+<p>SupervisorJob() + Dispatchers.IO</p>
+<p>)</p>
+<p>suspend fun &lt;T&gt; request(block: suspend () -&gt; T): T {</p>
+<p>return withTimeout(10_000) { // 全局 10 秒超时</p>
+<p>semaphore.withPermit { // 并发限制</p>
+<p>block()</p>
+<p>}</p>
+<p>}</p>
+<p>}</p>
+<p>// 并发拉取多个资源，失败独立处理</p>
+<p>fun loadBatch(ids: List&lt;String&gt;) {</p>
+<p>scope.launch {</p>
+<p>ids.map { id -&gt;</p>
+<p>async {</p>
+<p>runCatching { request { fetchResource(id) } }</p>
+<p>}</p>
+<p>}.awaitAll().forEach { result -&gt;</p>
+<p>result.onSuccess { println(&quot;成功: $it&quot;) }</p>
+<p>.onFailure { println(&quot;失败: ${it.message}&quot;) }</p>
+<p>}</p>
+<p>}</p>
+<p>}</p>
+<p>fun onDestroy() {</p>
+<p>requestScope.cancel() // 清理</p>
+<p>}</p>
+<p>}</p>
+<p></code></pre></p>
 <p>这个模块集合了：结构化并发、显式 Dispatcher、SupervisorJob 异常隔离、Semaphore 并发限制、withTimeout 超时、runCatching 独立失败处理——是一个可直接套用的生产级骨架。</p>
 <h2>总结</h2>
 <p>Kotlin Coroutines 通过语言级的 <code>suspend</code> 机制，把复杂的并发编程简化成了接近顺序代码的心智模型，同时保留了高性能与强可控性。回顾本文核心要点：</p>
@@ -936,7 +914,7 @@ class ApiClient(private val scope: CoroutineScope) {
       <div class="post-info-section">
         <div class="post-info-label">文章信息</div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📅</span> 发布日期</span><span class="post-info-stat-value">2026-08-07</span></div>
-        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">⏱️</span> 阅读时间</span><span class="post-info-stat-value">5 min read</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">⏱️</span> 阅读时间</span><span class="post-info-stat-value">19 min read</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">5806 字</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📊</span> 章节数</span><span class="post-info-stat-value">12 节 · 37 子节</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">💻</span> 代码块</span><span class="post-info-stat-value">34 段</span></div>

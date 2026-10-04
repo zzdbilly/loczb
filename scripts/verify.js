@@ -523,6 +523,32 @@ function contentCheck(name, count, samples) {
   }
 }
 
+// ── o) 全量博文 posts-src 源文件对齐门禁 ─────────────────────────────
+{
+  const missingSrc = [];
+  const invalidSrc = [];
+  for (const slug of htmlSlugs) {
+    const srcPath = `blog/posts-src/${slug}.md`;
+    if (!exists(srcPath)) {
+      missingSrc.push(slug);
+    } else {
+      const srcText = readText(srcPath);
+      if (!srcText.startsWith('---') || !srcText.includes('title:') || !srcText.includes('slug:')) {
+        invalidSrc.push(slug);
+      }
+    }
+  }
+
+  if (missingSrc.length) {
+    fail(`o) ${missingSrc.length} 篇博文缺少 blog/posts-src/ 源文件: ${missingSrc.slice(0, 5).join(', ')}${missingSrc.length > 5 ? ' …' : ''}`);
+  } else {
+    infos.push(`o) 全部 ${htmlSlugs.size} 篇博文均具备独立的 posts-src/*.md 源文件与 Frontmatter`);
+  }
+  if (invalidSrc.length) {
+    fail(`o) ${invalidSrc.length} 篇 posts-src 源文件缺少 Frontmatter: ${invalidSrc.join(', ')}`);
+  }
+}
+
 // ── 结果 ─────────────────────────────────────────────────
 if (infos.length) {
   console.log('ℹ️  非阻断提示:');

@@ -1,0 +1,399 @@
+---
+title: "SQLite 进阶：WAL 模式与性能优化"
+description: "SQLite 进阶：WAL 模式原理、性能优化技巧、并发处理、索引策略、PRAGMA 配置详解"
+date: 2026-04-26 15:11:29
+category: 数据库
+tags: ["SQLite", "数据库", "WAL", "性能优化"]
+read_time: 14
+slug: sqlite-wal-performance
+---
+
+<p>SQLite 是世界上最广泛使用的嵌入式数据库，但很多人只知道基础用法。合理配置 WAL 模式、索引、PRAGMA 参数后，SQLite 的性能可以媲美甚至超越传统数据库。本文深入 SQLite 的高级特性与优化技巧。</p>
+
+      <div class="tip-box">
+        <strong>适用场景</strong>：移动应用、桌面软件、小型 Web 服务、嵌入式设备、原型开发。单文件、零配置、可靠性高。
+        </div>
+
+      <h2>一、WAL 模式详解</h2>
+
+      <h3>什么是 WAL</h3>
+
+      <p>WAL（Write-Ahead Logging）是 SQLite 的一种日志模式。默认的 rollback journal 模式在写入时会创建临时回滚日志，写入完成后再删除。WAL 模式则将修改记录追加到 WAL 文件中，不直接修改数据库文件。</p>
+
+      <table>
+        <tr>
+          <th>特性</th>
+          <th>Rollback Journal</th>
+          <th>WAL</th>
+        </tr>
+        <tr>
+          <td>写入方式</td>
+          <td>修改原文件</td>
+          <td>追加到 WAL 文件</td>
+        </tr>
+        <tr>
+          <td>并发读</td>
+          <td>写入时阻塞</td>
+          <td>写入时仍可读</td>
+        </tr>
+        <tr>
+          <td>并发写</td>
+          <td>不支持</td>
+          <td>不支持（但可排队）</td>
+        </tr>
+        <tr>
+          <td>文件数</td>
+          <td>db + journal</td>
+          <td>db + wal + shm</td>
+        </tr>
+        <tr>
+          <td>性能</td>
+          <td>较慢</td>
+          <td>更快</td>
+        </tr>
+      </table>
+
+      <h3>启用 WAL 模式</h3>
+
+      <pre><code>-- 启用 WAL
+PRAGMA journal_mode = WAL;
+
+-- 查询当前模式
+PRAGMA journal_mode;
+-- 返回: wal
+
+-- 关闭 WAL
+PRAGMA journal_mode = DELETE;</code></pre>
+
+      <div class="tip-box">
+        <strong>推荐</strong>：生产环境默认启用 WAL 模式。设置是持久化的，无需每次连接都设置。
+      </div>
+
+      <h3>WAL 文件说明</h3>
+
+      <pre><code># WAL 模式会产生三个文件
+database.db          # 主数据库文件
+database.db-wal      # WAL 日志文件（写入记录）
+database.db-shm      # 共享内存文件（索引）
+
+# WAL 文件会自动 checkpoint 到主文件
+# 文件大小控制在 wal_autocheckpoint 限制内</code></pre>
+
+      <h3>Checkpoint 控制</h3>
+
+      <pre><code>-- 设置自动 checkpoint 阈限（页数）
+-- 默认 1000 页（约 4MB）
+PRAGMA wal_autocheckpoint = 1000;
+
+-- 手动 checkpoint
+PRAGMA wal_checkpoint;
+-- 返回: busy|log|checkpointed
+
+-- FULL checkpoint（完全合并）
+PRAGMA wal_checkpoint(TRUNCATE);</code></pre>
+
+      <h2>二、并发与锁</h2>
+
+      <h3>SQLite 锁级别</h3>
+
+      <table>
+        <tr>
+          <th>锁级别</th>
+          <th>说明</th>
+          <th>允许操作</th>
+        </tr>
+        <tr>
+          <td>UNLOCKED</td>
+          <td>无锁</td>
+          <td>无访问</td>
+        </tr>
+        <tr>
+          <td>SHARED</td>
+          <td>共享锁</td>
+          <td>多个读取</td>
+        </tr>
+        <tr>
+          <td>RESERVED</td>
+          <td>保留锁</td>
+          <td>读 + 准备写</td>
+        </tr>
+        <tr>
+          <td>PENDING</td>
+          <td>待写锁</td>
+          <td>读 + 等待写</td>
+        </tr>
+        <tr>
+          <td>EXCLUSIVE</td>
+          <td>独占锁</td>
+          <td>独占写入</td>
+        </tr>
+      </table>
+
+      <h3>WAL 模式并发特性</h3>
+
+      <pre><code># WAL 模式下：
+# - 多个读取者可以同时工作
+# - 写入时不阻塞读取
+# - 但同时只能有一个写入者
+
+# 解决方案：
+# 1. 使用连接池
+# 2. 批量写入减少锁竞争
+# 3. 调整 busy_timeout</code></pre>
+
+      <h3>Busy Timeout</h3>
+
+      <pre><code>-- 设置等待锁的超时（毫秒）
+PRAGMA busy_timeout = 5000;
+
+-- 写入时会等待最多 5 秒
+-- 而不是立即返回 SQLITE_BUSY 错误</code></pre>
+
+      <h2>三、索引优化</h2>
+
+      <h3>创建索引</h3>
+
+      <pre><code>-- 单列索引
+CREATE INDEX idx_users_email ON users(email);
+
+-- 多列索引（注意顺序）
+CREATE INDEX idx_orders_user_date ON orders(user_id, created_at);
+
+-- 覆盖索引（包含查询所需所有列）
+CREATE INDEX idx_users_cover ON users(email, name, created_at);
+
+-- 唯一索引
+CREATE UNIQUE INDEX idx_users_email_unique ON users(email);
+
+-- 条件索引（部分索引）
+CREATE INDEX idx_active_users ON users(email) WHERE active = 1;</code></pre>
+
+      <h3>索引使用分析</h3>
+
+      <pre><code>-- 查看查询计划
+EXPLAIN QUERY PLAN SELECT * FROM users WHERE email = 'test@example.com';
+-- 返回:
+-- QUERY PLAN
+-- `--SEARCH users USING INDEX idx_users_email (email=?)
+
+-- 未使用索引的情况
+EXPLAIN QUERY PLAN SELECT * FROM users WHERE name LIKE '%test%';
+-- QUERY PLAN
+-- `--SCAN users USING COVERING INDEX idx_users_cover  (全表扫描)
+
+-- 分析查询效率
+EXPLAIN SELECT * FROM users WHERE email = 'test@example.com';</code></pre>
+
+      <h3>索引最佳实践</h3>
+
+      <ul>
+        <li>WHERE 条件列优先索引</li>
+        <li>JOIN 关联列创建索引</li>
+        <li>ORDER BY 排序列考虑索引</li>
+        <li>多列索引注意最左匹配原则</li>
+        <li>避免过度索引（影响写入性能）</li>
+      </ul>
+
+      <pre><code>-- 最左匹配原则示例
+CREATE INDEX idx_multi ON users(status, role, created_at);
+
+-- 使用索引
+SELECT * FROM users WHERE status = 'active';              -- ✓
+SELECT * FROM users WHERE status = 'active' AND role = 'admin'; -- ✓
+
+-- 不使用索引
+SELECT * FROM users WHERE role = 'admin';                 -- ✗
+SELECT * FROM users WHERE created_at > '2024-01-01';      -- ✗</code></pre>
+
+      <h2>四、PRAGMA 性能参数</h2>
+
+      <h3>内存与缓存</h3>
+
+      <pre><code>-- 页缓存大小（页数，每页 4KB）
+-- 默认约 2MB，推荐增加到可用内存的 5-10%
+PRAGMA cache_size = -20000;  -- 负数表示 KB，即 20MB
+
+-- 临时存储位置
+-- MEMORY: 内存（最快）
+-- FILE: 临时文件
+PRAGMA temp_store = MEMORY;
+
+-- mmap 大小（映射文件到内存）
+-- 适合大数据库读取场景
+PRAGMA mmap_size = 268435456;  -- 256MB</code></pre>
+
+      <h3>同步与安全</h3>
+
+      <pre><code>-- 同步模式（写入可靠性）
+-- OFF:    最快，崩溃可能损坏数据
+-- NORMAL: 中等，小概率损坏
+-- FULL:   最安全，性能稍慢
+PRAGMA synchronous = NORMAL;  -- 推荐
+
+-- 锁定模式
+-- NORMAL: 正常锁
+-- EXCLUSIVE: 独占模式，防止其他进程访问
+PRAGMA locking_mode = EXCLUSIVE;</code></pre>
+
+      <div class="warning-box">
+        <strong>警告</strong>：<code>synchronous = OFF</code> 在极端情况下可能丢失数据，仅在可接受数据丢失的场景使用（如临时缓存）。
+      </div>
+
+      <h3>其他优化参数</h3>
+
+      <pre><code>-- 自动 VACUUM
+-- NONE:   不自动整理
+-- INCREMENTAL: 增量整理
+-- FULL:   完全整理
+PRAGMA auto_vacuum = INCREMENTAL;
+
+-- 页大小（创建数据库时设置）
+-- 默认 4096，大数据库可用更大页
+PRAGMA page_size = 4096;
+
+-- 外键约束（默认关闭）
+PRAGMA foreign_keys = ON;
+
+-- 递归触发器深度
+PRAGMA recursive_triggers = 0;</code></pre>
+
+      <h2>五、批量写入优化</h2>
+
+      <h3>使用事务</h3>
+
+      <pre><code>-- 单条插入（每次都写入磁盘）
+INSERT INTO users (name) VALUES ('a');
+INSERT INTO users (name) VALUES ('b');
+INSERT INTO users (name) VALUES ('c');
+-- 性能：慢
+
+-- 批量插入（单次写入）
+BEGIN TRANSACTION;
+INSERT INTO users (name) VALUES ('a');
+INSERT INTO users (name) VALUES ('b');
+INSERT INTO users (name) VALUES ('c');
+COMMIT;
+-- 性能：快 10-50 倍</code></pre>
+
+      <h3>预编译语句</h3>
+
+      <pre><code>-- Python 示例
+import sqlite3
+
+conn = sqlite3.connect('db.sqlite')
+cursor = conn.cursor()
+
+# 预编译
+stmt = cursor.prepare('INSERT INTO users (name, email) VALUES (?, ?)')
+
+# 批量执行
+for user in users:
+    stmt.execute((user.name, user.email))
+
+conn.commit()</code></pre>
+
+      <h3>Python 批量插入</h3>
+
+      <pre><code>import sqlite3
+
+conn = sqlite3.connect('db.sqlite')
+cursor = conn.cursor()
+
+# 方法1：executemany
+cursor.executemany(
+    'INSERT INTO users (name, email) VALUES (?, ?)',
+    [(u['name'], u['email']) for u in users]
+)
+
+# 方法2：直接插入多行
+values = ','.join([f"('{u['name']}', '{u['email']}')" for u in users])
+cursor.execute(f'INSERT INTO users (name, email) VALUES {values}')
+
+conn.commit()</code></pre>
+
+      <h2>六、查询优化技巧</h2>
+
+      <h3>避免 SELECT *</h3>
+
+      <pre><code>-- 不推荐
+SELECT * FROM users;
+
+-- 推荐：只查需要的列
+SELECT id, name FROM users;</code></pre>
+
+      <h3>使用 LIMIT</h3>
+
+      <pre><code>-- 分页查询
+SELECT * FROM users ORDER BY id LIMIT 20 OFFSET 40;
+
+-- 更高效的方式（使用游标）
+SELECT * FROM users WHERE id > 40 ORDER BY id LIMIT 20;</code></pre>
+
+      <h3>避免函数在索引列上</h3>
+
+      <pre><code>-- 不使用索引
+SELECT * FROM users WHERE LOWER(email) = 'test@example.com';
+
+-- 使用索引
+SELECT * FROM users WHERE email = 'test@example.com COLLATE NOCASE';</code></pre>
+
+      <h3>JOIN 优化</h3>
+
+      <pre><code>-- 小表驱动大表
+SELECT * FROM small_table s
+JOIN large_table l ON s.id = l.small_id;
+
+-- 使用 EXISTS 替代 IN
+SELECT * FROM users u
+WHERE EXISTS (SELECT 1 FROM orders o WHERE o.user_id = u.id);
+
+-- 比 IN 更高效
+-- WHERE id IN (SELECT user_id FROM orders)</code></pre>
+
+      <h2>七、监控与分析</h2>
+
+      <pre><code>-- 查看数据库状态
+PRAGMA integrity_check;
+PRAGMA quick_check;
+
+-- 查看表信息
+PRAGMA table_info(users);
+
+-- 查看索引列表
+PRAGMA index_list(users);
+PRAGMA index_info(idx_users_email);
+
+-- 查看数据库大小
+SELECT name, pgsize * page_size / 1024 / 1024 AS size_mb
+FROM dbstat
+GROUP BY name;
+
+-- 统计表行数
+SELECT COUNT(*) FROM users;
+
+-- 分析查询时间
+.timer on
+SELECT * FROM users WHERE email = 'test@example.com';
+-- Run Time: real 0.001 user 0.000000 sys 0.000000</code></pre>
+
+      <h2>总结</h2>
+
+      <p>SQLite 性能优化的关键点：</p>
+      <ul>
+        <li>启用 WAL 模式提升并发和写入性能</li>
+        <li>合理设置 cache_size 和 temp_store</li>
+        <li>为高频查询条件创建合适的索引</li>
+        <li>批量操作使用事务</li>
+        <li>调整 busy_timeout 处理并发冲突</li>
+        <li>定期 integrity_check 检查数据完整性</li>
+      </ul>
+
+      <div class="tip-box">
+        <strong>推荐配置</strong>：
+        <pre style="background:none;padding:0;margin:0;">PRAGMA journal_mode = WAL;
+PRAGMA synchronous = NORMAL;
+PRAGMA cache_size = -20000;
+PRAGMA temp_store = MEMORY;
+PRAGMA busy_timeout = 5000;
+PRAGMA foreign_keys = ON;</pre>
+      </div>

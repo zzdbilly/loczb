@@ -1,0 +1,382 @@
+---
+title: "Android 16 通知系统新 API 详解"
+description: "Android 16 通知系统新 API 详解：Live Updates、Rich Ongoing、Bubble API 增强、通知优先级改革与迁移指南"
+date: 2026-06-27 12:27:38
+category: Android
+tags: ["Android 16", "通知系统", "Live Updates", "Notifications", "Android 开发"]
+read_time: 16
+slug: android-16-notifications
+---
+
+<p>Android 16 的通知系统经历了近年来最大的一次重构。Live Updates、Rich Ongoing 通知、Bubble API 升级……这些新特性不仅改变了用户感知通知的方式，也要求开发者重新思考通知策略。本文逐一拆解新 API 的用法和迁移注意事项。</p>
+
+      <div class="tip-box">
+        <strong>适用场景</strong>：targetSdk 36（Android 16）的 App 开发，或计划支持 Android 16 新特性的应用。
+      </div>
+
+      <h2>一、Live Updates：实时动态通知</h2>
+
+      <p>Live Updates 是 Android 16 最引人注目的通知新特性。它允许通知内容实时更新，并在锁屏和状态栏上显示持续变化的信息。</p>
+
+      <h3>基本用法</h3>
+
+      <pre><code>// 创建 Live Update 通知
+val liveUpdateBuilder = Notification.Builder(this, CHANNEL_ID)
+    .setContentTitle("打车进行中")
+    .setSmallIcon(R.drawable.ic_car)
+    .setLiveUpdate(true)  // 标记为 Live Update
+    .setOngoing(true)
+
+// 动态更新内容
+val update = Notification.LiveUpdate()
+    .addText("距离目的地: 3.2km")
+    .addText("预计到达: 8分钟")
+    .addProgressBar(3200, currentDistance, false)
+
+liveUpdateBuilder.setLiveUpdateContent(update)
+notificationManager.notify(NOTIFICATION_ID, liveUpdateBuilder.build())</code></pre>
+
+      <h3>更新频率控制</h3>
+
+      <pre><code>// Live Updates 支持高频更新（相比普通通知有更高的更新限额）
+// Android 16 放宽了通知更新频率限制
+
+// 最多每 1 秒更新一次（普通通知限制为 5 秒）
+val policy = Notification.UpdatePolicy(
+    minIntervalMs = 1000L,
+    maxUpdatesPerMinute = 30
+)
+liveUpdateBuilder.setUpdatePolicy(policy)
+
+// 实时更新场景
+lifecycleScope.launch {
+    locationFlow.collect { location ->
+        val update = Notification.LiveUpdate()
+            .addText("当前位置已更新")
+            .addProgressBar(100, location.accuracy.toInt(), false)
+        
+        notificationManager.notify(
+            NOTIFICATION_ID,
+            liveUpdateBuilder
+                .setLiveUpdateContent(update)
+                .build()
+        )
+    }
+}</code></pre>
+
+      <div class="warning-box">
+        <strong>注意</strong>：即使有更高的更新限额，也不应滥用 Live Updates。频繁更新会导致电池消耗增加。建议仅在用户明确关注的状态（导航、运动、下载进度）使用。
+      </div>
+
+      <h3>类型系统</h3>
+
+      <table>
+        <tr>
+          <th>类型</th>
+          <th>适用场景</th>
+          <th>API</th>
+        </tr>
+        <tr>
+          <td>Progress</td>
+          <td>下载、上传、渲染进度</td>
+          <td>addProgressBar()</td>
+        </tr>
+        <tr>
+          <td>Counter</td>
+          <td>计时器、倒计时</td>
+          <td>addCounter()</td>
+        </tr>
+        <tr>
+          <td>Metric</td>
+          <td>距离、速度、温度</td>
+          <td>addMetric()</td>
+        </tr>
+        <tr>
+          <td>Text</td>
+          <td>状态文本变化</td>
+          <td>addText()</td>
+        </tr>
+      </table>
+
+      <pre><code>// 计时器示例
+val timerUpdate = Notification.LiveUpdate()
+    .addCounter("剩余时间", remainingSeconds)
+    .addText("番茄时钟工作中 🍅")
+
+// 运动追踪示例
+val workoutUpdate = Notification.LiveUpdate()
+    .addMetric("配速", "5:30", "/km")
+    .addMetric("心率", "142", "bpm")
+    .addProgressBar(10000, currentSteps, false)</code></pre>
+
+      <h2>二、Rich Ongoing：信息密度革命</h2>
+
+      <p>Rich Ongoing 是 Android 16 为持续通知设计的全新模板，大幅提升了信息展示能力。</p>
+
+      <h3>传统 Ongoing 的限制</h3>
+
+      <pre><code>// Android 15 及之前：只能显示简单的文本+进度条
+// 信息密度低，用户无法在通知面板快速获取关键信息
+val oldOngoing = Notification.Builder(this, CHANNEL_ID)
+    .setContentTitle("下载中")
+    .setContentText("进度: 45%")
+    .setProgress(100, 45, false)
+    .setOngoing(true)
+    .build()</code></pre>
+
+      <h3>Rich Ongoing 新模板</h3>
+
+      <pre><code>// Android 16：Rich Ongoing 支持结构化内容
+
+val richOngoing = Notification.Builder(this, CHANNEL_ID)
+    .setContentTitle("音乐播放中")
+    .setSmallIcon(R.drawable.ic_music)
+    .setOngoing(true)
+    .setStyle(Notification.MediaStyle())
+    .setRichOngoing {
+        // 左侧：专辑封面
+        coverArt(albumCoverBitmap)
+        
+        // 中间：元数据区域
+        metadata {
+            primary("月光曲")      // 当前曲目
+            secondary("贝多芬")   // 艺术家
+            tertiary("古典钢琴精选") // 专辑
+        }
+        
+        // 底部：进度条
+        playbackProgress(currentPosition, duration)
+        
+        // 操作按钮（最多 4 个）
+        actions(
+            Action(R.drawable.skip_prev, "上一首"),
+            Action(R.drawable.play_pause, "暂停"),
+            Action(R.drawable.skip_next, "下一首"),
+            Action(R.drawable.heart, "收藏")
+        )
+    }
+    .build()</code></pre>
+
+      <h3>信息展示区域划分</h3>
+
+      <table>
+        <tr>
+          <th>区域</th>
+          <th>内容</th>
+          <th>最大行数</th>
+        </tr>
+        <tr>
+          <td>Header</td>
+          <td>App 图标、标题、时间戳</td>
+          <td>1</td>
+        </tr>
+        <tr>
+          <td>Hero</td>
+          <td>主图像/封面/地图预览</td>
+          <td>1 图片</td>
+        </tr>
+        <tr>
+          <td>Metadata</td>
+          <td>结构化文本（primary/secondary/tertiary）</td>
+          <td>3</td>
+        </tr>
+        <tr>
+          <td>Progress</td>
+          <td>进度条 + 标签</td>
+          <td>1</td>
+        </tr>
+        <tr>
+          <td>Actions</td>
+          <td>操作按钮</td>
+          <td>4</td>
+        </tr>
+        <tr>
+          <td>Footer</td>
+          <td>次要信息、渠道名称</td>
+          <td>1</td>
+        </tr>
+      </table>
+
+      <h2>三、Bubble API 增强</h2>
+
+      <p>Android 16 将 Bubble 从 Beta 提升为正式 API，并增加了新能力：</p>
+
+      <pre><code>// Android 16 - Bubble 正式版 API
+val bubbleData = Notification.BubbleMetadata.Builder()
+    .setDesiredHeight(600)  // 支持自定义高度
+    .setShowAsBubble(true)
+    .setBubbleIcon(Icon.createWithResource(this, R.drawable.bubble_icon))
+    .setAutoExpandBubble(true)
+    .setSuppressNotification(true)  // 不显示重复通知
+    .build()
+
+// 新特性：浮动工具栏
+bubbleData.setFloatingToolbar {
+    addAction("截图", screenshotIntent)
+    addAction("最小化", minimizeIntent)
+}
+
+// 新特性：多实例 Bubble
+// 同一会话可以创建多个 Bubble 窗口
+bubbleData.setAllowMultipleInstances(true)</code></pre>
+
+      <h2>四、通知优先级改革</h2>
+
+      <p>Android 16 重新设计了通知优先级系统，引入了更细粒度的控制：</p>
+
+      <table>
+        <tr>
+          <th>级别</th>
+          <th>Android 15</th>
+          <th>Android 16</th>
+        </tr>
+        <tr>
+          <td>紧急</td>
+          <td>IMPORTANCE_HIGH</td>
+          <td>IMPORTANCE_CRITICAL（新增）</td>
+        </tr>
+        <tr>
+          <td>高</td>
+          <td>IMPORTANCE_HIGH</td>
+          <td>IMPORTANCE_HIGH</td>
+        </tr>
+        <tr>
+          <td>默认</td>
+          <td>IMPORTANCE_DEFAULT</td>
+          <td>IMPORTANCE_DEFAULT</td>
+        </tr>
+        <tr>
+          <td>低</td>
+          <td>IMPORTANCE_LOW</td>
+          <td>IMPORTANCE_LOW</td>
+        </tr>
+        <tr>
+          <td>最小</td>
+          <td>IMPORTANCE_MIN</td>
+          <td>IMPORTANCE_MIN</td>
+        </tr>
+      </table>
+
+      <pre><code>// 新增：CRITICAL 级别（仅限特定类别使用）
+// 适用于：医疗警报、安全警告、地震预警等
+
+val criticalNotification = Notification.Builder(this, CHANNEL_ID)
+    .setContentTitle("🚨 地震预警")
+    .setContentText("预计震级 6.2，请立即避险")
+    .setImportance(NotificationManager.IMPORTANCE_CRITICAL)
+    .setCategory(Notification.CATEGORY_ALARM)
+    .setCriticalAlert(true)     // 启用紧急警报行为
+    .setFullScreenIntent(pendingIntent, true)  // 强制全屏
+    .build()</code></pre>
+
+      <div class="warning-box">
+        <strong>CRITICAL 级别限制</strong>：
+        <ul>
+          <li>仅限 ALARM、CALL、MEDICAL、SAFETY 类别</li>
+          <li>需要向 Google Play 声明用途并获得批准</li>
+          <li>用户可以在设置中禁用</li>
+          <li>滥用可能导致 Google Play 下架</li>
+        </ul>
+      </div>
+
+      <h2>五、Channel 管理最佳实践</h2>
+
+      <pre><code>// Android 16 推荐的 Channel 设计策略
+
+class NotificationChannelManager(private val context: Context) {
+    
+    fun createChannels() {
+        // 1. 渠道分类清晰
+        createChannel(
+            "messages", "私信消息",
+            "好友私信和群聊消息",
+            NotificationManager.IMPORTANCE_HIGH
+        )
+        createChannel(
+            "social", "社交动态",
+            "点赞、评论、关注通知",
+            NotificationManager.IMPORTANCE_DEFAULT
+        )
+        createChannel(
+            "system", "系统通知",
+            "版本更新、账号安全等",
+            NotificationManager.IMPORTANCE_LOW
+        )
+        
+        // 2. 支持渠道分组
+        val msgGroup = NotificationChannelGroup("communication", "通讯")
+        notificationManager.createNotificationChannelGroup(msgGroup)
+        
+        // 3. 优化优先级策略
+        getChannel("messages")?.let {
+            it.setAllowBubbles(true)
+            it.setShowBadge(true)
+            it.enableLights(true)
+            it.setLightColor(Color.RED)
+        }
+    }
+    
+    private fun createChannel(
+        id: String, name: String, desc: String, importance: Int
+    ) {
+        val channel = NotificationChannel(id, name, importance).apply {
+            description = desc
+            setShowBadge(importance >= NotificationManager.IMPORTANCE_DEFAULT)
+        }
+        notificationManager.createNotificationChannel(channel)
+    }
+}</code></pre>
+
+      <h2>六、迁移指南：Android 15 → Android 16</h2>
+
+      <table>
+        <tr>
+          <th>变更项</th>
+          <th>旧 API</th>
+          <th>新 API</th>
+          <th>兼容性</th>
+        </tr>
+        <tr>
+          <td>持续通知</td>
+          <td>setOngoing(true)</td>
+          <td>setRichOngoing {}</td>
+          <td>可共存</td>
+        </tr>
+        <tr>
+          <td>实时更新</td>
+          <td>多次 notify()</td>
+          <td>LiveUpdate API</td>
+          <td>推荐迁移</td>
+        </tr>
+        <tr>
+          <td>高优先级</td>
+          <td>IMPORTANCE_HIGH</td>
+          <td>IMPORTANCE_CRITICAL</td>
+          <td>部分迁移</td>
+        </tr>
+        <tr>
+          <td>Bubble</td>
+          <td>实验性 API</td>
+          <td>正式 API</td>
+          <td>需要迁移</td>
+        </tr>
+        <tr>
+          <td>通知分组</td>
+          <td>setGroup()</td>
+          <td>setGroup() + 智能分组</td>
+          <td>自动升级</td>
+        </tr>
+      </table>
+
+      <div class="tip-box">
+        <strong>兼容性提醒</strong>：Android 16 的新通知 API 大部分是新增而非替换。调高 targetSdk 后调用新 API 会返回空操作，不会崩溃。可以逐步迁移。
+      </div>
+
+      <h2>七、性能与电量影响</h2>
+
+      <ul>
+        <li><strong>Live Updates</strong>：建议更新间隔 ≥ 1 秒，避免阻塞主线程</li>
+        <li><strong>Rich Ongoing</strong>：图片压缩到 480dp 宽度以内，减少渲染压力</li>
+        <li><strong>Bubble</strong>：每个 Bubble 约占用 30-50MB 额外内存</li>
+        <li><strong>CRITICAL</strong>：只在真正紧急时使用，滥用会影响用户信任</li>
+      </ul>

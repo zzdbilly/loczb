@@ -1,0 +1,598 @@
+---
+title: "像规划城市一样设计系统：城市规划给软件架构的启示"
+description: "城市和软件系统的本质惊人相似——功能分区映射限界上下文、交通网络映射数据流、基础设施先行映射可观测性、有机更新映射演进式架构。从城市规划的百年智慧中，找到软件架构的跨界启发"
+date: 2026-07-02 11:05:59
+category: 思考
+tags: ["架构", "系统思维", "工程思维", "思考"]
+read_time: 5
+slug: urban-planning-inspires-software-architecture
+---
+
+<blockquote>
+<p>50 万人的城市和 5 万人的城市，不只是规模不同，而是本质上不同的系统。软件也一样——当你从单体走向微服务，从千用户走向百万用户，问题已经不在"写代码"上了。城市规划师花了几百年研究如何让复杂系统有序运转，而这些智慧，恰好是每个架构师需要的。</p>
+</blockquote>
+<hr />
+<h2>为什么是城市规划</h2>
+<p>如果你仔细想想，城市和软件系统惊人地相似：</p>
+<table>
+<thead>
+<tr>
+<th>特征</th>
+<th>城市</th>
+<th>软件系统</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>核心目标</td>
+<td>让大量人高效协同生活</td>
+<td>让大量模块高效协同工作</td>
+</tr>
+<tr>
+<td>基础设施</td>
+<td>道路、水电、管网</td>
+<td>数据库、消息队列、缓存</td>
+</tr>
+<tr>
+<td>分区</td>
+<td>居住区、商业区、工业区</td>
+<td>业务域、核心域、支撑域</td>
+</tr>
+<tr>
+<td>交通</td>
+<td>人流、车流</td>
+<td>数据流、请求流</td>
+</tr>
+<tr>
+<td>老化</td>
+<td>建筑老旧、管道锈蚀</td>
+<td>技术债、依赖过时</td>
+</tr>
+<tr>
+<td>扩张</td>
+<td>新区开发、旧城改造</td>
+<td>新服务拆分、遗留系统重构</td>
+</tr>
+<tr>
+<td>瓶颈</td>
+<td>早高峰拥堵</td>
+<td>流量峰值熔断</td>
+</tr>
+</tbody>
+</table>
+<p>一个资深架构师面对的问题——如何让系统在增长中保持稳定、如何在旧架构上做增量改造、如何预判瓶颈——和一个城市规划师面对的问题本质上是一样的。</p>
+<p>更关键的是，<strong>城市规划犯的错误，软件行业正在重复犯</strong>。</p>
+<hr />
+<h2>第一课：功能分区——从混乱生长到有序布局</h2>
+<h3>城市的教训</h3>
+<p>早期城市没有规划。铁匠铺挨着住宅，屠宰场旁边就是集市，气味、噪音、火灾风险混杂在一起。中世纪伦敦多次大火，根本原因就是功能混杂导致火势无法控制。</p>
+<p>现代城市规划的核心发明是<strong>功能分区（Zoning）</strong>：将城市划分为居住区、商业区、工业区，不同功能之间用缓冲带隔离。</p>
+<h3>软件的映射</h3>
+<p>这不就是<strong>限界上下文（Bounded Context）</strong>吗？</p>
+<p>一个没有"分区"的软件系统：</p>
+<pre><code>// 所有东西搅在一起——就像中世纪的城市
+class OrderService {
+    void createOrder() {
+        // 订单逻辑
+        // 库存扣减逻辑
+        // 支付逻辑
+        // 物流逻辑
+        // 通知逻辑
+        // 用户积分逻辑
+        // 优惠券核销逻辑
+    }
+}
+</code></pre>
+
+<p>一个"分区"良好的系统：</p>
+<pre><code>// 订单上下文——只管订单
+class OrderService {
+    void createOrder(OrderRequest req) {
+        Order order = orderRepo.save(req.toOrder());
+        eventBus.publish(new OrderCreatedEvent(order.getId()));
+    }
+}
+
+// 库存上下文——只管库存
+class InventoryService {
+    @EventHandler
+    void on(OrderCreatedEvent e) {
+        inventoryRepo.deduct(e.getOrderId(), e.getItems());
+    }
+}
+
+// 支付上下文——只管支付
+class PaymentService {
+    @EventHandler
+    void on(OrderCreatedEvent e) {
+        paymentGateway.charge(e.getOrderId(), e.getAmount());
+    }
+}
+</code></pre>
+
+<p><strong>分区原则</strong>：</p>
+<ol>
+<li><strong>每个分区只做一件事</strong>——住宅区不建工厂，订单服务不处理支付</li>
+<li><strong>分区之间通过"道路"连接</strong>——事件总线、API 调用就是城市道路</li>
+<li><strong>分区之间有"缓冲带"</strong>——防腐层（Anti-Corruption Layer）就是绿化隔离带，防止一个上下文的"污染"蔓延到另一个</li>
+</ol>
+<h3>分区的陷阱</h3>
+<p>城市规划中有一个重要教训：<strong>过度分区和分区不足一样糟糕</strong>。</p>
+<p>巴西利亚是过度分区的典型——居住区、商业区、行政区严格分离，结果居民要开车穿越大半个城市才能买一瓶牛奶。城市失去了"混合活力"。</p>
+<p>软件中的"巴西利亚"：</p>
+<pre><code>过度拆分的微服务：
+用户姓名查询 → 调用用户服务
+用户地址查询 → 调用地址服务  
+用户偏好查询 → 调用偏好服务
+用户头像查询 → 调用头像服务
+
+一个简单的用户资料页要调 5 个服务
+延迟 = max(5 个服务) + 序列化 × 5 + 网络开销 × 5
+</code></pre>
+
+<p><strong>好的分区是高内聚低耦合的——相关的东西放在一起，不相关的东西隔离开。</strong> 不是拆得越细越好，而是每块内部功能完整，对外依赖最少。</p>
+<hr />
+<h2>第二课：交通网络——数据流的道路规划</h2>
+<h3>城市的教训</h3>
+<p>交通是城市的血脉。北京的环路与巴黎的放射状路网，代表了两种截然不同的交通哲学。</p>
+<p>北京环路的问题：<strong>单中心、层层嵌套</strong>。所有人都要进城，所有流量都汇聚到几个枢纽节点。结果就是——堵。从三环堵到五环，越往中心越堵。</p>
+<p>巴黎的思路不同：<strong>多中心、放射 + 环形混合</strong>。拉德芳斯是商务中心，拉丁区是文化中心，各有侧重，不必凡事都去"市中心"。</p>
+<h3>软件的映射</h3>
+<p><strong>北京环路 = 单体架构的中心数据库</strong>：</p>
+<pre><code>所有服务 → 一个大数据库
+
+  用户服务 ─┐
+  订单服务 ─┤
+  支付服务 ─┼──→ [超级大数据库] ← 瓶颈！
+  物流服务 ─┤
+  报表服务 ─┘
+</code></pre>
+
+<p>当所有流量都汇聚到一个数据库时，它就是"三环"——一旦堵了，全城瘫痪。</p>
+<p><strong>巴黎多中心 = 每个限界上下文有自己的数据存储</strong>：</p>
+<pre><code>用户服务 → [用户库]      订单服务 → [订单库]
+支付服务 → [支付库]      物流服务 → [物流库]
+
+服务之间通过事件/API通信，而非共享数据库
+</code></pre>
+
+<h3>道路等级与数据管道</h3>
+<p>城市规划中，道路有明确等级：</p>
+<table>
+<thead>
+<tr>
+<th>道路等级</th>
+<th>特点</th>
+<th>软件映射</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>高速公路</td>
+<td>大流量、长距离、出入口少</td>
+<td>消息队列（Kafka/RabbitMQ）</td>
+</tr>
+<tr>
+<td>主干道</td>
+<td>连接主要区域、红绿灯控制</td>
+<td>服务间同步 API（gRPC/REST）</td>
+</tr>
+<tr>
+<td>支路</td>
+<td>到达具体目的地、车速低</td>
+<td>服务内部方法调用</td>
+</tr>
+<tr>
+<td>人行道</td>
+<td>短距离、慢速</td>
+<td>内存中数据传递</td>
+</tr>
+</tbody>
+</table>
+<p>一个常见的架构错误：<strong>用高速公路送外卖</strong>。</p>
+<pre><code># 两个同进程内的模块，却用 Kafka 通信
+Module A → Kafka → Module B
+
+# 等同于：出门倒垃圾，先上高速公路，再下来
+# 开销：序列化 + 网络传输 + Broker 中转 + 反序列化
+# 正确做法：直接方法调用
+</code></pre>
+
+<p>反过来，<strong>用支路跑长途货运</strong>也有问题：</p>
+<pre><code># 两个独立部署的服务，通过共享数据库表&quot;通信&quot;
+Service A 写入 shared_table，Service B 轮询读取
+
+# 等同于：用乡村小路跑集装箱卡车
+# 问题：耦合、性能差、无法独立部署
+</code></pre>
+
+<h3>交通疏导：限流与熔断</h3>
+<p>城市交通管理有"限号"和"单行道"，软件有<strong>限流（Rate Limiting）和熔断（Circuit Breaker）</strong>：</p>
+<pre><code># 城市限号 → 限流
+限号: 每天只允许尾号 1/3/5/9 的车上路
+限流: 每秒只允许 1000 个请求通过
+
+# 交通管制 → 熔断
+前方事故 → 封路 → 车辆绕行
+下游服务故障 → 熔断 → 请求走降级路径
+</code></pre>
+
+<pre><code>// Resilience4j 熔断器——就像交通管制
+CircuitBreaker breaker = CircuitBreaker.ofDefaults(&quot;paymentService&quot;);
+Supplier&lt;String&gt; supplier = CircuitBreaker.decorateSupplier(
+    breaker, 
+    () -&gt; paymentService.charge(request)  // 正常路线
+);
+String result = Try.ofSupplier(supplier)
+    .recover(throwable -&gt; fallbackCharge(request))  // 绕行路线
+    .get();
+</code></pre>
+
+<hr />
+<h2>第三课：基础设施先行——别在沙地上盖楼</h2>
+<h3>城市的教训</h3>
+<p>深圳从渔村到一线城市，只用了 40 年。秘诀之一：<strong>基础设施先行</strong>。先修路、通水、通电，再招商引资。很多城市反着来——先盖楼卖房，等入住才发现路不够宽、水压不够、学校不够。补救成本远高于一开始就规划好。</p>
+<h3>软件的映射</h3>
+<p>软件的"基础设施"是什么？</p>
+<ul>
+<li><strong>可观测性</strong>：日志、指标、链路追踪——城市的"监控摄像头 + 传感器"</li>
+<li><strong>CI/CD</strong>：自动化构建和部署——城市的"供水供电系统"</li>
+<li><strong>安全基线</strong>：认证、授权、加密——城市的"消防 + 安防"</li>
+<li><strong>数据备份与恢复</strong>——城市的"应急避难所"</li>
+</ul>
+<p><strong>没有可观测性的服务，就像没有监控的城市——出了问题你甚至不知道。</strong></p>
+<pre><code>反模式：
+1. 先写业务代码
+2. 上线后出 Bug
+3. &quot;加个日志吧&quot;
+4. 日志打了，发现信息不够
+5. 再加指标
+6. 指标加了，发现没有告警
+7. 告警配了，发现找不到根因（缺链路追踪）
+8. 补链路追踪——但要改所有服务
+
+→ 每一步都是补救，总成本远大于一开始就搭建好
+</code></pre>
+
+<pre><code>精益做法：
+1. 先搭建可观测性基座（日志 + 指标 + 链路追踪）
+2. CI/CD 流水线就位
+3. 安全基线配置好
+4. 再开始写业务代码
+
+→ 业务代码天然就在基础设施的&quot;保护&quot;下运行
+→ 出问题时，三分钟定位而非三小时猜测
+</code></pre>
+
+<pre><code># 基础设施先行的实践：新服务脚手架
+service-template/
+├── Dockerfile              # 容器化
+├── .github/workflows/      # CI/CD
+├── health/                 # 健康检查
+│   ├── readiness.py
+│   └── liveness.py
+├── observability/          # 可观测性
+│   ├── logging.py          # 结构化日志
+│   ├── metrics.py          # Prometheus 指标
+│   └── tracing.py          # OpenTelemetry 链路追踪
+├── security/               # 安全基线
+│   ├── auth.py             # 认证中间件
+│   └── rate_limit.py       # 限流
+└── src/                    # 业务代码——最后才写
+    └── ...
+</code></pre>
+
+<h3>"临时"基础设施的诅咒</h3>
+<p>城市规划有一条铁律：<strong>临时建筑往往比永久建筑活得更久</strong>。</p>
+<p>软件也一样——那个"临时写的数据库连接池"用了三年，那个"先用文件存的配置"至今还在生产环境。</p>
+<p><strong>如果你觉得某个东西是临时的，那它一定会变成永久的。所以，从一开始就用生产级方案。</strong></p>
+<hr />
+<h2>第四课：有机生长 vs 大拆大建——演进式架构</h2>
+<h3>城市的教训</h3>
+<p>城市改造有两种路径：</p>
+<p><strong>大拆大建</strong>：推平老城，重新规划。巴西利亚就是在空地上从零设计的"理想城市"——功能完美，但缺乏人气，被称为"没有灵魂的城市"。</p>
+<p><strong>有机更新</strong>：保留城市肌理，逐步改造。巴黎的奥斯曼改造没有推平全部老城，而是在保留街道骨架的基础上拓宽道路、统一立面，形成了今天的美感。</p>
+<h3>软件的映射</h3>
+<p><strong>大拆大建 = 重写</strong>：</p>
+<pre><code>&quot;现有系统太烂了，我们用最新技术栈重写！&quot;
+
+旧系统：能跑，虽然丑
+新系统：设计完美，但——
+  - 花了 18 个月
+  - 遗漏了旧系统的 100 个边界 case
+  - 上线后用户投诉：功能还不如旧的
+  - 最终两套系统并行运行（更糟了）
+</code></pre>
+
+<p>这就是经典的<strong>第二系统综合症（Second-System Effect）</strong>——Fred Brooks 在《人月神话》中警告过的：第二个系统往往过度设计，因为设计者试图把"第一版所有没做的东西"全塞进去。</p>
+<p><strong>有机更新 = 演进式架构</strong>：</p>
+<pre><code>策略：绞杀者模式（Strangler Fig Pattern）
+
+旧系统继续运行，新系统逐步替代：
+1. 在旧系统前加一层路由（Facade）
+2. 新功能用新架构写，路由指向新系统
+3. 旧功能逐个迁移到新系统
+4. 每迁移一个，旧系统就小一分
+5. 最终旧系统被&quot;绞杀&quot;——自然退役
+</code></pre>
+
+<pre><code>  请求 → [路由层] → 新服务（优先）
+                ↘ 旧系统（降级）
+
+迁移进度：
+Week 1:  5% 请求走新系统
+Week 4:  30% 请求走新系统
+Week 8:  70% 请求走新系统
+Week 12: 100% 请求走新系统 → 旧系统下线
+</code></pre>
+
+<p>绞杀者模式的名称来自热带雨林中的绞杀榕——它从宿主树的枝干上开始生长，逐渐向下扎根、向上扩展，最终完全包裹并替代宿主。这个过程是渐进的、安全的，宿主树在每一步都还是活的。</p>
+<h3>演进式架构的核心原则</h3>
+<ol>
+<li><strong>可逆性</strong>：每个决策都应该是可逆的，或至少是可降级的</li>
+<li><strong>小步迁移</strong>：每次只迁移一个功能，验证通过再迁移下一个</li>
+<li><strong>双跑验证</strong>：新旧系统同时处理相同请求，对比结果确保一致</li>
+<li><strong>特性开关</strong>：用开关控制新旧路径，出问题秒级回滚</li>
+</ol>
+<pre><code># 演进式迁移：特性开关控制
+def process_order(order):
+    if feature_flags.is_enabled(&quot;new_order_service&quot;):
+        try:
+            return new_order_service.process(order)
+        except Exception as e:
+            log.error(f&quot;New service failed: {e}&quot;)
+            return legacy_order_service.process(order)  # 降级
+    else:
+        return legacy_order_service.process(order)
+</code></pre>
+
+<hr />
+<h2>第五课：公共空间——API 是城市的广场</h2>
+<h3>城市的教训</h3>
+<p>简·雅各布斯在《美国大城市的死与生》中指出，城市的活力来自<strong>公共空间</strong>——街道、广场、公园。这些地方不是为某个单一功能设计的，而是允许各种活动自然发生。好的公共空间让城市有"街道眼"——自然监督，安全感上升。</p>
+<p>被她严厉批评的是罗伯特·摩西的大拆大建——宽阔的高速公路切断了社区，巨大的住宅楼群缺乏人与人交互的空间，最终导致犯罪率上升、社区衰败。</p>
+<h3>软件的映射</h3>
+<p><strong>API 就是软件系统的公共空间</strong>。</p>
+<p>好的 API 像好的广场：</p>
+<ul>
+<li><strong>开放但有序</strong>：任何人都能来，但有规则（API 契约）</li>
+<li><strong>多功能</strong>：不同消费者可以用不同方式使用（REST + GraphQL + Webhook）</li>
+<li><strong>稳定性</strong>：广场不能今天有明天拆（API 版本管理）</li>
+<li><strong>自描述</strong>：好广场一眼就知道怎么走（API 文档、自描述端点）</li>
+</ul>
+<p>差的 API 像摩西的高速公路：</p>
+<ul>
+<li><strong>只管通过</strong>：只考虑提供方的方便，不管消费者的体验</li>
+<li><strong>切割系统</strong>：紧耦合的 API 把消费者锁死在提供方的实现细节上</li>
+<li><strong>粗暴变更</strong>：今天改字段明天改路径，消费者被迫跟着改</li>
+</ul>
+<pre><code># 好的 API 设计——像好广场
+/api/v2/orders:
+  get:
+    summary: 查询订单
+    parameters:
+      - status: 按状态筛选
+      - page: 分页
+    responses:
+      200:
+        content:
+          application/json:  # 标准 MIME
+        links:
+          payment: /api/v2/payments/{orderId}  # 引导到关联资源
+          tracking: /api/v2/logistics/{shipmentId}
+    # HATEOAS：像广场上的路标，告诉你还能去哪
+</code></pre>
+
+<pre><code>// 差的 API——像摩西的高速公路
+// 返回内部数据库字段，消费者被锁死在实现上
+@GetMapping(&quot;/internal/orders&quot;)
+Map&lt;String, Object&gt; getOrder(@RequestParam String ord_id) {
+    // 直接返回数据库行——字段名、类型、结构全暴露
+    return jdbcTemplate.queryForMap(&quot;SELECT * FROM t_ord WHERE id = ?&quot;, ord_id);
+}
+</code></pre>
+
+<h3>API 的"街道眼"——可观测性</h3>
+<p>好的公共空间有自然监督（街道眼），差的公共空间是监控死角。</p>
+<p>好的 API 有<strong>可观测性</strong>：</p>
+<ul>
+<li>每个请求有 traceId，像广场上的摄像头</li>
+<li>慢请求有告警，像交通拥堵提示</li>
+<li>异常请求有日志，像社区巡逻记录</li>
+<li>API 调用有统计，像广场人流量监控</li>
+</ul>
+<hr />
+<h2>第六课：抗震与韧性——城市不会因为一次地震就灭亡</h2>
+<h3>城市的教训</h3>
+<p>日本建筑有世界最强的抗震标准。核心思路不是"不会震"，而是<strong>"震了不倒"</strong>——允许建筑在地震中变形、晃动，但结构不崩塌，人能活着出来。</p>
+<p>这个思路叫<strong>韧性（Resilience）</strong>——不是追求绝对不故障，而是故障发生时系统能承受并恢复。</p>
+<h3>软件的映射</h3>
+<p><strong>高可用不是"不会挂"，而是"挂了不影响"</strong>。</p>
+<pre><code>非韧性架构：
+  单点故障 → 雪崩 → 全站挂
+
+韧性架构：
+  局部故障 → 降级 → 核心功能仍可用
+</code></pre>
+
+<p>建筑抗震的三重策略，映射到软件：</p>
+<p><strong>1. 基础隔震（Base Isolation）= 故障隔离</strong></p>
+<p>建筑在底部安装橡胶支座，让地震波不会传递到上层。软件中的故障隔离：</p>
+<ul>
+<li>线程池隔离：一个服务的慢请求不会耗尽全局线程池</li>
+<li>舱壁模式（Bulkhead）：一个服务挂了不影响其他服务</li>
+<li>熔断器：检测到故障，主动断开，防止级联</li>
+</ul>
+<p><strong>2. 柔性结构（Ductile Structure）= 优雅降级</strong></p>
+<p>建筑允许梁柱在极限状态下弯曲变形但不断裂。软件中的优雅降级：</p>
+<pre><code>def get_product_detail(product_id):
+    &quot;&quot;&quot;韧性设计：每个依赖都有降级方案&quot;&quot;&quot;
+
+    # 核心数据——必须成功
+    product = product_repo.get(product_id)
+    if not product:
+        raise NotFoundError(f&quot;Product {product_id} not found&quot;)
+
+    # 非核心：评论——挂了也能看商品
+    reviews = safe_call(
+        lambda: review_service.get_reviews(product_id),
+        fallback=[]  # 降级：返回空评论
+    )
+
+    # 非核心：推荐——挂了也不影响
+    recommendations = safe_call(
+        lambda: recommend_service.get_similar(product_id),
+        fallback=[]  # 降级：返回空推荐
+    )
+
+    # 非核心：库存——挂了显示&quot;查询中&quot;
+    stock = safe_call(
+        lambda: inventory_service.get_stock(product_id),
+        fallback={&quot;status&quot;: &quot;unknown&quot;, &quot;text&quot;: &quot;库存查询中&quot;}
+    )
+
+    return {
+        &quot;product&quot;: product,       # 核心
+        &quot;reviews&quot;: reviews,       # 非核心，降级
+        &quot;recommendations&quot;: recommendations,  # 非核心，降级
+        &quot;stock&quot;: stock            # 非核心，降级
+    }
+</code></pre>
+
+<p><strong>3. 冗余系统（Redundancy）= 多副本</strong></p>
+<p>关键建筑有备用电力、双水源、双消防通道。软件中的冗余：</p>
+<ul>
+<li>多副本部署（至少 2 个实例）</li>
+<li>多可用区（AZ）部署</li>
+<li>数据库主从复制</li>
+<li>CDN 多节点缓存</li>
+</ul>
+<hr />
+<h2>第七课：城市记忆——为什么老城区比新城区更有魅力</h2>
+<h3>城市的教训</h3>
+<p>几乎所有旅游城市最吸引人的地方，都是老城区——罗马的 Trastevere、巴黎的玛黑区、北京的胡同。这些地方经历了数百年自然演化，每一代人都留下了痕迹，形成了丰富的"层次感"。</p>
+<p>而新城区往往"完美但无聊"——因为缺乏时间的积累和人的使用痕迹。</p>
+<h3>软件的映射</h3>
+<p><strong>老代码不是债，是资产</strong>——前提是它能跑。</p>
+<p>一个运行了 5 年的系统，里面包含了无数边界 case 的处理、踩过的坑的修复、用户反馈的回应。这些信息不在文档里（文档早就过时了），而在代码本身。</p>
+<p>重写时丢失的，正是这些"城市记忆"：</p>
+<pre><code>旧系统中一个看起来&quot;多余&quot;的判断：
+
+if order.amount &gt; 10000 and user.level == &quot;silver&quot; and order.type != &quot;bulk&quot;:
+    order.add_flag(&quot;MANUAL_REVIEW&quot;)
+
+新系统重写时，有人看了这行觉得&quot;没意义&quot;就删了。
+结果：上线后，大额银牌用户的异常订单没人审核，造成损失。
+
+→ 那行代码是&quot;城市记忆&quot;：它记录了一次事故的教训。
+</code></pre>
+
+<p><strong>尊重老代码的态度</strong>：</p>
+<ol>
+<li><strong>先理解再改</strong>：看不懂的代码，先搞清楚为什么存在，再决定是否删除</li>
+<li><strong>保留有原因的丑</strong>：有些"丑"代码是特定约束下的最优解</li>
+<li><strong>注释记录决策</strong>：用注释记录"为什么这样做"，而不仅仅是"做了什么"</li>
+<li><strong>迁移而非重写</strong>：用绞杀者模式逐步迁移，保留"城市记忆"</li>
+</ol>
+<hr />
+<h2>跨行业映射速查表</h2>
+<table>
+<thead>
+<tr>
+<th>城市规划概念</th>
+<th>软件架构映射</th>
+<th>核心思想</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>功能分区</td>
+<td>限界上下文</td>
+<td>相关的放一起，不相关的隔开</td>
+</tr>
+<tr>
+<td>交通路网</td>
+<td>数据流架构</td>
+<td>高速公路走大批量，支路走低延迟</td>
+</tr>
+<tr>
+<td>基础设施先行</td>
+<td>可观测性 + CI/CD 先行</td>
+<td>先修路再盖楼</td>
+</tr>
+<tr>
+<td>有机更新</td>
+<td>演进式架构</td>
+<td>逐步迁移优于大拆大建</td>
+</tr>
+<tr>
+<td>公共空间</td>
+<td>API 设计</td>
+<td>开放、有序、稳定、自描述</td>
+</tr>
+<tr>
+<td>抗震韧性</td>
+<td>故障隔离 + 降级 + 冗余</td>
+<td>挂了不影响，而非不会挂</td>
+</tr>
+<tr>
+<td>老城区保护</td>
+<td>尊重遗留代码</td>
+<td>老代码是资产不是债</td>
+</tr>
+<tr>
+<td>绿化隔离带</td>
+<td>防腐层</td>
+<td>防止"污染"蔓延</td>
+</tr>
+<tr>
+<td>城市规划法规</td>
+<td>架构决策记录（ADR）</td>
+<td>重大决策要记录理由</td>
+</tr>
+<tr>
+<td>城市体检</td>
+<td>架构评估</td>
+<td>定期检查系统健康度</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>给架构师的城市规划书单</h2>
+<p>如果你对这种跨行业思维感兴趣，推荐几本"非技术"的书：</p>
+<ol>
+<li>
+<p><strong>《美国大城市的死与生》</strong> — 简·雅各布斯
+   - 核心洞察：城市的活力来自多样性，而非整齐划一
+   - 软件启示：好的系统允许不同风格的模块共存</p>
+</li>
+<li>
+<p><strong>《城市的胜利》</strong> — 爱德华·格莱泽
+   - 核心洞察：城市是人类最伟大的发明，密度创造价值
+   - 软件启示：合理的耦合不是坏事，过度解耦才是</p>
+</li>
+<li>
+<p><strong>《弹性基础设施》</strong> — 相关城市规划文献
+   - 核心洞察：基础设施要能承受冲击并快速恢复
+   - 软件启示：Chaos Engineering 的理论基础</p>
+</li>
+<li>
+<p><strong>《建筑模式语言》</strong> — 亚历山大
+   - 核心洞察：好的设计由可复用的"模式"组合而成
+   - 软件启示：这就是 GoF《设计模式》的灵感来源——亚历山大是模式语言的鼻祖</p>
+</li>
+</ol>
+<hr />
+<h2>结语：建筑是凝固的音乐，代码是流动的城市</h2>
+<p>建筑大师歌德说"建筑是凝固的音乐"。我倒觉得，<strong>代码是流动的城市</strong>——它有道路、有分区、有基础设施、有公共空间，也在不断生长和演变。</p>
+<p>一个城市的规划水平，不取决于最高的那栋楼有多漂亮，而取决于最普通的那条路走起来舒不舒服。一个系统的架构水平，不取决于用了多新的技术栈，而取决于最日常的那个操作稳不稳定。</p>
+<p>城市规划用几百年教会我们：<strong>不要追求完美的蓝图，要追求持续演化的能力。</strong> 因为没有人能在第一天就设计出一个容纳百万人的完美城市——城市的伟大在于它能不断适应变化。</p>
+<p>软件也一样。别试图设计"终极架构"，设计一个<strong>能随时间进化</strong>的架构。</p>
+<p>毕竟，罗马不是一天建成的。你的系统也不应该是。</p>
+<hr />
+<p><em>参考资源：</em>
+- <em>《美国大城市的死与生》— Jane Jacobs</em>
+- <em>《建筑模式语言》— Christopher Alexander</em>
+- <em>《演进式架构》— Neal Ford 等</em>
+- <em>《凤凰架构》— 周志明</em>
+- <em>《发布！软件的设计与部署》— Michael T. Nygard</em></p>

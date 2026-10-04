@@ -29,32 +29,33 @@
       "description": "Next.js 16 实战指南：App Router、Server Actions、Turbopack 完整教程与最佳实践",
       "image": "https://709527.xyz/assets/images/og-image.png",
       "author": {
-        "@type": "Person",
-        "name": "张小猛",
-        "url": "https://709527.xyz/about/"
+            "@type": "Person",
+            "name": "张小猛",
+            "url": "https://709527.xyz/about/"
       },
       "publisher": {
-        "@type": "Organization",
-        "name": "loczb",
-        "logo": {
-          "@type": "ImageObject",
-          "url": "https://709527.xyz/assets/images/favicon.svg"
-        }
+            "@type": "Organization",
+            "name": "loczb",
+            "logo": {
+                  "@type": "ImageObject",
+                  "url": "https://709527.xyz/assets/images/favicon.svg"
+            }
       },
       "datePublished": "2026-04-20T21:26:40+08:00",
       "dateModified": "2026-04-20T21:26:40+08:00",
       "url": "https://709527.xyz/blog/posts/nextjs-16-tutorial.html",
       "mainEntityOfPage": {
-        "@type": "WebPage",
-        "@id": "https://709527.xyz/blog/posts/nextjs-16-tutorial.html"
+            "@type": "WebPage",
+            "@id": "https://709527.xyz/blog/posts/nextjs-16-tutorial.html"
       },
       "keywords": "Next.js, React, 全栈开发, App Router, Server Actions",
       "articleSection": "前端",
+      "timeRequired": "PT20M",
       "inLanguage": "zh-CN"
-    }
+}
     </script>
 
-    <link rel="stylesheet" href="../../assets/css/style.css?v=231fa9f71a">
+    <link rel="stylesheet" href="../../assets/css/style.css?v=27743e398e">
     <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
     <link rel="alternate icon" href="../../assets/images/favicon.ico">
     <link rel="canonical" href="https://709527.xyz/blog/posts/nextjs-16-tutorial.html">
@@ -112,7 +113,7 @@
       </a>
 
       <article class="post-content">
-        <h1>Next.js 16 实战</h1>
+        <h1>Next.js 16 实战：App Router + Server Actions + Turbopack</h1>
 
         <div class="post-meta">
           <span class="meta-item"><span aria-hidden="true">📅</span> 2026-04-20 21:26:40</span>
@@ -131,159 +132,127 @@
         
 
         <p>Next.js 16 于 2026 年 3 月正式发布，带来了许多重大更新。作为目前最流行的 React 全栈框架，Next.js 16 进一步简化了开发体验，提升了性能。</p>
-
-      <p>本文通过一个完整的博客系统示例，带你掌握 Next.js 16 的核心特性。</p>
-
-      <div class="tip-box">
-        <strong>核心特性</strong>：App Router 稳定版、Server Actions 正式支持、Turbopack 默认启用、部分预渲染（PPR）
-      </div>
-
-      <h2>环境准备</h2>
-
-      <h3>系统要求</h3>
-
-      <ul>
-        <li>Node.js 20.17+ 或 22.11+</li>
-        <li>npm / pnpm / yarn</li>
-        <li>推荐：VS Code + ESLint + Prettier</li>
-      </ul>
-
-      <h3>创建项目</h3>
-
-      <pre><code># 使用 pnpm（推荐）
-pnpm create next-app@latest my-blog
-
-# 选择配置：
-# - TypeScript: Yes
-# - ESLint: Yes
-# - Tailwind CSS: Yes
-# - `src/` directory: Yes
-# - App Router: Yes
-# - Turbopack: Yes (默认启用)
-
-cd my-blog
-pnpm dev</code></pre>
-
-      <div class="tip-box">
-        <strong>Next.js 16 变化</strong>：Turbopack 现在是默认选项，开发速度比 Webpack 快 53%。
-      </div>
-
-      <h2>项目结构</h2>
-
-      <pre><code>my-blog/
-├── src/
-│   ├── app/                    # App Router 路由
-│   │   ├── layout.tsx          # 根布局
-│   │   ├── page.tsx            # 首页
-│   │   ├── blog/
-│   │   │   ├── page.tsx        # 博客列表
-│   │   │   └── [slug]/
-│   │   │       └── page.tsx    # 博客详情
-│   │   └── api/                # API 路由
-│   ├── components/             # React 组件
-│   ├── lib/                    # 工具函数
-│   └── styles/                 # 全局样式
-├── public/                     # 静态资源
-└── package.json</code></pre>
-
-      <h2>核心特性实战</h2>
-
-      <h3>1. App Router 基础</h3>
-
-      <p>Next.js 16 中 App Router 已经是稳定版本，推荐使用。</p>
-
-      <pre><code>// src/app/layout.tsx
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
-  return (
-    &lt;html lang="zh-CN">
-      &lt;body>
-        &lt;nav>
-          &lt;a href="/">首页&lt;/a>
-          &lt;a href="/blog">博客&lt;/a>
-        &lt;/nav>
-        {children}
-      
-  &lt;!-- Back to Top &amp; Reading Progress -->
-  &lt;button class="back-to-top" id="backToTop" aria-label="回到顶部">
-    &lt;svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      &lt;path d="M18 15l-6-6-6 6"/>
-    &lt;/svg>
-  &lt;/button>
-  &lt;div class="reading-progress" id="readingProgress">&lt;/div>
-
-  &lt;!-- Post TOC -->
-  &lt;div class="post-toc-container" id="postToc">
-    &lt;nav class="post-toc">
-      &lt;div class="post-toc-title">目录&lt;/div>
-      &lt;ul class="post-toc-list" id="tocList">&lt;/ul>
-    &lt;/nav>
-  &lt;/div>
-
-  
-&lt;script src="../../assets/js/particles.js">&lt;/script>
-  &lt;!-- Comment System -->
-  &lt;script src="../../workers/comment-system/comment-widget.js" defer>&lt;/script>
-&lt;/body>
-    &lt;/html>
-  )
-}</code></pre>
-
-      <h3>3. 缓存策略</h3>
-
-      <pre><code>// 手动控制缓存
-const data = await fetch(url, {
-  cache: 'force-cache',      // 默认，缓存
-  // cache: 'no-store',      // 不缓存
-  // next: { revalidate: 60 } // ISR
-})</code></pre>
-
-      <h2>部署</h2>
-
-      <h3>Vercel（推荐）</h3>
-
-      <pre><code># 1. 推送到 GitHub
-git push
-
-# 2. 在 Vercel 导入项目
-# 3. 自动构建部署</code></pre>
-
-      <h3>Docker 部署</h3>
-
-      <pre><code># Dockerfile
-FROM node:20-alpine
-WORKDIR /app
-COPY package.json pnpm-lock.yaml ./
-RUN pnpm install --frozen-lockfile
-COPY . .
-RUN pnpm build
-EXPOSE 3000
-CMD ["pnpm", "start"]</code></pre>
-
-      <h2>总结</h2>
-
-      <p>Next.js 16 是一个成熟的全栈框架，适合构建各种类型的 Web 应用：</p>
-
-      <ul>
-        <li>✅ <strong>App Router</strong>：更直观的路由系统</li>
-        <li>✅ <strong>Server Components</strong>：默认服务端渲染，性能优秀</li>
-        <li>✅ <strong>Server Actions</strong>：简化数据突变</li>
-        <li>✅ <strong>Turbopack</strong>：开发速度提升 53%</li>
-        <li>✅ <strong>部分预渲染</strong>：静态 + 动态混合渲染</li>
-      </ul>
-
-      <div class="tip-box">
-        <strong>学习建议</strong>：
-        <ul>
-          <li>先理解 RSC 和 Client Component 的区别</li>
-          <li>掌握 Server Actions 的使用场景</li>
-          <li>了解缓存和重新验证策略</li>
-          <li>实践一个完整项目加深理解</li>
-        </ul>
-      </div>
+<p>本文通过一个完整的博客系统示例，带你掌握 Next.js 16 的核心特性。</p>
+<div class="tip-box">
+<p><strong>核心特性</strong>：App Router 稳定版、Server Actions 正式支持、Turbopack 默认启用、部分预渲染（PPR）</p>
+</div>
+<h2>环境准备</h2>
+<h3>系统要求</h3>
+<ul>
+<li>Node.js 20.17+ 或 22.11+</li>
+<li>npm / pnpm / yarn</li>
+<li>推荐：VS Code + ESLint + Prettier</li>
+</ul>
+<h3>创建项目</h3>
+<pre><code># 使用 pnpm（推荐）
+<p>pnpm create next-app@latest my-blog</p>
+<h1>选择配置：</h1>
+<h1>- TypeScript: Yes</h1>
+<h1>- ESLint: Yes</h1>
+<h1>- Tailwind CSS: Yes</h1>
+<h1>- <strong>INLINE<em>CODE</em>0</strong> directory: Yes</h1>
+<h1>- App Router: Yes</h1>
+<h1>- Turbopack: Yes (默认启用)</h1>
+<p>cd my-blog</p>
+<p>pnpm dev</code></pre></p>
+<div class="tip-box">
+<p><strong>Next.js 16 变化</strong>：Turbopack 现在是默认选项，开发速度比 Webpack 快 53%。</p>
+</div>
+<h2>项目结构</h2>
+<pre><code>my-blog/
+<p>├── src/</p>
+<p>│   ├── app/                    # App Router 路由</p>
+<p>│   │   ├── layout.tsx          # 根布局</p>
+<p>│   │   ├── page.tsx            # 首页</p>
+<p>│   │   ├── blog/</p>
+<p>│   │   │   ├── page.tsx        # 博客列表</p>
+<p>│   │   │   └── [slug]/</p>
+<p>│   │   │       └── page.tsx    # 博客详情</p>
+<p>│   │   └── api/                # API 路由</p>
+<p>│   ├── components/             # React 组件</p>
+<p>│   ├── lib/                    # 工具函数</p>
+<p>│   └── styles/                 # 全局样式</p>
+<p>├── public/                     # 静态资源</p>
+<p>└── package.json</code></pre></p>
+<h2>核心特性实战</h2>
+<h3>1. App Router 基础</h3>
+<p>Next.js 16 中 App Router 已经是稳定版本，推荐使用。</p>
+<pre><code>// src/app/layout.tsx
+<p>export default function RootLayout({</p>
+<p>children,</p>
+<p>}: {</p>
+<p>children: React.ReactNode</p>
+<p>}) {</p>
+<p>return (</p>
+<p>&lt;html lang="zh-CN"></p>
+<p>&lt;body></p>
+<p>&lt;nav></p>
+<p>&lt;a href="/">首页&lt;/a></p>
+<p>&lt;a href="/blog">博客&lt;/a></p>
+<p>&lt;/nav></p>
+<p>{children}</p>
+<p>&lt;!-- Back to Top &amp; Reading Progress --></p>
+<p>&lt;button class="back-to-top" id="backToTop" aria-label="回到顶部"></p>
+<p>&lt;svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"></p>
+<p>&lt;path d="M18 15l-6-6-6 6"/></p>
+<p>&lt;/svg></p>
+<p>&lt;/button></p>
+<p>&lt;div class="reading-progress" id="readingProgress">&lt;/div></p>
+<p>&lt;!-- Post TOC --></p>
+<p>&lt;div class="post-toc-container" id="postToc"></p>
+<p>&lt;nav class="post-toc"></p>
+<p>&lt;div class="post-toc-title">目录&lt;/div></p>
+<p>&lt;ul class="post-toc-list" id="tocList">&lt;/ul></p>
+<p>&lt;/nav></p>
+<p>&lt;/div></p>
+<p>&lt;script src="../../assets/js/particles.js">&lt;/script></p>
+<p>&lt;!-- Comment System --></p>
+<p>&lt;script src="../../workers/comment-system/comment-widget.js" defer>&lt;/script></p>
+<p>&lt;/body></p>
+<p>&lt;/html></p>
+<p>)</p>
+<p>}</code></pre></p>
+<h3>3. 缓存策略</h3>
+<pre><code>// 手动控制缓存
+<p>const data = await fetch(url, {</p>
+<p>cache: 'force-cache',      // 默认，缓存</p>
+<p>// cache: 'no-store',      // 不缓存</p>
+<p>// next: { revalidate: 60 } // ISR</p>
+<p>})</code></pre></p>
+<h2>部署</h2>
+<h3>Vercel（推荐）</h3>
+<pre><code># 1. 推送到 GitHub
+<p>git push</p>
+<h1>2. 在 Vercel 导入项目</h1>
+<h1>3. 自动构建部署</code></pre></h1>
+<h3>Docker 部署</h3>
+<pre><code># Dockerfile
+<p>FROM node:20-alpine</p>
+<p>WORKDIR /app</p>
+<p>COPY package.json pnpm-lock.yaml ./</p>
+<p>RUN pnpm install --frozen-lockfile</p>
+<p>COPY . .</p>
+<p>RUN pnpm build</p>
+<p>EXPOSE 3000</p>
+<p>CMD ["pnpm", "start"]</code></pre></p>
+<h2>总结</h2>
+<p>Next.js 16 是一个成熟的全栈框架，适合构建各种类型的 Web 应用：</p>
+<ul>
+<li>✅ <strong>App Router</strong>：更直观的路由系统</li>
+<li>✅ <strong>Server Components</strong>：默认服务端渲染，性能优秀</li>
+<li>✅ <strong>Server Actions</strong>：简化数据突变</li>
+<li>✅ <strong>Turbopack</strong>：开发速度提升 53%</li>
+<li>✅ <strong>部分预渲染</strong>：静态 + 动态混合渲染</li>
+</ul>
+<div class="tip-box">
+<p><strong>学习建议</strong>：</p>
+<ul>
+<li>先理解 RSC 和 Client Component 的区别</li>
+<li>掌握 Server Actions 的使用场景</li>
+<li>了解缓存和重新验证策略</li>
+<li>实践一个完整项目加深理解</li>
+</ul>
+</div>
 
         <!-- Related Static -->
         <div class="related-posts">
@@ -330,7 +299,7 @@ CMD ["pnpm", "start"]</code></pre>
             </button>
           </div>
           <div class="copyright-list">
-            <div class="copyright-item"><strong>文章标题：</strong>Next.js 16 实战</div>
+            <div class="copyright-item"><strong>文章标题：</strong>Next.js 16 实战：App Router + Server Actions + Turbopack</div>
             <div class="copyright-item"><strong>文章作者：</strong>张小猛 · loczb</div>
             <div class="copyright-item"><strong>永久链接：</strong><a href="https://709527.xyz/blog/posts/nextjs-16-tutorial.html">https://709527.xyz/blog/posts/nextjs-16-tutorial.html</a></div>
             <div class="copyright-item"><strong>版权声明：</strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 国际许可协议。商业转载请联系作者获得授权，非商业转载请注明出处。</div>
@@ -423,7 +392,7 @@ CMD ["pnpm", "start"]</code></pre>
         <div class="post-info-label">文章信息</div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📅</span> 发布日期</span><span class="post-info-stat-value">2026-04-20</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">⏱️</span> 阅读时间</span><span class="post-info-stat-value">20 min read</span></div>
-        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">494 字</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">630 字</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📊</span> 章节数</span><span class="post-info-stat-value">5 节 · 6 子节</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">💻</span> 代码块</span><span class="post-info-stat-value">6 段</span></div>
       </div>

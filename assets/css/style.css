@@ -1,4 +1,14 @@
+/* ========================================================
+   CSS CASCADE LAYERS (P3 ARCHITECTURE)
+   ======================================================== */
+@layer reset, tokens, base, layout, components, pages, utilities;
+
 :root {
+  --bp-sm: 640px;
+  --bp-md: 768px;
+  --bp-lg: 1024px;
+  --bp-xl: 1280px;
+
   --color-bg-primary: #0a0a0b;
   --color-bg-secondary: #111113;
   --color-bg-tertiary: #18181b;

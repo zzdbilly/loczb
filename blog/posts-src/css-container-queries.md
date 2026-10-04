@@ -1,0 +1,374 @@
+---
+title: "CSS Container Queries 实战"
+description: "CSS Container Queries 实战：基于容器尺寸的响应式设计，比媒体查询更灵活的组件级响应式方案"
+date: 2026-04-26 15:11:29
+category: 前端
+tags: ["CSS", "Container Queries", "响应式设计", "前端开发"]
+read_time: 12
+slug: css-container-queries
+---
+
+<p>传统的媒体查询（Media Queries）基于视口宽度调整布局。但现代 Web 应用中，组件经常被放置在不同宽度的容器中——侧边栏、弹窗、网格列。Container Queries 让组件能够根据<strong>父容器</strong>而非视口的尺寸来调整样式，这是响应式设计的重大进化。</p>
+
+      <div class="tip-box">
+        <strong>核心价值</strong>：组件可以在任何容器中自适应，无需知道它将被放在页面的哪个位置。
+        </div>
+
+      <h2>一、为什么需要 Container Queries</h2>
+
+      <p>考虑一个卡片组件，它可能出现在：</p>
+      <ul>
+        <li>主内容区（宽 800px）</li>
+        <li>侧边栏（宽 300px）</li>
+        <li>弹窗（宽 500px）</li>
+        <li>移动端全屏（宽 375px）</li>
+      </ul>
+
+      <p>使用媒体查询，你无法知道卡片在哪个容器中，只能基于视口宽度猜测：</p>
+
+      <pre><code>/* 媒体查询：基于视口 */
+@media (min-width: 768px) {
+  .card {
+    display: flex; /* 视口 ≥768px 时横向布局 */
+  }
+}
+
+/* 问题：侧边栏中卡片宽度只有 300px，但视口是 1440px */
+/* 结果：卡片被挤压，布局不合理 */</code></pre>
+
+      <p>Container Queries 解决了这个问题：</p>
+
+      <pre><code>/* 容器查询：基于父容器 */
+@container (min-width: 400px) {
+  .card {
+    display: flex; /* 容器 ≥400px 时横向布局 */
+  }
+}
+
+/* 卡片根据自身所在容器调整布局 */
+/* 侧边栏中：容器 300px → 垂直布局 */
+/* 主内容区：容器 800px → 水平布局 */</code></pre>
+
+      <h2>二、基础用法</h2>
+
+      <h3>1. 定义容器</h3>
+
+      <pre><code>/* 父元素声明为容器 */
+.card-container {
+  container-type: inline-size;
+  /* 或简写 */
+  container: card / inline-size;
+}
+
+/* container-type 可选值：
+ * - inline-size: 查询行向尺寸（宽度）
+ * - size: 查询双向尺寸（宽度和高度）
+ * - normal: 默认值，不是查询容器
+ */</code></pre>
+
+      <h3>2. 编写容器查询</h3>
+
+      <pre><code>/* 默认样式：窄容器 */
+.card {
+  display: block;
+}
+
+.card-image {
+  width: 100%;
+  height: 200px;
+}
+
+/* 容器宽度 ≥400px */
+@container (min-width: 400px) {
+  .card {
+    display: flex;
+    gap: 1rem;
+  }
+  
+  .card-image {
+    width: 200px;
+    flex-shrink: 0;
+  }
+}
+
+/* 容器宽度 ≥600px */
+@container (min-width: 600px) {
+  .card {
+    padding: 2rem;
+  }
+  
+  .card-title {
+    font-size: 1.5rem;
+  }
+}</code></pre>
+
+      <h3>3. 命名容器</h3>
+
+      <p>当有多个嵌套容器时，可以指定查询哪个容器：</p>
+
+      <pre><code>/* 定义命名容器 */
+.sidebar {
+  container: sidebar / inline-size;
+}
+
+.main-content {
+  container: main / inline-size;
+}
+
+/* 指定查询特定容器 */
+@container sidebar (min-width: 300px) {
+  .widget {
+    /* 只响应 sidebar 容器的宽度 */
+  }
+}
+
+@container main (min-width: 600px) {
+  .article {
+    /* 只响应 main 容器的宽度 */
+  }
+}</code></pre>
+
+      <h2>三、实战案例</h2>
+
+      <h3>案例 1：自适应卡片组件</h3>
+
+      <pre><code>&lt;!-- HTML --&gt;
+&lt;div class="layout"&gt;
+  &lt;aside class="sidebar"&gt;
+    &lt;div class="card-container"&gt;
+      &lt;article class="card"&gt;
+        &lt;img src="photo.jpg" alt="" class="card-img"&gt;
+        &lt;div class="card-content"&gt;
+          &lt;h3 class="card-title"&gt;标题&lt;/h3&gt;
+          &lt;p class="card-desc"&gt;描述文字&lt;/p&gt;
+        &lt;/div&gt;
+      &lt;/article&gt;
+    &lt;/div&gt;
+  &lt;/aside&gt;
+  
+  &lt;main class="content"&gt;
+    &lt;div class="card-container"&gt;
+      &lt;article class="card"&gt;...&lt;/article&gt;
+    &lt;/div&gt;
+  &lt;/main&gt;
+&lt;/div&gt;</code></pre>
+
+      <pre><code>/* CSS */
+.card-container {
+  container-type: inline-size;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.card-img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+.card-content {
+  padding: 1rem;
+}
+
+/* 容器 ≥350px：水平布局 */
+@container (min-width: 350px) {
+  .card {
+    flex-direction: row;
+  }
+  
+  .card-img {
+    width: 140px;
+    height: 100%;
+  }
+}
+
+/* 容器 ≥500px：更大的图片 */
+@container (min-width: 500px) {
+  .card-img {
+    width: 200px;
+  }
+  
+  .card-content {
+    padding: 1.5rem;
+  }
+}</code></pre>
+
+      <h3>案例 2：响应式导航</h3>
+
+      <pre><code>.nav-container {
+  container-type: inline-size;
+}
+
+.nav {
+  display: flex;
+  gap: 1rem;
+}
+
+.nav-link {
+  padding: 0.5rem 1rem;
+}
+
+/* 窄容器：垂直导航 */
+@container (max-width: 500px) {
+  .nav {
+    flex-direction: column;
+  }
+  
+  .nav-link {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+/* 宽容器：水平导航 + 更多间距 */
+@container (min-width: 800px) {
+  .nav {
+    gap: 2rem;
+  }
+}</code></pre>
+
+      <h3>案例 3：网格自适应</h3>
+
+      <pre><code>.grid-container {
+  container-type: inline-size;
+}
+
+.grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr;
+}
+
+/* 容器 ≥400px：两列 */
+@container (min-width: 400px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* 容器 ≥600px：三列 */
+@container (min-width: 600px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* 容器 ≥900px：四列 */
+@container (min-width: 900px) {
+  .grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+  }
+}</code></pre>
+
+      <h2>四、容器查询单位</h2>
+
+      <p>CSS 提供了基于容器的相对单位：</p>
+
+      <table style="width: 100%; border-collapse: collapse; margin: 1.5rem 0;">
+        <tr style="background: var(--color-bg-tertiary);">
+          <th style="border: 1px solid var(--color-border); padding: 0.7rem;">单位</th>
+          <th style="border: 1px solid var(--color-border); padding: 0.7rem;">含义</th>
+        </tr>
+        <tr>
+          <td style="border: 1px solid var(--color-border); padding: 0.7rem;"><code>cqw</code></td>
+          <td style="border: 1px solid var(--color-border); padding: 0.7rem;">容器宽度的 1%</td>
+        </tr>
+        <tr>
+          <td style="border: 1px solid var(--color-border); padding: 0.7rem;"><code>cqh</code></td>
+          <td style="border: 1px solid var(--color-border); padding: 0.7rem;">容器高度的 1%</td>
+        </tr>
+        <tr>
+          <td style="border: 1px solid var(--color-border); padding: 0.7rem;"><code>cqi</code></td>
+          <td style="border: 1px solid var(--color-border); padding: 0.7rem;">容器行向尺寸的 1%</td>
+        </tr>
+        <tr>
+          <td style="border: 1px solid var(--color-border); padding: 0.7rem;"><code>cqb</code></td>
+          <td style="border: 1px solid var(--color-border); padding: 0.7rem;">容器块向尺寸的 1%</td>
+        </tr>
+        <tr>
+          <td style="border: 1px solid var(--color-border); padding: 0.7rem;"><code>cqmin</code></td>
+          <td style="border: 1px solid var(--color-border); padding: 0.7rem;">cqi 和 cqb 中较小的值</td>
+        </tr>
+        <tr>
+          <td style="border: 1px solid var(--color-border); padding: 0.7rem;"><code>cqmax</code></td>
+          <td style="border: 1px solid var(--color-border); padding: 0.7rem;">cqi 和 cqb 中较大的值</td>
+        </tr>
+      </table>
+
+      <pre><code>/* 使用容器单位 */
+.card-title {
+  font-size: 5cqw; /* 标题大小为容器宽度的 5% */
+}
+
+.card-padding {
+  padding: 2cqw; /* 内边距随容器缩放 */
+}
+
+.card-gap {
+  gap: min(2cqw, 20px); /* 最大 20px，否则按比例 */
+}</code></pre>
+
+      <h2>五、与媒体查询配合</h2>
+
+      <p>Container Queries 和 Media Queries 可以组合使用：</p>
+
+      <pre><code>/* 视口 ≥768px 且 容器 ≥400px */
+@media (min-width: 768px) {
+  @container (min-width: 400px) {
+    .card {
+      display: flex;
+    }
+  }
+}
+
+/* 或反过来 */
+@container (min-width: 400px) {
+  @media (prefers-color-scheme: dark) {
+    .card {
+      background: #1a1a1a;
+    }
+  }
+}</code></pre>
+
+      <h2>六、浏览器支持与降级</h2>
+
+      <p>Container Queries 已被所有现代浏览器支持（2023 年起）。对于不支持的浏览器：</p>
+
+      <pre><code>/* 渐进增强：先写默认样式 */
+.card {
+  display: block; /* 降级方案 */
+}
+
+/* 现代浏览器使用容器查询 */
+@supports (container-type: inline-size) {
+  .card-container {
+    container-type: inline-size;
+  }
+  
+  @container (min-width: 400px) {
+    .card {
+      display: flex;
+    }
+  }
+}</code></pre>
+
+      <div class="warning-box">
+        <strong>性能提示</strong>：容器查询会增加浏览器的计算开销。避免在深层嵌套中过度使用，只在真正需要的组件上定义容器。
+      </div>
+
+      <h2>总结</h2>
+
+      <p>Container Queries 是响应式设计的重要进化：</p>
+      <ul>
+        <li>组件可以根据父容器而非视口调整样式</li>
+        <li>使用 <code>container-type</code> 定义容器</li>
+        <li>使用 <code>@container</code> 编写查询</li>
+        <li>配合 <code>cqw</code> 等单位实现流畅缩放</li>
+        <li>与媒体查询组合，实现更精细的控制</li>
+      </ul>

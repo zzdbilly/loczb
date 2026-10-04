@@ -1,0 +1,534 @@
+---
+title: "云服务器 SSH 安全加固完整指南"
+description: "云服务器 SSH 安全加固完整指南 - 从端口修改到密钥认证，全方位提升 Linux VPS 安全性。适用于 AWS、阿里云、腾讯云、DigitalOcean 等主流云服务商"
+date: 2026-03-18 21:09:32
+category: 安全
+tags: ["DevOps", "安全", "SSH", "云服务器"]
+read_time: 15
+slug: ssh-security-hardening
+---
+
+<!-- TOC --><!-- Section 1: Introduction -->
+        <h2 id="intro">一、引言：为什么需要 SSH 加固</h2>
+        
+        <div class="tip-box">
+          <h4>📖 关于本指南</h4>
+          <p>这是一份<strong>通用的云服务器 SSH 安全加固指南</strong>，适用于 AWS、阿里云、腾讯云、华为云、DigitalOcean、Vultr、Linode 等主流云服务商。无论你使用哪家云平台，核心操作步骤都是相同的，唯一的区别在于云服务商控制台的界面和入口位置。</p>
+        </div>
+        
+        <p>当你购买了一台云服务器，默认的 SSH 配置通常是「开箱即用」的，方便但不安全。每天，你的服务器都在遭受来自全球的暴力破解攻击。让我给你看一组触目惊心的数据：</p>
+        
+        <div class="command-result">
+# 默认端口 22 的服务器，一天内的登录尝试
+$ sudo grep "Failed password" /var/log/secure | wc -l
+3847  # 是的，近 4000 次暴力破解尝试！
+        </div>
+        
+        <p><strong>默认配置的致命风险：</strong></p>
+        <ul>
+          <li>🔐 <strong>端口暴露</strong>：22 端口是攻击者的「首选目标」，自动扫描脚本 7x24 小时在扫</li>
+          <li>🔑 <strong>密码认证</strong>：弱密码、字典攻击、撞库...密码登录是最大安全隐患</li>
+          <li>👤 <strong>Root 直连</strong>：允许 Root 直接登录？攻击者只需猜对密码就获得最高权限</li>
+          <li>📊 <strong>无监控</strong>：被攻击了都不知道，等发现时可能已被植入挖矿木马</li>
+        </ul>
+
+        <div class="warning-box">
+          <h4>⚠️ 警告</h4>
+          <p>如果你使用的是默认配置（端口 22 + 密码登录），你的服务器就像「家门大开」，只需一个弱密码就会沦陷。本指南将帮你从零开始，全面加固 SSH 安全。</p>
+        </div>
+
+        <!-- Section 2: Environment -->
+        <h2 id="env">二、环境信息</h2>
+        
+        <p>本指南基于以下环境，适用于各类云服务器：</p>
+        
+        <div class="highlight-box">
+          <h4>🖥️ 服务器配置</h4>
+          <ul>
+            <li><strong>云服务商</strong>：AWS / 阿里云 / 腾讯云 / DigitalOcean / Vultr 等（本指南通用）</li>
+            <li><strong>操作系统</strong>：OpenCloudOS 9.4（兼容 CentOS/RHEL 9，Ubuntu/Debian 同样适用）</li>
+            <li><strong>公网 IP</strong>：你的服务器公网IP（示例，请替换为你的真实 IP）</li>
+            <li><strong>SSH 版本</strong>：OpenSSH 8.7+</li>
+          </ul>
+        </div>
+
+        <div class="tip-box">
+          <h4>💡 提示</h4>
+          <p>本指南是一份通用的云服务器 SSH 加固教程。不同云服务商的控制台界面略有差异，但核心操作步骤相同。如果你使用 Ubuntu/Debian，部分命令略有不同，我会特别标注。</p>
+        </div>
+
+        <!-- Section 3: Hardening Steps -->
+        <h2 id="hardening">三、SSH 安全加固步骤</h2>
+        
+        <h3>3.1 准备工作：添加普通用户</h3>
+        <p>永远不要用 Root 直接操作！先创建一个普通用户，赋予 sudo 权限：</p>
+
+        <pre><code># 创建新用户（替换 yourname 为你的用户名）
+sudo adduser yourname
+
+# 设置密码
+sudo passwd yourname
+
+# 添加到 wheel 组（RHEL/CentOS 系）
+sudo usermod -aG wheel yourname
+
+# Ubuntu/Debian 使用 sudo 组
+# sudo usermod -aG sudo yourname</code></pre>
+
+        <h3>3.2 配置 SSH 密钥登录</h3>
+        
+        <h4>步骤 1：在本地生成密钥对</h4>
+        <p>在你的<strong>本地电脑</strong>上执行（不是服务器）：</p>
+
+        <pre><code># 生成 ED25519 密钥（推荐，比 RSA 更安全、更短）
+ssh-keygen -t ed25519 -C "your_email@example.com"
+
+# 按提示操作：
+# 1. 选择保存位置（默认 ~/.ssh/id_ed25519）
+# 2. 设置密码短语（可选，增加安全性）
+# 3. 确认
+
+# 查看公钥（稍后需要）
+cat ~/.ssh/id_ed25519.pub</code></pre>
+
+        <div class="highlight-box">
+          <h4>🔐 为什么选择 ED25519？</h4>
+          <ul>
+            <li>更短的密钥（68 字符 vs RSA 2048 的 372 字符）</li>
+            <li>更快的签名/验证速度</li>
+            <li>更强的安全性（128 位安全强度）</li>
+            <li>OpenSSH 6.5+ 原生支持</li>
+          </ul>
+        </div>
+
+        <h4>步骤 2：上传公钥到服务器</h4>
+        
+        <p><strong>方法一：使用 ssh-copy-id（推荐）</strong></p>
+        <pre><code># 本地执行（替换用户名和 IP）
+ssh-copy-id -i ~/.ssh/id_ed25519.pub yourname@你的服务器公网IP</code></pre>
+
+        <p><strong>方法二：手动复制（如果没有 ssh-copy-id）</strong></p>
+        <pre><code># 在服务器上执行
+mkdir -p ~/.ssh
+chmod 700 ~/.ssh
+
+# 将本地公钥内容粘贴到 authorized_keys
+nano ~/.ssh/authorized_keys
+
+# 设置正确权限
+chmod 600 ~/.ssh/authorized_keys</code></pre>
+
+        <h4>步骤 3：测试密钥登录</h4>
+        <pre><code># 本地执行，测试是否能免密登录
+ssh yourname@你的服务器公网IP
+
+# 成功后，应显示类似：
+# Last login: Wed Mar 18 20:00:00 2026 from xxx.xxx.xxx.xxx</code></pre>
+
+        <div class="warning-box">
+          <h4>⚠️ 重要：确认密钥登录成功再继续！</h4>
+          <p>在禁用密码登录前，务必确认密钥登录正常工作。否则你可能永久失去服务器访问权限！</p>
+        </div>
+
+        <h3>3.3 修改 SSH 端口</h3>
+        <p>将默认端口 22 改为非常规端口，可以避开 99% 的自动化扫描：</p>
+
+        <pre><code># 编辑 SSH 配置文件
+sudo nano /etc/ssh/sshd_config
+
+# 找到并修改以下配置
+# Port 22              → Port 22222
+# PermitRootLogin yes  → PermitRootLogin no
+# PasswordAuthentication yes → PasswordAuthentication no
+# PubkeyAuthentication no    → PubkeyAuthentication yes</code></pre>
+
+        <p>完整的加固配置示例：</p>
+        <pre><code># /etc/ssh/sshd_config 安全加固配置
+
+# 网络设置
+Port 22222                          # 非常规端口
+AddressFamily inet                  # 仅 IPv4
+ListenAddress 0.0.0.0               # 监听所有接口
+
+# 认证设置
+PermitRootLogin no                  # 禁止 Root 直接登录
+PasswordAuthentication no           # 禁用密码认证
+PubkeyAuthentication yes            # 启用密钥认证
+AuthorizedKeysFile .ssh/authorized_keys
+
+# 安全加固
+MaxAuthTries 3                      # 最大认证尝试次数
+MaxSessions 5                       # 最大会话数
+LoginGraceTime 60                   # 登录超时（秒）
+ClientAliveInterval 300             # 保活检测间隔
+ClientAliveCountMax 2               # 保活检测次数
+
+# 禁用不安全特性
+X11Forwarding no                    # 禁用 X11 转发
+AllowTcpForwarding no               # 禁用 TCP 转发
+AllowAgentForwarding no             # 禁用 Agent 转发
+PermitEmptyPasswords no             # 禁止空密码
+PermitTunnel no                     # 禁用隧道
+
+# 加密算法（可选，更严格）
+KexAlgorithms curve25519-sha256@libssh.org,diffie-hellman-group-exchange-sha256
+Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com
+MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com</code></pre>
+
+        <h3>3.4 配置防火墙放行新端口</h3>
+        <p><strong>关键步骤！在重启 SSH 之前，必须先放行新端口！</strong></p>
+
+        <pre><code># 检查 firewalld 状态
+sudo systemctl status firewalld
+
+# 如果未运行，启动并设置开机自启
+sudo systemctl enable --now firewalld
+
+# 放行新端口（先添加，再删除旧端口）
+sudo firewall-cmd --permanent --add-port=22222/tcp
+
+# 同时放行旧端口（防止配置错误导致无法连接）
+sudo firewall-cmd --permanent --add-port=22/tcp
+
+# 重载防火墙
+sudo firewall-cmd --reload
+
+# 查看已放行端口
+sudo firewall-cmd --list-ports</code></pre>
+
+        <h3>3.5 配置云服务商安全组/防火墙</h3>
+        <p>云服务器通常有双重防火墙：系统防火墙（firewalld/ufw）+ 云服务商安全组。两者都要配置！</p>
+
+        <div class="highlight-box">
+          <h4>☁️ 云服务商控制台操作步骤</h4>
+          <p><strong>不同云服务商的入口略有不同：</strong></p>
+          <ul>
+            <li><strong>阿里云</strong>：云服务器 ECS → 实例详情 → 安全组</li>
+            <li><strong>腾讯云</strong>：云服务器 CVM → 实例详情 → 安全组</li>
+            <li><strong>AWS</strong>：EC2 → 实例 → Security Groups</li>
+            <li><strong>DigitalOcean</strong>：Networking → Firewalls</li>
+            <li><strong>Vultr</strong>：实例详情 → Firewall</li>
+          </ul>
+          <p><strong>通用配置步骤：</strong></p>
+          <ol>
+            <li>登录你的云服务商控制台</li>
+            <li>找到对应的服务器实例</li>
+            <li>进入「安全组」或「防火墙」设置</li>
+            <li>添加入站规则：
+              <ul>
+                <li>协议：TCP</li>
+                <li>端口：22222（你设置的新 SSH 端口）</li>
+                <li>来源：0.0.0.0/0（或限制为你的 IP，更安全）</li>
+                <li>策略：允许</li>
+              </ul>
+            </li>
+            <li>保存后立即生效</li>
+          </ol>
+        </div>
+
+        <div class="tip-box">
+          <h4>💡 安全组最佳实践</h4>
+          <p>如果你的 IP 是固定的（如公司网络、家庭宽带），强烈建议将来源设为你的 IP 地址，这样即使端口暴露，也只有你能连接。不同云服务商的安全组界面略有差异，但核心配置相同。</p>
+        </div>
+
+        <h3>3.6 验证并重启 SSH</h3>
+        <pre><code># 检查配置语法是否正确（必须无报错！）
+sudo sshd -t
+
+# 如果无输出，说明配置正确，可以重启
+sudo systemctl restart sshd
+
+# 查看服务状态
+sudo systemctl status sshd</code></pre>
+
+        <h3>3.7 测试新配置</h3>
+        <p><strong>在关闭当前连接前，新开一个终端测试连接！</strong></p>
+
+        <pre><code># 本地执行，指定新端口连接
+ssh -p 22222 yourname@你的服务器公网IP
+
+# 简化连接：编辑本地 ~/.ssh/config
+# 添加以下内容：
+Host myserver
+    HostName 你的服务器公网IP
+    Port 22222
+    User yourname
+    IdentityFile ~/.ssh/id_ed25519
+
+# 之后只需
+ssh myserver</code></pre>
+
+        <h3>3.8 清理：删除旧端口规则</h3>
+        <p>确认新端口连接正常后，删除防火墙的 22 端口规则：</p>
+
+        <pre><code># 删除旧端口规则
+sudo firewall-cmd --permanent --remove-port=22/tcp
+sudo firewall-cmd --reload
+
+# 确认
+sudo firewall-cmd --list-ports
+# 应只显示：22222/tcp</code></pre>
+
+        <h3>3.9 安装防护脚本（可选但推荐）</h3>
+        <p>安装 Fail2ban 自动封禁暴力破解 IP：</p>
+
+        <pre><code># 安装 EPEL 仓库（RHEL/CentOS 系）
+sudo dnf install -y epel-release
+
+# 安装 Fail2ban
+sudo dnf install -y fail2ban
+
+# 创建 SSH 防护配置
+sudo cat > /etc/fail2ban/jail.d/sshd.local &lt;&lt; 'EOF'
+[sshd]
+enabled = true
+port = 22222
+filter = sshd
+logpath = /var/log/secure
+maxretry = 3
+findtime = 600
+bantime = 86400
+EOF
+
+# 启动服务
+sudo systemctl enable --now fail2ban
+
+# 查看封禁状态
+sudo fail2ban-client status sshd</code></pre>
+
+        <!-- Section 4: Backup System -->
+        <h2 id="backup">四、自动备份系统</h2>
+        
+        <p>安全加固后，定期备份关键配置和数据：</p>
+
+        <h3>4.1 创建备份脚本</h3>
+        <pre><code>#!/bin/bash
+# /usr/local/bin/backup-ssh-config.sh
+# SSH 配置自动备份脚本
+
+BACKUP_DIR="/root/ssh-backups"
+DATE=$(date +%Y%m%d_%H%M%S)
+RETENTION_DAYS=30
+
+# 创建备份目录
+mkdir -p "$BACKUP_DIR"
+
+# 备份 SSH 配置
+tar -czf "$BACKUP_DIR/ssh-config-$DATE.tar.gz" \
+    /etc/ssh/sshd_config \
+    /root/.ssh \
+    /etc/firewalld \
+    /etc/fail2ban 2>/dev/null
+
+# 清理旧备份
+find "$BACKUP_DIR" -name "*.tar.gz" -mtime +$RETENTION_DAYS -delete
+
+# 记录日志
+echo "[$(date)] SSH config backup completed: $BACKUP_DIR/ssh-config-$DATE.tar.gz" >> /var/log/ssh-backup.log
+
+# 发送通知（可选）
+# curl -X POST "https://your-webhook-url" -d "SSH backup completed: $DATE"</code></pre>
+
+        <h3>4.2 配置定时任务</h3>
+        <pre><code># 添加执行权限
+sudo chmod +x /usr/local/bin/backup-ssh-config.sh
+
+# 配置每日凌晨 3 点执行
+sudo crontab -e
+
+# 添加以下行：
+0 3 * * * /usr/local/bin/backup-ssh-config.sh</code></pre>
+
+        <h3>4.3 备份保留策略</h3>
+        <div class="highlight-box">
+          <h4>📦 推荐的备份策略</h4>
+          <ul>
+            <li><strong>每日备份</strong>：保留 30 天，自动清理</li>
+            <li><strong>周备份</strong>：保留 12 周（约 3 个月）</li>
+            <li><strong>月备份</strong>：保留 12 个月</li>
+            <li><strong>异地备份</strong>：定期同步到对象存储（阿里云 OSS / 腾讯云 COS / AWS S3）或本地电脑</li>
+          </ul>
+        </div>
+
+        <!-- Section 5: Monitor Script -->
+        <h2 id="monitor">五、系统监控脚本</h2>
+        
+        <p>实时监控 SSH 登录状态，及时发现异常：</p>
+
+        <h3>5.1 SSH 登录监控脚本</h3>
+        <pre><code>#!/bin/bash
+# /usr/local/bin/ssh-monitor.sh
+# SSH 安全监控脚本
+
+LOG_FILE="/var/log/ssh-monitor.log"
+ALERT_THRESHOLD=5  # 1 小时内失败次数阈值
+
+# 检查最近的登录失败
+FAILED_COUNT=$(grep "$(date '+%b %d')" /var/log/secure | \
+    grep "Failed password" | \
+    grep -v "$(date '+%H')" | wc -l)
+
+# 检查今天的成功登录
+SUCCESS_LOGINS=$(grep "$(date '+%b %d')" /var/log/secure | \
+    grep "Accepted publickey" | \
+    awk '{print $NF}' | sort | uniq -c | sort -rn)
+
+# 记录状态
+{
+    echo "========================================"
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] SSH Monitor Report"
+    echo "========================================"
+    echo "Failed login attempts (last hour): $FAILED_COUNT"
+    echo ""
+    echo "Successful logins today:"
+    echo "$SUCCESS_LOGINS"
+    echo ""
+    echo "Active SSH connections:"
+    who | grep pts
+    echo ""
+} >> "$LOG_FILE"
+
+# 告警（失败次数过多）
+if [ "$FAILED_COUNT" -gt "$ALERT_THRESHOLD" ]; then
+    echo "[ALERT] High failed login attempts detected: $FAILED_COUNT" >> "$LOG_FILE"
+    # 发送告警通知（可选）
+    # curl -X POST "your-webhook-url" -d "SSH Alert: $FAILED_COUNT failed attempts"
+fi
+
+# 显示 Fail2ban 封禁状态
+if command -v fail2ban-client &amp;> /dev/null; then
+    echo "Fail2ban banned IPs:" >> "$LOG_FILE"
+    fail2ban-client status sshd >> "$LOG_FILE" 2>&amp;1
+fi</code></pre>
+
+        <h3>5.2 配置定时监控</h3>
+        <pre><code># 添加执行权限
+sudo chmod +x /usr/local/bin/ssh-monitor.sh
+
+# 每小时检查一次
+sudo crontab -e
+
+# 添加：
+0 * * * * /usr/local/bin/ssh-monitor.sh</code></pre>
+
+        <h3>5.3 实时查看监控日志</h3>
+        <pre><code># 查看最新监控报告
+sudo tail -f /var/log/ssh-monitor.log
+
+# 查看今天的登录失败
+sudo grep "$(date '+%b %d')" /var/log/secure | grep "Failed"
+
+# 查看最近登录成功的用户
+sudo last -n 10</code></pre>
+
+        <!-- Section 6: Common Commands -->
+        <h2 id="commands">六、常用命令速查</h2>
+        
+        <h3>6.1 SSH 连接命令</h3>
+        <pre><code># 标准连接
+ssh -p 22222 yourname@你的服务器公网IP
+
+# 使用配置别名
+ssh myserver
+
+# 指定密钥文件
+ssh -i ~/.ssh/id_ed25519 -p 22222 yourname@你的服务器公网IP
+
+# SCP 传输文件
+scp -P 22222 file.txt yourname@你的服务器公网IP:/home/yourname/
+
+# SFTP 连接
+sftp -P 22222 yourname@你的服务器公网IP</code></pre>
+
+        <h3>6.2 查看备份</h3>
+        <pre><code># 列出所有备份
+ls -la /root/ssh-backups/
+
+# 查看备份内容
+tar -tzf /root/ssh-backups/ssh-config-20260318.tar.gz
+
+# 恢复备份
+cd /
+sudo tar -xzf /root/ssh-backups/ssh-config-20260318.tar.gz
+
+# 查看 SSH 备份日志
+sudo cat /var/log/ssh-backup.log</code></pre>
+
+        <h3>6.3 手动执行脚本</h3>
+        <pre><code># 手动执行备份
+sudo /usr/local/bin/backup-ssh-config.sh
+
+# 手动执行监控
+sudo /usr/local/bin/ssh-monitor.sh
+
+# 查看防火墙状态
+sudo firewall-cmd --list-all
+
+# 查看 Fail2ban 状态
+sudo fail2ban-client status sshd
+
+# 手动解封 IP
+sudo fail2ban-client set sshd unbanip 1.2.3.4</code></pre>
+
+        <h3>6.4 故障排查</h3>
+        <pre><code># SSH 服务状态
+sudo systemctl status sshd
+
+# 查看 SSH 错误日志
+sudo journalctl -u sshd -f
+
+# 检查端口是否监听
+sudo ss -tlnp | grep 22222
+
+# 检查防火墙规则
+sudo iptables -L -n | grep 22222
+
+# 测试本地 SSH 连接（在服务器上执行）
+ssh -p 22222 yourname@localhost</code></pre>
+
+        <!-- Section 7: Summary -->
+        <h2 id="summary">七、总结</h2>
+        
+        <p>恭喜你！完成以上步骤后，你的云服务器 SSH 安全已经达到了生产级别。本指南是一份<strong>通用的 SSH 加固方案</strong>，适用于：</p>
+        
+        <ul>
+          <li>☁️ <strong>主流云服务商</strong>：AWS、阿里云、腾讯云、华为云、DigitalOcean、Vultr、Linode 等</li>
+          <li>🐧 <strong>主流 Linux 发行版</strong>：CentOS/RHEL/Rocky/AlmaLinux（使用 firewalld）、Ubuntu/Debian（使用 ufw）</li>
+          <li>🏠 <strong>自建服务器</strong>：家庭实验室、NAS、树莓派等</li>
+        </ul>
+
+        <p>让我们回顾一下做了什么：</p>
+
+        <div class="highlight-box">
+          <h4>✅ 完成的安全加固</h4>
+          <ol>
+            <li><strong>端口隐蔽</strong>：22 → 22222，避开 99% 自动扫描</li>
+            <li><strong>认证加固</strong>：禁用密码，仅允许密钥登录</li>
+            <li><strong>权限隔离</strong>：禁止 Root 直连，使用 sudo 提权</li>
+            <li><strong>防火墙</strong>：双重防护（系统 + 安全组）</li>
+            <li><strong>入侵防御</strong>：Fail2ban 自动封禁</li>
+            <li><strong>监控告警</strong>：实时监控登录状态</li>
+            <li><strong>备份恢复</strong>：自动备份，定期清理</li>
+          </ol>
+        </div>
+
+        <div class="warning-box">
+          <h4>⚠️ 不要忘记</h4>
+          <ul>
+            <li>定期更新系统和软件包：<code>sudo dnf update</code></li>
+            <li>定期检查备份是否正常</li>
+            <li>监控日志，关注异常登录</li>
+            <li>密钥文件妥善保管，不要泄露</li>
+          </ul>
+        </div>
+
+        <hr>
+
+        <p>如果这篇指南对你有帮助，欢迎分享给更多人。安全无小事，让我们一起守护服务器的安全！🔒</p>
+
+        <p><strong>参考资料：</strong></p>
+        <ul>
+          <li><a href="https://www.ssh.com/academy/ssh/sshd_config" target="_blank">OpenSSH 官方文档</a></li>
+          <li><a href="https://linux.die.net/man/5/sshd_config" target="_blank">sshd_config 配置详解</a></li>
+          <li><a href="https://www.fail2ban.org/" target="_blank">Fail2ban 官方网站</a></li>
+        </ul>

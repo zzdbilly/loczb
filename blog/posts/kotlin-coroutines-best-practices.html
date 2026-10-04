@@ -29,32 +29,33 @@
       "description": "Kotlin Coroutines 最佳实践：从入门到精通，掌握异步编程的核心技巧与常见陷阱",
       "image": "https://709527.xyz/assets/images/og-image.png",
       "author": {
-        "@type": "Person",
-        "name": "张小猛",
-        "url": "https://709527.xyz/about/"
+            "@type": "Person",
+            "name": "张小猛",
+            "url": "https://709527.xyz/about/"
       },
       "publisher": {
-        "@type": "Organization",
-        "name": "loczb",
-        "logo": {
-          "@type": "ImageObject",
-          "url": "https://709527.xyz/assets/images/favicon.svg"
-        }
+            "@type": "Organization",
+            "name": "loczb",
+            "logo": {
+                  "@type": "ImageObject",
+                  "url": "https://709527.xyz/assets/images/favicon.svg"
+            }
       },
       "datePublished": "2026-04-08T21:12:09+08:00",
       "dateModified": "2026-04-08T21:12:09+08:00",
       "url": "https://709527.xyz/blog/posts/kotlin-coroutines-best-practices.html",
       "mainEntityOfPage": {
-        "@type": "WebPage",
-        "@id": "https://709527.xyz/blog/posts/kotlin-coroutines-best-practices.html"
+            "@type": "WebPage",
+            "@id": "https://709527.xyz/blog/posts/kotlin-coroutines-best-practices.html"
       },
       "keywords": "Kotlin, Coroutines, 异步编程, Android, 最佳实践",
       "articleSection": "Kotlin",
+      "timeRequired": "PT18M",
       "inLanguage": "zh-CN"
-    }
+}
     </script>
 
-    <link rel="stylesheet" href="../../assets/css/style.css?v=231fa9f71a">
+    <link rel="stylesheet" href="../../assets/css/style.css?v=27743e398e">
     <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
     <link rel="alternate icon" href="../../assets/images/favicon.ico">
     <link rel="canonical" href="https://709527.xyz/blog/posts/kotlin-coroutines-best-practices.html">
@@ -155,262 +156,207 @@
         <!-- /Series Card Widget -->
 
         <p>协程（Coroutines）是 Kotlin 最强大的特性之一，它让异步编程变得像同步代码一样简洁。但在实际使用中，很多开发者容易踩坑：<strong>内存泄漏、异常丢失、线程阻塞</strong>等问题频发。</p>
-
-      <p>本文基于实际项目经验，总结 Kotlin 协程的核心概念、最佳实践和常见陷阱。</p>
-
-      <div class="tip-box">
-        <strong>核心优势</strong>：代码简洁、性能优秀、异常安全、易于测试
-      </div>
-
-      <h2>为什么需要协程</h2>
-
-      <p>传统异步编程的痛点：</p>
-
-      <ul>
-        <li><strong>回调地狱</strong>：多层嵌套，代码难以维护</li>
-        <li><strong>线程管理复杂</strong>：手动创建和管理线程池</li>
-        <li><strong>异常处理困难</strong>：回调链中异常容易丢失</li>
-        <li><strong>资源泄漏</strong>：忘记取消任务导致内存泄漏</li>
-      </ul>
-
-      <p>协程通过<strong>挂起函数</strong>和<strong>结构化并发</strong>解决了这些问题。</p>
-
-      <h2>核心概念</h2>
-
-      <h3>1. 挂起函数（suspend function）</h3>
-
-      <pre><code>// 普通函数
-fun fetchData(): String {
-    // 阻塞线程
-    return api.getData()
-}
-
-// 挂起函数
-suspend fun fetchData(): String {
-    // 挂起而不阻塞线程
-    return withContext(Dispatchers.IO) {
-        api.getData()
-    }
-}</code></pre>
-
-      <div class="tip-box">
-        <strong>关键区别</strong>：挂起函数可以在协程中暂停执行而不阻塞线程，普通函数会阻塞调用线程。
-      </div>
-
-      <h3>2. CoroutineScope</h3>
-
-      <p>协程作用域，用于管理协程的生命周期：</p>
-
-      <table>
-        <tr><th>作用域</th><th>使用场景</th><th>生命周期</th></tr>
-        <tr><td>viewModelScope</td><td>Android ViewModel</td><td>ViewModel 销毁时自动取消</td></tr>
-        <tr><td>lifecycleScope</td><td>Activity/Fragment</td><td>生命周期结束时取消</td></tr>
-        <tr><td>CoroutineScope()</td><td>自定义作用域</td><td>需要手动取消</td></tr>
-      </table>
-
-      <h3>3. Dispatcher</h3>
-
-      <pre><code>// Main：主线程，用于 UI 操作
-withContext(Dispatchers.Main) {
-    textView.text = result
-}
-
-// IO：磁盘/网络 IO
-withContext(Dispatchers.IO) {
-    val data = database.query()
-}
-
-// Default：CPU 密集型计算
-withContext(Dispatchers.Default) {
-    val result = heavyComputation()
-}</code></pre>
-
-      <h2>最佳实践</h2>
-
-      <h3>1. 优先使用挂起函数</h3>
-
-      <pre><code>// ❌ 不推荐：返回 Deferred
-fun loadData(): Deferred&lt;Data> = async { repo.getData() }
-
-// ✅ 推荐：直接返回挂起函数
-suspend fun loadData(): Data = repo.getData()</code></pre>
-
-      <div class="tip-box">
-        <strong>原则</strong>：挂起函数是协程的"一等公民"，Deferred 只用于需要组合多个异步操作的场景。
-      </div>
-
-      <h3>2. 结构化并发</h3>
-
-      <pre><code>// ❌ 不推荐：手动管理 Job
-val job = Job()
-val scope = CoroutineScope(job + Dispatchers.IO)
-scope.launch { ... }
-// 容易忘记取消
-
-// ✅ 推荐：使用结构化并发
-viewModelScope.launch {
-    // 自动取消，无需手动管理
-    val data = repo.getData()
-}</code></pre>
-
-      <h3>3. 异常处理</h3>
-
-      <pre><code>// ✅ 推荐：在作用域边界处理异常
-viewModelScope.launch {
-    try {
-        val data = repo.getData()
-        _uiState.value = UiState.Success(data)
-    } catch (e: Exception) {
-        _uiState.value = UiState.Error(e.message)
-    }
-}
-
-// ✅ 使用 supervisorScope 隔离异常
-supervisorScope {
-    launch {
-        // 这个协程失败不会影响其他协程
-        api.getUser()
-    }
-    launch {
-        // 这个协程仍然可以正常执行
-        api.getPosts()
-    }
-}</code></pre>
-
-      <h3>4. 并发操作</h3>
-
-      <pre><code>// ✅ 并行执行多个独立操作
-val (user, posts) = coroutineScope {
-    awaitAll(
-        async { api.getUser() },
-        async { api.getPosts() }
-    )
-}
-
-// ✅ 使用 zip 组合两个结果
-val result = coroutineScope {
-    async { api.getUser() }
-        .zip(async { api.getPosts() }) { user, posts ->
-            UserWithPosts(user, posts)
-        }
-}</code></pre>
-
-      <h3>5. 超时和重试</h3>
-
-      <pre><code>// ✅ 超时处理
-withTimeout(5000) {
-    api.slowOperation()
-}
-
-// ✅ 超时返回 null
-val result = withTimeoutOrNull(5000) {
-    api.slowOperation()
-}
-
-// ✅ 重试机制
-suspend fun &lt;T> retry(
-    times: Int,
-    initialDelay: Long = 100,
-    maxDelay: Long = 1000,
-    factor: Double = 2.0,
-    block: suspend () -> T
-): T {
-    var currentDelay = initialDelay
-    repeat(times - 1) {
-        try {
-            return block()
-        } catch (e: Exception) {
-            delay(currentDelay)
-            currentDelay = (currentDelay * factor).toLong().coerceAtMost(maxDelay)
-        }
-    }
-    return block() // 最后一次尝试
-}</code></pre>
-
-      <h2>常见陷阱</h2>
-
-      <div class="warning-box">
-        <strong>陷阱 1：在挂起函数中阻塞线程</strong><br>
-        <code>Thread.sleep()</code> 会阻塞线程，应该使用 <code>delay()</code>
-      </div>
-
-      <div class="warning-box">
-        <strong>陷阱 2：忘记处理异常</strong><br>
-        <code>launch</code> 中的异常会被吞掉，需要用 <code>try-catch</code> 或 <code>CoroutineExceptionHandler</code>
-      </div>
-
-      <div class="warning-box">
-        <strong>陷阱 3：滥用 GlobalScope</strong><br>
-        <code>GlobalScope</code> 没有生命周期管理，容易导致内存泄漏，应该使用 <code>viewModelScope</code> 或自定义作用域
-      </div>
-
-      <div class="warning-box">
-        <strong>陷阱 4：在主线程执行 IO 操作</strong><br>
-        即使使用协程，也要用 <code>withContext(Dispatchers.IO)</code> 切换线程
-      </div>
-
-      <h2>实战案例</h2>
-
-      <h3>Android ViewModel 中的协程</h3>
-
-      <pre><code>class UserViewModel(
-    private val userRepository: UserRepository
-) : ViewModel() {
-
-    private val _uiState = MutableStateFlow&lt;UiState&lt;User>>(UiState.Loading)
-    val uiState: StateFlow&lt;UiState&lt;User>> = _uiState.asStateFlow()
-
-    init {
-        loadUser()
-    }
-
-    private fun loadUser() {
-        viewModelScope.launch {
-            _uiState.value = UiState.Loading
-            
-            try {
-                // 并行加载用户数据和头像
-                val (user, avatar) = coroutineScope {
-                    awaitAll(
-                        async { userRepository.getUser() },
-                        async { userRepository.getAvatar() }
-                    )
-                }
-                
-                _uiState.value = UiState.Success(user.copy(avatar = avatar))
-            } catch (e: Exception) {
-                _uiState.value = UiState.Error(e.message ?: "Unknown error")
-            }
-        }
-    }
-}</code></pre>
-
-      <h2>性能优化</h2>
-
-      <ul>
-        <li><strong>避免过度使用 async</strong>：只有需要并行执行时才用 async，否则用 launch</li>
-        <li><strong>合理选择 Dispatcher</strong>：IO 操作别在 Main 线程，CPU 计算别在 IO 线程</li>
-        <li><strong>使用 Flow 替代回调</strong>：响应式数据流更适合协程</li>
-        <li><strong>避免协程嵌套</strong>：不要在协程中再启动协程</li>
-      </ul>
-
-      <h2>总结</h2>
-
-      <p>Kotlin 协程是强大的异步编程工具，但需要正确使用：</p>
-
-      <ul>
-        <li>✅ 优先使用挂起函数而非 Deferred</li>
-        <li>✅ 使用结构化并发管理生命周期</li>
-        <li>✅ 在作用域边界处理异常</li>
-        <li>✅ 合理选择 Dispatcher</li>
-        <li>✅ 避免 GlobalScope 和线程阻塞</li>
-      </ul>
-
-      <div class="tip-box">
-        <strong>参考资源</strong>：<br>
-        Kotlin 官方文档：<a href="https://kotlinlang.org/docs/coroutines-overview.html" target="_blank">kotlinlang.org/docs/coroutines</a><br>
-        Kotlin Coroutines 指南：<a href="https://github.com/Kotlin/kotlinx.coroutines" target="_blank">github.com/Kotlin/kotlinx.coroutines</a>
-      </div>
+<p>本文基于实际项目经验，总结 Kotlin 协程的核心概念、最佳实践和常见陷阱。</p>
+<div class="tip-box">
+<p><strong>核心优势</strong>：代码简洁、性能优秀、异常安全、易于测试</p>
+</div>
+<h2>为什么需要协程</h2>
+<p>传统异步编程的痛点：</p>
+<ul>
+<li><strong>回调地狱</strong>：多层嵌套，代码难以维护</li>
+<li><strong>线程管理复杂</strong>：手动创建和管理线程池</li>
+<li><strong>异常处理困难</strong>：回调链中异常容易丢失</li>
+<li><strong>资源泄漏</strong>：忘记取消任务导致内存泄漏</li>
+</ul>
+<p>协程通过<strong>挂起函数</strong>和<strong>结构化并发</strong>解决了这些问题。</p>
+<h2>核心概念</h2>
+<h3>1. 挂起函数（suspend function）</h3>
+<pre><code>// 普通函数
+<p>fun fetchData(): String {</p>
+<p>// 阻塞线程</p>
+<p>return api.getData()</p>
+<p>}</p>
+<p>// 挂起函数</p>
+<p>suspend fun fetchData(): String {</p>
+<p>// 挂起而不阻塞线程</p>
+<p>return withContext(Dispatchers.IO) {</p>
+<p>api.getData()</p>
+<p>}</p>
+<p>}</code></pre></p>
+<div class="tip-box">
+<p><strong>关键区别</strong>：挂起函数可以在协程中暂停执行而不阻塞线程，普通函数会阻塞调用线程。</p>
+</div>
+<h3>2. CoroutineScope</h3>
+<p>协程作用域，用于管理协程的生命周期：</p>
+<table>
+<tr><th>作用域</th><th>使用场景</th><th>生命周期</th></tr>
+<tr><td>viewModelScope</td><td>Android ViewModel</td><td>ViewModel 销毁时自动取消</td></tr>
+<tr><td>lifecycleScope</td><td>Activity/Fragment</td><td>生命周期结束时取消</td></tr>
+<tr><td>CoroutineScope()</td><td>自定义作用域</td><td>需要手动取消</td></tr>
+</table>
+<h3>3. Dispatcher</h3>
+<pre><code>// Main：主线程，用于 UI 操作
+<p>withContext(Dispatchers.Main) {</p>
+<p>textView.text = result</p>
+<p>}</p>
+<p>// IO：磁盘/网络 IO</p>
+<p>withContext(Dispatchers.IO) {</p>
+<p>val data = database.query()</p>
+<p>}</p>
+<p>// Default：CPU 密集型计算</p>
+<p>withContext(Dispatchers.Default) {</p>
+<p>val result = heavyComputation()</p>
+<p>}</code></pre></p>
+<h2>最佳实践</h2>
+<h3>1. 优先使用挂起函数</h3>
+<pre><code>// ❌ 不推荐：返回 Deferred
+<p>fun loadData(): Deferred&lt;Data> = async { repo.getData() }</p>
+<p>// ✅ 推荐：直接返回挂起函数</p>
+<p>suspend fun loadData(): Data = repo.getData()</code></pre></p>
+<div class="tip-box">
+<p><strong>原则</strong>：挂起函数是协程的"一等公民"，Deferred 只用于需要组合多个异步操作的场景。</p>
+</div>
+<h3>2. 结构化并发</h3>
+<pre><code>// ❌ 不推荐：手动管理 Job
+<p>val job = Job()</p>
+<p>val scope = CoroutineScope(job + Dispatchers.IO)</p>
+<p>scope.launch { ... }</p>
+<p>// 容易忘记取消</p>
+<p>// ✅ 推荐：使用结构化并发</p>
+<p>viewModelScope.launch {</p>
+<p>// 自动取消，无需手动管理</p>
+<p>val data = repo.getData()</p>
+<p>}</code></pre></p>
+<h3>3. 异常处理</h3>
+<pre><code>// ✅ 推荐：在作用域边界处理异常
+<p>viewModelScope.launch {</p>
+<p>try {</p>
+<p>val data = repo.getData()</p>
+<p>_uiState.value = UiState.Success(data)</p>
+<p>} catch (e: Exception) {</p>
+<p>_uiState.value = UiState.Error(e.message)</p>
+<p>}</p>
+<p>}</p>
+<p>// ✅ 使用 supervisorScope 隔离异常</p>
+<p>supervisorScope {</p>
+<p>launch {</p>
+<p>// 这个协程失败不会影响其他协程</p>
+<p>api.getUser()</p>
+<p>}</p>
+<p>launch {</p>
+<p>// 这个协程仍然可以正常执行</p>
+<p>api.getPosts()</p>
+<p>}</p>
+<p>}</code></pre></p>
+<h3>4. 并发操作</h3>
+<pre><code>// ✅ 并行执行多个独立操作
+<p>val (user, posts) = coroutineScope {</p>
+<p>awaitAll(</p>
+<p>async { api.getUser() },</p>
+<p>async { api.getPosts() }</p>
+<p>)</p>
+<p>}</p>
+<p>// ✅ 使用 zip 组合两个结果</p>
+<p>val result = coroutineScope {</p>
+<p>async { api.getUser() }</p>
+<p>.zip(async { api.getPosts() }) { user, posts -></p>
+<p>UserWithPosts(user, posts)</p>
+<p>}</p>
+<p>}</code></pre></p>
+<h3>5. 超时和重试</h3>
+<pre><code>// ✅ 超时处理
+<p>withTimeout(5000) {</p>
+<p>api.slowOperation()</p>
+<p>}</p>
+<p>// ✅ 超时返回 null</p>
+<p>val result = withTimeoutOrNull(5000) {</p>
+<p>api.slowOperation()</p>
+<p>}</p>
+<p>// ✅ 重试机制</p>
+<p>suspend fun &lt;T> retry(</p>
+<p>times: Int,</p>
+<p>initialDelay: Long = 100,</p>
+<p>maxDelay: Long = 1000,</p>
+<p>factor: Double = 2.0,</p>
+<p>block: suspend () -> T</p>
+<p>): T {</p>
+<p>var currentDelay = initialDelay</p>
+<p>repeat(times - 1) {</p>
+<p>try {</p>
+<p>return block()</p>
+<p>} catch (e: Exception) {</p>
+<p>delay(currentDelay)</p>
+<p>currentDelay = (currentDelay * factor).toLong().coerceAtMost(maxDelay)</p>
+<p>}</p>
+<p>}</p>
+<p>return block() // 最后一次尝试</p>
+<p>}</code></pre></p>
+<h2>常见陷阱</h2>
+<div class="warning-box">
+<p><strong>陷阱 1：在挂起函数中阻塞线程</strong><br></p>
+<p><code>Thread.sleep()</code> 会阻塞线程，应该使用 <code>delay()</code></p>
+</div>
+<div class="warning-box">
+<p><strong>陷阱 2：忘记处理异常</strong><br></p>
+<p><code>launch</code> 中的异常会被吞掉，需要用 <code>try-catch</code> 或 <code>CoroutineExceptionHandler</code></p>
+</div>
+<div class="warning-box">
+<p><strong>陷阱 3：滥用 GlobalScope</strong><br></p>
+<p><code>GlobalScope</code> 没有生命周期管理，容易导致内存泄漏，应该使用 <code>viewModelScope</code> 或自定义作用域</p>
+</div>
+<div class="warning-box">
+<p><strong>陷阱 4：在主线程执行 IO 操作</strong><br></p>
+<p>即使使用协程，也要用 <code>withContext(Dispatchers.IO)</code> 切换线程</p>
+</div>
+<h2>实战案例</h2>
+<h3>Android ViewModel 中的协程</h3>
+<pre><code>class UserViewModel(
+<p>private val userRepository: UserRepository</p>
+<p>) : ViewModel() {</p>
+<p>private val _uiState = MutableStateFlow&lt;UiState&lt;User>>(UiState.Loading)</p>
+<p>val uiState: StateFlow&lt;UiState&lt;User>> = _uiState.asStateFlow()</p>
+<p>init {</p>
+<p>loadUser()</p>
+<p>}</p>
+<p>private fun loadUser() {</p>
+<p>viewModelScope.launch {</p>
+<p>_uiState.value = UiState.Loading</p>
+<p>try {</p>
+<p>// 并行加载用户数据和头像</p>
+<p>val (user, avatar) = coroutineScope {</p>
+<p>awaitAll(</p>
+<p>async { userRepository.getUser() },</p>
+<p>async { userRepository.getAvatar() }</p>
+<p>)</p>
+<p>}</p>
+<p>_uiState.value = UiState.Success(user.copy(avatar = avatar))</p>
+<p>} catch (e: Exception) {</p>
+<p>_uiState.value = UiState.Error(e.message ?: "Unknown error")</p>
+<p>}</p>
+<p>}</p>
+<p>}</p>
+<p>}</code></pre></p>
+<h2>性能优化</h2>
+<ul>
+<li><strong>避免过度使用 async</strong>：只有需要并行执行时才用 async，否则用 launch</li>
+<li><strong>合理选择 Dispatcher</strong>：IO 操作别在 Main 线程，CPU 计算别在 IO 线程</li>
+<li><strong>使用 Flow 替代回调</strong>：响应式数据流更适合协程</li>
+<li><strong>避免协程嵌套</strong>：不要在协程中再启动协程</li>
+</ul>
+<h2>总结</h2>
+<p>Kotlin 协程是强大的异步编程工具，但需要正确使用：</p>
+<ul>
+<li>✅ 优先使用挂起函数而非 Deferred</li>
+<li>✅ 使用结构化并发管理生命周期</li>
+<li>✅ 在作用域边界处理异常</li>
+<li>✅ 合理选择 Dispatcher</li>
+<li>✅ 避免 GlobalScope 和线程阻塞</li>
+</ul>
+<div class="tip-box">
+<p><strong>参考资源</strong>：<br></p>
+<p>Kotlin 官方文档：<a href="https://kotlinlang.org/docs/coroutines-overview.html" target="_blank">kotlinlang.org/docs/coroutines</a><br></p>
+<p>Kotlin Coroutines 指南：<a href="https://github.com/Kotlin/kotlinx.coroutines" target="_blank">github.com/Kotlin/kotlinx.coroutines</a></p>
+</div>
 
         <!-- Related Static -->
         <div class="related-posts">
@@ -560,7 +506,7 @@ suspend fun &lt;T> retry(
         <div class="post-info-label">文章信息</div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📅</span> 发布日期</span><span class="post-info-stat-value">2026-04-08</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">⏱️</span> 阅读时间</span><span class="post-info-stat-value">18 min read</span></div>
-        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">1083 字</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">1095 字</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📊</span> 章节数</span><span class="post-info-stat-value">7 节 · 9 子节</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">💻</span> 代码块</span><span class="post-info-stat-value">8 段</span></div>
       </div>

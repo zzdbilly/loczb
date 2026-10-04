@@ -1,0 +1,312 @@
+---
+title: "GitHub Actions 自动索引：我的静态博客 CI/CD 进化之路"
+description: "68篇技术博客的索引更新从手动7文件到CI全量自动重建——聊聊全量vs增量的取舍、HTML解析技巧、RSS日期格式化踩坑，以及为什么应该让CI管索引"
+date: 2026-07-04 13:50:50
+category: DevOps
+tags: ["GitHub Actions", "CI/CD", "DevOps", "自动化"]
+read_time: 5
+slug: github-actions-auto-index-blog-cicd
+---
+
+<h2>为什么手动更新索引是个坑</h2>
+<p>我一直维护着一个 68 篇技术文章的静态博客。每写一篇文章，要手动更新至少 <strong>6 个文件</strong>：首页 index.html、博客列表 blog/index.html、搜索索引 articles-index.json、sitemap.xml、rss.xml、相关文章 related-posts.js。</p>
+<p>这不是我的博客独有的问题——所有静态博客都会遇到。区别在于你是否意识到这已经是个自动化任务。</p>
+<p>之前我的 <code>generate-post.py</code> 脚本虽然能自动完成这些更新，但问题在于：每次改模板、改样式、改索引逻辑，都要回刷全量文章。而且本地脚本和线上部署状态不一致——你在本地更新了 <code>index.html</code>，但如果之后 CI 又覆盖了一次，就出现冲突。</p>
+<h2>问题分解</h2>
+<p>静态博客的索引更新可以分为两类：</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>内容</th>
+<th>依赖</th>
+<th>更新时机</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>文章级</strong></td>
+<td>文章 HTML</td>
+<td>模板 + 内容</td>
+<td>写文章时</td>
+</tr>
+<tr>
+<td><strong>站点级</strong></td>
+<td>首页/列表/RSS/sitemap/搜索索引</td>
+<td>所有文章</td>
+<td>文章变更后</td>
+</tr>
+</tbody>
+</table>
+<p>文章级更新需要本地 markdown → HTML 转换，因为有模板渲染逻辑。</p>
+<p>站点级更新本质上是"把已有的文章列表扫一遍 → 生成对应数据文件"。这完全可以在 CI 里做。</p>
+<h3>数据流设计</h3>
+<p>核心思路很简单：</p>
+<ol>
+<li><strong><code>generate-post.py</code></strong> 只生成文章 HTML + 更新 related-posts.js</li>
+<li><strong><code>generate-index.js</code></strong> 接管所有站点级更新——从 <code>blog/posts/*.html</code> 解析出所有文章元数据，全量重建</li>
+<li><strong>GitHub Actions</strong> 监听 <code>blog/posts/</code> 的 push，自动跑 <code>generate-index.js</code>，提交结果</li>
+</ol>
+<pre><code>本地写文章 → git push → CI 触发:
+  1. node scripts/generate-index.js
+  2. 生成 articles-index.json (搜索索引 + 标签云 + 归档 + 系列)
+  3. 重建 blog/index.html (文章列表 + 分类按钮)
+  4. 更新 index.html (首页大卡 + 最新列表 + JS数组)
+  5. 生成 sitemap.xml + rss.xml
+  6. git commit + push → Pages 自动部署
+</code></pre>
+
+<h2>方案设计</h2>
+<h3>为什么选择全量重建而非增量</h3>
+<p>增量更新的诱惑很大——只改一行，快。但问题很棘手：</p>
+<ul>
+<li>要判断文章是否已存在，需要解析 HTML</li>
+<li>排序逻辑变了怎么办？比如某篇文章改了日期</li>
+<li>模板结构变了怎么办？比如分类按钮从 <code>&lt;select&gt;</code> 换成了 <code>&lt;button&gt;</code> 列表</li>
+<li>删文章怎么办？</li>
+</ul>
+<p>全量重建的好处：</p>
+<ul>
+<li><strong>原子性</strong>：每次 CI 跑完，索引文件一定精确反映当前 <code>blog/posts/</code> 的状态。没有"删了文章但列表还在"的幽灵问题</li>
+<li><strong>幂等性</strong>：同样的输入（<code>blog/posts/</code> 目录），同样的输出（所有索引文件）。不需要"检查是否存在 → 决定 insert/update"的分支逻辑</li>
+<li><strong>可恢复性</strong>：索引文件坏了？<code>rm index.html sitemap.xml &amp;&amp; node generate-index.js</code> 就恢复了</li>
+<li><strong>一致性</strong>：删文章、改日期、换分类——任何变更都不会产生幽灵数据</li>
+</ul>
+<p>增量更新需要维护状态（"这篇文章在 index 的第几行？"），而状态维护本身就是 bug 的来源。全量重建没有状态。</p>
+<p>而且 68 篇文章的全量重建在 CI 上只需要 <strong>不到 1 秒</strong>。完全没有性能压力。</p>
+<h2>generate-index.js 实现</h2>
+<p>核心逻辑非常直白：</p>
+<pre><code>// Phase 1: 扫描所有文章，解析元数据
+const files = fs.readdirSync(POSTS_DIR).filter(f =&gt; f.endsWith(&#39;.html&#39;));
+const posts = files.map(file =&gt; {
+  const content = fs.readFileSync(path.join(POSTS_DIR, file), &#39;utf-8&#39;);
+  const titleMatch = content.match(/&lt;title&gt;([^&lt;]+)&lt;\/title&gt;/);
+  // ... 从 HTML 中提取 title/date/tags/category/excerpt
+  return { slug, title, date, category, tags, excerpt, readTime, url };
+});
+
+// Phase 2-6: 写入各种输出文件
+rebuildBlogIndex(posts);   // blog/index.html
+rebuildHomePage(posts);    // index.html
+generateSitemap(posts);    // sitemap.xml
+generateRSS(posts);        // rss.xml
+// articles-index.json 在 Phase 1 排序后直接写入
+</code></pre>
+
+<p>整个脚本不到 250 行，纯 Node.js 无外部依赖。CI 上不需要 <code>npm install</code>。</p>
+<h3>解析 HTML 的元数据提取</h3>
+<p>从 HTML 中提取元数据用正则：</p>
+<pre><code>// 日期: &lt;span&gt;&lt;span>📅 2026-07-04&lt;/span>&lt;/span&gt;
+const dateMatch = content.match(/&lt;span&gt;📅 (\d{4}-\d{1,2}-\d{1,2})&lt;\/span&gt;/);
+
+// 标签: &lt;span class=&quot;tag&quot;&gt;Android&lt;/span&gt;
+const tagMatches = content.match(/&lt;span class=&quot;tag&quot;&gt;([^&lt;]+)&lt;\/span&gt;/g);
+
+// 分类: &lt;span class=&quot;category-tag&quot;&gt;前端&lt;/span&gt;
+const catMatch = content.match(/&lt;span class=&quot;category-tag&quot;[^&gt;]*&gt;([^&lt;]+)&lt;\/span&gt;/);
+
+// 描述: &lt;meta name=&quot;description&quot; content=&quot;...&quot;&gt;
+const descMatch = content.match(/&lt;meta name=&quot;description&quot; content=&quot;([^&quot;]+)&quot;/);
+</code></pre>
+
+<p>这种"数据在 HTML 里"的模式其实很适合静态博客——HTML 就是唯一的真相源。不需要额外的 frontmatter 或数据库。</p>
+<h3>处理排序的边界情况</h3>
+<p>排序规则：按日期降序，同日文章按 <code>blog/index.html</code> 原有顺序。</p>
+<pre><code>// 先构建&quot;原顺序&quot;映射
+const htmlOrder = {};
+let orderIdx = 0;
+const linkRegex = /href=&quot;posts\/([^&quot;&#39;]+\.html)&quot;/g;
+while ((match = linkRegex.exec(blogIndexContent)) !== null) {
+  if (!(match[1] in htmlOrder)) htmlOrder[match[1]] = orderIdx++;
+}
+
+// 排序
+posts.sort((a, b) =&gt; {
+  const dateDiff = new Date(b.date) - new Date(a.date);
+  if (dateDiff !== 0) return dateDiff;
+  return (htmlOrder[a.slug + &#39;.html&#39;] ?? 9999) - (htmlOrder[b.slug + &#39;.html&#39;] ?? 9999);
+});
+</code></pre>
+
+<p>第一次跑的时候 <code>blog/index.html</code> 是旧的，排出来的顺序和旧的一致。第二次跑的时候 <code>blog/index.html</code> 已更新，所以同日的顺序会稳定下来。</p>
+<h3>RSS 日期格式化的坑</h3>
+<p>RSS 规范要求 RFC 822 格式：<code>Sat, 04 Jul 2026 00:00:00 +0800</code>。</p>
+<p>JavaScript 处理日期的坑不少。我踩了一个：</p>
+<pre><code>// ❌ 错误：Date 解析带时区的 ISO 字符串时有偏移
+new Date(&#39;2026-07-04T00:00:00+08:00&#39;).getUTCDay() // → 5 (Fri)
+                                                      // 因为 2026-07-04 00:00+08
+                                                      // = 2026-07-03 16:00 UTC
+
+// ✅ 正确：用本地时间构造函数
+const [y, m, d] = &#39;2026-07-04&#39;.split(&#39;-&#39;).map(Number);
+const localDate = new Date(y, m - 1, d);
+localDate.getDay() // → 6 (Sat)
+</code></pre>
+
+<h3>GitHub Actions workflow 配置</h3>
+<pre><code>name: Update Blog Index &amp; Cache Hash
+on:
+  push:
+    branches: [main]
+    paths:
+      - &#39;blog/posts/**&#39;
+jobs:
+  update-index:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write    # ← 关键：允许提交回仓库
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: &#39;20&#39;
+      - name: Generate blog index
+        run: node scripts/generate-index.js
+      - name: Update cache-busting hashes
+        run: node -e &#39;...&#39;  # 计算 CSS/JS 的 MD5 hash
+      - name: Commit and Push
+        run: |
+          git config user.email &quot;github-actions[bot]@users.noreply.github.com&quot;
+          git config user.name &quot;github-actions[bot]&quot;
+          git add -A
+          git diff --staged --quiet || git commit -m &quot;chore: auto-update blog index &amp; cache hashes&quot;
+          git push
+</code></pre>
+
+<p>关键是 <code>permissions: contents: write</code>——允许 CI 提交回仓库。</p>
+<p>另一个要点：<code>GITHUB_TOKEN</code> 的提交<strong>不会再次触发 workflow</strong>。这避免了"提交 → CI → 提交 → CI → ..."的死循环。</p>
+<h3>缓存哈希自动更新</h3>
+<p>CI workflow 还有个重要的副作用：自动更新 CSS/JS 的缓存版本号。</p>
+<pre><code>// CI 中的缓存哈希更新逻辑
+function updateHtmlFile(htmlPath) {
+  let html = fs.readFileSync(htmlPath, &#39;utf-8&#39;);
+  html = html.replace(/(assets\/(?:css|js)\/[^&quot;?]+)\?v=[a-f0-9]+/g, (match, assetPath) =&gt; {
+    const hash = crypto.createHash(&#39;md5&#39;)
+      .update(fs.readFileSync(assetPath))
+      .digest(&#39;hex&#39;).slice(0, 8);
+    return assetPath + &#39;?v=&#39; + hash;
+  });
+  fs.writeFileSync(htmlPath, html);
+}
+</code></pre>
+
+<p>每次 CSS/JS 内容变化，引用它们的 HTML 文件中的 <code>?v=xxx</code> 会自动更新，确保访客拿到的是最新版本。之前这个也要手动改或靠 Python 脚本处理。</p>
+<h3>模板与索引的解耦</h3>
+<p>模板（<code>blog-post-template.html</code>）决定文章的视觉呈现，索引（<code>index.html</code> / <code>sitemap.xml</code> 等）决定文章的发现路径。</p>
+<p>这两者原本就是独立的变化维度：</p>
+<ul>
+<li>改样式：只影响所有文章的 HTML 生成，索引结构不变</li>
+<li>改索引逻辑：只影响站点级文件的生成方式，文章内容不变</li>
+<li>发新文章：既需要新文章 HTML，也需要更新索引</li>
+</ul>
+<p>在旧的 "generate-post.py 一把梭" 模式下，这三个操作都混在一起。改模板后必须用 <code>refresh-posts.py</code> 回刷所有文章，但 <code>generate-post.py</code> 会再次修改 index.html——产生不必要的 diff。</p>
+<p>解耦后：</p>
+<pre><code>模板变更: refresh-posts.py (只改文章) → generate-index.js (CI 改索引)
+                            └──── 两个步骤，互不干扰 ────┘
+</code></pre>
+
+<h2>前后对比</h2>
+<h3>变更量对比</h3>
+<table>
+<thead>
+<tr>
+<th>操作</th>
+<th>改前</th>
+<th>改后</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>写一篇新文章</td>
+<td>修改 7 个文件</td>
+<td>修改 2 个文件</td>
+</tr>
+<tr>
+<td>git diff 行数</td>
+<td>200+ 行</td>
+<td>文章本身的行数</td>
+</tr>
+<tr>
+<td>可能的人为错误</td>
+<td>高（手动改 HTML，忘了更新某文件）</td>
+<td>无</td>
+</tr>
+<tr>
+<td>回滚复杂度</td>
+<td>多个文件各自回滚</td>
+<td>只回滚文章 HTML</td>
+</tr>
+</tbody>
+</table>
+<h3>流程对比</h3>
+<p><strong>改前</strong>（写一篇文章的完整流程）：</p>
+<pre><code># 1. 生成文章
+python3 scripts/generate-post.py &quot;标题&quot; &quot;描述&quot; --tags &quot;标签&quot; --category 分类 --content article.md
+# 这一步修改了：文章HTML、首页、列表、sitemap、rss、articles-index.json、related-posts.js
+
+# 2. 手动检查（容易遗漏）
+grep &quot;标题&quot; index.html blog/index.html  # 确认首页和列表已更新
+grep &quot;标题&quot; sitemap.xml rss.xml         # 确认 sitemap 和 RSS
+
+# 3. git diff 里一堆&quot;自动化改动&quot;
+git status
+# modified: blog/posts/xxx.html
+# modified: index.html
+# modified: blog/index.html
+# modified: sitemap.xml
+# modified: rss.xml
+# modified: blog/articles-index.json
+# modified: assets/js/related-posts.js
+
+# 4. 提交（commit message 很难写清楚）
+git add -A &amp;&amp; git commit -m &quot;new post: xxx&quot; &amp;&amp; git push
+</code></pre>
+
+<p><strong>改后</strong>：</p>
+<pre><code># 1. 生成文章
+python3 scripts/generate-post.py &quot;标题&quot; &quot;描述&quot; --tags &quot;标签&quot; --category 分类 --content article.md
+# 只修改：文章HTML、related-posts.js
+
+# 2. 直接提交
+git add blog/posts/ assets/js/related-posts.js
+git commit -m &quot;new post: xxx&quot;
+git push
+
+# 3. CI 自动搞定剩下的，30秒后页面生效
+</code></pre>
+
+<p><code>git diff</code> 再也不会超过文章内容本身的长度了。</p>
+<h3>速度</h3>
+<p>CI 全量重建耗时 &lt; 5 秒（含 npm install）。实际上 <code>generate-index.js</code> 无外部依赖，去掉 <code>npm install</code> 后 &lt; 2 秒。</p>
+<p>本地感知的差异：<strong>从 push 到页面生效，前后没有区别</strong>（都是等 Pages 部署）。但本地操作简洁了很多——不用在 git diff 里翻找真正的改动。</p>
+<h2>还解决了什么附带问题</h2>
+<h3>模板变更后的回刷不再冲突</h3>
+<p>之前改一次模板，需要用 <code>scripts/refresh-posts.py</code> 回刷所有旧文章，再手动执行 <code>generate-index.js</code> 更新索引。步骤多且容易漏。</p>
+<p>现在：改模板 → 回刷文章 → <code>node scripts/generate-index.js</code> → push。CI 不会再产生额外冲突，因为它做的和你本地做的一模一样。</p>
+<h3>幽灵文章问题不复存在</h3>
+<p>删了 <code>blog/posts/xxx.html</code> 但忘了从列表/filter/sitemap/RSS 里删掉？不会再有了——<code>generate-index.js</code> 扫描的是 <code>blog/posts/</code> 目录，删了文件就自动消失。</p>
+<h3>多设备协作的冲突消除</h3>
+<p>以前在另一台电脑上改了文章，push 回来后本地的 index.html 没更新就出现冲突。现在不会有这个问题——索引文件永远只在 CI 端生成。</p>
+<p>本地工作副本里 <code>index.html</code> / <code>blog/index.html</code> / <code>sitemap.xml</code> / <code>rss.xml</code> 完全可以不关心，因为它们在任何设备上都是一样的内容（由 CI 决定）。</p>
+<h3>调试效率提升</h3>
+<p>以前想排查"为什么这篇文章没出现在博客列表"，要翻 <code>generate-post.py</code> 里的 <code>update_blog_list</code> 函数，看它是否检测到文章已存在、排序是否正确、是否触发了某个边界条件。代码路径长且散落在 Python 文件中。</p>
+<p>现在只要看 <code>generate-index.js</code> 里的排序逻辑——因为它是全量重建，输入确定，输出就确定。出错了直接跑本地 <code>node generate-index.js</code>，看哪一步出了问题。</p>
+<h2>适用场景</h2>
+<p>这个方案适合：</p>
+<ul>
+<li>静态博客 / SSG（Jekyll / Hugo / Hexo 原理）</li>
+<li>文章数 100-1000 篇（全量重建 &lt; 1s）</li>
+<li>有 GitHub Pages / Vercel / Netlify 部署</li>
+</ul>
+<p>不适合：</p>
+<ul>
+<li>文章数 &gt; 10,000 篇（全量重建可能超过 CI 时间限制）</li>
+<li>需要即时生效的场景（Pages 部署有 30-60 秒延迟）</li>
+<li>多人同时编辑同一篇文章（CI 提交可能冲突）</li>
+</ul>
+<h2>总结</h2>
+<p>把站点级索引生成从本地脚本迁移到 CI，是一个"做减法"的优化。每次写文章少改 5 个文件，少看 100 行 git diff，少担心漏了哪个索引。</p>
+<p>核心原则：<strong>文章 HTML 是唯一真相源</strong>，所有索引都是衍生数据。衍生数据的生成应该是确定性的、可重复的、自动的。</p>
+<p>代码在 GitHub：https://github.com/zzdbilly/loczb</p>
+<hr />
+<p><em>如果你也在维护静态博客，不妨试试把索引生成放入 CI。这可能是你今年做的性价比最高的自动化。</em></p>

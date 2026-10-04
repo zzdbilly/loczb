@@ -1,0 +1,775 @@
+---
+title: "Gradle 构建加速实操：我从 5 分钟做到 30 秒"
+description: "系统梳理 Gradle 构建加速的完整方法论——配置调优、KAPT迁移KSP、增量编译、模块化拆分、远程缓存、CI优化，附真实项目优化案例，构建时间减少85%"
+date: 2026-07-02 11:12:53
+category: Android
+tags: ["Gradle", "Android", "构建优化", "性能优化"]
+read_time: 5
+slug: gradle-build-acceleration-5min-to-30sec
+---
+
+<blockquote>
+<p>"等构建"是 Android 开发者最浪费时间的事情之一。一个中型项目，冷构建动辄 3-5 分钟，热构建也要 30 秒以上，一天下来光等构建就消耗半小时。本文系统梳理 Gradle 构建加速的完整方法论——从配置调优到架构改造，从本地缓存到远程缓存，手把手带你把构建时间压缩到极致。</p>
+</blockquote>
+<hr />
+<h2>先诊断，再优化</h2>
+<p>盲目加配置不会让构建变快，反而可能引入新问题。优化第一步：<strong>搞清楚时间花在哪了</strong>。</p>
+<h3>开启 Build Scan</h3>
+<p>Gradle 官方的 Build Scan 是最权威的诊断工具：</p>
+<pre><code>// settings.gradle.kts
+plugins {
+    id(&quot;com.gradle.enterprise&quot;) version &quot;3.18&quot;
+}
+
+gradleEnterprise {
+    buildScan {
+        termsOfServiceUrl = &quot;https://gradle.com/terms-of-service&quot;
+        termsOfServiceAgree = &quot;yes&quot;
+        publishAlways()  // 每次构建都生成 scan
+    }
+}
+</code></pre>
+
+<p>构建后会在终端输出一个链接，打开后可以看到：</p>
+<ul>
+<li>每个任务的执行时间</li>
+<li>任务依赖关系图</li>
+<li>临界路径（Critical Path）</li>
+<li>哪些任务可以并行但没有并行</li>
+</ul>
+<h3>使用 --profile 本地分析</h3>
+<p>不想上传数据到 Gradle 服务器？用本地 profile：</p>
+<pre><code>./gradlew assembleDebug --profile
+</code></pre>
+
+<p>构建结束后在 <code>build/reports/profile/</code> 下生成 HTML 报告，包含：</p>
+<ul>
+<li>任务执行时间排序</li>
+<li>依赖解析耗时</li>
+<li>配置阶段耗时</li>
+</ul>
+<h3>用 --scan 定位慢任务</h3>
+<pre><code># 精确定位哪个任务慢
+./gradlew assembleDebug --scan
+
+# 只看特定模块的构建时间
+./gradlew :app:assembleDebug --profile
+</code></pre>
+
+<h3>典型的时间分布</h3>
+<p>一个中型 Android 项目的构建时间通常这样分布：</p>
+<pre><code>配置阶段 (Configuration):    15-20%  → 解析所有 build.gradle
+依赖解析 (Resolution):       10-15%  → 下载和解析依赖
+注解处理 (Annotation Proc):  20-30%  → KSP/KAPT、Room、Hilt 等
+编译 (Compilation):          25-35%  → Kotlin/Java 编译
+Dex/R8:                     10-15%  → 字节码转换和优化
+其他 (Resources/Assets):      5-10%  → 资源处理、打包
+</code></pre>
+
+<p>优化策略要针对最大头下手。下面按收益从高到低排列。</p>
+<hr />
+<h2>基础配置优化：零成本提速</h2>
+<p>这些改动不需要改代码，不需要改架构，只需要调整 Gradle 配置。但效果可能出乎意料。</p>
+<h3>开启 Gradle 配置缓存</h3>
+<p>配置缓存（Configuration Cache）是 Gradle 7.x 引入的重磅特性：<strong>缓存配置阶段的结果，下次构建直接复用，跳过整个配置阶段。</strong></p>
+<pre><code>// gradle.properties
+org.gradle.configuration-cache=true
+org.gradle.configuration-cache.problems=warn  // 先 warn，确保兼容后再改 fail
+</code></pre>
+
+<p>效果：<strong>冷构建配置阶段从 10-15 秒降到 1 秒以内</strong>。</p>
+<p>但有一个前提：你的构建脚本必须是配置缓存兼容的。常见不兼容的情况：</p>
+<pre><code>// ❌ 不兼容：在配置阶段访问 Project 实例
+tasks.register(&quot;myTask&quot;) {
+    val project = project  // 配置缓存不允许
+    doLast { println(project.name) }
+}
+
+// ✅ 兼容：通过 Provider 传递
+tasks.register(&quot;myTask&quot;) {
+    val projectName = providers.gradleProperty(&quot;projectName&quot;)
+    doLast { println(projectName.get()) }
+}
+</code></pre>
+
+<h3>开启并行构建</h3>
+<pre><code># gradle.properties
+org.gradle.parallel=true        # 允许不同子项目并行构建
+org.gradle.workers.max=8        # 最大工作线程数（通常设为 CPU 核心数）
+</code></pre>
+
+<p>默认情况下 Gradle 是串行构建子项目的。开启并行后，没有依赖关系的模块可以同时编译。</p>
+<p>效果：<strong>多模块项目构建时间减少 20-40%</strong>。</p>
+<h3>增大 Gradle 堆内存</h3>
+<pre><code># gradle.properties
+org.gradle.jvmargs=-Xmx4g -XX:+UseParallelGC -XX:+HeapDumpOnOutOfMemoryError
+</code></pre>
+
+<p>关键参数：</p>
+<ul>
+<li><code>-Xmx4g</code>：给 Gradle daemon 分配 4GB 堆内存（根据机器内存调整，建议不低于 2GB）</li>
+<li><code>-XX:+UseParallelGC</code>：使用并行 GC，降低 GC 暂停</li>
+<li><code>-XX:+HeapDumpOnOutOfMemoryError</code>：OOM 时 dump，方便排查</li>
+</ul>
+<h3>开启构建缓存</h3>
+<pre><code># gradle.properties
+org.gradle.caching=true
+</code></pre>
+
+<p>或在命令行：</p>
+<pre><code>./gradlew assembleDebug --build-cache
+</code></pre>
+
+<p>构建缓存会复用之前相同输入的 task 输出。切换分支后再构建时，没改动的模块直接从缓存取结果。</p>
+<h3>完整的 gradle.properties 优化模板</h3>
+<pre><code># === JVM 配置 ===
+org.gradle.jvmargs=-Xmx4g -XX:+UseParallelGC -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8
+
+# === 并行与缓存 ===
+org.gradle.parallel=true
+org.gradle.caching=true
+org.gradle.configuration-cache=true
+org.gradle.configuration-cache.problems=warn
+
+# === Daemon ===
+org.gradle.daemon=true          # 确保 daemon 开启（默认就是 true）
+
+# === Android 特定 ===
+android.useAndroidX=true
+android.nonTransitiveRClass=true   # 非传递 R 类，减少 R 类体积
+
+# === Kotlin ===
+kotlin.incremental=true            # Kotlin 增量编译（默认 true）
+kotlin.incremental.java=true       # Java 变更也触发增量编译
+kotlin.caching.enabled=true
+
+# === 调试 ===
+# org.gradle.debug=true           # 只在需要调试时开启
+# org.gradle.logging.level=debug  # 太多日志反而慢
+</code></pre>
+
+<hr />
+<h2>依赖优化：砍掉看不见的拖累</h2>
+<h3>检测未使用的依赖</h3>
+<p>依赖越多，解析越慢，编译也越慢（传递依赖会参与编译 classpath）。</p>
+<pre><code># 使用 gradle-dependency-analyze 插件
+./gradlew :app:analyzeDependencies
+</code></pre>
+
+<pre><code>// build.gradle.kts
+plugins {
+    id(&quot;ca.neitsch.dependencyanalyze&quot;) version &quot;1.7.0&quot;
+}
+</code></pre>
+
+<p>手动排查：</p>
+<pre><code># 查看依赖树，找出异常大的传递依赖
+./gradlew :app:dependencies --configuration debugRuntimeClasspath | grep &quot;→&quot;
+
+# 查看编译期依赖（这个最影响构建速度）
+./gradlew :app:dependencies --configuration debugCompileClasspath
+</code></pre>
+
+<h3>排除不必要的传递依赖</h3>
+<pre><code>// ❌ 引入了一堆不需要的传递依赖
+implementation(&quot;com.squareup.retrofit2:retrofit:2.11.0&quot;)
+
+// ✅ 精确控制
+implementation(&quot;com.squareup.retrofit2:retrofit:2.11.0&quot;) {
+    // 排除不需要的模块
+    exclude(group = &quot;com.squareup.okhttp3&quot;, module = &quot;okhttp&quot;)
+}
+// 单独引入需要的版本
+implementation(&quot;com.squareup.okhttp3:okhttp:4.12.0&quot;)
+</code></pre>
+
+<h3>使用 compileOnly 替代 implementation</h3>
+<p>如果一个依赖只在编译期使用（运行时由其他途径提供），用 <code>compileOnly</code>：</p>
+<pre><code>// Lombok 只在编译期用
+compileOnly(&quot;org.projectlombok:lombok:1.18.34&quot;)
+annotationProcessor(&quot;org.projectlombok:lombok:1.18.34&quot;)
+
+// 注解只在编译期用
+compileOnly(&quot;javax.annotation:javax.annotation-api:1.3.2&quot;)
+</code></pre>
+
+<p><code>compileOnly</code> 的依赖不会进入运行时 classpath，减少 dex 工作量。</p>
+<h3>统一依赖版本，避免冲突解析</h3>
+<p>版本冲突会让 Gradle 花大量时间解析该用哪个版本：</p>
+<pre><code>// versionCatalog 统一管理（推荐）
+// gradle/libs.versions.toml
+[versions]
+kotlin = &quot;2.0.21&quot;
+compose-bom = &quot;2024.12.01&quot;
+
+[libraries]
+kotlin-stdlib = { module = &quot;org.jetbrains.kotlin:kotlin-stdlib&quot;, version.ref = &quot;kotlin&quot; }
+compose-bom = { module = &quot;androidx.compose:compose-bom&quot;, version.ref = &quot;compose-bom&quot; }
+
+# 使用
+dependencies {
+    implementation(libs.kotlin.stdlib)
+    implementation(platform(libs.compose.bom))
+}
+</code></pre>
+
+<hr />
+<h2>KAPT → KSP：注解处理的质变</h2>
+<h3>KAPT 为什么慢</h3>
+<p>KAPT（Kotlin Annotation Processing Tool）的工作流程：</p>
+<pre><code>Kotlin 源码 → 生成 Java 存根（Stub）→ Java 注解处理器处理 → 生成代码 → Kotlin 编译器编译
+                 ↑ 这是瓶颈！
+</code></pre>
+
+<p>KAPT 必须先把 Kotlin 代码转成 Java 存根，才能让基于 Java 的注解处理器工作。这个"翻译"过程非常慢，而且不支持增量编译。</p>
+<h3>KSP 的优势</h3>
+<p>KSP（Kotlin Symbol Processing）直接在 Kotlin 编译器上运行：</p>
+<pre><code>Kotlin 源码 → KSP 直接解析 Kotlin AST → 生成代码 → Kotlin 编译器编译
+</code></pre>
+
+<ul>
+<li><strong>不需要生成 Java 存根</strong></li>
+<li><strong>支持增量处理</strong></li>
+<li><strong>速度通常是 KAPT 的 2 倍以上</strong></li>
+</ul>
+<h3>迁移步骤</h3>
+<pre><code>// 1. 替换插件
+// 旧：kotlin(&quot;kapt&quot;)
+// 新：
+plugins {
+    id(&quot;com.google.devtools.ksp&quot;) version &quot;2.0.21-1.0.28&quot;
+}
+
+// 2. 替换依赖声明
+// 旧：kapt(&quot;com.google.dagger:hilt-compiler:2.51.1&quot;)
+// 新：
+ksp(&quot;com.google.dagger:hilt-compiler:2.51.1&quot;)
+
+// 3. 移除 kapt 配置
+// 删除 kapt { ... } 块
+</code></pre>
+
+<h3>已支持 KSP 的主流库</h3>
+<table>
+<thead>
+<tr>
+<th>库</th>
+<th>KSP 支持</th>
+<th>迁移难度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Room</td>
+<td>✅ 2.4+</td>
+<td>简单</td>
+</tr>
+<tr>
+<td>Hilt/Dagger</td>
+<td>✅ 2.48+</td>
+<td>简单</td>
+</tr>
+<tr>
+<td>Moshi</td>
+<td>✅ 简单</td>
+<td>简单</td>
+</tr>
+<tr>
+<td>Epoxy</td>
+<td>✅ 5.0+</td>
+<td>中等</td>
+</tr>
+<tr>
+<td>Glide</td>
+<td>✅ 4.16+</td>
+<td>简单</td>
+</tr>
+<tr>
+<td>Lombok</td>
+<td>❌ 不支持</td>
+<td>无法迁移（换掉 Lombok）</td>
+</tr>
+</tbody>
+</table>
+<h3>实测效果</h3>
+<pre><code>项目：~50 个模块，Room + Hilt + Moshi
+
+KAPT 冷构建：3 分 12 秒
+KSP  冷构建：1 分 48 秒  (-44%)
+
+KAPT 增量：42 秒
+KSP  增量：18 秒  (-57%)
+</code></pre>
+
+<p><strong>如果只能做一件事，就从 KAPT 迁移到 KSP。</strong></p>
+<hr />
+<h2>增量编译：只编译改动的部分</h2>
+<h3>Kotlin 增量编译</h3>
+<p>Kotlin 增量编译默认开启，但有些操作会触发全量编译：</p>
+<pre><code># gradle.properties（确认开启）
+kotlin.incremental=true
+kotlin.incremental.java=true
+kotlin.incremental.js=true       # KMP 项目
+</code></pre>
+
+<p><strong>会破坏增量编译的操作</strong>：</p>
+<ol>
+<li>修改 build.gradle.kts 中的编译选项</li>
+<li>修改依赖版本</li>
+<li>修改 Kotlin 编译器插件配置</li>
+<li>修改注解处理器的输入/输出</li>
+</ol>
+<h3>Kotlin 增量编译的"classpath snapshot"</h3>
+<p>Gradle 8.x + Kotlin 2.x 使用新的增量编译机制：</p>
+<pre><code>旧机制：比较源文件的修改时间
+新机制：比较编译产物的 ABI（Application Binary Interface）
+
+好处：改了内部实现但没改 ABI → 下游模块不需要重新编译
+</code></pre>
+
+<pre><code>// build.gradle.kts
+tasks.withType&lt;org.jetbrains.kotlin.gradle.tasks.KotlinCompile&gt;().configureEach {
+    compilerOptions {
+        // 开启 ABI 增量（Gradle 8.2+ 默认开启）
+        freeCompilerArgs.add(&quot;-Xabi-gen&quot;)
+    }
+}
+</code></pre>
+
+<h3>资源增量编译</h3>
+<p>Android 资源处理也有增量支持：</p>
+<pre><code>// build.gradle.kts (app)
+android {
+    buildFeatures {
+        // 减少资源合并时间
+        renderScript = false    // 不用就关掉
+        aidl = false            // 不用就关掉
+        buildConfig = true      // 需要就保留
+    }
+}
+</code></pre>
+
+<hr />
+<h2>模块化：构建加速的架构级方案</h2>
+<h3>为什么模块化能加速构建</h3>
+<p>单模块项目：改一行代码，整个项目重新编译。</p>
+<p>多模块项目：改一个模块的代码，只重新编译该模块 + 依赖它的模块。</p>
+<pre><code>单模块：
+app (2000 文件) → 改 1 个文件 → 编译 2000 文件
+
+多模块：
+:core    (200 文件)
+:feature-a (300 文件)  ← 改了这里
+:feature-b (300 文件)  ← 不需要重新编译
+:app      (200 文件)   ← 只重新编译 :feature-a 和 :app
+</code></pre>
+
+<h3>模块化的正确姿势</h3>
+<p><strong>按功能拆分，不要按层拆分</strong>：</p>
+<pre><code>❌ 按层拆分（变化时多模块同时改）：
+:data
+:domain
+:presentation
+
+✅ 按功能拆分（变化时只改一个模块）：
+:feature:login
+:feature:home
+:feature:profile
+:core:network
+:core:database
+</code></pre>
+
+<h3>避免循环依赖</h3>
+<p>循环依赖会导致 Gradle 无法确定构建顺序，丧失并行构建的优势：</p>
+<pre><code>// ❌ 循环依赖
+:feature-a → :feature-b → :feature-a
+
+// ✅ 提取公共模块
+:feature-a → :core:common ← :feature-b
+</code></pre>
+
+<p>检测循环依赖：</p>
+<pre><code>./gradlew :app:dependencies --configuration debugRuntimeClasspath | grep &quot;↳&quot;
+</code></pre>
+
+<h3>API 模块 vs Implementation 模块</h3>
+<pre><code>// :core:network 对外暴露的接口
+// :core:network-api 模块（只有接口，没有实现）
+dependencies {
+    api(project(&quot;:core:network-api&quot;))      // 对外暴露
+    implementation(project(&quot;:core:network-impl&quot;))  // 内部实现
+}
+</code></pre>
+
+<p>这样依赖 :core:network-api 的模块不需要因为网络实现变了而重新编译。</p>
+<hr />
+<h2>远程构建缓存：团队级加速</h2>
+<h3>搭建远程缓存</h3>
+<p>远程缓存让整个团队共享构建产物——你构建过的模块，同事直接下载，不用重新编译。</p>
+<h4>方案一：Gradle Build Cache Node</h4>
+<pre><code>// settings.gradle.kts
+buildCache {
+    local {
+        directory = File(rootDir, &quot;.gradle/build-cache&quot;)
+        removeUnusedEntriesAfterDays = 30
+    }
+    remote&lt;HttpBuildCache&gt; {
+        url = uri(&quot;https://cache.example.com/cache/&quot;)
+        push = System.getenv(&quot;CI&quot;) == &quot;true&quot;  // CI 推送，开发者只拉取
+        credentials {
+            username = System.getenv(&quot;CACHE_USER&quot;)
+            password = System.getenv(&quot;CACHE_PASSWORD&quot;)
+        }
+    }
+}
+</code></pre>
+
+<h4>方案二：S3 作为缓存后端</h4>
+<pre><code>remote&lt;HttpBuildCache&gt; {
+    url = uri(&quot;https://your-bucket.s3.amazonaws.com/cache/&quot;)
+    push = System.getenv(&quot;CI&quot;) == &quot;true&quot;
+}
+</code></pre>
+
+<h4>方案三：自建 Gradle Enterprise</h4>
+<p>企业级方案，包含 Build Scan + 远程缓存 + 预测性测试选择：</p>
+<pre><code>Gradle Enterprise
+├── Build Cache (远程缓存)
+├── Build Scan (构建分析)
+├── Test Distribution (测试分发)
+└── Predictive Test Selection (智能测试选择)
+</code></pre>
+
+<h3>缓存命中率优化</h3>
+<p>远程缓存只有命中才有用。影响命中率的因素：</p>
+<table>
+<thead>
+<tr>
+<th>因素</th>
+<th>说明</th>
+<th>优化</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>任务输入不稳定</td>
+<td>包含时间戳、随机数的输入</td>
+<td>固定输入，排除不稳定字段</td>
+</tr>
+<tr>
+<td>绝对路径</td>
+<td>不同机器路径不同</td>
+<td>使用相对路径</td>
+</tr>
+<tr>
+<td>环境变量</td>
+<td>不同机器环境不同</td>
+<td>用 <code>@Input</code> 声明关键环境变量</td>
+</tr>
+<tr>
+<td>原生代码</td>
+<td>不同 CPU 架构产物不同</td>
+<td>分架构缓存</td>
+</tr>
+</tbody>
+</table>
+<pre><code>// 自定义 Task 的缓存键
+abstract class GenerateProtoTask : DefaultTask() {
+    @get:InputFile
+    @get:PathSensitive(PathSensitivity.RELATIVE)  // 用相对路径
+    abstract val protoFile: RegularFileProperty
+
+    @get:Input
+    abstract val version: Property&lt;String&gt;  // 声明版本为输入
+
+    @get:OutputDirectory
+    abstract val outputDir: DirectoryProperty
+
+    @TaskAction
+    fun generate() {
+        // ...
+    }
+}
+</code></pre>
+
+<hr />
+<h2>CI 构建优化</h2>
+<p>CI 环境的构建优化和本地不同——CI 每次都是干净的，没有增量编译的优势。</p>
+<h3>分阶段构建</h3>
+<pre><code># GitHub Actions 示例
+jobs:
+  build:
+    steps:
+      # 1. 只编译，不打包 APK
+      - name: Compile
+        run: ./gradlew compileDebugKotlin --build-cache
+
+      # 2. 单元测试（可以和编译并行）
+      - name: Unit Test
+        run: ./gradlew testDebugUnitTest --build-cache
+
+      # 3. 打包 APK（只在需要时执行）
+      - name: Assemble
+        if: github.ref == &#39;refs/heads/main&#39;
+        run: ./gradlew assembleDebug --build-cache
+</code></pre>
+
+<h3>缓存 Gradle 依赖和构建缓存</h3>
+<pre><code># GitHub Actions
+- uses: actions/cache@v4
+  with:
+    path: |
+      ~/.gradle/caches
+      ~/.gradle/wrapper
+      .gradle/build-cache
+    key: gradle-${{ hashFiles(&#39;**/*.gradle.kts&#39;, &#39;gradle/libs.versions.toml&#39;) }}
+    restore-keys: |
+      gradle-
+</code></pre>
+
+<h3>只构建变更的模块</h3>
+<pre><code># 只构建变更影响的模块
+CHANGED_MODULES=$(git diff --name-only origin/main...HEAD | \
+  grep -oP &#39;^\K[^/]+&#39; | sort -u | \
+  awk &#39;{print &quot;:&quot;$1&quot;:compileDebugKotlin&quot;}&#39; | tr &#39;\n&#39; &#39; &#39;)
+
+if [ -n &quot;$CHANGED_MODULES&quot; ]; then
+  ./gradlew $CHANGED_MODULES
+fi
+</code></pre>
+
+<h3>分布式测试执行</h3>
+<pre><code>// Gradle Enterprise 的预测性测试选择
+gradleEnterprise {
+    buildCache {
+        local { isEnabled = true }
+        remote { url = uri(&quot;https://cache.example.com/&quot;) }
+    }
+    predictions {
+        // 只运行可能受影响的测试
+        enabled = true
+    }
+}
+</code></pre>
+
+<hr />
+<h2>高级优化：深入编译器</h2>
+<h3>Kotlin 编译器选项调优</h3>
+<pre><code>// build.gradle.kts
+tasks.withType&lt;org.jetbrains.kotlin.gradle.tasks.KotlinCompile&gt;().configureEach {
+    compilerOptions {
+        jvmTarget.set(JvmTarget.JVM_17)
+
+        freeCompilerArgs.addAll(
+            &quot;-Xjvm-default=all&quot;,           // 生成默认方法（减少生成类数量）
+            &quot;-Xno-optimized-callable-references&quot;, // 跳过 callable reference 优化
+            &quot;-Xsam-conversions=class&quot;,      // SAM 转换策略
+        )
+
+        // 增量编译优化
+        incremental = true
+    }
+}
+</code></pre>
+
+<h3>R8 全模式优化</h3>
+<pre><code>// build.gradle.kts (app)
+android {
+    buildTypes {
+        release {
+            isMinifyEnabled = true       // 开启 R8
+            isShrinkResources = true     // 资源压缩
+            proguardFiles(
+                getDefaultProguardFile(&quot;proguard-android-optimize.txt&quot;),
+                &quot;proguard-rules.pro&quot;
+            )
+        }
+    }
+}
+</code></pre>
+
+<p>R8 在 release 构建中减少 dex 数量，间接减少下次构建的 dex 时间。</p>
+<h3>DexBuilder 增量处理</h3>
+<pre><code># gradle.properties
+android.enableDexingArtifactTransform.desugaring=true
+android.enableParallelDex=true  # 并行 dex（AGP 8.x+ 默认开启）
+</code></pre>
+
+<hr />
+<h2>Android Gradle Plugin 优化</h2>
+<h3>AGP 配置优化</h3>
+<pre><code>// build.gradle.kts (app)
+android {
+    // 关闭不需要的构建变体
+    variantFilter {
+        if (name != &quot;debug&quot; &amp;&amp; name != &quot;release&quot;) {
+            ignore = true
+        }
+    }
+
+    // 减少打包内容
+    packaging {
+        resources {
+            excludes += setOf(
+                &quot;META-INF/DEPENDENCIES&quot;,
+                &quot;META-INF/LICENSE&quot;,
+                &quot;META-INF/LICENSE.txt&quot;,
+                &quot;META-INF/license.txt&quot;,
+                &quot;META-INF/NOTICE&quot;,
+                &quot;META-INF/NOTICE.txt&quot;,
+                &quot;META-INF/notice.txt&quot;,
+                &quot;META-INF/ASL2.0&quot;,
+                &quot;META-INF/*.kotlin_module&quot;
+            )
+        }
+    }
+
+    // 关闭不需要的 feature
+    buildFeatures {
+        buildConfig = true
+        viewBinding = true
+        dataBinding = false   // 不用就关
+        compose = true
+        resValues = false     # 不需要动态资源
+    }
+}
+</code></pre>
+
+<h3>非传递 R 类</h3>
+<pre><code># gradle.properties
+android.nonTransitiveRClass=true
+</code></pre>
+
+<p>这个配置让每个模块只包含自己声明的资源 ID，不包含依赖模块的资源 ID。效果：</p>
+<ul>
+<li>减少每个模块 R 类的大小</li>
+<li>减少资源合并时间</li>
+<li>资源变更不会导致所有模块重新编译</li>
+</ul>
+<h3>按 namespace 分离资源</h3>
+<pre><code>// build.gradle.kts (library module)
+android {
+    namespace = &quot;com.example.core.network&quot;  // 明确声明 namespace
+
+    resourcePrefix = &quot;network_&quot;  // 资源前缀，避免冲突
+}
+</code></pre>
+
+<hr />
+<h2>实战案例：一个真实项目的优化历程</h2>
+<h3>项目概况</h3>
+<ul>
+<li>35 个模块（5 个 core + 20 个 feature + 10 个 legacy）</li>
+<li>Room + Hilt + Moshi + KAPT</li>
+<li>冷构建 4 分 50 秒，增量构建 55 秒</li>
+</ul>
+<h3>优化步骤与效果</h3>
+<pre><code>第一阶段：零成本配置优化
+├── 开启 configuration-cache          → 冷构建 -18 秒
+├── 开启 parallel + 调大 JVM          → 冷构建 -25 秒
+├── 开启 build-cache                  → 增量 -12 秒
+└── android.nonTransitiveRClass=true  → 增量 -5 秒
+                                   小计：冷 3 分 47 秒，增量 38 秒
+
+第二阶段：KAPT → KSP 迁移
+├── Room KSP 迁移                     → 冷构建 -45 秒
+├── Hilt KSP 迁移                     → 冷构建 -30 秒
+└── Moshi KSP 迁移                    → 冷构建 -15 秒
+                                   小计：冷 2 分 17 秒，增量 18 秒
+
+第三阶段：依赖清理 + 模块拆分
+├── 移除 12 个未使用的依赖             → 冷构建 -10 秒
+├── 拆分 3 个巨型 feature 模块         → 增量 -6 秒
+└── API/Implementation 分离           → 增量 -4 秒
+                                   小计：冷 2 分 07 秒，增量 8 秒
+
+第四阶段：远程缓存 + CI 优化
+├── 搭建远程缓存                      → CI 冷构建 -60%
+├── CI 分阶段构建                     → PR 检查时间 -40%
+└── 预测性测试选择                    → 测试时间 -50%
+</code></pre>
+
+<h3>最终结果</h3>
+<pre><code>                 优化前          优化后         提升
+冷构建          4 分 50 秒      2 分 07 秒     -56%
+增量构建        55 秒           8 秒           -85%
+CI PR 检查      12 分钟         4 分 30 秒     -63%
+</code></pre>
+
+<hr />
+<h2>构建优化检查清单</h2>
+<h3>立即可做（10 分钟内）</h3>
+<ul>
+<li>[ ] 确认 <code>gradle.properties</code> 中的 JVM 参数（<code>-Xmx4g -XX:+UseParallelGC</code>）</li>
+<li>[ ] 开启 <code>org.gradle.parallel=true</code></li>
+<li>[ ] 开启 <code>org.gradle.caching=true</code></li>
+<li>[ ] 开启 <code>android.nonTransitiveRClass=true</code></li>
+<li>[ ] 运行一次 <code>--profile</code>，了解当前基线</li>
+</ul>
+<h3>本周可做</h3>
+<ul>
+<li>[ ] 开启 <code>org.gradle.configuration-cache=true</code></li>
+<li>[ ] 检测并移除未使用的依赖</li>
+<li>[ ] 关闭不需要的 <code>buildFeatures</code></li>
+<li>[ ] 统一版本目录（Version Catalog）</li>
+</ul>
+<h3>本月可做</h3>
+<ul>
+<li>[ ] KAPT → KSP 迁移</li>
+<li>[ ] 拆分巨型模块</li>
+<li>[ ] API/Implementation 分离</li>
+<li>[ ] 搭建远程构建缓存</li>
+</ul>
+<h3>长期规划</h3>
+<ul>
+<li>[ ] 全面模块化（按功能拆分）</li>
+<li>[ ] 引入 Gradle Enterprise</li>
+<li>[ ] CI 分布式构建</li>
+<li>[ ] 定期 Build Scan 审查</li>
+</ul>
+<hr />
+<h2>常见误区</h2>
+<h3>误区一："升级 Gradle 版本就能变快"</h3>
+<p>升级确实有帮助，但不是万能的。Gradle 8.x 相比 7.x 在配置缓存和增量编译上有改进，但如果你的构建脚本不兼容配置缓存，升级也用不上。</p>
+<p><strong>正确做法</strong>：升级后先确认新特性是否生效，用 Build Scan 对比。</p>
+<h3>误区二："模块越多越快"</h3>
+<p>模块化有收益边界。过多的小模块会增加：</p>
+<ul>
+<li>配置阶段时间（每个模块都要解析 build.gradle）</li>
+<li>依赖解析时间（模块间依赖变多）</li>
+<li>Kotlin 编译的 classpath 查找时间</li>
+</ul>
+<p><strong>经验值</strong>：一个模块 50-200 个源文件比较合理。少于 30 个文件的模块考虑合并。</p>
+<h3>误区三："开越多线程越快"</h3>
+<p><code>org.gradle.workers.max</code> 不是越大越好。太多线程会导致：</p>
+<ul>
+<li>CPU 上下文切换开销</li>
+<li>内存压力增大（每个 worker 有独立类加载器）</li>
+<li>GC 压力</li>
+</ul>
+<p><strong>经验值</strong>：设为 CPU 核心数或 CPU 核心数 - 1。</p>
+<h3>误区四："远程缓存一定比本地快"</h3>
+<p>远程缓存受网络延迟影响。在低延迟网络中确实有效，但在高延迟或不稳定网络中，下载缓存可能比本地编译还慢。</p>
+<p><strong>正确做法</strong>：CI 环境推送缓存，开发者环境设置 <code>push = false</code> 只拉取。</p>
+<hr />
+<h2>结语</h2>
+<p>构建优化不是一次性的工作，而是持续的过程。项目的代码在增长，依赖在变化，构建时间也会慢慢膨胀。关键不是一次优化到位，而是<strong>建立可观测性和持续优化的习惯</strong>。</p>
+<p>我的建议是：</p>
+<ol>
+<li><strong>先量后改</strong>：用 Build Scan 或 <code>--profile</code> 量化当前状态</li>
+<li><strong>先低后高</strong>：先做零成本配置优化，再做架构级改造</li>
+<li><strong>先人后机</strong>：先优化开发者日常的增量构建，再优化 CI 的冷构建</li>
+<li><strong>定期体检</strong>：每月跑一次 Build Scan，监控构建时间趋势</li>
+</ol>
+<p>构建时间每减少 10 秒，假设团队 10 人每天构建 20 次，一年就省下了：</p>
+<pre><code>10 秒 × 10 人 × 20 次 × 250 工作日 = 500,000 秒 ≈ 138 小时 ≈ 17 个工作日
+</code></pre>
+
+<p>这 17 天，够写多少有价值的功能了。</p>
+<hr />
+<p><em>参考资源：</em>
+- <em>Gradle 官方文档 — Performance Tuning</em>
+- <em>Android Developers — Reduce build times</em>
+- <em>《Gradle in Action》— Benjamin Muschko</em>
+- <em>Google I/O 2025 — What's new in Android Gradle Plugin</em>
+- <em>Gradle Build Cache 最佳实践</em></p>

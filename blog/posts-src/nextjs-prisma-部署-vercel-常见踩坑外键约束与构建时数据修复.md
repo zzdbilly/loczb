@@ -1,0 +1,283 @@
+---
+title: "Next.js + Prisma 部署 Vercel 常见踩坑：外键约束与构建时数据修复"
+description: "Vercel 构建时 prisma db push 失败，外键约束报错怎么办？本文完整复盘一次真实的部署失败案例，从根因分析到构建时数据修复方案。"
+date: 2026-08-01 15:12:09
+category: DevOps
+tags: ["Next.js", "Prisma", "Vercel", "部署", "DevOps"]
+read_time: 5
+slug: nextjs-prisma-部署-vercel-常见踩坑外键约束与构建时数据修复
+---
+
+<p>将 Next.js + Prisma 项目部署到 Vercel 时，构建阶段的数据库操作常常踩坑。本文记录了一次真实的外键约束失败案例，从问题定位到根因分析再到解决方案，完整复盘整个过程。</p>
+<h2>问题背景</h2>
+<p>项目 Zest 是一个基于 Next.js 15 + Prisma 6 + PostgreSQL 的习惯追踪应用，部署在 Vercel 上。build 脚本中包含 <code>prisma db push</code> 来同步 schema：</p>
+<pre><code class="language-json">{
+  &quot;scripts&quot;: {
+    &quot;build&quot;: &quot;if [ \&quot;$DATABASE_URL\&quot; ]; then prisma db push; fi &amp;&amp; next build&quot;
+  }
+}
+</code></pre>
+<p>某次修改了 Badge 模型（添加 nullable 的 <code>habitId</code> 字段）后推送代码，Vercel 构建失败，报错信息：</p>
+<pre><code>Error: insert or update on table &quot;streaks&quot; violates
+foreign key constraint &quot;streaks_habit_id_fkey&quot;
+</code></pre>
+<p><code>streaks</code> 表的外键约束在 <code>prisma db push</code> 同步 schema 时失败了。</p>
+<h2>根因分析</h2>
+<h3>数据库里的"幽灵外键"</h3>
+<p>查看 Prisma schema，发现 <code>Streak</code>、<code>Reward</code>、<code>DiaryEntry</code> 三个模型都有 <code>habitId</code> 字段引用 <code>Habit</code> 模型：</p>
+<pre><code class="language-prisma">model Streak {
+  // ...
+  habitId    String    @default(&quot;default&quot;) @map(&quot;habit_id&quot;)
+  habit      Habit     @relation(fields: [habitId], references: [id])
+  // ...
+}
+
+model Reward {
+  // ...
+  habitId     String    @default(&quot;default&quot;) @map(&quot;habit_id&quot;)
+  habit       Habit     @relation(fields: [habitId], references: [id])
+  // ...
+}
+
+model DiaryEntry {
+  // ...
+  habitId   String   @default(&quot;default&quot;) @map(&quot;habit_id&quot;)
+  habit     Habit    @relation(fields: [habitId], references: [id])
+  // ...
+}
+</code></pre>
+<p>问题在于这三个表的 <code>habitId</code> 默认值是 <code>"default"</code>，但 <code>habits</code> 表里从未创建过 <code>id = "default"</code> 的记录。</p>
+<h3>为什么之前没有报错</h3>
+<p>这个项目最初是单习惯追踪器，<code>habitId</code> 只是占位字段，没有真正的外键约束。<code>prisma db push</code> 在早期版本中可能没有严格执行外键检查，或者数据量小的时候恰好没触发。</p>
+<p>当我修改 Badge 模型添加 <code>habitId</code> 字段后，<code>prisma db push</code> 重新计算了整个 schema 的约束，这时 <code>streaks</code> 表中 <code>habit_id = "default"</code> 的记录找不到对应的 <code>habits</code> 记录，外键约束就炸了。</p>
+<h3>问题链路</h3>
+<pre><code>修改 Badge schema（添加 nullable habitId）
+  → prisma db push 重新同步全部 schema
+  → 重新创建所有外键约束
+  → 检查 streaks 表的 habit_id 外键
+  → 发现 habit_id='default' 在 habits 表中不存在
+  → 外键约束失败 → 构建中断
+</code></pre>
+<h2>解决方案</h2>
+<h3>方案对比</h3>
+<table>
+<thead>
+<tr>
+<th>方案</th>
+<th>描述</th>
+<th>优点</th>
+<th>缺点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A. 插入 default habit</td>
+<td>确保 habits 表有 id='default' 的记录</td>
+<td>最简单、向后兼容</td>
+<td>default 记录是垃圾数据</td>
+</tr>
+<tr>
+<td>B. 迁移现有数据</td>
+<td>将 streaks/rewards/diary 的 habit_id 更新为真实 habit id</td>
+<td>数据干净</td>
+<td>需要知道真实 habit id</td>
+</tr>
+<tr>
+<td>C. 移除外键约束</td>
+<td>将 habitId 改为不引用 habits</td>
+<td>无依赖问题</td>
+<td>失去数据完整性</td>
+</tr>
+<tr>
+<td>D. 使用 nullable habitId</td>
+<td>所有模型都改为 nullable</td>
+<td>灵活</td>
+<td>需要大量代码适配</td>
+</tr>
+</tbody>
+</table>
+<p>考虑到这是紧急修复，且向后兼容性最重要，选择了 <strong>方案 A</strong>：在构建前自动插入 <code>default</code> habit 记录。</p>
+<h3>修复 SQL</h3>
+<p>创建 <code>prisma/fix-data.sql</code> 文件：</p>
+<pre><code class="language-sql">-- 修复外键约束问题：确保 habits 表有 id='default' 的记录
+-- streaks/rewards/diary_entries 中有 habit_id='default' 的记录引用它
+INSERT INTO &quot;habits&quot; (
+  &quot;id&quot;, &quot;name&quot;, &quot;emoji&quot;, &quot;color&quot;,
+  &quot;description&quot;, &quot;active&quot;, &quot;order&quot;,
+  &quot;created_at&quot;, &quot;updated_at&quot;
+)
+SELECT
+  'default', '默认习惯', '🎯', '#8b5cf6',
+  '', true, 0, NOW(), NOW()
+WHERE NOT EXISTS (
+  SELECT 1 FROM &quot;habits&quot; WHERE &quot;id&quot; = 'default'
+);
+</code></pre>
+<p>这个 SQL 的关键点：</p>
+<ol>
+<li><strong>幂等性</strong>：<code>WHERE NOT EXISTS</code> 确保多次执行不会重复插入</li>
+<li><strong>向后兼容</strong>：只在不存在时插入，不影响已有数据</li>
+<li><strong>完整字段</strong>：覆盖 <code>habits</code> 表所有非 null 字段</li>
+</ol>
+<h3>修改 build 脚本</h3>
+<pre><code class="language-json">{
+  &quot;scripts&quot;: {
+    &quot;build&quot;: &quot;if [ \&quot;$DATABASE_URL\&quot; ]; then prisma db execute --file prisma/fix-data.sql --schema prisma/schema.prisma &amp;&amp; prisma db push; fi &amp;&amp; next build&quot;
+  }
+}
+</code></pre>
+<p>执行顺序：</p>
+<pre><code>有 DATABASE_URL?
+  → 是 → prisma db execute（修复数据） → prisma db push（同步 schema） → next build
+  → 否 → next build（本地无数据库跳过）
+</code></pre>
+<h2>第一次踩坑：缺少 --schema 参数</h2>
+<p>推送后 Vercel 再次失败：</p>
+<pre><code>Error: Either --url or --schema must be provided.
+</code></pre>
+<p><code>prisma db execute</code> 命令需要显式指定 <code>--url</code> 或 <code>--schema</code> 参数，不像 <code>prisma db push</code> 会自动读取 schema 文件。修复后加上 <code>--schema prisma/schema.prisma</code> 即可。</p>
+<p>这个坑值得记住：<strong>Prisma CLI 的不同子命令对参数的要求不一致</strong>。<code>db push</code> 自动找 schema，<code>db execute</code> 必须手动指定。</p>
+<h3>Prisma CLI 参数一致性问题的根因</h3>
+<p>这种不一致源于 Prisma 的设计哲学。<code>db push</code> 和 <code>migrate</code> 是高频操作，CLI 做了自动发现优化；而 <code>db execute</code> 是低频工具命令，设计上要求显式参数以避免误操作。理解这个设计逻辑后，就不会再踩这个坑了。</p>
+<p>查看 Prisma 源码可以看到，<code>db push</code> 内部调用了 <code>getSchema()</code> 辅助函数自动搜索 <code>schema.prisma</code> 文件，而 <code>db execute</code> 没有调用这个函数，直接要求用户提供 <code>--url</code> 或 <code>--schema</code>。这是一个有意识的 API 设计选择，不是 bug。</p>
+<h3>最终验证</h3>
+<p>修复后的构建流程：</p>
+<pre><code>1. prisma db execute → 插入 default habit 记录 → ✅
+2. prisma db push → 同步 schema，外键约束通过 → ✅
+3. next build → 编译成功 → ✅
+4. Vercel 部署 → HTTP 200 → ✅
+</code></pre>
+<h2>经验总结</h2>
+<h3>Prisma db push vs Migrate</h3>
+<p><code>prisma db push</code> 和 <code>prisma migrate dev</code> 是两种不同的 schema 同步方式：</p>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>db push</th>
+<th>migrate</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>生成 migration 文件</td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>数据迁移</td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>适用场景</td>
+<td>原型开发</td>
+<td>生产环境</td>
+</tr>
+<tr>
+<td>外键约束</td>
+<td>重算所有约束</td>
+<td>按计划执行</td>
+</tr>
+</tbody>
+</table>
+<p><code>db push</code> 每次都会重算所有约束，这意味着任何 schema 变动都可能暴露之前隐藏的数据不一致问题。而 <code>migrate</code> 是增量式的，只在 migration 文件中定义的步骤执行。</p>
+<h3>构建时数据修复的最佳实践</h3>
+<p>在 CI/CD 构建阶段执行数据库操作是一种常见模式，但需要注意：</p>
+<h4>1. 幂等性</h4>
+<p>所有 SQL 必须可以重复执行。使用 <code>INSERT ... WHERE NOT EXISTS</code>、<code>CREATE TABLE IF NOT EXISTS</code> 等模式：</p>
+<pre><code class="language-sql">-- ✅ 幂等
+INSERT INTO &quot;habits&quot; (...) SELECT ... WHERE NOT EXISTS (...);
+
+-- ❌ 非幂等，第二次执行会报主键冲突
+INSERT INTO &quot;habits&quot; (id, ...) VALUES ('default', ...);
+</code></pre>
+<h4>2. 顺序依赖</h4>
+<p>确保修复 SQL 在 schema 同步之前执行：</p>
+<pre><code class="language-json">&quot;build&quot;: &quot;prisma db execute --file fix.sql --schema p.schema &amp;&amp; prisma db push &amp;&amp; next build&quot;
+</code></pre>
+<p>如果反过来，<code>db push</code> 会先因为外键约束失败，修复 SQL 就没机会执行了。</p>
+<h4>3. 注释和文档</h4>
+<p>修复 SQL 应该清晰说明为什么存在、何时可以移除：</p>
+<pre><code class="language-sql">-- 临时数据修复：确保 habits 表有 default 记录
+-- 当所有 streaks/rewards/diary_entries 的 habit_id='default'
+-- 都迁移到真实 habit id 后，可以移除本文件和 build 脚本中的引用
+INSERT INTO &quot;habits&quot; (...) SELECT ... WHERE NOT EXISTS (...);
+</code></pre>
+<h3>Vercel 构建的特殊性</h3>
+<p>Vercel 的 build 环境有几个值得注意的特性：</p>
+<h4>环境变量</h4>
+<p>Vercel 的 Environment Variables 需要在项目设置中手动配置。<code>DATABASE_URL</code> 如果没有配置，build 脚本中的 <code>if [ "$DATABASE_URL" ]</code> 判断会跳过数据库操作，这既是保护（不会在无数据库环境跑 db push）也是隐患（可能悄悄跳过必要的初始化）。</p>
+<h4>构建日志</h4>
+<p>Vercel 的构建日志只能通过 Dashboard 查看，如果 <code>prisma db push</code> 失败，日志会显示完整的 Prisma 错误信息（包括 Rust 源码的 stack trace），这对定位问题很有帮助。</p>
+<h4>部署目标</h4>
+<p>Vercel 部署的 URL 不是固定的。production URL 与每次构建生成的 preview URL 不同，验证生产环境时要用 production URL 而不是 preview URL。</p>
+<h2>更深层的问题</h2>
+<p>虽然外键约束问题解决了，但 <code>habitId = "default"</code> 本身是一个技术债。理想情况应该：</p>
+<h3>1. 数据迁移</h3>
+<p>将所有 <code>habit_id = "default"</code> 的记录更新为真实的 habit id：</p>
+<pre><code class="language-sql">-- 假设用户只有一个习惯，用第一个真实习惯替代 default
+UPDATE streaks SET habit_id = (
+  SELECT id FROM habits WHERE id != 'default' LIMIT 1
+) WHERE habit_id = 'default';
+
+-- 同样处理 rewards 和 diary_entries
+-- 然后删除 default habit
+DELETE FROM habits WHERE id = 'default';
+</code></pre>
+<h3>2. Schema 改为 nullable</h3>
+<p>将 <code>Streak</code>、<code>Reward</code>、<code>DiaryEntry</code> 的 <code>habitId</code> 也改为 <code>String?</code>（nullable），null 表示全局/未关联。这和 <code>Badge</code> 的设计一致。</p>
+<h3>3. 移除修复 SQL</h3>
+<p>数据迁移完成后，从 build 脚本中移除 <code>prisma db execute</code> 步骤，保持构建流程干净。</p>
+<h2>常见 Vercel + Prisma 构建问题速查</h2>
+<table>
+<thead>
+<tr>
+<th>错误信息</th>
+<th>根因</th>
+<th>解决方案</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Environment variable not found: DATABASE_URL</code></td>
+<td>Vercel 未配置数据库 URL</td>
+<td>项目设置添加环境变量</td>
+</tr>
+<tr>
+<td><code>foreign key constraint violated</code></td>
+<td>外键数据不一致</td>
+<td>构建前修复数据</td>
+</tr>
+<tr>
+<td><code>Either --url or --schema must be provided</code></td>
+<td><code>prisma db execute</code> 缺参数</td>
+<td>加 <code>--schema prisma/schema.prisma</code></td>
+</tr>
+<tr>
+<td><code>PrismaClientInitializationError</code></td>
+<td>构建时静态页面生成连接数据库失败</td>
+<td>配置 DATABASE_URL 或改为动态渲染</td>
+</tr>
+<tr>
+<td><code>Migration failed</code></td>
+<td>migration 文件有冲突</td>
+<td>检查 migration 历史或用 <code>db push</code> 替代</td>
+</tr>
+</tbody>
+</table>
+<h2>总结与最佳实践清单</h2>
+<h3>部署前检查清单</h3>
+<p>在每次修改 Prisma schema 并部署前，过一遍以下检查项：</p>
+<ul>
+<li>[ ] 确认所有外键引用的记录存在</li>
+<li>[ ] 确认 build 脚本中的数据库操作顺序正确</li>
+<li>[ ] 确认 Vercel 环境变量已配置</li>
+<li>[ ] 确认 <code>prisma db execute</code> 带了 <code>--schema</code> 参数</li>
+<li>[ ] 确认修复 SQL 是幂等的</li>
+<li>[ ] 本地跑一遍 <code>pnpm build</code> 验证</li>
+</ul>
+<h3>核心教训</h3>
+<p>这次踩坑的核心教训是：<strong>Prisma 的外键约束在 schema 变动时会全局重算</strong>。你以为只改了 Badge 模型，实际上 <code>db push</code> 会重新验证所有模型的外键完整性。</p>
+<p>解决方案的关键思想是 <strong>构建时数据修复</strong>：在 CI/CD 的 build 阶段，schema 同步之前，先执行幂等的修复 SQL 确保数据一致性。这是一种通用的 CI/CD 模式，不限于 Prisma 或 Vercel。</p>
+<p>更长期的解决方案是做好数据迁移，将占位符数据（如 <code>habit_id = "default"</code>）替换为真实的数据关系，然后移除修复 SQL，保持构建流程的简洁。</p>

@@ -1,0 +1,365 @@
+---
+title: "AI Agent 技能开发实战：从需求到上线的完整流程"
+description: "AI Agent 技能开发实战：从需求到上线的完整流程 - 张小猛的技术博客"
+date: 2026-03-14 11:00:48
+category: AI
+tags: ["AI Agent", "OpenClaw", "Skill", "JavaScript"]
+read_time: 15
+slug: ai-agent-skill-development
+---
+
+<div class="container container-narrow">
+      
+
+      <div class="post-content">
+        </div>
+
+        <hr>
+
+        <h2 id="引言">引言</h2>
+
+        <p>在上一篇文章中，我们介绍了 OpenClaw 的基础使用。当你熟悉了基础功能后，下一步就是开发自己的技能（Skill）—— 这才是 AI Agent 真正强大的地方。</p>
+
+        <p>技能系统让 AI Agent 可以无限扩展能力：从简单的天气查询到复杂的自动化工作流，从 API 集成到浏览器自动化。本文将以一个实际案例，带你完成从需求分析到上线的完整流程。</p>
+
+        <div class="highlight-box">
+          <h4>🎯 本文目标</h4>
+          <p>开发一个「GitHub 项目分析」技能：用户输入 GitHub 仓库地址，AI 自动分析项目架构、依赖、活跃度，生成分析报告。</p>
+        </div>
+
+        <hr>
+
+        <h2 id="需求分析">需求分析</h2>
+
+        <h3 id="用户故事">用户故事</h3>
+
+        <blockquote>
+          <p>作为一个开发者，我想快速了解一个 GitHub 项目的技术栈和活跃度，以便决定是否使用或贡献这个项目。</p>
+        </blockquote>
+
+        <h3 id="功能拆解">功能拆解</h3>
+
+        <ol>
+          <li><strong>解析仓库地址</strong>：从 URL 提取 owner/repo</li>
+          <li><strong>获取仓库信息</strong>：stars、forks、语言、描述</li>
+          <li><strong>分析项目结构</strong>：目录结构、技术栈</li>
+          <li><strong>生成报告</strong>：格式化输出分析结果</li>
+        </ol>
+
+        <h3 id="技术选型">技术选型</h3>
+
+        <ul>
+          <li><strong>GitHub API</strong>：gh CLI（已内置，无需额外配置）</li>
+          <li><strong>技能框架</strong>：OpenClaw Skill System</li>
+          <li><strong>输出格式</strong>：Markdown（可扩展为 HTML）</li>
+        </ul>
+
+        <hr>
+
+        <h2 id="技能开发">技能开发</h2>
+
+        <h3 id="目录结构">目录结构</h3>
+
+        <p>一个标准的 OpenClaw 技能目录：</p>
+
+        <pre><code>~/.openclaw/workspace/skills/github-explorer/
+├── SKILL.md           # 技能描述（必需）
+├── scripts/
+│   └── analyze.js     # 核心逻辑
+└── README.md          # 文档</code></pre>
+
+        <h3 id="1-创建-skillmd">1. 创建 SKILL.md</h3>
+
+        <p>SKILL.md 是技能的「身份证」，告诉 Agent 什么时候使用这个技能：</p>
+
+        <pre><code># GitHub 项目分析技能
+
+## 触发条件
+
+当用户想要了解 GitHub 项目时使用此技能。触发词包括：
+- "分析这个项目"
+- "帮我看看这个 repo"
+- "了解一下 XXX"
+- GitHub URL 直接输入
+
+## 功能
+
+- 解析 GitHub 仓库地址
+- 获取项目元数据（stars、forks、语言）
+- 分析项目结构和依赖
+- 生成技术栈分析报告
+
+## 使用方法
+
+```bash
+node scripts/analyze.js &lt;repo-url&gt;
+```
+
+## 依赖
+
+- GitHub CLI (gh) 已安装并配置
+- Node.js 18+</code></pre>
+
+        <h3 id="2-编写核心脚本">2. 编写核心脚本</h3>
+
+        <p>创建 <code>scripts/analyze.js</code>：</p>
+
+        <pre><code>#!/usr/bin/env node
+
+const { execSync } = require('child_process');
+
+// 解析 GitHub URL
+function parseRepoUrl(url) {
+  const match = url.match(/github\.com\/([^/]+)\/([^/]+)/);
+  if (!match) throw new Error('Invalid GitHub URL');
+  return { owner: match[1], repo: match[2].replace('.git', '') };
+}
+
+// 获取仓库信息
+function getRepoInfo(owner, repo) {
+  const json = execSync(
+    `gh repo view ${owner}/${repo} --json name,description,stargazersCount,forksCount,primaryLanguage,updatedAt,createdAt`,
+    { encoding: 'utf-8' }
+  );
+  return JSON.parse(json);
+}
+
+// 分析项目结构
+function analyzeStructure(owner, repo) {
+  try {
+    const tree = execSync(
+      `gh api repos/${owner}/${repo}/git/trees/main?recursive=1 --jq '.tree[].path'`,
+      { encoding: 'utf-8' }
+    );
+    const files = tree.trim().split('\n');
+    
+    // 检测技术栈
+    const techStack = [];
+    if (files.some(f => f.includes('package.json'))) techStack.push('Node.js');
+    if (files.some(f => f.includes('requirements.txt'))) techStack.push('Python');
+    if (files.some(f => f.includes('Cargo.toml'))) techStack.push('Rust');
+    if (files.some(f => f.includes('go.mod'))) techStack.push('Go');
+    
+    return { fileCount: files.length, techStack };
+  } catch {
+    return { fileCount: 0, techStack: ['Unknown'] };
+  }
+}
+
+// 主函数
+function main() {
+  const url = process.argv[2];
+  if (!url) {
+    console.error('Usage: analyze.js &lt;github-url&gt;');
+    process.exit(1);
+  }
+
+  const { owner, repo } = parseRepoUrl(url);
+  console.log(`\n🔍 正在分析 ${owner}/${repo}...\n`);
+
+  const repoInfo = getRepoInfo(owner, repo);
+  const structure = analyzeStructure(owner, repo);
+
+  // 生成报告
+  console.log('## 📊 项目分析报告\n');
+  console.log(`**项目**: ${repoInfo.name}`);
+  console.log(`**描述**: ${repoInfo.description || '暂无描述'}`);
+  console.log(`**主语言**: ${repoInfo.primaryLanguage?.name || 'Unknown'}`);
+  console.log(`**⭐ Stars**: ${repoInfo.stargazersCount}`);
+  console.log(`**🍴 Forks**: ${repoInfo.forksCount}`);
+  console.log(`**📁 文件数**: ~${structure.fileCount}`);
+  console.log(`**🛠️ 技术栈**: ${structure.techStack.join(', ')}`);
+  console.log(`**📅 创建时间**: ${repoInfo.createdAt.split('T')[0]}`);
+  console.log(`**🔄 最后更新**: ${repoInfo.updatedAt.split('T')[0]}`);
+}
+
+main();</code></pre>
+
+        <h3 id="3-测试技能">3. 测试技能</h3>
+
+        <pre><code># 添加执行权限
+chmod +x scripts/analyze.js
+
+# 测试运行
+node scripts/analyze.js https://github.com/vercel/next.js</code></pre>
+
+        <p>输出示例：</p>
+
+        <pre><code>🔍 正在分析 vercel/next.js...
+
+## 📊 项目分析报告
+
+**项目**: next.js
+**描述**: The React Framework
+**主语言**: JavaScript
+**⭐ Stars**: 128542
+**🍴 Forks**: 27368
+**📁 文件数**: ~3245
+**🛠️ 技术栈**: Node.js
+**📅 创建时间**: 2016-10-05
+**🔄 最后更新**: 2026-03-15</code></pre>
+
+        <hr>
+
+        <h2 id="集成到-agent">集成到 Agent</h2>
+
+        <h3 id="配置技能路径">配置技能路径</h3>
+
+        <p>确保 Agent 能找到技能目录。在 <code>openclaw.json</code> 中：</p>
+
+        <pre><code>{
+  "skills": {
+    "paths": [
+      "~/.openclaw/workspace/skills"
+    ]
+  }
+}</code></pre>
+
+        <h3 id="验证技能加载">验证技能加载</h3>
+
+        <p>重启 Gateway 后，Agent 会自动加载 SKILL.md：</p>
+
+        <pre><code>openclaw gateway restart</code></pre>
+
+        <h3 id="实际使用">实际使用</h3>
+
+        <p>在 Discord 或 TUI 中与 Agent 对话：</p>
+
+        <blockquote>
+          <p><strong>你</strong>：帮我分析一下 https://github.com/vercel/next.js 这个项目</p>
+          <p><strong>Agent</strong>：好的，我来分析这个项目...</p>
+          <p><em>[自动调用 github-explorer 技能]</em></p>
+        </blockquote>
+
+        <hr>
+
+        <h2 id="进阶优化">进阶优化</h2>
+
+        <h3 id="1-添加更多分析维度">1. 添加更多分析维度</h3>
+
+        <p>可以扩展脚本，增加：</p>
+
+        <ul>
+          <li><strong>依赖分析</strong>：解析 package.json、requirements.txt</li>
+          <li><strong>贡献者统计</strong>：获取 contributor 列表</li>
+          <li><strong>Issue/PR 活跃度</strong>：分析近 30 天的活动</li>
+          <li><strong>安全检查</strong>：检测已知漏洞</li>
+        </ul>
+
+        <h3 id="2-错误处理和缓存">2. 错误处理和缓存</h3>
+
+        <pre><code>// 添加错误处理
+function safeExec(cmd) {
+  try {
+    return execSync(cmd, { encoding: 'utf-8' });
+  } catch (error) {
+    console.error(`Command failed: ${cmd}`);
+    return null;
+  }
+}
+
+// 添加简单缓存
+const cache = new Map();
+function cached(key, fn) {
+  if (cache.has(key)) return cache.get(key);
+  const result = fn();
+  cache.set(key, result);
+  return result;
+}</code></pre>
+
+        <h3 id="3-输出格式美化">3. 输出格式美化</h3>
+
+        <p>使用模板引擎生成更美观的报告：</p>
+
+        <pre><code>const report = `
+# 📊 ${repoInfo.name} 分析报告
+
+## 基本信息
+
+| 项目 | 值 |
+|------|-----|
+| Stars | ⭐ ${repoInfo.stargazersCount} |
+| Forks | 🍴 ${repoInfo.forksCount} |
+| 语言 | ${repoInfo.primaryLanguage?.name} |
+| 文件数 | 📁 ${structure.fileCount} |
+
+## 技术栈
+
+${structure.techStack.map(t => `- ${t}`).join('\n')}
+`;
+console.log(report);</code></pre>
+
+        <hr>
+
+        <h2 id="最佳实践">最佳实践</h2>
+
+        <div class="highlight-box">
+          <h4>✅ 技能设计原则</h4>
+          <ul>
+            <li><strong>单一职责</strong>：一个技能只做一件事</li>
+            <li><strong>明确触发</strong>：SKILL.md 要描述清楚什么时候用</li>
+            <li><strong>友好输出</strong>：输出格式要清晰易读</li>
+            <li><strong>错误处理</strong>：优雅处理各种异常情况</li>
+          </ul>
+        </div>
+
+        <div class="highlight-box">
+          <h4>⚠️ 避免的坑</h4>
+          <ul>
+            <li>不要在技能中硬编码敏感信息（API Key 等）</li>
+            <li>不要假设环境（先检查依赖是否存在）</li>
+            <li>不要输出过于冗长的内容（Agent 有 token 限制）</li>
+            <li>不要忘记文档（README.md 很重要）</li>
+          </ul>
+        </div>
+
+        <hr>
+
+        <h2 id="总结">总结</h2>
+
+        <h3 id="我们做了什么">我们做了什么</h3>
+
+        <ol>
+          <li>✅ 需求分析：明确用户故事和功能点</li>
+          <li>✅ 技术选型：选择合适的工具和框架</li>
+          <li>✅ 核心开发：编写 SKILL.md 和分析脚本</li>
+          <li>✅ 集成测试：验证技能能被 Agent 正确调用</li>
+          <li>✅ 进阶优化：错误处理、缓存、格式美化</li>
+        </ol>
+
+        <h3 id="技能开发的本质">技能开发的本质</h3>
+
+        <p>技能开发的核心是<strong>让 AI Agent 获得新能力</strong>。一个好的技能应该：</p>
+
+        <ul>
+          <li>解决实际问题</li>
+          <li>易于使用和理解</li>
+          <li>输出有价值的信息</li>
+          <li>可扩展和可维护</li>
+        </ul>
+
+        <h3 id="下一步">下一步</h3>
+
+        <ul>
+          <li>探索 <a href="https://clawhub.com" target="_blank" rel="noopener">ClawHub</a> 发现更多技能</li>
+          <li>开发自己的技能并分享到社区</li>
+          <li>组合多个技能创建自动化工作流</li>
+        </ul>
+
+        <hr>
+
+        <h2 id="参考资源">参考资源</h2>
+
+        <ul>
+          <li><a href="https://docs.openclaw.ai/skills" target="_blank" rel="noopener">OpenClaw 技能开发文档</a></li>
+          <li><a href="https://cli.github.com/manual/" target="_blank" rel="noopener">GitHub CLI 手册</a></li>
+          <li><a href="https://docs.github.com/en/rest" target="_blank" rel="noopener">GitHub REST API</a></li>
+        </ul>
+
+        <hr>
+
+        <p style="color: #c8c8d0; font-size: 0.9rem;">
+          <em>最后更新：2026-03-15</em><br>
+          <em>作者：张小猛</em>
+        </p>
+      </div>

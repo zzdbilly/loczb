@@ -1,0 +1,475 @@
+---
+title: "幂等与可复现：为什么你的构建总在产生无意义的 diff"
+description: "从 mtime 并列裁决、无条件写盘到不对称正则，拆开构建噪声的三个真实来源，给出元数据 sidecar 与「零改动」门禁的落地实现。"
+date: 2026-09-27 15:56:42
+category: 开发
+tags: ["构建", "幂等", "可复现", "工程实践"]
+read_time: 14
+slug: idempotent-reproducible-builds
+---
+
+<p>这篇文章写给正在维护静态站点、代码生成器或任何「跑脚本产出文件」流水线的工程师。你大概见过这种场面：明明没有人改内容，<code>git status</code> 却列出一屏变更；review 的 diff 里 90% 是行序变化；CI 上的产物和本地对不上，谁也说不出哪边是对的。</p>
+<p>前置条件：Node 18+、Python 3.9+、git 2.30+，以及一个能跑构建脚本的仓库。文中所有命令都在 Linux 或 macOS 上执行，所有代码片段都可以直接复制运行并复现输出。</p>
+<p>下文用一个真实维护了两百多天的静态博客仓库作为样本（111 篇文章、286 个标签、单次构建产出十几个文件），把三类构建噪声逐个拆开，再补上元数据真相源和可执行门禁的落地写法。</p>
+<h2>一、把「空转构建」的症状固定下来</h2>
+<p>先别急着改代码。构建噪声最麻烦的地方在于它是间歇的：今天复现，明天就没了，于是所有人都当它不存在。把它固定成一条可以反复执行的命令，后面每一步修复才有裁判。</p>
+<h3>用两连跑把噪声量出来</h3>
+<p>连续跑两次全量构建，中间不做任何内容改动，然后看工作区有没有变化：</p>
+<pre><code class="language-bash"># 记录基线指纹
+md5sum blog/articles-index.json blog/index.html index.html sitemap.xml rss.xml &gt; /tmp/before.md5
+
+# 第一遍
+node scripts/generate-index.js &gt; /tmp/run1.log
+
+# 第二遍
+node scripts/generate-index.js &gt; /tmp/run2.log
+
+# 工作区是否出现「无内容变化」的改动
+git status --porcelain
+</code></pre>
+<p>在一个已经收敛的仓库里，这三条命令的输出是这样的：</p>
+<pre><code class="language-text">$ git status --porcelain
+（没有任何输出）
+
+$ diff /tmp/run1.log /tmp/run2.log
+（没有差异）
+</code></pre>
+<p>如果 <code>git status --porcelain</code> 打印了文件名，说明第二次构建写了一些字节不同的东西。注意这里是「字节不同」而不是「内容语义不同」——排序换了、空白多了一个换行、时间戳字段被刷新，都算。</p>
+<h3>把 diff 分成三类噪声</h3>
+<p>把 <code>git diff</code> 的内容按性质归类，后面每一类都有独立的成因和对策：</p>
+<ul>
+<li><strong>顺序漂移</strong>：同一批条目、同样的字段，只是排列不同。典型是列表页、索引 JSON、sitemap 的条目顺序在两次构建之间互换。</li>
+<li><strong>mtime 漂移</strong>：文件内容逐字节相同，但文件的修改时间被无条件刷新。这类噪声在 <code>git status</code> 里看不见，却会污染所有依赖 mtime 的下游逻辑。</li>
+<li><strong>不收敛（一遍不平）</strong>：第一遍构建留下的产物，第二遍构建还会改一次；第二遍的结果才是稳定态。这种「洗噪」现象说明写入逻辑不是自映射的。</li>
+</ul>
+<p>三类噪声的修法完全不同，混在一起改会互相掩盖。判断顺序建议是：先修顺序漂移（最容易量出规模），再修不收敛（因为它会制造假的顺序漂移），最后修 mtime 漂移（它对 git 不可见，最容易漏掉）。</p>
+<h3>量出噪声的规模再动手</h3>
+<p>在样本仓库里统计一次就发现，问题不是边角料。111 篇文章里有 27 篇的发布时间戳完全并列：</p>
+<pre><code class="language-bash">python3 - &lt;&lt;'PY'
+import json, collections
+posts = json.load(open('blog/articles-index.json'))['posts']
+groups = {k: v for k, v in collections.Counter(p['dateTime'] for p in posts).items() if v &gt; 1}
+print(f&quot;并列时间戳分组: {len(groups)} 组, 覆盖 {sum(groups.values())} 篇 / 共 {len(posts)} 篇&quot;)
+PY
+</code></pre>
+<p>输出：</p>
+<pre><code class="language-text">并列时间戳分组: 9 组, 覆盖 27 篇 / 共 111 篇
+</code></pre>
+<p>27 篇、接近四分之一，全部落在同一个排序分支上。这意味着只要这个分支的裁决依据不稳定，四分之一的文章在每次构建里都可能换位置——而它们恰恰是列表页第一屏和 sitemap 前段的常客。</p>
+<h2>二、把四个被混用的词分开</h2>
+<p>「幂等」「可复现」「确定性」「字节比对写盘」经常被当成同义词用。它们描述的是四个不同层次的保证，混用会导致你修错地方。</p>
+<h3>幂等：同一份输入跑两次，第二次不改变任何东西</h3>
+<p>幂等（idempotent）关心的是<strong>重复执行</strong>：把构建跑第二遍，产物一个字都不应该变。它不要求跨机器一致，也不要求产物本身有什么特性，只要求「再跑一次 = 什么都没发生」。</p>
+<p>判断幂等有一个副作用可见的判据：跑完第二遍之后，<code>git status --porcelain</code> 必须为空，且所有产物的 mtime 保持不变。</p>
+<h3>可复现：换一台机器、换一次检出，结果仍然一致</h3>
+<p>可复现（reproducible）关心的是<strong>环境无关</strong>：开发机、CI runner、三年后重新 clone 出来的工作区，跑同一份源码得到逐字节相同的产物。</p>
+<p>幂等是可复现的必要条件，不是充分条件。一个脚本可以在同一台机器上稳定收敛，却在全新检出上产出完全不同的顺序——因为它的输入里混进了「这台机器恰好如此」的事实，比如文件 mtime、目录遍历顺序、环境变量、本地时区。</p>
+<h3>确定性：同一个输入永远给同一个输出</h3>
+<p>确定性（deterministic）关心的是<strong>函数纯度</strong>：同样的参数调用两次，返回同样的值。读时钟、读随机数、读文件系统顺序，都会破坏确定性。</p>
+<p>构建脚本里最常见的非确定性来源有四个：<code>Date.now()</code>（生成时间戳字段）、<code>Math.random()</code>（临时文件名、哈希盐）、<code>readdirSync</code> 的返回顺序（依赖文件系统而非排序）、<code>statSync().mtime</code>（依赖检出与写入历史）。</p>
+<h3>字节比对写盘：把「内容未变」翻译成「不落盘」</h3>
+<p>字节比对写盘（write-if-changed）是一条写入纪律，不是排序技巧：写文件之前先读出旧内容，逐字节比对，相同就直接返回，不调用写盘系统调用。</p>
+<p>它的价值有两层。第一层是消除 mtime 漂移——内容没变就不写，文件的修改时间自然不动。第二层是让「幂等」这件事变成可观测的：产物没有 mtime 变化，说明写入路径确实没有空转。</p>
+<table>
+<thead>
+<tr>
+<th>概念</th>
+<th>关心的问题</th>
+<th>典型失败现象</th>
+<th>主要对策</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>幂等</td>
+<td>再跑一次会不会改变产物</td>
+<td>第二遍构建仍有 diff</td>
+<td>字节比对写盘、写入前归一化</td>
+</tr>
+<tr>
+<td>可复现</td>
+<td>换机器会不会得出不同产物</td>
+<td>CI 与本地不一致、全新检出顺序翻转</td>
+<td>去掉 mtime/readdir 依赖、固定排序裁决</td>
+</tr>
+<tr>
+<td>确定性</td>
+<td>同输入是否恒定输出</td>
+<td>时间戳字段每次不同、顺序随机</td>
+<td>输入显式化、排序键完备</td>
+</tr>
+<tr>
+<td>字节比对写盘</td>
+<td>内容未变时是否还落盘</td>
+<td>mtime 被刷新、下游缓存失效</td>
+<td>读写前比对、相同则跳过</td>
+</tr>
+</tbody>
+</table>
+<h2>三、拿文件 mtime 当并列裁决，换机器就翻脸</h2>
+<p>排序里总会遇到「主键相同」的情况。这时需要第二个键来决定先后，也就是并列裁决（tiebreaker）。用文件 mtime 作裁决依据是最常见的错误选择，因为它在开发机上看起来很合理。</p>
+<h3>问题代码长什么样</h3>
+<p>下面这段比较器在本地跑一个月都不会出问题：</p>
+<pre><code class="language-js">// ❌ 用文件 mtime 作并列裁决
+posts.sort((a, b) =&gt; {
+  if (a.timestamp !== b.timestamp) return b.timestamp - a.timestamp;
+  return fs.statSync(a.file).mtimeMs - fs.statSync(b.file).mtimeMs;
+});
+</code></pre>
+<p>在开发机上，你写完一篇文章就构建一次，文件的 mtime 大致反映了写作先后，所以顺序满足直觉。这个正反馈会掩盖一个事实：mtime 描述的是「文件被写入的时刻」，而你想表达的是「条目的发布时间」。</p>
+<h3>mtime 在全新检出上为什么必然失效</h3>
+<p>git 不保存 mtime。检出时所有文件被一次性写下，它们的 mtime 等于检出时刻。用一个三点小实验验证这一点：</p>
+<pre><code class="language-bash">mkdir work &amp;&amp; cd work &amp;&amp; git init -q .
+for n in 1 2 3; do printf 'post %s\n' $n &gt; &quot;post-$n.html&quot;; done
+git add -A &amp;&amp; git -c user.name=t -c user.email=t@t commit -qm init
+cd .. &amp;&amp; git clone -q work clone
+find clone -maxdepth 1 -name '*.html' -printf '%T@ %p\n' | sort
+</code></pre>
+<p>输出（三行 mtime 精确到纳秒完全相同）：</p>
+<pre><code class="language-text">1790495702.3200957370 clone/post-1.html
+1790495702.3200957370 clone/post-2.html
+1790495702.3200957370 clone/post-3.html
+</code></pre>
+<p>三个文件的 mtime 一模一样。回到上面的比较器：并列裁决返回 <code>0</code>，排序退化为「引擎稳定性未知」的状态——V8 现在会保持原顺序，但原顺序来自 <code>readdirSync</code>，而目录遍历顺序由文件系统决定，不在你的控制范围内。于是：</p>
+<ul>
+<li>开发机上 27 篇并列文章有一个顺序；</li>
+<li>CI 新 clone 的工作区有另一个顺序；</li>
+<li>三年后别人 clone 出来，又是第三个顺序。</li>
+</ul>
+<p>按照第二节的分类，这同时破坏了确定性和可复现。</p>
+<h3>换成既有索引位次做裁决</h3>
+<p>稳定的做法是把裁决依据放进版本控制。读上一次已提交的索引，记录每个条目的既有位次，并列时按位次升序——位次是仓库里的数据，跨机器一致：</p>
+<pre><code class="language-js">// ✅ 用已提交索引中的既有位次作并列裁决
+const prevOrder = {};
+try {
+  const prevIndex = JSON.parse(fs.readFileSync(OUTPUT_FILE, 'utf-8'));
+  prevIndex.posts.forEach((p, i) =&gt; { prevOrder[p.slug] = i; });
+} catch (e) { /* 首次构建时无锚点，退化为 slug 字典序 */ }
+
+posts.sort((a, b) =&gt; {
+  if (a._ts !== b._ts) return b._ts - a._ts;          // 主键：发布时间降序
+  const ra = prevOrder[a.slug], rb = prevOrder[b.slug];
+  if (ra !== undefined &amp;&amp; rb !== undefined &amp;&amp; ra !== rb) return ra - rb;
+  if (ra === undefined &amp;&amp; rb !== undefined) return 1;  // 新条目排在同刻旧条目之后
+  if (rb === undefined &amp;&amp; ra !== undefined) return -1;
+  return a.slug &lt; b.slug ? -1 : a.slug &gt; b.slug ? 1 : 0; // 兜底：slug 字典序
+});
+</code></pre>
+<p>这个比较器有三个值得注意的性质：</p>
+<ol>
+<li><strong>自映射</strong>：用产物自己作为下一次构建的锚点。内容不变时位次不变，位次不变时顺序不变，顺序不变时产物字节不变——闭环一遍收敛。</li>
+<li><strong>新条目有确定落点</strong>：不在索引里的条目统一排在同刻旧条目之后，落点不取决于目录遍历顺序。</li>
+<li><strong>兜底键完备</strong>：最后一个分支用 slug 字典序，保证任意两个条目都能比较出确定结果，比较器不会返回 <code>0</code>。</li>
+</ol>
+<p>顺带一句维护提醒：这段逻辑迁移完成后，文件头部的注释里还留着一句「同日无精确时间时，用文件 mtime 作 tiebreaker」的旧描述，而实现已经不再读 mtime。注释漂移本身不产生 bug，但它会让下一个读到这段代码的人按旧注释推理。迁移完排序依据后，同步改掉注释是流程的一部分。</p>
+<h3>验证并列裁决稳定</h3>
+<pre><code class="language-bash">node scripts/generate-index.js
+md5sum blog/articles-index.json
+node scripts/generate-index.js
+md5sum blog/articles-index.json
+git status --porcelain
+</code></pre>
+<p>两行 md5 必须相同，<code>git status --porcelain</code> 必须为空。如果第一次 md5 不同、第二次才相同，说明顺序还在依赖某个未被锚定的输入。</p>
+<h2>四、生成物无条件写盘，把 mtime 刷成噪声</h2>
+<p>顺序修好之后，<code>git status</code> 干净了，但事情只走完一半。还有一类噪声对 git 不可见：文件内容一字未改，写入操作却照常发生，于是 mtime 被刷新。</p>
+<h3>观察一次「什么都没变」的写盘</h3>
+<p>用一段最小脚本观察 mtime 是否被刷新：</p>
+<pre><code class="language-js">const fs = require('fs');
+
+function writeIfChanged(filePath, content) {
+  let old = null;
+  try { old = fs.readFileSync(filePath, 'utf-8'); } catch (e) { /* 文件不存在则直接写 */ }
+  if (old === content) return false;
+  fs.writeFileSync(filePath, content, 'utf-8');
+  return true;
+}
+
+const target = 'out.txt';
+console.log(`首次写入: ${writeIfChanged(target, 'same bytes\n')}`);
+console.log(`内容相同: ${writeIfChanged(target, 'same bytes\n')}`);
+</code></pre>
+<p>连续跑两次并观察 mtime：</p>
+<pre><code class="language-bash">rm -f out.txt
+node wic.js &amp;&amp; stat -c '%Y %n' out.txt
+sleep 1.1
+node wic.js &amp;&amp; stat -c '%Y %n' out.txt
+</code></pre>
+<p>输出：</p>
+<pre><code class="language-text">首次写入: true
+内容相同: false
+1790495675 out.txt
+首次写入: false
+内容相同: false
+1790495675 out.txt
+</code></pre>
+<p>两次输出的时间戳完全相同（<code>1790495675</code>），说明第二次调用虽然跑完了 <code>writeIfChanged</code>，但没有落盘，mtime 原地不动。这就是字节比对写盘的全部机制，二十行不到。</p>
+<h3>谁在依赖 mtime</h3>
+<p>mtime 漂移之所以危险，是因为依赖它的逻辑通常不在同一个文件里，甚至不在同一个仓库里。</p>
+<p>在样本仓库里有过一次真实的连锁事故：早期的专栏注入脚本每次运行都重写全部文章页，把 mtime 刷成「脚本运行日」。而 sitemap 的 <code>lastmod</code> 字段当时取自文件 mtime，结果是 106 篇文章的 <code>lastmod</code> 全部挤在同一天，第二天再构建又集体跳到新的一天。搜索引擎看到的信号是「这个站每天全量更新」，<code>lastmod</code> 的可信度被彻底稀释，而仓库里没有任何一条 diff 能反映这件事。</p>
+<p>改法有两条，两条都要做：</p>
+<ol>
+<li><strong>写入端</strong>：所有产物写盘走字节比对，内容未变不写。</li>
+<li><strong>读取端</strong>：<code>lastmod</code> 从元数据的发布日期取值，不再取文件系统 mtime。</li>
+</ol>
+<pre><code class="language-js">// sitemap 的 lastmod 使用文章发布日期（来自元数据），不再取 fs mtime
+posts.forEach(p =&gt; {
+  lines.push('  &lt;url&gt;');
+  lines.push(`    &lt;loc&gt;${BASE_URL}/blog/posts/${p.slug}.html&lt;/loc&gt;`);
+  lines.push(`    &lt;lastmod&gt;${p.date}&lt;/lastmod&gt;`);   // 发布日期，YYYY-MM-DD
+  lines.push('    &lt;changefreq&gt;monthly&lt;/changefreq&gt;');
+  lines.push('    &lt;priority&gt;0.6&lt;/priority&gt;');
+  lines.push('  &lt;/url&gt;');
+});
+writeIfChanged(SITEMAP_XML, lines.join('\n') + '\n');
+</code></pre>
+<p>除了 sitemap，还有一批常见依赖方需要检查：</p>
+<ul>
+<li><code>make</code>、<code>gradle</code>、<code>webpack</code> 等工具的增量判断；</li>
+<li><code>rsync --update</code>、部署工具的「只传更新的文件」逻辑；</li>
+<li>编辑器与语言服务器的索引重建；</li>
+<li>备份与冷存归档的「变更文件」筛选；</li>
+<li>缓存失效策略里的「文件比缓存新」比较。</li>
+</ul>
+<p>这些依赖方都不看内容，只看时间。内容未变却刷了 mtime，等于给它们发了一次假事件。</p>
+<h3>写一份 Python 版本</h3>
+<p>同一份纪律在 Python 侧需要显式处理编码与原子性：</p>
+<pre><code class="language-python">import os
+import tempfile
+
+
+def write_if_changed(file_path: str, content: str, encoding: str = 'utf-8') -&gt; bool:
+    &quot;&quot;&quot;内容逐字节相同时跳过写盘，返回本次是否真的写入。&quot;&quot;&quot;
+    try:
+        with open(file_path, 'r', encoding=encoding) as f:
+            if f.read() == content:
+                return False
+    except FileNotFoundError:
+        pass
+
+    # 原子写：先写同目录临时文件，再 rename 覆盖，避免半截文件被读到
+    directory = os.path.dirname(os.path.abspath(file_path))
+    fd, tmp_path = tempfile.mkstemp(dir=directory, suffix='.tmp')
+    try:
+        with os.fdopen(fd, 'w', encoding=encoding) as f:
+            f.write(content)
+        os.replace(tmp_path, file_path)
+    except BaseException:
+        try:
+            os.unlink(tmp_path)
+        except OSError:
+            pass
+        raise
+    return True
+</code></pre>
+<p>原子写这一步在构建脚本里容易被省掉，代价是：当构建被别人在写入中途读到产物时，会读到半截文件。注意 <code>os.replace</code> 会改变 mtime——这是对的，因为这次确实写入了新内容。</p>
+<h2>五、注入与移除正则不对称，一遍就不收敛</h2>
+<p>顺序锚定了、写盘也加了比对，还是可能剩下「第一遍洗噪、第二遍才稳」。这类问题的根源通常在注入与移除的一对正则上。</p>
+<h3>「第一遍洗噪、第二遍才稳」是怎么来的</h3>
+<p>考虑一个构建期注入的组件块，它的更新方式是「先删旧的、再写新的」：</p>
+<pre><code class="language-js">// ❌ 移除端吃掉块两侧的空白，写入端只写回单侧 —— 两端不对称
+let out = orig.replace(/\s*&lt;!-- Widget --&gt;[\s\S]*?&lt;!-- \/Widget --&gt;\s*/g, '');
+out = out.replace(/(&lt;div class=&quot;post-tags&quot;&gt;[\s\S]*?&lt;\/div&gt;)/,
+  `$1\n&lt;!-- Widget --&gt;\n&lt;span&gt;w&lt;/span&gt;\n&lt;!-- /Widget --&gt;`);
+</code></pre>
+<p>移除端用 <code>\s*</code> 吃掉了块前后的空白，写入端却不负责把这些空白补回去。跑三次的实际输出：</p>
+<pre><code class="language-text">run1: len=121
+run2: len=119
+run3: len=119
+</code></pre>
+<p>第一遍和第二遍的长度不同，第二遍之后才稳定。原因很直白：第一遍是「删除什么都不做、只做注入」，此时块后面的空白还是文件原有的；第二遍先把块连同两侧空白一起吃掉，再写回一份不带尾部空白的版本，长度因此短了 2 个字符。</p>
+<p>这种模式下，<code>git status</code> 会出现一次「无意义的空白 diff」，reviewer 会以为有人手改过文件；而如果构建产物被部署，第一遍的产物和稳定态产物是两个不同版本。</p>
+<h3>让吃掉的空白等于写回的空白</h3>
+<p>对称规则可以用一句话表达：<strong>移除端吃掉的空白，必须与写入端写回的空白逐字节相同</strong>。实现上，让两端只处理「锚点之后到块结尾」这一段，不碰块之外属于文件自身的分离空白：</p>
+<pre><code class="language-js">// ✅ 两端严格对称：移除吃掉锚点后的空白，注入写回同量的空白
+let out = orig.replace(/\n*[ \t]*&lt;!-- Widget --&gt;[\s\S]*?&lt;!-- \/Widget --&gt;/g, '');
+out = out.replace(/(&lt;div class=&quot;post-tags&quot;&gt;[\s\S]*?&lt;\/div&gt;)/,
+  `$1\n\n        &lt;!-- Widget --&gt;\n        &lt;span&gt;w&lt;/span&gt;\n        &lt;!-- /Widget --&gt;`);
+</code></pre>
+<p>同样的三次连跑：</p>
+<pre><code class="language-text">run1: len=146 md5=8da03c4d1fec879e21413ebb8485b23a
+run2: len=146 md5=8da03c4d1fec879e21413ebb8485b23a
+run3: len=146 md5=8da03c4d1fec879e21413ebb8485b23a
+</code></pre>
+<p>三次结果的长度和 md5 完全一致，第一遍就是不动点。样本仓库的专栏注入脚本里，这条规则是以注释的形式写下来的：「缩进与移除正则严格对称：吃掉的空白 == 写回的空白」。</p>
+<h3>用两连跑断言收敛</h3>
+<p>改成对称之后，把「一遍收敛」变成可以自动判定的条件：</p>
+<pre><code class="language-bash">node scripts/generate-index.js
+FINGERPRINT_1=$(md5sum blog/index.html index.html sitemap.xml | md5sum)
+node scripts/generate-index.js
+FINGERPRINT_2=$(md5sum blog/index.html index.html sitemap.xml | md5sum)
+[ &quot;$FINGERPRINT_1&quot; = &quot;$FINGERPRINT_2&quot; ] &amp;&amp; echo &quot;PASS: 一遍收敛&quot; || echo &quot;FAIL: 需要第二次构建才稳定&quot;
+</code></pre>
+<p>输出的期望结果是 <code>PASS: 一遍收敛</code>。这条断言比「看 git diff」更严格，因为它在同一次会话里排除了「git 忽略了某个产物」的可能性。</p>
+<h2>六、把元数据抽成 sidecar，让真相源唯一</h2>
+<p>前五节解决的是「相同的输入产生相同的输出」。这一节解决另一个方向的问题：<strong>输入本身从哪来</strong>。如果元数据是靠正则从生成物里反解的，那么构建的正确性依赖于模板的 HTML 细节，模板一改，元数据解读就集体漂移。</p>
+<h3>正则反解 HTML 的三种失败方式</h3>
+<p>从文章 HTML 里正则提取标题、描述、日期，在仓库规模小的时候看不出问题，规模上来后有三种必然失败：</p>
+<ul>
+<li><strong>正文撞车</strong>：文章正文里恰好出现 <code>&lt;span class="tag"&gt;</code> 或一段形如日期的文本，正则抓到了正文里的字符串，而不是元数据区。</li>
+<li><strong>模板改动静默失效</strong>：模板调整属性顺序、换标签、加一层 <code>div</code>，正则匹配失败后返回空串，而空串会被当成「这篇文章没有描述」静默接受。</li>
+<li><strong>回刷后语义漂移</strong>：回刷脚本从 HTML 提元数据、再套模板重渲染，一次成功的回刷会把「上一版生成物的解读结果」固化成新的元数据，误差被逐次放大。</li>
+</ul>
+<p>样本仓库的回刷脚本在自己的文档字符串里就写下了这个隐患的结论：元数据从 HTML 正则提取，如需增强，「可考虑在文章 HTML 中嵌入元数据块」。这句话指的就是把元数据从生成物里剥离出来。</p>
+<h3>让 sidecar 成为唯一真相源</h3>
+<p>做法是每篇文章配一份独立的元数据文件，与文章 HTML 同步落盘，索引重建优先读它：</p>
+<pre><code class="language-json">{
+  &quot;slug&quot;: &quot;idempotent-reproducible-builds&quot;,
+  &quot;title&quot;: &quot;幂等与可复现：为什么你的构建总在产生无意义的 diff&quot;,
+  &quot;description&quot;: &quot;从 mtime 并列裁决、无条件写盘到不对称正则，拆开构建噪声的三个真实来源……&quot;,
+  &quot;date&quot;: &quot;2026-09-27&quot;,
+  &quot;dateTime&quot;: &quot;2026-09-27 15:52:00&quot;,
+  &quot;category&quot;: &quot;开发&quot;,
+  &quot;tags&quot;: [&quot;构建&quot;, &quot;幂等&quot;, &quot;可复现&quot;, &quot;工程实践&quot;],
+  &quot;readTime&quot;: 14
+}
+</code></pre>
+<p>放在 <code>blog/meta/&lt;slug&gt;.json</code>，与 <code>blog/posts/&lt;slug&gt;.html</code> 一一对应。读取端按「sidecar 优先、正则回退」的顺序取字段，而且回退粒度是字段级而不是文件级——这样部分字段缺失时仍然可以工作：</p>
+<pre><code class="language-js">// 元数据 sidecar 优先：字段取 sidecar，缺失字段回退正则
+function readSidecar(slug) {
+  const p = path.join(META_DIR, slug + '.json');
+  if (!fs.existsSync(p)) return null;
+  try {
+    return JSON.parse(fs.readFileSync(p, 'utf-8'));
+  } catch (e) {
+    console.warn(`⚠️ blog/meta/${slug}.json 解析失败，回退正则: ${e.message}`);
+    return null;
+  }
+}
+
+const sidecar = readSidecar(slug);
+const title = (sidecar &amp;&amp; sidecar.title) || regexTitle(html);
+const date  = (sidecar &amp;&amp; sidecar.date)  || regexDate(html);
+</code></pre>
+<p>配套要做两件事：<strong>存量回填</strong>（给已有文章批量生成 sidecar，并逐字段核对与正则结果一致）和<strong>门禁断言</strong>（见下节 b 组），否则 sidecar 会慢慢变成一份没人维护的平行数据。</p>
+<h3>回填之后用门禁守住一致性</h3>
+<p>回填一次脚本就能完成，难的是此后不再漂移。门禁里至少要断言三件事：sidecar 与文章文件一一对应（不能多、不能少）、<code>slug</code> 字段与文件名一致、<code>dateTime</code> 可以被解析成合法时间。</p>
+<pre><code class="language-bash">node scripts/verify.js
+</code></pre>
+<pre><code class="language-text">✅ verify.js 全部通过（posts/index/meta 各 111 条对齐，静态相关与静态分页门禁通过，主页面版本一致）
+</code></pre>
+<p>这条输出里的「各 111 条对齐」就是集合对账的结论：<code>blog/posts/*.html</code> 的文件名集合、索引 JSON 里的 slug 集合、<code>blog/meta/*.json</code> 的 slug 集合，两两双向相等。</p>
+<h2>七、把「零改动」写成可执行的门禁</h2>
+<p>前面所有修法都有一个共同弱点：它们靠人记得。人一忙，绕过校验直接 push 的路径就会出现。把纪律变成退出码，才算落地。</p>
+<h3>门禁要断言的五件事</h3>
+<p>按「能自动判定就不要靠人眼」的原则，门禁脚本应该覆盖这些断言，任一条失败即以非零码退出：</p>
+<ol>
+<li><strong>集合对账</strong>：文章文件、索引 JSON、元数据 sidecar 三处集合双向相等，缺一篇、多一条都要报错并列出名字。</li>
+<li><strong>元数据可解析</strong>：每份 sidecar 的 <code>slug</code> 匹配文件名，<code>dateTime</code> 能解析成合法时间；解析不出来的直接失败，不进入排序。</li>
+<li><strong>并列裁决有锚</strong>：索引里同刻条目的相对顺序与上一次已提交索引一致——也就是跑一遍构建后 <code>git status --porcelain</code> 为空。</li>
+<li><strong>体积线</strong>：索引 JSON 超过预警线只提示、超过阻断线直接失败。索引膨胀到某个规模说明架构该换了，让门禁替你做这个判断。</li>
+<li><strong>静态分页自洽</strong>：页数等于「总数除以每页条数向上取整」，每页卡片数在合理区间，跨页无重复，合计等于总数，每页有自指 canonical 与可达的上一页/下一页链接。</li>
+</ol>
+<p>第 3 条的本质就是本文第一节那条两连跑命令，只是被固化成了门禁的一部分。样本仓库的门禁把这份清单实现成了七组断言（a 至 g），任何一组不一致都会打印具体到条目的错误信息，然后以 <code>exit 1</code> 阻断发布。</p>
+<h3>用 md5 做一遍收敛断言</h3>
+<p>门禁脚本之外，再加一条幂等断言，成本极低：</p>
+<pre><code class="language-bash">#!/usr/bin/env bash
+set -euo pipefail
+
+ARTIFACTS=&quot;blog/articles-index.json blog/index.html index.html sitemap.xml rss.xml&quot;
+
+node scripts/generate-index.js &gt; /dev/null
+md5sum $ARTIFACTS &gt; /tmp/idem-1.md5
+node scripts/generate-index.js &gt; /dev/null
+md5sum $ARTIFACTS &gt; /tmp/idem-2.md5
+
+diff /tmp/idem-1.md5 /tmp/idem-2.md5 &amp;&amp; echo &quot;PASS: 两连跑产物一致&quot;
+test -z &quot;$(git status --porcelain)&quot; &amp;&amp; echo &quot;PASS: 无内容变化时零 git 改动&quot;
+</code></pre>
+<p>在样本仓库上跑出来的完整结果：</p>
+<pre><code class="language-text">✅ 静态相关文章: 111 篇处理，0 篇写入，每篇 top 5（&lt;3 条的 0 篇）
+✅ sitemap.xml: 111 articles
+✅ sw.js: cache version unchanged (c-8aecd35c), skip write
+PASS: 两连跑产物一致
+PASS: 无内容变化时零 git 改动
+</code></pre>
+<p>两行关键证据：<code>0 篇写入</code> 说明相关文章内联步骤在内容不变时没有任何落盘动作；<code>cache version unchanged, skip write</code> 说明 Service Worker 的缓存版本号是按内容哈希算的，哈希不变就不写文件。这两条加上前面 md5 的比对，构成完整的幂等证据链。</p>
+<h3>把门禁接进发文链</h3>
+<p>门禁不能是「可选的一步」。把它挂在构建脚本的末尾，让发布流程无法跳过：</p>
+<pre><code class="language-python"># 索引重建成功后跑门禁，不通过则以同码退出（阻断发布）
+vresult = subprocess.run(['node', 'scripts/verify.js'], capture_output=True, text=True, cwd=proj_root)
+for line in (vresult.stdout + vresult.stderr).strip().split('\n'):
+    if line.strip():
+        print(f&quot;  {line}&quot;)
+if vresult.returncode != 0:
+    print(&quot;❌ 一致性校验未通过，请修复后重新运行&quot;)
+    sys.exit(vresult.returncode)
+</code></pre>
+<p>同一份构建脚本里还有一条值得抄的纪律：目标文件已存在时拒绝覆盖，必须显式传 <code>--force</code> 才允许，否则以 <code>exit 2</code> 退出。这条保护挡住的是最昂贵的一类事故——同名覆盖让一篇已发布文章整篇消失，而 git 历史里只剩一次「内容替换」。</p>
+<h2>八、带状态的任务必须成功后才推进</h2>
+<p>前面讨论的都是「无状态构建」：输入是仓库内容，输出是产物，跑多少次都一样。还有一类任务天生带状态——增量抓取、增量日报、断点续传的同步。这类任务里最常见的顺序错误，就是先推进状态、再执行动作。</p>
+<h3>先推进状态再执行，失败就丢事件</h3>
+<pre><code class="language-python"># ❌ 先写水位线，再处理数据：中途失败就永久丢掉一段事件
+def run_daily():
+    last_seen = read_watermark('watermark.txt')
+    new_events = fetch_events(since=last_seen)
+    write_watermark('watermark.txt', latest_ts(new_events))   # 水位线先推进
+    for event in new_events:
+        render_and_send(event)                                  # 这里抛异常…
+</code></pre>
+<p>如果第 7 行的发送因为网络抖动抛了异常，水位线已经写到了最新时间戳。下一次运行会从新的水位线开始拉取，那些没发出去的事件不会重来——数据静默丢失，而且没有任何日志会显示丢失，因为「拉到过、也推进过」。</p>
+<h3>用状态锚点做幂等重放</h3>
+<p>正确顺序是把水位线的推进放在成功之后，并且锚点本身要能表达「处理到哪」，而不是一个单调的时间水位：</p>
+<pre><code class="language-python"># ✅ 成功后才推进水位线；锚点写入走字节比对，重放安全
+def run_daily():
+    anchor = read_anchor('anchor.json')          # {&quot;last_id&quot;: &quot;...&quot;, &quot;date&quot;: &quot;2026-09-27&quot;}
+    events = fetch_events(after_id=anchor['last_id'])
+
+    processed = []
+    for event in events:
+        render_and_send(event)                    # 先完成副作用
+        processed.append(event['id'])             # 全部成功才记录
+
+    if processed:
+        write_if_changed('anchor.json', json.dumps({
+            'last_id': processed[-1],
+            'date': today(),
+        }, ensure_ascii=False, indent=2))
+</code></pre>
+<p>三个设计要点：</p>
+<ol>
+<li><strong>锚点用稳定 ID 而非时间戳</strong>。时间戳会并列（和第三节的排序问题同源），并列就会漏事件或重复事件；单调递增的 ID 没有这个问题。</li>
+<li><strong>锚点写入走字节比对</strong>。重放时锚点内容相同就不落盘，避免「每次重放都刷一次 mtime」，也避免锚点文件本身成为噪声来源。</li>
+<li><strong>失败时锚点不动</strong>，下一次运行重放未完成的那一段。副作用端的接口要能容忍重复（发送前查重、或按 ID 幂等写入），这就是幂等在这里的落点。</li>
+</ol>
+<h3>补一条可观测的校验</h3>
+<p>顺序改对之后，加一条能断言的校验，避免回归：</p>
+<pre><code class="language-bash">python3 - &lt;&lt;'PY'
+import json, datetime
+anchor = json.load(open('anchor.json'))
+# 锚点时间不得晚于当前时间，且必须早于或等于最后一次产物的覆盖时间
+assert anchor['date'] &lt;= datetime.date.today().isoformat(), &quot;锚点跑到未来了&quot;
+print(f&quot;PASS: 锚点 date={anchor['date']} last_id={anchor['last_id']}&quot;)
+PY
+</code></pre>
+<p>这条断言检查的是锚点语义而不是语法：锚点一旦跑到未来，说明某次推进写入了不该写入的时间，后续拉取会长期空转。</p>
+<h2>九、发布前照这份清单逐条打勾</h2>
+<p>把上面九节的结论压成一份可以直接照做的清单。每一条都对应一条命令或一个可判定的结果。</p>
+<h3>构建层：产物是否收敛</h3>
+<ul>
+<li>两连跑构建，产物 md5 逐字节相同。</li>
+<li><code>git status --porcelain</code> 为空——没有内容变化时不产生任何 git 改动。</li>
+<li>排序比较器没有任何来自文件系统的输入（mtime、遍历顺序都不算合法输入）。</li>
+<li>并列裁决的依据存在于版本控制中，而不是存在于某台机器的文件系统里。</li>
+<li>所有写入路径都经过字节比对；写盘的数量等于「内容真正变化」的数量。</li>
+</ul>
+<h3>内容层：真的变了吗</h3>
+<ul>
+<li>日志里的写入计数能被解释：<code>0 篇写入</code> 是可接受的结果，<code>111 篇全部写入</code> 在内容未变时就是噪声。</li>
+<li>注入与移除的正则逐字节对称，注释与实现描述同一套行为。</li>
+<li>元数据只从 sidecar 读取，正则只作字段级回退。</li>
+<li>门禁脚本以退出码表达结论，且挂在发布链的末尾，无法被绕过。</li>
+</ul>
+<h3>发布层：线上是否可达</h3>
+<ul>
+<li>门禁以 <code>exit 0</code> 通过，非零时不推送。</li>
+<li>提交身份、作者邮箱与仓库约定一致，提交后用一条只读命令复核。</li>
+<li>推送后实测线上地址返回 200，且页面包含本次标题。</li>
+<li>首页、列表页、索引 JSON、sitemap、RSS 五处都能查到本次发布的标识。</li>
+<li>若线上持续 404，先看首页响应头的 <code>last-modified</code>：它若不包含本次构建时间，说明站点构建没有被触发，用一次空提交触发重建，而不是归因于内容错误。</li>
+</ul>
+<pre><code class="language-bash">git -c user.name=zzdbilly -c user.email=billycust716@gmail.com commit -m &quot;新增文章：示例标题（example-slug）&quot;
+git log -1 --format='%ae'
+curl -sS -o /dev/null -w '%{http_code}\n' -A 'Mozilla/5.0' https://example.com/blog/posts/example-slug.html
+</code></pre>
+<p>预期的两条输出依次是约定的作者邮箱与 <code>200</code>。</p>
+<p>回到开头那个问题：构建为什么总在产生无意义的 diff。答案不是「工具不行」，而是构建的输入里混进了三样不属于内容的东西——文件的修改时间、目录的遍历顺序、以及「上一版产物被反解出来的字段」。把这三样逐一换成版本控制里的事实，diff 就会回到它本来的含义：只显示有人真的改了内容。</p>

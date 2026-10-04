@@ -48,14 +48,14 @@
             "@type": "WebPage",
             "@id": "https://709527.xyz/blog/posts/github-actions-auto-index-blog-cicd.html"
       },
-      "keywords": "CI/CD, DevOps, GitHub Actions, 前端, 自动化",
+      "keywords": "GitHub Actions, CI/CD, DevOps, 自动化",
       "articleSection": "DevOps",
-      "timeRequired": "PT5M",
+      "timeRequired": "PT10M",
       "inLanguage": "zh-CN"
 }
     </script>
 
-    <link rel="stylesheet" href="../../assets/css/style.css?v=231fa9f71a">
+    <link rel="stylesheet" href="../../assets/css/style.css?v=27743e398e">
     <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
     <link rel="alternate icon" href="../../assets/images/favicon.ico">
     <link rel="canonical" href="https://709527.xyz/blog/posts/github-actions-auto-index-blog-cicd.html">
@@ -117,7 +117,7 @@
 
         <div class="post-meta">
           <span class="meta-item"><span aria-hidden="true">📅</span> 2026-07-04 13:50:50</span>
-          <span class="meta-item"><span aria-hidden="true">⏱️</span> 5 min read</span>
+          <span class="meta-item"><span aria-hidden="true">⏱️</span> 10 min read</span>
           <span class="meta-item"><span aria-hidden="true">👤</span> 张小猛</span>
         </div>
 
@@ -170,14 +170,15 @@
 <li><strong>GitHub Actions</strong> 监听 <code>blog/posts/</code> 的 push，自动跑 <code>generate-index.js</code>，提交结果</li>
 </ol>
 <pre><code>本地写文章 → git push → CI 触发:
-  1. node scripts/generate-index.js
-  2. 生成 articles-index.json (搜索索引 + 标签云 + 归档 + 系列)
-  3. 重建 blog/index.html (文章列表 + 分类按钮)
-  4. 更新 index.html (首页大卡 + 最新列表 + JS数组)
-  5. 生成 sitemap.xml + rss.xml
-  6. git commit + push → Pages 自动部署
-</code></pre>
-
+<ol>
+<li>node scripts/generate-index.js</li>
+<li>生成 articles-index.json (搜索索引 + 标签云 + 归档 + 系列)</li>
+<li>重建 blog/index.html (文章列表 + 分类按钮)</li>
+<li>更新 index.html (首页大卡 + 最新列表 + JS数组)</li>
+<li>生成 sitemap.xml + rss.xml</li>
+<li>git commit + push → Pages 自动部署</li>
+</ol>
+<p></code></pre></p>
 <h2>方案设计</h2>
 <h3>为什么选择全量重建而非增量</h3>
 <p>增量更新的诱惑很大——只改一行，快。但问题很棘手：</p>
@@ -199,119 +200,117 @@
 <h2>generate-index.js 实现</h2>
 <p>核心逻辑非常直白：</p>
 <pre><code>// Phase 1: 扫描所有文章，解析元数据
-const files = fs.readdirSync(POSTS_DIR).filter(f =&gt; f.endsWith(&#39;.html&#39;));
-const posts = files.map(file =&gt; {
-  const content = fs.readFileSync(path.join(POSTS_DIR, file), &#39;utf-8&#39;);
-  const titleMatch = content.match(/&lt;title&gt;([^&lt;]+)&lt;\/title&gt;/);
-  // ... 从 HTML 中提取 title/date/tags/category/excerpt
-  return { slug, title, date, category, tags, excerpt, readTime, url };
-});
-
-// Phase 2-6: 写入各种输出文件
-rebuildBlogIndex(posts);   // blog/index.html
-rebuildHomePage(posts);    // index.html
-generateSitemap(posts);    // sitemap.xml
-generateRSS(posts);        // rss.xml
-// articles-index.json 在 Phase 1 排序后直接写入
-</code></pre>
-
+<p>const files = fs.readdirSync(POSTS_DIR).filter(f =&gt; f.endsWith(&#39;.html&#39;));</p>
+<p>const posts = files.map(file =&gt; {</p>
+<p>const content = fs.readFileSync(path.join(POSTS_DIR, file), &#39;utf-8&#39;);</p>
+<p>const titleMatch = content.match(/&lt;title&gt;([^&lt;]+)&lt;\/title&gt;/);</p>
+<p>// ... 从 HTML 中提取 title/date/tags/category/excerpt</p>
+<p>return { slug, title, date, category, tags, excerpt, readTime, url };</p>
+<p>});</p>
+<p>// Phase 2-6: 写入各种输出文件</p>
+<p>rebuildBlogIndex(posts);   // blog/index.html</p>
+<p>rebuildHomePage(posts);    // index.html</p>
+<p>generateSitemap(posts);    // sitemap.xml</p>
+<p>generateRSS(posts);        // rss.xml</p>
+<p>// articles-index.json 在 Phase 1 排序后直接写入</p>
+<p></code></pre></p>
 <p>整个脚本不到 250 行，纯 Node.js 无外部依赖。CI 上不需要 <code>npm install</code>。</p>
 <h3>解析 HTML 的元数据提取</h3>
 <p>从 HTML 中提取元数据用正则：</p>
 <pre><code>// 日期: &lt;span&gt;&lt;span>📅 2026-07-04&lt;/span>&lt;/span&gt;
-const dateMatch = content.match(/&lt;span&gt;📅 (\d{4}-\d{1,2}-\d{1,2})&lt;\/span&gt;/);
-
-// 标签: &lt;span class=&quot;tag&quot;&gt;Android&lt;/span&gt;
-const tagMatches = content.match(/&lt;span class=&quot;tag&quot;&gt;([^&lt;]+)&lt;\/span&gt;/g);
-
-// 分类: &lt;span class=&quot;category-tag&quot;&gt;前端&lt;/span&gt;
-const catMatch = content.match(/&lt;span class=&quot;category-tag&quot;[^&gt;]*&gt;([^&lt;]+)&lt;\/span&gt;/);
-
-// 描述: &lt;meta name=&quot;description&quot; content=&quot;...&quot;&gt;
-const descMatch = content.match(/&lt;meta name=&quot;description&quot; content=&quot;([^&quot;]+)&quot;/);
-</code></pre>
-
+<p>const dateMatch = content.match(/&lt;span&gt;📅 (\d{4}-\d{1,2}-\d{1,2})&lt;\/span&gt;/);</p>
+<p>// 标签: &lt;span class=&quot;tag&quot;&gt;Android&lt;/span&gt;</p>
+<p>const tagMatches = content.match(/&lt;span class=&quot;tag&quot;&gt;([^&lt;]+)&lt;\/span&gt;/g);</p>
+<p>// 分类: &lt;span class=&quot;category-tag&quot;&gt;前端&lt;/span&gt;</p>
+<p>const catMatch = content.match(/&lt;span class=&quot;category-tag&quot;[^&gt;]*&gt;([^&lt;]+)&lt;\/span&gt;/);</p>
+<p>// 描述: &lt;meta name=&quot;description&quot; content=&quot;...&quot;&gt;</p>
+<p>const descMatch = content.match(/&lt;meta name=&quot;description&quot; content=&quot;([^&quot;]+)&quot;/);</p>
+<p></code></pre></p>
 <p>这种"数据在 HTML 里"的模式其实很适合静态博客——HTML 就是唯一的真相源。不需要额外的 frontmatter 或数据库。</p>
 <h3>处理排序的边界情况</h3>
 <p>排序规则：按日期降序，同日文章按 <code>blog/index.html</code> 原有顺序。</p>
 <pre><code>// 先构建&quot;原顺序&quot;映射
-const htmlOrder = {};
-let orderIdx = 0;
-const linkRegex = /href=&quot;posts\/([^&quot;&#39;]+\.html)&quot;/g;
-while ((match = linkRegex.exec(blogIndexContent)) !== null) {
-  if (!(match[1] in htmlOrder)) htmlOrder[match[1]] = orderIdx++;
-}
-
-// 排序
-posts.sort((a, b) =&gt; {
-  const dateDiff = new Date(b.date) - new Date(a.date);
-  if (dateDiff !== 0) return dateDiff;
-  return (htmlOrder[a.slug + &#39;.html&#39;] ?? 9999) - (htmlOrder[b.slug + &#39;.html&#39;] ?? 9999);
-});
-</code></pre>
-
+<p>const htmlOrder = {};</p>
+<p>let orderIdx = 0;</p>
+<p>const linkRegex = /href=&quot;posts\/([^&quot;&#39;]+\.html)&quot;/g;</p>
+<p>while ((match = linkRegex.exec(blogIndexContent)) !== null) {</p>
+<p>if (!(match[1] in htmlOrder)) htmlOrder[match[1]] = orderIdx++;</p>
+<p>}</p>
+<p>// 排序</p>
+<p>posts.sort((a, b) =&gt; {</p>
+<p>const dateDiff = new Date(b.date) - new Date(a.date);</p>
+<p>if (dateDiff !== 0) return dateDiff;</p>
+<p>return (htmlOrder[a.slug + &#39;.html&#39;] ?? 9999) - (htmlOrder[b.slug + &#39;.html&#39;] ?? 9999);</p>
+<p>});</p>
+<p></code></pre></p>
 <p>第一次跑的时候 <code>blog/index.html</code> 是旧的，排出来的顺序和旧的一致。第二次跑的时候 <code>blog/index.html</code> 已更新，所以同日的顺序会稳定下来。</p>
 <h3>RSS 日期格式化的坑</h3>
 <p>RSS 规范要求 RFC 822 格式：<code>Sat, 04 Jul 2026 00:00:00 +0800</code>。</p>
 <p>JavaScript 处理日期的坑不少。我踩了一个：</p>
 <pre><code>// ❌ 错误：Date 解析带时区的 ISO 字符串时有偏移
-new Date(&#39;2026-07-04T00:00:00+08:00&#39;).getUTCDay() // → 5 (Fri)
-                                                      // 因为 2026-07-04 00:00+08
-                                                      // = 2026-07-03 16:00 UTC
-
-// ✅ 正确：用本地时间构造函数
-const [y, m, d] = &#39;2026-07-04&#39;.split(&#39;-&#39;).map(Number);
-const localDate = new Date(y, m - 1, d);
-localDate.getDay() // → 6 (Sat)
-</code></pre>
-
+<p>new Date(&#39;2026-07-04T00:00:00+08:00&#39;).getUTCDay() // → 5 (Fri)</p>
+<p>// 因为 2026-07-04 00:00+08</p>
+<p>// = 2026-07-03 16:00 UTC</p>
+<p>// ✅ 正确：用本地时间构造函数</p>
+<p>const [y, m, d] = &#39;2026-07-04&#39;.split(&#39;-&#39;).map(Number);</p>
+<p>const localDate = new Date(y, m - 1, d);</p>
+<p>localDate.getDay() // → 6 (Sat)</p>
+<p></code></pre></p>
 <h3>GitHub Actions workflow 配置</h3>
 <pre><code>name: Update Blog Index &amp; Cache Hash
-on:
-  push:
-    branches: [main]
-    paths:
-      - &#39;blog/posts/**&#39;
-jobs:
-  update-index:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write    # ← 关键：允许提交回仓库
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: &#39;20&#39;
-      - name: Generate blog index
-        run: node scripts/generate-index.js
-      - name: Update cache-busting hashes
-        run: node -e &#39;...&#39;  # 计算 CSS/JS 的 MD5 hash
-      - name: Commit and Push
-        run: |
-          git config user.email &quot;github-actions[bot]@users.noreply.github.com&quot;
-          git config user.name &quot;github-actions[bot]&quot;
-          git add -A
-          git diff --staged --quiet || git commit -m &quot;chore: auto-update blog index &amp; cache hashes&quot;
-          git push
-</code></pre>
-
+<p>on:</p>
+<p>push:</p>
+<p>branches: [main]</p>
+<p>paths:</p>
+<ul>
+<li>&#39;blog/posts/**&#39;</li>
+</ul>
+<p>jobs:</p>
+<p>update-index:</p>
+<p>runs-on: ubuntu-latest</p>
+<p>permissions:</p>
+<p>contents: write    # ← 关键：允许提交回仓库</p>
+<p>steps:</p>
+<ul>
+<li>uses: actions/checkout@v4</li>
+<li>uses: actions/setup-node@v4</li>
+</ul>
+<p>with:</p>
+<p>node-version: &#39;20&#39;</p>
+<ul>
+<li>name: Generate blog index</li>
+</ul>
+<p>run: node scripts/generate-index.js</p>
+<ul>
+<li>name: Update cache-busting hashes</li>
+</ul>
+<p>run: node -e &#39;...&#39;  # 计算 CSS/JS 的 MD5 hash</p>
+<ul>
+<li>name: Commit and Push</li>
+</ul>
+<p>run: |</p>
+<p>git config user.email &quot;github-actions[bot]@users.noreply.github.com&quot;</p>
+<p>git config user.name &quot;github-actions[bot]&quot;</p>
+<p>git add -A</p>
+<p>git diff --staged --quiet || git commit -m &quot;chore: auto-update blog index &amp; cache hashes&quot;</p>
+<p>git push</p>
+<p></code></pre></p>
 <p>关键是 <code>permissions: contents: write</code>——允许 CI 提交回仓库。</p>
 <p>另一个要点：<code>GITHUB_TOKEN</code> 的提交<strong>不会再次触发 workflow</strong>。这避免了"提交 → CI → 提交 → CI → ..."的死循环。</p>
 <h3>缓存哈希自动更新</h3>
 <p>CI workflow 还有个重要的副作用：自动更新 CSS/JS 的缓存版本号。</p>
 <pre><code>// CI 中的缓存哈希更新逻辑
-function updateHtmlFile(htmlPath) {
-  let html = fs.readFileSync(htmlPath, &#39;utf-8&#39;);
-  html = html.replace(/(assets\/(?:css|js)\/[^&quot;?]+)\?v=[a-f0-9]+/g, (match, assetPath) =&gt; {
-    const hash = crypto.createHash(&#39;md5&#39;)
-      .update(fs.readFileSync(assetPath))
-      .digest(&#39;hex&#39;).slice(0, 8);
-    return assetPath + &#39;?v=&#39; + hash;
-  });
-  fs.writeFileSync(htmlPath, html);
-}
-</code></pre>
-
+<p>function updateHtmlFile(htmlPath) {</p>
+<p>let html = fs.readFileSync(htmlPath, &#39;utf-8&#39;);</p>
+<p>html = html.replace(/(assets\/(?:css|js)\/[^&quot;?]+)\?v=[a-f0-9]+/g, (match, assetPath) =&gt; {</p>
+<p>const hash = crypto.createHash(&#39;md5&#39;)</p>
+<p>.update(fs.readFileSync(assetPath))</p>
+<p>.digest(&#39;hex&#39;).slice(0, 8);</p>
+<p>return assetPath + &#39;?v=&#39; + hash;</p>
+<p>});</p>
+<p>fs.writeFileSync(htmlPath, html);</p>
+<p>}</p>
+<p></code></pre></p>
 <p>每次 CSS/JS 内容变化，引用它们的 HTML 文件中的 <code>?v=xxx</code> 会自动更新，确保访客拿到的是最新版本。之前这个也要手动改或靠 Python 脚本处理。</p>
 <h3>模板与索引的解耦</h3>
 <p>模板（<code>blog-post-template.html</code>）决定文章的视觉呈现，索引（<code>index.html</code> / <code>sitemap.xml</code> 等）决定文章的发现路径。</p>
@@ -324,9 +323,8 @@ function updateHtmlFile(htmlPath) {
 <p>在旧的 "generate-post.py 一把梭" 模式下，这三个操作都混在一起。改模板后必须用 <code>refresh-posts.py</code> 回刷所有文章，但 <code>generate-post.py</code> 会再次修改 index.html——产生不必要的 diff。</p>
 <p>解耦后：</p>
 <pre><code>模板变更: refresh-posts.py (只改文章) → generate-index.js (CI 改索引)
-                            └──── 两个步骤，互不干扰 ────┘
-</code></pre>
-
+<p>└──── 两个步骤，互不干扰 ────┘</p>
+<p></code></pre></p>
 <h2>前后对比</h2>
 <h3>变更量对比</h3>
 <table>
@@ -363,40 +361,33 @@ function updateHtmlFile(htmlPath) {
 <h3>流程对比</h3>
 <p><strong>改前</strong>（写一篇文章的完整流程）：</p>
 <pre><code># 1. 生成文章
-python3 scripts/generate-post.py &quot;标题&quot; &quot;描述&quot; --tags &quot;标签&quot; --category 分类 --content article.md
-# 这一步修改了：文章HTML、首页、列表、sitemap、rss、articles-index.json、related-posts.js
-
-# 2. 手动检查（容易遗漏）
-grep &quot;标题&quot; index.html blog/index.html  # 确认首页和列表已更新
-grep &quot;标题&quot; sitemap.xml rss.xml         # 确认 sitemap 和 RSS
-
-# 3. git diff 里一堆&quot;自动化改动&quot;
-git status
-# modified: blog/posts/xxx.html
-# modified: index.html
-# modified: blog/index.html
-# modified: sitemap.xml
-# modified: rss.xml
-# modified: blog/articles-index.json
-# modified: assets/js/related-posts.js
-
-# 4. 提交（commit message 很难写清楚）
-git add -A &amp;&amp; git commit -m &quot;new post: xxx&quot; &amp;&amp; git push
-</code></pre>
-
+<p>python3 scripts/generate-post.py &quot;标题&quot; &quot;描述&quot; --tags &quot;标签&quot; --category 分类 --content article.md</p>
+<h1>这一步修改了：文章HTML、首页、列表、sitemap、rss、articles-index.json、related-posts.js</h1>
+<h1>2. 手动检查（容易遗漏）</h1>
+<p>grep &quot;标题&quot; index.html blog/index.html  # 确认首页和列表已更新</p>
+<p>grep &quot;标题&quot; sitemap.xml rss.xml         # 确认 sitemap 和 RSS</p>
+<h1>3. git diff 里一堆&quot;自动化改动&quot;</h1>
+<p>git status</p>
+<h1>modified: blog/posts/xxx.html</h1>
+<h1>modified: index.html</h1>
+<h1>modified: blog/index.html</h1>
+<h1>modified: sitemap.xml</h1>
+<h1>modified: rss.xml</h1>
+<h1>modified: blog/articles-index.json</h1>
+<h1>modified: assets/js/related-posts.js</h1>
+<h1>4. 提交（commit message 很难写清楚）</h1>
+<p>git add -A &amp;&amp; git commit -m &quot;new post: xxx&quot; &amp;&amp; git push</p>
+<p></code></pre></p>
 <p><strong>改后</strong>：</p>
 <pre><code># 1. 生成文章
-python3 scripts/generate-post.py &quot;标题&quot; &quot;描述&quot; --tags &quot;标签&quot; --category 分类 --content article.md
-# 只修改：文章HTML、related-posts.js
-
-# 2. 直接提交
-git add blog/posts/ assets/js/related-posts.js
-git commit -m &quot;new post: xxx&quot;
-git push
-
-# 3. CI 自动搞定剩下的，30秒后页面生效
-</code></pre>
-
+<p>python3 scripts/generate-post.py &quot;标题&quot; &quot;描述&quot; --tags &quot;标签&quot; --category 分类 --content article.md</p>
+<h1>只修改：文章HTML、related-posts.js</h1>
+<h1>2. 直接提交</h1>
+<p>git add blog/posts/ assets/js/related-posts.js</p>
+<p>git commit -m &quot;new post: xxx&quot;</p>
+<p>git push</p>
+<h1>3. CI 自动搞定剩下的，30秒后页面生效</h1>
+<p></code></pre></p>
 <p><code>git diff</code> 再也不会超过文章内容本身的长度了。</p>
 <h3>速度</h3>
 <p>CI 全量重建耗时 &lt; 5 秒（含 npm install）。实际上 <code>generate-index.js</code> 无外部依赖，去掉 <code>npm install</code> 后 &lt; 2 秒。</p>
@@ -411,7 +402,7 @@ git push
 <p>以前在另一台电脑上改了文章，push 回来后本地的 index.html 没更新就出现冲突。现在不会有这个问题——索引文件永远只在 CI 端生成。</p>
 <p>本地工作副本里 <code>index.html</code> / <code>blog/index.html</code> / <code>sitemap.xml</code> / <code>rss.xml</code> 完全可以不关心，因为它们在任何设备上都是一样的内容（由 CI 决定）。</p>
 <h3>调试效率提升</h3>
-<p>以前想排查"为什么这篇文章没出现在博客列表"，要翻 <code>generate-post.py</code> 里的 <code>update_blog_list</code> 函数，看它是否检测到文章已存在、排序是否正确、是否触发了某个边界条件。代码路径长且散落在 Python 文件中。</p>
+<p>以前想排查"为什么这篇文章没出现在博客列表"，要翻 <code>generate-post.py</code> 里的 <code>update<em>blog</em>list</code> 函数，看它是否检测到文章已存在、排序是否正确、是否触发了某个边界条件。代码路径长且散落在 Python 文件中。</p>
 <p>现在只要看 <code>generate-index.js</code> 里的排序逻辑——因为它是全量重建，输入确定，输出就确定。出错了直接跑本地 <code>node generate-index.js</code>，看哪一步出了问题。</p>
 <h2>适用场景</h2>
 <p>这个方案适合：</p>
@@ -570,8 +561,8 @@ git push
       <div class="post-info-section">
         <div class="post-info-label">文章信息</div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📅</span> 发布日期</span><span class="post-info-stat-value">2026-07-04</span></div>
-        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">⏱️</span> 阅读时间</span><span class="post-info-stat-value">5 min read</span></div>
-        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">2897 字</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">⏱️</span> 阅读时间</span><span class="post-info-stat-value">10 min read</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">2899 字</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📊</span> 章节数</span><span class="post-info-stat-value">8 节 · 15 子节</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">💻</span> 代码块</span><span class="post-info-stat-value">10 段</span></div>
       </div>

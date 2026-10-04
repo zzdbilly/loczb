@@ -13,7 +13,7 @@
         "投资",
         "个人财务"
       ],
-      "readTime": "18",
+      "readTime": 18,
       "url": "blog/posts/纳指定投把一笔月供当成长期运维来跑.html"
     },
     {
@@ -556,7 +556,7 @@
     },
     {
       "slug": "当-ai-编程-agent-有了眼睛safari-mcp-server-深度解读",
-      "title": "当 AI 编程 Agent 有了\"眼睛\"：Safari MCP Server 深度解读",
+      "title": "当 AI 编程 Agent 有了\\\"眼睛\\\"：Safari MCP Server 深度解读",
       "date": "2026-07-06",
       "dateTime": "2026-07-06 15:56:51",
       "category": "前端",
@@ -1655,7 +1655,7 @@
         "Android",
         "端侧推理"
       ],
-      "readTime": 5,
+      "readTime": 12,
       "url": "blog/posts/onnx-mobile-deployment.html"
     },
     {
@@ -1670,7 +1670,7 @@
         "前端",
         "离线应用"
       ],
-      "readTime": 5,
+      "readTime": 10,
       "url": "blog/posts/pwa-offline-web-app.html"
     },
     {
