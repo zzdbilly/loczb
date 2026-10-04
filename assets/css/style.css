@@ -1168,6 +1168,8 @@ a:hover {
   display: flex;
   gap: var(--space-sm);
   flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
   margin-bottom: var(--space-lg);
   scrollbar-width: none;
   -ms-overflow-style: none;
@@ -1178,18 +1180,14 @@ a:hover {
 @media (max-width: 640px) {
   .blog-filters {
     display: flex;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 0.45rem 0.5rem;
     padding-bottom: var(--space-sm);
     margin-bottom: var(--space-xl);
-    margin-left: calc(-1 * var(--space-md));
-    margin-right: calc(-1 * var(--space-md));
-    padding-left: var(--space-md);
-    padding-right: var(--space-md);
   }
   .blog-filters .filter-btn {
-    flex-shrink: 0;
     white-space: nowrap;
   }
 }
@@ -4183,6 +4181,8 @@ pre code.hljs {
 .blog-filters {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
   gap: 0.55rem;
   margin-bottom: var(--space-xl);
   padding: 6px 0 1.5rem;
@@ -4488,7 +4488,7 @@ pre code.hljs {
 /* 分类筛选条智能折叠隐藏 */
 .blog-filters {
   transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-  max-height: 200px;
+  max-height: 400px;
   opacity: 1;
   overflow: visible;
 }
@@ -4507,17 +4507,16 @@ pre code.hljs {
 @media (max-width: 640px) {
   .blog-filters {
     display: flex;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-    gap: 0.5rem;
-    padding: 6px var(--space-lg) 0.85rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 0.45rem 0.5rem;
+    padding: 6px 0 1.25rem;
     margin-bottom: 1.25rem;
-    margin-left: calc(-1 * var(--space-lg));
-    margin-right: calc(-1 * var(--space-lg));
-    max-height: 70px;
+    margin-left: 0;
+    margin-right: 0;
+    max-height: 400px;
+    overflow: visible;
   }
   .blog-filters::-webkit-scrollbar {
     display: none;
@@ -4525,7 +4524,7 @@ pre code.hljs {
   .blog-filters .filter-btn {
     flex-shrink: 0;
     white-space: nowrap;
-    padding: 0.4rem 0.85rem;
+    padding: 0.4rem 0.8rem;
     font-size: 0.75rem;
   }
 }
@@ -7089,8 +7088,7 @@ html, body {
   }
 
   .category-filter-bar,
-  .blog-topic-tags,
-  .projects-filter-bar {
+  .blog-topic-tags {
     display: flex;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
@@ -7102,8 +7100,19 @@ html, body {
     padding-right: 1rem;
   }
 
-  .category-filter-bar::-webkit-scrollbar,
-  .projects-filter-bar::-webkit-scrollbar {
+  .projects-filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .category-filter-bar::-webkit-scrollbar {
     display: none;
   }
 
