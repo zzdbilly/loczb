@@ -1,6 +1,21 @@
 {
   "posts": [
     {
+      "slug": "national-day-planned-maintenance",
+      "title": "国庆假期：把七天长假当成一次计划内停机维护",
+      "date": "2026-10-05",
+      "dateTime": "2026-10-05 09:48:29",
+      "category": "思考",
+      "tags": [
+        "国庆假期",
+        "精力管理",
+        "工程师视角",
+        "计划内停机"
+      ],
+      "readTime": 13,
+      "url": "blog/posts/national-day-planned-maintenance.html"
+    },
+    {
       "slug": "纳指定投把一笔月供当成长期运维来跑",
       "title": "纳指定投：把一笔月供当成长期运维来跑",
       "date": "2026-09-28",
@@ -1778,9 +1793,9 @@
     "安全"
   ],
   "stats": {
-    "totalPosts": 113,
-    "totalTags": 296,
-    "latestDate": "2026-09-28",
+    "totalPosts": 114,
+    "totalTags": 300,
+    "latestDate": "2026-10-05",
     "oldestDate": "2026-02-15"
   }
 }

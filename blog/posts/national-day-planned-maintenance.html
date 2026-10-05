@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <script>document.documentElement.classList.add("js");try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://static.cloudflareinsights.com https://loczb-comments.billycust716.workers.dev; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://loczb-comments.billycust716.workers.dev https://dashscope.aliyuncs.com https://709527.xyz https://www.709527.xyz https://cloudflareinsights.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
+    <script>/* 反点击劫持兜底：GitHub Pages 无法下发 X-Frame-Options / CSP frame-ancestors */(function(){if(self===top)return;try{top.location=self.location}catch(e){}setTimeout(function(){if(self!==top){document.documentElement.style.display='none';}},400);})();</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>国庆假期：把七天长假当成一次计划内停机维护 | 张小猛 - loczb</title>
+    <meta name="description" content="七天长假不是停机，而是一次难得的长维护窗口。用运维的视角重排假期：先盘点欠下的债，再按精力曲线排期，最后用三个可观测指标验证这次维护有没有成功。">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="国庆假期：把七天长假当成一次计划内停机维护 | 张小猛 - loczb">
+    <meta property="og:description" content="七天长假不是停机，而是一次难得的长维护窗口。用运维的视角重排假期：先盘点欠下的债，再按精力曲线排期，最后用三个可观测指标验证这次维护有没有成功。">
+    <meta property="og:url" content="https://709527.xyz/blog/posts/national-day-planned-maintenance.html">
+    <meta property="og:type" content="article">
+    <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
+    <meta property="og:site_name" content="loczb">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="国庆假期：把七天长假当成一次计划内停机维护 | 张小猛 - loczb">
+    <meta name="twitter:description" content="七天长假不是停机，而是一次难得的长维护窗口。用运维的视角重排假期：先盘点欠下的债，再按精力曲线排期，最后用三个可观测指标验证这次维护有没有成功。">
+    <meta name="twitter:image" content="https://709527.xyz/assets/images/og-image.png">
+
+        <script type="application/ld+json">
+{
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "国庆假期：把七天长假当成一次计划内停机维护",
+      "description": "七天长假不是停机，而是一次难得的长维护窗口。用运维的视角重排假期：先盘点欠下的债，再按精力曲线排期，最后用三个可观测指标验证这次维护有没有成功。",
+      "image": "https://709527.xyz/assets/images/og-image.png",
+      "author": {
+            "@type": "Person",
+            "name": "张小猛",
+            "url": "https://709527.xyz/about/"
+      },
+      "publisher": {
+            "@type": "Organization",
+            "name": "loczb",
+            "logo": {
+                  "@type": "ImageObject",
+                  "url": "https://709527.xyz/assets/images/favicon.svg"
+            }
+      },
+      "datePublished": "2026-10-05T09:48:29+08:00",
+      "dateModified": "2026-10-05T09:48:29+08:00",
+      "url": "https://709527.xyz/blog/posts/national-day-planned-maintenance.html",
+      "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://709527.xyz/blog/posts/national-day-planned-maintenance.html"
+      },
+      "keywords": "国庆假期, 精力管理, 工程师视角, 计划内停机",
+      "articleSection": "思考",
+      "timeRequired": "PT13M",
+      "inLanguage": "zh-CN"
+}
+    </script>
+
+    <link rel="stylesheet" href="../../assets/css/style.css?v=27743e398e">
+    <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
+    <link rel="alternate icon" href="../../assets/images/favicon.ico">
+    <link rel="canonical" href="https://709527.xyz/blog/posts/national-day-planned-maintenance.html">
+</head>
+<body>
+  <!-- PARTIAL:SKIP_LINK -->
+  <a href="#main-content" class="skip-link">跳至主要内容</a>
+  <!-- /PARTIAL:SKIP_LINK -->
+
+  <!-- Navigation -->
+<!-- PARTIAL:NAV -->
+  <nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">
+      loc<span>zb</span>
+    </a>
+    <button class="nav-toggle" aria-label="打开菜单" aria-expanded="false" aria-controls="nav-links-menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <div class="nav-overlay"></div>
+    <ul class="nav-links" id="nav-links-menu">
+      <li><a href="/" class="nav-link" data-nav="home">首页</a></li>
+      <li><a href="/projects/" class="nav-link" data-nav="projects">项目</a></li>
+      <li><a href="/blog/" class="nav-link active" data-nav="blog">博客</a></li>
+      <li><a href="/about/" class="nav-link" data-nav="about">关于</a></li>
+    </ul>
+    <button class="theme-toggle" aria-label="切换主题" title="切换亮/暗模式">
+      <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="5"></circle>
+        <line x1="12" y1="1" x2="12" y2="3"></line>
+        <line x1="12" y1="21" x2="12" y2="23"></line>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+        <line x1="1" y1="12" x2="3" y2="12"></line>
+        <line x1="21" y1="12" x2="23" y2="12"></line>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+      </svg>
+      <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+      </svg>
+    </button>
+  </div>
+</nav>
+  <!-- /PARTIAL:NAV -->
+  <main class="section" id="main-content" style="padding-bottom: 0; padding-top: var(--space-4xl);">
+    <div class="container container-narrow">
+      <a href="../index.html" class="back-link">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        返回博客列表
+      </a>
+
+      <article class="post-content">
+        <h1>国庆假期：把七天长假当成一次计划内停机维护</h1>
+
+        <div class="post-meta">
+          <span class="meta-item"><span aria-hidden="true">📅</span> 2026-10-05 09:48:29</span>
+          <span class="meta-item"><span aria-hidden="true">⏱️</span> 13 min read</span>
+          <span class="meta-item"><span aria-hidden="true">👤</span> 张小猛</span>
+        </div>
+
+        <div class="post-tags">
+          <span class="tag">国庆假期</span>
+          <span class="tag">精力管理</span>
+          <span class="tag">工程师视角</span>
+          <span class="tag">计划内停机</span>
+        </div>
+
+        
+
+        <h2>写在前面：这篇文章写给谁</h2>
+<p>如果你是一放长假就不知道干什么、或者假期过完比上班还累的人，这篇文章是写给你的。我做了十多年开发，前几年每次长假都差不多：前两天补觉，中间几天被聚会和饭局切碎，最后一天焦虑地发现「七天啥也没干」，然后带着更重的疲惫回去上班。</p>
+<p>后来我换了个思路——把假期当成一次<strong>计划内停机维护</strong>。这不是修辞上的比喻，而是真的用运维那套东西来安排：先盘点要还的债，再按精力曲线排窗口，最后用可观测指标验证这次维护到底有没有成功。这篇文章是我这两年实操下来的一套方法，全是判断和取舍，不讲鸡汤。</p>
+<p>前置条件：你有一个连续几天、不需要随时响应的假期窗口；你不追求把假期塞满，只想在收假时状态比放假前好。</p>
+<h2>一、先纠正一个认知：假期是维护窗口，不是停机</h2>
+<h3>停机是坏了才修，维护是主动的</h3>
+<p>运维里「停机」和「维护」是两回事。停机是故障驱动的——系统挂了，被迫停服抢修，修完还欠着一堆临时补丁。维护是计划驱动的——你主动挑一个流量低谷的窗口，把该还的技术债、该打的补丁、该升级的依赖一次做完。</p>
+<p>大多数人过假期的模式是「停机」：平时硬扛，扛到身体报警了才停；停下来之后没有计划，随波逐流，七天过去系统重启，隐患一个没动。而维护窗口的价值恰恰在于——它是流量低谷，是你一年里少有的、可以安心做「耗时但不紧急」事情的时段。</p>
+<h3>为什么工作日永远还不上这些债</h3>
+<p>工作日的算力被两件事吃掉：一是排满的交付节奏，二是随时可能来的中断。还债这类任务有个共同特点——它们都要求连续、不被打断的注意力，而且短期没有可见产出。这类任务在工作日会被无限推迟，因为它们永远竞争不过「有 deadline 的活」。</p>
+<p>假期不一样：外部中断降到最低，交付压力清零。这就是维护窗口。你不把它当窗口用，它就只是一段被浪费的低谷。</p>
+<h3>我给自己定的目标：收假不欠债</h3>
+<p>我给每次长假定的目标只有一句话：<strong>收假那天，我欠自己的债比放假前少，而不是多。</strong></p>
+<p>注意这个目标的方向。不是「假期要有产出」，也不是「要玩够本」，而是把净负债降下来。产出是给公司的，玩够本是给别人看的，只有「不欠债」是对自己真正有意义的。</p>
+<h2>二、维护第一步：盘点你到底欠了哪些债</h2>
+<h3>睡眠债：利息最高的一笔</h3>
+<p>运维里最贵的债是那种「不还会滚利息」的。睡眠就是这一类。连续熬夜之后，你以为补一觉就回来了，实际上睡眠债是按小时累积的，一次补不回来。</p>
+<p>我给自己的算法很粗暴：平时工作日平均少睡一小时，一周就是五小时。长假头两天，我什么正事都不安排，唯一的任务就是把这笔债还到「自然醒且不困」为止。这不是懒，这是维护窗口里优先级最高的止损项——带着睡眠债去度假，等于在故障状态下做维护。</p>
+<h3>身体债：久坐和视力的隐性告警</h3>
+<p>程序员的债大多是「慢性、无症状、一旦报警就晚了」的那种，跟磁盘坏道很像。久坐、低头、屏幕时间、缺运动，这些东西平时不疼不痒，但它们是有累积阈值的。</p>
+<p>盘点方法很朴素：假期第一天，做一次「全身体检」式的自问——</p>
+<ul>
+<li>早上起床腰和颈椎有没有僵</li>
+<li>爬三层楼会不会喘</li>
+<li>眼睛干不干、看远处糊不糊</li>
+</ul>
+<p>任何一项答「是」，它就是这次窗口要处理的告警。不用搞复杂，散步、慢跑、拉伸、把屏幕时间压下来，就是最便宜有效的修复。</p>
+<h3>关系债：被工作挤掉的那些连接</h3>
+<p>这笔债最容易被忽略，因为它不疼。但它是真实存在的：父母的电话你总是「回头打」，老朋友的约你总是「这阵子忙」，孩子的成长你只在视频里看。</p>
+<p>关系债的特点是不可逆——有些连接错过窗口期就再也补不回来，像那种只在特定版本存在的接口，升级后就没了。长假是少数能整块用来还这笔债的时间，别把它让给无效社交。</p>
+<h3>信息债：收藏夹里躺着的那几百条</h3>
+<p>每个人都有一个「以后再看」的收藏夹，里面躺着几十上百条文章、视频、课程。这笔债的特点是：不还也不会立刻出问题，但它一直在后台占着你的认知内存——你隐约知道自己「欠着一堆没看的东西」，这种背景焦虑本身就在耗电。</p>
+<p>维护窗口里，我给信息债定的处理原则是：<strong>要么当场消化，要么当场删掉。</strong> 不允许它继续挂在后台。</p>
+<h2>三、窗口期怎么排：把七天当成一次发布计划</h2>
+<h3>第一天：只做止损，不做新功能</h3>
+<p>发布计划里有个铁律：灰度发布的第一步永远是「观察基线」，不是「上新功能」。假期第一天同理——不要一上来就安排读书、学习、健身这些「新功能」，先做止损：睡够、吃好、把工作群的打扰关掉。</p>
+<p>第一天做止损，后面几天才有干净的基线去干别的。反过来，第一天就冲去做新任务，等于在故障还没修的系统上部署新版本。</p>
+<h3>中间几天：按精力曲线排任务，不按日历排</h3>
+<p>大部分人的假期排期是按日历的：「周二去哪、周三见谁」。我按精力曲线排：早上精力最好，安排需要深度的事情（读书、写东西、想清楚一件事）；下午精力回落，安排体力或社交；晚上精力最低，安排纯放松。</p>
+<p>这套排法的好处是，它承认了一个事实——你的算力是有波动的，把深度任务排在精力低谷，等于把核心业务跑在负载最高的时段。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">时段</th>
+<th style="text-align: center;">精力水平</th>
+<th style="text-align: left;">适合的事</th>
+<th style="text-align: left;">不适合的事</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">上午</td>
+<td style="text-align: center;">高</td>
+<td style="text-align: left;">深度阅读、写作、想清楚一个决策</td>
+<td style="text-align: left;">刷信息流、处理琐事</td>
+</tr>
+<tr>
+<td style="text-align: left;">下午</td>
+<td style="text-align: center;">中</td>
+<td style="text-align: left;">运动、社交、外出</td>
+<td style="text-align: left;">需要连续专注的硬任务</td>
+</tr>
+<tr>
+<td style="text-align: left;">晚上</td>
+<td style="text-align: center;">低</td>
+<td style="text-align: left;">纯放松、看片、早睡</td>
+<td style="text-align: left;">做大额消费决定、赶工</td>
+</tr>
+</tbody>
+</table>
+<h3>留出缓冲日：别把七天排满</h3>
+<p>发布计划里永远要留缓冲（buffer）。七天假，我只排四到五天的事，剩下两到三天完全留白。</p>
+<p>留白不是浪费。真实世界总有意外——朋友临时约、身体需要多睡、某个任务比预想耗时。排满的计划一旦被一个意外打乱，后面全线崩；留了缓冲的计划，意外只是消耗缓冲，不破坏整体。</p>
+<h3>最后一天：预热，不是加班</h3>
+<p>收假前一天，最忌讳的是「报复性赶工」——把假期没做的事堆到最后一天补，结果带着疲劳和焦虑回去上班。</p>
+<p>我的做法是把它当成系统的<strong>预热</strong>：提前一天把作息调回工作节奏，把第二天的待办理一遍，把工作环境（收邮件、看消息）恢复连接。这跟上线前预热缓存是一个道理——不要等到流量打进来才开始热。</p>
+<h2>四、国庆特有的几个坑</h2>
+<h3>出行即压力测试：人山人海是必然</h3>
+<p>国庆的交通和景区是典型的峰值流量。这不是「运气不好」，是确定性事件——全国同时放假，热门线路必然过载。把它当成一次已知的压力测试，就不会因为堵在路上而暴躁：要么错峰，要么干脆不挤热点，要么把出行本身当成体验而不是手段。</p>
+<h3>信息过载：朋友圈的「晒」是一种缓存污染</h3>
+<p>长假期间社交平台的信息密度会暴涨，而且内容高度同质——晒旅游、晒美食、晒团圆。刷久了会产生一种隐秘的焦虑：「别人都在精彩，我是不是在浪费假期。」</p>
+<p>从系统角度看，这就是缓存污染：无关的高频数据反复冲刷你的注意力缓存，把你从自己的节奏里挤出去。我的处理方式是主动降频——假期把这类信息流的使用压到每天固定的一小段，而不是随手就刷。</p>
+<h3>消费冲动：促销是给注意力做的压测</h3>
+<p>国庆也是消费高峰，各种促销、满减、限时。这些设计的核心目标就是劫持你的决策——制造紧迫感、放大比较焦虑、让你在疲劳状态下做大额决定。</p>
+<p>一个实用原则：<strong>假期不买大件。</strong> 任何超过某个金额的决定，都留到收假、头脑清醒时再定。你不是在错过优惠，你是在避免在低质量注意力状态下做高影响决策。</p>
+<h2>五、假期里我实际做的几件事</h2>
+<h3>断连：把通知分级降级</h3>
+<p>第一步是把「任何人都能中断我」的默认配置改掉。工作群、邮件、非紧急 App 全部静音或免打扰，只留真正紧急的通道（家人电话）。做完这一步，你会立刻感觉到后台轮询停了，注意力明显变干净。</p>
+<h3>补觉：用固定起床时间锚定节律</h3>
+<p>补觉不等于随便睡到中午。我的做法是固定一个起床时间（比工作日晚一点，但固定），睡够自然醒。固定起床时间能锚定生物钟，避免假期结束后的「时差反应」。</p>
+<h3>慢跑与散步：最低成本的系统巡检</h3>
+<p>每天一段散步或慢跑，是我给身体做的日常巡检。它同时解决三件事：久坐、视力、情绪。成本极低——一双鞋、半小时，回报是当天剩余时间的精力都更稳。</p>
+<h3>读书与长文：给大脑加载新依赖</h3>
+<p>假期是少数能整块读书的时段。我一般选一本和工作不直接相关、但能拓展视角的书，或者几篇一直想读的长文。关键是<strong>读完要有输出</strong>——哪怕只是几行笔记，否则读了等于没加载，下次还得重来。</p>
+<h3>收尾工作：把悬念清干净</h3>
+<p>放假前花半小时做一次工作收尾，能显著降低假期的背景焦虑：</p>
+<pre><code class="language-bash"># 1. 把未完成的分支和改动记录下来，别让它们悬在半空
+git status --short
+git stash list
+
+# 2. 把「回来第一件事」写成清单，收假时不用重新进入上下文
+#    我习惯直接写进日历或备忘录，收假当天第一条就是它
+</code></pre>
+<p>这里的重点不是命令本身，而是那个动作：把没做完的事<strong>明确地放下</strong>，而不是含糊地悬着。悬着的任务会在后台持续占用你的认知资源，明确放下的任务不会。收尾清单我一般长这样：</p>
+<pre><code class="language-text">收假第一件事清单（示例）
+1. 看线上告警历史，确认假期期间没有遗留事故
+2. 把 stash 的改动过一遍，决定继续还是丢弃
+3. 回复假期里刻意搁置的非紧急消息
+</code></pre>
+<h2>六、怎么验证这次维护是成功的</h2>
+<h3>三个可观测指标</h3>
+<p>维护做没做好，不看感觉，看指标。我给自己定了三个可观测的：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">指标</th>
+<th style="text-align: left;">达标线</th>
+<th style="text-align: left;">不达标说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">睡眠</td>
+<td style="text-align: left;">收假前两晚自然醒且白天不困</td>
+<td style="text-align: left;">睡眠债没还够，下次窗口优先补</td>
+</tr>
+<tr>
+<td style="text-align: left;">精力</td>
+<td style="text-align: left;">收假当天下午不需要靠咖啡硬撑</td>
+<td style="text-align: left;">作息没调回来，或假期透支了</td>
+</tr>
+<tr>
+<td style="text-align: left;">情绪</td>
+<td style="text-align: left;">想到第二天上班是平常心，不是抵触</td>
+<td style="text-align: left;">某个债（多半是关系或信息）没处理</td>
+</tr>
+</tbody>
+</table>
+<p>三个都达标，这次窗口就是成功的。有一个不达标，说明某个债没还够。</p>
+<h3>失败也没关系：维护窗口允许回滚</h3>
+<p>不是每次维护都会成功。可能假期被意外打乱，可能某个债盘错了量。这没关系——维护窗口的核心价值是<strong>给了你一次主动修复的机会</strong>，而不是要求你每次都修满。</p>
+<p>把这次的经验记下来（哪笔债最重、哪种排期最舒服），下次窗口的排期就会更准。维护是个迭代过程，不是一次性发布。</p>
+<h2>结尾：把窗口期的思路带回日常</h2>
+<p>写到这里，其实我真正想说的不是「假期该怎么过」。我想说的是：<strong>维护窗口的思路，可以带回日常。</strong></p>
+<p>你不需要等到长假才开始还债。每个周末都是一次小型维护窗口，每天晚上都是一次微型窗口。区别只在于你有没有把它当窗口用——是随波逐流地消耗掉，还是有意识地先止损、再排期、最后验证。</p>
+<p>国庆七天，说长不长，说短不短。把它当成一次计划内停机维护，收假那天你会发现，你欠自己的债真的变少了。</p>
+
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="纳指定投把一笔月供当成长期运维来跑.html">
+            <div class="related-post-card-title">纳指定投：把一笔月供当成长期运维来跑</div>
+            <div class="related-post-card-tags"><span>理财</span><span>指数基金</span><span>定投</span></div>
+          </a>
+          <a class="related-post-card" href="tech-manager-vs-pm-vs-po.html">
+            <div class="related-post-card-title">技术经理、项目经理、产品经理的区别</div>
+            <div class="related-post-card-tags"><span>职场</span><span>团队管理</span><span>角色认知</span></div>
+          </a>
+          <a class="related-post-card" href="how-engineers-report.html">
+            <div class="related-post-card-title">技术人员如何做好汇报</div>
+            <div class="related-post-card-tags"><span>职场</span><span>沟通</span><span>汇报</span></div>
+          </a>
+          <a class="related-post-card" href="quick-energy-recovery.html">
+            <div class="related-post-card-title">如何快速恢复能量，让自己快乐起来</div>
+            <div class="related-post-card-tags"><span>能量管理</span><span>情绪</span><span>生活方式</span></div>
+          </a>
+          <a class="related-post-card" href="seek-long-term-desires.html">
+            <div class="related-post-card-title">欲望也要看周期：把长期欲望当成你的核心资产</div>
+            <div class="related-post-card-tags"><span>认知科学</span><span>长期主义</span><span>自我管理</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
+
+        <!-- Post Copyright & License Card -->
+        <div class="post-copyright-card">
+          <div class="copyright-header">
+            <div class="copyright-badge">
+              <span>📜</span>
+              <span>原创与知识共享协议</span>
+            </div>
+            <button class="copyright-cite-btn" id="copy-cite-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+              </svg>
+              <span>复制 Markdown 引用</span>
+            </button>
+          </div>
+          <div class="copyright-list">
+            <div class="copyright-item"><strong>文章标题：</strong>国庆假期：把七天长假当成一次计划内停机维护</div>
+            <div class="copyright-item"><strong>文章作者：</strong>张小猛 · loczb</div>
+            <div class="copyright-item"><strong>永久链接：</strong><a href="https://709527.xyz/blog/posts/national-day-planned-maintenance.html">https://709527.xyz/blog/posts/national-day-planned-maintenance.html</a></div>
+            <div class="copyright-item"><strong>版权声明：</strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 国际许可协议。商业转载请联系作者获得授权，非商业转载请注明出处。</div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </main>
+
+  <!-- Related Posts / Navigation -->
+  <section class="section" aria-label="读完之后" style="padding-top: 0;">
+    <div class="container container-narrow">
+      <!-- Post Nav Prev Next -->
+      <nav class="post-nav" aria-label="文章翻页导航">
+        <a href="纳指定投把一笔月供当成长期运维来跑.html" class="post-nav-card post-nav-prev" rel="prev">
+          <span class="post-nav-label">← 上一篇</span>
+          <span class="post-nav-title">纳指定投：把一笔月供当成长期运维来跑</span>
+        </a>
+        <div class="post-nav-card post-nav-next disabled" aria-disabled="true">
+          <span class="post-nav-label">下一篇 →</span>
+          <span class="post-nav-title">已是最新篇博文</span>
+        </div>
+      </nav>
+      <!-- /Post Nav Prev Next -->
+      <hr style="border: none; border-top: 1px solid var(--color-border); margin: var(--space-2xl) 0;">
+
+      <div class="blog-topics" style="margin-bottom: var(--space-xl); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+        <div>
+          <span class="topic-label">读完之后:</span>
+          <a href="../index.html" class="topic-tag">返回博客列表</a>
+          <a href="../index.html?view=series" class="topic-tag">浏览全部专栏</a>
+        </div>
+        <a href="#main-content" class="topic-tag" style="margin-left: auto;">↑ 回到顶部</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+<!-- PARTIAL:FOOTER -->
+  <footer class="footer" role="contentinfo">
+  <div class="footer-inner">
+    <p class="footer-signature">写代码，做产品，也认真生活。</p>
+    <div class="footer-social">
+      <a href="https://github.com/zzdbilly" class="footer-social-link" target="_blank" rel="noopener" aria-label="GitHub">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+      </a>
+      <a href="https://twitter.com/zzdbilly" class="footer-social-link" target="_blank" rel="noopener" aria-label="X (Twitter)">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      </a>
+      <a href="/rss.xml" class="footer-social-link" target="_blank" rel="noopener" aria-label="RSS 订阅">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+      </a>
+    </div>
+    <div class="footer-links">
+      <a href="/" class="footer-link">首页</a>
+      <a href="/projects/" class="footer-link">项目</a>
+      <a href="/blog/" class="footer-link">博客</a>
+      <a href="/about/" class="footer-link">关于</a>
+    </div>
+    <p class="footer-copyright">&copy; 2026 张小猛 · loczb · Built with care</p>
+  </div>
+</footer>
+  <!-- /PARTIAL:FOOTER -->
+
+  <script defer src="../../assets/js/main.js"></script>
+  <script defer src="../../assets/js/article.js"></script>
+  <script defer src="../../assets/js/share.js"></script>
+  <!-- Back to Top & Reading Progress -->
+  <button class="back-to-top" id="backToTop" aria-label="回到顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
+  <div class="reading-progress" id="readingProgress"></div>
+
+  <!-- Post Sidebar Info（左侧） -->
+  <div class="post-sidebar-info" id="postSidebar">
+    <div class="post-info-card">
+      <div class="post-info-section">
+        <div class="post-info-label">作者</div>
+        <div class="post-info-author">
+          <div class="post-info-avatar">小</div>
+          <div>
+            <div class="post-info-author-name">张小猛</div>
+            <div class="post-info-author-desc">写代码，做产品</div>
+          </div>
+        </div>
+      </div>
+      <div class="post-info-section">
+        <div class="post-info-label">文章信息</div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📅</span> 发布日期</span><span class="post-info-stat-value">2026-10-05</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">⏱️</span> 阅读时间</span><span class="post-info-stat-value">13 min read</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">3489 字</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📊</span> 章节数</span><span class="post-info-stat-value">8 节 · 21 子节</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">💻</span> 代码块</span><span class="post-info-stat-value">2 段</span></div>
+      </div>
+      <div class="post-info-section" id="postSidebarTags">
+        <div class="post-info-label">标签</div>
+        <div class="post-info-links">
+          <a href="../../blog/index.html?tag=%E5%9B%BD%E5%BA%86%E5%81%87%E6%9C%9F" class="post-info-link"># 国庆假期</a>
+          <a href="../../blog/index.html?tag=%E7%B2%BE%E5%8A%9B%E7%AE%A1%E7%90%86" class="post-info-link"># 精力管理</a>
+          <a href="../../blog/index.html?tag=%E5%B7%A5%E7%A8%8B%E5%B8%88%E8%A7%86%E8%A7%92" class="post-info-link"># 工程师视角</a>
+          <a href="../../blog/index.html?tag=%E8%AE%A1%E5%88%92%E5%86%85%E5%81%9C%E6%9C%BA" class="post-info-link"># 计划内停机</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Post TOC -->
+  <div class="post-toc-container" id="postToc">
+    <nav class="post-toc" aria-label="文章目录">
+      <div class="post-toc-title">目录</div>
+      <ul class="post-toc-list" id="tocList">
+      </ul>
+    </nav>
+  </div>
+
+  <!-- Comment System -->
+  <script src="../../workers/comment-system/comment-widget.js?v=a650e91e3e" defer></script>
+
+  <!-- highlight.js 代码语法高亮（本地完整构建，无外部依赖） -->
+  <script defer src="../../assets/vendor/highlight/highlight.min.js"></script>
+  <script>
+    /* 语法高亮改为「可见优先、空闲补齐」：
+       highlight.js 要遍历全篇代码块并生成数百个 span，若在 DOMContentLoaded 里同步跑完，
+       会在关键路径上长时间占住主线程（2026-09-27 实测本页长任务 1548ms、DCL 3651ms；
+       改动后长任务 145ms、DCL 1378ms）。这里 DCL 阶段只登记观察，实际高亮交给
+       IntersectionObserver（近屏 800px 内优先）+ requestIdleCallback（剩余块每片 ≤4 块），
+       首屏代码块的着色时机与视觉基本无变化。 */
+    (function() {
+      function canPaint(b) {
+        return !b.classList.contains('hljs') && !b.closest('.codehilite');
+      }
+      function paint(b) {
+        if (!canPaint(b)) return;
+        try { hljs.highlightElement(b); } catch (e) {}
+      }
+      function init() {
+        var blocks = [].slice.call(document.querySelectorAll('pre code')).filter(canPaint);
+        if (!blocks.length) return;
+        if ('IntersectionObserver' in window) {
+          var io = new IntersectionObserver(function(entries, obs) {
+            entries.forEach(function(en) {
+              if (!en.isIntersecting) return;
+              paint(en.target);
+              obs.unobserve(en.target);
+            });
+          }, { rootMargin: '800px 0px' });
+          blocks.forEach(function(b) { io.observe(b); });
+        }
+        var i = 0;
+        var idle = window.requestIdleCallback || window.setTimeout;
+        var step = function() {
+          var quota = 4;
+          while (i < blocks.length && quota-- > 0) paint(blocks[i++]);
+          if (i < blocks.length) idle(step);
+        };
+        idle(step); // 不在 DCL 里同步跑：可见块由 IntersectionObserver 处理，其余走空闲分片
+      }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+      } else {
+        init();
+      }
+    })();
+  </script>
+
+  <!-- Cloudflare Web Analytics -->
+  <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "29e7cff6f37448989538e2165cb79187"}'></script>
+</body>
+</html>
