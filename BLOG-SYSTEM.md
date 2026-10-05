@@ -175,37 +175,66 @@ python3 scripts/generate-post.py "标题" "描述" \
 - 重建首页、sitemap.xml（不含 page-N）、rss.xml、sw.js 缓存版本
 
 触发方式：
-- **本地**：`node scripts/generate-index.js`
-- **自动**：无 CI 触发（见第五节）——发文时由 `generate-post.py` 自动调用，回刷时由 `refresh-posts.py` 调用
+- **本地**：`node scripts/generate-index.js`（`npm run build`）
+- **自动**：发文/回刷脚本末尾自动调用（`generate-post.py`、`build-posts.py`、`refresh-posts.py`）
+- **CI 不重建索引**（见第五节）：索引必须在推送前本地重建并一起提交，否则 CI 门禁会红
 
 ---
 
-## 五、CI/CD（已下线，勿按此操作）
+## 五、CI/CD 现状（2026-10-05 更正）
 
-本仓库**不再使用 GitHub Actions**：`.github/` 目录下已无 workflow，原 `update-index.yml` 于 2026-09-08 删除。
-索引重建改为**推送前本地完成**：`generate-post.py` / `refresh-posts.py` 自动调用 `generate-index.js`，末尾跑 `scripts/verify.js` 门禁，不通过则不得 push。
-因此**没有「push 后 CI 再补一次索引」的兜底**——发文/回刷必须把本地重建产物一起提交。
+**CI 已恢复**：`.github/workflows/verify.yml`（P3 重构引入）在 push / PR 到 `main` 时执行
+`npm install` → `npm run verify` → `npm run check-links`（Node 22 / Python 3.11）。
+
+⚠️ **CI 只做校验，不重建索引**：它既不跑 `generate-index.js`，也不跑 `build-posts.py`
+（后者需要 `pip install -r requirements.txt`，CI 未装 python 依赖）。所以**仍然没有
+「push 后 CI 补索引」的兜底**——发文/回刷必须把本地重建产物一起提交。
+
+⚠️ **本地门禁绿 ≠ CI 绿**：CI 是独立第三方复核，push 后若红要去看 Actions 日志。
+（旧文档写的「GitHub Actions 已下线、`.github/` 下无 workflow」是 2026-09-08 的历史状态，
+P3 之后已不成立。）
 
 ---
 
 ## 六、发布工作流
 
-### 标准流程
+### 标准流程（md 源优先，2026-10-05 起）
 
 ```bash
 cd nook/loczb
 
-# 1. 准备正文 HTML 文件
-# 2. 运行生成脚本
-python3 scripts/generate-post.py "文章标题" "描述" \
-  --tags "标签" --category 分类 \
-  --read-time N \
-  --content /tmp/content.html
+# 0. 前置：构建依赖（纯 Markdown 正文编译必需，缺了会直接构建失败）
+pip install -r requirements.txt
 
-# 3. 提交推送
+# 1. 写正文源：blog/posts-src/{slug}.md
+#    Frontmatter 含 title / description / date（建议带时分秒）/ category / tags / read_time / slug
+#    正文直接写 Markdown（复杂表格、嵌套列表用 4 空格缩进）
+
+# 2. 从 md 源批量编译（末尾自动接 generate-index.js + verify.js）
+python3 scripts/build-posts.py          # npm run build:posts
+
+# 3. 门禁与死链（推送前必须双绿）
+node scripts/verify.js                  # npm run verify
+node scripts/check-links.js             # npm run check-links
+
+# 4. 提交推送
 git add -A
-git commit -m "feat: 新文章 - 文章标题"
+git commit -m "feat(posts): 新增文章 - 文章标题"
 git push
+
+# 5. 部署校验（确认线上与本地 HEAD 逐字节一致）
+./scripts/deploy-check.sh
+```
+
+> 单篇发文也可用 `python3 scripts/generate-post.py article.md`（Frontmatter 模式，正文可写 HTML）——
+> 它同样会把正文归档进 `posts-src/`，保证源与产物对齐。
+
+### 删除一篇文章（无专用脚本）
+
+```bash
+rm blog/posts-src/{slug}.md blog/posts/{slug}.html blog/meta/{slug}.json
+node scripts/generate-index.js     # 列表/分页/sitemap/rss/SW 版本 + 别处的相关文章卡片自动回滚
+node scripts/verify.js && node scripts/check-links.js   # 双绿再推
 ```
 
 ### 生成脚本自动完成的内容
@@ -220,7 +249,7 @@ git push
 
 ### 推送后自动完成
 - **GitHub Pages** 推送后自动构建部署（常规 1-2 分钟；若线上仍旧版，查首页 `last-modified` 判断是否漏触发构建）
-- ❌ 索引重建**不在**推送后发生（GitHub Actions 已下线，见第五节）
+- ❌ 索引重建**不在**推送后发生（CI 只跑 verify + check-links，不重建索引，见第五节）
 
 ---
 
@@ -270,7 +299,26 @@ git push
 
 ---
 
-## 九、Git 配置
+## 九、md → html 编译器语义（2026-10-05 定案）
+
+`scripts/generate-post.py` 的 `markdown_to_html()` **按正文形态自动选渲染器**：
+
+| 正文形态 | 渲染器 | 原因 |
+|---------|--------|------|
+| HTML 外壳型（首行以 `<` 开头，存量 111 篇） | 零依赖逐行渲染器 | 与线上产物逐字一致，重建不产生无意义 diff；不受「构建机装没装库」影响 |
+| 纯 Markdown 型（首行是 `## 标题` 等，存量 2 篇 + 以后新写的） | python `markdown` 库 | 复杂表格对齐语法、无外框竖线的表格行、嵌套列表、多行引用才正确；正文里的 `snake_case` 不会被吃成斜体 |
+
+⚠️ **`requirements.txt` 是构建机的硬依赖**：纯 Markdown 正文缺库时 `build-posts.py` **直接
+exit 1**（不再静默退回逐行渲染器）。实测两种引擎在同一份复杂语法样例上装库 8/10 项 vs
+纯 Python 3/10，且产物逐字不同（984 vs 730 字符）⇒ 缺库时整站重建都会失败（因为那 2 篇）。
+重建前先 `python3 -c 'import markdown'` 确认。
+
+⚠️ **不支持 GFM 扩展**：删除线 `~~`、任务列表 `[x]` 两个引擎都不认，需要另加扩展
+（`extra` / `pymdownx`），别指望装库就有。
+
+---
+
+## 十、Git 配置
 
 ```bash
 # 仓库
@@ -289,4 +337,4 @@ git push
 
 ---
 
-*文档版本 v1.2 / 2026-09-17（体积门禁改为 250KB 预警 / 400KB 阻断；修正已下线的 GitHub Actions 描述）*
+*文档版本 v1.3 / 2026-10-05（更正 CI 现状：verify.yml 已恢复但只校验不重建索引；补 md→html 编译器语义与 requirements.txt 硬依赖；发布流程改为 md 源优先；新增删除文章流程）*

@@ -41,8 +41,8 @@
 ---
 
 ### 🛠️ 基础设施与云端生态
-- 🩺 **自动化死链巡检医生（`scripts/check-links.js`）** — 极速全量扫描 129 个 HTML 页面中 3700+ 条内链与资源引用，保障 0 死链（2026-10-01 实测：129 个 HTML、3729 条内链、0 死链）。
-- 🔄 **Service Worker 离线强缓存与构建自动版本同步** — 每次构建自动生成 `YYYYMMDD-XXXX` 缓存版本，避免旧缓存残留。
+- 🩺 **自动化死链巡检医生（`scripts/check-links.js`）** — 极速全量扫描 129 个 HTML 页面中的内链与资源引用，保障 0 死链（2026-10-05 实测：129 个 HTML、4071 条内链、0 死链）。
+- 🔄 **Service Worker 离线强缓存与构建自动版本同步** — 构建时按 `sha256(articles-index.json + search.js + style.css)` 前 8 位生成 `c-xxxxxxxx` 缓存版本（内容哈希：内容不变版本不变），避免旧缓存残留。
 - 💬 **评论系统** — Cloudflare Workers + Cloudflare D1 边缘数据库，支持嵌套树状回复、Token 鉴权与独立管理后台。
 - 🤖 **AI 问答助手** — Cloudflare Workers 驱动，基于全站博文知识库进行 RAG 即时检索问答。
 - 📡 **全自动化索引与 SEO** — `sitemap.xml`、`rss.xml`、JSON-LD 结构化数据与 Open Graph 社交分享卡片全自动构建。
@@ -57,10 +57,10 @@
 | **前端架构** | 原生 HTML5 + CSS3 + 现代 JavaScript（ES6+） | 零框架运行时依赖，极速首屏，Instant Prefetch |
 | **UI 视觉体系** | Bento Grid 2.0 + Spotlight Glow + Glassmorphism | 动态打字机、高对比度双模控制台、macOS 代码块 |
 | **专栏体系** | 6 大核心旗舰系列专栏 | 自动化专栏便当盒、全集目录折叠板、上下篇导航直达 |
-| **本地依赖** | Fuse.js / marked / DOMPurify | Vendor 本地化托管，无外链 CDN 阻塞风险 |
-| **构建与质量**| Python 3 + Node.js + check-links.js + verify.js 门禁 | 推送前本地重建索引、0 死链校验、一致性门禁、Service Worker 同步 |
+| **本地依赖** | Fuse.js / highlight.js（Node）+ python `markdown`（`requirements.txt`） | Vendor 本地化托管，无外链 CDN 阻塞风险；`markdown` 是纯 Markdown 正文编译的**硬依赖**（缺了构建直接失败） |
+| **构建与质量**| Python 3 + Node.js + build-posts.py + verify.js + check-links.js 门禁 | 推送前本地重建索引、0 死链校验、一致性门禁、Service Worker 同步 |
 | **边缘计算** | Cloudflare Workers + D1 数据库 | 支撑无服务器评论系统与 AI 知识库问答 |
-| **自动化工作流**| 本地脚本链（无 CI） | 推送前重建索引 + verify.js 门禁，GitHub Pages 自动构建部署 |
+| **自动化工作流**| 本地脚本链 + GitHub Actions CI | 推送前本地重建索引 + verify.js 门禁；push 后 CI 再复核一遍 verify + check-links（`.github/workflows/verify.yml`），GitHub Pages 自动构建部署 |
 
 ---
 
@@ -74,8 +74,11 @@ loczb/
 │   └── index.html                 # 项目案例展示页 (Android 16 Lab / Hermes Agent Toolkit 等)
 ├── blog/
 │   ├── index.html                 # 博客列表页 (全部文章 / 📚 专题专栏 / 时间归档三重视图)
+│   ├── page-2..N.html             # 构建期静态分页 (每页 10 篇，无 JS 也能翻页)
 │   ├── articles-index.json        # 全站 113 篇博文索引与标签元数据
-│   └── posts/                     # 博客详情 HTML 正文 (内嵌专栏卡片与上下篇直达)
+│   ├── meta/{slug}.json           # 每篇元数据 sidecar (摘要按需拉取)
+│   ├── posts-src/{slug}.md        # ★ 文章正文源 (Markdown + YAML Frontmatter，唯一真相源)
+│   └── posts/                     # 编译产出的文章 HTML (内嵌专栏卡片、静态相关文章与上下篇直达)
 ├── assets/
 │   ├── css/
 │   │   ├── style.css              # 全局核心样式 (Bento 2.0、Spotlight、高对比度双模适配)
@@ -91,22 +94,35 @@ loczb/
 │   │   └── particles.js           # 粒子动画背景
 │   └── vendor/                    # 本地化第三方基础库 (Fuse, marked, dompurify)
 ├── scripts/
-│   ├── generate-post.py           # Markdown 文章构建器 (支持 YAML Frontmatter & 单文件 CLI)
-│   ├── generate-index.js          # 全站 CI 全量索引重建管线
+│   ├── generate-post.py           # 单篇发文 (Frontmatter / CLI 两种模式) + 自动归档 md 源
+│   ├── build-posts.py             # ★ 从 posts-src/*.md 批量编译文章 (npm run build:posts)
+│   ├── extract-posts-src.py       # 反向从已发 HTML 提取回 md 源
+│   ├── generate-index.js          # 全站索引重建管线 (npm run build)
+│   ├── verify.js                  # 一致性门禁 (npm run verify)
+│   ├── check-links.js             # 死链与静态资源巡检医生 (npm run check-links)
+│   ├── sync-partials.js           # 公共布局片段同步 (npm run sync-partials)
+│   ├── sync-asset-versions.js     # style.css 内容哈希版本号自动同步 (generate-index 内自动调用)
+│   ├── sync-widget-version.js     # 评论组件引用版本同步
 │   ├── build-series.js            # 6 大旗舰系列专栏聚合构建器
-│   ├── check-links.js             # 自动化死链与静态资源巡检医生 (扫描 129 个 HTML 页面)
-│   ├── refresh-posts.py           # 模板变更后批量刷新旧文章
+│   ├── build-custom-hljs.js       # 定制 highlight.js 构建 (89KB / 28KB gzip)
+│   ├── backfill-meta.py           # 历史文章 meta sidecar 回填
+│   ├── refresh-posts.py           # 模板变更后批量回刷文章骨架
 │   └── deploy-check.sh            # 部署状态自动验证脚本
 ├── workers/
 │   ├── comment-system/            # Cloudflare Workers + D1 评论系统
 │   └── ai-assistant/              # Cloudflare Workers AI 博客知识库助手
 ├── templates/
-│   └── blog-post-template.html    # 文章详情页标准化骨架模板
+│   ├── blog-post-template.html    # 文章详情页标准化骨架模板
+│   └── partials/                  # 公共布局片段 (nav / footer / skip-link，由 sync-partials.js 注入)
 ├── CNAME                          # 自定义域名配置
 ├── 404.html                       # 极客风格 404 缺省页 (集成专栏智能推荐)
 ├── sw.js                          # Service Worker 离线强缓存 (构建自动版本迭代)
 ├── sitemap.xml                    # 全量文章搜索引擎站点地图
-└── rss.xml                        # 博客 RSS 订阅源
+├── rss.xml                        # 博客 RSS 订阅源
+├── offline.html                   # 离线兜底页
+├── requirements.txt               # 构建依赖 (python markdown，纯 Markdown 正文编译必需)
+├── .github/workflows/verify.yml   # CI: push / PR 跑 verify + check-links
+└── BLOG-SYSTEM.md                 # 博客系统规范 (构建链与模板系统细则)
 ```
 
 ---
@@ -115,32 +131,56 @@ loczb/
 
 ### 1. 发布新博文
 
-支持直接在 Markdown 头部声明 **YAML Frontmatter**：
+**正文源 = `blog/posts-src/{slug}.md`**（Markdown + YAML Frontmatter，唯一真相源），编译产出
+`blog/posts/{slug}.html` + `blog/meta/{slug}.json`。改文章只改 md，重跑编译即可，不用手改 HTML。
+
+**前置：构建依赖**（纯 Markdown 正文编译必需，缺失会直接构建失败并提示）：
+
+```bash
+pip install -r requirements.txt   # python markdown：复杂表格对齐、嵌套列表、多行引用等标准语法
+```
+
+Frontmatter 示例（`slug` 与 `read_time` 建议显式给；`date` 带时分秒可避免同日文章排序歧义）：
 
 ```markdown
 ---
 title: "文章标题"
 description: "文章摘要与核心观点"
+date: 2026-10-05 09:30:00
 category: "Android"
 tags: ["Kotlin", "Jetpack Compose", "架构"]
-date: "2026-08-25"
+read_time: 12
+slug: my-new-post
 ---
 
 ## 1. 章节标题
-正文内容...
+正文内容（Markdown）...
 ```
 
-**单文件极简生成与全量索引联动命令**：
+**发布与校验命令**：
+
 ```bash
-# 1. 自动解析 Frontmatter 并生成 blog/posts/xxx.html
-python3 scripts/generate-post.py article.md
+# 1. 从 md 源批量编译文章（末尾自动接索引重建 + verify 门禁）
+python3 scripts/build-posts.py        # 或 npm run build:posts
 
-# 2. 一键执行全量管线：专栏注入 + 博客列表 + 首页推荐 + Sitemap + RSS + SW版本递增
-node scripts/generate-index.js
+# 2. 单独重建全站索引：专栏注入 + 列表分页 + 首页推荐 + Sitemap + RSS + SW 版本
+node scripts/generate-index.js        # 或 npm run build
 
-# 3. 运行死链巡检医生验证全站链接健康
-node scripts/check-links.js
+# 3. 门禁与死链巡检（推送前必须双绿）
+node scripts/verify.js                # 或 npm run verify
+node scripts/check-links.js           # 或 npm run check-links
+
+# 4. 部署校验（推送后确认线上与本地 HEAD 逐字节一致）
+./scripts/deploy-check.sh
 ```
+
+> 只想发单篇、正文直接用 HTML 写时，也可用 `python3 scripts/generate-post.py article.md`
+> （Frontmatter 模式）——它同样会把正文归档进 `posts-src/`，保证源与产物对齐。
+
+**删除一篇文章**（无专用脚本，手工三步）：删掉 `blog/posts-src/{slug}.md`、
+`blog/posts/{slug}.html`、`blog/meta/{slug}.json`，再跑 `node scripts/generate-index.js`
+重建索引（列表/分页/sitemap/rss/SW 版本与别处的「相关文章」卡片会自动回滚），
+最后 `verify.js` + `check-links.js` 双绿再推。
 
 ---
 
