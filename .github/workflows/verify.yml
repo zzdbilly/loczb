@@ -13,6 +13,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 12.3.4
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -25,20 +30,29 @@ jobs:
 
       - name: Install dependencies
         run: |
-          npm install
+          pnpm install --frozen-lockfile
           pip install -r requirements.txt
 
       - name: Run unit and regression tests
-        run: npm test
+        run: pnpm run test
 
       - name: Rebuild posts from Markdown sources
-        run: npm run build:posts
+        run: pnpm run build:posts
 
       - name: Ensure generated artifacts match committed files
-        run: git diff --exit-code
+        run: |
+          git add -A
+          if ! git diff --cached --exit-code; then
+            echo "::error::重建产物与提交文件不一致（改产物不改源会红）"
+            echo "----- git status --porcelain -----"
+            git status --porcelain
+            echo "----- git diff --cached --stat -----"
+            git diff --cached --stat
+            exit 1
+          fi
 
       - name: Run verification gate checks
-        run: npm run verify
+        run: pnpm run verify
 
       - name: Run dead link and asset inspection
-        run: npm run check-links
+        run: pnpm run check-links

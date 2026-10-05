@@ -2,6 +2,7 @@
   "name": "loczb",
   "version": "1.0.0",
   "private": true,
+  "packageManager": "pnpm@12.3.4",
   "scripts": {
     "build": "node scripts/generate-index.js",
     "build:posts": "python3 scripts/build-posts.py",
