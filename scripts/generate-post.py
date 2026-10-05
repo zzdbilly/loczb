@@ -194,6 +194,7 @@ def pure_python_markdown_to_html(md_text):
     output = []
     in_list = None
     in_table = False
+    in_pre = False  # <pre>…</pre> 内部：逐行原样直通，不参与块级/行内解析
     table_rows = []
 
     def close_list():
@@ -227,6 +228,14 @@ def pure_python_markdown_to_html(md_text):
 
     for line in lines:
         s = line.strip()
+
+        # <pre> 内部逐行原样直通：代码行不是 Markdown 段落，包成 <p> 会产出
+        # <pre><code> 里嵌 <p> 的非法结构（正文行会被逐行包成段落），并毁掉缩进语义
+        if in_pre:
+            output.append(line)
+            if '</pre>' in line.lower():
+                in_pre = False
+            continue
 
         if s.startswith('|') and s.endswith('|'):
             close_list()
@@ -284,6 +293,9 @@ def pure_python_markdown_to_html(md_text):
         if re.match(r'^</?(p|div|section|article|table|thead|tbody|tr|th|td|ul|ol|li|h[1-6]|blockquote|pre|figure|figcaption|hr|details|summary|canvas|svg)(\s|>|/|$)', s, re.IGNORECASE) or s.startswith('<!--'):
             close_list()
             output.append(s)
+            # 开了多行 <pre>（未在同一行闭合）→ 后续行进入直通模式
+            if re.search(r'<pre\b', s, re.IGNORECASE) and not re.search(r'</pre>', s, re.IGNORECASE):
+                in_pre = True
             continue
 
         close_list()
@@ -309,13 +321,27 @@ def pure_python_markdown_to_html(md_text):
     return res
 
 
-def markdown_to_html(md_text):
-    """转换 Markdown 为 HTML，优先使用 markdown 库，回退使用纯 Python 渲染"""
-    try:
-        import markdown as md_lib
-        return md_lib.markdown(md_text, extensions=['fenced_code', 'tables', 'sane_lists'])
-    except ImportError:
-        return pure_python_markdown_to_html(md_text)
+def markdown_to_html(md_text, prefer_library=False):
+    """转换 Markdown 为 HTML。
+
+    默认走零依赖的纯 Python 渲染器，且不随环境改变：
+
+    blog/posts-src 的存量正文是「HTML 外壳 + Markdown 片段」的混合体，按 Markdown 规范
+    渲染并不合适 —— `markdown` 库会把带缩进的 HTML 当缩进代码块（正文被整体转义进
+    <pre><code>），并在 HTML 块内部跳过 Markdown（`## 标题`、`- 项` 原样留在页面里）。
+    更关键的是：`markdown` 库装没装会编译出**不同的 HTML**，同一份源在 CI / 本机 / 别人
+    机器上产物不一致，是「生成器与产物不同源」的隐患。
+
+    逐行渲染器对 HTML 直通与 Markdown 片段都稳定，且与线上存量产物一致。
+    需要严格 Markdown 语义（嵌套列表等）时可显式 prefer_library=True。
+    """
+    if prefer_library:
+        try:
+            import markdown as md_lib
+            return md_lib.markdown(md_text, extensions=['fenced_code', 'tables', 'sane_lists'])
+        except ImportError:
+            pass
+    return pure_python_markdown_to_html(md_text)
 
 
 def generate_article(title, description, article_date, read_time, tags, content_html, category, custom_slug=None, series=None, iso_datetime=None):
