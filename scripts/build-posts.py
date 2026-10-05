@@ -82,7 +82,32 @@ def normalize_src_indent(body):
     return '\n'.join(out)
 
 
-def build_post(src_file, template_str, dry_run=False):
+def check_dependencies(src_files):
+    """构建前置环境嗅探：若存在纯 Markdown 文章，必须装有 python markdown 库。
+    在任何写盘动作前执行，确保 fail-fast 且绝不留下破坏性脏状态。"""
+    has_pure_md = False
+    for f in src_files:
+        try:
+            with open(f, 'r', encoding='utf-8') as fp:
+                raw_text = fp.read()
+            _, body = extract_frontmatter(raw_text)
+            if not generate_post._looks_like_html_body(body):
+                has_pure_md = True
+                break
+        except Exception:
+            pass
+
+    if has_pure_md:
+        try:
+            import markdown  # noqa: F401
+        except ImportError:
+            print("❌ 构建失败: 检测到纯 Markdown 源文件，但当前 Python 环境未安装 `markdown` 库。")
+            print("   为确保排版语法渲染正确且避免同一份源产出不同产物，请先安装依赖：")
+            print("   👉 pip install -r requirements.txt\n")
+            sys.exit(1)
+
+
+def render_post(src_file, template_str):
     slug = os.path.basename(src_file)[:-3]
     with open(src_file, 'r', encoding='utf-8') as f:
         raw_text = f.read()
@@ -91,7 +116,14 @@ def build_post(src_file, template_str, dry_run=False):
 
     title = frontmatter.get('title') or slug
     description = frontmatter.get('description') or ''
-    date_str = frontmatter.get('date') or datetime.now().strftime('%Y-%m-%d')
+    date_str = frontmatter.get('date')
+    if not date_str or str(date_str).strip() in ('', 'None', 'null'):
+        raise ValueError(f"文章 {slug} 缺少 frontmatter `date` 字段，无法确定构建日期（禁止动态降级以确保构建可重现）")
+
+    fm_slug = frontmatter.get('slug')
+    if fm_slug and str(fm_slug).strip() != slug:
+        raise ValueError(f"文章 {slug} 的 frontmatter slug ('{fm_slug}') 与文件名 ('{slug}.md') 不一致")
+
     category = frontmatter.get('category') or '开发'
     tags = frontmatter.get('tags') or []
     read_time = parse_read_time(frontmatter.get('read_time'), md_body)
@@ -133,18 +165,13 @@ def build_post(src_file, template_str, dry_run=False):
         "dateTime": display_date,
         "category": category,
         "tags": tags,
-        "readTime": int(str(read_time).replace('min', '').replace('read', '').strip() or 5)
+        "readTime": read_time
     }
     if series:
         meta_data["series"] = series
 
-    if not dry_run:
-        with open(out_post_path, 'w', encoding='utf-8') as f:
-            f.write(html)
-        with open(out_meta_path, 'w', encoding='utf-8') as f:
-            json.dump(meta_data, f, ensure_ascii=False, indent=2)
+    return slug, out_post_path, out_meta_path, html, meta_data
 
-    return True
 
 def main():
     args = sys.argv[1:]
@@ -169,18 +196,31 @@ def main():
             print(f"❌ 未在 blog/posts-src/ 中找到 slug 为 {target_slug} 的 .md 源文件")
             sys.exit(1)
 
+    # 阶段 0: 前置环境检查（fail-fast，依赖缺失时一篇都不写）
+    check_dependencies(src_files)
+
     print(f"🔨 开始从 posts-src 编译文章: 共 {len(src_files)} 篇 {'[DRY RUN]' if dry_run else ''}")
-    built = 0
+
+    # 阶段 1: 内存批量渲染与校验（任一篇文章出错直接退出，绝不产生部分写盘）
+    rendered_batch = []
     for f in src_files:
         slug = os.path.basename(f)[:-3]
         try:
-            build_post(f, template_str, dry_run)
-            built += 1
+            item = render_post(f, template_str)
+            rendered_batch.append(item)
         except Exception as e:
-            print(f"  ❌ 编译失败 {slug}: {e}")
+            print(f"  ❌ 渲染/校验失败 {slug}: {e}")
             sys.exit(1)
 
-    print(f"✅ 文章编译完成: {built} 篇成功")
+    # 阶段 2: 仅当全部文章在内存中成功渲染且校验无误后，才执行统一原子写盘
+    if not dry_run:
+        for slug, out_post_path, out_meta_path, html, meta_data in rendered_batch:
+            with open(out_post_path, 'w', encoding='utf-8') as f:
+                f.write(html)
+            with open(out_meta_path, 'w', encoding='utf-8') as f:
+                json.dump(meta_data, f, ensure_ascii=False, indent=2)
+
+    print(f"✅ 文章编译完成: {len(rendered_batch)} 篇成功")
 
     if not dry_run:
         print("\n🔁 触发全站索引与门禁重建...")

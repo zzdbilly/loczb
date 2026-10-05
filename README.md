@@ -176,7 +176,7 @@ node scripts/check-links.js           # 或 npm run check-links
 ./scripts/deploy-check.sh
 ```
 
-> 只想发单篇、正文直接用 HTML 写时，也可用 `python3 scripts/generate-post.py article.md`
+> 只想发单篇、正文直接用 HTML 写时，也可用 `python3 scripts/generate-post.py templates/post-src-template.md`（或任意自定义路径）
 > （Frontmatter 模式）——它同样会把正文归档进 `posts-src/`，保证源与产物对齐。
 
 **删除一篇文章**（无专用脚本，手工三步）：删掉 `blog/posts-src/{slug}.md`、

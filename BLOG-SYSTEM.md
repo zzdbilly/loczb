@@ -229,7 +229,7 @@ git push
 ./scripts/deploy-check.sh
 ```
 
-> 单篇发文也可用 `python3 scripts/generate-post.py article.md`（Frontmatter 模式，正文可写 HTML）——
+> 单篇发文也可用 `python3 scripts/generate-post.py templates/post-src-template.md`（或任意自定义路径，Frontmatter 模式）——
 > 它同样会把正文归档进 `posts-src/`，保证源与产物对齐。
 
 ### 删除一篇文章（无专用脚本）
