@@ -14,7 +14,7 @@
   2. **核心技术雷达（Tech Radar）**：原生 Android 底座 + 端云协同全栈赋能；
   3. **6 大旗舰专题专栏便当盒（Curated Series）**：聚合展示 AI Agent、Android 16、Kotlin 协程、工程思维等专栏封面芯片；
   4. **工程技术原则（Engineering Principles）**：实用主义优先、毫秒级极致体验、AI 工具化闭环；
-  5. **量化影响力（Track Record）**：113 篇深度博文、6 大专题专栏、5+ 年移动端沉淀；
+  5. **量化影响力（Track Record）**：114 篇深度博文、6 大专题专栏、5+ 年移动端沉淀；
   6. **工程师哲学语录（Philosophy Quote）**：自适应双模引语便当盒。
 - ⌨️ **Hero 动态变幻打字机** — 流畅光标节奏循环变幻，传递鲜明的技术定位。
 - 🔍 **Raycast 级 ⌘K 即时全站微搜索** — 首页与博客页全局 Command Palette 支持，零卡顿毫秒级全文检索博文、专栏与项目，支持键盘 `↑↓` 导航与 `Enter` 秒开。
@@ -26,7 +26,7 @@
 ---
 
 ### 📝 博客与 6 大旗舰系列专栏
-- 📚 **113 篇全量深度文章** — 深度覆盖 `Android`、`Kotlin`、`AI Agent`、`前端`、`DevOps`、`思考`、`数据库`、`系统编程`、`安全`、`开发` 等 10 大垂直领域。
+- 📚 **114 篇全量深度文章** — 深度覆盖 `Android`、`Kotlin`、`AI Agent`、`前端`、`DevOps`、`思考`、`数据库`、`系统编程`、`安全`、`开发` 等 10 大垂直领域。
 - 📖 **6 大核心旗舰系列专栏**（自动化脚本 `scripts/build-series.js` 构建）：
   1. 🤖 **《AI Agent 与本地大模型实战》** (9 篇) — 工作区迁移、定时无废话直投、MCP 协议、本地 RAG 与端侧模型；
   2. 📱 **《Android 16 深度演进与系统适配》** (6 篇) — 前台服务新约束、通知大改、多媒体权限与性能深度优化；
@@ -41,10 +41,9 @@
 ---
 
 ### 🛠️ 基础设施与云端生态
-- 🩺 **自动化死链巡检医生（`scripts/check-links.js`）** — 极速全量扫描 129 个 HTML 页面中的内链与资源引用，保障 0 死链（2026-10-05 实测：129 个 HTML、4071 条内链、0 死链）。
+- 🩺 **自动化死链巡检医生（`scripts/check-links.js`）** — 极速全量扫描 130 个 HTML 页面中的内链与资源引用，保障 0 死链（2026-10-05 实测：130 个 HTML、4100 条内链与资源引用、0 死链）。
 - 🔄 **Service Worker 离线强缓存与构建自动版本同步** — 构建时按 `sha256(articles-index.json + search.js + style.css)` 前 8 位生成 `c-xxxxxxxx` 缓存版本（内容哈希：内容不变版本不变），避免旧缓存残留。
 - 💬 **评论系统** — Cloudflare Workers + Cloudflare D1 边缘数据库，支持嵌套树状回复、Token 鉴权与独立管理后台。
-- 🤖 **AI 问答助手** — Cloudflare Workers 驱动，基于全站博文知识库进行 RAG 即时检索问答。
 - 📡 **全自动化索引与 SEO** — `sitemap.xml`、`rss.xml`、JSON-LD 结构化数据与 Open Graph 社交分享卡片全自动构建。
 
 ---
@@ -57,10 +56,10 @@
 | **前端架构** | 原生 HTML5 + CSS3 + 现代 JavaScript（ES6+） | 零框架运行时依赖，极速首屏，Instant Prefetch |
 | **UI 视觉体系** | Bento Grid 2.0 + Spotlight Glow + Glassmorphism | 动态打字机、高对比度双模控制台、macOS 代码块 |
 | **专栏体系** | 6 大核心旗舰系列专栏 | 自动化专栏便当盒、全集目录折叠板、上下篇导航直达 |
-| **本地依赖** | Fuse.js / highlight.js（Node）+ python `markdown`（`requirements.txt`） | Vendor 本地化托管，无外链 CDN 阻塞风险；`markdown` 是纯 Markdown 正文编译的**硬依赖**（缺了构建直接失败） |
-| **构建与质量**| Python 3 + Node.js + build-posts.py + verify.js + check-links.js 门禁 | 推送前本地重建索引、0 死链校验、一致性门禁、Service Worker 同步 |
-| **边缘计算** | Cloudflare Workers + D1 数据库 | 支撑无服务器评论系统与 AI 知识库问答 |
-| **自动化工作流**| 本地脚本链 + GitHub Actions CI | 推送前本地重建索引 + verify.js 门禁；push 后 CI 再复核（`.github/workflows/verify.yml`：pnpm 冻结安装 + 单测 + 全量编译 + 源产物一致性 + verify + check-links），GitHub Pages 自动构建部署 |
+| **本地依赖** | pnpm 12 (Fuse.js / highlight.js) + python `markdown==3.11` | 前端依赖严格冻结锁定 (`pnpm-lock.yaml`)；`markdown` 为构建硬依赖 |
+| **构建与质量**| Python 3 + Node.js + build-posts.py + verify.js + check-links.js | 事务级真原子写盘与回滚、22 项单测、16 项一致性门禁 (a 至 p)、0 死链巡检 |
+| **边缘计算** | Cloudflare Workers + D1 数据库 | 支撑无服务器全球低延迟评论系统 |
+| **自动化工作流**| 本地脚本链 + GitHub Actions CI | 本地编译 + 门禁验证；push 后 CI 严格复核（`.github/workflows/verify.yml`：pnpm 冻结安装 + 单测 + 全量编译 + 源产物一致性 + verify + check-links） |
 
 ---
 
@@ -75,54 +74,56 @@ loczb/
 ├── blog/
 │   ├── index.html                 # 博客列表页 (全部文章 / 📚 专题专栏 / 时间归档三重视图)
 │   ├── page-2..N.html             # 构建期静态分页 (每页 10 篇，无 JS 也能翻页)
-│   ├── articles-index.json        # 全站 113 篇博文索引与标签元数据
-│   ├── meta/{slug}.json           # 每篇元数据 sidecar (摘要按需拉取)
+│   ├── articles-index.json        # 全站 114 篇博文索引与标签元数据
+│   ├── meta/{slug}.json           # 每篇元数据 sidecar (按需拉取摘要)
 │   ├── posts-src/{slug}.md        # ★ 文章正文源 (Markdown + YAML Frontmatter，唯一真相源)
 │   └── posts/                     # 编译产出的文章 HTML (内嵌专栏卡片、静态相关文章与上下篇直达)
 ├── assets/
 │   ├── css/
-│   │   ├── style.css              # 全局核心样式 (Bento 2.0、Spotlight、高对比度双模适配)
-│   │   ├── article.css            # 博客正文排版样式
-│   │   ├── syntax-highlight.css   # 代码语法高亮主题
-│   │   └── ai-assistant.css       # AI 助手悬浮窗样式
+│   │   ├── style.css              # 全局核心样式 (Bento 2.0、Spotlight、高对比度双模、响应式表格)
+│   │   └── syntax-highlight.css   # 代码语法高亮主题
 │   ├── js/
 │   │   ├── main.js                # 全局逻辑、打字机、Instant Prefetch 预加载引擎
 │   │   ├── blog-list.js           # 博客分页、3重视图切换与专栏渲染
 │   │   ├── search.js              # Command Palette 模糊检索引擎 (支持首页/博客/快捷键)
-│   │   ├── article.js             # 文章详情页 (macOS 代码块、TOC、Toast、返回顶部)
+│   │   ├── article.js             # 文章详情页 (macOS 代码块、表格横向滚动、TOC、Toast、返回顶部)
 │   │   ├── meta-cache.js          # 文章元数据按需缓存与懒拉取
 │   │   └── particles.js           # 粒子动画背景
-│   └── vendor/                    # 本地化第三方基础库 (Fuse, marked, dompurify)
+│   └── vendor/                    # 本地化第三方基础库 (Fuse, marked, dompurify, highlight.js)
 ├── scripts/
-│   ├── generate-post.py           # 单篇发文 (Frontmatter / CLI 两种模式) + 自动归档 md 源
-│   ├── build-posts.py             # ★ 从 posts-src/*.md 批量编译文章 (npm run build:posts)
-│   ├── extract-posts-src.py       # 反向从已发 HTML 提取回 md 源
-│   ├── generate-index.js          # 全站索引重建管线 (npm run build)
-│   ├── verify.js                  # 一致性门禁 (npm run verify)
-│   ├── check-links.js             # 死链与静态资源巡检医生 (npm run check-links)
-│   ├── sync-partials.js           # 公共布局片段同步 (npm run sync-partials)
-│   ├── sync-asset-versions.js     # style.css / article.js 内容哈希版本号自动同步 (generate-index 内自动调用)
+│   ├── generate-post.py           # 底层单篇发文渲染器 (Frontmatter / CLI 两种模式)
+│   ├── build-posts.py             # ★ 文章源编译构建管线 (pnpm run build:posts，支持真原子写盘与事务回滚)
+│   ├── generate-index.js          # 全站索引重建管线 (pnpm run build)
+│   ├── verify.js                  # 核心一致性门禁 (pnpm run verify，涵盖 a 至 p 16 项校验)
+│   ├── check-links.js             # 死链与静态资源巡检医生 (pnpm run check-links)
+│   ├── sync-partials.js           # 公共布局片段同步 (pnpm run sync-partials)
+│   ├── sync-asset-versions.js     # style.css / article.js 内容哈希版本号自动同步
 │   ├── sync-widget-version.js     # 评论组件引用版本同步
 │   ├── build-series.js            # 6 大旗舰系列专栏聚合构建器
-│   ├── build-custom-hljs.js       # 定制 highlight.js 构建 (89KB / 28KB gzip)
-│   ├── build-posts.py             # ★ 文章源编译构建管线 (npm run build:posts，从 posts-src/ 批量编译)
-│   ├── refresh-posts.py           # 历史回刷兼容代理 (已废弃，转发至 build-posts.py；旧参数 --post 不再支持)
-│   └── deploy-check.sh            # 部署状态自动验证脚本
+│   ├── build-custom-hljs.js       # 定制 highlight.js 构建
+│   ├── refresh-posts.py           # 历史回刷兼容代理 (已废弃，自动转发至 build-posts.py)
+│   ├── deploy-check.sh            # 部署状态自动验证脚本
+│   └── archive/                   # 已归档的历史一次性脚本 (含 --force-run 防误跑安全开关)
+├── tests/
+│   ├── test_pipeline.py           # 渲染器与管道回归测试 (Markdown语法/防污染/占位符/Frontmatter)
+│   └── test_build_pipeline.py     # 构建管线测试 (参数白名单/依赖自检/真原子写盘回滚/误判硬拦截)
 ├── workers/
-│   ├── comment-system/            # Cloudflare Workers + D1 评论系统
-│   └── ai-assistant/              # Cloudflare Workers AI 博客知识库助手
+│   └── comment-system/            # Cloudflare Workers + D1 边缘评论系统
 ├── templates/
 │   ├── post-src-template.md       # ★ 文章源脚手架模板 (复制到 blog/posts-src/ 后改名使用)
 │   ├── blog-post-template.html    # 文章详情页标准化骨架模板
 │   └── partials/                  # 公共布局片段 (nav / footer / skip-link，由 sync-partials.js 注入)
+├── package.json                   # 项目配置 (固定 packageManager=pnpm@12.3.4)
+├── pnpm-lock.yaml                 # pnpm 依赖锁定文件 (保证 CI 环境 100% 依赖确定性)
+├── requirements.txt               # Python 构建依赖 (锁定 markdown==3.11)
 ├── CNAME                          # 自定义域名配置
+├── LICENSE                        # MIT 开源许可证
 ├── 404.html                       # 极客风格 404 缺省页 (集成专栏智能推荐)
 ├── sw.js                          # Service Worker 离线强缓存 (构建自动版本迭代)
 ├── sitemap.xml                    # 全量文章搜索引擎站点地图
 ├── rss.xml                        # 博客 RSS 订阅源
 ├── offline.html                   # 离线兜底页
-├── requirements.txt               # 构建依赖 (python markdown，纯 Markdown 正文编译必需)
-├── .github/workflows/verify.yml   # CI: push / PR 跑单测 + 全量编译 + 源产物一致性 + verify + check-links
+├── .github/workflows/verify.yml   # CI 自动化流水线 (pnpm 冻结安装 + 单测 + 编译 + 源产物校验 + 门禁)
 └── BLOG-SYSTEM.md                 # 博客系统规范 (构建链与模板系统细则)
 ```
 
@@ -135,9 +136,13 @@ loczb/
 **正文源 = `blog/posts-src/{slug}.md`**（Markdown + YAML Frontmatter，唯一真相源），编译产出
 `blog/posts/{slug}.html` + `blog/meta/{slug}.json`。改文章只改 md，重跑编译即可，不用手改 HTML。
 
-**前置：构建依赖**（纯 Markdown 正文编译必需，缺失会直接构建失败并提示）：
+**前置：环境与依赖初始化**：
 
 ```bash
+# 1. 安装 Node.js 前端依赖 (锁定 pnpm 12.3.4)
+pnpm install --frozen-lockfile
+
+# 2. 安装 Python 编译依赖 (纯 Markdown 正文编译必需，缺失会直接构建失败并提示)
 pip install -r requirements.txt   # python markdown：复杂表格对齐、嵌套列表、多行引用等标准语法
 ```
 
@@ -162,6 +167,7 @@ slug: my-new-post
 
 | 入口 | 等价命令 | 做什么 |
 | :--- | :--- | :--- |
+| `pnpm run test` | `python3 -m unittest discover -s tests` | **单元测试**：严格参数校验、快速失败、原子写与回滚机制、Markdown 管道解析等 22 项单测 |
 | `pnpm run build` | `node scripts/generate-index.js` | **只重算索引**：专栏注入 + 列表分页 + 首页推荐 + Sitemap + RSS + SW 版本（不重编译文章正文） |
 | `pnpm run build:posts` | `python3 scripts/build-posts.py` | **文章编译（唯一推荐入口）**：从 `posts-src/*.md` 全量/单篇重编译，自带索引重建 + verify 门禁 |
 | `pnpm run refresh` | 同 `pnpm run build:posts` | 历史别名，等价于 `build:posts`（底层 `scripts/refresh-posts.py` 已弃用为转发代理） |
@@ -169,6 +175,9 @@ slug: my-new-post
 **发布与校验命令**：
 
 ```bash
+# 0. 流水线单元测试 (执行 tests/ 下 22 项单测，验证白名单参数、原子备份回滚与解析稳定性)
+pnpm run test                         # 或 npm test / python3 -m unittest discover -s tests
+
 # 1. 从 md 源批量编译文章（末尾自动接索引重建 + verify 门禁，唯一推荐入口）
 #    新文从模板开始：cp templates/post-src-template.md blog/posts-src/my-new-post.md
 pnpm run build:posts                  # 或 python3 scripts/build-posts.py（单篇加 --slug my-new-post）
