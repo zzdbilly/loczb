@@ -7,6 +7,14 @@
     <language>zh-CN</language>
     <atom:link href="https://709527.xyz/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>国庆假期：把七天长假当成一次计划内停机维护</title>
+      <link>https://709527.xyz/blog/posts/national-day-planned-maintenance.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/national-day-planned-maintenance.html</guid>
+      <description>七天长假不是停机，而是一次难得的长维护窗口。用运维的视角重排假期：先盘点欠下的债，再按精力曲线排期，最后用三个可观测指标验证这次维护有没有成功。</description>
+      <category>思考</category>
+      <pubDate>Mon, 05 Oct 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
       <title>纳指定投：把一笔月供当成长期运维来跑</title>
       <link>https://709527.xyz/blog/posts/纳指定投把一笔月供当成长期运维来跑.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/纳指定投把一笔月供当成长期运维来跑.html</guid>
@@ -157,14 +165,6 @@
       <description>结合当前 Agent 编程趋势，聊聊 AI 助手能做/不能做/边界三层认知、五种实战协作心法，以及开发者如何重新定位自己</description>
       <category>开发</category>
       <pubDate>Wed, 12 Aug 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>300 万能躺平吗</title>
-      <link>https://709527.xyz/blog/posts/300-万能躺平吗.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/300-万能躺平吗.html</guid>
-      <description>一个看似数字、实则是认知与心态的问题：300 万到底够不够躺平？聊透 4% 法则、通胀与黑天鹅、城市差异、心态准备和务实替代路径。</description>
-      <category>思考</category>
-      <pubDate>Sun, 09 Aug 2026 00:00:00 +0800</pubDate>
     </item>
   </channel>
 </rss>
