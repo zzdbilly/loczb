@@ -22,6 +22,9 @@
  *      等于 workers/comment-system/comment-widget.js 的内容哈希（sha256 前 10 位），
  *      组件内部注入 CSS 的 CSS_PATH 版本必须等于 comment-widget.css 的内容哈希。
  *      作用：改组件后不重建（引用版本陈旧）会立刻在这里暴露，而不是上线后等 10 分钟缓存。
+ *   p) article.js 引用版本：模板 + 全部文章页的 <script src="…article.js?v="> 必须等于
+ *      assets/js/article.js 的内容哈希（sha256 前 10 位）。作用同 i)，挡住「改了 article.js
+ *      却没重建」导致老访客吃 10 分钟旧脚本。
  *
  * 本地 Run: node scripts/verify.js
  * generate-post.py 在索引重建成功后自动调用。
@@ -546,6 +549,42 @@ function contentCheck(name, count, samples) {
   }
   if (invalidSrc.length) {
     fail(`o) ${invalidSrc.length} 篇 posts-src 源文件缺少 Frontmatter: ${invalidSrc.join(', ')}`);
+  }
+}
+
+// ── p) article.js 引用版本 = 内容哈希 ────────────────────
+// 为什么需要：article.js 是文章页/模板的裸引用（<script defer src="…article.js">），
+// GitHub Pages 对静态资源下发 max-age=600，内容变了而 URL 没变 ⇒ 老访客最长 10 分钟
+// 拿到旧脚本（例如新增移动端表格 wrapper 的改动不生效）。版本号由
+// scripts/sync-asset-versions.js 写（generate-index.js 末尾自动跑），这里对账
+// 「引用里的 ?v= == article.js 内容 sha256 前 10 位」，挡住「改了 JS 却没重建」。
+// 范围：文章模板 + 全部文章页（实测全站 article.js 引用恰好只在这些页面）。
+{
+  const crypto = require('crypto');
+  const JS_REL = 'assets/js/article.js';
+  const expectedHash = exists(JS_REL)
+    ? crypto.createHash('sha256').update(fs.readFileSync(JS_REL)).digest('hex').slice(0, 10)
+    : null;
+
+  const mustRef = ['templates/blog-post-template.html'];
+  for (const slug of htmlSlugs) mustRef.push(`blog/posts/${slug}.html`);
+
+  const missing = [];
+  const noVersion = [];
+  const stale = [];
+  mustRef.forEach(p => {
+    if (!exists(p)) { missing.push(p); return; }
+    const m = readText(p).match(/<script[^>]*\bsrc="[^"]*article\.js(?:\?v=([0-9a-f]+))?"/);
+    if (!m) { missing.push(p); return; }
+    if (!m[1]) { noVersion.push(p); return; }
+    if (expectedHash && m[1] !== expectedHash) stale.push(`${p}(v=${m[1]})`);
+  });
+
+  if (missing.length) fail(`p) ${missing.length} 个文章页/模板缺少 article.js 引用: ${missing.slice(0, 5).join(', ')}${missing.length > 5 ? ' …' : ''}`);
+  if (noVersion.length) fail(`p) ${noVersion.length} 处 article.js 引用缺少 ?v= 版本参数: ${noVersion.slice(0, 5).join(', ')}${noVersion.length > 5 ? ' …' : ''}`);
+  if (stale.length) fail(`p) ${stale.length} 处 article.js 引用版本 ≠ 当前内容哈希 ${expectedHash}（改 JS 后未重建）: ${stale.slice(0, 5).join(', ')}${stale.length > 5 ? ' …' : ''}`);
+  if (!missing.length && !noVersion.length && !stale.length) {
+    infos.push(`p) article.js 引用版本 ${expectedHash}：模板 + ${htmlSlugs.size} 篇文章页全部一致`);
   }
 }
 

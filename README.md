@@ -60,7 +60,7 @@
 | **本地依赖** | Fuse.js / highlight.js（Node）+ python `markdown`（`requirements.txt`） | Vendor 本地化托管，无外链 CDN 阻塞风险；`markdown` 是纯 Markdown 正文编译的**硬依赖**（缺了构建直接失败） |
 | **构建与质量**| Python 3 + Node.js + build-posts.py + verify.js + check-links.js 门禁 | 推送前本地重建索引、0 死链校验、一致性门禁、Service Worker 同步 |
 | **边缘计算** | Cloudflare Workers + D1 数据库 | 支撑无服务器评论系统与 AI 知识库问答 |
-| **自动化工作流**| 本地脚本链 + GitHub Actions CI | 推送前本地重建索引 + verify.js 门禁；push 后 CI 再复核一遍 verify + check-links（`.github/workflows/verify.yml`），GitHub Pages 自动构建部署 |
+| **自动化工作流**| 本地脚本链 + GitHub Actions CI | 推送前本地重建索引 + verify.js 门禁；push 后 CI 再复核（`.github/workflows/verify.yml`：pnpm 冻结安装 + 单测 + 全量编译 + 源产物一致性 + verify + check-links），GitHub Pages 自动构建部署 |
 
 ---
 
@@ -101,12 +101,12 @@ loczb/
 │   ├── verify.js                  # 一致性门禁 (npm run verify)
 │   ├── check-links.js             # 死链与静态资源巡检医生 (npm run check-links)
 │   ├── sync-partials.js           # 公共布局片段同步 (npm run sync-partials)
-│   ├── sync-asset-versions.js     # style.css 内容哈希版本号自动同步 (generate-index 内自动调用)
+│   ├── sync-asset-versions.js     # style.css / article.js 内容哈希版本号自动同步 (generate-index 内自动调用)
 │   ├── sync-widget-version.js     # 评论组件引用版本同步
 │   ├── build-series.js            # 6 大旗舰系列专栏聚合构建器
 │   ├── build-custom-hljs.js       # 定制 highlight.js 构建 (89KB / 28KB gzip)
 │   ├── build-posts.py             # ★ 文章源编译构建管线 (npm run build:posts，从 posts-src/ 批量编译)
-│   ├── refresh-posts.py           # 历史回刷兼容代理 (已废弃并自动转调 build-posts.py)
+│   ├── refresh-posts.py           # 历史回刷兼容代理 (已废弃，转发至 build-posts.py；旧参数 --post 不再支持)
 │   └── deploy-check.sh            # 部署状态自动验证脚本
 ├── workers/
 │   ├── comment-system/            # Cloudflare Workers + D1 评论系统
@@ -158,24 +158,40 @@ slug: my-new-post
 正文内容（Markdown）...
 ```
 
+**三个近义入口（别混用）**：
+
+| 入口 | 等价命令 | 做什么 |
+| :--- | :--- | :--- |
+| `pnpm run build` | `node scripts/generate-index.js` | **只重算索引**：专栏注入 + 列表分页 + 首页推荐 + Sitemap + RSS + SW 版本（不重编译文章正文） |
+| `pnpm run build:posts` | `python3 scripts/build-posts.py` | **文章编译（唯一推荐入口）**：从 `posts-src/*.md` 全量/单篇重编译，自带索引重建 + verify 门禁 |
+| `pnpm run refresh` | 同 `pnpm run build:posts` | 历史别名，等价于 `build:posts`（底层 `scripts/refresh-posts.py` 已弃用为转发代理） |
+
 **发布与校验命令**：
 
 ```bash
-# 1. 从 md 源批量编译文章（末尾自动接索引重建 + verify 门禁）
+# 1. 从 md 源批量编译文章（末尾自动接索引重建 + verify 门禁，唯一推荐入口）
 #    新文从模板开始：cp templates/post-src-template.md blog/posts-src/my-new-post.md
-python3 scripts/build-posts.py        # 或 npm run build:posts（单篇可加 --slug my-new-post）
+pnpm run build:posts                  # 或 python3 scripts/build-posts.py（单篇加 --slug my-new-post）
 
-# 2. 单独重建全站索引：专栏注入 + 列表分页 + 首页推荐 + Sitemap + RSS + SW 版本
-node scripts/generate-index.js        # 或 npm run build
+# 2. 只想单独重算全站索引（不重编译正文）时才跑：专栏注入 + 列表分页 + 首页 + Sitemap + RSS + SW 版本
+pnpm run build                        # 或 node scripts/generate-index.js
 
 # 3. 门禁与死链巡检（推送前必须双绿）
-node scripts/verify.js                # 或 npm run verify
-node scripts/check-links.js           # 或 npm run check-links
+pnpm run verify                       # 或 node scripts/verify.js
+pnpm run check-links                  # 或 node scripts/check-links.js
 
 # 4. 部署校验（推送后确认线上与本地 HEAD 逐字节一致）
 ./scripts/deploy-check.sh
 ```
 
+> `scripts/refresh-posts.py` **已弃用**：现为转发代理，**旧参数 `--post <slug>` 不再支持**（单篇统一用 `--slug <slug>`），
+> 未知参数一律 `exit 1` 报错，不再静默转成全量重编译。旧「从 HTML 反解回刷」实现归档在
+> `scripts/archive/refresh-posts.py`，**默认拒绝运行、需显式 `--force-run`**（`scripts/archive/` 下所有归档脚本同此纪律）。
+>
+> **CI 会挡住「只改产物、不改源」**：`.github/workflows/verify.yml` 顺序 = `pnpm install --frozen-lockfile` + `pip install -r requirements.txt`
+> → `pnpm run test` → `pnpm run build:posts` → `git add -A && git diff --cached --exit-code`（含未跟踪新文件）→ `pnpm run verify` → `pnpm run check-links`。
+> 任何手改 `blog/posts/*.html` / `blog/meta/*.json` 而不动 `blog/posts-src/*.md` 的改动，push 后 CI 必红（重建结果与提交文件逐字节比对不过）。**改正文一律改 md 源再编译。**
+>
 > 只想发单篇、正文直接用 HTML 写时，也可用 `python3 scripts/generate-post.py templates/post-src-template.md`（或任意自定义路径）
 > （Frontmatter 模式）——它同样会把正文归档进 `posts-src/`，保证源与产物对齐。
 

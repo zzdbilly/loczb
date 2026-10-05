@@ -23,9 +23,9 @@ loczb/
 │   ├── build-posts.py            # ★ 文章批量编译脚本 (npm run build:posts)
 │   ├── generate-index.js         # 全站 CI 全量索引重建管线 (npm run build)
 │   ├── sync-partials.js          # 公共布局片段同步脚本 (npm run sync-partials)
-│   ├── verify.js                 # 核心门禁校验脚本 (npm run verify，含 a-o 项校验)
+│   ├── verify.js                 # 核心门禁校验脚本 (npm run verify，含 a-p 项校验)
 │   ├── check-links.js            # 自动化死链与静态资源巡检医生 (npm run check-links)
-│   └── refresh-posts.py          # 历史回刷兼容代理 (已废弃并转发至 build-posts.py)
+│   └── refresh-posts.py          # 历史回刷兼容代理 (已废弃，转发至 build-posts.py；旧参数 --post 不再支持，单篇用 --slug)
 ├── assets/
 │   ├── css/style.css             # 全局核心样式 (@layer 层叠分层，Bento 2.0，双模高对比度)
 │   ├── js/
@@ -184,16 +184,40 @@ python3 scripts/generate-post.py "标题" "描述" \
 
 ## 五、CI/CD 现状（2026-10-05 升级）
 
-**CI 已升级**：`.github/workflows/verify.yml` 在 push / PR 到 `main` 时执行
-依赖安装（Node 22 / Python 3.11）→ 流水线单测 → 全量编译 → 源产物一致性校验（`git diff --exit-code`）→ `npm run verify` → `npm run check-links`。
+**CI 已升级**：`.github/workflows/verify.yml` 在 push / PR 到 `main` 时执行：
 
-💡 **CI 严格守门「源 ↔ 产物」一致性**：CI 会安装 Python `markdown==3.11` 依赖，重跑 `build-posts.py` 全量编译，并通过 `git diff --exit-code` 校验提交的 HTML/JSON 产物与源文件是否逐字节完全一致。若本地修改了 Markdown 却漏跑编译，或手动修改了 HTML，CI 会直接失败阻断。因此发文必须在本地编译后将源与产物一同提交。
+依赖安装（pnpm 12.3.4 冻结安装 + Node 22 / Python 3.11）→ 流水线单测 → 全量编译
+→ 源产物一致性校验 → `pnpm run verify` → `pnpm run check-links`。
+
+```yaml
+# 关键顺序
+pnpm/action-setup@v4 (version: 12.3.4) → setup-node 22 → setup-python 3.11
+pnpm install --frozen-lockfile            # 依赖锁死（不再用 npm install）
+pip install -r requirements.txt
+pnpm run test        # python3 -m unittest discover -s tests
+pnpm run build:posts # 从 md 源全量重编译
+git add -A && git diff --cached --exit-code   # 含未跟踪新文件；失败先打印 status/diff --stat
+pnpm run verify
+pnpm run check-links
+```
+
+- **依赖锁死**：`package.json` 声明 `"packageManager": "pnpm@12.3.4"`，CI 用 `pnpm install --frozen-lockfile`（`pnpm-lock.yaml` 已纳入版本控制），杜绝 `npm install` 版本漂移。
+- **源产物一致性**：改用 `git add -A` 后再 `git diff --cached --exit-code`，因此**未跟踪的新产物文件**也会被门禁抓到（旧的 `git diff --exit-code` 看不到 untracked）；失败时先打印 `git status --porcelain` 与 `git diff --cached --stat` 便于排错。
+- 💡 **CI 严格守门「源 ↔ 产物」一致性**：CI 会安装 Python `markdown==3.11` 依赖，重跑 `build-posts.py` 全量编译，并校验提交的 HTML/JSON 产物与源文件是否逐字节完全一致。**手改 `blog/posts/*.html` / `blog/meta/*.json` 而不动 `blog/posts-src/*.md`，push 后 CI 必红**（改产物不改源会红）。发文必须在本地编译后将源与产物一同提交。
 
 ---
 
 ## 六、发布工作流
 
 ### 标准流程（md 源优先，2026-10-05 起）
+
+**三个近义入口（别混用）**：
+
+| 入口 | 等价命令 | 做什么 |
+| :--- | :--- | :--- |
+| `pnpm run build` | `node scripts/generate-index.js` | **只重算索引**（专栏/分页/首页/Sitemap/RSS/SW），不重编译正文 |
+| `pnpm run build:posts` | `python3 scripts/build-posts.py` | **文章编译，唯一推荐入口**：从 md 源重编译，自带索引重建 + verify 门禁 |
+| `pnpm run refresh` | 同 `pnpm run build:posts` | 历史别名，等价 `build:posts`（底层 `refresh-posts.py` 已弃用为转发代理） |
 
 ```bash
 cd nook/loczb
@@ -208,22 +232,25 @@ cp templates/post-src-template.md blog/posts-src/{slug}.md
 #    正文写 Markdown（复杂表格、嵌套列表用 4 空格缩进）
 
 # 2. 从 md 源批量编译（末尾自动接 generate-index.js + verify.js）
-python3 scripts/build-posts.py          # npm run build:posts
+pnpm run build:posts                    # 或 python3 scripts/build-posts.py；单篇 --slug <slug>
 
 # 3. 门禁与死链（推送前必须双绿）
-node scripts/verify.js                  # npm run verify
-node scripts/check-links.js             # npm run check-links
+pnpm run verify                         # node scripts/verify.js
+pnpm run check-links                    # node scripts/check-links.js
 
-# 4. 提交推送
-git add -A
-git commit -m "feat(posts): 新增文章 - 文章标题"
+# 4. 提交推送（显式文件列表，别一把梭）
+git add <具体文件> && git commit -m "feat(posts): 新增文章 - 文章标题"
 git push
 
 # 5. 部署校验（确认线上与本地 HEAD 逐字节一致）
 ./scripts/deploy-check.sh
 ```
 
-> 单篇发文也可用 `python3 scripts/generate-post.py templates/post-src-template.md`（或任意自定义路径，Frontmatter 模式）——
+> `scripts/refresh-posts.py` **已弃用**（2026-10-05）：现为转发代理，**旧参数 `--post <slug>` 不再支持**
+> （单篇统一用 `--slug <slug>`，未知参数一律 `exit 1` 报错，不再静默转成全量重编译）。旧「从 HTML 反解回刷」
+> 实现归档在 `scripts/archive/refresh-posts.py`，**默认拒绝运行、需显式 `--force-run`**（`scripts/archive/` 下所有归档脚本同此纪律）。
+>
+> 只想发单篇、正文直接用 HTML 写时，也可用 `python3 scripts/generate-post.py templates/post-src-template.md`（或任意自定义路径，Frontmatter 模式）——
 > 它同样会把正文归档进 `posts-src/`，保证源与产物对齐。
 
 ### 删除一篇文章（无专用脚本）
@@ -334,4 +361,4 @@ git push
 
 ---
 
-*文档版本 v1.3 / 2026-10-05（更正 CI 现状：verify.yml 已恢复但只校验不重建索引；补 md→html 编译器语义与 requirements.txt 硬依赖；发布流程改为 md 源优先；新增删除文章流程）*
+*文档版本 v1.4 / 2026-10-05（CI 改 pnpm 冻结安装 + 门禁改用 `git add -A` + `git diff --cached`；明确 build / build:posts / refresh 三个近义入口；refresh-posts.py 参数白名单化，旧 --post 不再支持；sync-asset-versions 扩到 article.js 内容哈希；build-posts.py 原子写盘 + 下游失败回滚 + 纯 MD 误判硬校验）*
