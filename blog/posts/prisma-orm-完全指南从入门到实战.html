@@ -442,7 +442,7 @@ prisma.$use(async (params, next) =&gt; {
   const result = await next(params)
   const after = Date.now()
 
-  console.log(<strong>INLINE<em>CODE</em>0</strong>)
+  console.log(Query ${params.model}.${params.action} took ${after - before}ms)
 
   return result
 })
@@ -772,7 +772,7 @@ CMD [&quot;node&quot;, &quot;dist/index.js&quot;]
         <div class="post-info-label">文章信息</div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📅</span> 发布日期</span><span class="post-info-stat-value">2026-07-07</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">⏱️</span> 阅读时间</span><span class="post-info-stat-value">10 min read</span></div>
-        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">2895 字</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">2903 字</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📊</span> 章节数</span><span class="post-info-stat-value">9 节 · 23 子节</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">💻</span> 代码块</span><span class="post-info-stat-value">28 段</span></div>
       </div>

@@ -318,7 +318,7 @@ document.querySelector('.theme-btn').addEventListener('click', () => {
 <div class="tip-box">
 <p><strong>动态命名</strong>：在 JS 中根据数据动态设置 <code>view-transition-name</code>，比在 CSS 中写 <code>nth-child</code> 更灵活：</p>
 <pre><code>document.querySelectorAll('.card').forEach((card, i) => {
-  card.style.viewTransitionName = <strong>INLINE<em>CODE</em>0</strong>;
+  card.style.viewTransitionName = card-${card.dataset.id};
 });</code></pre>
 </div>
 <h2>五、跨页面导航过渡（MPA）</h2>
@@ -386,14 +386,14 @@ function ProductCard({ product }) {
   const handleClick = () => {
     // ✅ 用 startViewTransition 包裹导航
     const transition = document.startViewTransition(() => {
-      navigate(<strong>INLINE<em>CODE</em>1</strong>);
+      navigate(/product/${product.id});
     });
   };
 
   return (
     &lt;div
       className="product-card"
-      style={{ viewTransitionName: <strong>INLINE<em>CODE</em>2</strong> }}
+      style={{ viewTransitionName: product-${product.id} }}
       onClick={handleClick}
     &gt;
       &lt;img src={product.image} alt={product.name} /&gt;
@@ -411,7 +411,7 @@ function ProductCard({ product }) {
 
 document.startViewTransition(() => {
   flushSync(() => {
-    navigate(<strong>INLINE<em>CODE</em>3</strong>);
+    navigate(/product/${product.id});
   });
 });</code></pre>
 </div>
@@ -443,7 +443,7 @@ router.beforeEach((to, from) => {
   &lt;div
     v-for="item in items"
     :key="item.id"
-    :style="{ viewTransitionName: <strong>INLINE<em>CODE</em>4</strong> }"
+    :style="{ viewTransitionName: item-${item.id} }"
     @click="goToDetail(item.id)"
   &gt;
     {{ item.name }}
@@ -452,7 +452,7 @@ router.beforeEach((to, from) => {
 
 // DetailPage.vue
 &lt;template&gt;
-  &lt;div :style="{ viewTransitionName: <strong>INLINE<em>CODE</em>5</strong> }" class="detail-hero"&gt;
+  &lt;div :style="{ viewTransitionName: item-${itemId} }" class="detail-hero"&gt;
     &lt;h1&gt;{{ item.name }}&lt;/h1&gt;
   &lt;/div&gt;
 &lt;/template&gt;</code></pre>
@@ -470,7 +470,7 @@ function useViewTransition(callback) {
 
 // 使用
 const handleNavigate = useViewTransition((id) => {
-  flushSync(() => navigate(<strong>INLINE<em>CODE</em>6</strong>));
+  flushSync(() => navigate(/detail/${id}));
 });</code></pre>
 <pre><code>// Vue: useViewTransition composable
 import { nextTick } from 'vue';
@@ -497,7 +497,7 @@ export function useViewTransition() {
   document.startViewTransition(() => {
     // 给每个列表项设置唯一的 view-transition-name
     document.querySelectorAll('.list-item').forEach((item) => {
-      item.style.viewTransitionName = <strong>INLINE<em>CODE</em>7</strong>;
+      item.style.viewTransitionName = item-${item.dataset.id};
     });
 
     // 执行排序，更新 DOM
@@ -525,7 +525,7 @@ export function useViewTransition() {
   document.startViewTransition(() => {
     // 每个网格项设置唯一 name
     document.querySelectorAll('.grid-item').forEach((item) => {
-      item.style.viewTransitionName = <strong>INLINE<em>CODE</em>8</strong>;
+      item.style.viewTransitionName = grid-${item.dataset.id};
     });
 
     // 应用新布局
@@ -550,7 +550,7 @@ export function useViewTransition() {
   document.startViewTransition(() => {
     // 现有项设置 name（保持位置过渡）
     document.querySelectorAll('.list-item').forEach((item) => {
-      item.style.viewTransitionName = <strong>INLINE<em>CODE</em>9</strong>;
+      item.style.viewTransitionName = item-${item.dataset.id};
     });
 
     // 新项不设 name（走 root 的淡入）
@@ -562,11 +562,11 @@ function removeItem(id) {
   document.startViewTransition(() => {
     // 所有项都设 name
     document.querySelectorAll('.list-item').forEach((item) => {
-      item.style.viewTransitionName = <strong>INLINE<em>CODE</em>10</strong>;
+      item.style.viewTransitionName = item-${item.dataset.id};
     });
 
     // 删除目标项
-    document.querySelector(<strong>INLINE<em>CODE</em>11</strong>)?.remove();
+    document.querySelector([data-id="${id}"])?.remove();
   });
 }</code></pre>
 <h2>八、性能考量与渐进增强</h2>
@@ -645,7 +645,7 @@ function updateWithTransition(updateFn) {
 
 /<em> ✅ 每个元素唯一 name </em>/
 .card { view-transition-name: var(--vt-name); }
-// JS: card.style.setProperty('--vt-name', <strong>INLINE<em>CODE</em>12</strong>);</code></pre>
+// JS: card.style.setProperty('--vt-name', card-${id});</code></pre>
 <h3>陷阱 2：过渡期间 DOM 不可交互</h3>
 <p>过渡期间，伪元素层覆盖在真实 DOM 之上。用户点击按钮可能没反应。解决方案：</p>
 <pre><code>/<em> 短过渡通常无影响。如果确实需要交互： </em>/
@@ -707,7 +707,7 @@ function showPage(page) {
     renderNewPage(page);
     // 为新页面元素设置 name
     document.querySelectorAll('.card').forEach(card => {
-      card.style.viewTransitionName = <strong>INLINE<em>CODE</em>13</strong>;
+      card.style.viewTransitionName = card-${card.dataset.id};
     });
   });
 }</code></pre>
@@ -955,7 +955,7 @@ function showPage(page) {
         <div class="post-info-label">文章信息</div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📅</span> 发布日期</span><span class="post-info-stat-value">2026-06-27</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">⏱️</span> 阅读时间</span><span class="post-info-stat-value">14 min read</span></div>
-        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">3621 字</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">3652 字</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📊</span> 章节数</span><span class="post-info-stat-value">10 节 · 26 子节</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">💻</span> 代码块</span><span class="post-info-stat-value">32 段</span></div>
       </div>

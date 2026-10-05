@@ -161,7 +161,7 @@ document.getElementById('btn').addEventListener('click', () =&gt; {
 const observer = new PerformanceObserver((list) =&gt; {
   for (const entry of list.getEntries()) {
     if (entry.duration &gt; 50) {
-      console.warn(<strong>INLINE<em>CODE</em>0</strong>, entry);
+      console.warn(长任务警告: ${entry.duration.toFixed(2)}ms, entry);
     }
   }
 });
@@ -320,7 +320,7 @@ self.onconnect = (e) =&gt; {
   const clientId = Date.now().toString(36) + Math.random().toString(36).slice(2);
 
   connections.set(clientId, port);
-  console.log(<strong>INLINE<em>CODE</em>1</strong>);
+  console.log(新连接: ${clientId}，当前连接数: ${connections.size});
 
   port.onmessage = (event) =&gt; {
     const { action, channel, data } = event.data;
@@ -349,11 +349,11 @@ self.onconnect = (e) =&gt; {
   port.start();
 
   // 向新加入的客户端广播当前连接数
-  port.postMessage({ action: 'status', data: <strong>INLINE<em>CODE</em>2</strong> });
+  port.postMessage({ action: 'status', data: 当前 ${connections.size} 个标签页已连接 });
 };
 
 function initializeWebSocket(channel) {
-  ws = new WebSocket(<strong>INLINE<em>CODE</em>3</strong>);
+  ws = new WebSocket(wss://example.com/ws/${channel});
 
   ws.onmessage = (event) =&gt; {
     const msg = JSON.parse(event.data);
@@ -760,7 +760,7 @@ async function main() {
 
   // 设置进度回调
   mathAPI.onProgress = (current, total) =&gt; {
-    console.log(<strong>INLINE<em>CODE</em>4</strong>);
+    console.log(计算进度: ${current}/${total});
   };
 
   const results = await mathAPI.longRunningTask([1, 2, 3, 4, 5]);
@@ -899,7 +899,7 @@ const idealConcurrency = Math.min(
   navigator.hardwareConcurrency || 4,
   tasks.length
 );
-console.log(<strong>INLINE<em>CODE</em>5</strong>);
+console.log(使用 ${idealConcurrency} 个 Worker 并行处理);
 </code></pre>
 <h3>实现一个简单的 Worker 池</h3>
 <pre><code class="language-javascript">// worker-pool.js
@@ -1040,7 +1040,7 @@ class PriorityWorkerPool extends WorkerPool {
       const task = { 
         data, transferables, resolve, reject, 
         priority, cancelled: false,
-        id: <strong>INLINE<em>CODE</em>6</strong>
+        id: task-${Date.now()}-${Math.random().toString(36)}
       };
 
       // 注册取消令牌
@@ -1067,7 +1067,7 @@ class PriorityWorkerPool extends WorkerPool {
     const timeout = new Promise((_, reject) =&gt; {
       setTimeout(() =&gt; {
         task.then(t =&gt; t.abort?.());
-        reject(new Error(<strong>INLINE<em>CODE</em>7</strong>));
+        reject(new Error(任务超时 (${timeoutMs}ms)));
       }, timeoutMs);
     });
 
@@ -1145,9 +1145,9 @@ async function compressImage(file) {
       compressWorker.onmessage = (e) =&gt; {
         if (e.data.success) {
           console.log(
-            <strong>INLINE<em>CODE</em>8</strong> +
-            <strong>INLINE<em>CODE</em>9</strong> +
-            <strong>INLINE<em>CODE</em>10</strong>
+            压缩完成: ${(e.data.originalSize / 1024).toFixed(1)}KB →  +
+            ${(e.data.compressedSize / 1024).toFixed(1)}KB  +
+            (${(e.data.compressedSize / e.data.originalSize * 100).toFixed(1)}%)
           );
           resolve(e.data);
         } else {
@@ -1170,7 +1170,7 @@ async function compressImage(file) {
 document.getElementById('upload').addEventListener('change', async (e) =&gt; {
   const files = Array.from(e.target.files);
   const results = await Promise.all(files.map(compressImage));
-  console.log(<strong>INLINE<em>CODE</em>11</strong>);
+  console.log(${results.length} 张图片压缩完成);
 });
 </code></pre>
 <h3>场景二：大数据 JSON 解析</h3>
@@ -1237,7 +1237,7 @@ async function parseLargeJSON(url, options) {
   const response = await fetch(url);
   const rawText = await response.text();
 
-  console.log(<strong>INLINE<em>CODE</em>12</strong>);
+  console.log(JSON 文本大小: ${(rawText.length / 1024 / 1024).toFixed(2)}MB);
 
   return new Promise((resolve, reject) =&gt; {
     jsonWorker.onmessage = (e) =&gt; {
@@ -1451,7 +1451,7 @@ function renderResults(results, total) {
 
 function highlightMatch(text, query) {
   if (!query) return text;
-  const regex = new RegExp(<strong>INLINE<em>CODE</em>13</strong>, 'gi');
+  const regex = new RegExp((${escapeRegex(query)}), 'gi');
   return text.replace(regex, '&lt;mark&gt;$1&lt;/mark&gt;');
 }
 
@@ -1487,12 +1487,12 @@ worker.onmessage = () =&gt; {
   performance.measure('worker-task', 'worker-task-start', 'worker-task-end');
 
   const measure = performance.getEntriesByName('worker-task')[0];
-  console.log(<strong>INLINE<em>CODE</em>14</strong>);
+  console.log(Worker 任务耗时: ${measure.duration.toFixed(2)}ms);
 };
 </code></pre>
 <p><strong>3. console.log 的线程来源标识</strong></p>
 <pre><code class="language-javascript">// worker.js
-console.log(<strong>INLINE<em>CODE</em>15</strong>);
+console.log([Worker-${self.name || 'anonymous'}] 任务开始处理);
 // DevTools console 中会显示消息来自哪个 Worker 线程
 </code></pre>
 <h3>性能指标与监控</h3>
@@ -1507,7 +1507,7 @@ class WorkerPerfMonitor {
     // 包装 postMessage 以记录性能
     const originalPostMessage = worker.postMessage.bind(worker);
     worker.postMessage = (message, transfer) =&gt; {
-      const taskId = <strong>INLINE<em>CODE</em>16</strong>;
+      const taskId = ${label}-${Date.now()};
       const startTime = performance.now();
 
       // 拦截响应
@@ -1580,17 +1580,17 @@ class WorkerPerfMonitor {
     if (!stats) return '暂无性能数据';
 
     return [
-      <strong>INLINE<em>CODE</em>17</strong>,
-      <strong>INLINE<em>CODE</em>18</strong>,
-      <strong>INLINE<em>CODE</em>19</strong>,
-      <strong>INLINE<em>CODE</em>20</strong>,
-      <strong>INLINE<em>CODE</em>21</strong>,
-      <strong>INLINE<em>CODE</em>22</strong>,
-      <strong>INLINE<em>CODE</em>23</strong>,
-      <strong>INLINE<em>CODE</em>24</strong>,
-      <strong>INLINE<em>CODE</em>25</strong>,
-      <strong>INLINE<em>CODE</em>26</strong>,
-      <strong>INLINE<em>CODE</em>27</strong>,
+      \n📊 Worker 性能报告 [${this.label}],
+      ─────────────────────────────────,
+      任务总数:     ${stats.totalTasks},
+      平均耗时:     ${stats.avgDuration}ms,
+      最小耗时:     ${stats.minDuration}ms,
+      最大耗时:     ${stats.maxDuration}ms,
+      P50:          ${stats.p50}ms,
+      P95:          ${stats.p95}ms,
+      P99:          ${stats.p99}ms,
+      入站数据:     ${(stats.totalMsgSizeIn / 1024).toFixed(1)}KB,
+      出站数据:     ${(stats.totalMsgSizeOut / 1024).toFixed(1)}KB,
     ].join('\n');
   }
 }
@@ -1884,7 +1884,7 @@ importScripts('/heavy-lib.js', '/utils.js', '/helpers.js');
         <div class="post-info-label">文章信息</div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📅</span> 发布日期</span><span class="post-info-stat-value">2026-08-07</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">⏱️</span> 阅读时间</span><span class="post-info-stat-value">10 min read</span></div>
-        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">7784 字</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">7945 字</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📊</span> 章节数</span><span class="post-info-stat-value">8 节 · 22 子节</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">💻</span> 代码块</span><span class="post-info-stat-value">43 段</span></div>
       </div>

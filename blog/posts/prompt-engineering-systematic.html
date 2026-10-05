@@ -224,10 +224,28 @@
 
 # P - Experiment
 输入示例：
-<strong>CODE<em>BLOCK</em>0</strong>
+class OrderListView(View):
+    def get(self, request):
+        orders = Order.objects.all()[:100]
+        data = []
+        for order in orders:
+            data.append({
+                'customer_name': order.customer.name,  # N+1!
+                'product_name': order.product.name,     # N+1!
+            })
+        return JsonResponse(data, safe=False)
 
 输出示例：
-<strong>CODE<em>BLOCK</em>1</strong>
+class OrderListView(View):
+    def get(self, request):
+        orders = Order.objects.select_related(
+            'customer', 'product'
+        ).all()[:100]
+        data = [{
+            'customer_name': o.customer.name,
+            'product_name': o.product.name,
+        } for o in orders]
+        return JsonResponse(data, safe=False)
 查询次数：201 → 1（减少 99.5%）
 
 # E - Extra Constraints
@@ -983,7 +1001,14 @@ Answer: 阿根廷罗萨里奥</code></pre>
 参考答案：{reference}
 
 ## 输出格式
-<strong>CODE<em>BLOCK</em>2</strong>"""
+{
+  "score": [1-5],
+  "accuracy": [1-5],
+  "relevance": [1-5],
+  "completeness": [1-5],
+  "format": [1-5],
+  "reason": "简述扣分原因"
+}"""
 
 def evaluate<em>with</em>llm(question: str, response: str, 
                       reference: str = "") -> dict:
@@ -1402,7 +1427,7 @@ class ConversationManager:
         <div class="post-info-label">文章信息</div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📅</span> 发布日期</span><span class="post-info-stat-value">2026-06-27</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">⏱️</span> 阅读时间</span><span class="post-info-stat-value">18 min read</span></div>
-        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">8761 字</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">8840 字</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📊</span> 章节数</span><span class="post-info-stat-value">9 节 · 38 子节</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">💻</span> 代码块</span><span class="post-info-stat-value">27 段</span></div>
       </div>

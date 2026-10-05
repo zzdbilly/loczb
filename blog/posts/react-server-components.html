@@ -193,7 +193,7 @@ async function ProductList() {
 import { readFile } from 'fs/promises';
 
 async function MarkdownPost({ slug }) {
-  const content = await readFile(<strong>INLINE<em>CODE</em>0</strong>, 'utf-8');
+  const content = await readFile(./posts/${slug}.md, 'utf-8');
   return &lt;article>{content}&lt;/article&gt;;
 }
 
@@ -517,7 +517,7 @@ function ClientButton() {
         <div class="post-info-label">文章信息</div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📅</span> 发布日期</span><span class="post-info-stat-value">2026-04-26</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">⏱️</span> 阅读时间</span><span class="post-info-stat-value">15 min read</span></div>
-        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">1226 字</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">1228 字</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📊</span> 章节数</span><span class="post-info-stat-value">8 节 · 11 子节</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">💻</span> 代码块</span><span class="post-info-stat-value">13 段</span></div>
       </div>

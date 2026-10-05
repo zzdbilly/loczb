@@ -317,7 +317,7 @@ wasm-pack build --target web --release
         const t0 = performance.now();
         grayscale(imageData.data);
         const t1 = performance.now();
-        console.log(<strong>INLINE<em>CODE</em>0</strong>);
+        console.log(灰度耗时: ${(t1 - t0).toFixed(2)}ms);
         ctx.putImageData(imageData, 0, 0);
       });
 
@@ -326,7 +326,7 @@ wasm-pack build --target web --release
         const t0 = performance.now();
         const result = blur(imageData.data, canvas.width, canvas.height, 3);
         const t1 = performance.now();
-        console.log(<strong>INLINE<em>CODE</em>1</strong>);
+        console.log(模糊耗时: ${(t1 - t0).toFixed(2)}ms);
         imageData.data.set(result);
         ctx.putImageData(imageData, 0, 0);
       });
@@ -446,7 +446,7 @@ wasm-pack build --target web --dev
 const t0 = performance.now();
 wasm_function(data);
 const t1 = performance.now();
-console.log(<strong>INLINE<em>CODE</em>2</strong>);
+console.log(WASM 耗时: ${(t1 - t0).toFixed(2)}ms);
 
 // Chrome Performance 面板可以看到 WASM 函数调用栈
 // 配合 source map 可以映射回 Rust 源码</code></pre>
@@ -674,7 +674,7 @@ const { instance } = await WebAssembly.instantiateStreaming(
         <div class="post-info-label">文章信息</div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📅</span> 发布日期</span><span class="post-info-stat-value">2026-06-27</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">⏱️</span> 阅读时间</span><span class="post-info-stat-value">16 min read</span></div>
-        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">2008 字</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">2028 字</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📊</span> 章节数</span><span class="post-info-stat-value">9 节 · 17 子节</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">💻</span> 代码块</span><span class="post-info-stat-value">13 段</span></div>
       </div>
