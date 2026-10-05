@@ -7,7 +7,7 @@ yarn-error.log*
 # Package files (generated/lock files)
 package-lock.json
 yarn.lock
-pnpm-lock.yaml
+# pnpm-lock.yaml 已纳入版本控制（CI 用 pnpm install --frozen-lockfile），不要再忽略
 
 # Build output
 dist/
