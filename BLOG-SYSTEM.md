@@ -15,6 +15,7 @@ loczb/
 │   ├── posts-src/{slug}.md       # ★ 每篇文章 Markdown 原文与 Frontmatter（正文源唯一真相源）
 │   └── posts/                    # 编译产出的文章 HTML（支持专栏便当盒注入 + 静态「相关文章」内联）
 ├── templates/
+│   ├── post-src-template.md      # ★ 文章源脚手架模板（复制到 blog/posts-src/ 用）
 │   ├── blog-post-template.html   # 文章骨架模板（含 <!-- Related Static --> 相关文章标记区间）
 │   └── partials/                 # 公共布局片段（nav / footer / skip-link）
 ├── scripts/
@@ -206,9 +207,11 @@ cd nook/loczb
 # 0. 前置：构建依赖（纯 Markdown 正文编译必需，缺了会直接构建失败）
 pip install -r requirements.txt
 
-# 1. 写正文源：blog/posts-src/{slug}.md
+# 1. 写正文源：从模板复制后改名
+cp templates/post-src-template.md blog/posts-src/{slug}.md
 #    Frontmatter 含 title / description / date（建议带时分秒）/ category / tags / read_time / slug
-#    正文直接写 Markdown（复杂表格、嵌套列表用 4 空格缩进）
+#    正文第一条必须是 ## 标题（不能以 HTML 注释/标签开头，否则会被当 HTML 外壳型渲染器）
+#    正文写 Markdown（复杂表格、嵌套列表用 4 空格缩进）
 
 # 2. 从 md 源批量编译（末尾自动接 generate-index.js + verify.js）
 python3 scripts/build-posts.py          # npm run build:posts
