@@ -177,7 +177,9 @@ def pure_python_markdown_to_html(md_text):
         lang_attr = f' class="language-{lang}"' if lang else ''
         idx = len(code_blocks)
         code_blocks.append(f'<pre><code{lang_attr}>{escaped_code}</code></pre>')
-        return f'__CODE_BLOCK_{idx}__'
+        # 占位符不能用 __X__ 形式：后面会把 __...__ 当加粗、_..._ 当斜体替换，
+        # 占位符会被吃掉（旧写法实测产出 <strong>CODE<em>BLOCK</em>0</strong>）
+        return f'\x00CB{idx}\x00'
 
     text = re.sub(r'```([a-zA-Z0-9_+#-]*)\r?\n(.*?)\r?\n```', save_code_block, md_text, flags=re.DOTALL)
 
@@ -187,7 +189,7 @@ def pure_python_markdown_to_html(md_text):
         escaped = code.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
         idx = len(inline_codes)
         inline_codes.append(f'<code>{escaped}</code>')
-        return f'__INLINE_CODE_{idx}__'
+        return f'\x00IC{idx}\x00'
     text = re.sub(r'`([^`\n]+)`', save_inline_code, text)
 
     lines = text.split('\n')
@@ -284,7 +286,7 @@ def pure_python_markdown_to_html(md_text):
             close_list()
             continue
 
-        if s.startswith('__CODE_BLOCK_') and s.endswith('__'):
+        if re.fullmatch(r'\x00CB\d+\x00', s):
             close_list()
             output.append(s)
             continue
@@ -314,33 +316,47 @@ def pure_python_markdown_to_html(md_text):
     res = re.sub(r'_([^_\n]+)_', r'<em>\1</em>', res)
 
     for i, c in enumerate(inline_codes):
-        res = res.replace(f'__INLINE_CODE_{i}__', c)
+        res = res.replace(f'\x00IC{i}\x00', c)
     for i, b in enumerate(code_blocks):
-        res = res.replace(f'__CODE_BLOCK_{i}__', b)
+        res = res.replace(f'\x00CB{i}\x00', b)
 
     return res
 
 
-def markdown_to_html(md_text, prefer_library=False):
-    """转换 Markdown 为 HTML。
+def _looks_like_html_body(md_text):
+    """正文是否「HTML 外壳」型（存量 113 篇都是），而不是纯 Markdown。"""
+    first = next((l.strip() for l in md_text.split('\n') if l.strip()), '')
+    return first.startswith('<')
 
-    默认走零依赖的纯 Python 渲染器，且不随环境改变：
 
-    blog/posts-src 的存量正文是「HTML 外壳 + Markdown 片段」的混合体，按 Markdown 规范
-    渲染并不合适 —— `markdown` 库会把带缩进的 HTML 当缩进代码块（正文被整体转义进
-    <pre><code>），并在 HTML 块内部跳过 Markdown（`## 标题`、`- 项` 原样留在页面里）。
-    更关键的是：`markdown` 库装没装会编译出**不同的 HTML**，同一份源在 CI / 本机 / 别人
-    机器上产物不一致，是「生成器与产物不同源」的隐患。
+def markdown_to_html(md_text, prefer_library=None):
+    """转换 Markdown 为 HTML，按正文形态自动选渲染器。
 
-    逐行渲染器对 HTML 直通与 Markdown 片段都稳定，且与线上存量产物一致。
-    需要严格 Markdown 语义（嵌套列表等）时可显式 prefer_library=True。
+    prefer_library=None（默认）自动判定：
+
+    · HTML 外壳型正文（存量文章：`<p>`/`<h2>`/`<pre><code>` 直接写出来）
+      → 逐行渲染器。按 Markdown 规范渲染并不合适：`markdown` 库会把带缩进的 HTML 当
+        缩进代码块（正文被整体转义进 <pre><code>），并在 HTML 块内部跳过 Markdown。
+        逐行渲染器与线上存量产物逐字一致，重建才不会产生无意义 diff。
+
+    · 纯 Markdown 正文（以后新写的文章）
+      → `markdown` 库（fenced_code/tables/sane_lists），嵌套列表、多行引用、行内代码等
+        语义才正确。依赖见仓库根 requirements.txt；库缺失时退回逐行渲染器并告警
+        （此时嵌套列表会被摊平、行内代码可能异常，所以告警必须可见）。
+
+    prefer_library=True/False 可强制指定，用于对照实验。
     """
+    if prefer_library is None:
+        prefer_library = not _looks_like_html_body(md_text)
     if prefer_library:
         try:
             import markdown as md_lib
             return md_lib.markdown(md_text, extensions=['fenced_code', 'tables', 'sane_lists'])
         except ImportError:
-            pass
+            import sys
+            print('⚠️  未安装 python `markdown` 库，纯 Markdown 正文退回逐行渲染器'
+                  '（嵌套列表/行内代码语义可能不正确）——请 pip install -r requirements.txt',
+                  file=sys.stderr)
     return pure_python_markdown_to_html(md_text)
 
 
