@@ -235,22 +235,22 @@
 <h3>定地域：延迟预算先于价格</h3>
 <p>按「你的用户在哪」而不是「机器在哪便宜」选机房。境内用户选国内节点（北上广深杭）；跨境访问选港/日/新（延迟 40–80ms 量级，但国际出口质量看运营商心情）；纯自用的网关类服务选美西/欧洲（150–250ms 可接受）。下单前用厂商提供的 looking glass 或试用 <code>ping</code>/<code>mtr</code> 实测：</p>
 <pre><code class="language-bash"># 拿到候选机房 IP 后，本地与目标端各跑一次
-<p>mtr -rwzbc 100 --tcp --port 443 203.0.113.10</p>
-<h1>输出最后一列 Loss% 与 Avg ms 就是线路质量底牌；晚高峰再测一次</h1>
-<p></code></pre></p>
+mtr -rwzbc 100 --tcp --port 443 203.0.113.10
+# 输出最后一列 Loss% 与 Avg ms 就是线路质量底牌；晚高峰再测一次
+</code></pre>
 <h3>定规格：内存优先，磁盘看 IO</h3>
 <p>CPU 在共享 vCPU 档普遍够用，瓶颈通常按「内存 → 磁盘 IO → 带宽」顺序出现。1GB 内存跑一个 Node 应用 + Caddy 是下限体验，2GB 开始从容。NVMe/SSD 宣传值不等于实际 IO，新机器到货先测：</p>
 <pre><code class="language-bash"># 顺序写 + 随机写各测一次（fio，Debian 12: apt install fio）
-<p>fio --name=seqwrite --rw=write --bs=1M --size=256M --numjobs=1 --direct=1 --runtime=10 --group_reporting</p>
-<p>fio --name=randwrite --rw=randwrite --bs=4k --size=128M --numjobs=4 --iodepth=32 --direct=1 --runtime=20 --group_reporting</p>
-<h1>关注结果行 write: BW=xxx MiB/s 与 IOPS=xxxxx；随机写低于约 5k IOPS 的盘跑数据库要慎重</h1>
-<p></code></pre></p>
+fio --name=seqwrite --rw=write --bs=1M --size=256M --numjobs=1 --direct=1 --runtime=10 --group_reporting
+fio --name=randwrite --rw=randwrite --bs=4k --size=128M --numjobs=4 --iodepth=32 --direct=1 --runtime=20 --group_reporting
+# 关注结果行 write: BW=xxx MiB/s 与 IOPS=xxxxx；随机写低于约 5k IOPS 的盘跑数据库要慎重
+</code></pre>
 <h3>定流量与带宽政策：看清「不限」的写法</h3>
 <p>「不限流量」在国内轻量套餐里普遍是「峰值带宽 + 公平使用条款」，海外厂商的「Unmetered」同样受 AUP 约束。Hetzner 式「给足一个显性配额（20TB）」反而最诚实。读条款时找三个词：cap（上限）、fair use（公平使用）、overage（超额计费单价）。</p>
 <h3>定 IPv4/IPv6：双栈是底线，纯 IPv6 看场景</h3>
 <p>IPv4 枯竭让部分厂商把纯 IPv6 实例做成最低价档（Lightsail $3.50、Hetzner 附加费模式）。只有当你确认出口网络、对端服务都支持 IPv6 时才选纯 IPv6；否则把 IPv4 附加费计入报价再比较。验收命令：</p>
 <pre><code class="language-bash">curl -4 -s ifconfig.me &amp;&amp; echo &quot; &lt;- IPv4&quot; ; curl -6 -s ifconfig.me &amp;&amp; echo &quot; &lt;- IPv6&quot;
-<p></code></pre></p>
+</code></pre>
 <h3>定合规与备案：决定你能用哪些机房</h3>
 <p>域名解析到境内节点提供 Web 服务需要 ICP 备案（部分经营性场景另需许可证），未备案域名在境内机房通常直接拦截 80/443。嫌麻烦就选境外机房——代价是延迟与内容属性要自己评估合规边界。这笔账在选型阶段算清楚，不要等上线被阻断。</p>
 <h3>定支付方式与风控：被拒付比配置难排查</h3>
@@ -264,130 +264,133 @@
 <li>开机后拿到公网 IP，验证 SSH 可达：</li>
 </ol>
 <pre><code class="language-bash">ssh-keygen -t ed25519 -C &quot;vps-2026&quot; -f ~/.ssh/id<em>ed25519</em>vps   # 本机执行，已有密钥可跳过
-<p>ssh-copy-id -i ~/.ssh/id<em>ed25519</em>vps.pub root@203.0.113.10      # 首次用厂商密码登录</p>
-<p>ssh -i ~/.ssh/id<em>ed25519</em>vps root@203.0.113.10 'hostname &amp;&amp; cat /etc/debian_version'</p>
-<h1>预期输出：你的主机名 + 12.x，说明密钥登录已通</h1>
-<p></code></pre></p>
+ssh-copy-id -i ~/.ssh/id<em>ed25519</em>vps.pub root@203.0.113.10      # 首次用厂商密码登录
+ssh -i ~/.ssh/id<em>ed25519</em>vps root@203.0.113.10 'hostname &amp;&amp; cat /etc/debian_version'
+# 预期输出：你的主机名 + 12.x，说明密钥登录已通
+</code></pre>
 <p>在 <code>~/.ssh/config</code> 固化别名，后续所有命令用别名，不再手敲 IP：</p>
 <pre><code>Host myvps
-<p>HostName 203.0.113.10</p>
-<p>User root</p>
-<p>IdentityFile ~/.ssh/id<em>ed25519</em>vps</p>
-<p>ServerAliveInterval 30</p>
-<p></code></pre></p>
+    HostName 203.0.113.10
+    User root
+    IdentityFile ~/.ssh/id<em>ed25519</em>vps
+    ServerAliveInterval 30
+</code></pre>
 <h2>30 分钟内加固新机器</h2>
 <p>公网上的新机器，首次 SSH 密码登录尝试通常在几分钟内开始出现——2026 年公开端口扫描强度只增不减。以下动作以 root 在 <code>ssh myvps</code> 会话内依次执行（Ubuntu 24.04 需先 <code>adduser admin &amp;&amp; usermod -aG sudo admin</code>；Debian 12 安装时已建普通用户）。</p>
 <h3>创建普通用户并收权</h3>
 <pre><code class="language-bash">adduser deploy          # 建用户
-<p>usermod -aG sudo deploy # Debian 下用 -aG sudo 亦可（需安装 sudo）</p>
-<p>loginctl enable-linger deploy  # 让该用户的 systemd 服务常驻（后续 Docker 方案会用）</p>
-<p></code></pre></p>
+usermod -aG sudo deploy # Debian 下用 -aG sudo 亦可（需安装 sudo）
+loginctl enable-linger deploy  # 让该用户的 systemd 服务常驻（后续 Docker 方案会用）
+</code></pre>
 <h3>加固 SSH：禁密码、禁 root</h3>
 <p>新建 <code>/etc/ssh/sshd_config.d/20-hardening.conf</code>（不要直接改主文件，发行版升级友好）：</p>
 <pre><code># /etc/ssh/sshd_config.d/20-hardening.conf
-<p>PermitRootLogin no</p>
-<p>PasswordAuthentication no</p>
-<p>KbdInteractiveAuthentication no</p>
-<p>PubkeyAuthentication yes</p>
-<p>MaxAuthTries 3</p>
-<p>LoginGraceTime 20</p>
-<p>ClientAliveInterval 60</p>
-<p>ClientAliveCountMax 3</p>
-<p></code></pre></p>
+PermitRootLogin no
+PasswordAuthentication no
+KbdInteractiveAuthentication no
+PubkeyAuthentication yes
+MaxAuthTries 3
+LoginGraceTime 20
+ClientAliveInterval 60
+ClientAliveCountMax 3
+</code></pre>
 <pre><code class="language-bash">sshd -t &amp;&amp; systemctl reload ssh    # 先校验再重载；Ubuntu 服务名 ssh，Debian 同为 ssh
-<h1>另开一个新终端验证 deploy 用户还能登录，确认无误后才退出当前 root 会话：</h1>
-<p>ssh deploy@203.0.113.10 'id &amp;&amp; sudo -n true &amp;&amp; echo OK'   # 预期输出 uid + OK</p>
-<p></code></pre></p>
+# 另开一个新终端验证 deploy 用户还能登录，确认无误后才退出当前 root 会话：
+ssh deploy@203.0.113.10 'id &amp;&amp; sudo -n true &amp;&amp; echo OK'   # 预期输出 uid + OK
+</code></pre>
 <p><strong>保留一个已验证的 root 会话直到新配置测试通过</strong>，这是防锁死的唯一保险。真锁死了走厂商控制台的 VNC/救援模式。</p>
 <h3>配置防火墙 ufw</h3>
 <pre><code class="language-bash">apt update &amp;&amp; apt install -y ufw
-<p>ufw default deny incoming &amp;&amp; ufw default allow outgoing</p>
-<p>ufw allow 22/tcp &amp;&amp; ufw allow 80/tcp &amp;&amp; ufw allow 443/tcp</p>
-<p>ufw --force enable &amp;&amp; ufw status verbose</p>
-<h1>预期输出：Status: active，三行 ALLOW IN</h1>
-<p></code></pre></p>
+ufw default deny incoming &amp;&amp; ufw default allow outgoing
+ufw allow 22/tcp &amp;&amp; ufw allow 80/tcp &amp;&amp; ufw allow 443/tcp
+ufw --force enable &amp;&amp; ufw status verbose
+# 预期输出：Status: active，三行 ALLOW IN
+</code></pre>
 <h3>部署 fail2ban 挡住暴力破解</h3>
 <pre><code># /etc/fail2ban/jail.d/sshd.local
-<p>[sshd]</p>
-<p>enabled = true</p>
-<p>port = ssh</p>
-<p>maxretry = 5</p>
-<p>findtime = 10m</p>
-<p>bantime = 24h</p>
-<p>backend = systemd</p>
-<p></code></pre></p>
+[sshd]
+enabled = true
+port = ssh
+maxretry = 5
+findtime = 10m
+bantime = 24h
+backend = systemd
+</code></pre>
 <pre><code class="language-bash">apt install -y fail2ban &amp;&amp; systemctl enable --now fail2ban
-<p>fail2ban-client status sshd</p>
-<h1>预期输出含 &quot;Currently banned:  N&quot;，N 随扫描持续上升</h1>
-<p></code></pre></p>
+fail2ban-client status sshd
+# 预期输出含 &quot;Currently banned:  N&quot;，N 随扫描持续上升
+</code></pre>
 <h3>设置时区、swap 与主机时钟同步</h3>
 <pre><code class="language-bash">timedatectl set-timezone Asia/Shanghai &amp;&amp; timedatectl   # Local time 与 ZONE 正确即通过
-<h1>2GB 内存机型建议 1G swap（部分厂商默认没有，OOM 时直接杀进程）</h1>
-<p>fallocate -l 1G /swapfile &amp;&amp; chmod 600 /swapfile &amp;&amp; mkswap /swapfile</p>
-<p>swapon /swapfile &amp;&amp; echo '/swapfile none swap sw 0 0' &gt;&gt; /etc/fstab</p>
-<p>free -h | grep -i swap    # 预期输出：Swap: 1.0Gi</p>
-<p></code></pre></p>
+
+# 2GB 内存机型建议 1G swap（部分厂商默认没有，OOM 时直接杀进程）
+fallocate -l 1G /swapfile &amp;&amp; chmod 600 /swapfile &amp;&amp; mkswap /swapfile
+swapon /swapfile &amp;&amp; echo '/swapfile none swap sw 0 0' &gt;&gt; /etc/fstab
+free -h | grep -i swap    # 预期输出：Swap: 1.0Gi
+</code></pre>
 <h3>开启自动安全更新</h3>
 <pre><code class="language-bash">apt install -y unattended-upgrades
-<p>dpkg-reconfigure -plow unattended-upgrades   # 选 Yes；或手写 /etc/apt/apt.conf.d/20auto-upgrades</p>
-<p>apt-config dump | grep Unattended-Upgrade | head -2</p>
-<h1>预期含 &quot;Unattended-Upgrade::Automatic-Reboot&quot; 配置项即已生效</h1>
-<p></code></pre></p>
+dpkg-reconfigure -plow unattended-upgrades   # 选 Yes；或手写 /etc/apt/apt.conf.d/20auto-upgrades
+apt-config dump | grep Unattended-Upgrade | head -2
+# 预期含 &quot;Unattended-Upgrade::Automatic-Reboot&quot; 配置项即已生效
+</code></pre>
 <p>自动重启策略按需打开（建议维护窗口时间），默认不重启更安全。</p>
 <h2>跑起来：Docker、反向代理与 systemd 服务</h2>
 <h3>装 Docker 并验证</h3>
 <pre><code class="language-bash">curl -fsSL https://get.docker.com | sudo sh
-<p>sudo usermod -aG docker deploy</p>
-<p>docker run --rm hello-world | grep -o &quot;Docker is working&quot; # 或看到 &quot;Hello from Docker&quot; 段即通过</p>
-<p></code></pre></p>
+sudo usermod -aG docker deploy
+docker run --rm hello-world | grep -o &quot;Docker is working&quot; # 或看到 &quot;Hello from Docker&quot; 段即通过
+</code></pre>
 <p>2GB 内存以下的机器慎用 Docker Desktop 类重型栈；单容器用 <code>--memory</code> 和 <code>--restart unless-stopped</code> 兜底。</p>
 <h3>用 Caddy 做反向代理：HTTPS 全自动</h3>
 <p>Caddy 单二进制 + 自动签发 Let's Encrypt，比 nginx + certbot 的脚本链条省心。<code>/etc/caddy/Caddyfile</code> 完整示例：</p>
 <pre><code>api.example.com {
-<p>encode gzip</p>
-<p>reverse_proxy 127.0.0.1:8080 {</p>
-<p>header<em>up X-Real-IP {remote</em>host}</p>
-<p>}</p>
-<p>}</p>
-<p></code></pre></p>
+    encode gzip
+    reverse_proxy 127.0.0.1:8080 {
+        header<em>up X-Real-IP {remote</em>host}
+    }
+}
+</code></pre>
 <pre><code class="language-bash">sudo apt install -y debian-keyring debian-archive-keyring apt-transport-https curl
-<p>curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' | sudo gpg --dearmor -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg</p>
-<p>curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' | sudo tee /etc/apt/sources.list.d/caddy-stable.list</p>
-<p>sudo apt update &amp;&amp; sudo apt install -y caddy</p>
-<p>systemctl status caddy --no-pager | head -5   # active (running) 即通过</p>
-<p></code></pre></p>
+curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' | sudo gpg --dearmor -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg
+curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' | sudo tee /etc/apt/sources.list.d/caddy-stable.list
+sudo apt update &amp;&amp; sudo apt install -y caddy
+systemctl status caddy --no-pager | head -5   # active (running) 即通过
+</code></pre>
 <p>域名 A 记录指到 VPS IP 后，<code>curl -I https://api.example.com</code> 应返回 200 且证书有效——这是整套反代链路的验收点。nginx 派读者可用 <code>certbot --nginx -d api.example.com</code> 达到同效，此处不展开。</p>
 <h3>把服务写成 systemd 单元</h3>
 <p>自写程序不要 <code>nohup</code> 裸跑，给它一个单元文件 <code>/etc/systemd/user/myapp.service</code>（deploy 用户）：</p>
 <pre><code>[Unit]
-<p>Description=My App</p>
-<p>After=network-online.target</p>
-<p>[Service]</p>
-<p>ExecStart=/home/deploy/myapp/bin/myapp</p>
-<p>Restart=on-failure</p>
-<p>RestartSec=5</p>
-<p>MemoryMax=512M</p>
-<p>[Install]</p>
-<p>WantedBy=default.target</p>
-<p></code></pre></p>
+Description=My App
+After=network-online.target
+
+[Service]
+ExecStart=/home/deploy/myapp/bin/myapp
+Restart=on-failure
+RestartSec=5
+MemoryMax=512M
+
+[Install]
+WantedBy=default.target
+</code></pre>
 <pre><code class="language-bash">systemctl --user daemon-reload &amp;&amp; systemctl --user enable --now myapp
-<p>systemctl --user status myapp --no-pager   # Active: active (running) 即通过</p>
-<p>journalctl --user -u myapp -n 20           # 看日志</p>
-<p></code></pre></p>
+systemctl --user status myapp --no-pager   # Active: active (running) 即通过
+journalctl --user -u myapp -n 20           # 看日志
+</code></pre>
 <h3>建立备份习惯：先备份再折腾</h3>
 <p>最低配方案是「本地打包 + 推对象存储」，每周日 3 点跑：</p>
 <pre><code class="language-bash">cat &gt; /home/deploy/backup.sh &lt;&lt;'EOF'
-<p>#!/usr/bin/env bash</p>
-<p>set -euo pipefail</p>
-<p>APP_DIR=/home/deploy/myapp</p>
-<p>DEST=/home/deploy/backups</p>
-<p>mkdir -p &quot;$DEST&quot;</p>
-<p>tar -czf &quot;$DEST/myapp-$(date +%F).tar.gz&quot; -C &quot;$APP_DIR&quot; data config Caddyfile</p>
-<p>find &quot;$DEST&quot; -name 'myapp-*.tar.gz' -mtime +14 -delete</p>
-<p>EOF</p>
-<p>chmod +x /home/deploy/backup.sh</p>
-<p>crontab -e   # 追加： 0 3 <em> </em> 0 /home/deploy/backup.sh &gt;&gt; /home/deploy/backup.log 2&gt;&amp;1</p>
-<p></code></pre></p>
+#!/usr/bin/env bash
+set -euo pipefail
+APP_DIR=/home/deploy/myapp
+DEST=/home/deploy/backups
+mkdir -p &quot;$DEST&quot;
+tar -czf &quot;$DEST/myapp-$(date +%F).tar.gz&quot; -C &quot;$APP_DIR&quot; data config Caddyfile
+find &quot;$DEST&quot; -name 'myapp-*.tar.gz' -mtime +14 -delete
+EOF
+chmod +x /home/deploy/backup.sh
+crontab -e   # 追加： 0 3 <em> </em> 0 /home/deploy/backup.sh &gt;&gt; /home/deploy/backup.log 2&gt;&amp;1
+</code></pre>
 <p>异地副本用 <code>rclone copy /home/deploy/backups remote:vps-backup/</code>（rclone 配好任意 S3/B2/WebDAV 后端），防单机全损。备份的验收标准是<strong>真的做一次恢复演练</strong>，而不是脚本退出码为 0。</p>
 <h2>控制长期费用与运维节奏</h2>
 <h3>续费与到期：日历比邮件提醒可靠</h3>
@@ -403,17 +406,17 @@
 </ol>
 <h3>建立轻量监控，别等挂了才知道</h3>
 <pre><code class="language-bash"># 三件套自查，写成 cron 每 10 分钟一次落日志即可覆盖 80% 个人服务监控
-<p>df -h / | awk 'NR==2 {print &quot;disk&quot;, $5}'</p>
-<p>free -m | awk '/Mem/ {printf &quot;mem %.0f%%\n&quot;, $3/$2*100}'</p>
-<p>uptime | awk -F'load average:' '{print &quot;load&quot;$2}'</p>
-<p></code></pre></p>
+df -h / | awk 'NR==2 {print &quot;disk&quot;, $5}'
+free -m | awk '/Mem/ {printf &quot;mem %.0f%%\n&quot;, $3/$2*100}'
+uptime | awk -F'load average:' '{print &quot;load&quot;$2}'
+</code></pre>
 <p>进阶再上 Uptime Kuma（自监控）+ 厂商面板的 CPU/带宽告警，起步阶段别把监控本身做成负担。</p>
 <h2>排查常见的坑</h2>
 <h3>超售：CPU 争用与「邻居效应」</h3>
 <p>共享 vCPU 实例的 <code>steal time</code> 是体检指标：</p>
 <pre><code class="language-bash">top -bn1 | grep '%Cpu'   # 看 st 列；长期 &gt;10% 说明宿主超售严重
-<p>vmstat 1 5               # si/so 持续非零且 swap 繁忙 → 内存被超卖挤压</p>
-<p></code></pre></p>
+vmstat 1 5               # si/so 持续非零且 swap 繁忙 → 内存被超卖挤压
+</code></pre>
 <p>偶尔尖峰正常，长期高 steal 走工单或迁移，别在超售机上跑对延迟敏感的服务。</p>
 <h3>磁盘 IO 瓶颈：便宜 HDD RAID 的伪装</h3>
 <p>上一节 fio 实测随机写低于数千 IOPS 的「SSD」，SQLite/PostgreSQL 会慢到不可用。对策：数据库挪 NVMe 档、或换厂商，别用加缓存层掩盖选型错误。</p>

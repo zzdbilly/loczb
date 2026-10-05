@@ -189,15 +189,17 @@
 <h3>安全兜底</h3>
 <p>开放 80/443 端口的 VPS 每天会被各种扫描器光顾几百次。最低限度要做三件事：</p>
 <pre><code># 1. 改 SSH 端口，禁止密码登录
-<p>sed -i &#39;s/#Port 22/Port 2222/&#39; /etc/ssh/sshd_config</p>
-<p>sed -i &#39;s/#PasswordAuthentication yes/PasswordAuthentication no/&#39; /etc/ssh/sshd_config</p>
-<h1>2. 装 fail2ban</h1>
-<p>apt install fail2ban</p>
-<h1>3. 配 ufw / iptables，只开放需要的端口</h1>
-<p>ufw default deny incoming</p>
-<p>ufw allow 80,443/tcp</p>
-<p>ufw allow 2222</p>
-<p></code></pre></p>
+sed -i &#39;s/#Port 22/Port 2222/&#39; /etc/ssh/sshd_config
+sed -i &#39;s/#PasswordAuthentication yes/PasswordAuthentication no/&#39; /etc/ssh/sshd_config
+
+# 2. 装 fail2ban
+apt install fail2ban
+
+# 3. 配 ufw / iptables，只开放需要的端口
+ufw default deny incoming
+ufw allow 80,443/tcp
+ufw allow 2222
+</code></pre>
 <p>就这三步，挡住 99% 的基础扫描攻击。</p>
 <h2>场景三：个人开发测试环境</h2>
 <p>这是最容易<strong>过度配置</strong>的场景。很多开发者的第一台 VPS 买来就跑了几个 Docker 容器测试，却选了 4C8G 的配置——多半是因为"反正也才几十块钱"。</p>
@@ -209,25 +211,23 @@
 </ul>
 <h3>Docker 踩坑</h3>
 <pre><code># docker-compose.yml 常见陷阱
-<p>version: &#39;3&#39;</p>
-<p>services:</p>
-<p>postgres:</p>
-<p>image: postgres:16</p>
-<h1>❌ 不要这样</h1>
-<h1>volumes:</h1>
-<h1>- /var/lib/postgresql/data</h1>
-<h1>✅ 应该显式指定命名卷</h1>
-<p>volumes:</p>
-<ul>
-<li>postgres_data:/var/lib/postgresql/data</li>
-</ul>
-<p></code></pre></p>
+version: &#39;3&#39;
+services:
+  postgres:
+    image: postgres:16
+    # ❌ 不要这样
+    # volumes:
+    #   - /var/lib/postgresql/data
+    # ✅ 应该显式指定命名卷
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+</code></pre>
 <p>一个常见的坑是 MySQL / PostgreSQL 的默认配置在 1C2G 的机器上跑不起来——它们默认分配的 buffer pool 和 shared buffers 是机器内存的 25%，在 2GB 内存上就是 512MB，没毛病。但如果是内存 512MB 的机器，数据库会频繁 OOM。</p>
 <pre><code># MySQL 5.7+ 在 1C1G 上的安全配置
-<p>innodb<em>buffer</em>pool_size = 256M</p>
-<p>innodb<em>log</em>file_size = 64M</p>
-<p>max_connections = 50</p>
-<p></code></pre></p>
+innodb<em>buffer</em>pool_size = 256M
+innodb<em>log</em>file_size = 64M
+max_connections = 50
+</code></pre>
 <h3>用快照备份</h3>
 <p>这是 VPS 比物理服务器方便的地方。在控制面板点一下快照（Snapshot），整个系统状态就保存下来了。开发测试时先打快照，搞坏了恢复就是几秒钟的事。</p>
 <p>但要注意：不是所有商家都免费提供快照。便宜的 VPS 通常快照要额外收费，或者限制了每日次数。</p>
@@ -243,12 +243,12 @@
 <h3>注意硬盘 IO</h3>
 <p>很多便宜的 VPS 用的是<strong>共享硬盘</strong>（比如 OpenVZ 架构或者某些 KVM 超售严重的商家），IO 性能很差。你用 DD 命令测试一下：</p>
 <pre><code>dd if=/dev/zero of=test bs=64k count=16k conv=fdatasync
-<p></code></pre></p>
+</code></pre>
 <p>如果顺序写入速度低于 100MB/s，或者 4K 随机写入低于 5MB/s，这台 VPS 就不适合做下载/NAS 用途。</p>
 <h3>rclone + 云盘方案</h3>
 <p>如果 VPS 硬盘不够大，可以用 rclone 挂载 Google Drive / OneDrive / 阿里云盘：</p>
 <pre><code>rclone mount remote:path /mnt/cloud --daemon
-<p></code></pre></p>
+</code></pre>
 <p>好处是无限存储，坏处是带宽限制和 API 配额。一天下载超过 750GB 会被 Google 限速。如果不考虑这个限制，这个方案对个人用户已经足够用了。</p>
 <h2>场景五：生产级的小型业务服务</h2>
 <p>如果是面向真实用户的服务，底线要求完全不同。</p>

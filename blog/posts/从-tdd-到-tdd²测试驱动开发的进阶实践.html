@@ -138,68 +138,74 @@
 <h3>测试粒度过细</h3>
 <p>最经典的问题：把每一个内部方法都写成测试。</p>
 <pre><code class="language-java">// ❌ 坏的例子：测试私有方法
-<p>public class OrderService {</p>
-<p>private BigDecimal calculateTax(Order order) { ... }</p>
-<p>private boolean validateStock(Order order) { ... }</p>
-<p>private String generateOrderNumber() { ... }</p>
-<p>}</p>
-<p></code></pre></p>
+public class OrderService {
+    private BigDecimal calculateTax(Order order) { ... }
+    private boolean validateStock(Order order) { ... }
+    private String generateOrderNumber() { ... }
+}
+</code></pre>
 <p>每个私有方法写一个测试类，重构时全得改。正确的做法是测试<strong>公开行为</strong>，不是测试<strong>内部实现</strong>。</p>
 <h3>在错误层级做断言</h3>
 <pre><code class="language-python"># ❌ 太细，绑定实现
-<p>def test_calculate():</p>
-<p>result = calculator.add(1, 2)</p>
-<p>assert result == 3</p>
-<p>assert calculator.history == [3]  # 绑定内部状态</p>
-<p></code></pre></p>
+def test_calculate():
+    result = calculator.add(1, 2)
+    assert result == 3
+    assert calculator.history == [3]  # 绑定内部状态
+</code></pre>
 <p>测试应该断言行为的输出，而不是实现细节。改一下：</p>
 <pre><code class="language-python"># ✅ 关注行为
-<p>def test_calculate():</p>
-<p>result = calculator.add(1, 2)</p>
-<p>assert result == 3</p>
-<p></code></pre></p>
+def test_calculate():
+    result = calculator.add(1, 2)
+    assert result == 3
+</code></pre>
 <h3>一步走太大</h3>
 <p>TDD 的精髓是小步快跑。但很多人在"红"阶段写了太多代码，然后发现测试怎么都过不了。</p>
 <pre><code class="language-python"># ❌ 一步到位，red 阶段写了整个模块
-<p>def test_checkout():</p>
-<p>cart = Cart()</p>
-<p>cart.add_item(&quot;book&quot;, 2, 29.9)</p>
-<p>result = checkout(cart, coupon=&quot;NEW50&quot;, address=&quot;...&quot;)</p>
-<p>assert result.total == 29.9</p>
-<p>assert result.tracking_number is not None</p>
-<p></code></pre></p>
+def test_checkout():
+    cart = Cart()
+    cart.add_item(&quot;book&quot;, 2, 29.9)
+    result = checkout(cart, coupon=&quot;NEW50&quot;, address=&quot;...&quot;)
+    assert result.total == 29.9
+    assert result.tracking_number is not None
+</code></pre>
 <p>这样如果测试失败，你完全不知道是哪一步出错了。应该拆成更小的步骤。</p>
 <h2>第二个 T：三角测量法</h2>
 <p>TDD² 中的第二个 T 来自 <strong>Transformation Priority</strong>（转换优先级）和 <strong>Triangulation</strong>（三角测量）。这是很多 TDD 实践者忽略的精华。</p>
 <h3>三角测量的本质</h3>
 <p>三角测量是通过<strong>多个测试案例</strong>来推导出通用实现，而不是实现完再写第二个用例。</p>
 <pre><code class="language-python">import pytest
-<h1>第一步：最简单的案例</h1>
-<p>def test<em>sum</em>empty():</p>
-<p>assert sum_list([]) == 0</p>
-<h1>第二步：单元素列表</h1>
-<p>def test<em>sum</em>single():</p>
-<p>assert sum_list([5]) == 5</p>
-<h1>第三步：多元素列表——三角测量点</h1>
-<p>def test<em>sum</em>multiple():</p>
-<p>assert sum_list([1, 2, 3]) == 6</p>
-<p></code></pre></p>
+
+# 第一步：最简单的案例
+def test<em>sum</em>empty():
+    assert sum_list([]) == 0
+
+# 第二步：单元素列表
+def test<em>sum</em>single():
+    assert sum_list([5]) == 5
+
+# 第三步：多元素列表——三角测量点
+def test<em>sum</em>multiple():
+    assert sum_list([1, 2, 3]) == 6
+</code></pre>
 <p>实现过程：</p>
 <pre><code class="language-python"># 第一版：硬编码
-<p>def sum_list(nums):</p>
-<p>return 0</p>
-<h1>第二版：还是硬编码</h1>
-<p>def sum_list(nums):</p>
-<p>return 5 if nums == [5] else 0  # ❌ 这是反面例子，但真实开发中要注意它</p>
-<h1>更好的路径</h1>
-<p>def sum_list(nums):</p>
-<p>if not nums:</p>
-<p>return 0</p>
-<p>return nums[0]  # 稍微通用一点</p>
-<h1>最终版：经过三角测量推导出</h1>
-<p>def sum_list(nums):</p>
-<p>return sum(nums)</p>
-<p></code></pre></p>
+def sum_list(nums):
+    return 0
+
+# 第二版：还是硬编码
+def sum_list(nums):
+    return 5 if nums == [5] else 0  # ❌ 这是反面例子，但真实开发中要注意它
+
+# 更好的路径
+def sum_list(nums):
+    if not nums:
+        return 0
+    return nums[0]  # 稍微通用一点
+
+# 最终版：经过三角测量推导出
+def sum_list(nums):
+    return sum(nums)
+</code></pre>
 <p>关键点：三角测量让你<strong>避免过度工程化</strong>。只写刚好能让所有测试通过的代码。</p>
 <h3>转换优先级原则</h3>
 <p>Uncle Bob 提出了一个转换优先级列表，告诉你从"特殊到通用"的转换路径：</p>
@@ -218,33 +224,39 @@
 <li><code>case → if/else</code> or <code>case → polymorphism</code>（case→分支/多态）</li>
 </ol>
 <pre><code class="language-python"># 实际例子：猜数字游戏
-<p>def guess_number(secret: int, guess: int) -&gt; str:</p>
-<h1>测试1：猜中</h1>
-<p>def test<em>guess</em>correct():</p>
-<p>assert guess_number(5, 5) == &quot;correct&quot;</p>
-<h1>按转换优先级，应该先走 constant → scalar</h1>
-<p>def guess_number(secret: int, guess: int) -&gt; str:</p>
-<p>return &quot;correct&quot;  # nil → constant</p>
-<h1>测试2：猜大了</h1>
-<p>def test<em>guess</em>too_high():</p>
-<p>assert guess_number(5, 7) == &quot;too high&quot;</p>
-<p>assert guess_number(5, 6) == &quot;too high&quot;</p>
-<h1>现在需要 conditional 了（优先级5）</h1>
-<p>def guess_number(secret: int, guess: int) -&gt; str:</p>
-<p>if guess &gt; secret:</p>
-<p>return &quot;too high&quot;</p>
-<p>return &quot;correct&quot;</p>
-<h1>测试3：猜小了</h1>
-<p>def test<em>guess</em>too_low():</p>
-<p>assert guess_number(5, 3) == &quot;too low&quot;</p>
-<h1>最终</h1>
-<p>def guess_number(secret: int, guess: int) -&gt; str:</p>
-<p>if guess &gt; secret:</p>
-<p>return &quot;too high&quot;</p>
-<p>if guess &lt; secret:</p>
-<p>return &quot;too low&quot;</p>
-<p>return &quot;correct&quot;</p>
-<p></code></pre></p>
+def guess_number(secret: int, guess: int) -&gt; str:
+
+# 测试1：猜中
+def test<em>guess</em>correct():
+    assert guess_number(5, 5) == &quot;correct&quot;
+
+# 按转换优先级，应该先走 constant → scalar
+def guess_number(secret: int, guess: int) -&gt; str:
+    return &quot;correct&quot;  # nil → constant
+
+# 测试2：猜大了
+def test<em>guess</em>too_high():
+    assert guess_number(5, 7) == &quot;too high&quot;
+    assert guess_number(5, 6) == &quot;too high&quot;
+
+# 现在需要 conditional 了（优先级5）
+def guess_number(secret: int, guess: int) -&gt; str:
+    if guess &gt; secret:
+        return &quot;too high&quot;
+    return &quot;correct&quot;
+
+# 测试3：猜小了
+def test<em>guess</em>too_low():
+    assert guess_number(5, 3) == &quot;too low&quot;
+
+# 最终
+def guess_number(secret: int, guess: int) -&gt; str:
+    if guess &gt; secret:
+        return &quot;too high&quot;
+    if guess &lt; secret:
+        return &quot;too low&quot;
+    return &quot;correct&quot;
+</code></pre>
 <p>每一步都是最小幅度的转换，让代码自然生长。</p>
 <h2>测试替身的正确用法</h2>
 <p>测试替身（Mock/Stub/Fake）用得好是利器，用不好是累赘。很多人的误区是"只要测试就 mock 数据库"。</p>
@@ -256,242 +268,279 @@
 <li><strong>Fake</strong>：轻量级实现替代（比如用内存数据库代替真实数据库）</li>
 </ul>
 <pre><code class="language-python">from unittest.mock import Mock, patch
-<p>from dataclasses import dataclass</p>
-<h1>Stub：返回固定数据</h1>
-<p>class UserServiceStub:</p>
-<p>def get<em>user(self, user</em>id: int):</p>
-<p>return {&quot;id&quot;: user_id, &quot;name&quot;: &quot;Alice&quot;}</p>
-<h1>Fake：真正的替代实现</h1>
-<p>class InMemoryUserRepository:</p>
-<p>def <strong>init</strong>(self):</p>
-<p>self._users = {}</p>
-<p>def save(self, user):</p>
-<p>self._users[user.id] = user</p>
-<p>def find<em>by</em>id(self, user_id):</p>
-<p>return self.<em>users.get(user</em>id)</p>
-<h1>测试时</h1>
-<p>def test<em>create</em>user():</p>
-<p>repo = InMemoryUserRepository()</p>
-<p>service = UserService(repo)</p>
-<p>user = service.create_user(&quot;Alice&quot;)</p>
-<p>assert repo.find<em>by</em>id(user.id).name == &quot;Alice&quot;</p>
-<p></code></pre></p>
+from dataclasses import dataclass
+
+# Stub：返回固定数据
+class UserServiceStub:
+    def get<em>user(self, user</em>id: int):
+        return {&quot;id&quot;: user_id, &quot;name&quot;: &quot;Alice&quot;}
+
+# Fake：真正的替代实现
+class InMemoryUserRepository:
+    def <strong>init</strong>(self):
+        self._users = {}
+
+    def save(self, user):
+        self._users[user.id] = user
+
+    def find<em>by</em>id(self, user_id):
+        return self.<em>users.get(user</em>id)
+
+# 测试时
+def test<em>create</em>user():
+    repo = InMemoryUserRepository()
+    service = UserService(repo)
+    user = service.create_user(&quot;Alice&quot;)
+    assert repo.find<em>by</em>id(user.id).name == &quot;Alice&quot;
+</code></pre>
 <h3>什么时候用 Mock</h3>
 <p>可以用，但有节制。Mock 应该在以下场景使用：</p>
 <pre><code class="language-python"># ✅ 合理的 Mock：外部系统边界的确认
-<p>@patch(&quot;myapp.services.email_sender&quot;)</p>
-<p>def test<em>send</em>welcome<em>email(mock</em>sender):</p>
-<p>service = UserService(email<em>sender=mock</em>sender)</p>
-<p>service.register(&quot;alice@example.com&quot;)</p>
-<h1>确认调用了外部服务</h1>
-<p>mock<em>sender.send.assert</em>called<em>once</em>with(</p>
-<p>to=&quot;alice@example.com&quot;,</p>
-<p>template=&quot;welcome&quot;</p>
-<p>)</p>
-<p></code></pre></p>
+@patch(&quot;myapp.services.email_sender&quot;)
+def test<em>send</em>welcome<em>email(mock</em>sender):
+    service = UserService(email<em>sender=mock</em>sender)
+    service.register(&quot;alice@example.com&quot;)
+
+    # 确认调用了外部服务
+    mock<em>sender.send.assert</em>called<em>once</em>with(
+        to=&quot;alice@example.com&quot;,
+        template=&quot;welcome&quot;
+    )
+</code></pre>
 <pre><code class="language-python"># ❌ 过度 Mock：把内部实现细节全部 Mock
-<p>@patch(&quot;myapp.services.UserService.<em>validate</em>email&quot;)</p>
-<p>@patch(&quot;myapp.services.UserService.<em>check</em>username&quot;)</p>
-<p>@patch(&quot;myapp.services.UserService.<em>hash</em>password&quot;)</p>
-<p>def test<em>create</em>user(mock<em>hash, mock</em>check, mock_validate):</p>
-<h1>把自己内部逻辑全 mock 了还测什么？</h1>
-<p>pass</p>
-<p></code></pre></p>
+@patch(&quot;myapp.services.UserService.<em>validate</em>email&quot;)
+@patch(&quot;myapp.services.UserService.<em>check</em>username&quot;)
+@patch(&quot;myapp.services.UserService.<em>hash</em>password&quot;)
+def test<em>create</em>user(mock<em>hash, mock</em>check, mock_validate):
+    # 把自己内部逻辑全 mock 了还测什么？
+    pass
+</code></pre>
 <h3>一个值得用的模式：Contract Test</h3>
 <p>接口定义好之后，用 Contract Test 保证实现一致性：</p>
 <pre><code class="language-python">from abc import ABC, abstractmethod
-<p>class UserRepository(ABC):</p>
-<p>@abstractmethod</p>
-<p>def save(self, user): ...</p>
-<p>@abstractmethod</p>
-<p>def find<em>by</em>id(self, user_id): ...</p>
-<h1>Contract Test</h1>
-<p>class UserRepositoryContract:</p>
-<p>def test<em>save</em>and_find(self):</p>
-<p>repo = self.create_repository()</p>
-<p>user = User(id=1, name=&quot;Alice&quot;)</p>
-<p>repo.save(user)</p>
-<p>found = repo.find<em>by</em>id(1)</p>
-<p>assert found.name == &quot;Alice&quot;</p>
-<p>def test<em>find</em>nonexistent(self):</p>
-<p>repo = self.create_repository()</p>
-<p>assert repo.find<em>by</em>id(999) is None</p>
-<h1>子类实现这个方法来提供不同的实现</h1>
-<p>def create_repository(self) -&gt; UserRepository:</p>
-<p>raise NotImplementedError</p>
-<h1>PostgreSQL 实现</h1>
-<p>class TestPostgresUserRepository(UserRepositoryContract):</p>
-<p>def create_repository(self):</p>
-<p>return PostgresUserRepository(db_url=&quot;postgresql://test:test@localhost:5432/test&quot;)</p>
-<h1>内存实现</h1>
-<p>class TestInMemoryUserRepository(UserRepositoryContract):</p>
-<p>def create_repository(self):</p>
-<p>return InMemoryUserRepository()</p>
-<p></code></pre></p>
+
+class UserRepository(ABC):
+    @abstractmethod
+    def save(self, user): ...
+    @abstractmethod
+    def find<em>by</em>id(self, user_id): ...
+
+# Contract Test
+class UserRepositoryContract:
+    def test<em>save</em>and_find(self):
+        repo = self.create_repository()
+        user = User(id=1, name=&quot;Alice&quot;)
+        repo.save(user)
+        found = repo.find<em>by</em>id(1)
+        assert found.name == &quot;Alice&quot;
+
+    def test<em>find</em>nonexistent(self):
+        repo = self.create_repository()
+        assert repo.find<em>by</em>id(999) is None
+
+    # 子类实现这个方法来提供不同的实现
+    def create_repository(self) -&gt; UserRepository:
+        raise NotImplementedError
+
+# PostgreSQL 实现
+class TestPostgresUserRepository(UserRepositoryContract):
+    def create_repository(self):
+        return PostgresUserRepository(db_url=&quot;postgresql://test:test@localhost:5432/test&quot;)
+
+# 内存实现
+class TestInMemoryUserRepository(UserRepositoryContract):
+    def create_repository(self):
+        return InMemoryUserRepository()
+</code></pre>
 <p>这样切换实现时，测试也复用。</p>
 <h2>重构的艺术</h2>
 <p>TDD 的第三步"重构"是最容易被跳过的。很多人写完通过后就跑了，留下了大量坏味道。</p>
 <h3>测试本身也需要重构</h3>
 <pre><code class="language-python"># ❌ 测试中有大量重复
-<p>def test<em>discount</em>no_coupon():</p>
-<p>cart = Cart()</p>
-<p>cart.add_item(&quot;book&quot;, 1, 29.9)</p>
-<p>result = checkout(cart, coupon=None)</p>
-<p>assert result.total == 29.9</p>
-<p>def test<em>discount</em>with<em>10</em>percent():</p>
-<p>cart = Cart()</p>
-<p>cart.add_item(&quot;book&quot;, 1, 29.9)</p>
-<p>result = checkout(cart, coupon=&quot;DISCOUNT10&quot;)</p>
-<p>assert result.total == 26.91</p>
-<p>def test<em>discount</em>with<em>20</em>percent():</p>
-<p>cart = Cart()</p>
-<p>cart.add_item(&quot;book&quot;, 1, 29.9)</p>
-<p>result = checkout(cart, coupon=&quot;DISCOUNT20&quot;)</p>
-<p>assert result.total == 23.92</p>
-<p></code></pre></p>
+def test<em>discount</em>no_coupon():
+    cart = Cart()
+    cart.add_item(&quot;book&quot;, 1, 29.9)
+    result = checkout(cart, coupon=None)
+    assert result.total == 29.9
+
+def test<em>discount</em>with<em>10</em>percent():
+    cart = Cart()
+    cart.add_item(&quot;book&quot;, 1, 29.9)
+    result = checkout(cart, coupon=&quot;DISCOUNT10&quot;)
+    assert result.total == 26.91
+
+def test<em>discount</em>with<em>20</em>percent():
+    cart = Cart()
+    cart.add_item(&quot;book&quot;, 1, 29.9)
+    result = checkout(cart, coupon=&quot;DISCOUNT20&quot;)
+    assert result.total == 23.92
+</code></pre>
 <p>提取公共逻辑：</p>
 <pre><code class="language-python">import pytest
-<p>@pytest.fixture</p>
-<p>def cart<em>with</em>book():</p>
-<p>cart = Cart()</p>
-<p>cart.add_item(&quot;book&quot;, 1, 29.9)</p>
-<p>return cart</p>
-<p>def test<em>discount</em>no<em>coupon(cart</em>with_book):</p>
-<p>result = checkout(cart<em>with</em>book, coupon=None)</p>
-<p>assert result.total == 29.9</p>
-<p>@pytest.mark.parametrize(&quot;coupon,expected&quot;, [</p>
-<p>(&quot;DISCOUNT10&quot;, 26.91),</p>
-<p>(&quot;DISCOUNT20&quot;, 23.92),</p>
-<p>(&quot;DISCOUNT50&quot;, 14.95),</p>
-<p>])</p>
-<p>def test<em>discount</em>with<em>coupon(cart</em>with_book, coupon, expected):</p>
-<p>result = checkout(cart<em>with</em>book, coupon=coupon)</p>
-<p>assert result.total == expected</p>
-<p></code></pre></p>
+
+@pytest.fixture
+def cart<em>with</em>book():
+    cart = Cart()
+    cart.add_item(&quot;book&quot;, 1, 29.9)
+    return cart
+
+def test<em>discount</em>no<em>coupon(cart</em>with_book):
+    result = checkout(cart<em>with</em>book, coupon=None)
+    assert result.total == 29.9
+
+@pytest.mark.parametrize(&quot;coupon,expected&quot;, [
+    (&quot;DISCOUNT10&quot;, 26.91),
+    (&quot;DISCOUNT20&quot;, 23.92),
+    (&quot;DISCOUNT50&quot;, 14.95),
+])
+def test<em>discount</em>with<em>coupon(cart</em>with_book, coupon, expected):
+    result = checkout(cart<em>with</em>book, coupon=coupon)
+    assert result.total == expected
+</code></pre>
 <h3>生产代码重构的保险</h3>
 <p>TDD 的测试集就是重构的安全网。但要让它真正发挥作用：</p>
 <pre><code class="language-python"># ✅ 重构前：先确认测试全部通过
-<p>import subprocess</p>
-<p>def run_tests():</p>
-<p>result = subprocess.run([&quot;pytest&quot;, &quot;-x&quot;, &quot;--tb=short&quot;], capture_output=True, text=True)</p>
-<p>assert result.returncode == 0, f&quot;Tests failed before refactoring:\n{result.stdout}&quot;</p>
-<h1>然后放心重构</h1>
-<p>def calculate_discount(total: float, coupon: str | None) -&gt; float:</p>
-<p>&quot;&quot;&quot;把分散在各个地方的优惠计算集中到一处&quot;&quot;&quot;</p>
-<p>if coupon is None:</p>
-<p>return total</p>
-<p>discounts = {</p>
-<p>&quot;DISCOUNT10&quot;: 0.9,</p>
-<p>&quot;DISCOUNT20&quot;: 0.8,</p>
-<p>&quot;DISCOUNT50&quot;: 0.5,</p>
-<p>}</p>
-<p>return total * discounts.get(coupon, 1.0)</p>
-<p></code></pre></p>
+import subprocess
+
+def run_tests():
+    result = subprocess.run([&quot;pytest&quot;, &quot;-x&quot;, &quot;--tb=short&quot;], capture_output=True, text=True)
+    assert result.returncode == 0, f&quot;Tests failed before refactoring:\n{result.stdout}&quot;
+
+# 然后放心重构
+def calculate_discount(total: float, coupon: str | None) -&gt; float:
+    &quot;&quot;&quot;把分散在各个地方的优惠计算集中到一处&quot;&quot;&quot;
+    if coupon is None:
+        return total
+
+    discounts = {
+        &quot;DISCOUNT10&quot;: 0.9,
+        &quot;DISCOUNT20&quot;: 0.8,
+        &quot;DISCOUNT50&quot;: 0.5,
+    }
+
+    return total * discounts.get(coupon, 1.0)
+</code></pre>
 <p>重构后跑测试，如果全绿，说明重构成功。</p>
 <h2>边界测试：容易被忽略的角落</h2>
 <p>大部分测试覆盖的是"快乐路径"，边界值往往被忽略。但生产环境的 bug 大多出在边界上。</p>
 <h3>数值边界</h3>
 <pre><code class="language-python">import pytest
-<p>def test<em>discount</em>boundaries():</p>
-<h1>零金额</h1>
-<p>assert checkout(Cart(), coupon=&quot;DISCOUNT10&quot;).total == 0</p>
-<h1>超大金额</h1>
-<p>big_cart = Cart()</p>
-<p>big<em>cart.add</em>item(&quot;expensive<em>stuff&quot;, 1, 1</em>000_000)</p>
-<p>result = checkout(big_cart, coupon=&quot;DISCOUNT50&quot;)</p>
-<p>assert result.total == 500_000  # 不会溢出</p>
-<h1>负数金额（异常情况）</h1>
-<p>with pytest.raises(InvalidPriceError):</p>
-<p>Cart().add_item(&quot;bad&quot;, 1, -100)</p>
-<p></code></pre></p>
+
+def test<em>discount</em>boundaries():
+    # 零金额
+    assert checkout(Cart(), coupon=&quot;DISCOUNT10&quot;).total == 0
+
+    # 超大金额
+    big_cart = Cart()
+    big<em>cart.add</em>item(&quot;expensive<em>stuff&quot;, 1, 1</em>000_000)
+    result = checkout(big_cart, coupon=&quot;DISCOUNT50&quot;)
+    assert result.total == 500_000  # 不会溢出
+
+    # 负数金额（异常情况）
+    with pytest.raises(InvalidPriceError):
+        Cart().add_item(&quot;bad&quot;, 1, -100)
+</code></pre>
 <h3>字符串边界</h3>
 <pre><code class="language-python">@pytest.mark.parametrize(&quot;username,expected&quot;, [
-<p>(&quot;a&quot;, True),          # 最小有效</p>
-<p>(&quot;a&quot; * 50, True),     # 最大有效</p>
-<p>(&quot;&quot;, False),          # 空字符串</p>
-<p>(&quot;a&quot; * 51, False),    # 超长</p>
-<p>(&quot;user@name&quot;, False), # 特殊字符</p>
-<p>(None, False),        # None</p>
-<p>])</p>
-<p>def test<em>username</em>validation(username, expected):</p>
-<p>assert validate_username(username) == expected</p>
-<p></code></pre></p>
+    (&quot;a&quot;, True),          # 最小有效
+    (&quot;a&quot; * 50, True),     # 最大有效
+    (&quot;&quot;, False),          # 空字符串
+    (&quot;a&quot; * 51, False),    # 超长
+    (&quot;user@name&quot;, False), # 特殊字符
+    (None, False),        # None
+])
+def test<em>username</em>validation(username, expected):
+    assert validate_username(username) == expected
+</code></pre>
 <h3>并发边界</h3>
 <pre><code class="language-python">import threading
-<p>import time</p>
-<p>def test<em>concurrent</em>checkout():</p>
-<p>cart = Cart()</p>
-<p>cart.add<em>item(&quot;limited</em>item&quot;, 1, 99.9)</p>
-<h1>库存只有1件</h1>
-<p>results = []</p>
-<p>errors = []</p>
-<p>def try<em>checkout(user</em>id):</p>
-<p>try:</p>
-<p>result = checkout(cart, user<em>id=user</em>id)</p>
-<p>results.append(result)</p>
-<p>except OutOfStockError:</p>
-<p>errors.append(user_id)</p>
-<p>threads = [</p>
-<p>threading.Thread(target=try_checkout, args=(i,))</p>
-<p>for i in range(10)</p>
-<p>]</p>
-<p>for t in threads:</p>
-<p>t.start()</p>
-<p>for t in threads:</p>
-<p>t.join()</p>
-<p>assert len(results) == 1  # 只有一个人成功</p>
-<p>assert len(errors) == 9   # 其他人获取&quot;已售罄&quot;</p>
-<p></code></pre></p>
+import time
+
+def test<em>concurrent</em>checkout():
+    cart = Cart()
+    cart.add<em>item(&quot;limited</em>item&quot;, 1, 99.9)
+
+    # 库存只有1件
+    results = []
+    errors = []
+
+    def try<em>checkout(user</em>id):
+        try:
+            result = checkout(cart, user<em>id=user</em>id)
+            results.append(result)
+        except OutOfStockError:
+            errors.append(user_id)
+
+    threads = [
+        threading.Thread(target=try_checkout, args=(i,))
+        for i in range(10)
+    ]
+
+    for t in threads:
+        t.start()
+    for t in threads:
+        t.join()
+
+    assert len(results) == 1  # 只有一个人成功
+    assert len(errors) == 9   # 其他人获取&quot;已售罄&quot;
+</code></pre>
 <h2>测试驱动设计：TDD 的真正价值</h2>
 <p>TDD 最大的好处不是"更少的 bug"，而是<strong>更好的设计</strong>。</p>
 <h3>可测试性 = 可维护性</h3>
 <p>如果一个函数很难写测试，往往意味着它的设计有问题。</p>
 <pre><code class="language-python"># ❌ 难以测试：硬编码依赖
-<p>def process<em>order(order</em>id):</p>
-<p>db = Database(&quot;mysql://...&quot;)</p>
-<p>order = db.query(f&quot;SELECT * FROM orders WHERE id = {order_id}&quot;)</p>
-<p>email_client = EmailClient(&quot;smtp://...&quot;)</p>
-<p>email<em>client.send(order.user</em>email, &quot;Order processed&quot;)</p>
-<p>return &quot;OK&quot;</p>
-<p></code></pre></p>
+def process<em>order(order</em>id):
+    db = Database(&quot;mysql://...&quot;)
+    order = db.query(f&quot;SELECT * FROM orders WHERE id = {order_id}&quot;)
+    email_client = EmailClient(&quot;smtp://...&quot;)
+    email<em>client.send(order.user</em>email, &quot;Order processed&quot;)
+    return &quot;OK&quot;
+</code></pre>
 <p>改为依赖注入后，不仅可测试，还更灵活：</p>
 <pre><code class="language-python"># ✅ 可测试设计：依赖注入
-<p>def process_order(</p>
-<p>order_id: int,</p>
-<p>db: Database | None = None,</p>
-<p>email: EmailClient | None = None</p>
-<p>):</p>
-<p>db = db or Database()</p>
-<p>email = email or EmailClient()</p>
-<p>order = db.find<em>order(order</em>id)</p>
-<p>email.send(order.user_email, &quot;Order processed&quot;)</p>
-<p>return &quot;OK&quot;</p>
-<h1>测试中传递 mock</h1>
-<p>def test<em>process</em>order():</p>
-<p>mock_db = Mock()</p>
-<p>mock<em>db.find</em>order.return<em>value = Order(user</em>email=&quot;test@test.com&quot;)</p>
-<p>mock_email = Mock()</p>
-<p>result = process<em>order(1, db=mock</em>db, email=mock_email)</p>
-<p>assert result == &quot;OK&quot;</p>
-<p>mock<em>email.send.assert</em>called_once()</p>
-<p></code></pre></p>
+def process_order(
+    order_id: int,
+    db: Database | None = None,
+    email: EmailClient | None = None
+):
+    db = db or Database()
+    email = email or EmailClient()
+
+    order = db.find<em>order(order</em>id)
+    email.send(order.user_email, &quot;Order processed&quot;)
+    return &quot;OK&quot;
+
+# 测试中传递 mock
+def test<em>process</em>order():
+    mock_db = Mock()
+    mock<em>db.find</em>order.return<em>value = Order(user</em>email=&quot;test@test.com&quot;)
+    mock_email = Mock()
+
+    result = process<em>order(1, db=mock</em>db, email=mock_email)
+
+    assert result == &quot;OK&quot;
+    mock<em>email.send.assert</em>called_once()
+</code></pre>
 <h3>测试驱动的 API 设计</h3>
 <p>写客户端代码之前先写测试，逼你从使用者角度思考 API：</p>
 <pre><code class="language-python"># 先写使用场景
-<p>from mylib import DataProcessor</p>
-<p>import pytest</p>
-<p>def test<em>data</em>processor_pipeline():</p>
-<p>data = [1, 2, 3, 4, 5]</p>
-<p>pipeline = DataProcessor()</p>
-<p>result = (</p>
-<p>pipeline</p>
-<p>.load(data)</p>
-<p>.filter(lambda x: x &gt; 2)</p>
-<p>.map(lambda x: x * 2)</p>
-<p>.reduce(lambda a, b: a + b)</p>
-<p>)</p>
-<p>assert result == 28  # (3+4+5) <em> 2 还是 3</em>2 + 4<em>2 + 5</em>2?</p>
-<p></code></pre></p>
+from mylib import DataProcessor
+import pytest
+
+def test<em>data</em>processor_pipeline():
+    data = [1, 2, 3, 4, 5]
+    pipeline = DataProcessor()
+
+    result = (
+        pipeline
+        .load(data)
+        .filter(lambda x: x &gt; 2)
+        .map(lambda x: x * 2)
+        .reduce(lambda a, b: a + b)
+    )
+
+    assert result == 28  # (3+4+5) <em> 2 还是 3</em>2 + 4<em>2 + 5</em>2?
+</code></pre>
 <p>写成这样你才清楚 API 到底要怎样设计才自然。</p>
 <h2>常见误区一览</h2>
 <table>

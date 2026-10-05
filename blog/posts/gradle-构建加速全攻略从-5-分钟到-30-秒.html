@@ -136,7 +136,7 @@
 <p>开始优化之前，先要搞清楚瓶颈在哪。盲猜"编译慢"然后随机调参数，跟修 bug 不先复现一样不靠谱。</p>
 <h3>用 Profile 找出瓶颈</h3>
 <pre><code class="language-bash">./gradlew assembleDebug --profile
-<p></code></pre></p>
+</code></pre>
 <p>跑完后在 <code>build/reports/profile/</code> 下生成一个 HTML 报告，里面会显示每个 Task 的执行时间。你大概率会发现：</p>
 <ul>
 <li><strong>Configuration 阶段</strong> 占了几十秒甚至更多</li>
@@ -146,61 +146,65 @@
 <h3>开启 Gradle Build Scan</h3>
 <p>如果 Profile 还不够详细，直接用 Build Scan：</p>
 <pre><code class="language-bash">./gradlew assembleDebug --scan
-<p></code></pre></p>
+</code></pre>
 <p>这个会生成一个在线报告，包含依赖解析时间、缓存命中率、Task 执行顺序等非常详细的信息。免费版的够用了。</p>
 <h2>控制依赖版本的管理策略</h2>
 <p>很多人没注意到，依赖版本的管理方式直接影响构建速度。</p>
 <h3>统一版本管理（Version Catalog）</h3>
 <pre><code class="language-toml"># gradle/libs.versions.toml
-<p>[versions]</p>
-<p>kotlin = &quot;2.0.21&quot;</p>
-<p>compose-bom = &quot;2024.12.01&quot;</p>
-<p>room = &quot;2.6.1&quot;</p>
-<p>hilt = &quot;2.51.1&quot;</p>
-<p>agp = &quot;8.7.3&quot;</p>
-<p>[libraries]</p>
-<p>kotlin-stdlib = { module = &quot;org.jetbrains.kotlin:kotlin-stdlib&quot;, version.ref = &quot;kotlin&quot; }</p>
-<p>compose-bom = { module = &quot;androidx.compose:compose-bom&quot;, version.ref = &quot;compose-bom&quot; }</p>
-<p>room-runtime = { module = &quot;androidx.room:room-runtime&quot;, version.ref = &quot;room&quot; }</p>
-<p>room-ktx = { module = &quot;androidx.room:room-ktx&quot;, version.ref = &quot;room&quot; }</p>
-<p>room-compiler = { module = &quot;androidx.room:room-compiler&quot;, version.ref = &quot;room&quot; }</p>
-<p>hilt-android = { module = &quot;com.google.dagger:hilt-android&quot;, version.ref = &quot;hilt&quot; }</p>
-<p>hilt-compiler = { module = &quot;com.google.dagger:hilt-compiler&quot;, version.ref = &quot;hilt&quot; }</p>
-<p>[plugins]</p>
-<p>android-application = { id = &quot;com.android.application&quot;, version.ref = &quot;agp&quot; }</p>
-<p>kotlin-android = { id = &quot;org.jetbrains.kotlin.android&quot;, version.ref = &quot;kotlin&quot; }</p>
-<p>hilt = { id = &quot;com.google.dagger.hilt.android&quot;, version.ref = &quot;hilt&quot; }</p>
-<p>kapt = { id = &quot;org.jetbrains.kotlin.kapt&quot; }</p>
-<p></code></pre></p>
+[versions]
+kotlin = &quot;2.0.21&quot;
+compose-bom = &quot;2024.12.01&quot;
+room = &quot;2.6.1&quot;
+hilt = &quot;2.51.1&quot;
+agp = &quot;8.7.3&quot;
+
+[libraries]
+kotlin-stdlib = { module = &quot;org.jetbrains.kotlin:kotlin-stdlib&quot;, version.ref = &quot;kotlin&quot; }
+compose-bom = { module = &quot;androidx.compose:compose-bom&quot;, version.ref = &quot;compose-bom&quot; }
+room-runtime = { module = &quot;androidx.room:room-runtime&quot;, version.ref = &quot;room&quot; }
+room-ktx = { module = &quot;androidx.room:room-ktx&quot;, version.ref = &quot;room&quot; }
+room-compiler = { module = &quot;androidx.room:room-compiler&quot;, version.ref = &quot;room&quot; }
+hilt-android = { module = &quot;com.google.dagger:hilt-android&quot;, version.ref = &quot;hilt&quot; }
+hilt-compiler = { module = &quot;com.google.dagger:hilt-compiler&quot;, version.ref = &quot;hilt&quot; }
+
+[plugins]
+android-application = { id = &quot;com.android.application&quot;, version.ref = &quot;agp&quot; }
+kotlin-android = { id = &quot;org.jetbrains.kotlin.android&quot;, version.ref = &quot;kotlin&quot; }
+hilt = { id = &quot;com.google.dagger.hilt.android&quot;, version.ref = &quot;hilt&quot; }
+kapt = { id = &quot;org.jetbrains.kotlin.kapt&quot; }
+</code></pre>
 <p>然后直接在 <code>build.gradle.kts</code> 里引用：</p>
 <pre><code class="language-kotlin">plugins {
-<p>alias(libs.plugins.android.application)</p>
-<p>alias(libs.plugins.kotlin.android)</p>
-<p>alias(libs.plugins.hilt)</p>
-<p>alias(libs.plugins.kapt)</p>
-<p>}</p>
-<p>android {</p>
-<p>// ...</p>
-<p>}</p>
-<p>dependencies {</p>
-<p>implementation(libs.kotlin.stdlib)</p>
-<p>implementation(platform(libs.compose.bom))</p>
-<p>implementation(libs.room.runtime)</p>
-<p>implementation(libs.room.ktx)</p>
-<p>kapt(libs.room.compiler)</p>
-<p>implementation(libs.hilt.android)</p>
-<p>kapt(libs.hilt.compiler)</p>
-<p>}</p>
-<p></code></pre></p>
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.kapt)
+}
+
+android {
+    // ...
+}
+
+dependencies {
+    implementation(libs.kotlin.stdlib)
+    implementation(platform(libs.compose.bom))
+    implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
+    kapt(libs.room.compiler)
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
+}
+</code></pre>
 <p>Version Catalog 的好处不仅仅是统一版本号——它能让你清晰地看到依赖图谱，避免重复下载同一依赖的不同版本。</p>
 <h2>AGP 版本与 Gradle 版本的匹配关系</h2>
 <p>很多人直接复制了网上的 Gradle 配置，但 AGP 和 Gradle 的版本不匹配会导致一些隐性问题。官方兼容性指南建议：</p>
 <pre><code class="language-kotlin">// gradle.properties — 关键参数
-<p>org.gradle.jvmargs = -Xmx4096m -XX:MaxMetaspaceSize=1024m</p>
-<p>org.gradle.parallel = true</p>
-<p>org.gradle.caching = true</p>
-<p>org.gradle.configuration-cache = true</p>
-<p></code></pre></p>
+org.gradle.jvmargs = -Xmx4096m -XX:MaxMetaspaceSize=1024m
+org.gradle.parallel = true
+org.gradle.caching = true
+org.gradle.configuration-cache = true
+</code></pre>
 <h3>JVM 参数优化</h3>
 <p><code>-Xmx</code> 的值需要根据你的机器内存来调。一个参考：</p>
 <table>
@@ -250,34 +254,35 @@
 </table>
 <p>迁移示例（以 Room 为例）：</p>
 <pre><code class="language-kotlin">// build.gradle.kts — 替换前
-<p>plugins {</p>
-<p>id(&quot;org.jetbrains.kotlin.kapt&quot;)</p>
-<p>}</p>
-<p>dependencies {</p>
-<p>kapt(libs.room.compiler)</p>
-<p>}</p>
-<p>// build.gradle.kts — 替换后</p>
-<p>plugins {</p>
-<p>id(&quot;com.google.devtools.ksp&quot;)</p>
-<p>}</p>
-<p>dependencies {</p>
-<p>ksp(libs.room.compiler)</p>
-<p>}</p>
-<p></code></pre></p>
+plugins {
+    id(&quot;org.jetbrains.kotlin.kapt&quot;)
+}
+dependencies {
+    kapt(libs.room.compiler)
+}
+
+// build.gradle.kts — 替换后
+plugins {
+    id(&quot;com.google.devtools.ksp&quot;)
+}
+dependencies {
+    ksp(libs.room.compiler)
+}
+</code></pre>
 <p>不是所有库都支持 KSP，目前主流的 Room、Glide、Moshi 都支持了。Hilt 暂时还不支持，但已经在开发中了。</p>
 <h2>模块化架构对构建速度的影响</h2>
 <p>模块化不是为了"代码组织更清晰"——它的直接好处是<strong>增量构建</strong>。</p>
 <h3>模块化正确的打开方式</h3>
 <pre><code class="language-css">app/
-<p>├── :app                        // 主模块（包含依赖集成、Navigation）</p>
-<p>├── :core:ui                    // UI 公共组件</p>
-<p>├── :core:network               // 网络层</p>
-<p>├── :core:database              // 数据库</p>
-<p>├── :feature:home               // 首页</p>
-<p>├── :feature:profile            // 个人中心</p>
-<p>├── :feature:settings           // 设置</p>
-<p>└── :feature:search             // 搜索</p>
-<p></code></pre></p>
+├── :app                        // 主模块（包含依赖集成、Navigation）
+├── :core:ui                    // UI 公共组件
+├── :core:network               // 网络层
+├── :core:database              // 数据库
+├── :feature:home               // 首页
+├── :feature:profile            // 个人中心
+├── :feature:settings           // 设置
+└── :feature:search             // 搜索
+</code></pre>
 <p>关键原则：<strong>高频改动的模块和低频改动的模块分开</strong>。<code>:core:ui</code> 和 <code>:core:network</code> 可能几周才改一次，它们的字节码缓存基本不会失效。<code>:feature:home</code> 可能一天改很多次，但它只会重新编译它自己和依赖的基础模块。</p>
 <h3>数据流对比</h3>
 <ul>
@@ -295,77 +300,77 @@
 <h2>缓存策略：本地缓存、远程缓存、Build Cache</h2>
 <h3>本地构建缓存</h3>
 <pre><code class="language-kotlin">// settings.gradle.kts
-<p>buildCache {</p>
-<p>local {</p>
-<p>isEnabled = true</p>
-<p>directory = File(rootDir, &quot;.build-cache&quot;)</p>
-<p>removeUnusedEntriesAfterDays = 30</p>
-<p>}</p>
-<p>}</p>
-<p></code></pre></p>
+buildCache {
+    local {
+        isEnabled = true
+        directory = File(rootDir, &quot;.build-cache&quot;)
+        removeUnusedEntriesAfterDays = 30
+    }
+}
+</code></pre>
 <p>默认的 <code>~/.gradle/caches/</code> 交给 Gradle 自己管理。但显式指定缓存目录可以让你在 <code>git clean -fdx</code> 后保留缓存。</p>
 <h3>Remote Build Cache（团队构建加速）</h3>
 <p>如果团队有多人，或者有 CI，远程构建缓存的价值就体现出来了：</p>
 <pre><code class="language-kotlin">// settings.gradle.kts
-<p>buildCache {</p>
-<p>local {</p>
-<p>isEnabled = true</p>
-<p>}</p>
-<p>remote(HttpBuildCache::class.java) {</p>
-<p>url = uri(&quot;https://build-cache.your-team.com/cache/&quot;)</p>
-<p>isPush = true</p>
-<p>credentials {</p>
-<p>username = System.getenv(&quot;BUILD<em>CACHE</em>USER&quot;) ?: &quot;&quot;</p>
-<p>password = System.getenv(&quot;BUILD<em>CACHE</em>PASSWORD&quot;) ?: &quot;&quot;</p>
-<p>}</p>
-<p>}</p>
-<p>}</p>
-<p></code></pre></p>
+buildCache {
+    local {
+        isEnabled = true
+    }
+    remote(HttpBuildCache::class.java) {
+        url = uri(&quot;https://build-cache.your-team.com/cache/&quot;)
+        isPush = true
+        credentials {
+            username = System.getenv(&quot;BUILD<em>CACHE</em>USER&quot;) ?: &quot;&quot;
+            password = System.getenv(&quot;BUILD<em>CACHE</em>PASSWORD&quot;) ?: &quot;&quot;
+        }
+    }
+}
+</code></pre>
 <p>CI 构建一次后，开发者拉下来就能直接命中缓存，不用重新编译。对于有 30+ 人的 Android 团队，这个配置每个月能省下几个小时的构建等待时间。</p>
 <h2>禁用不必要的 Task 和 Plugin</h2>
 <p>很多 Android 项目默认启用了一些你完全不需要的 Task：</p>
 <pre><code class="language-kotlin">// build.gradle.kts — 禁用不必要的 Task
-<p>android {</p>
-<p>lint {</p>
-<p>// 如果只需要 lint 的 error 级别检查</p>
-<p>checkReleaseBuilds = false</p>
-<p>abortOnError = false</p>
-<p>}</p>
-<p>buildTypes {</p>
-<p>release {</p>
-<p>// 如果不需要 ProGuard 混淆（比如 debug 版）</p>
-<p>isMinifyEnabled = false</p>
-<p>proguardFiles(...)</p>
-<p>}</p>
-<p>}</p>
-<p>}</p>
-<p>// 禁用特定的 Lint 检查</p>
-<p>lintOptions {</p>
-<p>disable += setOf(</p>
-<p>&quot;MissingTranslation&quot;,</p>
-<p>&quot;ExtraTranslation&quot;,</p>
-<p>&quot;TypographyFractions&quot;</p>
-<p>)</p>
-<p>}</p>
-<p></code></pre></p>
+android {
+    lint {
+        // 如果只需要 lint 的 error 级别检查
+        checkReleaseBuilds = false
+        abortOnError = false
+    }
+    buildTypes {
+        release {
+            // 如果不需要 ProGuard 混淆（比如 debug 版）
+            isMinifyEnabled = false
+            proguardFiles(...)
+        }
+    }
+}
+// 禁用特定的 Lint 检查
+lintOptions {
+    disable += setOf(
+        &quot;MissingTranslation&quot;,
+        &quot;ExtraTranslation&quot;,
+        &quot;TypographyFractions&quot;
+    )
+}
+</code></pre>
 <h3>为什么 lint 这么慢</h3>
 <p>Gradle Plugin 默认的 lint 检查非常多——它会在每个变体（debug/release）上跑一次完整的 lint 检查。如果你的项目有 5 个 flavor × 2 个 buildType = 10 个变体，lint 每 run 一次就是 10 倍的时间。</p>
 <p>建议在本地开发时只保留 <code>checkDebug</code>，对 release 变体只做 critical 级别检查：</p>
 <pre><code class="language-kotlin">// build.gradle.kts
-<p>android {</p>
-<p>lint {</p>
-<p>checkReleaseBuilds = false</p>
-<p>checkGeneratedSources = false</p>
-<p>checkDependencies = false</p>
-<p>abortOnError = false</p>
-<p>}</p>
-<p>}</p>
-<p></code></pre></p>
+android {
+    lint {
+        checkReleaseBuilds = false
+        checkGeneratedSources = false
+        checkDependencies = false
+        abortOnError = false
+    }
+}
+</code></pre>
 <h2>开启 Gradle Configuration Cache</h2>
 <p>Gradle 8 以后最重要的特性就是 Configuration Cache。它把配置阶段的结果缓存下来，后续构建跳过配置阶段。</p>
 <pre><code class="language-properties"># gradle.properties
-<p>org.gradle.configuration-cache = true</p>
-<p></code></pre></p>
+org.gradle.configuration-cache = true
+</code></pre>
 <h3>兼容性检查</h3>
 <p>开启后，Gradle 会检查你的脚本是否兼容。常见的不兼容情况：</p>
 <ul>
@@ -377,60 +382,57 @@
 <h3>一些需要注意的事项</h3>
 <p>Configuration Cache 在 CI 上也会生效，但需要确保缓存目录不被清理。在 GitHub Actions 上可以用 <code>actions/cache</code> 来保存：</p>
 <pre><code class="language-yaml">- name: Cache Gradle configuration
-<p>uses: actions/cache@v4</p>
-<p>with:</p>
-<p>path: ~/.gradle/configuration-cache</p>
-<p>key: ${{ runner.os }}-gradle-config-${{ hashFiles('*<em>/</em>.gradle*') }}</p>
-<p></code></pre></p>
+  uses: actions/cache@v4
+  with:
+    path: ~/.gradle/configuration-cache
+    key: ${{ runner.os }}-gradle-config-${{ hashFiles('*<em>/</em>.gradle*') }}
+</code></pre>
 <h2>CI 上的构建加速</h2>
 <p>CI 上的 Gradle 构建和本地有很多不同。</p>
 <h3>Task 输出缓存保持</h3>
 <pre><code class="language-yaml">- uses: actions/cache@v4
-<p>with:</p>
-<p>path: |</p>
-<p>~/.gradle/caches/</p>
-<p>~/.gradle/wrapper/</p>
-<p>key: ${{ runner.os }}-gradle-${{ hashFiles('<strong>/<em>.gradle</em>', '</strong>/gradle-wrapper.properties') }}</p>
-<p>restore-keys: |</p>
-<p>${{ runner.os }}-gradle-</p>
-<p></code></pre></p>
+  with:
+    path: |
+      ~/.gradle/caches/
+      ~/.gradle/wrapper/
+    key: ${{ runner.os }}-gradle-${{ hashFiles('<strong>/<em>.gradle</em>', '</strong>/gradle-wrapper.properties') }}
+    restore-keys: |
+      ${{ runner.os }}-gradle-
+</code></pre>
 <h3>按模块拆分 CI 任务</h3>
 <pre><code class="language-yaml">jobs:
-<p>test-core-network:</p>
-<p>runs-on: ubuntu-latest</p>
-<p>steps:</p>
-<ul>
-<li>uses: actions/checkout@v4</li>
-<li>run: ./gradlew :core:network:test</li>
-</ul>
-<p>test-core-database:</p>
-<p>runs-on: ubuntu-latest</p>
-<p>steps:</p>
-<ul>
-<li>uses: actions/checkout@v4</li>
-<li>run: ./gradlew :core:database:test</li>
-</ul>
-<p></code></pre></p>
+  test-core-network:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: ./gradlew :core:network:test
+
+  test-core-database:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: ./gradlew :core:database:test
+</code></pre>
 <p>如果 CI 机器资源充裕，并行跑模块测试能大幅缩短总耗时。</p>
 <h3>使用 Remote Build Cache</h3>
 <p>CI 上开启 Remote Build Cache 然后 push 到远端，开发者本地也能获益。之前已经写过配置了，这里不再重复。</p>
 <h2>其他细节优化</h2>
 <h3>zipflinger 替代默认压缩</h3>
 <pre><code class="language-kotlin">// gradle.properties
-<p>android.useNewApkCreator = true</p>
-<p></code></pre></p>
+android.useNewApkCreator = true
+</code></pre>
 <p>这个会在打包 apk 时使用 zipflinger 替代旧的压缩算法，速度能快 30-40%。</p>
 <h3>减少 APK 构建变体</h3>
 <pre><code class="language-kotlin">// build.gradle.kts
-<p>android {</p>
-<p>variantFilter {</p>
-<p>// 只保留 debug 和 release</p>
-<p>if (buildType.name == &quot;staging&quot; || buildType.name == &quot;benchmark&quot;) {</p>
-<p>ignore = true</p>
-<p>}</p>
-<p>}</p>
-<p>}</p>
-<p></code></pre></p>
+android {
+    variantFilter {
+        // 只保留 debug 和 release
+        if (buildType.name == &quot;staging&quot; || buildType.name == &quot;benchmark&quot;) {
+            ignore = true
+        }
+    }
+}
+</code></pre>
 <p>每多一个变体，Gradle 就要多编译一套。对于开发不需要的变体，直接过滤掉。</p>
 <h2>一个完整的优化 checklist</h2>
 <p>把上面的内容做成一个 checklist，方便你对着改：</p>

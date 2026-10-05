@@ -155,8 +155,8 @@
 <div class="comparison-card good">
 <p><strong>✅ 好 Prompt</strong></p>
 <pre style="margin: 0.5rem 0; padding: 0.5rem; font-size: 0.85rem;"><code>技术栈：Android + Kotlin + Retrofit
-<p>需求：实现手机号 + 验证码登录</p>
-<p>限制：需要处理网络异常、验证码 60s 倒计时</code></pre></p>
+需求：实现手机号 + 验证码登录
+限制：需要处理网络异常、验证码 60s 倒计时</code></pre>
 </div>
 </div>
 <h3>第二层：目标（Goal）</h3>
@@ -169,12 +169,10 @@
 <h3>第三层：约束（Constraints）</h3>
 <p>这是最容易被忽略的，但往往决定了输出质量：</p>
 <pre><code>约束示例：
-<ul>
-<li>不要用第三方库，只用官方 API</li>
-<li>代码要兼容 Android 8.0+</li>
-<li>遵循项目现有的 MVVM 架构</li>
-<li>变量命名用驼峰，注释用中文</code></pre></li>
-</ul>
+- 不要用第三方库，只用官方 API
+- 代码要兼容 Android 8.0+
+- 遵循项目现有的 MVVM 架构
+- 变量命名用驼峰，注释用中文</code></pre>
 <div class="tip-box">
 <p><strong>💡 经验法则</strong>：约束越具体，AI 输出越接近你的预期。宁可多写 3 行约束，也不要来回修改 10 次。</p>
 </div>
@@ -195,17 +193,19 @@
 <h3>策略二：结构化信息</h3>
 <p>用格式化的方式提供信息，AI 更容易理解：</p>
 <pre><code>// 项目结构
-<p>├── api/          # 网络请求层</p>
-<p>├── repository/   # 数据仓库层</p>
-<p>├── viewmodel/    # ViewModel 层</p>
-<p>└── ui/           # UI 层</p>
-<p>// 问题代码（LoginViewModel.kt:45）</p>
-<p>fun login(phone: String, code: String) {</p>
-<p>// 这里报 NPE，不知道为什么</p>
-<p>}</p>
-<p>// 错误日志</p>
-<p>java.lang.NullPointerException: user is null</p>
-<p>at LoginViewModel.login(LoginViewModel.kt:47)</code></pre></p>
+├── api/          # 网络请求层
+├── repository/   # 数据仓库层
+├── viewmodel/    # ViewModel 层
+└── ui/           # UI 层
+
+// 问题代码（LoginViewModel.kt:45）
+fun login(phone: String, code: String) {
+    // 这里报 NPE，不知道为什么
+}
+
+// 错误日志
+java.lang.NullPointerException: user is null
+    at LoginViewModel.login(LoginViewModel.kt:47)</code></pre>
 <h3>策略三：及时重置</h3>
 <p>当对话超过 20 轮，AI 的回答质量会明显下降。这时候应该：</p>
 <ol>
@@ -220,9 +220,9 @@
 <p>AI 很难一次给出完美答案，但<strong>迭代优化</strong>可以让它越来越接近。核心原则：</p>
 <h3>法则一：先粗后细</h3>
 <pre><code>第一轮：给我一个 Retrofit + Kotlin 协程的网络请求示例
-<p>第二轮：加上错误处理和 Loading 状态</p>
-<p>第三轮：把错误处理改成统一的 ExceptionHandler</p>
-<p>第四轮：添加日志拦截器，方便调试</code></pre></p>
+第二轮：加上错误处理和 Loading 状态
+第三轮：把错误处理改成统一的 ExceptionHandler
+第四轮：添加日志拦截器，方便调试</code></pre>
 <p>每一轮只加一个需求，让 AI 有明确的优化方向。</p>
 <h3>法则二：给出反馈</h3>
 <p>AI 不知道它生成的代码好还是不好，你需要告诉它：</p>
@@ -239,43 +239,37 @@
 <h3>法则三：明确「为什么」</h3>
 <p>当你拒绝 AI 的方案时，解释原因。这样它会学习你的偏好：</p>
 <pre><code>❌ 不要用 GlobalScope，它会导致内存泄漏
-<p>✅ 改用 viewModelScope，它会自动取消</code></pre></p>
+✅ 改用 viewModelScope，它会自动取消</code></pre>
 <p>几次之后，AI 就会记住你的代码规范。</p>
 <h2>实战案例：从零到一的完整流程</h2>
 <p>下面是一个完整的 AI 辅助开发流程，以「实现一个图片缓存组件」为例：</p>
 <h3>Step 1：需求分析（人工）</h3>
 <pre><code>需求：图片缓存组件
-<ul>
-<li>支持内存缓存 + 磁盘缓存</li>
-<li>LRU 淘汰策略</li>
-<li>支持设置缓存大小上限</li>
-<li>线程安全</code></pre></li>
-</ul>
+- 支持内存缓存 + 磁盘缓存
+- LRU 淘汰策略
+- 支持设置缓存大小上限
+- 线程安全</code></pre>
 <h3>Step 2：初步实现（AI 生成）</h3>
 <pre><code>Prompt：
-<p>技术栈：Kotlin + Android</p>
-<p>需求：实现一个双缓存图片加载器</p>
-<p>要求：</p>
-<ol>
-<li>内存缓存用 LruCache，磁盘缓存用 DiskLruCache</li>
-<li>提供 get(url) 和 put(url, bitmap) 接口</li>
-<li>自动处理线程切换</code></pre></li>
-</ol>
+技术栈：Kotlin + Android
+需求：实现一个双缓存图片加载器
+要求：
+1. 内存缓存用 LruCache，磁盘缓存用 DiskLruCache
+2. 提供 get(url) 和 put(url, bitmap) 接口
+3. 自动处理线程切换</code></pre>
 <h3>Step 3：问题反馈（人工 + AI）</h3>
 <pre><code>反馈：
-<ol>
-<li>DiskLruCache 的初始化要在子线程，否则会 ANR</li>
-<li>内存缓存大小建议用可用内存的 1/8</li>
-<li>需要处理图片加载失败的情况</li>
-</ol>
-<p>请针对这三点优化代码</code></pre></p>
+1. DiskLruCache 的初始化要在子线程，否则会 ANR
+2. 内存缓存大小建议用可用内存的 1/8
+3. 需要处理图片加载失败的情况
+
+请针对这三点优化代码</code></pre>
 <h3>Step 4：边界处理（AI 补全）</h3>
 <pre><code>追问：
-<ul>
-<li>如果同一张图片被多次请求，怎么避免重复加载？</li>
-<li>如果缓存满了，新图片进来怎么处理？</li>
-</ul>
-<p>请补充这些边界情况的处理逻辑</code></pre></p>
+- 如果同一张图片被多次请求，怎么避免重复加载？
+- 如果缓存满了，新图片进来怎么处理？
+
+请补充这些边界情况的处理逻辑</code></pre>
 <h3>Step 5：代码审查（人工）</h3>
 <p>最终人工检查：</p>
 <ul>
@@ -346,13 +340,14 @@
 <h3>误区四：AI 能理解「你懂的」</h3>
 <p>AI 不懂你的项目背景、团队规范、历史代码。每次都要显式说明：</p>
 <pre><code>// 项目背景
-<p>这是一个 MVVM 架构的 Android 项目</p>
-<p>使用 Hilt 做依赖注入</p>
-<p>使用 Kotlin Flow 做响应式编程</p>
-<p>// 团队规范</p>
-<p>变量命名用驼峰，常量全大写下划线</p>
-<p>注释用中文，代码用英文</p>
-<p>不要用 !! 操作符，用 ?.let 或 ?: 处理空值</code></pre></p>
+这是一个 MVVM 架构的 Android 项目
+使用 Hilt 做依赖注入
+使用 Kotlin Flow 做响应式编程
+
+// 团队规范
+变量命名用驼峰，常量全大写下划线
+注释用中文，代码用英文
+不要用 !! 操作符，用 ?.let 或 ?: 处理空值</code></pre>
 <h2>总结：AI 编程的正确姿势</h2>
 <p>最后总结几个核心原则：</p>
 <ol>

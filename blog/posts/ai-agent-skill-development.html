@@ -191,124 +191,140 @@
 <h3 id="目录结构">目录结构</h3>
 <p>一个标准的 OpenClaw 技能目录：</p>
 <pre><code>~/.openclaw/workspace/skills/github-explorer/
-<p>├── SKILL.md           # 技能描述（必需）</p>
-<p>├── scripts/</p>
-<p>│   └── analyze.js     # 核心逻辑</p>
-<p>└── README.md          # 文档</code></pre></p>
+├── SKILL.md           # 技能描述（必需）
+├── scripts/
+│   └── analyze.js     # 核心逻辑
+└── README.md          # 文档</code></pre>
 <h3 id="1-创建-skillmd">1. 创建 SKILL.md</h3>
 <p>SKILL.md 是技能的「身份证」，告诉 Agent 什么时候使用这个技能：</p>
 <pre><code># GitHub 项目分析技能
-<h2>触发条件</h2>
-<p>当用户想要了解 GitHub 项目时使用此技能。触发词包括：</p>
-<ul>
-<li>"分析这个项目"</li>
-<li>"帮我看看这个 repo"</li>
-<li>"了解一下 XXX"</li>
-<li>GitHub URL 直接输入</li>
-</ul>
-<h2>功能</h2>
-<ul>
-<li>解析 GitHub 仓库地址</li>
-<li>获取项目元数据（stars、forks、语言）</li>
-<li>分析项目结构和依赖</li>
-<li>生成技术栈分析报告</li>
-</ul>
-<h2>使用方法</h2>
+
+## 触发条件
+
+当用户想要了解 GitHub 项目时使用此技能。触发词包括：
+- "分析这个项目"
+- "帮我看看这个 repo"
+- "了解一下 XXX"
+- GitHub URL 直接输入
+
+## 功能
+
+- 解析 GitHub 仓库地址
+- 获取项目元数据（stars、forks、语言）
+- 分析项目结构和依赖
+- 生成技术栈分析报告
+
+## 使用方法
+
 <strong>CODE<em>BLOCK</em>0</strong>
-<h2>依赖</h2>
-<ul>
-<li>GitHub CLI (gh) 已安装并配置</li>
-<li>Node.js 18+</code></pre></li>
-</ul>
+
+## 依赖
+
+- GitHub CLI (gh) 已安装并配置
+- Node.js 18+</code></pre>
 <h3 id="2-编写核心脚本">2. 编写核心脚本</h3>
 <p>创建 <code>scripts/analyze.js</code>：</p>
 <pre><code>#!/usr/bin/env node
-<p>const { execSync } = require('child_process');</p>
-<p>// 解析 GitHub URL</p>
-<p>function parseRepoUrl(url) {</p>
-<p>const match = url.match(/github\.com\/([^/]+)\/([^/]+)/);</p>
-<p>if (!match) throw new Error('Invalid GitHub URL');</p>
-<p>return { owner: match[1], repo: match[2].replace('.git', '') };</p>
-<p>}</p>
-<p>// 获取仓库信息</p>
-<p>function getRepoInfo(owner, repo) {</p>
-<p>const json = execSync(</p>
-<p><strong>INLINE<em>CODE</em>0</strong>,</p>
-<p>{ encoding: 'utf-8' }</p>
-<p>);</p>
-<p>return JSON.parse(json);</p>
-<p>}</p>
-<p>// 分析项目结构</p>
-<p>function analyzeStructure(owner, repo) {</p>
-<p>try {</p>
-<p>const tree = execSync(</p>
-<p><strong>INLINE<em>CODE</em>1</strong>,</p>
-<p>{ encoding: 'utf-8' }</p>
-<p>);</p>
-<p>const files = tree.trim().split('\n');</p>
-<p>// 检测技术栈</p>
-<p>const techStack = [];</p>
-<p>if (files.some(f => f.includes('package.json'))) techStack.push('Node.js');</p>
-<p>if (files.some(f => f.includes('requirements.txt'))) techStack.push('Python');</p>
-<p>if (files.some(f => f.includes('Cargo.toml'))) techStack.push('Rust');</p>
-<p>if (files.some(f => f.includes('go.mod'))) techStack.push('Go');</p>
-<p>return { fileCount: files.length, techStack };</p>
-<p>} catch {</p>
-<p>return { fileCount: 0, techStack: ['Unknown'] };</p>
-<p>}</p>
-<p>}</p>
-<p>// 主函数</p>
-<p>function main() {</p>
-<p>const url = process.argv[2];</p>
-<p>if (!url) {</p>
-<p>console.error('Usage: analyze.js &lt;github-url&gt;');</p>
-<p>process.exit(1);</p>
-<p>}</p>
-<p>const { owner, repo } = parseRepoUrl(url);</p>
-<p>console.log(<strong>INLINE<em>CODE</em>2</strong>);</p>
-<p>const repoInfo = getRepoInfo(owner, repo);</p>
-<p>const structure = analyzeStructure(owner, repo);</p>
-<p>// 生成报告</p>
-<p>console.log('## 📊 项目分析报告\n');</p>
-<p>console.log(<strong>INLINE<em>CODE</em>3</strong>);</p>
-<p>console.log(<strong>INLINE<em>CODE</em>4</strong>);</p>
-<p>console.log(<strong>INLINE<em>CODE</em>5</strong>);</p>
-<p>console.log(<strong>INLINE<em>CODE</em>6</strong>);</p>
-<p>console.log(<strong>INLINE<em>CODE</em>7</strong>);</p>
-<p>console.log(<strong>INLINE<em>CODE</em>8</strong>);</p>
-<p>console.log(<strong>INLINE<em>CODE</em>9</strong>);</p>
-<p>console.log(<strong>INLINE<em>CODE</em>10</strong>);</p>
-<p>console.log(<strong>INLINE<em>CODE</em>11</strong>);</p>
-<p>}</p>
-<p>main();</code></pre></p>
+
+const { execSync } = require('child_process');
+
+// 解析 GitHub URL
+function parseRepoUrl(url) {
+  const match = url.match(/github\.com\/([^/]+)\/([^/]+)/);
+  if (!match) throw new Error('Invalid GitHub URL');
+  return { owner: match[1], repo: match[2].replace('.git', '') };
+}
+
+// 获取仓库信息
+function getRepoInfo(owner, repo) {
+  const json = execSync(
+    <strong>INLINE<em>CODE</em>0</strong>,
+    { encoding: 'utf-8' }
+  );
+  return JSON.parse(json);
+}
+
+// 分析项目结构
+function analyzeStructure(owner, repo) {
+  try {
+    const tree = execSync(
+      <strong>INLINE<em>CODE</em>1</strong>,
+      { encoding: 'utf-8' }
+    );
+    const files = tree.trim().split('\n');
+    
+    // 检测技术栈
+    const techStack = [];
+    if (files.some(f => f.includes('package.json'))) techStack.push('Node.js');
+    if (files.some(f => f.includes('requirements.txt'))) techStack.push('Python');
+    if (files.some(f => f.includes('Cargo.toml'))) techStack.push('Rust');
+    if (files.some(f => f.includes('go.mod'))) techStack.push('Go');
+    
+    return { fileCount: files.length, techStack };
+  } catch {
+    return { fileCount: 0, techStack: ['Unknown'] };
+  }
+}
+
+// 主函数
+function main() {
+  const url = process.argv[2];
+  if (!url) {
+    console.error('Usage: analyze.js &lt;github-url&gt;');
+    process.exit(1);
+  }
+
+  const { owner, repo } = parseRepoUrl(url);
+  console.log(<strong>INLINE<em>CODE</em>2</strong>);
+
+  const repoInfo = getRepoInfo(owner, repo);
+  const structure = analyzeStructure(owner, repo);
+
+  // 生成报告
+  console.log('## 📊 项目分析报告\n');
+  console.log(<strong>INLINE<em>CODE</em>3</strong>);
+  console.log(<strong>INLINE<em>CODE</em>4</strong>);
+  console.log(<strong>INLINE<em>CODE</em>5</strong>);
+  console.log(<strong>INLINE<em>CODE</em>6</strong>);
+  console.log(<strong>INLINE<em>CODE</em>7</strong>);
+  console.log(<strong>INLINE<em>CODE</em>8</strong>);
+  console.log(<strong>INLINE<em>CODE</em>9</strong>);
+  console.log(<strong>INLINE<em>CODE</em>10</strong>);
+  console.log(<strong>INLINE<em>CODE</em>11</strong>);
+}
+
+main();</code></pre>
 <h3 id="3-测试技能">3. 测试技能</h3>
 <pre><code># 添加执行权限
-<p>chmod +x scripts/analyze.js</p>
-<h1>测试运行</h1>
-<p>node scripts/analyze.js https://github.com/vercel/next.js</code></pre></p>
+chmod +x scripts/analyze.js
+
+# 测试运行
+node scripts/analyze.js https://github.com/vercel/next.js</code></pre>
 <p>输出示例：</p>
 <pre><code>🔍 正在分析 vercel/next.js...
-<h2>📊 项目分析报告</h2>
-<p><strong>项目</strong>: next.js</p>
-<p><strong>描述</strong>: The React Framework</p>
-<p><strong>主语言</strong>: JavaScript</p>
-<p><strong>⭐ Stars</strong>: 128542</p>
-<p><strong>🍴 Forks</strong>: 27368</p>
-<p><strong>📁 文件数</strong>: ~3245</p>
-<p><strong>🛠️ 技术栈</strong>: Node.js</p>
-<p><strong>📅 创建时间</strong>: 2016-10-05</p>
-<p><strong>🔄 最后更新</strong>: 2026-03-15</code></pre></p>
+
+## 📊 项目分析报告
+
+<strong>项目</strong>: next.js
+<strong>描述</strong>: The React Framework
+<strong>主语言</strong>: JavaScript
+<strong>⭐ Stars</strong>: 128542
+<strong>🍴 Forks</strong>: 27368
+<strong>📁 文件数</strong>: ~3245
+<strong>🛠️ 技术栈</strong>: Node.js
+<strong>📅 创建时间</strong>: 2016-10-05
+<strong>🔄 最后更新</strong>: 2026-03-15</code></pre>
 <hr>
 <h2 id="集成到-agent">集成到 Agent</h2>
 <h3 id="配置技能路径">配置技能路径</h3>
 <p>确保 Agent 能找到技能目录。在 <code>openclaw.json</code> 中：</p>
 <pre><code>{
-<p>"skills": {</p>
-<p>"paths": [</p>
-<p>"~/.openclaw/workspace/skills"</p>
-<p>]</p>
-<p>}</p>
-<p>}</code></pre></p>
+  "skills": {
+    "paths": [
+      "~/.openclaw/workspace/skills"
+    ]
+  }
+}</code></pre>
 <h3 id="验证技能加载">验证技能加载</h3>
 <p>重启 Gateway 后，Agent 会自动加载 SKILL.md：</p>
 <pre><code>openclaw gateway restart</code></pre>
@@ -331,40 +347,42 @@
 </ul>
 <h3 id="2-错误处理和缓存">2. 错误处理和缓存</h3>
 <pre><code>// 添加错误处理
-<p>function safeExec(cmd) {</p>
-<p>try {</p>
-<p>return execSync(cmd, { encoding: 'utf-8' });</p>
-<p>} catch (error) {</p>
-<p>console.error(<strong>INLINE<em>CODE</em>12</strong>);</p>
-<p>return null;</p>
-<p>}</p>
-<p>}</p>
-<p>// 添加简单缓存</p>
-<p>const cache = new Map();</p>
-<p>function cached(key, fn) {</p>
-<p>if (cache.has(key)) return cache.get(key);</p>
-<p>const result = fn();</p>
-<p>cache.set(key, result);</p>
-<p>return result;</p>
-<p>}</code></pre></p>
+function safeExec(cmd) {
+  try {
+    return execSync(cmd, { encoding: 'utf-8' });
+  } catch (error) {
+    console.error(<strong>INLINE<em>CODE</em>12</strong>);
+    return null;
+  }
+}
+
+// 添加简单缓存
+const cache = new Map();
+function cached(key, fn) {
+  if (cache.has(key)) return cache.get(key);
+  const result = fn();
+  cache.set(key, result);
+  return result;
+}</code></pre>
 <h3 id="3-输出格式美化">3. 输出格式美化</h3>
 <p>使用模板引擎生成更美观的报告：</p>
 <pre><code>const report = `
-<h1>📊 ${repoInfo.name} 分析报告</h1>
-<h2>基本信息</h2>
-<table>
-<thead><tr><th>项目</th><th>值</th></tr></thead>
-<tbody>
-<tr><td>Stars</td><td>⭐ ${repoInfo.stargazersCount}</td></tr>
-<tr><td>Forks</td><td>🍴 ${repoInfo.forksCount}</td></tr>
-<tr><td>语言</td><td>${repoInfo.primaryLanguage?.name}</td></tr>
-<tr><td>文件数</td><td>📁 ${structure.fileCount}</td></tr>
-</tbody>
-</table>
-<h2>技术栈</h2>
-<p>${structure.techStack.map(t => <strong>INLINE<em>CODE</em>13</strong>).join('\n')}</p>
-<p>`;</p>
-<p>console.log(report);</code></pre></p>
+# 📊 ${repoInfo.name} 分析报告
+
+## 基本信息
+
+| 项目 | 值 |
+|------|-----|
+| Stars | ⭐ ${repoInfo.stargazersCount} |
+| Forks | 🍴 ${repoInfo.forksCount} |
+| 语言 | ${repoInfo.primaryLanguage?.name} |
+| 文件数 | 📁 ${structure.fileCount} |
+
+## 技术栈
+
+${structure.techStack.map(t => <strong>INLINE<em>CODE</em>13</strong>).join('\n')}
+`;
+console.log(report);</code></pre>
 <hr>
 <h2 id="最佳实践">最佳实践</h2>
 <div class="highlight-box">
@@ -576,7 +594,7 @@
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📅</span> 发布日期</span><span class="post-info-stat-value">2026-03-14</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">⏱️</span> 阅读时间</span><span class="post-info-stat-value">15 min read</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">1414 字</span></div>
-        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📊</span> 章节数</span><span class="post-info-stat-value">15 节 · 16 子节</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📊</span> 章节数</span><span class="post-info-stat-value">8 节 · 16 子节</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">💻</span> 代码块</span><span class="post-info-stat-value">9 段</span></div>
       </div>
       <div class="post-info-section" id="postSidebarTags">

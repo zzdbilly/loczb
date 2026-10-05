@@ -176,75 +176,64 @@
 </tr>
 </table>
 <pre><code>name: Basic CI
-<p>on:</p>
-<p>push:</p>
-<p>branches: [main]</p>
-<p>pull_request:</p>
-<p>branches: [main]</p>
-<p>jobs:</p>
-<p>test:</p>
-<p>runs-on: ubuntu-latest</p>
-<p>steps:</p>
-<ul>
-<li>uses: actions/checkout@v4</li>
-<li>uses: actions/setup-node@v4</li>
-</ul>
-<p>with:</p>
-<p>node-version: 20</p>
-<ul>
-<li>run: npm ci</li>
-<li>run: npm test</code></pre></li>
-</ul>
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm ci
+      - run: npm test</code></pre>
 <p>这是最基本的形态。但当项目变大、团队变多，你需要更多武器。</p>
 <h2>二、矩阵构建：多版本、多平台并行测试</h2>
 <p>你的库需要同时支持 Node 18/20/22、在 Ubuntu/macOS/Windows 上跑测试吗？手动写 9 个 Job 太蠢了。<code>strategy.matrix</code> 让你声明维度，GitHub 自动展开组合并行执行。</p>
 <h3>基本矩阵</h3>
 <pre><code>jobs:
-<p>test:</p>
-<p>strategy:</p>
-<p>matrix:</p>
-<p>node-version: [18, 20, 22]</p>
-<p>os: [ubuntu-latest, macos-latest, windows-latest]</p>
-<p>runs-on: ${{ matrix.os }}</p>
-<p>steps:</p>
-<ul>
-<li>uses: actions/checkout@v4</li>
-<li>uses: actions/setup-node@v4</li>
-</ul>
-<p>with:</p>
-<p>node-version: ${{ matrix.node-version }}</p>
-<ul>
-<li>run: npm ci</li>
-<li>run: npm test</code></pre></li>
-</ul>
+  test:
+    strategy:
+      matrix:
+        node-version: [18, 20, 22]
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm ci
+      - run: npm test</code></pre>
 <p>这会生成 <strong>3 × 3 = 9</strong> 个并行 Job。GitHub 会自动分配 Runner，所有 Job 同时执行。</p>
 <h3>排除特定组合</h3>
 <p>某些组合可能没意义，比如 Node 18 不支持 macOS ARM：</p>
 <pre><code>strategy:
-<p>matrix:</p>
-<p>node-version: [18, 20, 22]</p>
-<p>os: [ubuntu-latest, macos-latest, windows-latest]</p>
-<p>exclude:</p>
-<ul>
-<li>node-version: 18</li>
-</ul>
-<p>os: macos-latest   # Node 18 在 macOS ARM 上有兼容问题</code></pre></p>
+  matrix:
+    node-version: [18, 20, 22]
+    os: [ubuntu-latest, macos-latest, windows-latest]
+    exclude:
+      - node-version: 18
+        os: macos-latest   # Node 18 在 macOS ARM 上有兼容问题</code></pre>
 <h3>包含额外组合</h3>
 <p>在矩阵基础上追加特殊组合，比如加一个 Canary 版本的测试：</p>
 <pre><code>strategy:
-<p>matrix:</p>
-<p>node-version: [18, 20, 22]</p>
-<p>include:</p>
-<ul>
-<li>node-version: 23</li>
-</ul>
-<p>os: ubuntu-latest</p>
-<p>experimental: true  # 自定义变量</code></pre></p>
+  matrix:
+    node-version: [18, 20, 22]
+    include:
+      - node-version: 23
+        os: ubuntu-latest
+        experimental: true  # 自定义变量</code></pre>
 <h3>失败策略</h3>
 <pre><code>strategy:
-<p>fail-fast: false  # 某个组合失败不取消其他 Job</p>
-<p>matrix:</p>
-<p>node-version: [18, 20, 22]</code></pre></p>
+  fail-fast: false  # 某个组合失败不取消其他 Job
+  matrix:
+    node-version: [18, 20, 22]</code></pre>
 <div class="tip-box">
 <p><strong>推荐</strong>：CI 管道中始终设置 <code>fail-fast: false</code>。否则一个 Node 版本失败就会取消其他版本的测试，你无法一次运行看到所有失败。</p>
 </div>
@@ -252,55 +241,51 @@
 <p>当多个仓库的 CI 流程相似，复制粘贴 YAML 不是长久之计。可复用工作流（Reusable Workflows）让你定义一次，到处调用。</p>
 <h3>Callee：定义可复用工作流</h3>
 <pre><code># .github/workflows/ci-template.yml
-<p>name: Reusable CI</p>
-<p>on:</p>
-<p>workflow_call:</p>
-<p>inputs:</p>
-<p>node-version:</p>
-<p>required: true</p>
-<p>type: string</p>
-<p>run-lint:</p>
-<p>required: false</p>
-<p>type: boolean</p>
-<p>default: true</p>
-<p>secrets:</p>
-<p>npm-token:</p>
-<p>required: true</p>
-<p>jobs:</p>
-<p>build-and-test:</p>
-<p>runs-on: ubuntu-latest</p>
-<p>steps:</p>
-<ul>
-<li>uses: actions/checkout@v4</li>
-<li>uses: actions/setup-node@v4</li>
-</ul>
-<p>with:</p>
-<p>node-version: ${{ inputs.node-version }}</p>
-<p>registry-url: https://registry.npmjs.org</p>
-<ul>
-<li>run: npm ci</li>
-</ul>
-<p>env:</p>
-<p>NODE<em>AUTH</em>TOKEN: ${{ secrets.npm-token }}</p>
-<ul>
-<li>if: ${{ inputs.run-lint }}</li>
-</ul>
-<p>run: npm run lint</p>
-<ul>
-<li>run: npm test</code></pre></li>
-</ul>
+name: Reusable CI
+
+on:
+  workflow_call:
+    inputs:
+      node-version:
+        required: true
+        type: string
+      run-lint:
+        required: false
+        type: boolean
+        default: true
+    secrets:
+      npm-token:
+        required: true
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ inputs.node-version }}
+          registry-url: https://registry.npmjs.org
+      - run: npm ci
+        env:
+          NODE<em>AUTH</em>TOKEN: ${{ secrets.npm-token }}
+      - if: ${{ inputs.run-lint }}
+        run: npm run lint
+      - run: npm test</code></pre>
 <h3>Caller：调用可复用工作流</h3>
 <pre><code># 仓库 A 的 .github/workflows/ci.yml
-<p>name: CI</p>
-<p>on: [push, pull_request]</p>
-<p>jobs:</p>
-<p>call-ci:</p>
-<p>uses: my-org/ci-templates/.github/workflows/ci-template.yml@v1</p>
-<p>with:</p>
-<p>node-version: 20</p>
-<p>run-lint: true</p>
-<p>secrets:</p>
-<p>npm-token: ${{ secrets.NPM_TOKEN }}</code></pre></p>
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  call-ci:
+    uses: my-org/ci-templates/.github/workflows/ci-template.yml@v1
+    with:
+      node-version: 20
+      run-lint: true
+    secrets:
+      npm-token: ${{ secrets.NPM_TOKEN }}</code></pre>
 <h3>可复用工作流的关键限制</h3>
 <table>
 <tr>
@@ -358,82 +343,80 @@
 </table>
 <h3>JavaScript Action 示例</h3>
 <pre><code># action.yml
-<p>name: 'PR Size Label'</p>
-<p>description: 'Label PRs based on changed lines count'</p>
-<p>inputs:</p>
-<p>max-small-size:</p>
-<p>description: 'Maximum lines for "small" label'</p>
-<p>required: false</p>
-<p>default: '50'</p>
-<p>outputs:</p>
-<p>label:</p>
-<p>description: 'The applied label'</p>
-<p>value: ${{ steps.label.outputs.result }}</p>
-<p>runs:</p>
-<p>using: 'node20'</p>
-<p>main: 'dist/index.js'</code></pre></p>
+name: 'PR Size Label'
+description: 'Label PRs based on changed lines count'
+inputs:
+  max-small-size:
+    description: 'Maximum lines for "small" label'
+    required: false
+    default: '50'
+outputs:
+  label:
+    description: 'The applied label'
+    value: ${{ steps.label.outputs.result }}
+runs:
+  using: 'node20'
+  main: 'dist/index.js'</code></pre>
 <pre><code>// src/index.ts
-<p>import * as core from '@actions/core';</p>
-<p>import * as github from '@actions/core';</p>
-<p>async function run() {</p>
-<p>const maxSize = Number(core.getInput('max-small-size'));</p>
-<p>const pr = github.context.payload.pull_request;</p>
-<p>const changedLines = pr.additions + pr.deletions;</p>
-<p>let label: string;</p>
-<p>if (changedLines &lt;= maxSize) {</p>
-<p>label = 'size/small';</p>
-<p>} else if (changedLines &lt;= maxSize * 4) {</p>
-<p>label = 'size/medium';</p>
-<p>} else {</p>
-<p>label = 'size/large';</p>
-<p>}</p>
-<p>core.setOutput('label', label);</p>
-<p>console.log(<strong>INLINE<em>CODE</em>0</strong>);</p>
-<p>}</p>
-<p>run().catch(err => core.setFailed(err.message));</code></pre></p>
+import * as core from '@actions/core';
+import * as github from '@actions/core';
+
+async function run() {
+  const maxSize = Number(core.getInput('max-small-size'));
+  const pr = github.context.payload.pull_request;
+  const changedLines = pr.additions + pr.deletions;
+
+  let label: string;
+  if (changedLines &lt;= maxSize) {
+    label = 'size/small';
+  } else if (changedLines &lt;= maxSize * 4) {
+    label = 'size/medium';
+  } else {
+    label = 'size/large';
+  }
+
+  core.setOutput('label', label);
+  console.log(<strong>INLINE<em>CODE</em>0</strong>);
+}
+
+run().catch(err => core.setFailed(err.message));</code></pre>
 <h3>Docker Action 示例</h3>
 <pre><code># action.yml
-<p>name: 'Lint Python'</p>
-<p>description: 'Run Python linters in a controlled environment'</p>
-<p>inputs:</p>
-<p>path:</p>
-<p>description: 'Path to lint'</p>
-<p>required: false</p>
-<p>default: '.'</p>
-<p>runs:</p>
-<p>using: 'docker'</p>
-<p>image: 'Dockerfile'</p>
-<p>args:</p>
-<ul>
-<li>${{ inputs.path }}</code></pre></li>
-</ul>
+name: 'Lint Python'
+description: 'Run Python linters in a controlled environment'
+inputs:
+  path:
+    description: 'Path to lint'
+    required: false
+    default: '.'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.path }}</code></pre>
 <pre><code># Dockerfile
-<p>FROM python:3.12-slim</p>
-<p>RUN pip install ruff mypy black</p>
-<p>COPY entrypoint.sh /entrypoint.sh</p>
-<p>ENTRYPOINT ["/entrypoint.sh"]</code></pre></p>
+FROM python:3.12-slim
+RUN pip install ruff mypy black
+COPY entrypoint.sh /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]</code></pre>
 <h3>Composite Action 示例</h3>
 <pre><code># action.yml
-<p>name: 'Setup Node Project'</p>
-<p>description: 'Checkout + Setup Node + Install Dependencies'</p>
-<p>inputs:</p>
-<p>node-version:</p>
-<p>required: false</p>
-<p>default: '20'</p>
-<p>runs:</p>
-<p>using: 'composite'</p>
-<p>steps:</p>
-<ul>
-<li>uses: actions/checkout@v4</li>
-<li>uses: actions/setup-node@v4</li>
-</ul>
-<p>with:</p>
-<p>node-version: ${{ inputs.node-version }}</p>
-<p>cache: 'npm'</p>
-<ul>
-<li>run: npm ci</li>
-</ul>
-<p>shell: bash</code></pre></p>
+name: 'Setup Node Project'
+description: 'Checkout + Setup Node + Install Dependencies'
+inputs:
+  node-version:
+    required: false
+    default: '20'
+runs:
+  using: 'composite'
+  steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: ${{ inputs.node-version }}
+        cache: 'npm'
+    - run: npm ci
+      shell: bash</code></pre>
 <div class="tip-box">
 <p><strong>选择建议</strong>：90% 场景用 Composite Action（零编译、零依赖、最简单）。需要复杂逻辑用 JavaScript Action。需要特殊系统环境（如 Go 编译工具链）用 Docker Action。</p>
 </div>
@@ -441,23 +424,20 @@
 <p>GitHub Actions 的 <strong>Environments</strong> 功能让你为不同部署阶段（staging、production）配置保护规则、审批流程和专属 Secrets。</p>
 <h3>定义环境</h3>
 <pre><code>jobs:
-<p>deploy-staging:</p>
-<p>runs-on: ubuntu-latest</p>
-<p>environment: staging    # 关联 staging 环境</p>
-<p>steps:</p>
-<ul>
-<li>run: echo "Deploying to staging..."</li>
-</ul>
-<p>deploy-production:</p>
-<p>runs-on: ubuntu-latest</p>
-<p>needs: deploy-staging</p>
-<p>environment:            # 关联 production 环境</p>
-<p>name: production</p>
-<p>url: https://myapp.example.com   # 部署链接，显示在 PR 页面</p>
-<p>steps:</p>
-<ul>
-<li>run: echo "Deploying to production..."</code></pre></li>
-</ul>
+  deploy-staging:
+    runs-on: ubuntu-latest
+    environment: staging    # 关联 staging 环境
+    steps:
+      - run: echo "Deploying to staging..."
+
+  deploy-production:
+    runs-on: ubuntu-latest
+    needs: deploy-staging
+    environment:            # 关联 production 环境
+      name: production
+      url: https://myapp.example.com   # 部署链接，显示在 PR 页面
+    steps:
+      - run: echo "Deploying to production..."</code></pre>
 <h3>保护规则</h3>
 <p>在仓库 Settings → Environments 中配置：</p>
 <table>
@@ -489,55 +469,44 @@
 <p>跨 Job 传递文件用 <strong>Artifact</strong>，加速构建用 <strong>Cache</strong>。两者目的不同，别搞混。</p>
 <h3>Artifact：跨 Job 传递文件</h3>
 <pre><code>jobs:
-<p>build:</p>
-<p>runs-on: ubuntu-latest</p>
-<p>steps:</p>
-<ul>
-<li>uses: actions/checkout@v4</li>
-<li>run: npm run build</li>
-<li>uses: actions/upload-artifact@v4</li>
-</ul>
-<p>with:</p>
-<p>name: dist</p>
-<p>path: dist/</p>
-<p>retention-days: 5   # 保留 5 天</p>
-<p>deploy:</p>
-<p>needs: build</p>
-<p>runs-on: ubuntu-latest</p>
-<p>steps:</p>
-<ul>
-<li>uses: actions/download-artifact@v4</li>
-</ul>
-<p>with:</p>
-<p>name: dist</p>
-<p>path: dist/</p>
-<ul>
-<li>run: aws s3 sync dist/ s3://my-bucket/</code></pre></li>
-</ul>
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: npm run build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+          retention-days: 5   # 保留 5 天
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+      - run: aws s3 sync dist/ s3://my-bucket/</code></pre>
 <h3>Cache：加速依赖安装</h3>
 <pre><code>steps:
-<ul>
-<li>uses: actions/checkout@v4</li>
-<li>uses: actions/setup-node@v4</li>
-</ul>
-<p>with:</p>
-<p>node-version: 20</p>
-<p>cache: npm          # 自动缓存 node_modules</p>
-<ul>
-<li>run: npm ci           # 命中缓存时秒级完成</code></pre></li>
-</ul>
+  - uses: actions/checkout@v4
+  - uses: actions/setup-node@v4
+    with:
+      node-version: 20
+      cache: npm          # 自动缓存 node_modules
+  - run: npm ci           # 命中缓存时秒级完成</code></pre>
 <h3>手动缓存控制</h3>
 <pre><code>steps:
-<ul>
-<li>uses: actions/cache@v4</li>
-</ul>
-<p>with:</p>
-<p>path: |</p>
-<p>~/.npm</p>
-<p>~/.cache/pip</p>
-<p>key: deps-${{ runner.os }}-${{ hashFiles('<strong>/package-lock.json', '</strong>/requirements.txt') }}</p>
-<p>restore-keys: |</p>
-<p>deps-${{ runner.os }}-   # 部分匹配回退</code></pre></p>
+  - uses: actions/cache@v4
+    with:
+      path: |
+        ~/.npm
+        ~/.cache/pip
+      key: deps-${{ runner.os }}-${{ hashFiles('<strong>/package-lock.json', '</strong>/requirements.txt') }}
+      restore-keys: |
+        deps-${{ runner.os }}-   # 部分匹配回退</code></pre>
 <h3>Artifact vs Cache 对比</h3>
 <table>
 <tr>
@@ -578,91 +547,77 @@
 <p>传统方式：把 AWS Access Key、GCP Service Account Key 存为 GitHub Secret——密钥轮换麻烦、泄露风险高。OIDC（OpenID Connect）让 GitHub Actions 直接向云服务商证明身份，<strong>无需存储任何长期密钥</strong>。</p>
 <h3>工作原理</h3>
 <pre><code>1. GitHub 为 Workflow Run 生成短期 JWT Token
-<ol>
-<li>Action 将 JWT 发送给云服务商的 STS 接口</li>
-<li>云服务商验证 JWT 签名和 Claims</li>
-<li>返回临时凭证（有效期通常 1 小时）</li>
-<li>Action 用临时凭证操作云资源</code></pre></li>
-</ol>
+2. Action 将 JWT 发送给云服务商的 STS 接口
+3. 云服务商验证 JWT 签名和 Claims
+4. 返回临时凭证（有效期通常 1 小时）
+5. Action 用临时凭证操作云资源</code></pre>
 <h3>AWS 集成示例</h3>
 <pre><code>jobs:
-<p>deploy:</p>
-<p>runs-on: ubuntu-latest</p>
-<p>permissions:</p>
-<p>id-token: write    # 必须声明，允许请求 OIDC Token</p>
-<p>contents: read</p>
-<p>steps:</p>
-<ul>
-<li>uses: actions/checkout@v4</li>
-<li>uses: aws-actions/configure-aws-credentials@v4</li>
-</ul>
-<p>with:</p>
-<p>role-to-assume: arn:aws:iam::123456789012:role/GitHubActionsDeploy</p>
-<p>aws-region: ap-east-1</p>
-<ul>
-<li>run: aws s3 sync dist/ s3://my-bucket/</code></pre></li>
-</ul>
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write    # 必须声明，允许请求 OIDC Token
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::123456789012:role/GitHubActionsDeploy
+          aws-region: ap-east-1
+      - run: aws s3 sync dist/ s3://my-bucket/</code></pre>
 <h3>AWS 侧 Trust Policy 配置</h3>
 <pre><code>{
-<p>"Version": "2012-10-17",</p>
-<p>"Statement": [</p>
-<p>{</p>
-<p>"Effect": "Allow",</p>
-<p>"Principal": {</p>
-<p>"Federated": "arn:aws:iam::123456789012:oidc-provider/token.actions.githubusercontent.com"</p>
-<p>},</p>
-<p>"Action": "sts:AssumeRoleWithWebIdentity",</p>
-<p>"Condition": {</p>
-<p>"StringEquals": {</p>
-<p>"token.actions.githubusercontent.com:aud": "sts.amazonaws.com"</p>
-<p>},</p>
-<p>"StringLike": {</p>
-<p>"token.actions.githubusercontent.com:sub": "repo:my-org/my-repo:*"</p>
-<p>}</p>
-<p>}</p>
-<p>}</p>
-<p>]</p>
-<p>}</code></pre></p>
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Federated": "arn:aws:iam::123456789012:oidc-provider/token.actions.githubusercontent.com"
+      },
+      "Action": "sts:AssumeRoleWithWebIdentity",
+      "Condition": {
+        "StringEquals": {
+          "token.actions.githubusercontent.com:aud": "sts.amazonaws.com"
+        },
+        "StringLike": {
+          "token.actions.githubusercontent.com:sub": "repo:my-org/my-repo:*"
+        }
+      }
+    }
+  ]
+}</code></pre>
 <h3>GCP 集成示例</h3>
 <pre><code>jobs:
-<p>deploy:</p>
-<p>runs-on: ubuntu-latest</p>
-<p>permissions:</p>
-<p>id-token: write</p>
-<p>contents: read</p>
-<p>steps:</p>
-<ul>
-<li>uses: actions/checkout@v4</li>
-<li>uses: google-github-actions/auth@v2</li>
-</ul>
-<p>with:</p>
-<p>workload<em>identity</em>provider: projects/123/locations/global/workloadIdentityPools/github/providers/my-provider</p>
-<p>service_account: github-actions@my-project.iam.gserviceaccount.com</p>
-<ul>
-<li>uses: google-github-actions/deploy-cloudrun@v2</li>
-</ul>
-<p>with:</p>
-<p>service: my-service</p>
-<p>region: asia-east1</code></pre></p>
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: google-github-actions/auth@v2
+        with:
+          workload<em>identity</em>provider: projects/123/locations/global/workloadIdentityPools/github/providers/my-provider
+          service_account: github-actions@my-project.iam.gserviceaccount.com
+      - uses: google-github-actions/deploy-cloudrun@v2
+        with:
+          service: my-service
+          region: asia-east1</code></pre>
 <h3>Azure 集成示例</h3>
 <pre><code>jobs:
-<p>deploy:</p>
-<p>runs-on: ubuntu-latest</p>
-<p>permissions:</p>
-<p>id-token: write</p>
-<p>contents: read</p>
-<p>steps:</p>
-<ul>
-<li>uses: actions/checkout@v4</li>
-<li>uses: azure/login@v2</li>
-</ul>
-<p>with:</p>
-<p>client-id: ${{ secrets.AZURE<em>CLIENT</em>ID }}</p>
-<p>tenant-id: ${{ secrets.AZURE<em>TENANT</em>ID }}</p>
-<p>subscription-id: ${{ secrets.AZURE<em>SUBSCRIPTION</em>ID }}</p>
-<ul>
-<li>run: az webapp deploy --resource-group myRG --name myApp --src-path dist.zip</code></pre></li>
-</ul>
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE<em>CLIENT</em>ID }}
+          tenant-id: ${{ secrets.AZURE<em>TENANT</em>ID }}
+          subscription-id: ${{ secrets.AZURE<em>SUBSCRIPTION</em>ID }}
+      - run: az webapp deploy --resource-group myRG --name myApp --src-path dist.zip</code></pre>
 <div class="tip-box">
 <p><strong>OIDC 的核心优势</strong>：零长期密钥、自动过期、细粒度控制（可限制只有特定仓库/分支/环境才能获取凭证）。这是云部署的最佳实践，GitHub 官方也推荐替代传统 Secret 方式。</p>
 </div>
@@ -670,32 +625,30 @@
 <p>CI/CD 管道是攻击面的重要一环。一次 Supply Chain 攻击可能比直接入侵服务器更致命。</p>
 <h3>1. 最小权限原则</h3>
 <pre><code>jobs:
-<p>build:</p>
-<p>runs-on: ubuntu-latest</p>
-<p>permissions:</p>
-<p>contents: read        # 只读代码</p>
-<p>packages: write       # 写入包注册表</p>
-<h1>不给 id-token: write（不需要 OIDC 就不给）</h1>
-<h1>不给 actions: write（不需要修改 Workflow 就不给）</code></pre></h1>
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read        # 只读代码
+      packages: write       # 写入包注册表
+      # 不给 id-token: write（不需要 OIDC 就不给）
+      # 不给 actions: write（不需要修改 Workflow 就不给）</code></pre>
 <div class="warning-box">
 <p><strong>默认权限问题</strong>：如果不显式声明 <code>permissions</code>，GitHub 默认给 <code>write</code> 权限。强烈建议在 Workflow 顶层设置 <code>permissions: read-all</code>，再按需放开。</p>
 </div>
 <pre><code># 顶层默认最小权限
-<p>permissions: read-all</p>
-<p>jobs:</p>
-<p>deploy:</p>
-<p>permissions:</p>
-<p>contents: read</p>
-<p>id-token: write       # 按需放开</code></pre></p>
+permissions: read-all
+
+jobs:
+  deploy:
+    permissions:
+      contents: read
+      id-token: write       # 按需放开</code></pre>
 <h3>2. 第三方 Action 审计</h3>
 <pre><code># ❌ 不安全的引用：使用可变标签，可能被篡改
-<ul>
-<li>uses: someone/action@main</li>
-</ul>
-<h1>✅ 安全的引用：使用 SHA 哈希，不可变</h1>
-<ul>
-<li>uses: someone/action@a8c5c03e8f4c1a4e89e6e9b6e4d4a4c8b7d6e5f4</code></pre></li>
-</ul>
+- uses: someone/action@main
+
+# ✅ 安全的引用：使用 SHA 哈希，不可变
+- uses: someone/action@a8c5c03e8f4c1a4e89e6e9b6e4d4a4c8b7d6e5f4</code></pre>
 <h3>3. Pin 住 Action 版本</h3>
 <table>
 <tr>
@@ -730,138 +683,117 @@
 </tr>
 </table>
 <pre><code># 推荐：tag + SHA 注释
-<ul>
-<li>uses: actions/checkout@v4             # v4.2.2</li>
-</ul>
-<h1>pin: actions/checkout@a8c5c03e8f4c1a4e89e6e9b6e4d4a4c8b7d6e5f4</code></pre></h1>
+- uses: actions/checkout@v4             # v4.2.2
+  # pin: actions/checkout@a8c5c03e8f4c1a4e89e6e9b6e4d4a4c8b7d6e5f4</code></pre>
 <h3>4. 防止 Script Injection</h3>
 <pre><code># ❌ 危险：直接拼接用户输入
-<ul>
-<li>run: echo "Comment: ${{ github.event.issue.title }}"</li>
-</ul>
-<h1>✅ 安全：使用环境变量传递</h1>
-<ul>
-<li>run: echo "Comment: $TITLE"</li>
-</ul>
-<p>env:</p>
-<p>TITLE: ${{ github.event.issue.title }}</code></pre></p>
+- run: echo "Comment: ${{ github.event.issue.title }}"
+
+# ✅ 安全：使用环境变量传递
+- run: echo "Comment: $TITLE"
+  env:
+    TITLE: ${{ github.event.issue.title }}</code></pre>
 <div class="warning-box">
 <p><strong>Script Injection 原理</strong>：<code>${{ }}</code> 表达式在 YAML 解析阶段被直接替换。如果用户在 Issue 标题中写 <code>; rm -rf /</code>，它会直接拼进 shell 命令执行。用 <code>env</code> 传递则由 shell 处理，不会执行注入代码。</p>
 </div>
 <h3>5. 限制 Workflow 触发源</h3>
 <pre><code># 只允许特定人员触发部署
-<p>jobs:</p>
-<p>deploy:</p>
-<p>if: github.actor == 'zzdbilly' || contains(fromJSON('["maintainer1", "maintainer2"]'), github.actor)</code></pre></p>
+jobs:
+  deploy:
+    if: github.actor == 'zzdbilly' || contains(fromJSON('["maintainer1", "maintainer2"]'), github.actor)</code></pre>
 <h2>九、性能优化</h2>
 <p>CI 跑得慢，开发体验就差。以下是系统性的优化策略。</p>
 <h3>1. 并发控制：避免重复运行</h3>
 <pre><code># 同一分支的新推送取消旧的运行
-<p>concurrency:</p>
-<p>group: ${{ github.workflow }}-${{ github.ref }}</p>
-<p>cancel-in-progress: true</p>
-<p>jobs:</p>
-<p>test:</p>
-<p>runs-on: ubuntu-latest</p>
-<p>steps:</p>
-<ul>
-<li>run: npm test</code></pre></li>
-</ul>
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - run: npm test</code></pre>
 <p>当你快速连续推送 3 个 commit，只有最后一次运行的 Workflow 会完整执行，前两次自动取消——节省 Runner 资源，结果也更快出来。</p>
 <h3>2. Job 并行与依赖</h3>
 <pre><code>jobs:
-<p>lint:</p>
-<p>runs-on: ubuntu-latest</p>
-<p>steps:</p>
-<ul>
-<li>run: npm run lint</li>
-</ul>
-<p>typecheck:</p>
-<p>runs-on: ubuntu-latest</p>
-<p>steps:</p>
-<ul>
-<li>run: npm run typecheck</li>
-</ul>
-<p>test:</p>
-<p>runs-on: ubuntu-latest</p>
-<p>steps:</p>
-<ul>
-<li>run: npm test</li>
-</ul>
-<p>build:</p>
-<p>needs: [lint, typecheck, test]   # 三个 Job 全部通过才执行</p>
-<p>runs-on: ubuntu-latest</p>
-<p>steps:</p>
-<ul>
-<li>run: npm run build</li>
-</ul>
-<p>deploy:</p>
-<p>needs: build</p>
-<p>runs-on: ubuntu-latest</p>
-<p>steps:</p>
-<ul>
-<li>run: npm run deploy</code></pre></li>
-</ul>
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - run: npm run lint
+
+  typecheck:
+    runs-on: ubuntu-latest
+    steps:
+      - run: npm run typecheck
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - run: npm test
+
+  build:
+    needs: [lint, typecheck, test]   # 三个 Job 全部通过才执行
+    runs-on: ubuntu-latest
+    steps:
+      - run: npm run build
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - run: npm run deploy</code></pre>
 <pre><code>执行流程：
-<p>lint ─────┐</p>
-<p>├─→ build → deploy</p>
-<p>typecheck ┤</p>
-<p>│</p>
-<p>test ─────┘</p>
-<p>前三个并行，build 等全部完成，deploy 等 build 完成</code></pre></p>
+
+  lint ─────┐
+            ├─→ build → deploy
+  typecheck ┤
+            │
+  test ─────┘
+
+  前三个并行，build 等全部完成，deploy 等 build 完成</code></pre>
 <h3>3. 条件执行：跳过不必要的步骤</h3>
 <pre><code>jobs:
-<p>test:</p>
-<p>runs-on: ubuntu-latest</p>
-<p>steps:</p>
-<ul>
-<li>uses: actions/checkout@v4</li>
-</ul>
-<h1>路径过滤：只有 src/ 变更才跑测试</h1>
-<ul>
-<li>uses: dorny/paths-filter@v3</li>
-</ul>
-<p>id: changes</p>
-<p>with:</p>
-<p>filters: |</p>
-<p>src:</p>
-<ul>
-<li>'src/**'</li>
-</ul>
-<ul>
-<li>if: steps.changes.outputs.src == 'true'</li>
-</ul>
-<p>run: npm test</p>
-<h1>只在 tag 推送时构建发布</h1>
-<p>release:</p>
-<p>if: startsWith(github.ref, 'refs/tags/v')</p>
-<p>runs-on: ubuntu-latest</p>
-<p>steps:</p>
-<ul>
-<li>run: npm run release</code></pre></li>
-</ul>
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # 路径过滤：只有 src/ 变更才跑测试
+      - uses: dorny/paths-filter@v3
+        id: changes
+        with:
+          filters: |
+            src:
+              - 'src/**'
+
+      - if: steps.changes.outputs.src == 'true'
+        run: npm test
+
+  # 只在 tag 推送时构建发布
+  release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    steps:
+      - run: npm run release</code></pre>
 <h3>4. 缓存依赖安装</h3>
 <pre><code># setup-node 自带缓存
-<ul>
-<li>uses: actions/setup-node@v4</li>
-</ul>
-<p>with:</p>
-<p>node-version: 20</p>
-<p>cache: npm           # 自动基于 lock 文件缓存</p>
-<h1>setup-python 自带缓存</h1>
-<ul>
-<li>uses: actions/setup-python@v5</li>
-</ul>
-<p>with:</p>
-<p>python-version: '3.12'</p>
-<p>cache: pip</p>
-<h1>setup-go 自带缓存</h1>
-<ul>
-<li>uses: actions/setup-go@v5</li>
-</ul>
-<p>with:</p>
-<p>go-version: '1.22'</p>
-<p>cache: true</code></pre></p>
+- uses: actions/setup-node@v4
+  with:
+    node-version: 20
+    cache: npm           # 自动基于 lock 文件缓存
+
+# setup-python 自带缓存
+- uses: actions/setup-python@v5
+  with:
+    python-version: '3.12'
+    cache: pip
+
+# setup-go 自带缓存
+- uses: actions/setup-go@v5
+  with:
+    go-version: '1.22'
+    cache: true</code></pre>
 <h3>5. 自托管 Runner</h3>
 <p>GitHub-hosted Runner 有局限：每次都是全新环境、网络受限、免费额度有限。自托管 Runner 适合：</p>
 <ul>
@@ -871,12 +803,12 @@
 <li>需要特定硬件/软件环境</li>
 </ul>
 <pre><code># 安装自托管 Runner
-<p>mkdir actions-runner &amp;&amp; cd actions-runner</p>
-<p>curl -o actions-runner-linux-x64-2.321.0.tar.gz -L \</p>
-<p>https://github.com/actions/runner/releases/download/v2.321.0/actions-runner-linux-x64-2.321.0.tar.gz</p>
-<p>tar xzf actions-runner-linux-x64-2.321.0.tar.gz</p>
-<p>./config.sh --url https://github.com/OWNER/REPO --token TOKEN</p>
-<p>./run.sh</code></pre></p>
+mkdir actions-runner &amp;&amp; cd actions-runner
+curl -o actions-runner-linux-x64-2.321.0.tar.gz -L \
+  https://github.com/actions/runner/releases/download/v2.321.0/actions-runner-linux-x64-2.321.0.tar.gz
+tar xzf actions-runner-linux-x64-2.321.0.tar.gz
+./config.sh --url https://github.com/OWNER/REPO --token TOKEN
+./run.sh</code></pre>
 <div class="warning-box">
 <p><strong>自托管 Runner 安全风险</strong>：公共仓库不建议用自托管 Runner，因为任何人都可以提交 PR 触发 Workflow，在 Runner 上执行任意代码。私有仓库或配合 <code>environment</code> 保护规则使用更安全。</p>
 </div>

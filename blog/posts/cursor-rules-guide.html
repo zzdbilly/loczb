@@ -150,12 +150,13 @@
 <h2>Rules 文件结构</h2>
 <h3>文件格式</h3>
 <pre><code># 文件名：.cursor/rules/文件名.md
-<hr>
-<p>description: "规则说明"</p>
-<p>glob: "*<em>/</em>.ts"</p>
-<hr>
-<h2>规则内容</h2>
-<p>...</code></pre></p>
+
+---
+description: "规则说明"
+glob: "*<em>/</em>.ts"
+---
+## 规则内容
+...</code></pre>
 <ul>
 <li><code>description</code>：描述该规则用途</li>
 <li><code>glob</code>：文件匹配模式，控制规则应用到哪些文件</li>
@@ -163,121 +164,115 @@
 </ul>
 <h3>推荐目录结构</h3>
 <pre><code>.cursor/rules/
-<p>├── project-overview.md         # 项目概览（技术栈、架构说明）</p>
-<p>├── typescript-rules.md         # TypeScript 规范</p>
-<p>├── naming-conventions.md       # 命名规范</p>
-<p>├── react-guidelines.md        # React 最佳实践</p>
-<p>├── testing-standards.md        # 测试标准</p>
-<p>├── error-handling.md           # 错误处理规范</p>
-<p>├── file-organization.md        # 文件组织规范</p>
-<p>└── git-commit-conventions.md   # Git 提交规范</code></pre></p>
+├── project-overview.md         # 项目概览（技术栈、架构说明）
+├── typescript-rules.md         # TypeScript 规范
+├── naming-conventions.md       # 命名规范
+├── react-guidelines.md        # React 最佳实践
+├── testing-standards.md        # 测试标准
+├── error-handling.md           # 错误处理规范
+├── file-organization.md        # 文件组织规范
+└── git-commit-conventions.md   # Git 提交规范</code></pre>
 </section>
 <section>
 <h2>实战案例：Kotlin Android 项目</h2>
 <h3>1. 项目概览规则</h3>
 <pre><code>---
-<p>description: "项目技术栈和架构概览"</p>
-<p>glob: "*<em>/</em>.{kt,kts,xml}"</p>
-<hr>
-<h1>Android 项目概览</h1>
-<h2>技术栈</h2>
-<ul>
-<li>语言：Kotlin 2.0+</li>
-<li>UI 框架：Jetpack Compose + Material 3</li>
-<li>架构：MVVM + Clean Architecture</li>
-<li>依赖注入：Hilt</li>
-<li>网络层：Retrofit + OkHttp</li>
-<li>数据库：Room</li>
-<li>协程：基于协程的异步处理</li>
-</ul>
-<h2>项目结构</h2>
-<p>app/src/main/java/com/example/app/</p>
-<p>├── data/          # 数据层</p>
-<p>├── domain/        # 领域层</p>
-<p>├── ui/            # UI 层</p>
-<p>├── di/            # 依赖注入</p>
-<p>└── core/          # 公共工具</p>
-<h2>核心约定</h2>
-<ul>
-<li>禁止在 ViewModel 中持有 Activity/Fragment 引用</li>
-<li>所有 IO 操作必须使用 Dispatchers.IO</li>
-<li>UI 状态使用 sealed class / sealed interface</code></pre></li>
-</ul>
+description: "项目技术栈和架构概览"
+glob: "*<em>/</em>.{kt,kts,xml}"
+---
+# Android 项目概览
+
+## 技术栈
+- 语言：Kotlin 2.0+
+- UI 框架：Jetpack Compose + Material 3
+- 架构：MVVM + Clean Architecture
+- 依赖注入：Hilt
+- 网络层：Retrofit + OkHttp
+- 数据库：Room
+- 协程：基于协程的异步处理
+
+## 项目结构
+app/src/main/java/com/example/app/
+├── data/          # 数据层
+├── domain/        # 领域层
+├── ui/            # UI 层
+├── di/            # 依赖注入
+└── core/          # 公共工具
+
+## 核心约定
+- 禁止在 ViewModel 中持有 Activity/Fragment 引用
+- 所有 IO 操作必须使用 Dispatchers.IO
+- UI 状态使用 sealed class / sealed interface</code></pre>
 <h3>2. Kotlin 编码规范</h3>
 <pre><code>---
-<p>description: "Kotlin 代码风格和命名规范"</p>
-<p>glob: "*<em>/</em>.kt"</p>
-<hr>
-<h1>Kotlin 规范</h1>
-<h2>命名规则</h2>
-<ul>
-<li>类和接口：PascalCase</li>
-<li>函数和变量：camelCase</li>
-<li>常量：SCREAMING<em>SNAKE</em>CASE</li>
-<li>Compose 函数：PascalCase</li>
-<li>私有函数以下划线开头：_internalHelper()</li>
-</ul>
-<h2>禁止使用的模式</h2>
-<ul>
-<li>❌ <strong>INLINE<em>CODE</em>0</strong> 操作符（除非在测试中）</li>
-<li>❌ GlobalScope</li>
-<li>❌ 未命名的协程</li>
-<li>❌ 使用 var 替代 mutable state</li>
-</ul>
-<h2>优先使用的模式</h2>
-<ul>
-<li>✅ sealed interface 替代枚举</li>
-<li>✅ by viewModels() 替代手动创建 ViewModel</li>
-<li>✅ Result 或 sealed class 处理操作结果</li>
-<li>✅ Data Class 替代手动数据容器</code></pre></li>
-</ul>
+description: "Kotlin 代码风格和命名规范"
+glob: "*<em>/</em>.kt"
+---
+# Kotlin 规范
+
+## 命名规则
+- 类和接口：PascalCase
+- 函数和变量：camelCase
+- 常量：SCREAMING<em>SNAKE</em>CASE
+- Compose 函数：PascalCase
+- 私有函数以下划线开头：_internalHelper()
+
+## 禁止使用的模式
+- ❌ <strong>INLINE<em>CODE</em>0</strong> 操作符（除非在测试中）
+- ❌ GlobalScope
+- ❌ 未命名的协程
+- ❌ 使用 var 替代 mutable state
+
+## 优先使用的模式
+- ✅ sealed interface 替代枚举
+- ✅ by viewModels() 替代手动创建 ViewModel
+- ✅ Result 或 sealed class 处理操作结果
+- ✅ Data Class 替代手动数据容器</code></pre>
 <h3>3. Compose UI 规范</h3>
 <pre><code>---
-<p>description: "Jetpack Compose UI 编写规范"</p>
-<p>glob: "*<em>/</em>.kt"</p>
-<hr>
-<h1>Compose UI 规范</h1>
-<h2>组件命名</h2>
-<ul>
-<li>页面级：XxxScreen</li>
-<li>可复用组件：XxxComponent / XxxItem</li>
-</ul>
-<h2>状态管理</h2>
-<ul>
-<li>使用 collectAsStateWithLifecycle() 替代 collectAsState()</li>
-<li>ViewModel 状态使用 StateFlow，事件使用 SharedFlow</li>
-<li>局部 UI 状态使用 remember + mutableStateOf</li>
-</ul>
-<h2>预览</h2>
-<ul>
-<li>所有公共组件必须提供 Preview</li>
-<li>Preview 需要覆盖不同状态</li>
-</ul>
-<h2>性能</h2>
-<ul>
-<li>使用 derivedStateOf 减少不必要的重组</li>
-<li>列表使用 LazyColumn + key 参数</li>
-<li>避免在重组范围执行高开销计算</code></pre></li>
-</ul>
+description: "Jetpack Compose UI 编写规范"
+glob: "*<em>/</em>.kt"
+---
+# Compose UI 规范
+
+## 组件命名
+- 页面级：XxxScreen
+- 可复用组件：XxxComponent / XxxItem
+
+## 状态管理
+- 使用 collectAsStateWithLifecycle() 替代 collectAsState()
+- ViewModel 状态使用 StateFlow，事件使用 SharedFlow
+- 局部 UI 状态使用 remember + mutableStateOf
+
+## 预览
+- 所有公共组件必须提供 Preview
+- Preview 需要覆盖不同状态
+
+## 性能
+- 使用 derivedStateOf 减少不必要的重组
+- 列表使用 LazyColumn + key 参数
+- 避免在重组范围执行高开销计算</code></pre>
 </section>
 <section>
 <h2>高级技巧</h2>
 <h3>1. 使用 glob 精确匹配</h3>
 <pre><code># 只匹配测试文件
-<p>glob: "*<em>/</em>.test.{ts,tsx}"</p>
-<h1>匹配所有配置文件</h1>
-<p>glob: "*<em>/</em>.{json,yaml,toml}"</p>
-<h1>排除 node_modules</h1>
-<p>glob: "*<em>/</em>.ts"</p>
-<p>exclude: ["node_modules/**"]</code></pre></p>
+glob: "*<em>/</em>.test.{ts,tsx}"
+
+# 匹配所有配置文件
+glob: "*<em>/</em>.{json,yaml,toml}"
+
+# 排除 node_modules
+glob: "*<em>/</em>.ts"
+exclude: ["node_modules/**"]</code></pre>
 <h3>2. 分层规则设计</h3>
 <pre><code>.cursor/rules/
-<p>├── 0-project.md         # 第一层：项目概览</p>
-<p>├── 1-typescript.md      # 第二层：语言规范</p>
-<p>├── 1-python.md          # 第二层：多语言</p>
-<p>├── 2-react.md           # 第三层：框架规范</p>
-<p>├── 3-testing.md         # 第三层：测试规范</p>
-<p>└── 9-common.md          # 底层：通用规范</code></pre></p>
+├── 0-project.md         # 第一层：项目概览
+├── 1-typescript.md      # 第二层：语言规范
+├── 1-python.md          # 第二层：多语言
+├── 2-react.md           # 第三层：框架规范
+├── 3-testing.md         # 第三层：测试规范
+└── 9-common.md          # 底层：通用规范</code></pre>
 <h3>3. Rules vs .cursorrules</h3>
 <table>
 <thead><tr><th>特性</th><th>.cursorrules</th><th>.cursor/rules/*.md</th></tr></thead>
@@ -290,16 +285,14 @@
 <p><strong>建议</strong>：新项目直接用多文件方式。</p>
 <h3>4. 为特定文件类型定制规则</h3>
 <pre><code>---
-<p>description: "SQL 文件规范"</p>
-<p>glob: "*<em>/</em>.sql"</p>
-<hr>
-<h1>SQL 规范</h1>
-<ul>
-<li>关键字大写（SELECT、FROM、WHERE）</li>
-<li>表名使用 snake_case 复数形式</li>
-<li>每个查询必须显式指定列名，禁止 SELECT *</li>
-<li>WHERE 条件使用参数化查询</code></pre></li>
-</ul>
+description: "SQL 文件规范"
+glob: "*<em>/</em>.sql"
+---
+# SQL 规范
+- 关键字大写（SELECT、FROM、WHERE）
+- 表名使用 snake_case 复数形式
+- 每个查询必须显式指定列名，禁止 SELECT *
+- WHERE 条件使用参数化查询</code></pre>
 </section>
 <section>
 <h2>常见问题</h2>
@@ -478,7 +471,7 @@
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📅</span> 发布日期</span><span class="post-info-stat-value">2026-06-30</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">⏱️</span> 阅读时间</span><span class="post-info-stat-value">12 min read</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">1394 字</span></div>
-        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📊</span> 章节数</span><span class="post-info-stat-value">19 节 · 9 子节</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📊</span> 章节数</span><span class="post-info-stat-value">8 节 · 9 子节</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">💻</span> 代码块</span><span class="post-info-stat-value">8 段</span></div>
       </div>
       <div class="post-info-section" id="postSidebarTags">

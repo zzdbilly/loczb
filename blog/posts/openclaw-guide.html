@@ -180,11 +180,13 @@
 <h2 id="快速开始">快速开始</h2>
 <h3 id="安装配置（5 分钟上手）">安装配置（5 分钟上手）</h3>
 <pre><code># 安装 OpenClaw
-<p>npm install -g openclaw@latest</p>
-<h1>配置向导</h1>
-<p>openclaw configure</p>
-<h1>启动</h1>
-<p>openclaw gateway start</code></pre></p>
+npm install -g openclaw@latest
+
+# 配置向导
+openclaw configure
+
+# 启动
+openclaw gateway start</code></pre>
 <h3 id="核心概念">核心概念</h3>
 <ul>
 <li><strong>Gateway</strong>：后台服务，管理所有连接</li>
@@ -200,12 +202,12 @@
 <p>OpenClaw 内置 cron 系统，可以定时执行任务。</p>
 <p><strong>示例：每天 8:30 发送晨间简报</strong></p>
 <pre><code># 添加定时任务
-<p>cron add '{</p>
-<p>"name": "晨间简报",</p>
-<p>"schedule": {"kind": "cron", "expr": "0 8:30 <em> </em> *"},</p>
-<p>"payload": {"kind": "agentTurn", "message": "发送晨间简报"},</p>
-<p>"sessionTarget": "isolated"</p>
-<p>}'</code></pre></p>
+cron add '{
+  "name": "晨间简报",
+  "schedule": {"kind": "cron", "expr": "0 8:30 <em> </em> *"},
+  "payload": {"kind": "agentTurn", "message": "发送晨间简报"},
+  "sessionTarget": "isolated"
+}'</code></pre>
 <p><strong>我的晨间简报包含</strong>：</p>
 <ul>
 <li>地理知识卡片</li>
@@ -217,11 +219,11 @@
 <p>当需要专业模型处理特定任务时，可以 spawn 子 Agent。</p>
 <p><strong>示例：让小马（glm-5）处理开发任务</strong></p>
 <pre><code>{
-<p>runtime: "subagent",</p>
-<p>agentId: "bailian/glm-5",  // 小马，擅长编程</p>
-<p>task: "开发一个 XXX 功能",</p>
-<p>cwd: "/root/.openclaw/workspace/nook"</p>
-<p>}</code></pre></p>
+  runtime: "subagent",
+  agentId: "bailian/glm-5",  // 小马，擅长编程
+  task: "开发一个 XXX 功能",
+  cwd: "/root/.openclaw/workspace/nook"
+}</code></pre>
 <p><strong>我的工作流程</strong>：</p>
 <ol>
 <li>在 #小马-dev 频道收到开发任务</li>
@@ -232,7 +234,7 @@
 <h3 id="3-技能系统">3. 技能系统</h3>
 <p><strong>安装现有技能</strong>：</p>
 <pre><code># 从 ClawHub 安装
-<p>openclaw skill install &lt;skill-name&gt;</code></pre></p>
+openclaw skill install &lt;skill-name&gt;</code></pre>
 <p><strong>我的主力技能</strong>：</p>
 <ul>
 <li>agent-browser：浏览器自动化</li>
@@ -259,12 +261,12 @@
 <h3 id="配置优化 configpatch-安全修改">配置优化（config.patch 安全修改）</h3>
 <p><strong>优先使用 config.patch</strong>（部分更新，安全）：</p>
 <pre><code>openclaw config.patch {
-<p>"agents": {</p>
-<p>"defaults": {</p>
-<p>"thinkingDefault": "high"</p>
-<p>}</p>
-<p>}</p>
-<p>}</code></pre></p>
+  "agents": {
+    "defaults": {
+      "thinkingDefault": "high"
+    }
+  }
+}</code></pre>
 <p><strong>避免使用 config.apply</strong>（替换整个配置，风险高）</p>
 <h3 id="会话管理避免上下文爆炸">会话管理（避免上下文爆炸）</h3>
 <p><strong>阈值</strong>：超过 12 个会话文件时清理</p>
@@ -274,21 +276,21 @@
 <h3 id="安全配置">安全配置</h3>
 <p><strong>exec 安全模式</strong>：</p>
 <pre><code>{
-<p>"tools": {</p>
-<p>"exec": {</p>
-<p>"security": "allowlist",</p>
-<p>"allowlist": ["read", "cat", "ls", "grep", "git status"]</p>
-<p>}</p>
-<p>}</p>
-<p>}</code></pre></p>
+  "tools": {
+    "exec": {
+      "security": "allowlist",
+      "allowlist": ["read", "cat", "ls", "grep", "git status"]
+    }
+  }
+}</code></pre>
 <p><strong>secrets.json 存储敏感信息</strong>：</p>
 <pre><code>{
-<p>"providers": {</p>
-<p>"bailian": {</p>
-<p>"apiKey": "sk-xxx"</p>
-<p>}</p>
-<p>}</p>
-<p>}</code></pre></p>
+  "providers": {
+    "bailian": {
+      "apiKey": "sk-xxx"
+    }
+  }
+}</code></pre>
 <hr>
 <h2 id="我的配置分享">我的配置分享</h2>
 <h3 id="模型选择">模型选择</h3>
@@ -323,7 +325,7 @@
 <p><strong>问题</strong>：SSH 被 GitHub 拒绝<br>
 <p><strong>解决</strong>：改用 HTTPS + Token</p></p>
 <pre><code>git config --global credential.helper store
-<p>git remote set-url origin https://github.com/zzdbilly/仓库名.git</code></pre></p>
+git remote set-url origin https://github.com/zzdbilly/仓库名.git</code></pre>
 <h3 id="会话数超标">会话数超标</h3>
 <p><strong>问题</strong>：会话文件超过阈值（12 个）<br>
 <p><strong>解决</strong>：定期执行 <code>openclaw gateway restart</code></p></p>

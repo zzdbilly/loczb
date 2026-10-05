@@ -156,21 +156,22 @@
 </ol>
 <h3>核心代码</h3>
 <pre><code>// 初始化识别器
-<p>val config = OfflineRecognizerConfig().apply {</p>
-<p>modelConfig = OfflineModelConfig().apply {</p>
-<p>transducer = OfflineTransducerModelConfig().apply {</p>
-<p>encoder = "$modelDir/encoder.onnx"</p>
-<p>decoder = "$modelDir/decoder.onnx"</p>
-<p>joiner = "$modelDir/joiner.onnx"</p>
-<p>}</p>
-<p>tokens = "$modelDir/tokens.txt"</p>
-<p>numThreads = 4</p>
-<p>}</p>
-<p>}</p>
-<p>val recognizer = OfflineRecognizer(config)</p>
-<p>// 识别音频</p>
-<p>val result = recognizer.decode(audioData, 16000f)</p>
-<p>println(result.text)</code></pre></p>
+val config = OfflineRecognizerConfig().apply {
+    modelConfig = OfflineModelConfig().apply {
+        transducer = OfflineTransducerModelConfig().apply {
+            encoder = "$modelDir/encoder.onnx"
+            decoder = "$modelDir/decoder.onnx"
+            joiner = "$modelDir/joiner.onnx"
+        }
+        tokens = "$modelDir/tokens.txt"
+        numThreads = 4
+    }
+}
+val recognizer = OfflineRecognizer(config)
+
+// 识别音频
+val result = recognizer.decode(audioData, 16000f)
+println(result.text)</code></pre>
 <p>完整实现参考官方 <a href="https://github.com/k2-fsa/sherpa-onnx/tree/master/android" target="_blank">Android 示例项目</a>。</p>
 <h3>模型选择</h3>
 <table>
@@ -188,10 +189,10 @@
 <h2>Vosk（备选）</h2>
 <p>Vosk 基于传统 Kaldi，API 设计简洁，适合快速原型开发。但模型相对老旧，Sherpa ONNX 是更好的选择。</p>
 <pre><code>// Vosk 简洁 API
-<p>val model = Model("/path/to/model")</p>
-<p>val recognizer = Recognizer(model, 16000f)</p>
-<p>recognizer.acceptWaveform(buffer)</p>
-<p>val result = recognizer.result()</code></pre></p>
+val model = Model("/path/to/model")
+val recognizer = Recognizer(model, 16000f)
+recognizer.acceptWaveform(buffer)
+val result = recognizer.result()</code></pre>
 <h2>性能优化建议</h2>
 <ul>
 <li><strong>减小 APK 体积</strong>：首次启动时从服务器下载模型</li>

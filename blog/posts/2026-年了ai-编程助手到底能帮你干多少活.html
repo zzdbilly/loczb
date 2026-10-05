@@ -182,49 +182,51 @@
 <h3>心法一：把需求写"清"而不是写"多"</h3>
 <p>Prompt 的质量决定输出的上限。好的提示词不是"越长越好"，而是<strong>把约束讲清楚</strong>。</p>
 <pre><code class="language-python"># 反例：模糊需求
-<p>请优化这段代码，让它更快</p>
-<h1>正例：清晰需求</h1>
-<h1>请优化 process_items 函数：</h1>
-<h1>1. 输入是 10 万条记录的列表</h1>
-<h1>2. 当前每个元素单独发一次 HTTP 请求</h1>
-<h1>3. 目标是总耗时从 8 分钟降到 1 分钟以内</h1>
-<h1>4. 要求保持接口不变，错误处理逻辑不丢失</h1>
-<h1>5. 完成后用示例数据跑一遍并给出耗时对比</h1>
-<p></code></pre></p>
+请优化这段代码，让它更快
+
+# 正例：清晰需求
+# 请优化 process_items 函数：
+# 1. 输入是 10 万条记录的列表
+# 2. 当前每个元素单独发一次 HTTP 请求
+# 3. 目标是总耗时从 8 分钟降到 1 分钟以内
+# 4. 要求保持接口不变，错误处理逻辑不丢失
+# 5. 完成后用示例数据跑一遍并给出耗时对比
+</code></pre>
 <p>差异巨大。前者 AI 只能猜，后者 AI 能像接真实需求一样干活。</p>
 <h3>心法二：让 AI"先说方案再动手"</h3>
 <p>对于中等以上复杂度任务，不要让 AI 直接改代码，而是<strong>先要方案，你审核后再执行</strong>。</p>
 <pre><code>请先不要写代码。给我 2 个缓存方案（Redis/本地 LRU），
-<p>对比：命中率、实现成本、对现有代码侵入程度、失败兜底。</p>
-<p>我给个结论你再动手。</p>
-<p></code></pre></p>
+对比：命中率、实现成本、对现有代码侵入程度、失败兜底。
+我给个结论你再动手。
+</code></pre>
 <p>这一步花 30 秒，能避免 AI 一头扎进错误方向，省下几十分钟返工。</p>
 <h3>心法三：用"测试即契约"来验收</h3>
 <p>AI 改完代码，别只问"改好了吗"。<strong>让它跑测试给你看</strong>，你自己也要跑。最好的协作方式是把需求写成测试，然后让 AI 去"让测试通过"。</p>
 <pre><code class="language-bash"># 把验收标准固化成测试
-<p>pnpm vitest run --reporter=dot</p>
-<h1>让 AI 基于失败测试定位并修复</h1>
-<h1>&quot;test/order.test.ts 里有 3 个失败用例，请修复 order-service，不要改测试本身&quot;</h1>
-<p></code></pre></p>
+pnpm vitest run --reporter=dot
+
+# 让 AI 基于失败测试定位并修复
+# &quot;test/order.test.ts 里有 3 个失败用例，请修复 order-service，不要改测试本身&quot;
+</code></pre>
 <p>测试是人和 AI 之间最清晰的"契约"。<strong>契约清晰，协作才不会扯皮。</strong></p>
 <h3>心法四：分块提交，别让 AI"一口气吃成胖子"</h3>
 <p>把一个大型改动拆成若干<strong>可独立验证的小块</strong>，每块让 AI 完成、你检查、再继续。这既是工程纪律，也是对 AI 能力的诚实认知——<strong>越小的任务，AI 的准确率越高，越好审查。</strong></p>
 <pre><code class="language-bash"># 拆解示例
-<p>step1: 抽出 API 调用层 (review: 接口定义)</p>
-<p>step2: 实现缓存模块  (review: 边界与失效)</p>
-<p>step3: 接入主流程    (review: 集成与回滚)</p>
-<p></code></pre></p>
+step1: 抽出 API 调用层 (review: 接口定义)
+step2: 实现缓存模块  (review: 边界与失效)
+step3: 接入主流程    (review: 集成与回滚)
+</code></pre>
 <h3>心法五：建立"人类复核清单"</h3>
 <p>AI 最擅长在你看不见的地方埋雷。列一个自己的复核清单，每次 AI 提交后过一遍：</p>
 <pre><code class="language-javascript">// 人类复核清单（每次 AI 提交后必查）
-<p>const reviewChecklist = [</p>
-<p>'1. 权限校验是否被绕过？',       // 安全</p>
-<p>'2. 敏感信息有没有硬编码/打日志？', // 隐私</p>
-<p>'3. 异常分支和回滚路径完备吗？',   // 健壮性</p>
-<p>'4. 边界条件和极端输入覆盖了吗？', // 正确性</p>
-<p>'5. 有没有引入没必要的复杂度？',   // 可维护性</p>
-<p>];</p>
-<p></code></pre></p>
+const reviewChecklist = [
+  '1. 权限校验是否被绕过？',       // 安全
+  '2. 敏感信息有没有硬编码/打日志？', // 隐私
+  '3. 异常分支和回滚路径完备吗？',   // 健壮性
+  '4. 边界条件和极端输入覆盖了吗？', // 正确性
+  '5. 有没有引入没必要的复杂度？',   // 可维护性
+];
+</code></pre>
 <p><strong>AI 当加速器，你当质检官。</strong> 这套组合在 2026 年依然是最优解。</p>
 <hr />
 <h2>开发者该如何"重新定位"自己</h2>
@@ -251,30 +253,26 @@
 <h3>第一步：把需求写成清晰的任务</h3>
 <p>我用一个 CLI Agent 示例（概念演示，具体工具可用任意 agent）：</p>
 <pre><code class="language-bash"># 给 agent 下达清晰任务
-<p>agent-cli run \</p>
-<p>--task &quot;为 UserService.getUser 增加缓存层&quot; \</p>
-<p>--constraint &quot;数据库是 PostgreSQL;缓存用 Redis;TTL=5min;&quot; \</p>
-<p>--constraint &quot;用户资料更新时要同步失效缓存&quot; \</p>
-<p>--constraint &quot;热点用户(如 ID&lt;100)做缓存击穿保护&quot; \</p>
-<p>--acceptance &quot;跑通 test/cache.test.ts 全部用例&quot;</p>
-<p></code></pre></p>
+agent-cli run \
+  --task &quot;为 UserService.getUser 增加缓存层&quot; \
+  --constraint &quot;数据库是 PostgreSQL;缓存用 Redis;TTL=5min;&quot; \
+  --constraint &quot;用户资料更新时要同步失效缓存&quot; \
+  --constraint &quot;热点用户(如 ID&lt;100)做缓存击穿保护&quot; \
+  --acceptance &quot;跑通 test/cache.test.ts 全部用例&quot;
+</code></pre>
 <p>关键是把<strong>约束</strong>和<strong>验收标准</strong>都写在任务里，而不是只给一句话。</p>
 <h3>第二步：Agent 自主执行并汇报</h3>
 <p>Agent 会读代码、定位、改、跑测试，最后给你一个改动摘要：</p>
 <pre><code>✅ 已完成
-<ul>
-<li>在 service/cache.ts 新增 Redis 缓存封装</li>
-<li>getUser 改为 先查缓存 → 未命中查库 → 回填缓存</li>
-<li>updateUser 中同步删除对应 key</li>
-<li>热点 ID 加了单飞锁(解决击穿)</li>
-<li>测试: 8/8 通过, 耗时从 84ms 提到 6ms</li>
-</ul>
-<p>⚠️ 注意</p>
-<ul>
-<li>缓存 key 格式用了 user:{id}, 建议确认命名规范</li>
-<li>updateUser 的失效逻辑依赖事务成功后才执行</li>
-</ul>
-<p></code></pre></p>
+- 在 service/cache.ts 新增 Redis 缓存封装
+- getUser 改为 先查缓存 → 未命中查库 → 回填缓存
+- updateUser 中同步删除对应 key
+- 热点 ID 加了单飞锁(解决击穿)
+- 测试: 8/8 通过, 耗时从 84ms 提到 6ms
+⚠️ 注意
+- 缓存 key 格式用了 user:{id}, 建议确认命名规范
+- updateUser 的失效逻辑依赖事务成功后才执行
+</code></pre>
 <p>看到没——Agent 不仅完成了任务，还主动标出了<strong>它自己觉得值得你复核的两个点</strong>。这就是"好的 Agent 协作"：它把你当成需要汇报的老板，而不是当成可以糊弄过去的人。</p>
 <h3>第三步：你复核，而不是信任</h3>
 <p>你快速过一遍实际改动，重点看 Agent 列的 ⚠️ 部分，自己补一轮边界测试，然后才合并。<strong>信任，但要验证。</strong></p>

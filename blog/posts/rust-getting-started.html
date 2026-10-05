@@ -137,68 +137,81 @@
 <h2>一、安装与 Hello World</h2>
 <h3>安装 Rust</h3>
 <pre><code># macOS / Linux
-<p>curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh</p>
-<h1>验证安装</h1>
-<p>rustc --version</p>
-<p>cargo --version</code></pre></p>
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
+# 验证安装
+rustc --version
+cargo --version</code></pre>
 <h3>第一个程序</h3>
 <pre><code>// main.rs
-<p>fn main() {</p>
-<p>println!("Hello, Rust!");</p>
-<p>}</p>
-<p>// 编译运行</p>
-<p>// $ rustc main.rs</p>
-<p>// $ ./main</p>
-<p>// Hello, Rust!</code></pre></p>
+fn main() {
+    println!("Hello, Rust!");
+}
+
+// 编译运行
+// $ rustc main.rs
+// $ ./main
+// Hello, Rust!</code></pre>
 <h3>使用 Cargo</h3>
 <pre><code># 创建项目
-<p>cargo new hello_rust</p>
-<h1>项目结构</h1>
-<h1>hello_rust/</h1>
-<h1>├── Cargo.toml    # 配置文件</h1>
-<h1>└── src/</h1>
-<h1>└── main.rs   # 源代码</h1>
-<h1>运行项目</h1>
-<p>cargo run</p>
-<h1>构建发布版本</h1>
-<p>cargo build --release</code></pre></p>
+cargo new hello_rust
+
+# 项目结构
+# hello_rust/
+# ├── Cargo.toml    # 配置文件
+# └── src/
+#     └── main.rs   # 源代码
+
+# 运行项目
+cargo run
+
+# 构建发布版本
+cargo build --release</code></pre>
 <h2>二、变量与数据类型</h2>
 <h3>变量声明</h3>
 <pre><code>fn main() {
-<p>// 不可变变量（默认）</p>
-<p>let x = 5;</p>
-<p>// x = 6; // 错误！不能修改</p>
-<p>// 可变变量</p>
-<p>let mut y = 10;</p>
-<p>y = 20; // OK</p>
-<p>// 常量（必须注明类型）</p>
-<p>const MAX<em>POINTS: u32 = 100</em>000;</p>
-<p>// 变量遮蔽（shadowing）</p>
-<p>let z = 5;</p>
-<p>let z = z + 1; // 新变量，遮蔽了旧的</p>
-<p>let z = "hello"; // 甚至可以改变类型</p>
-<p>}</code></pre></p>
+    // 不可变变量（默认）
+    let x = 5;
+    // x = 6; // 错误！不能修改
+    
+    // 可变变量
+    let mut y = 10;
+    y = 20; // OK
+    
+    // 常量（必须注明类型）
+    const MAX<em>POINTS: u32 = 100</em>000;
+    
+    // 变量遮蔽（shadowing）
+    let z = 5;
+    let z = z + 1; // 新变量，遮蔽了旧的
+    let z = "hello"; // 甚至可以改变类型
+}</code></pre>
 <h3>基本数据类型</h3>
 <pre><code>fn main() {
-<p>// 整数：i8, i16, i32, i64, i128, isize（有符号）</p>
-<p>//       u8, u16, u32, u64, u128, usize（无符号）</p>
-<p>let a: i32 = -42;</p>
-<p>let b: u8 = 255;</p>
-<p>// 浮点数</p>
-<p>let c: f64 = 3.14;</p>
-<p>// 布尔</p>
-<p>let d: bool = true;</p>
-<p>// 字符（Unicode）</p>
-<p>let e: char = '🦀';</p>
-<p>// 元组</p>
-<p>let tuple: (i32, f64, char) = (1, 2.0, 'a');</p>
-<p>let (x, y, z) = tuple; // 解构</p>
-<p>let first = tuple.0;   // 索引访问</p>
-<p>// 数组（固定长度）</p>
-<p>let arr: [i32; 3] = [1, 2, 3];</p>
-<p>let first = arr[0];</p>
-<p>let repeat = [0; 5]; // [0, 0, 0, 0, 0]</p>
-<p>}</code></pre></p>
+    // 整数：i8, i16, i32, i64, i128, isize（有符号）
+    //       u8, u16, u32, u64, u128, usize（无符号）
+    let a: i32 = -42;
+    let b: u8 = 255;
+    
+    // 浮点数
+    let c: f64 = 3.14;
+    
+    // 布尔
+    let d: bool = true;
+    
+    // 字符（Unicode）
+    let e: char = '🦀';
+    
+    // 元组
+    let tuple: (i32, f64, char) = (1, 2.0, 'a');
+    let (x, y, z) = tuple; // 解构
+    let first = tuple.0;   // 索引访问
+    
+    // 数组（固定长度）
+    let arr: [i32; 3] = [1, 2, 3];
+    let first = arr[0];
+    let repeat = [0; 5]; // [0, 0, 0, 0, 0]
+}</code></pre>
 <h2>三、所有权（Ownership）</h2>
 <p>所有权是 Rust 最独特的特性，是内存安全的基石。</p>
 <h3>所有权规则</h3>
@@ -208,246 +221,288 @@
 <li>所有者离开作用域时，值被丢弃</li>
 </ul>
 <pre><code>fn main() {
-<p>// 移动（Move）</p>
-<p>let s1 = String::from("hello");</p>
-<p>let s2 = s1; // s1 的所有权转移给 s2</p>
-<p>// println!("{}", s1); // 错误！s1 已失效</p>
-<p>// 克隆（Clone）</p>
-<p>let s3 = String::from("world");</p>
-<p>let s4 = s3.clone(); // 深拷贝</p>
-<p>println!("{} {}", s3, s4); // 两者都有效</p>
-<p>// 栈上的数据：拷贝</p>
-<p>let x = 5;</p>
-<p>let y = x; // 整数实现了 Copy trait，是拷贝而非移动</p>
-<p>println!("{} {}", x, y); // 两者都有效</p>
-<p>}</code></pre></p>
+    // 移动（Move）
+    let s1 = String::from("hello");
+    let s2 = s1; // s1 的所有权转移给 s2
+    // println!("{}", s1); // 错误！s1 已失效
+    
+    // 克隆（Clone）
+    let s3 = String::from("world");
+    let s4 = s3.clone(); // 深拷贝
+    println!("{} {}", s3, s4); // 两者都有效
+    
+    // 栈上的数据：拷贝
+    let x = 5;
+    let y = x; // 整数实现了 Copy trait，是拷贝而非移动
+    println!("{} {}", x, y); // 两者都有效
+}</code></pre>
 <h3>函数与所有权</h3>
 <pre><code>fn main() {
-<p>let s = String::from("hello");</p>
-<p>takes_ownership(s); // s 的所有权移动到函数</p>
-<p>// println!("{}", s); // 错误！s 已失效</p>
-<p>let x = 5;</p>
-<p>makes_copy(x); // x 是拷贝</p>
-<p>println!("{}", x); // OK</p>
-<p>}</p>
-<p>fn takes_ownership(s: String) {</p>
-<p>println!("{}", s);</p>
-<p>} // s 在这里被丢弃</p>
-<p>fn makes_copy(i: i32) {</p>
-<p>println!("{}", i);</p>
-<p>}</code></pre></p>
+    let s = String::from("hello");
+    takes_ownership(s); // s 的所有权移动到函数
+    // println!("{}", s); // 错误！s 已失效
+    
+    let x = 5;
+    makes_copy(x); // x 是拷贝
+    println!("{}", x); // OK
+}
+
+fn takes_ownership(s: String) {
+    println!("{}", s);
+} // s 在这里被丢弃
+
+fn makes_copy(i: i32) {
+    println!("{}", i);
+}</code></pre>
 <h2>四、引用与借用</h2>
 <h3>不可变引用</h3>
 <pre><code>fn main() {
-<p>let s = String::from("hello");</p>
-<p>// 借用：不获取所有权</p>
-<p>let len = calculate_length(&amp;s);</p>
-<p>println!("'{}' 的长度是 {}", s, len); // s 仍然有效</p>
-<p>}</p>
-<p>fn calculate_length(s: &amp;String) -> usize {</p>
-<p>s.len()</p>
-<p>} // s 是引用，不丢弃值</code></pre></p>
+    let s = String::from("hello");
+    
+    // 借用：不获取所有权
+    let len = calculate_length(&amp;s);
+    
+    println!("'{}' 的长度是 {}", s, len); // s 仍然有效
+}
+
+fn calculate_length(s: &amp;String) -> usize {
+    s.len()
+} // s 是引用，不丢弃值</code></pre>
 <h3>可变引用</h3>
 <pre><code>fn main() {
-<p>let mut s = String::from("hello");</p>
-<p>change(&amp;mut s);</p>
-<p>println!("{}", s); // "hello, world"</p>
-<p>}</p>
-<p>fn change(s: &amp;mut String) {</p>
-<p>s.push_str(", world");</p>
-<p>}</code></pre></p>
+    let mut s = String::from("hello");
+    
+    change(&amp;mut s);
+    println!("{}", s); // "hello, world"
+}
+
+fn change(s: &amp;mut String) {
+    s.push_str(", world");
+}</code></pre>
 <div class="warning-box">
 <p><strong>可变引用限制</strong>：同一时间只能有一个可变引用，防止数据竞争。</p>
 </div>
 <pre><code>fn main() {
-<p>let mut s = String::from("hello");</p>
-<p>// 错误！不能同时有多个可变引用</p>
-<p>let r1 = &amp;mut s;</p>
-<p>let r2 = &amp;mut s; // 编译错误</p>
-<p>// 正确：引用作用域结束后再创建新的</p>
-<p>{</p>
-<p>let r1 = &amp;mut s;</p>
-<p>} // r1 结束</p>
-<p>let r2 = &amp;mut s; // OK</p>
-<p>// 错误！有不可变引用时不能有可变引用</p>
-<p>let r1 = &s;</p>
-<p>let r2 = &s;</p>
-<p>let r3 = &amp;mut s; // 编译错误</p>
-<p>}</code></pre></p>
+    let mut s = String::from("hello");
+    
+    // 错误！不能同时有多个可变引用
+    let r1 = &amp;mut s;
+    let r2 = &amp;mut s; // 编译错误
+    
+    // 正确：引用作用域结束后再创建新的
+    {
+        let r1 = &amp;mut s;
+    } // r1 结束
+    let r2 = &amp;mut s; // OK
+    
+    // 错误！有不可变引用时不能有可变引用
+    let r1 = &s;
+    let r2 = &s;
+    let r3 = &amp;mut s; // 编译错误
+}</code></pre>
 <h2>五、结构体</h2>
 <pre><code>// 定义结构体
-<p>struct User {</p>
-<p>username: String,</p>
-<p>email: String,</p>
-<p>active: bool,</p>
-<p>sign<em>in</em>count: u64,</p>
-<p>}</p>
-<p>// 元组结构体</p>
-<p>struct Color(i32, i32, i32);</p>
-<p>// 单元结构体</p>
-<p>struct AlwaysEqual;</p>
-<p>fn main() {</p>
-<p>// 创建实例</p>
-<p>let user1 = User {</p>
-<p>email: String::from("user@example.com"),</p>
-<p>username: String::from("user123"),</p>
-<p>active: true,</p>
-<p>sign<em>in</em>count: 1,</p>
-<p>};</p>
-<p>// 访问字段</p>
-<p>println!("{}", user1.email);</p>
-<p>// 结构体更新语法</p>
-<p>let user2 = User {</p>
-<p>email: String::from("another@example.com"),</p>
-<p>..user1 // 其余字段来自 user1</p>
-<p>};</p>
-<p>// 元组结构体</p>
-<p>let black = Color(0, 0, 0);</p>
-<p>println!("{}", black.0);</p>
-<p>}</p>
-<p>// 方法</p>
-<p>impl User {</p>
-<p>// 关联函数（构造器）</p>
-<p>fn new(email: String, username: String) -> Self {</p>
-<p>Self {</p>
-<p>email,</p>
-<p>username,</p>
-<p>active: true,</p>
-<p>sign<em>in</em>count: 0,</p>
-<p>}</p>
-<p>}</p>
-<p>// 方法</p>
-<p>fn is_active(&amp;self) -> bool {</p>
-<p>self.active</p>
-<p>}</p>
-<p>fn deactivate(&amp;mut self) {</p>
-<p>self.active = false;</p>
-<p>}</p>
-<p>}</code></pre></p>
+struct User {
+    username: String,
+    email: String,
+    active: bool,
+    sign<em>in</em>count: u64,
+}
+
+// 元组结构体
+struct Color(i32, i32, i32);
+
+// 单元结构体
+struct AlwaysEqual;
+
+fn main() {
+    // 创建实例
+    let user1 = User {
+        email: String::from("user@example.com"),
+        username: String::from("user123"),
+        active: true,
+        sign<em>in</em>count: 1,
+    };
+    
+    // 访问字段
+    println!("{}", user1.email);
+    
+    // 结构体更新语法
+    let user2 = User {
+        email: String::from("another@example.com"),
+        ..user1 // 其余字段来自 user1
+    };
+    
+    // 元组结构体
+    let black = Color(0, 0, 0);
+    println!("{}", black.0);
+}
+
+// 方法
+impl User {
+    // 关联函数（构造器）
+    fn new(email: String, username: String) -> Self {
+        Self {
+            email,
+            username,
+            active: true,
+            sign<em>in</em>count: 0,
+        }
+    }
+    
+    // 方法
+    fn is_active(&amp;self) -> bool {
+        self.active
+    }
+    
+    fn deactivate(&amp;mut self) {
+        self.active = false;
+    }
+}</code></pre>
 <h2>六、枚举与模式匹配</h2>
 <pre><code>// 定义枚举
-<p>enum Message {</p>
-<p>Quit,</p>
-<p>Move { x: i32, y: i32 },</p>
-<p>Write(String),</p>
-<p>ChangeColor(i32, i32, i32),</p>
-<p>}</p>
-<p>// Option：Rust 没有空值</p>
-<p>enum Option&lt;T&gt; {</p>
-<p>Some(T),</p>
-<p>None,</p>
-<p>}</p>
-<p>// Result：错误处理</p>
-<p>enum Result&lt;T, E&gt; {</p>
-<p>Ok(T),</p>
-<p>Err(E),</p>
-<p>}</p>
-<p>fn main() {</p>
-<p>// match 匹配</p>
-<p>let msg = Message::Write(String::from("hello"));</p>
-<p>match msg {</p>
-<p>Message::Quit => println!("Quit"),</p>
-<p>Message::Move { x, y } => println!("Move to ({}, {})", x, y),</p>
-<p>Message::Write(text) => println!("Text: {}", text),</p>
-<p>Message::ChangeColor(r, g, b) => println!("Color: ({}, {}, {})", r, g, b),</p>
-<p>}</p>
-<p>// if let 简化</p>
-<p>let some_value = Some(3);</p>
-<p>if let Some(x) = some_value {</p>
-<p>println!("{}", x);</p>
-<p>}</p>
-<p>// 错误处理</p>
-<p>let result: Result&lt;i32, &amp;str> = Ok(42);</p>
-<p>match result {</p>
-<p>Ok(v) => println!("Success: {}", v),</p>
-<p>Err(e) => println!("Error: {}", e),</p>
-<p>}</p>
-<p>// ? 运算符</p>
-<p>fn read_file() -> Result&lt;String, std::io::Error> {</p>
-<p>let content = std::fs::read<em>to</em>string("file.txt")?; // 自动处理错误</p>
-<p>Ok(content)</p>
-<p>}</p>
-<p>}</code></pre></p>
+enum Message {
+    Quit,
+    Move { x: i32, y: i32 },
+    Write(String),
+    ChangeColor(i32, i32, i32),
+}
+
+// Option：Rust 没有空值
+enum Option&lt;T&gt; {
+    Some(T),
+    None,
+}
+
+// Result：错误处理
+enum Result&lt;T, E&gt; {
+    Ok(T),
+    Err(E),
+}
+
+fn main() {
+    // match 匹配
+    let msg = Message::Write(String::from("hello"));
+    
+    match msg {
+        Message::Quit => println!("Quit"),
+        Message::Move { x, y } => println!("Move to ({}, {})", x, y),
+        Message::Write(text) => println!("Text: {}", text),
+        Message::ChangeColor(r, g, b) => println!("Color: ({}, {}, {})", r, g, b),
+    }
+    
+    // if let 简化
+    let some_value = Some(3);
+    if let Some(x) = some_value {
+        println!("{}", x);
+    }
+    
+    // 错误处理
+    let result: Result&lt;i32, &amp;str> = Ok(42);
+    match result {
+        Ok(v) => println!("Success: {}", v),
+        Err(e) => println!("Error: {}", e),
+    }
+    
+    // ? 运算符
+    fn read_file() -> Result&lt;String, std::io::Error> {
+        let content = std::fs::read<em>to</em>string("file.txt")?; // 自动处理错误
+        Ok(content)
+    }
+}</code></pre>
 <h2>七、错误处理</h2>
 <pre><code>use std::fs::File;
-<p>use std::io::ErrorKind;</p>
-<p>fn main() {</p>
-<p>// 可恢复错误：Result</p>
-<p>let f = File::open("hello.txt");</p>
-<p>let f = match f {</p>
-<p>Ok(file) => file,</p>
-<p>Err(error) => match error.kind() {</p>
-<p>ErrorKind::NotFound => match File::create("hello.txt") {</p>
-<p>Ok(fc) => fc,</p>
-<p>Err(e) => panic!("创建文件失败: {:?}", e),</p>
-<p>},</p>
-<p>other<em>error => panic!("打开文件失败: {:?}", other</em>error),</p>
-<p>},</p>
-<p>};</p>
-<p>// unwrap：成功返回值，失败 panic</p>
-<p>let f = File::open("hello.txt").unwrap();</p>
-<p>// expect：自定义错误信息</p>
-<p>let f = File::open("hello.txt")</p>
-<p>.expect("无法打开文件");</p>
-<p>// 不可恢复错误：panic!</p>
-<p>// panic!("程序崩溃！");</p>
-<p>}</code></pre></p>
+use std::io::ErrorKind;
+
+fn main() {
+    // 可恢复错误：Result
+    let f = File::open("hello.txt");
+    
+    let f = match f {
+        Ok(file) => file,
+        Err(error) => match error.kind() {
+            ErrorKind::NotFound => match File::create("hello.txt") {
+                Ok(fc) => fc,
+                Err(e) => panic!("创建文件失败: {:?}", e),
+            },
+            other<em>error => panic!("打开文件失败: {:?}", other</em>error),
+        },
+    };
+    
+    // unwrap：成功返回值，失败 panic
+    let f = File::open("hello.txt").unwrap();
+    
+    // expect：自定义错误信息
+    let f = File::open("hello.txt")
+        .expect("无法打开文件");
+    
+    // 不可恢复错误：panic!
+    // panic!("程序崩溃！");
+}</code></pre>
 <h2>八、泛型、Trait 与生命周期</h2>
 <h3>泛型</h3>
 <pre><code>// 泛型函数
-<p>fn largest&lt;T: PartialOrd&gt;(list: &amp;[T]) -> &amp;T {</p>
-<p>let mut largest = &amp;list[0];</p>
-<p>for item in list {</p>
-<p>if item > largest {</p>
-<p>largest = item;</p>
-<p>}</p>
-<p>}</p>
-<p>largest</p>
-<p>}</p>
-<p>// 泛型结构体</p>
-<p>struct Point&lt;T&gt; {</p>
-<p>x: T,</p>
-<p>y: T,</p>
-<p>}</code></pre></p>
+fn largest&lt;T: PartialOrd&gt;(list: &amp;[T]) -> &amp;T {
+    let mut largest = &amp;list[0];
+    for item in list {
+        if item > largest {
+            largest = item;
+        }
+    }
+    largest
+}
+
+// 泛型结构体
+struct Point&lt;T&gt; {
+    x: T,
+    y: T,
+}</code></pre>
 <h3>Trait</h3>
 <pre><code>// 定义 Trait
-<p>trait Summary {</p>
-<p>fn summarize(&amp;self) -> String;</p>
-<p>// 默认实现</p>
-<p>fn author(&amp;self) -> String {</p>
-<p>String::from("Unknown")</p>
-<p>}</p>
-<p>}</p>
-<p>// 实现 Trait</p>
-<p>struct Article {</p>
-<p>title: String,</p>
-<p>content: String,</p>
-<p>}</p>
-<p>impl Summary for Article {</p>
-<p>fn summarize(&amp;self) -> String {</p>
-<p>format!("{}: {}", self.title, self.content)</p>
-<p>}</p>
-<p>}</p>
-<p>// Trait 作为参数</p>
-<p>fn notify(item: &amp;impl Summary) {</p>
-<p>println!("{}", item.summarize());</p>
-<p>}</code></pre></p>
+trait Summary {
+    fn summarize(&amp;self) -> String;
+    
+    // 默认实现
+    fn author(&amp;self) -> String {
+        String::from("Unknown")
+    }
+}
+
+// 实现 Trait
+struct Article {
+    title: String,
+    content: String,
+}
+
+impl Summary for Article {
+    fn summarize(&amp;self) -> String {
+        format!("{}: {}", self.title, self.content)
+    }
+}
+
+// Trait 作为参数
+fn notify(item: &amp;impl Summary) {
+    println!("{}", item.summarize());
+}</code></pre>
 <h3>生命周期</h3>
 <pre><code>// 生命周期标注
-<p>fn longest&lt;'a&gt;(x: &amp;'a str, y: &amp;'a str) -> &amp;'a str {</p>
-<p>if x.len() > y.len() { x } else { y }</p>
-<p>}</p>
-<p>// 结构体中的生命周期</p>
-<p>struct ImportantExcerpt&lt;'a&gt; {</p>
-<p>part: &amp;'a str,</p>
-<p>}</p>
-<p>fn main() {</p>
-<p>let novel = String::from("Call me Ishmael. Some years ago...");</p>
-<p>let first_sentence = novel.split('.').next().unwrap();</p>
-<p>let excerpt = ImportantExcerpt {</p>
-<p>part: first_sentence,</p>
-<p>};</p>
-<p>}</code></pre></p>
+fn longest&lt;'a&gt;(x: &amp;'a str, y: &amp;'a str) -> &amp;'a str {
+    if x.len() > y.len() { x } else { y }
+}
+
+// 结构体中的生命周期
+struct ImportantExcerpt&lt;'a&gt; {
+    part: &amp;'a str,
+}
+
+fn main() {
+    let novel = String::from("Call me Ishmael. Some years ago...");
+    let first_sentence = novel.split('.').next().unwrap();
+    
+    let excerpt = ImportantExcerpt {
+        part: first_sentence,
+    };
+}</code></pre>
 <h2>总结</h2>
 <p>Rust 的学习曲线较陡，但掌握后收益巨大：</p>
 <ul>
