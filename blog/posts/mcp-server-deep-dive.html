@@ -248,7 +248,7 @@ main().catch((error) => {
     const issues = [];
 
     if (code.includes("var ")) {
-      issues.push({ line: "N/A", type: "warning", message: <strong>INLINE<em>CODE</em>0</strong> });
+      issues.push({ line: "N/A", type: "warning", message: 使用 let/const 替代 var });
     }
     if (code.length > 500) {
       issues.push({ line: "N/A", type: "warning", message: "函数过长，建议拆分为多个小函数" });
@@ -319,7 +319,7 @@ main().catch((error) => {
         role: "user",
         content: {
           type: "text",
-          text: <strong>INLINE<em>CODE</em>1</strong>,
+          text: 生成一个 Conventional Commits 提交信息:\n类型: ${type}\n范围: ${scope || "无"}\n描述: ${description}\n\n格式: &amp;lt;type&gt;(&amp;lt;scope&gt;): &amp;lt;description&gt;,
         },
       },
     ],
@@ -451,14 +451,14 @@ console.log("MCP Server (SSE) running on port 3000");</code></pre>
     try {
       const response = await fetch(url);
       if (!response.ok) {
-        throw new Error(<strong>INLINE<em>CODE</em>2</strong>);
+        throw new Error(HTTP ${response.status});
       }
       const text = await response.text();
       return { content: [{ type: "text", text }] };
     } catch (error) {
       return {
         isError: true,
-        content: [{ type: "text", text: <strong>INLINE<em>CODE</em>3</strong> }],
+        content: [{ type: "text", text: 错误: ${error.message} }],
       };
     }
   }
@@ -499,8 +499,8 @@ server.tool(
     branch: z.string().optional(),
   },
   async ({ count, branch }) => {
-    const branchOpt = branch ? <strong>INLINE<em>CODE</em>4</strong> : "";
-    const output = execSync(<strong>INLINE<em>CODE</em>5</strong>, {
+    const branchOpt = branch ?  ${branch} : "";
+    const output = execSync(git log --oneline --max-count=${count}${branchOpt}, {
       encoding: "utf-8",
     });
     return {
@@ -518,8 +518,8 @@ server.tool(
   },
   async ({ file, staged }) => {
     const stagedOpt = staged ? "--staged" : "";
-    const fileOpt = file ? <strong>INLINE<em>CODE</em>6</strong> : "";
-    const output = execSync(<strong>INLINE<em>CODE</em>7</strong>, {
+    const fileOpt = file ?  -- "${file}" : "";
+    const output = execSync(git diff ${stagedOpt}${fileOpt}, {
       encoding: "utf-8",
     });
     return {
@@ -730,7 +730,7 @@ server.tool(
         <div class="post-info-label">文章信息</div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📅</span> 发布日期</span><span class="post-info-stat-value">2026-06-30</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">⏱️</span> 阅读时间</span><span class="post-info-stat-value">14 min read</span></div>
-        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">1857 字</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">1915 字</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📊</span> 章节数</span><span class="post-info-stat-value">11 节 · 17 子节</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">💻</span> 代码块</span><span class="post-info-stat-value">16 段</span></div>
       </div>

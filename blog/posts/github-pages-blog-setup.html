@@ -259,7 +259,7 @@ const articles = files.map(file => {
   return {
     title: extractMeta(content, 'title'),
     date: extractMeta(content, 'publish-date'),
-    url: <strong>INLINE<em>CODE</em>0</strong>,
+    url: posts/${file},
     // ... 其他字段
   };
 });
@@ -485,7 +485,7 @@ fs.writeFileSync(
         <div class="post-info-label">文章信息</div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📅</span> 发布日期</span><span class="post-info-stat-value">2026-04-09</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">⏱️</span> 阅读时间</span><span class="post-info-stat-value">20 min read</span></div>
-        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">1356 字</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">1357 字</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📊</span> 章节数</span><span class="post-info-stat-value">11 节 · 7 子节</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">💻</span> 代码块</span><span class="post-info-stat-value">5 段</span></div>
       </div>

@@ -317,7 +317,7 @@ def build_report():
         lines.append(f&quot;<strong>{p}</strong>&quot;)
         lines.append(f&quot;- 状态：{clean}&quot;)
         if info[&quot;hash&quot;]:
-            lines.append(f&quot;- 最近提交：<strong>INLINE<em>CODE</em>0</strong> {info['subject'][:50]}&quot;)
+            lines.append(f&quot;- 最近提交：{info['hash']} {info['subject'][:50]}&quot;)
         lines.append(&quot;&quot;)
     return &quot;\n&quot;.join(lines)
 
@@ -362,7 +362,7 @@ if <strong>name</strong> == &quot;<strong>main</strong>&quot;:
 | 表格（Discord 不渲染表格）
 # ✅ 正常渲染
 <strong>加粗</strong>       # 标题分组
-<strong>INLINE<em>CODE</em>1</strong>         # 提交 hash、命令
+code         # 提交 hash、命令
 - 列表         # 项目明细
 &gt; 引用         # 备注、AI 点评
 </code></pre>
@@ -457,7 +457,7 @@ print(&quot;&quot;)  # 静默
 <p><strong>症状</strong>：生成的日报用了 <code>•</code> 做列表符号，在 Discord 里显示为纯文本，没有渲染成列表。</p>
 <p><strong>原因</strong>：Discord 的 markdown 只认 <code>-</code> 或 <code>1.</code> 做列表，<code>•</code> 是普通字符。</p>
 <p><strong>解法</strong>：生成内容时用 <code>-</code> 前缀：</p>
-<pre><code class="language-markdown">- 最近提交：2 天前（8-18）<strong>INLINE<em>CODE</em>2</strong>
+<pre><code class="language-markdown">- 最近提交：2 天前（8-18）b83027b
 - 线上：https://sansi-sanxing.vercel.app
 </code></pre>
 <h2>模式选择：什么时候用哪个</h2>
@@ -700,7 +700,7 @@ ENV<em>FILE = &quot;.../.env&quot;       # 放 DISCORD</em>BOT_TOKEN 的文件
         <div class="post-info-label">文章信息</div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📅</span> 发布日期</span><span class="post-info-stat-value">2026-08-20</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">⏱️</span> 阅读时间</span><span class="post-info-stat-value">18 min read</span></div>
-        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">5286 字</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">5288 字</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📊</span> 章节数</span><span class="post-info-stat-value">10 节 · 34 子节</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">💻</span> 代码块</span><span class="post-info-stat-value">25 段</span></div>
       </div>

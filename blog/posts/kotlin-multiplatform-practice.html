@@ -644,7 +644,7 @@ class LoginUseCaseTest {
     }
 
     @Test
-    fun <strong>INLINE<em>CODE</em>0</strong>() = runTest {
+    fun login success saves user info() = runTest {
         // Given
         val user = User("1", "张小猛", "test@example.com", "avatar.png")
         coEvery { userRepository.login("test@example.com", "123456") } returns Result.success(user)
@@ -660,7 +660,7 @@ class LoginUseCaseTest {
     }
 
     @Test
-    fun <strong>INLINE<em>CODE</em>1</strong>() = runTest {
+    fun login failure returns error() = runTest {
         // Given
         coEvery { userRepository.login(any(), any()) } returns Result.failure(
             RuntimeException("Invalid credentials")
@@ -917,7 +917,7 @@ val localDate = now.toLocalDateTime(TimeZone.currentSystemDefault())</code></pre
         <div class="post-info-label">文章信息</div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📅</span> 发布日期</span><span class="post-info-stat-value">2026-06-24</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">⏱️</span> 阅读时间</span><span class="post-info-stat-value">22 min read</span></div>
-        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">2655 字</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">2662 字</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📊</span> 章节数</span><span class="post-info-stat-value">13 节 · 16 子节</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">💻</span> 代码块</span><span class="post-info-stat-value">19 段</span></div>
       </div>

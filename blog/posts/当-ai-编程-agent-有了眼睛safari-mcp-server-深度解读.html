@@ -370,8 +370,8 @@ npm install -g safari-mcp
 <p>results.push({</p>
 <p>index: i,</p>
 <p>objectFit: getComputedStyle(img).objectFit,</p>
-<p>actualSize: <strong>INLINE<em>CODE</em>0</strong>,</p>
-<p>displaySize: <strong>INLINE<em>CODE</em>1</strong></p>
+<p>actualSize: <code>${img.naturalWidth}x${img.naturalHeight}</code>,</p>
+<p>displaySize: <code>${img.offsetWidth}x${img.offsetHeight}</code></p>
 <p>});</p>
 <p>}</p>
 <p>});</p>
@@ -509,7 +509,7 @@ AI Agent:
    console.log('Safari 不支持的 CSS 属性:', unsupported);
    ```
 5. 结合 Caniuse 数据给出具体的替换方案
-6. 自动在代码中添加 <strong>INLINE<em>CODE</em>2</strong> 查询或 polyfill 引用
+6. 自动在代码中添加 @supports 查询或 polyfill 引用
 </code></pre>
 <h3>安全性分析</h3>
 <p>Apple 在 Safari MCP Server 的安全性上做了很多考虑。</p>
@@ -791,7 +791,7 @@ cat ~/.claude/mcp.json | grep safari
         <div class="post-info-label">文章信息</div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📅</span> 发布日期</span><span class="post-info-stat-value">2026-07-06</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">⏱️</span> 阅读时间</span><span class="post-info-stat-value">15 min read</span></div>
-        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">4378 字</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">4386 字</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📊</span> 章节数</span><span class="post-info-stat-value">1 节 · 11 子节</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">💻</span> 代码块</span><span class="post-info-stat-value">15 段</span></div>
       </div>

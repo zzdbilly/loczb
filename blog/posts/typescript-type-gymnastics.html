@@ -218,7 +218,7 @@ type MyReadonly&lt;T&gt; = {
 
 // 添加前缀
 type Prefixed&lt;T, P extends string&gt; = {
-    [K in keyof T as <strong>INLINE<em>CODE</em>0</strong>]: T[K];
+    [K in keyof T as ${P}${Capitalize&amp;lt;string &amp;amp; K&amp;gt;}]: T[K];
 };
 
 interface User {
@@ -272,7 +272,7 @@ type ReadonlyConfig = DeepReadonly&lt;Config&gt;;
 <h2>模板字面量类型</h2>
 <h3>基础用法</h3>
 <pre><code>// 字符串拼接
-type Greeting&lt;T extends string&gt; = <strong>INLINE<em>CODE</em>1</strong>;
+type Greeting&lt;T extends string&gt; = Hello, ${T}!;
 
 type Message = Greeting&lt;'World'&gt;;  // "Hello, World!"
 
@@ -280,7 +280,7 @@ type Message = Greeting&lt;'World'&gt;;  // "Hello, World!"
 type Color = 'red' | 'blue' | 'green';
 type Size = 'small' | 'medium' | 'large';
 
-type Button = <strong>INLINE<em>CODE</em>2</strong>;
+type Button = ${Size}-${Color};
 // "small-red" | "small-blue" | "small-green" | 
 // "medium-red" | "medium-blue" | "medium-green" | 
 // "large-red" | "large-blue" | "large-green"</code></pre>
@@ -294,27 +294,27 @@ type Uncap = Uncapitalize&lt;Str&gt;;  // "hello world"
 
 // 实际应用：事件处理器类型
 type EventName = 'click' | 'focus' | 'blur';
-type EventHandler = <strong>INLINE<em>CODE</em>3</strong>;
+type EventHandler = on${Capitalize&amp;lt;EventName&amp;gt;};
 // "onClick" | "onFocus" | "onBlur"</code></pre>
 <h3>高级模式匹配</h3>
 <pre><code>// 提取字符串前缀
 type RemovePrefix&lt;T extends string, P extends string&gt; = 
-    T extends <strong>INLINE<em>CODE</em>4</strong> ? Rest : T;
+    T extends ${P}${infer Rest} ? Rest : T;
 
 type Result = RemovePrefix&lt;'getUserById', 'get'&gt;;  // "UserById"
 
 // 提取字符串后缀
 type RemoveSuffix&lt;T extends string, S extends string&gt; =
-    T extends <strong>INLINE<em>CODE</em>5</strong> ? Rest : T;
+    T extends ${infer Rest}${S} ? Rest : T;
 
 type Result2 = RemoveSuffix&lt;'UserController', 'Controller'&gt;;  // "User"
 
 // 驼峰转连字符
 type CamelToKebab&lt;S extends string&gt; = 
-    S extends <strong>INLINE<em>CODE</em>6</strong>
+    S extends ${infer First}${infer Rest}
         ? First extends Uppercase&lt;First&gt;
-            ? <strong>INLINE<em>CODE</em>7</strong>
-            : <strong>INLINE<em>CODE</em>8</strong>
+            ? -${Lowercase&amp;lt;First&amp;gt;}${CamelToKebab&amp;lt;Rest&amp;gt;}
+            : ${First}${CamelToKebab&amp;lt;Rest&amp;gt;}
         : S;
 
 type Kebab = CamelToKebab&lt;'backgroundColor'&gt;;  // "background-color"</code></pre>
@@ -322,9 +322,9 @@ type Kebab = CamelToKebab&lt;'backgroundColor'&gt;;  // "background-color"</code
 <h3>1. 路由参数推断</h3>
 <pre><code>// 从路由路径提取参数类型
 type ExtractParams&lt;T extends string&gt; = 
-    T extends <strong>INLINE<em>CODE</em>9</strong>
-        ? Param | ExtractParams&lt;<strong>INLINE<em>CODE</em>10</strong>&gt;
-        : T extends <strong>INLINE<em>CODE</em>11</strong>
+    T extends ${string}:${infer Param}/${infer Rest}
+        ? Param | ExtractParams&lt;/${Rest}&gt;
+        : T extends ${string}:${infer Param}
             ? Param
             : never;
 
@@ -369,7 +369,7 @@ const user = await fetchApi('/users/:id');   // User</code></pre>
 <h3>3. 深度 Pick</h3>
 <pre><code>// 支持嵌套路径的 Pick
 type DeepPick&lt;T, Path extends string&gt; = 
-    Path extends <strong>INLINE<em>CODE</em>12</strong>
+    Path extends ${infer Key}.${infer Rest}
         ? Key extends keyof T
             ? { [K in Key]: DeepPick&lt;T[K], Rest&gt; }
             : never
@@ -411,7 +411,7 @@ type UserAddress = DeepPick&lt;User, 'profile.address.city'&gt;;
 <li>✅ 条件类型：<code>T extends U ? X : Y</code></li>
 <li>✅ 类型推断：<code>infer</code> 关键字</li>
 <li>✅ 映射类型：<code>[K in keyof T]</code></li>
-<li>✅ 模板字面量：<code><strong>INLINE<em>CODE</em>13</strong></code></li>
+<li>✅ 模板字面量：<code><code>${T}</code></code></li>
 <li>✅ 递归类型：注意性能和深度限制</li>
 </ul>
 <div class="tip-box">
@@ -559,7 +559,7 @@ type UserAddress = DeepPick&lt;User, 'profile.address.city'&gt;;
         <div class="post-info-label">文章信息</div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📅</span> 发布日期</span><span class="post-info-stat-value">2026-04-25</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">⏱️</span> 阅读时间</span><span class="post-info-stat-value">20 min read</span></div>
-        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">1460 字</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">1510 字</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📊</span> 章节数</span><span class="post-info-stat-value">8 节 · 10 子节</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">💻</span> 代码块</span><span class="post-info-stat-value">11 段</span></div>
       </div>

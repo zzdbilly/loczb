@@ -307,8 +307,8 @@ function writeIfChanged(filePath, content) {
 }
 
 const target = 'out.txt';
-console.log(<strong>INLINE<em>CODE</em>0</strong>);
-console.log(<strong>INLINE<em>CODE</em>1</strong>);
+console.log(首次写入: ${writeIfChanged(target, 'same bytes\n')});
+console.log(内容相同: ${writeIfChanged(target, 'same bytes\n')});
 </code></pre>
 <p>连续跑两次并观察 mtime：</p>
 <pre><code class="language-bash">rm -f out.txt
@@ -336,8 +336,8 @@ node wic.js &amp;&amp; stat -c '%Y %n' out.txt
 <pre><code class="language-js">// sitemap 的 lastmod 使用文章发布日期（来自元数据），不再取 fs mtime
 posts.forEach(p =&gt; {
   lines.push('  &lt;url&gt;');
-  lines.push(<strong>INLINE<em>CODE</em>2</strong>);
-  lines.push(<strong>INLINE<em>CODE</em>3</strong>);   // 发布日期，YYYY-MM-DD
+  lines.push(    &amp;lt;loc&amp;gt;${BASE_URL}/blog/posts/${p.slug}.html&amp;lt;/loc&amp;gt;);
+  lines.push(    &amp;lt;lastmod&amp;gt;${p.date}&amp;lt;/lastmod&amp;gt;);   // 发布日期，YYYY-MM-DD
   lines.push('    &lt;changefreq&gt;monthly&lt;/changefreq&gt;');
   lines.push('    &lt;priority&gt;0.6&lt;/priority&gt;');
   lines.push('  &lt;/url&gt;');
@@ -391,7 +391,7 @@ def write<em>if</em>changed(file_path: str, content: str, encoding: str = 'utf-8
 <pre><code class="language-js">// ❌ 移除端吃掉块两侧的空白，写入端只写回单侧 —— 两端不对称
 let out = orig.replace(/\s<em>&lt;!-- Widget --&gt;[\s\S]</em>?&lt;!-- \/Widget --&gt;\s*/g, '');
 out = out.replace(/(&lt;div class=&quot;post-tags&quot;&gt;[\s\S]*?&lt;\/div&gt;)/,
-  <strong>INLINE<em>CODE</em>4</strong>);
+  $1\n&amp;lt;!-- Widget --&amp;gt;\n&amp;lt;span&amp;gt;w&amp;lt;/span&amp;gt;\n&amp;lt;!-- /Widget --&amp;gt;);
 </code></pre>
 <p>移除端用 <code>\s*</code> 吃掉了块前后的空白，写入端却不负责把这些空白补回去。跑三次的实际输出：</p>
 <pre><code class="language-text">run1: len=121
@@ -405,7 +405,7 @@ run3: len=119
 <pre><code class="language-js">// ✅ 两端严格对称：移除吃掉锚点后的空白，注入写回同量的空白
 let out = orig.replace(/\n<em>[ \t]</em>&lt;!-- Widget --&gt;[\s\S]*?&lt;!-- \/Widget --&gt;/g, '');
 out = out.replace(/(&lt;div class=&quot;post-tags&quot;&gt;[\s\S]*?&lt;\/div&gt;)/,
-  <strong>INLINE<em>CODE</em>5</strong>);
+  $1\n\n        &amp;lt;!-- Widget --&amp;gt;\n        &amp;lt;span&amp;gt;w&amp;lt;/span&amp;gt;\n        &amp;lt;!-- /Widget --&amp;gt;);
 </code></pre>
 <p>同样的三次连跑：</p>
 <pre><code class="language-text">run1: len=146 md5=8da03c4d1fec879e21413ebb8485b23a
@@ -453,7 +453,7 @@ function readSidecar(slug) {
   try {
     return JSON.parse(fs.readFileSync(p, 'utf-8'));
   } catch (e) {
-    console.warn(<strong>INLINE<em>CODE</em>6</strong>);
+    console.warn(⚠️ blog/meta/${slug}.json 解析失败，回退正则: ${e.message});
     return null;
   }
 }
@@ -612,13 +612,13 @@ curl -sS -o /dev/null -w '%{http_code}\n' -A 'Mozilla/5.0' https://example.com/b
             <div class="related-post-card-title">软件工程师能从制造业学到什么：精益思维重塑开发流程</div>
             <div class="related-post-card-tags"><span>工程实践</span><span>思考</span><span>工程思维</span></div>
           </a>
+          <a class="related-post-card" href="md-pipeline-test.html">
+            <div class="related-post-card-title">Markdown 发文链路测试（实验用）</div>
+            <div class="related-post-card-tags"><span>实验记录</span></div>
+          </a>
           <a class="related-post-card" href="ai-助手定时任务投递指南从-agent-废话到-no-agent-脚本.html">
             <div class="related-post-card-title">AI 助手定时任务投递指南：从 Agent 废话到 No-Agent 脚本</div>
             <div class="related-post-card-tags"><span>AI</span><span>DevOps</span><span>前端</span></div>
-          </a>
-          <a class="related-post-card" href="2026-年了ai-编程助手到底能帮你干多少活.html">
-            <div class="related-post-card-title">2026 年了，AI 编程助手到底能帮你干多少活？</div>
-            <div class="related-post-card-tags"><span>AI</span><span>前端</span><span>开发</span></div>
           </a>
           </div>
         </div>
@@ -734,7 +734,7 @@ curl -sS -o /dev/null -w '%{http_code}\n' -A 'Mozilla/5.0' https://example.com/b
         <div class="post-info-label">文章信息</div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📅</span> 发布日期</span><span class="post-info-stat-value">2026-09-27</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">⏱️</span> 阅读时间</span><span class="post-info-stat-value">14 min read</span></div>
-        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">7633 字</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">7736 字</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📊</span> 章节数</span><span class="post-info-stat-value">9 节 · 29 子节</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">💻</span> 代码块</span><span class="post-info-stat-value">30 段</span></div>
       </div>
