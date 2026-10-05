@@ -9,14 +9,17 @@
 import os
 import re
 import json
-import glob
+import sys
 
-ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+ROOT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 POSTS_DIR = os.path.join(ROOT_DIR, 'blog', 'posts')
 META_DIR = os.path.join(ROOT_DIR, 'blog', 'meta')
 SRC_DIR = os.path.join(ROOT_DIR, 'blog', 'posts-src')
 
-os.makedirs(SRC_DIR, exist_ok=True)
+if '--force-run' not in sys.argv:
+    print("⛔ 本脚本已归档停用：P3 阶段存量文章逆向提取已完成，posts-src 已建立并持续维护。")
+    print("   如确实需要重新提取并覆盖 posts-src/*.md，请显式传入 --force-run 参数。")
+    sys.exit(1)
 
 def extract_content(html):
     m = re.search(r'<article class="post-content">(.*?)</article>', html, re.DOTALL)

@@ -105,8 +105,8 @@ loczb/
 │   ├── sync-widget-version.js     # 评论组件引用版本同步
 │   ├── build-series.js            # 6 大旗舰系列专栏聚合构建器
 │   ├── build-custom-hljs.js       # 定制 highlight.js 构建 (89KB / 28KB gzip)
-│   ├── backfill-meta.py           # 历史文章 meta sidecar 回填
-│   ├── refresh-posts.py           # 模板变更后批量回刷文章骨架
+│   ├── build-posts.py             # ★ 文章源编译构建管线 (npm run build:posts，从 posts-src/ 批量编译)
+│   ├── refresh-posts.py           # 历史回刷兼容代理 (已废弃并自动转调 build-posts.py)
 │   └── deploy-check.sh            # 部署状态自动验证脚本
 ├── workers/
 │   ├── comment-system/            # Cloudflare Workers + D1 评论系统
@@ -122,7 +122,7 @@ loczb/
 ├── rss.xml                        # 博客 RSS 订阅源
 ├── offline.html                   # 离线兜底页
 ├── requirements.txt               # 构建依赖 (python markdown，纯 Markdown 正文编译必需)
-├── .github/workflows/verify.yml   # CI: push / PR 跑 verify + check-links
+├── .github/workflows/verify.yml   # CI: push / PR 跑单测 + 全量编译 + 源产物一致性 + verify + check-links
 └── BLOG-SYSTEM.md                 # 博客系统规范 (构建链与模板系统细则)
 ```
 

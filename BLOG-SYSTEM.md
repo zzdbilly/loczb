@@ -25,7 +25,7 @@ loczb/
 │   ├── sync-partials.js          # 公共布局片段同步脚本 (npm run sync-partials)
 │   ├── verify.js                 # 核心门禁校验脚本 (npm run verify，含 a-o 项校验)
 │   ├── check-links.js            # 自动化死链与静态资源巡检医生 (npm run check-links)
-│   └── refresh-posts.py          # 全量文章骨架回刷脚本 (npm run refresh)
+│   └── refresh-posts.py          # 历史回刷兼容代理 (已废弃并转发至 build-posts.py)
 ├── assets/
 │   ├── css/style.css             # 全局核心样式 (@layer 层叠分层，Bento 2.0，双模高对比度)
 │   ├── js/
@@ -177,23 +177,17 @@ python3 scripts/generate-post.py "标题" "描述" \
 
 触发方式：
 - **本地**：`node scripts/generate-index.js`（`npm run build`）
-- **自动**：发文/回刷脚本末尾自动调用（`generate-post.py`、`build-posts.py`、`refresh-posts.py`）
+- **自动**：发文/构建脚本末尾自动调用（`generate-post.py`、`build-posts.py`）
 - **CI 不重建索引**（见第五节）：索引必须在推送前本地重建并一起提交，否则 CI 门禁会红
 
 ---
 
-## 五、CI/CD 现状（2026-10-05 更正）
+## 五、CI/CD 现状（2026-10-05 升级）
 
-**CI 已恢复**：`.github/workflows/verify.yml`（P3 重构引入）在 push / PR 到 `main` 时执行
-`npm install` → `npm run verify` → `npm run check-links`（Node 22 / Python 3.11）。
+**CI 已升级**：`.github/workflows/verify.yml` 在 push / PR 到 `main` 时执行
+依赖安装（Node 22 / Python 3.11）→ 流水线单测 → 全量编译 → 源产物一致性校验（`git diff --exit-code`）→ `npm run verify` → `npm run check-links`。
 
-⚠️ **CI 只做校验，不重建索引**：它既不跑 `generate-index.js`，也不跑 `build-posts.py`
-（后者需要 `pip install -r requirements.txt`，CI 未装 python 依赖）。所以**仍然没有
-「push 后 CI 补索引」的兜底**——发文/回刷必须把本地重建产物一起提交。
-
-⚠️ **本地门禁绿 ≠ CI 绿**：CI 是独立第三方复核，push 后若红要去看 Actions 日志。
-（旧文档写的「GitHub Actions 已下线、`.github/` 下无 workflow」是 2026-09-08 的历史状态，
-P3 之后已不成立。）
+💡 **CI 严格守门「源 ↔ 产物」一致性**：CI 会安装 Python `markdown==3.11` 依赖，重跑 `build-posts.py` 全量编译，并通过 `git diff --exit-code` 校验提交的 HTML/JSON 产物与源文件是否逐字节完全一致。若本地修改了 Markdown 却漏跑编译，或手动修改了 HTML，CI 会直接失败阻断。因此发文必须在本地编译后将源与产物一同提交。
 
 ---
 
@@ -293,7 +287,7 @@ node scripts/verify.js && node scripts/check-links.js   # 双绿再推
 |------|---------|------|
 | `index.html` | `generate-index.js` | 从 `posts[]` 读最新文章 |
 | `blog/index.html` + `blog/page-*.html` | `generate-index.js` | `posts[]`（每页 10 张卡） |
-| `blog/posts/*.html` | `generate-post.py` / `refresh-posts.py` + `generate-index.js` | 模板 `templates/` + 内联相关文章 |
+| `blog/posts/*.html` | `build-posts.py` / `generate-post.py` + `generate-index.js` | 模板 `templates/` + 内联相关文章 |
 | `blog/articles-index.json` | `generate-index.js` | 各 JS 文件（搜索/筛选/归档） |
 | `blog/meta/{slug}.json` | `generate-post.py` | `generate-index.js`、`meta-cache.js` |
 | `assets/js/blog-list.js` | — | `articles-index.json`（仅筛选/归档视图） |

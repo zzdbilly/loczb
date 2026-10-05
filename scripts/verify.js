@@ -202,7 +202,7 @@ for (const slug of metaSlugs) {
     });
   }
 
-  if (missingBlock) fail(`f) ${missingBlock} 篇文章页缺少 <!-- Related Static --> 标记（需跑一次 refresh-posts.py 回刷模板）`);
+  if (missingBlock) fail(`f) ${missingBlock} 篇文章页缺少 <!-- Related Static --> 标记（需跑一次 npm run build:posts 重新编译模板）`);
   if (emptyBlock) fail(`f) ${emptyBlock} 篇文章页的相关文章块为空`);
   if (brokenLink) fail(`f) 静态相关链接指向不存在的文章 ${brokenLink} 处: ${brokenSamples.join(', ')}`);
   if (thin) infos.push(`f) ${thin} 篇文章的相关推荐不足 3 条（相关度过滤后候选偏少，非阻断）`);

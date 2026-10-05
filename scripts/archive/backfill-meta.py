@@ -18,9 +18,14 @@ import os
 import re
 import sys
 
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 POSTS_DIR = os.path.join(ROOT, 'blog', 'posts')
 META_DIR = os.path.join(ROOT, 'blog', 'meta')
+
+if '--force-run' not in sys.argv:
+    print("⛔ 本脚本已归档停用：全量 114 篇 meta sidecar 已就绪，后续编译由 build-posts.py 自动生成。")
+    print("   如确实需要重新从 HTML 回填，请显式传入 --force-run 参数。")
+    sys.exit(1)
 
 
 def norm_date(raw):
