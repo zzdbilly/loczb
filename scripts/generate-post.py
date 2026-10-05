@@ -5,9 +5,9 @@
 
 支持两种模式：
 1. Frontmatter 模式（推荐，零命令行参数）：
-   python3 scripts/generate-post.py article.md
+   python3 scripts/generate-post.py path/to/post.md
 
-   在 article.md 顶部添加：
+   在 Markdown 文件顶部添加：
    ---
    title: 文章标题
    description: 文章简要描述
@@ -22,7 +22,7 @@
 
 2. 命令行参数模式（兼容传统用法）：
    python3 scripts/generate-post.py "标题" "描述" \\
-     --tags "标签1,标签2" --category Android --content article.md
+     --tags "标签1,标签2" --category Android --content path/to/post.md
 """
 
 import re

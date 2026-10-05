@@ -24,7 +24,18 @@ jobs:
           python-version: '3.11'
 
       - name: Install dependencies
-        run: npm install
+        run: |
+          npm install
+          pip install -r requirements.txt
+
+      - name: Run unit and regression tests
+        run: npm test
+
+      - name: Rebuild posts from Markdown sources
+        run: npm run build:posts
+
+      - name: Ensure generated artifacts match committed files
+        run: git diff --exit-code
 
       - name: Run verification gate checks
         run: npm run verify

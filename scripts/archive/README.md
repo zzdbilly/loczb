@@ -11,6 +11,9 @@
 | `inject-comments.py` | 2026-09-27 | 112/112 篇文章已注入评论组件，重跑 0 变更（本身幂等，风险最低，归档只为收口“一次性脚本”）。 |
 | `batch-lazy-hljs.py` | 2026-09-27 | 一次性的批量手术工具（112 篇文章 + 模板）：语法高亮改「可见优先」、TOC nav 补 aria-label、装饰 canvas 加 aria-hidden、正文外 section 补可访问名。已执行完毕，dry-run 复核为 0 变更；保留是为了留证据与复用写法。 |
 | `time-progress.js` | 2026-10-01 | 时光进度条组件。DOM 容器 `.time-progress-container` 已于 Commit 3c15377 移除，脚本此前仍在首页与博客列表页作为死代码加载，现全站下线并归档。 |
+| `backfill-meta.py` | 2026-10-05 | P0 阶段从 HTML 正则抽取生成 sidecar `blog/meta/*.json` 的一次性迁移脚本。全量 114 篇元数据已全部生成并转由 `build-posts.py` 在编译时自动写入。 |
+| `extract-posts-src.py` | 2026-10-05 | P3 阶段从存量文章逆向提取 `blog/posts-src/*.md` 的一次性迁移脚本。源文件体系已建立完成。 |
+| `refresh-posts.py` | 2026-10-05 | 历史文章骨架回刷脚本（从 HTML 反解）。自 P3 阶段确立 Markdown 唯一真相源后，已统一转由 `build-posts.py` 编译；原路径保留转发代理。 |
 
 ## 归档后的正确做法
 
@@ -30,6 +33,6 @@
 
 ## 仍在维护链路上、不要归档的脚本
 
-`backfill-meta.py`（sidecar 元数据真相源）、`check-links.js`（唯一死链门禁）、
-`verify.js`（发布前一致性门禁）、`generate-index.js`、`generate-post.py`、
-`refresh-posts.py`、`build-series.js`、`deploy-check.sh`。
+`check-links.js`（唯一死链门禁）、`verify.js`（发布前一致性门禁）、
+`build-posts.py`（文章源编译管线）、`generate-index.js`（全站索引/分页/导航生成）、
+`generate-post.py`（底层渲染器）、`build-series.js`、`deploy-check.sh`。
