@@ -181,175 +181,198 @@
 <p>Rust 是目前编译到 WASM 体验最好的语言，官方工具链 <code>wasm-pack</code> 一行命令就能产出可发布的 npm 包。</p>
 <h3>环境搭建</h3>
 <pre><code># 安装 wasm-pack
-<p>curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh</p>
-<h1>添加 wasm32 目标</h1>
-<p>rustup target add wasm32-unknown-unknown</p>
-<h1>创建项目</h1>
-<p>cargo new --lib image-processor</p>
-<p>cd image-processor</code></pre></p>
+curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
+
+# 添加 wasm32 目标
+rustup target add wasm32-unknown-unknown
+
+# 创建项目
+cargo new --lib image-processor
+cd image-processor</code></pre>
 <h3>编写 Rust 代码</h3>
 <pre><code>// src/lib.rs
-<p>use wasm_bindgen::prelude::*;</p>
-<p>#[wasm_bindgen]</p>
-<p>pub fn grayscale(data: &amp;mut [u8]) {</p>
-<p>// 每个像素 4 字节：R, G, B, A</p>
-<p>for pixel in data.chunks<em>exact</em>mut(4) {</p>
-<p>let r = pixel[0] as f32;</p>
-<p>let g = pixel[1] as f32;</p>
-<p>let b = pixel[2] as f32;</p>
-<p>// 加权灰度公式（人眼对绿色更敏感）</p>
-<p>let gray = (0.299 <em> r + 0.587 </em> g + 0.114 * b) as u8;</p>
-<p>pixel[0] = gray;</p>
-<p>pixel[1] = gray;</p>
-<p>pixel[2] = gray;</p>
-<p>// alpha 保持不变</p>
-<p>}</p>
-<p>}</p>
-<p>#[wasm_bindgen]</p>
-<p>pub fn invert(data: &amp;mut [u8]) {</p>
-<p>for pixel in data.chunks<em>exact</em>mut(4) {</p>
-<p>pixel[0] = 255 - pixel[0];</p>
-<p>pixel[1] = 255 - pixel[1];</p>
-<p>pixel[2] = 255 - pixel[2];</p>
-<p>}</p>
-<p>}</p>
-<p>#[wasm_bindgen]</p>
-<p>pub fn blur(data: &amp;[u8], width: u32, height: u32, radius: u32) -> Vec&lt;u8&gt; {</p>
-<p>let mut output = data.to_vec();</p>
-<p>let w = width as usize;</p>
-<p>let h = height as usize;</p>
-<p>let r = radius as usize;</p>
-<p>for y in r..h-r {</p>
-<p>for x in r..w-r {</p>
-<p>let mut sum_r: f64 = 0.0;</p>
-<p>let mut sum_g: f64 = 0.0;</p>
-<p>let mut sum_b: f64 = 0.0;</p>
-<p>let mut count: f64 = 0.0;</p>
-<p>for dy in -r..=r {</p>
-<p>for dx in -r..=r {</p>
-<p>let idx = ((y as isize + dy as isize) as usize <em> w + (x as isize + dx as isize) as usize) </em> 4;</p>
-<p>sum_r += data[idx] as f64;</p>
-<p>sum_g += data[idx + 1] as f64;</p>
-<p>sum_b += data[idx + 2] as f64;</p>
-<p>count += 1.0;</p>
-<p>}</p>
-<p>}</p>
-<p>let out_idx = (y <em> w + x) </em> 4;</p>
-<p>output[out<em>idx] = (sum</em>r / count) as u8;</p>
-<p>output[out<em>idx + 1] = (sum</em>g / count) as u8;</p>
-<p>output[out<em>idx + 2] = (sum</em>b / count) as u8;</p>
-<p>}</p>
-<p>}</p>
-<p>output</p>
-<p>}</code></pre></p>
+use wasm_bindgen::prelude::*;
+
+#[wasm_bindgen]
+pub fn grayscale(data: &amp;mut [u8]) {
+    // 每个像素 4 字节：R, G, B, A
+    for pixel in data.chunks<em>exact</em>mut(4) {
+        let r = pixel[0] as f32;
+        let g = pixel[1] as f32;
+        let b = pixel[2] as f32;
+        // 加权灰度公式（人眼对绿色更敏感）
+        let gray = (0.299 <em> r + 0.587 </em> g + 0.114 * b) as u8;
+        pixel[0] = gray;
+        pixel[1] = gray;
+        pixel[2] = gray;
+        // alpha 保持不变
+    }
+}
+
+#[wasm_bindgen]
+pub fn invert(data: &amp;mut [u8]) {
+    for pixel in data.chunks<em>exact</em>mut(4) {
+        pixel[0] = 255 - pixel[0];
+        pixel[1] = 255 - pixel[1];
+        pixel[2] = 255 - pixel[2];
+    }
+}
+
+#[wasm_bindgen]
+pub fn blur(data: &amp;[u8], width: u32, height: u32, radius: u32) -> Vec&lt;u8&gt; {
+    let mut output = data.to_vec();
+    let w = width as usize;
+    let h = height as usize;
+    let r = radius as usize;
+
+    for y in r..h-r {
+        for x in r..w-r {
+            let mut sum_r: f64 = 0.0;
+            let mut sum_g: f64 = 0.0;
+            let mut sum_b: f64 = 0.0;
+            let mut count: f64 = 0.0;
+
+            for dy in -r..=r {
+                for dx in -r..=r {
+                    let idx = ((y as isize + dy as isize) as usize <em> w + (x as isize + dx as isize) as usize) </em> 4;
+                    sum_r += data[idx] as f64;
+                    sum_g += data[idx + 1] as f64;
+                    sum_b += data[idx + 2] as f64;
+                    count += 1.0;
+                }
+            }
+
+            let out_idx = (y <em> w + x) </em> 4;
+            output[out<em>idx] = (sum</em>r / count) as u8;
+            output[out<em>idx + 1] = (sum</em>g / count) as u8;
+            output[out<em>idx + 2] = (sum</em>b / count) as u8;
+        }
+    }
+
+    output
+}</code></pre>
 <h3>配置 Cargo.toml</h3>
 <pre><code>[package]
-<p>name = "image-processor"</p>
-<p>version = "0.1.0"</p>
-<p>edition = "2021"</p>
-<p>[lib]</p>
-<p>crate-type = ["cdylib", "rlib"]</p>
-<p>[dependencies]</p>
-<p>wasm-bindgen = "0.2"</p>
-<p>[profile.release]</p>
-<p>opt-level = 3</p>
-<p>lto = true</code></pre></p>
+name = "image-processor"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+wasm-bindgen = "0.2"
+
+[profile.release]
+opt-level = 3
+lto = true</code></pre>
 <h3>编译并打包</h3>
 <pre><code># 编译为 web 目标（ES Module）
-<p>wasm-pack build --target web --release</p>
-<h1>产出目录 pkg/ 包含：</h1>
-<h1>image_processor.js      - JS 胶水代码</h1>
-<h1>image<em>processor</em>bg.wasm - WASM 二进制</h1>
-<h1>image_processor.d.ts    - TypeScript 类型定义</h1>
-<h1>package.json            - npm 包配置</code></pre></h1>
+wasm-pack build --target web --release
+
+# 产出目录 pkg/ 包含：
+# image_processor.js      - JS 胶水代码
+# image<em>processor</em>bg.wasm - WASM 二进制
+# image_processor.d.ts    - TypeScript 类型定义
+# package.json            - npm 包配置</code></pre>
 <h2>三、浏览器端集成</h2>
 <h3>HTML 中使用</h3>
 <pre><code>&lt;!DOCTYPE html&gt;
-<p>&lt;html&gt;</p>
-<p>&lt;head&gt;</p>
-<p>&lt;title&gt;WASM 图片处理器&lt;/title&gt;</p>
-<p>&lt;/head&gt;</p>
-<p>&lt;body&gt;</p>
-<p>&lt;input type="file" id="fileInput" accept="image/*"&gt;</p>
-<p>&lt;canvas id="canvas"&gt;&lt;/canvas&gt;</p>
-<p>&lt;button id="grayscaleBtn"&gt;灰度&lt;/button&gt;</p>
-<p>&lt;button id="blurBtn"&gt;模糊&lt;/button&gt;</p>
-<p>&lt;button id="invertBtn"&gt;反色&lt;/button&gt;</p>
-<p>&lt;script type="module"&gt;</p>
-<p>import init, { grayscale, invert, blur, memory } from './pkg/image_processor.js';</p>
-<p>let imageData;</p>
-<p>async function run() {</p>
-<p>await init();</p>
-<p>const canvas = document.getElementById('canvas');</p>
-<p>const ctx = canvas.getContext('2d');</p>
-<p>document.getElementById('fileInput').addEventListener('change', (e) => {</p>
-<p>const file = e.target.files[0];</p>
-<p>const img = new Image();</p>
-<p>img.onload = () => {</p>
-<p>canvas.width = img.width;</p>
-<p>canvas.height = img.height;</p>
-<p>ctx.drawImage(img, 0, 0);</p>
-<p>imageData = ctx.getImageData(0, 0, img.width, img.height);</p>
-<p>};</p>
-<p>img.src = URL.createObjectURL(file);</p>
-<p>});</p>
-<p>document.getElementById('grayscaleBtn').addEventListener('click', () => {</p>
-<p>if (!imageData) return;</p>
-<p>const t0 = performance.now();</p>
-<p>grayscale(imageData.data);</p>
-<p>const t1 = performance.now();</p>
-<p>console.log(<strong>INLINE<em>CODE</em>0</strong>);</p>
-<p>ctx.putImageData(imageData, 0, 0);</p>
-<p>});</p>
-<p>document.getElementById('blurBtn').addEventListener('click', () => {</p>
-<p>if (!imageData) return;</p>
-<p>const t0 = performance.now();</p>
-<p>const result = blur(imageData.data, canvas.width, canvas.height, 3);</p>
-<p>const t1 = performance.now();</p>
-<p>console.log(<strong>INLINE<em>CODE</em>1</strong>);</p>
-<p>imageData.data.set(result);</p>
-<p>ctx.putImageData(imageData, 0, 0);</p>
-<p>});</p>
-<p>}</p>
-<p>run();</p>
-<p>&lt;/script&gt;</p>
-<p>&lt;/body&gt;</p>
-<p>&lt;/html&gt;</code></pre></p>
+&lt;html&gt;
+&lt;head&gt;
+  &lt;title&gt;WASM 图片处理器&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;input type="file" id="fileInput" accept="image/*"&gt;
+  &lt;canvas id="canvas"&gt;&lt;/canvas&gt;
+  &lt;button id="grayscaleBtn"&gt;灰度&lt;/button&gt;
+  &lt;button id="blurBtn"&gt;模糊&lt;/button&gt;
+  &lt;button id="invertBtn"&gt;反色&lt;/button&gt;
+
+  &lt;script type="module"&gt;
+    import init, { grayscale, invert, blur, memory } from './pkg/image_processor.js';
+
+    let imageData;
+
+    async function run() {
+      await init();
+
+      const canvas = document.getElementById('canvas');
+      const ctx = canvas.getContext('2d');
+
+      document.getElementById('fileInput').addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        const img = new Image();
+        img.onload = () => {
+          canvas.width = img.width;
+          canvas.height = img.height;
+          ctx.drawImage(img, 0, 0);
+          imageData = ctx.getImageData(0, 0, img.width, img.height);
+        };
+        img.src = URL.createObjectURL(file);
+      });
+
+      document.getElementById('grayscaleBtn').addEventListener('click', () => {
+        if (!imageData) return;
+        const t0 = performance.now();
+        grayscale(imageData.data);
+        const t1 = performance.now();
+        console.log(<strong>INLINE<em>CODE</em>0</strong>);
+        ctx.putImageData(imageData, 0, 0);
+      });
+
+      document.getElementById('blurBtn').addEventListener('click', () => {
+        if (!imageData) return;
+        const t0 = performance.now();
+        const result = blur(imageData.data, canvas.width, canvas.height, 3);
+        const t1 = performance.now();
+        console.log(<strong>INLINE<em>CODE</em>1</strong>);
+        imageData.data.set(result);
+        ctx.putImageData(imageData, 0, 0);
+      });
+    }
+
+    run();
+  &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
 <h2>四、内存管理：WASM 的核心挑战</h2>
 <p>WASM 使用线性内存模型，所有数据在一段连续的 <code>ArrayBuffer</code> 中。JS 和 WASM 之间的数据传递有几种方式：</p>
 <h3>1. 直接传递引用（最快）</h3>
 <pre><code>// JS 端直接操作 WASM 内存
-<p>const ptr = wasm_exports.alloc(size);</p>
-<p>const wasmMemory = new Uint8Array(memory.buffer, ptr, size);</p>
-<p>wasmMemory.set(jsData);  // 拷贝数据到 WASM 内存</p>
-<p>wasm_exports.process(ptr, size);  // 调用 WASM 函数</p>
-<p>wasm_exports.dealloc(ptr, size);  // 释放内存</code></pre></p>
+const ptr = wasm_exports.alloc(size);
+const wasmMemory = new Uint8Array(memory.buffer, ptr, size);
+wasmMemory.set(jsData);  // 拷贝数据到 WASM 内存
+wasm_exports.process(ptr, size);  // 调用 WASM 函数
+wasm_exports.dealloc(ptr, size);  // 释放内存</code></pre>
 <h3>2. wasm-bindgen 自动封送</h3>
 <pre><code>// Rust 端
-<p>#[wasm_bindgen]</p>
-<p>pub fn process_vec(data: Vec&lt;u8&gt;) -> Vec&lt;u8&gt; {</p>
-<p>// wasm-bindgen 自动处理 JS ↔ Rust 的数据转换</p>
-<p>data.iter().map(|&amp;x| x.wrapping_add(1)).collect()</p>
-<p>}</code></pre></p>
+#[wasm_bindgen]
+pub fn process_vec(data: Vec&lt;u8&gt;) -> Vec&lt;u8&gt; {
+    // wasm-bindgen 自动处理 JS ↔ Rust 的数据转换
+    data.iter().map(|&amp;x| x.wrapping_add(1)).collect()
+}</code></pre>
 <div class="warning-box">
 <p><strong>性能陷阱</strong>：<code>Vec&lt;u8&gt;</code> 参数会导致数据从 JS 堆拷贝到 WASM 线性内存。大数组场景下，直接操作内存引用比自动封送快 3-10 倍。</p>
 </div>
 <h3>3. 共享内存 + Web Workers</h3>
 <pre><code>// 主线程
-<p>const sharedBuffer = new SharedArrayBuffer(1024 * 1024);</p>
-<p>const sharedArray = new Uint8Array(sharedBuffer);</p>
-<p>// Worker 线程</p>
-<p>const worker = new Worker('worker.js');</p>
-<p>worker.postMessage({ buffer: sharedBuffer });</p>
-<p>// worker.js</p>
-<p>self.onmessage = async ({ data }) => {</p>
-<p>const { init, process } = await import('./pkg/image_processor.js');</p>
-<p>await init();</p>
-<p>// 直接在共享内存上操作</p>
-<p>const view = new Uint8Array(data.buffer);</p>
-<p>process(view);</p>
-<p>self.postMessage('done');</p>
-<p>};</code></pre></p>
+const sharedBuffer = new SharedArrayBuffer(1024 * 1024);
+const sharedArray = new Uint8Array(sharedBuffer);
+
+// Worker 线程
+const worker = new Worker('worker.js');
+worker.postMessage({ buffer: sharedBuffer });
+
+// worker.js
+self.onmessage = async ({ data }) => {
+  const { init, process } = await import('./pkg/image_processor.js');
+  await init();
+  // 直接在共享内存上操作
+  const view = new Uint8Array(data.buffer);
+  process(view);
+  self.postMessage('done');
+};</code></pre>
 <h2>五、性能对比：WASM vs JavaScript</h2>
 <p>以 4096×4096 图片灰度处理为例：</p>
 <table>
@@ -381,16 +404,17 @@
 </table>
 <h3>启用 SIMD 优化</h3>
 <pre><code>// Rust 端使用 SIMD intrinsics
-<p>#[wasm_bindgen]</p>
-<p>#[target_feature(enable = "simd128")]</p>
-<p>pub fn grayscale_simd(data: &amp;mut [u8]) {</p>
-<p>use std::arch::wasm32::*;</p>
-<p>for pixel in data.chunks<em>exact</em>mut(16) {</p>
-<p>let rgba1 = v128<em>load(pixel.as</em>ptr() as *const v128);</p>
-<p>// SIMD 并行处理 4 个像素</p>
-<p>// ... SIMD 指令处理 ...</p>
-<p>}</p>
-<p>}</code></pre></p>
+#[wasm_bindgen]
+#[target_feature(enable = "simd128")]
+pub fn grayscale_simd(data: &amp;mut [u8]) {
+    use std::arch::wasm32::*;
+
+    for pixel in data.chunks<em>exact</em>mut(16) {
+        let rgba1 = v128<em>load(pixel.as</em>ptr() as *const v128);
+        // SIMD 并行处理 4 个像素
+        // ... SIMD 指令处理 ...
+    }
+}</code></pre>
 <div class="tip-box">
 <p><strong>2026 年现状</strong>：所有主流浏览器已支持 WASM SIMD。Chrome 91+、Firefox 89+、Safari 16.4+ 均可使用，无需 feature detect。</p>
 </div>
@@ -403,26 +427,29 @@
 <p>DuckDB-WASM 让你在浏览器中直接运行 SQL 查询，处理 GB 级数据。Apache Arrow 也提供了 WASM 版本。</p>
 <h3>4. 加密与压缩</h3>
 <pre><code>// 使用 WASM 版 zlib 替代纯 JS 压缩
-<p>import init, { deflate } from './pkg/zlib_wasm.js';</p>
-<p>await init();</p>
-<p>const compressed = deflate(rawData, 6); // 压缩级别 6</p>
-<p>// 比纯 JS 版 pako 快 2-3 倍</code></pre></p>
+import init, { deflate } from './pkg/zlib_wasm.js';
+
+await init();
+const compressed = deflate(rawData, 6); // 压缩级别 6
+// 比纯 JS 版 pako 快 2-3 倍</code></pre>
 <h3>5. AI 推理</h3>
 <p>ONNX Runtime Web、TensorFlow.js WASM backend 让浏览器端跑轻量模型成为可能。</p>
 <h2>七、调试技巧</h2>
 <h3>DevTools 调试 WASM</h3>
 <pre><code># 编译时开启 debug 信息
-<p>wasm-pack build --target web --dev</p>
-<h1>Chrome DevTools → Sources → wasm 模块</h1>
-<h1>可以设置断点、单步执行、查看变量</code></pre></h1>
+wasm-pack build --target web --dev
+
+# Chrome DevTools → Sources → wasm 模块
+# 可以设置断点、单步执行、查看变量</code></pre>
 <h3>性能分析</h3>
 <pre><code>// JS 端
-<p>const t0 = performance.now();</p>
-<p>wasm_function(data);</p>
-<p>const t1 = performance.now();</p>
-<p>console.log(<strong>INLINE<em>CODE</em>2</strong>);</p>
-<p>// Chrome Performance 面板可以看到 WASM 函数调用栈</p>
-<p>// 配合 source map 可以映射回 Rust 源码</code></pre></p>
+const t0 = performance.now();
+wasm_function(data);
+const t1 = performance.now();
+console.log(<strong>INLINE<em>CODE</em>2</strong>);
+
+// Chrome Performance 面板可以看到 WASM 函数调用栈
+// 配合 source map 可以映射回 Rust 源码</code></pre>
 <h3>常见问题排查</h3>
 <table>
 <tr>
@@ -501,10 +528,10 @@
 <li><strong>Streaming 编译</strong>：<code>WebAssembly.instantiateStreaming()</code> 边下载边编译</li>
 </ol>
 <pre><code>// 流式编译（比 instantiate 快 20-30%）
-<p>const { instance } = await WebAssembly.instantiateStreaming(</p>
-<p>fetch('image<em>processor</em>bg.wasm'),</p>
-<p>importObject</p>
-<p>);</code></pre></p>
+const { instance } = await WebAssembly.instantiateStreaming(
+  fetch('image<em>processor</em>bg.wasm'),
+  importObject
+);</code></pre>
 <div class="tip-box">
 <p><strong>一句话总结</strong>：WebAssembly 不是万能药，但在计算密集场景下它是浏览器性能的终极答案。Rust + wasm-bindgen 是当前最佳开发体验。</p>
 </div>

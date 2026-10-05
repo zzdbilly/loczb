@@ -182,12 +182,10 @@
 <h3>写读者画像这件事本身</h3>
 <p>读者画像不用长篇大论，放在文档开头两三行即可：</p>
 <pre><code class="language-markdown">## 本文适用对象
-<ul>
-<li>已部署本服务、需要调整超时参数的 SRE</li>
-<li>不熟悉：不需要你了解内部调度实现</li>
-<li>前置条件：能登录部署机器，有 config/ 目录读写权限</li>
-</ul>
-<p></code></pre></p>
+- 已部署本服务、需要调整超时参数的 SRE
+- 不熟悉：不需要你了解内部调度实现
+- 前置条件：能登录部署机器，有 config/ 目录读写权限
+</code></pre>
 <p>这同时是在帮作者自己砍内容：凡是这个读者用不到的段落，删掉，或者拆成链接。</p>
 <h2>用 Diátaxis 把文档分四层</h2>
 <p>写文档最常见的结构灾难，是一份文档同时想当教程、手册和架构图。Diátaxis 框架把文档切成四种互斥的类型，每种只服务一种需求，这个划分我用了两年，是真正改变我写作习惯的一条：</p>
@@ -201,88 +199,98 @@
 <p>判断方法很粗暴：读者是<strong>在学习</strong>还是<strong>在工作</strong>？参考和 how-to 服务工作中的读者，教程和解释服务学习中的读者。混层的典型症状是：how-to 的第 4 步突然插入两页架构史——工作的人只想把第 4 步执行完。</p>
 <p>以我自己这个博客为例（这篇也是按这个标准维护的）：</p>
 <pre><code class="language-markdown">blog/
-<p>├── README.md            # 教程：5 分钟从零发一篇文</p>
-<p>├── docs/</p>
-<p>│   ├── write-post.md    # how-to：改封面图 / 加分类 / 回刷旧文章</p>
-<p>│   ├── reference.md     # 参考：frontmatter 字段表、脚本参数、模板占位符</p>
-<p>│   └── why-markdown.md  # 解释：为什么弃用 WordPress 自己写生成器</p>
-<p></code></pre></p>
+├── README.md            # 教程：5 分钟从零发一篇文
+├── docs/
+│   ├── write-post.md    # how-to：改封面图 / 加分类 / 回刷旧文章
+│   ├── reference.md     # 参考：frontmatter 字段表、脚本参数、模板占位符
+│   └── why-markdown.md  # 解释：为什么弃用 WordPress 自己写生成器
+</code></pre>
 <p>四层各自独立，互相用链接引用，绝不把彼此的内容抄进对方——一抄就开始了复制粘贴漂移的深渊（后面反模式一节细讲）。</p>
 <h2>单篇文档的结构规范</h2>
 <p>分层解决了"该写哪几篇"，这一节解决"每一篇内部长什么样"。</p>
 <h3>标准骨架</h3>
 <p>一份合格的 how-to / 说明类文档，我建议固定这个骨架：</p>
 <pre><code class="language-markdown"># 标题：面向动作，一眼知道读完能干嘛
-<h2>你将完成什么（1-2 句 + 结果截图/输出）</h2>
-<h2>前置条件（版本、权限、账号，用表格或列表）</h2>
-<h2>步骤</h2>
-<h3>第 1 步：……</h3>
-<h3>第 2 步：……</h3>
-<h2>验证成功（怎么确认真的生效了，给出预期输出）</h2>
-<h2>常见问题 / 回滚（失败怎么办）</h2>
-<h2>延伸阅读（链接到参考或解释，不展开）</h2>
-<p></code></pre></p>
+## 你将完成什么（1-2 句 + 结果截图/输出）
+## 前置条件（版本、权限、账号，用表格或列表）
+## 步骤
+### 第 1 步：……
+### 第 2 步：……
+## 验证成功（怎么确认真的生效了，给出预期输出）
+## 常见问题 / 回滚（失败怎么办）
+## 延伸阅读（链接到参考或解释，不展开）
+</code></pre>
 <p>每步一节、一节一个观点。验证成功是最常被省掉又最不该省的一节——读者做完十步，你需要告诉他怎么知道这十步都成了，而不是让他猜。</p>
 <h3>标题层级不许跳级</h3>
 <p>标题是目录树的原料，跳级会毁掉大纲和可访问性（屏幕阅读器按层级导航）。<code>h1</code> 只允许一个，<code>##</code> 下直接出现 <code>####</code> 属于 bug 不是风格：</p>
 <pre><code class="language-markdown"># 配置超时参数            ✅ h1 全篇唯一
-<h2>服务端                  ✅</h2>
-<h3>Nginx 层               ✅ 逐级递进</h3>
-<h4>单个 location 覆盖     ✅</h4>
-<h1>配置超时参数</h1>
-<h2>服务端</h2>
-<h4>单个 location 覆盖     ❌ 跳级，大纲会错位</h4>
-<p></code></pre></p>
+## 服务端                  ✅
+### Nginx 层               ✅ 逐级递进
+#### 单个 location 覆盖     ✅
+
+# 配置超时参数
+## 服务端
+#### 单个 location 覆盖     ❌ 跳级，大纲会错位
+</code></pre>
 <p>发布前用脚本扫一遍，比人眼可靠：</p>
 <pre><code class="language-bash"># 检查 h1 数量与标题跳级（本博客 generate-post.py 内置同款检查）
-<p>grep -c &quot;&lt;h1&gt;&quot; blog/posts/*.html | grep -v &quot;:1$&quot; &amp;&amp; echo &quot;h1 数量异常&quot;</p>
-<p>awk '/^#+ /{n=length($1)} prev &amp;&amp; n&gt;prev+1{print FILENAME&quot;: 跳级 -&gt; &quot;$0} {prev=n}' docs/*.md</p>
-<p></code></pre></p>
+grep -c &quot;&lt;h1&gt;&quot; blog/posts/*.html | grep -v &quot;:1$&quot; &amp;&amp; echo &quot;h1 数量异常&quot;
+awk '/^#+ /{n=length($1)} prev &amp;&amp; n&gt;prev+1{print FILENAME&quot;: 跳级 -&gt; &quot;$0} {prev=n}' docs/*.md
+</code></pre>
 <h3>目录和锚点</h3>
 <p>超过两屏的文档必须有目录。目录要么手写要么从标题生成，<strong>永远不要在正文里再手写一遍"第一章……"之类的编号</strong>——插入一节就得全部重排，编号漂移是文档腐烂的第一现场。</p>
 <h2>措辞规范：十条红线</h2>
 <p>内容对了，措辞不对照样劝退。这是我长期修订文档总结的红线，每条都附 bad / good 对比。</p>
 <h3>红线 1-5：主动、具体、面向动作</h3>
 <pre><code class="language-markdown">❌ 超时可以在配置中被修改。
-<p>✅ 你可以修改配置中的 timeout 值。</p>
-<h1>被动语态藏起了&quot;谁来做&quot;；主动语态逼你写出动作的执行者。</h1>
-<p>❌ 该功能性能很好。</p>
-<p>✅ 单次查询 P99 从 120ms 降到 8ms（v2.3，16C32G，100 并发）。</p>
-<h1>没有数字的性能描述等于没写。</h1>
-<p>❌ 关于部署的相关信息</p>
-<p>✅ 部署到生产环境</p>
-<h1>标题就是任务名。名词短语的标题搜不到、看不懂。</h1>
-<p>❌ 这里我们采用了一个巧妙的方案，非常简单，显然应该……</p>
-<p>✅ 采用 X 方案，代价是 Y（见「为什么不用 Z」）。</p>
-<h1>&quot;简单/显然/只需&quot;是对读者的否定：读者卡在这一步时只会觉得自己蠢。</h1>
-<p>❌ 用户点击保存按钮之后，系统将会把数据写入数据库。</p>
-<p>✅ 点「保存」，数据落库。</p>
-<h1>删掉&quot;之后/将会/进行/对所……的&quot;这些水分词。中文技术写作同样适用。</h1>
-<p></code></pre></p>
+✅ 你可以修改配置中的 timeout 值。
+# 被动语态藏起了&quot;谁来做&quot;；主动语态逼你写出动作的执行者。
+
+❌ 该功能性能很好。
+✅ 单次查询 P99 从 120ms 降到 8ms（v2.3，16C32G，100 并发）。
+# 没有数字的性能描述等于没写。
+
+❌ 关于部署的相关信息
+✅ 部署到生产环境
+# 标题就是任务名。名词短语的标题搜不到、看不懂。
+
+❌ 这里我们采用了一个巧妙的方案，非常简单，显然应该……
+✅ 采用 X 方案，代价是 Y（见「为什么不用 Z」）。
+# &quot;简单/显然/只需&quot;是对读者的否定：读者卡在这一步时只会觉得自己蠢。
+
+❌ 用户点击保存按钮之后，系统将会把数据写入数据库。
+✅ 点「保存」，数据落库。
+# 删掉&quot;之后/将会/进行/对所……的&quot;这些水分词。中文技术写作同样适用。
+</code></pre>
 <h3>红线 6-10：一致、精确、不卖关子</h3>
 <pre><code class="language-markdown">❌ 先&quot;登录控制台&quot;，后&quot;登陆管理后台&quot;，再&quot;进入 Dashboard&quot;。
-<p>✅ 全文统一用一个词：&quot;登录管理控制台&quot;。</p>
-<h1>术语一致性：同一事物全文只有一个名字。建术语表，review 时对照。</h1>
-<p>❌ 较新的 Node 版本即可。</p>
-<p>✅ 需要 Node.js ≥ 18.17（v16 已 EOL）。</p>
-<h1>版本、路径、参数名精确到可复制。&quot;较新/大概/一般来说&quot;都是埋雷。</h1>
-<p>❌ 未来将支持导入功能。</p>
-<p>✅ 导入功能在 3.1 提供（未 GA，勿用于生产）。</p>
-<h1>不写没有日期的承诺。要么给版本，要么不写。</h1>
-<p>❌ 详见相关文档。</p>
-<p>✅ 见《限流参数参考》#qps 一节。</p>
-<h1>&quot;相关文档&quot;要么给确切链接，要么删掉这句废话。</h1>
-<p>❌ 这段逻辑很复杂，就不再展开了。</p>
-<p>✅ 核心逻辑分四步：A → B → C → D（每步一句话 + 链接到解释文档）。</p>
-<h1>复杂不是省略的理由，是拆分层级的信号。</h1>
-<p></code></pre></p>
+✅ 全文统一用一个词：&quot;登录管理控制台&quot;。
+# 术语一致性：同一事物全文只有一个名字。建术语表，review 时对照。
+
+❌ 较新的 Node 版本即可。
+✅ 需要 Node.js ≥ 18.17（v16 已 EOL）。
+# 版本、路径、参数名精确到可复制。&quot;较新/大概/一般来说&quot;都是埋雷。
+
+❌ 未来将支持导入功能。
+✅ 导入功能在 3.1 提供（未 GA，勿用于生产）。
+# 不写没有日期的承诺。要么给版本，要么不写。
+
+❌ 详见相关文档。
+✅ 见《限流参数参考》#qps 一节。
+# &quot;相关文档&quot;要么给确切链接，要么删掉这句废话。
+
+❌ 这段逻辑很复杂，就不再展开了。
+✅ 核心逻辑分四步：A → B → C → D（每步一句话 + 链接到解释文档）。
+# 复杂不是省略的理由，是拆分层级的信号。
+</code></pre>
 <h3>代码优先于文字</h3>
 <p>能用一行代码说清的，不要三行中文。比较两种赋值方式，最好的写法是并排放两段代码加一句结论，而不是用文字描述代码行为：</p>
 <pre><code class="language-markdown">❌ 文字描述：&quot;你需要先解构出 head 和 tail，然后对 tail 做 map……&quot;
-<p>✅ 直接给：</p>
-<p>const [head, ...tail] = list;          // 取第一个和其余</p>
-<p>const doubled = tail.map(x =&gt; x * 2);  // 其余翻倍</p>
-<p></code></pre></p>
+✅ 直接给：
+
+const [head, ...tail] = list;          // 取第一个和其余
+const doubled = tail.map(x =&gt; x * 2);  // 其余翻倍
+</code></pre>
 <h2>代码示例的规范</h2>
 <p>技术文档里代码示例是本体，文字是注解。示例不合格，整篇文档作废。</p>
 <h3>合格示例的四条硬标准</h3>
@@ -293,183 +301,166 @@
 <li><strong>有预期输出</strong>：跑完之后 stdout / 返回值长什么样，贴在代码后面。</li>
 </ol>
 <pre><code class="language-python"># Python ≥ 3.9；redis-py 5.0.1
-<p>import redis</p>
-<p>client = redis.Redis(host=&quot;127.0.0.1&quot;, port=6379, decode_responses=True)</p>
-<p>client.set(&quot;session:42&quot;, &quot;active&quot;, ex=900)   # 900 秒后自动过期</p>
-<p>print(client.ttl(&quot;session:42&quot;))</p>
-<h1>预期输出：899</h1>
-<p></code></pre></p>
+import redis
+
+client = redis.Redis(host=&quot;127.0.0.1&quot;, port=6379, decode_responses=True)
+client.set(&quot;session:42&quot;, &quot;active&quot;, ex=900)   # 900 秒后自动过期
+print(client.ttl(&quot;session:42&quot;))
+# 预期输出：899
+</code></pre>
 <h3>参数注释写的是"为什么"</h3>
 <p>字段名和类型看一眼就知道，注释要给的是看代码看不出来的信息：单位、边界、为什么是这个默认值。</p>
 <pre><code class="language-python">@dataclass
-<p>class TimeoutConfig:</p>
-<p>connect_timeout: float = 3.0</p>
-<h1>单位：秒。拨号阶段超时，不含 TLS 握手。</h1>
-<h1>3s 而非 30s：跨机房建连 P99 为 1.2s，超过 3s 基本等于网络已断，</h1>
-<h1>快速失败让上层的重试逻辑接管（见 docs/retry-policy.md）。</h1>
-<p>read_timeout: float = 10.0</p>
-<h1>单位：秒。建连后两次收包之间的最大间隔，不是整个请求的总耗时。</h1>
-<h1>⚠️ 必须 &lt; 上游 Nginx 的 proxy<em>read</em>timeout(15s)，否则超时发生在哪一层不可控，</h1>
-<h1>排障时会互相甩锅。这是踩过的坑，别改小注释不通知 SRE。</h1>
-<p></code></pre></p>
+class TimeoutConfig:
+    connect_timeout: float = 3.0
+    # 单位：秒。拨号阶段超时，不含 TLS 握手。
+    # 3s 而非 30s：跨机房建连 P99 为 1.2s，超过 3s 基本等于网络已断，
+    # 快速失败让上层的重试逻辑接管（见 docs/retry-policy.md）。
+
+    read_timeout: float = 10.0
+    # 单位：秒。建连后两次收包之间的最大间隔，不是整个请求的总耗时。
+    # ⚠️ 必须 &lt; 上游 Nginx 的 proxy<em>read</em>timeout(15s)，否则超时发生在哪一层不可控，
+    #    排障时会互相甩锅。这是踩过的坑，别改小注释不通知 SRE。
+</code></pre>
 <h3>反例：坏示例长什么样</h3>
 <pre><code class="language-markdown">❌ 修改配置文件中的相关参数，重启服务即可生效。
-<p>❌ // TODO: implement here（教程挖坑让读者自己填核心步骤）</p>
-<p>❌ 用伪代码当真实 API 用：db.query(&quot;SELECT ...&quot;) —— 真实叫法不是这个</p>
-<p>❌ 截图里带一个无法从文字复现的配置界面（截图不能代替文字，见反模式一节）</p>
-<p></code></pre></p>
+❌ // TODO: implement here（教程挖坑让读者自己填核心步骤）
+❌ 用伪代码当真实 API 用：db.query(&quot;SELECT ...&quot;) —— 真实叫法不是这个
+❌ 截图里带一个无法从文字复现的配置界面（截图不能代替文字，见反模式一节）
+</code></pre>
 <h2>Docs-as-Code：把文档当代码管</h2>
 <p>文档腐烂的根源是"文档和代码分家"。解法是把文档纳入写代码的那套流程：版本管理、lint、CI、code review。这一步做完，前面所有规范才不是靠自觉。</p>
 <h3>仓库布局</h3>
 <pre><code class="language-markdown">项目文档的推荐布局（docs/ 与代码同仓、同 PR 演进）：
-<p>.</p>
-<p>├── README.md              # 教程入口 + 一句话定位 + 指向 docs/</p>
-<p>├── docs/</p>
-<p>│   ├── how-to/            # 面向任务</p>
-<p>│   ├── reference/         # 面向信息（可从代码注释生成）</p>
-<p>│   └── explanation/       # 面向理解</p>
-<p>├── scripts/</p>
-<p>│   ├── generate-post.py   # 文档生成器（本博客就是这个模式）</p>
-<p>│   └── check-links.py     # 死链检查</p>
-<p>└── .github/workflows/docs.yml</p>
-<p></code></pre></p>
+.
+├── README.md              # 教程入口 + 一句话定位 + 指向 docs/
+├── docs/
+│   ├── how-to/            # 面向任务
+│   ├── reference/         # 面向信息（可从代码注释生成）
+│   └── explanation/       # 面向理解
+├── scripts/
+│   ├── generate-post.py   # 文档生成器（本博客就是这个模式）
+│   └── check-links.py     # 死链检查
+└── .github/workflows/docs.yml
+</code></pre>
 <h3>Markdown lint 与 frontmatter</h3>
 <p>先把风格问题交给机器，别浪费 review 的人力在空格和列表符号上：</p>
 <pre><code class="language-yaml"># .markdownlint.yml —— 收紧到能防住大半结构病
-<p>MD001: true        # 标题层级逐级递进，不许跳级</p>
-<p>MD003: { style: atx }</p>
-<p>MD004: { style: dash }</p>
-<p>MD013: false       # 行宽交给编辑器，不禁</p>
-<p>MD022: true        # 标题前后必须空行</p>
-<p>MD024: { siblings_only: true }  # 允许不同父节下有同名标题</p>
-<p>MD025: { front<em>matter</em>title: &quot;^\\s<em>title\\s</em>[:=]&quot; }  # h1 唯一，排除 frontmatter</p>
-<p>MD028: true        # 块引用不能多空行</p>
-<p>MD032: true        # 列表前后空行</p>
-<p>MD041: true        # 文件必须以 h1（或 frontmatter title）开头</p>
-<p></code></pre></p>
+MD001: true        # 标题层级逐级递进，不许跳级
+MD003: { style: atx }
+MD004: { style: dash }
+MD013: false       # 行宽交给编辑器，不禁
+MD022: true        # 标题前后必须空行
+MD024: { siblings_only: true }  # 允许不同父节下有同名标题
+MD025: { front<em>matter</em>title: &quot;^\\s<em>title\\s</em>[:=]&quot; }  # h1 唯一，排除 frontmatter
+MD028: true        # 块引用不能多空行
+MD032: true        # 列表前后空行
+MD041: true        # 文件必须以 h1（或 frontmatter title）开头
+</code></pre>
 <p>结构化元数据（标题、日期、分类）放 frontmatter，让生成脚本读，而不是从正文里正则抠——这是我把博客生成器从 v2 升到 v3 学到的最重要一课：</p>
 <pre><code class="language-markdown">---
-<p>title: 技术文档编写指南</p>
-<p>description: 一句话摘要，给列表页和 RSS 用</p>
-<p>date: 2026-09-03 17:30:00   # 带时间：同一天两篇文靠它排序</p>
-<p>category: 开发</p>
-<p>tags: [技术写作, 文档规范]</p>
-<p>slug: 自定义-url-片段</p>
-<hr>
-<p></code></pre></p>
+title: 技术文档编写指南
+description: 一句话摘要，给列表页和 RSS 用
+date: 2026-09-03 17:30:00   # 带时间：同一天两篇文靠它排序
+category: 开发
+tags: [技术写作, 文档规范]
+slug: 自定义-url-片段
+---
+</code></pre>
 <h3>CI 校验：链接、示例、数字</h3>
 <p>死链检查是最小可行 CI。文档里的 URL 和文件路径全部用 markdown 链接写，机器才能扫：</p>
 <pre><code class="language-yaml"># .github/workflows/docs.yml
-<p>name: docs</p>
-<p>on:</p>
-<p>pull_request:</p>
-<p>paths: [&quot;docs/**&quot;, &quot;README.md&quot;]</p>
-<p>jobs:</p>
-<p>check:</p>
-<p>runs-on: ubuntu-latest</p>
-<p>steps:</p>
-<ul>
-<li>uses: actions/checkout@v4</li>
-<li>name: markdownlint</li>
-</ul>
-<p>uses: DavidAnson/markdownlint-cli2-action@v16</p>
-<ul>
-<li>name: 检查相对链接死链</li>
-</ul>
-<p>run: python3 scripts/check-links.py docs/ README.md</p>
-<ul>
-<li>name: 示例代码语法检查（能 parse 才能谈可运行）</li>
-</ul>
-<p>run: |</p>
-<p>pip install &quot;pyright==1.1.*&quot;</p>
-<p>python scripts/extract-code-blocks.py docs/ --lang python &gt; /tmp/snippets/</p>
-<p>pyright /tmp/snippets/</p>
-<p></code></pre></p>
+name: docs
+on:
+  pull_request:
+    paths: [&quot;docs/**&quot;, &quot;README.md&quot;]
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: markdownlint
+        uses: DavidAnson/markdownlint-cli2-action@v16
+      - name: 检查相对链接死链
+        run: python3 scripts/check-links.py docs/ README.md
+      - name: 示例代码语法检查（能 parse 才能谈可运行）
+        run: |
+          pip install &quot;pyright==1.1.*&quot;
+          python scripts/extract-code-blocks.py docs/ --lang python &gt; /tmp/snippets/
+          pyright /tmp/snippets/
+</code></pre>
 <pre><code class="language-python"># scripts/check-links.py（简化版）
-<p>import re, sys, pathlib</p>
-<p>LINK = re.compile(r&quot;\[[^\]]*\]\((?!https?://)([^)]+)\)&quot;)  # 只看相对链接</p>
-<p>bad = 0</p>
-<p>for md in pathlib.Path(sys.argv[1]).rglob(&quot;*.md&quot;):</p>
-<p>for target in LINK.findall(md.read_text(encoding=&quot;utf-8&quot;)):</p>
-<p>path = (md.parent / target.split(&quot;#&quot;)[0]).resolve()</p>
-<p>if not path.exists():</p>
-<p>print(f&quot;❌ {md}: 链接目标不存在 -&gt; {target}&quot;)</p>
-<p>bad += 1</p>
-<p>sys.exit(1 if bad else 0)</p>
-<p></code></pre></p>
+import re, sys, pathlib
+
+LINK = re.compile(r&quot;\[[^\]]*\]\((?!https?://)([^)]+)\)&quot;)  # 只看相对链接
+bad = 0
+for md in pathlib.Path(sys.argv[1]).rglob(&quot;*.md&quot;):
+    for target in LINK.findall(md.read_text(encoding=&quot;utf-8&quot;)):
+        path = (md.parent / target.split(&quot;#&quot;)[0]).resolve()
+        if not path.exists():
+            print(f&quot;❌ {md}: 链接目标不存在 -&gt; {target}&quot;)
+            bad += 1
+sys.exit(1 if bad else 0)
+</code></pre>
 <h3>Review 规则</h3>
 <p>PR 改了行为、接口或参数，必须同 PR 改文档，否则 review 直接打回。这条规则写进 CONTRIBUTING，由模板强制：</p>
 <pre><code class="language-markdown">## PR 检查模板（.github/pull<em>request</em>template.md）
-<ul>
-<li>[ ] 本 PR 是否改变用户可见行为/接口/配置？</li>
-<li>[ ] 若是：对应文档在哪个文件？（附 diff 链接）</li>
-<li>[ ] 新增错误信息是否已收录 docs/reference/errors.md？</li>
-</ul>
-<p></code></pre></p>
+- [ ] 本 PR 是否改变用户可见行为/接口/配置？
+- [ ] 若是：对应文档在哪个文件？（附 diff 链接）
+- [ ] 新增错误信息是否已收录 docs/reference/errors.md？
+</code></pre>
 <h2>常见反模式与解药</h2>
 <p>规范讲完了，这一节是真实尸体陈列。每种反模式都配可操作的解药。</p>
 <h3>反模式一：一次性文档</h3>
 <p>上线前突击写完，上线后再没人打开过。解药是<strong>把文档变更绑定到代码变更的触发条件</strong>上：CI 规则（上一节）、错误码表从代码注释生成、CHANGELOG 和文档同 PR。</p>
 <h3>反模式二：只写是什么，不写为什么</h3>
 <pre><code class="language-markdown">❌ &quot;重试次数设为 3。&quot;（三个月后没人敢动这个数字）
-<p>✅ &quot;重试次数 3：覆盖瞬时抖动（占故障 92%）；第 4 次起的成功率增益 &lt;1%，</p>
-<p>但最坏延迟翻倍。数据见 docs/explanation/retry-policy.md。&quot;</p>
-<p></code></pre></p>
+✅ &quot;重试次数 3：覆盖瞬时抖动（占故障 92%）；第 4 次起的成功率增益 &lt;1%，
+   但最坏延迟翻倍。数据见 docs/explanation/retry-policy.md。&quot;
+</code></pre>
 <p>"为什么"是文档里保鲜期最长的部分——参数会变，权衡的逻辑能活很久。</p>
 <h3>反模式三：复制粘贴漂移</h3>
 <p>同一份安装步骤抄在 README、官网和 wiki 三处，半年后三个版本互相矛盾。解药只有一个：<strong>单一事实源 + 引用</strong>。内容只存在一处，其他地方用链接或 include 指令引入。本博客的相关文章、索引页全是这么做的——所有列表由 <code>generate-index.js</code> 从文章 HTML 反向生成，绝不手写第二份。</p>
 <h3>反模式四：用截图代替文字</h3>
 <p>截图不能搜索、不能复制、界面改版即作废。截图只该用于"无法用文字描述的空间布局"，且必须配文字步骤：</p>
 <pre><code class="language-markdown">❌ （一张 800px 的控制台设置页截图）&quot;按下图配置&quot;
-<p>✅ 1. 打开「设置 → 网络 → 高级」</p>
-<ol>
-<li>「连接超时」填 3s（默认 30s，务必改小，原因见下文）</li>
-</ol>
-<p><img src="../images/timeout.png" alt="超时设置">   # 截图降级为辅助，不是主体</p>
-<p></code></pre></p>
+✅ 1. 打开「设置 → 网络 → 高级」
+   2. 「连接超时」填 3s（默认 30s，务必改小，原因见下文）
+   <img src="../images/timeout.png" alt="超时设置">   # 截图降级为辅助，不是主体
+</code></pre>
 <h3>反模式五：完美主义瘫痪</h3>
 <p>"等 API 稳定了再写文档"永远不会写。解药是分层：先交参考层的骨架（哪怕每格只有一行），再补 how-to，解释层最后。一份粗糙但完整的地图，胜于一张永远在画的局部高清。</p>
 <h3>流图表也当作代码</h3>
 <p>流程图用 Mermaid 存在 markdown 里，跟着 git diff 演进，别贴白板照片。比如本博客的发文流水线：</p>
 <pre><code class="language-mermaid">flowchart LR
-<p>A[写 article.md] --&gt; B[generate-post.py]</p>
-<p>B --&gt; C{本地校验&lt;br/&gt;h1 死链 体积}</p>
-<p>C -- 通过 --&gt; D[git push]</p>
-<p>C -- 失败 --&gt; A</p>
-<p>D --&gt; E[线上 200 验证]</p>
-<p></code></pre></p>
+    A[写 article.md] --&gt; B[generate-post.py]
+    B --&gt; C{本地校验&lt;br/&gt;h1 死链 体积}
+    C -- 通过 --&gt; D[git push]
+    C -- 失败 --&gt; A
+    D --&gt; E[线上 200 验证]
+</code></pre>
 <h2>发布前检查清单</h2>
 <p>最后把全文压缩成一份可打印的清单。本博客发文的实际流程就是这张清单的具象化——写完文章跑生成脚本、本地 grep 校验、push、线上实测，一步不省。</p>
 <pre><code class="language-markdown">## 发布前逐项打勾
-<h3>定位</h3>
-<ul>
-<li>[ ] 这篇属于教程/how-to/参考/解释中的哪一层？没有混层？</li>
-<li>[ ] 开头两行写清读者画像和前置条件？</li>
-</ul>
-<h3>结构</h3>
-<ul>
-<li>[ ] h1 唯一、标题逐级不跳、超两屏有目录？</li>
-<li>[ ] 标题是动作短语（&quot;部署到生产&quot;，不是&quot;关于部署&quot;）？</li>
-<li>[ ] 有&quot;验证成功&quot;一节？</li>
-</ul>
-<h3>措辞</h3>
-<ul>
-<li>[ ] 无&quot;简单/显然/只需/将会&quot;？</li>
-<li>[ ] 同一事物全文同一个名字？</li>
-<li>[ ] 所有版本、路径、参数精确可复制？</li>
-</ul>
-<h3>示例</h3>
-<ul>
-<li>[ ] 代码块可运行：含 import、标版本、附预期输出？</li>
-</ul>
-<h3>工程</h3>
-<ul>
-<li>[ ] markdownlint / 死链检查通过？</li>
-<li>[ ] 改动的接口/参数已同步更新对应文档？</li>
-<li>[ ] 生成物全部重跑（索引/地图/RSS），首页和列表页能看到新文章？</li>
-<li>[ ] 线上地址实测返回 200 且含标题？</li>
-</ul>
-<p></code></pre></p>
+### 定位
+- [ ] 这篇属于教程/how-to/参考/解释中的哪一层？没有混层？
+- [ ] 开头两行写清读者画像和前置条件？
+### 结构
+- [ ] h1 唯一、标题逐级不跳、超两屏有目录？
+- [ ] 标题是动作短语（&quot;部署到生产&quot;，不是&quot;关于部署&quot;）？
+- [ ] 有&quot;验证成功&quot;一节？
+### 措辞
+- [ ] 无&quot;简单/显然/只需/将会&quot;？
+- [ ] 同一事物全文同一个名字？
+- [ ] 所有版本、路径、参数精确可复制？
+### 示例
+- [ ] 代码块可运行：含 import、标版本、附预期输出？
+### 工程
+- [ ] markdownlint / 死链检查通过？
+- [ ] 改动的接口/参数已同步更新对应文档？
+- [ ] 生成物全部重跑（索引/地图/RSS），首页和列表页能看到新文章？
+- [ ] 线上地址实测返回 200 且含标题？
+</code></pre>
 <p>最后一句心得：<strong>写文档是写给三个月后的自己和深夜三点的排障者</strong>。他们都不了解背景、都没有耐心、都不能被你拉来问两句。把这三件事放进心里，规范只是自然的结果。</p>
 
         <!-- Related Static -->
@@ -611,7 +602,7 @@
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📅</span> 发布日期</span><span class="post-info-stat-value">2026-09-03</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">⏱️</span> 阅读时间</span><span class="post-info-stat-value">18 min read</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">4434 字</span></div>
-        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📊</span> 章节数</span><span class="post-info-stat-value">17 节 · 31 子节</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📊</span> 章节数</span><span class="post-info-stat-value">9 节 · 23 子节</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">💻</span> 代码块</span><span class="post-info-stat-value">21 段</span></div>
       </div>
       <div class="post-info-section" id="postSidebarTags">

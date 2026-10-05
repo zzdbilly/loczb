@@ -144,26 +144,29 @@
 <h3>PyTorch 导出 ONNX</h3>
 <p>以一个简单的图像分类模型为例：</p>
 <pre><code>import torch
-<p>import torchvision.models as models</p>
-<h1>加载预训练模型</h1>
-<p>model = models.mobilenet<em>v3</em>small(pretrained=True)</p>
-<p>model.eval()</p>
-<h1>创建示例输入</h1>
-<p>dummy_input = torch.randn(1, 3, 224, 224)</p>
-<h1>导出 ONNX</h1>
-<p>torch.onnx.export(</p>
-<p>model,</p>
-<p>dummy_input,</p>
-<p>"mobilenet_v3.onnx",</p>
-<p>input_names=['input'],</p>
-<p>output_names=['output'],</p>
-<p>dynamic_axes={</p>
-<p>'input': {0: 'batch_size'},</p>
-<p>'output': {0: 'batch_size'}</p>
-<p>},</p>
-<p>opset_version=14,</p>
-<p>do<em>constant</em>folding=True</p>
-<p>)</code></pre></p>
+import torchvision.models as models
+
+# 加载预训练模型
+model = models.mobilenet<em>v3</em>small(pretrained=True)
+model.eval()
+
+# 创建示例输入
+dummy_input = torch.randn(1, 3, 224, 224)
+
+# 导出 ONNX
+torch.onnx.export(
+    model,
+    dummy_input,
+    "mobilenet_v3.onnx",
+    input_names=['input'],
+    output_names=['output'],
+    dynamic_axes={
+        'input': {0: 'batch_size'},
+        'output': {0: 'batch_size'}
+    },
+    opset_version=14,
+    do<em>constant</em>folding=True
+)</code></pre>
 <div class="highlight-box">
 <p><strong>💡 关键参数说明：</strong></p>
 <ul style="margin-top: 0.5rem;">
@@ -175,42 +178,48 @@
 <h3>模型验证</h3>
 <p>导出后务必验证模型正确性：</p>
 <pre><code>import onnx
-<p>import onnxruntime as ort</p>
-<p>import numpy as np</p>
-<h1>检查模型格式</h1>
-<p>onnx<em>model = onnx.load("mobilenet</em>v3.onnx")</p>
-<p>onnx.checker.check<em>model(onnx</em>model)</p>
-<h1>对比推理结果</h1>
-<p>session = ort.InferenceSession("mobilenet_v3.onnx")</p>
-<p>onnx<em>output = session.run(None, {"input": dummy</em>input.numpy()})</p>
-<h1>PyTorch 原始输出</h1>
-<p>with torch.no_grad():</p>
-<p>torch<em>output = model(dummy</em>input)</p>
-<h1>验证数值一致性</h1>
-<p>np.testing.assert_allclose(</p>
-<p>torch_output.numpy(),</p>
-<p>onnx_output[0],</p>
-<p>rtol=1e-3,</p>
-<p>atol=1e-5</p>
-<p>)</p>
-<p>print("✅ 模型验证通过！")</code></pre></p>
+import onnxruntime as ort
+import numpy as np
+
+# 检查模型格式
+onnx<em>model = onnx.load("mobilenet</em>v3.onnx")
+onnx.checker.check<em>model(onnx</em>model)
+
+# 对比推理结果
+session = ort.InferenceSession("mobilenet_v3.onnx")
+onnx<em>output = session.run(None, {"input": dummy</em>input.numpy()})
+
+# PyTorch 原始输出
+with torch.no_grad():
+    torch<em>output = model(dummy</em>input)
+
+# 验证数值一致性
+np.testing.assert_allclose(
+    torch_output.numpy(), 
+    onnx_output[0], 
+    rtol=1e-3, 
+    atol=1e-5
+)
+print("✅ 模型验证通过！")</code></pre>
 <h2>模型优化与量化</h2>
 <p>移动端资源有限，模型优化是必须的环节。</p>
 <h3>1. 模型简化</h3>
 <p>使用 <code>onnx-simplifier</code> 消除冗余算子：</p>
 <pre><code># 安装
-<p>pip install onnx-simplifier</p>
-<h1>简化模型</h1>
-<p>onnxsim mobilenet<em>v3.onnx mobilenet</em>v3_sim.onnx</code></pre></p>
+pip install onnx-simplifier
+
+# 简化模型
+onnxsim mobilenet<em>v3.onnx mobilenet</em>v3_sim.onnx</code></pre>
 <h3>2. 量化压缩</h3>
 <p>INT8 量化可以显著降低模型体积和推理延迟：</p>
 <pre><code>from onnxruntime.quantization import quantize_dynamic, QuantType
-<h1>动态量化（无需校准数据）</h1>
-<p>quantize_dynamic(</p>
-<p>"mobilenet<em>v3</em>sim.onnx",</p>
-<p>"mobilenet<em>v3</em>int8.onnx",</p>
-<p>weight_type=QuantType.QUInt8</p>
-<p>)</code></pre></p>
+
+# 动态量化（无需校准数据）
+quantize_dynamic(
+    "mobilenet<em>v3</em>sim.onnx",
+    "mobilenet<em>v3</em>int8.onnx",
+    weight_type=QuantType.QUInt8
+)</code></pre>
 <p>量化效果对比：</p>
 <div class="comparison-table">
 <table>
@@ -305,31 +314,35 @@
 <h2>Android 集成实战</h2>
 <h3>1. 添加依赖</h3>
 <pre><code>// build.gradle
-<p>dependencies {</p>
-<p>implementation 'com.microsoft.onnxruntime:onnxruntime-android:1.16.0'</p>
-<p>}</code></pre></p>
+dependencies {
+    implementation 'com.microsoft.onnxruntime:onnxruntime-android:1.16.0'
+}</code></pre>
 <h3>2. 加载与推理</h3>
 <pre><code>// Kotlin
-<p>class ONNXModel(private val context: Context) {</p>
-<p>private var session: OrtSession? = null</p>
-<p>fun init() {</p>
-<p>val env = OrtEnvironment.getEnvironment()</p>
-<p>val modelBytes = context.assets.open("mobilenet<em>v3</em>int8.onnx")</p>
-<p>.use { it.readBytes() }</p>
-<p>session = env.createSession(modelBytes)</p>
-<p>}</p>
-<p>fun infer(input: FloatArray): FloatArray {</p>
-<p>val inputTensor = OnnxTensor.createTensor(</p>
-<p>OrtEnvironment.getEnvironment(),</p>
-<p>input.reshape(intArrayOf(1, 3, 224, 224))</p>
-<p>)</p>
-<p>val output = session?.run(mapOf("input" to inputTensor))</p>
-<p>return output?.get(0)?.value as FloatArray</p>
-<p>}</p>
-<p>fun release() {</p>
-<p>session?.close()</p>
-<p>}</p>
-<p>}</code></pre></p>
+class ONNXModel(private val context: Context) {
+    private var session: OrtSession? = null
+    
+    fun init() {
+        val env = OrtEnvironment.getEnvironment()
+        val modelBytes = context.assets.open("mobilenet<em>v3</em>int8.onnx")
+            .use { it.readBytes() }
+        session = env.createSession(modelBytes)
+    }
+    
+    fun infer(input: FloatArray): FloatArray {
+        val inputTensor = OnnxTensor.createTensor(
+            OrtEnvironment.getEnvironment(),
+            input.reshape(intArrayOf(1, 3, 224, 224))
+        )
+        
+        val output = session?.run(mapOf("input" to inputTensor))
+        return output?.get(0)?.value as FloatArray
+    }
+    
+    fun release() {
+        session?.close()
+    }
+}</code></pre>
 <h3>3. 性能优化技巧</h3>
 <div class="highlight-box">
 <p><strong>🚀 实测有效的优化手段：</strong></p>

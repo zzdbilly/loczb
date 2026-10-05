@@ -206,150 +206,161 @@
 <h2>实操示例</h2>
 <h3>apply — 配置对象的首选</h3>
 <pre><code class="language-kotlin">// ❌ 糟糕的写法
-<p>val user = User()</p>
-<p>user.name = &quot;张三&quot;</p>
-<p>user.email = &quot;zhangsan@example.com&quot;</p>
-<p>user.role = &quot;admin&quot;</p>
-<p>user.avatar = &quot;default.png&quot;</p>
-<p>// ✅ 用 apply</p>
-<p>val user = User().apply {</p>
-<p>name = &quot;张三&quot;</p>
-<p>email = &quot;zhangsan@example.com&quot;</p>
-<p>role = &quot;admin&quot;</p>
-<p>avatar = &quot;default.png&quot;</p>
-<p>}</p>
-<p></code></pre></p>
+val user = User()
+user.name = &quot;张三&quot;
+user.email = &quot;zhangsan@example.com&quot;
+user.role = &quot;admin&quot;
+user.avatar = &quot;default.png&quot;
+
+// ✅ 用 apply
+val user = User().apply {
+    name = &quot;张三&quot;
+    email = &quot;zhangsan@example.com&quot;
+    role = &quot;admin&quot;
+    avatar = &quot;default.png&quot;
+}
+</code></pre>
 <p><code>apply</code> 返回对象本身，天然适合链式初始化。Builder 模式在 Kotlin 里基本不需要了，<code>apply</code> 就是最轻量的 Builder。</p>
 <h3>let — 非空检查和转换</h3>
 <pre><code class="language-kotlin">// ❌ 不好的写法
-<p>if (user != null) {</p>
-<p>sendEmail(user.email)</p>
-<p>}</p>
-<p>// ✅ 用 let</p>
-<p>user?.let { sendEmail(it.email) }</p>
-<p>// 或者更简洁</p>
-<p>user?.email?.let { sendEmail(it) }</p>
-<p></code></pre></p>
+if (user != null) {
+    sendEmail(user.email)
+}
+
+// ✅ 用 let
+user?.let { sendEmail(it.email) }
+
+// 或者更简洁
+user?.email?.let { sendEmail(it) }
+</code></pre>
 <p><code>let</code> 用 <code>it</code> 引用对象，并且返回 lambda 结果，适合"如果非空则做某事并返回结果"的场景。</p>
 <pre><code class="language-kotlin">// 转换链
-<p>val length = text?.let {</p>
-<p>println(&quot;处理文本: $it&quot;)</p>
-<p>it.length  // let 返回这个值</p>
-<p>} ?: 0</p>
-<p></code></pre></p>
+val length = text?.let { 
+    println(&quot;处理文本: $it&quot;)
+    it.length  // let 返回这个值
+} ?: 0
+</code></pre>
 <h3>run — 配置 + 计算一步到位</h3>
 <pre><code class="language-kotlin">// 场景：创建一个 Dialog 并配置后 show，然后返回结果
-<p>val result = AlertDialog.Builder(context).apply {</p>
-<p>setTitle(&quot;确认&quot;)</p>
-<p>setMessage(&quot;确定删除吗？&quot;)</p>
-<p>}.run {</p>
-<p>show()</p>
-<p>// 返回用户操作结果</p>
-<p>isShowing</p>
-<p>}</p>
-<p></code></pre></p>
+val result = AlertDialog.Builder(context).apply {
+    setTitle(&quot;确认&quot;)
+    setMessage(&quot;确定删除吗？&quot;)
+}.run {
+    show()
+    // 返回用户操作结果
+    isShowing
+}
+</code></pre>
 <p><code>run</code> 和 <code>apply</code> 的区别就是返回值：<code>apply</code> 返回对象，<code>run</code> 返回 lambda 结果。</p>
 <h3>with — 对已有对象批量操作</h3>
 <pre><code class="language-kotlin">// ❌ 重复写 binding.
-<p>binding.userName.text = userName</p>
-<p>binding.userEmail.text = email</p>
-<p>binding.userRole.text = role</p>
-<p>binding.userAvatar.setImageResource(avatarRes)</p>
-<p>// ✅ 用 with</p>
-<p>with(binding) {</p>
-<p>userName.text = userName</p>
-<p>userEmail.text = email</p>
-<p>userRole.text = role</p>
-<p>userAvatar.setImageResource(avatarRes)</p>
-<p>}</p>
-<p></code></pre></p>
+binding.userName.text = userName
+binding.userEmail.text = email
+binding.userRole.text = role
+binding.userAvatar.setImageResource(avatarRes)
+
+// ✅ 用 with
+with(binding) {
+    userName.text = userName
+    userEmail.text = email
+    userRole.text = role
+    userAvatar.setImageResource(avatarRes)
+}
+</code></pre>
 <p><code>with</code> 的特殊之处在于它不是扩展函数而是顶层函数，参数是对象本身。适合"我有一个对象，要对它做点事"的场景。</p>
 <h3>also — 插一脚的副作用</h3>
 <pre><code class="language-kotlin">// 日志/调试
-<p>val user = User().apply {</p>
-<p>name = &quot;张三&quot;</p>
-<p>email = &quot;zhangsan@example.com&quot;</p>
-<p>}.also {</p>
-<p>Log.d(&quot;User&quot;, &quot;创建用户: ${it.name}&quot;)</p>
-<p>}</p>
-<p></code></pre></p>
+val user = User().apply {
+    name = &quot;张三&quot;
+    email = &quot;zhangsan@example.com&quot;
+}.also {
+    Log.d(&quot;User&quot;, &quot;创建用户: ${it.name}&quot;)
+}
+</code></pre>
 <p><code>also</code> 和 <code>apply</code> 共用同样的场景，区别是用 <code>it</code> 而不是 <code>this</code>，适合"做完了，顺便打个日志/校验/发个事件"。</p>
 <h2>三个常见的反模式</h2>
 <h3>反模式 1：把 apply 当 run 用</h3>
 <pre><code class="language-kotlin">// ❌ 反模式：apply 不应负责返回计算结果
-<p>val config = Configuration().apply {</p>
-<p>loadFromFile(&quot;config.json&quot;)</p>
-<p>validate()  // validate 返回一个 Boolean</p>
-<p>// 这里用 apply 但希望返回 validate 结果——结果它返回了 config 对象本身</p>
-<p>}</p>
-<p>// ✅ 正确做法：用 run</p>
-<p>val isValid = Configuration().run {</p>
-<p>loadFromFile(&quot;config.json&quot;)</p>
-<p>validate()</p>
-<p>}</p>
-<p></code></pre></p>
+val config = Configuration().apply {
+    loadFromFile(&quot;config.json&quot;)
+    validate()  // validate 返回一个 Boolean
+    // 这里用 apply 但希望返回 validate 结果——结果它返回了 config 对象本身
+}
+
+// ✅ 正确做法：用 run
+val isValid = Configuration().run {
+    loadFromFile(&quot;config.json&quot;)
+    validate()
+}
+</code></pre>
 <h3>反模式 2：不必要的嵌套</h3>
 <pre><code class="language-kotlin">// ❌ 反模式：嵌套作用域函数
-<p>user?.let { u -&gt;</p>
-<p>u.address?.let { addr -&gt;</p>
-<p>println(&quot;${u.name} 住在 ${addr.city}&quot;)</p>
-<p>}</p>
-<p>}</p>
-<p>// ✅ 更好：用 if 或链式调用</p>
-<p>if (user != null &amp;&amp; user.address != null) {</p>
-<p>println(&quot;${user.name} 住在 ${user.address.city}&quot;)</p>
-<p>}</p>
-<p>// 或者用 takeIf</p>
-<p>user?.takeIf { it.address != null }?.let {</p>
-<p>println(&quot;${it.name} 住在 ${it.address.city}&quot;)</p>
-<p>}</p>
-<p></code></pre></p>
+user?.let { u -&gt; 
+    u.address?.let { addr -&gt;
+        println(&quot;${u.name} 住在 ${addr.city}&quot;)
+    }
+}
+
+// ✅ 更好：用 if 或链式调用
+if (user != null &amp;&amp; user.address != null) {
+    println(&quot;${user.name} 住在 ${user.address.city}&quot;)
+}
+
+// 或者用 takeIf
+user?.takeIf { it.address != null }?.let {
+    println(&quot;${it.name} 住在 ${it.address.city}&quot;)
+}
+</code></pre>
 <h3>反模式 3：链式滥用</h3>
 <pre><code class="language-kotlin">// ❌ 反模式：一切皆链式
-<p>data class Result(val code: Int, val message: String)</p>
-<p>fun process() = getData()</p>
-<p>?.let { transform(it) }</p>
-<p>?.also { log(it) }</p>
-<p>?.let { validate(it) }</p>
-<p>?.run { saveToDatabase(this) }</p>
-<p>?: Result(500, &quot;failed&quot;)</p>
-<p>// ✅ 更好的可读性：命名变量</p>
-<p>fun process(): Result {</p>
-<p>val data = getData() ?: return Result(500, &quot;failed&quot;)</p>
-<p>val transformed = transform(data)</p>
-<p>log(transformed)</p>
-<p>val valid = validate(transformed)</p>
-<p>return saveToDatabase(valid)</p>
-<p>}</p>
-<p></code></pre></p>
+data class Result(val code: Int, val message: String)
+
+fun process() = getData()
+    ?.let { transform(it) }
+    ?.also { log(it) }
+    ?.let { validate(it) }
+    ?.run { saveToDatabase(this) }
+    ?: Result(500, &quot;failed&quot;)
+
+// ✅ 更好的可读性：命名变量
+fun process(): Result {
+    val data = getData() ?: return Result(500, &quot;failed&quot;)
+    val transformed = transform(data)
+    log(transformed)
+    val valid = validate(transformed)
+    return saveToDatabase(valid)
+}
+</code></pre>
 <p>链式看起来很酷，但调试的时候每一行都塞进 lambda 里，你没办法在中间加断点和日志。</p>
 <h2><code>this</code> 和 <code>it</code> 的选择逻辑</h2>
 <p>一个更重要的决定：<strong>什么时候用 <code>this</code>，什么时候用 <code>it</code></strong>。</p>
 <p>用 <code>this</code> 的优点是可以直接访问接收者的成员，代码像在对象内部写一样自然：</p>
 <pre><code class="language-kotlin">// this → 像说话一样自然
-<p>binding.apply {</p>
-<p>userName.visibility = View.VISIBLE</p>
-<p>userEmail.isEnabled = true</p>
-<p>userAvatar.setImageResource(R.drawable.default)</p>
-<p>}</p>
-<p></code></pre></p>
+binding.apply {
+    userName.visibility = View.VISIBLE
+    userEmail.isEnabled = true
+    userAvatar.setImageResource(R.drawable.default)
+}
+</code></pre>
 <p>但 <code>this</code> 也有一个缺陷：如果对象和外部作用域有重名的成员，编译器会优先用接收者的，导致混淆：</p>
 <pre><code class="language-kotlin">class MyFragment : Fragment() {
-<p>private var userName: String = &quot;&quot;  // 成员变量</p>
-<p>fun setup(binding: MyBinding) {</p>
-<p>binding.apply {</p>
-<p>// 这里的 userName 是 Fragment 的成员变量</p>
-<p>// 还是 binding.userName？</p>
-<p>userName.text = &quot;Hello&quot;  // 编译器：binding 的</p>
-<p>}</p>
-<p>}</p>
-<p>}</p>
-<p>// 用 it 显式区分</p>
-<p>binding.also { b -&gt;</p>
-<p>b.userName.text = &quot;Hello&quot;</p>
-<p>this@MyFragment.userName = b.userName.text.toString()</p>
-<p>}</p>
-<p></code></pre></p>
+    private var userName: String = &quot;&quot;  // 成员变量
+
+    fun setup(binding: MyBinding) {
+        binding.apply {
+            // 这里的 userName 是 Fragment 的成员变量
+            // 还是 binding.userName？
+            userName.text = &quot;Hello&quot;  // 编译器：binding 的
+        }
+    }
+}
+
+// 用 it 显式区分
+binding.also { b -&gt;
+    b.userName.text = &quot;Hello&quot;
+    this@MyFragment.userName = b.userName.text.toString()
+}
+</code></pre>
 <p>一个简单的经验法则：</p>
 <blockquote>
 <p><strong>如果你只需要访问接收者的成员而不需要引用它本身，用 <code>this</code>（apply/run/with）。如果你需要引用接收者本身（比如区分内外作用域或作为参数传递），用 <code>it</code>（let/also）。</strong></p>
@@ -358,12 +369,14 @@
 <p>在团队项目中，最致命的不是选错了 scope function，而是<strong>每个人选的不一样</strong>。</p>
 <p>举个例子，三个开发者给同一个 View 做初始化：</p>
 <pre><code class="language-kotlin">// 开发者 A
-<p>view.apply { alpha = 0.5f; isVisible = true }</p>
-<p>// 开发者 B</p>
-<p>with(view) { alpha = 0.5f; isVisible = true }</p>
-<p>// 开发者 C</p>
-<p>view.also { it.alpha = 0.5f; it.isVisible = true }</p>
-<p></code></pre></p>
+view.apply { alpha = 0.5f; isVisible = true }
+
+// 开发者 B
+with(view) { alpha = 0.5f; isVisible = true }
+
+// 开发者 C
+view.also { it.alpha = 0.5f; it.isVisible = true }
+</code></pre>
 <p>三行代码功能一模一样。每次 code review 都要争论哪种"更 Kotlin"，纯属内耗。</p>
 <p><strong>推荐的团队规范：</strong>
 <ul>
@@ -377,26 +390,27 @@
 <h2>工具辅助：Detekt 和 lint 规则</h2>
 <p>如果你在 Android 项目里用 Detekt（Gradle 插件），可以加一条规则来强制团队统一风格：</p>
 <pre><code class="language-kotlin">// detekt.yml
-<p>style:</p>
-<p>UnnecessaryApply:</p>
-<p>active: true</p>
-<p>ScopeFunctions:</p>
-<p>active: true</p>
-<p>excludes: ['<strong>/test/</strong>', '<strong>/androidTest/</strong>']</p>
-<p></code></pre></p>
+style:
+  UnnecessaryApply:
+    active: true
+
+  ScopeFunctions:
+    active: true
+    excludes: ['<strong>/test/</strong>', '<strong>/androidTest/</strong>']
+</code></pre>
 <p>Detekt 的 ScopeFunctions 检测器默认是关的，但把它开了以后，它会提示"合适的场景函数"——至少在多人协作时能让代码风格收敛。</p>
 <p>也可以写自定义 lint rule，拒绝 <code>also</code> 在非日志场景下的使用，或者限制 <code>apply</code> 的 lambda 行数。</p>
 <h2>为什么不要过度使用 it</h2>
 <p>Kotlin 中 <code>it</code> 是单参数的隐式名称。在嵌套 scope function 中：</p>
 <pre><code class="language-kotlin">// 你还能分清三个 it 分别是谁吗？
-<p>list?.let {</p>
-<p>it.filter {</p>
-<p>it.isActive  // 是 list 的 it 还是 filter 的 it？</p>
-<p>}?.let {</p>
-<p>it.firstOrNull()  // 同上</p>
-<p>}</p>
-<p>}</p>
-<p></code></pre></p>
+list?.let {
+    it.filter {
+        it.isActive  // 是 list 的 it 还是 filter 的 it？
+    }?.let {
+        it.firstOrNull()  // 同上
+    }
+}
+</code></pre>
 <p><code>it</code> 的隐式特性在嵌套超过一层时会让可读性断崖式下降。一个简单的规则：</p>
 <blockquote>
 <p><strong>作用域函数嵌套超过两层时，给所有的 <code>it</code> 显式命名。</strong></p>
@@ -405,14 +419,14 @@
 <p>Scope Functions 是 Kotlin 中最容易被低估的工具：入门简单，但用好需要想清楚选择逻辑。</p>
 <p>最后给你一个快速决策树，贴到你的 Android 项目 README 里，省得每次 code review 都吵：</p>
 <pre><code>要配置对象？                           → apply
-<p>要检查非空并做转换？                    → let</p>
-<p>要配置 + 计算返回值？                   → run</p>
-<p>要对已有对象批量操作？                   → with</p>
-<p>要打个日志或做前置/后置校验？             → also</p>
-<p>对象和外部作用域有重名成员？              → let/also（用 it 显式引用）</p>
-<p>嵌套超过两层？                          → 给 it 显式命名</p>
-<p>不确定选哪个？                          → 先写传统方式，回头重构成函数提取</p>
-<p></code></pre></p>
+要检查非空并做转换？                    → let
+要配置 + 计算返回值？                   → run
+要对已有对象批量操作？                   → with
+要打个日志或做前置/后置校验？             → also
+对象和外部作用域有重名成员？              → let/also（用 it 显式引用）
+嵌套超过两层？                          → 给 it 显式命名
+不确定选哪个？                          → 先写传统方式，回头重构成函数提取
+</code></pre>
 <p>记得加一条：<strong>不要嵌套 scope functions</strong>。超过两层嵌套说明你的逻辑应该提取成独立函数了。</p>
 
         <!-- Related Static -->

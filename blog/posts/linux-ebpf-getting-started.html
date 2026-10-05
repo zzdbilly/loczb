@@ -178,15 +178,13 @@
 </table>
 <h3>eBPF 程序的生命周期</h3>
 <pre><code>1. 编写 BPF 程序（C / BTF / bpftrace）
-<ol>
-<li>编译为 BPF 字节码（clang -target bpf）</li>
-<li>加载到内核 → 验证器（Verifier）安全检查</li>
-<li>JIT 编译为本地机器码</li>
-<li>挂载到内核钩子（kprobe / tracepoint / XDP 等）</li>
-<li>事件触发时自动执行</li>
-<li>通过 Map 与用户态通信</li>
-<li>不需要时卸载</code></pre></li>
-</ol>
+2. 编译为 BPF 字节码（clang -target bpf）
+3. 加载到内核 → 验证器（Verifier）安全检查
+4. JIT 编译为本地机器码
+5. 挂载到内核钩子（kprobe / tracepoint / XDP 等）
+6. 事件触发时自动执行
+7. 通过 Map 与用户态通信
+8. 不需要时卸载</code></pre>
 <div class="warning-box">
 <p><strong>关键保障</strong>：验证器会在加载时静态分析 BPF 程序，确保：无无限循环、无越界内存访问、所有路径都有返回、不会 panic 内核。这是 eBPF 安全性的根基。</p>
 </div>
@@ -246,43 +244,51 @@
 <p><code>bpftrace</code> 是 eBPF 的高级追踪语言，类似 awk 风格，一行命令就能完成复杂的内核追踪。不需要写 C、不需要编译。</p>
 <h3>安装 bpftrace</h3>
 <pre><code># Ubuntu / Debian
-<p>sudo apt install bpftrace</p>
-<h1>CentOS / RHEL</h1>
-<p>sudo yum install bpftrace</p>
-<h1>从源码编译（获取最新版）</h1>
-<p>git clone https://github.com/bpftrace/bpftrace</p>
-<p>cd bpftrace &amp;&amp; mkdir build &amp;&amp; cd build</p>
-<p>cmake -DCMAKE<em>BUILD</em>TYPE=Release ..</p>
-<p>make -j$(nproc) &amp;&amp; sudo make install</code></pre></p>
+sudo apt install bpftrace
+
+# CentOS / RHEL
+sudo yum install bpftrace
+
+# 从源码编译（获取最新版）
+git clone https://github.com/bpftrace/bpftrace
+cd bpftrace &amp;&amp; mkdir build &amp;&amp; cd build
+cmake -DCMAKE<em>BUILD</em>TYPE=Release ..
+make -j$(nproc) &amp;&amp; sudo make install</code></pre>
 <h3>一行命令实战</h3>
 <pre><code># 追踪所有 openat 系统调用，看看谁在打开文件
-<p>sudo bpftrace -e 'tracepoint:syscalls:sys<em>enter</em>openat { printf("%s -> %s\n", comm, str(args->filename)); }'</p>
-<h1>统计每个进程的系统调用次数</h1>
-<p>sudo bpftrace -e 'tracepoint:raw<em>syscalls:sys</em>enter { @[comm] = count(); }'</p>
-<h1>追踪 TCP 连接建立</h1>
-<p>sudo bpftrace -e 'kprobe:tcp_connect { printf("PID %d (%s) connecting\n", pid, comm); }'</p>
-<h1>统计内核函数调用耗时分布</h1>
-<p>sudo bpftrace -e 'kprobe:vfs<em>read { @start[tid] = nsecs; } kretprobe:vfs</em>read /@start[tid]/ { @ns = hist(nsecs - @start[tid]); delete(@start, tid); }'</p>
-<h1>实时监控 OOM Kill</h1>
-<p>sudo bpftrace -e 'kprobe:oom<em>kill</em>process { printf("OOM killed PID %d\n", pid); }'</code></pre></p>
+sudo bpftrace -e 'tracepoint:syscalls:sys<em>enter</em>openat { printf("%s -> %s\n", comm, str(args->filename)); }'
+
+# 统计每个进程的系统调用次数
+sudo bpftrace -e 'tracepoint:raw<em>syscalls:sys</em>enter { @[comm] = count(); }'
+
+# 追踪 TCP 连接建立
+sudo bpftrace -e 'kprobe:tcp_connect { printf("PID %d (%s) connecting\n", pid, comm); }'
+
+# 统计内核函数调用耗时分布
+sudo bpftrace -e 'kprobe:vfs<em>read { @start[tid] = nsecs; } kretprobe:vfs</em>read /@start[tid]/ { @ns = hist(nsecs - @start[tid]); delete(@start, tid); }'
+
+# 实时监控 OOM Kill
+sudo bpftrace -e 'kprobe:oom<em>kill</em>process { printf("OOM killed PID %d\n", pid); }'</code></pre>
 <p>输出示例：</p>
 <pre><code>Attaching 5 probes...
-<p>nginx -> /var/log/nginx/access.log</p>
-<p>python3 -> /tmp/data.csv</p>
-<p>mysqld -> /var/lib/mysql/ibdata1</p>
-<p>^C</p>
-<p>@ns:</p>
-<p>[256, 512)         43 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@        |</p>
-<p>[512, 1K)          28 |@@@@@@@@@@@@@@@@@@@@@@@@                        |</p>
-<p>[1K, 2K)           12 |@@@@@@@@@@@@@@                                  |</p>
-<p>[2K, 4K)            3 |@@@                                             |</code></pre></p>
+nginx -> /var/log/nginx/access.log
+python3 -> /tmp/data.csv
+mysqld -> /var/lib/mysql/ibdata1
+^C
+
+@ns: 
+[256, 512)         43 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@        |
+[512, 1K)          28 |@@@@@@@@@@@@@@@@@@@@@@@@                        |
+[1K, 2K)           12 |@@@@@@@@@@@@@@                                  |
+[2K, 4K)            3 |@@@                                             |</code></pre>
 <h2>四、BCC 工具链：开箱即用的性能分析</h2>
 <p>BCC（BPF Compiler Collection）提供了 70+ 个预构建的 eBPF 工具，覆盖 CPU、内存、网络、文件 I/O 等场景。大部分工具一行命令就能用。</p>
 <h3>安装 BCC</h3>
 <pre><code># Ubuntu 22.04+
-<p>sudo apt install bpfcc-tools linux-headers-$(uname -r)</p>
-<h1>CentOS 8+</h1>
-<p>sudo yum install bcc-tools</code></pre></p>
+sudo apt install bpfcc-tools linux-headers-$(uname -r)
+
+# CentOS 8+
+sudo yum install bcc-tools</code></pre>
 <h3>常用工具速查</h3>
 <table>
 <tr>
@@ -343,145 +349,175 @@
 </table>
 <h3>实战：定位慢请求根因</h3>
 <pre><code># 1. 发现哪个进程在做大量 I/O
-<p>sudo biotop-bpfcc</p>
-<h1>2. 看 I/O 延迟分布</h1>
-<p>sudo biolatency-bpfcc</p>
-<h1>3. 追踪具体文件被谁打开</h1>
-<p>sudo opensnoop-bpfcc -n mysqld</p>
-<h1>4. 看进程 off-CPU 在等什么</h1>
-<p>sudo offcputime-bpfcc -p $(pidof myapp) 5</p>
-<h1>5. 检查是否有内存泄漏</h1>
-<p>sudo memleak-bpfcc -p $(pidof myapp) -t</code></pre></p>
+sudo biotop-bpfcc
+
+# 2. 看 I/O 延迟分布
+sudo biolatency-bpfcc
+
+# 3. 追踪具体文件被谁打开
+sudo opensnoop-bpfcc -n mysqld
+
+# 4. 看进程 off-CPU 在等什么
+sudo offcputime-bpfcc -p $(pidof myapp) 5
+
+# 5. 检查是否有内存泄漏
+sudo memleak-bpfcc -p $(pidof myapp) -t</code></pre>
 <h2>五、编写 C 语言 eBPF 程序</h2>
 <p>bpftrace 适合快速追踪，但复杂场景需要写 C 语言 eBPF 程序。使用 libbpf 框架是当前推荐的方式。</p>
 <h3>项目结构</h3>
 <pre><code>hello-ebpf/
-<p>├── src/</p>
-<p>│   ├── hello.bpf.c      # 内核态 BPF 程序</p>
-<p>│   └── hello.c           # 用户态加载器</p>
-<p>├── vmlinux.h             # 内核类型定义（BTF 生成）</p>
-<p>└── Makefile</code></pre></p>
+├── src/
+│   ├── hello.bpf.c      # 内核态 BPF 程序
+│   └── hello.c           # 用户态加载器
+├── vmlinux.h             # 内核类型定义（BTF 生成）
+└── Makefile</code></pre>
 <h3>内核态程序：hello.bpf.c</h3>
 <pre><code>#include "vmlinux.h"
-<p>#include &lt;bpf/bpf_helpers.h&gt;</p>
-<p>#include &lt;bpf/bpf_tracing.h&gt;</p>
-<p>#include &lt;bpf/bpf<em>core</em>read.h&gt;</p>
-<p>// 定义一个 Perf Event Array Map，用于向用户态发送事件</p>
-<p>struct {</p>
-<p>_<em>uint(type, BPF</em>MAP<em>TYPE</em>PERF<em>EVENT</em>ARRAY);</p>
-<p>_<em>uint(key</em>size, sizeof(u32));</p>
-<p>_<em>uint(value</em>size, sizeof(u32));</p>
-<p>} events SEC(".maps");</p>
-<p>// 事件结构体</p>
-<p>struct event {</p>
-<p>u32 pid;</p>
-<p>char comm[16];</p>
-<p>char filename[256];</p>
-<p>};</p>
-<p>// 挂载到 openat 系统调用的 tracepoint</p>
-<p>SEC("tracepoint/syscalls/sys<em>enter</em>openat")</p>
-<p>int handle<em>openat(struct trace</em>event<em>raw</em>sys_enter *ctx)</p>
-<p>{</p>
-<p>struct event e = {};</p>
-<p>u64 id = bpf<em>get</em>current<em>pid</em>tgid();</p>
-<p>e.pid = id &gt;&gt; 32;</p>
-<p>bpf<em>get</em>current_comm(&amp;e.comm, sizeof(e.comm));</p>
-<p>// 从 tracepoint 参数中读取文件名</p>
-<p>const char <em>filename = (const char </em>)ctx->args[1];</p>
-<p>bpf<em>probe</em>read<em>user</em>str(e.filename, sizeof(e.filename), filename);</p>
-<p>// 发送事件到用户态</p>
-<p>bpf<em>perf</em>event<em>output(ctx, &amp;events, BPF</em>F<em>CURRENT</em>CPU, &amp;e, sizeof(e));</p>
-<p>return 0;</p>
-<p>}</p>
-<p>char LICENSE[] SEC("license") = "GPL";</code></pre></p>
+#include &lt;bpf/bpf_helpers.h&gt;
+#include &lt;bpf/bpf_tracing.h&gt;
+#include &lt;bpf/bpf<em>core</em>read.h&gt;
+
+// 定义一个 Perf Event Array Map，用于向用户态发送事件
+struct {
+    _<em>uint(type, BPF</em>MAP<em>TYPE</em>PERF<em>EVENT</em>ARRAY);
+    _<em>uint(key</em>size, sizeof(u32));
+    _<em>uint(value</em>size, sizeof(u32));
+} events SEC(".maps");
+
+// 事件结构体
+struct event {
+    u32 pid;
+    char comm[16];
+    char filename[256];
+};
+
+// 挂载到 openat 系统调用的 tracepoint
+SEC("tracepoint/syscalls/sys<em>enter</em>openat")
+int handle<em>openat(struct trace</em>event<em>raw</em>sys_enter *ctx)
+{
+    struct event e = {};
+    u64 id = bpf<em>get</em>current<em>pid</em>tgid();
+    e.pid = id &gt;&gt; 32;
+    bpf<em>get</em>current_comm(&amp;e.comm, sizeof(e.comm));
+
+    // 从 tracepoint 参数中读取文件名
+    const char <em>filename = (const char </em>)ctx->args[1];
+    bpf<em>probe</em>read<em>user</em>str(e.filename, sizeof(e.filename), filename);
+
+    // 发送事件到用户态
+    bpf<em>perf</em>event<em>output(ctx, &amp;events, BPF</em>F<em>CURRENT</em>CPU, &amp;e, sizeof(e));
+    return 0;
+}
+
+char LICENSE[] SEC("license") = "GPL";</code></pre>
 <h3>用户态加载器：hello.c</h3>
 <pre><code>#include &lt;stdio.h&gt;
-<p>#include &lt;stdlib.h&gt;</p>
-<p>#include &lt;string.h&gt;</p>
-<p>#include &lt;errno.h&gt;</p>
-<p>#include &lt;unistd.h&gt;</p>
-<p>#include &lt;bpf/libbpf.h&gt;</p>
-<p>#include &lt;bpf/bpf.h&gt;</p>
-<p>struct event {</p>
-<p>unsigned int pid;</p>
-<p>char comm[16];</p>
-<p>char filename[256];</p>
-<p>};</p>
-<p>static void perf<em>event</em>handler(void <em>ctx, int cpu, void </em>data, __u32 size)</p>
-<p>{</p>
-<p>struct event *e = data;</p>
-<p>printf("[%-6d] %-16s opened %s\n", e->pid, e->comm, e->filename);</p>
-<p>}</p>
-<p>int main(int argc, char **argv)</p>
-<p>{</p>
-<p>struct bpf_object *obj;</p>
-<p>struct bpf_program *prog;</p>
-<p>struct perf_buffer *pb;</p>
-<p>int err;</p>
-<p>// 1. 打开并加载 BPF 程序</p>
-<p>obj = bpf<em>object</em><em>open</em>file("hello.bpf.o", NULL);</p>
-<p>if (libbpf<em>get</em>error(obj)) {</p>
-<p>fprintf(stderr, "Failed to open BPF object\n");</p>
-<p>return 1;</p>
-<p>}</p>
-<p>err = bpf<em>object</em>_load(obj);</p>
-<p>if (err) {</p>
-<p>fprintf(stderr, "Failed to load BPF object: %d\n", err);</p>
-<p>return 1;</p>
-<p>}</p>
-<p>// 2. 找到 BPF 程序并挂载</p>
-<p>prog = bpf<em>object</em><em>find</em>program<em>by</em>name(obj, "handle_openat");</p>
-<p>if (!prog) {</p>
-<p>fprintf(stderr, "Failed to find BPF program\n");</p>
-<p>return 1;</p>
-<p>}</p>
-<p>// libbpf 会自动根据 SEC() 声明挂载到对应 tracepoint</p>
-<p>// 3. 设置 Perf Buffer 接收事件</p>
-<p>struct bpf<em>map *events</em>map = bpf<em>object</em><em>find</em>map<em>by</em>name(obj, "events");</p>
-<p>pb = perf<em>buffer<strong>new(bpf</em>map</strong>fd(events_map), 64,</p>
-<p>perf<em>event</em>handler, NULL, NULL, NULL);</p>
-<p>if (!pb) {</p>
-<p>fprintf(stderr, "Failed to create perf buffer\n");</p>
-<p>return 1;</p>
-<p>}</p>
-<p>printf("Tracing openat() calls... Hit Ctrl-C to stop.\n");</p>
-<p>// 4. 事件循环</p>
-<p>while (1) {</p>
-<p>err = perf<em>buffer</em>_poll(pb, 100);</p>
-<p>if (err &lt; 0 &amp;&amp; err != -EINTR) {</p>
-<p>fprintf(stderr, "Error polling perf buffer: %d\n", err);</p>
-<p>break;</p>
-<p>}</p>
-<p>}</p>
-<p>perf<em>buffer</em>_free(pb);</p>
-<p>bpf<em>object</em>_close(obj);</p>
-<p>return 0;</p>
-<p>}</code></pre></p>
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+#include &lt;errno.h&gt;
+#include &lt;unistd.h&gt;
+#include &lt;bpf/libbpf.h&gt;
+#include &lt;bpf/bpf.h&gt;
+
+struct event {
+    unsigned int pid;
+    char comm[16];
+    char filename[256];
+};
+
+static void perf<em>event</em>handler(void <em>ctx, int cpu, void </em>data, __u32 size)
+{
+    struct event *e = data;
+    printf("[%-6d] %-16s opened %s\n", e->pid, e->comm, e->filename);
+}
+
+int main(int argc, char **argv)
+{
+    struct bpf_object *obj;
+    struct bpf_program *prog;
+    struct perf_buffer *pb;
+    int err;
+
+    // 1. 打开并加载 BPF 程序
+    obj = bpf<em>object</em><em>open</em>file("hello.bpf.o", NULL);
+    if (libbpf<em>get</em>error(obj)) {
+        fprintf(stderr, "Failed to open BPF object\n");
+        return 1;
+    }
+
+    err = bpf<em>object</em>_load(obj);
+    if (err) {
+        fprintf(stderr, "Failed to load BPF object: %d\n", err);
+        return 1;
+    }
+
+    // 2. 找到 BPF 程序并挂载
+    prog = bpf<em>object</em><em>find</em>program<em>by</em>name(obj, "handle_openat");
+    if (!prog) {
+        fprintf(stderr, "Failed to find BPF program\n");
+        return 1;
+    }
+
+    // libbpf 会自动根据 SEC() 声明挂载到对应 tracepoint
+
+    // 3. 设置 Perf Buffer 接收事件
+    struct bpf<em>map *events</em>map = bpf<em>object</em><em>find</em>map<em>by</em>name(obj, "events");
+    pb = perf<em>buffer<strong>new(bpf</em>map</strong>fd(events_map), 64,
+                          perf<em>event</em>handler, NULL, NULL, NULL);
+    if (!pb) {
+        fprintf(stderr, "Failed to create perf buffer\n");
+        return 1;
+    }
+
+    printf("Tracing openat() calls... Hit Ctrl-C to stop.\n");
+
+    // 4. 事件循环
+    while (1) {
+        err = perf<em>buffer</em>_poll(pb, 100);
+        if (err &lt; 0 &amp;&amp; err != -EINTR) {
+            fprintf(stderr, "Error polling perf buffer: %d\n", err);
+            break;
+        }
+    }
+
+    perf<em>buffer</em>_free(pb);
+    bpf<em>object</em>_close(obj);
+    return 0;
+}</code></pre>
 <h3>Makefile</h3>
 <pre><code>CLANG ?= clang
-<p>ARCH := $(shell uname -m | sed 's/x86_64/x86/' | sed 's/aarch64/arm64/')</p>
-<p>BPF_CFLAGS := -g -O2 -target bpf \</p>
-<p>-D_<em>TARGET</em>ARCH_$(ARCH) \</p>
-<p>-I/usr/include/$(shell uname -m)-linux-gnu</p>
-<p>.PHONY: all clean</p>
-<p>all: hello.bpf.o hello</p>
-<p>hello.bpf.o: src/hello.bpf.c</p>
-<p>$(CLANG) $(BPF_CFLAGS) -c $&lt; -o $@</p>
-<p>hello: src/hello.c</p>
-<p>gcc -O2 -o $@ $&lt; -lbpf -lelf -lz</p>
-<p>clean:</p>
-<p>rm -f hello hello.bpf.o</code></pre></p>
+ARCH := $(shell uname -m | sed 's/x86_64/x86/' | sed 's/aarch64/arm64/')
+
+BPF_CFLAGS := -g -O2 -target bpf \
+  -D_<em>TARGET</em>ARCH_$(ARCH) \
+  -I/usr/include/$(shell uname -m)-linux-gnu
+
+.PHONY: all clean
+
+all: hello.bpf.o hello
+
+hello.bpf.o: src/hello.bpf.c
+	$(CLANG) $(BPF_CFLAGS) -c $&lt; -o $@
+
+hello: src/hello.c
+	gcc -O2 -o $@ $&lt; -lbpf -lelf -lz
+
+clean:
+	rm -f hello hello.bpf.o</code></pre>
 <h3>编译与运行</h3>
 <pre><code># 生成 vmlinux.h（如果还没有）
-<p>bpftool btf dump file /sys/kernel/btf/vmlinux format c > vmlinux.h</p>
-<h1>编译</h1>
-<p>make</p>
-<h1>运行（需要 root 或 CAP_BPF）</h1>
-<p>sudo ./hello</p>
-<h1>输出示例：</h1>
-<h1>[3245  ] bash             opened /etc/passwd</h1>
-<h1>[1234  ] nginx            opened /var/www/html/index.html</h1>
-<h1>[5678  ] python3          opened /tmp/data.json</code></pre></h1>
+bpftool btf dump file /sys/kernel/btf/vmlinux format c > vmlinux.h
+
+# 编译
+make
+
+# 运行（需要 root 或 CAP_BPF）
+sudo ./hello
+
+# 输出示例：
+# [3245  ] bash             opened /etc/passwd
+# [1234  ] nginx            opened /var/www/html/index.html
+# [5678  ] python3          opened /tmp/data.json</code></pre>
 <h2>六、BPF Map：内核态与用户态的桥梁</h2>
 <p>BPF Map 是 eBPF 程序与用户态通信的核心机制。它本质上是内核中的一个键值存储。</p>
 <table>
@@ -528,101 +564,110 @@
 </table>
 <h3>Map 操作示例</h3>
 <pre><code>// 内核态
-<p>struct {</p>
-<p>_<em>uint(type, BPF</em>MAP<em>TYPE</em>HASH);</p>
-<p>_<em>uint(max</em>entries, 10240);</p>
-<p>__type(key, u32);           // PID</p>
-<p>__type(value, u64);         // 计数</p>
-<p>} pid_count SEC(".maps");</p>
-<p>SEC("tracepoint/syscalls/sys<em>enter</em>read")</p>
-<p>int count_reads(void *ctx)</p>
-<p>{</p>
-<p>u32 pid = bpf<em>get</em>current<em>pid</em>tgid() >> 32;</p>
-<p>u64 *count = bpf<em>map</em>lookup<em>elem(&amp;pid</em>count, &amp;pid);</p>
-<p>if (count) {</p>
-<p>_<em>sync</em>fetch<em>and</em>add(count, 1);  // 原子递增</p>
-<p>} else {</p>
-<p>u64 init = 1;</p>
-<p>bpf<em>map</em>update<em>elem(&amp;pid</em>count, &amp;pid, &amp;init, BPF_ANY);</p>
-<p>}</p>
-<p>return 0;</p>
-<p>}</code></pre></p>
+struct {
+    _<em>uint(type, BPF</em>MAP<em>TYPE</em>HASH);
+    _<em>uint(max</em>entries, 10240);
+    __type(key, u32);           // PID
+    __type(value, u64);         // 计数
+} pid_count SEC(".maps");
+
+SEC("tracepoint/syscalls/sys<em>enter</em>read")
+int count_reads(void *ctx)
+{
+    u32 pid = bpf<em>get</em>current<em>pid</em>tgid() >> 32;
+    u64 *count = bpf<em>map</em>lookup<em>elem(&amp;pid</em>count, &amp;pid);
+    if (count) {
+        _<em>sync</em>fetch<em>and</em>add(count, 1);  // 原子递增
+    } else {
+        u64 init = 1;
+        bpf<em>map</em>update<em>elem(&amp;pid</em>count, &amp;pid, &amp;init, BPF_ANY);
+    }
+    return 0;
+}</code></pre>
 <div class="warning-box">
 <p><strong>Ringbuf vs Perf Event Array</strong>：新项目推荐使用 <code>BPF<em>MAP</em>TYPE_RINGBUF</code>。它支持变长记录、更少的内存拷贝、更好的数据保序。Perf Event Array 是旧方案，仍然可用但不再推荐。</p>
 </div>
 <h2>七、实战场景：网络可观测性</h2>
 <h3>1. TCP 连接延迟监控</h3>
 <pre><code># bpftrace 追踪 TCP 握手延迟
-<p>sudo bpftrace -e '</p>
-<p>kprobe:tcp<em>v4</em>connect { @start[tid] = nsecs; }</p>
-<p>kretprobe:tcp<em>v4</em>connect /@start[tid]/ {</p>
-<p>$latency = nsecs - @start[tid];</p>
-<p>printf("TCP connect PID %d latency: %d us\n", pid, $latency / 1000);</p>
-<p>delete(@start, tid);</p>
-<p>}'</code></pre></p>
+sudo bpftrace -e '
+kprobe:tcp<em>v4</em>connect { @start[tid] = nsecs; }
+kretprobe:tcp<em>v4</em>connect /@start[tid]/ {
+    $latency = nsecs - @start[tid];
+    printf("TCP connect PID %d latency: %d us\n", pid, $latency / 1000);
+    delete(@start, tid);
+}'</code></pre>
 <h3>2. XDP 包过滤（高性能 DDoS 防御）</h3>
 <pre><code>// xdp_drop.c - XDP 程序丢弃特定 IP 的包
-<p>#include &lt;linux/bpf.h&gt;</p>
-<p>#include &lt;bpf/bpf_helpers.h&gt;</p>
-<p>struct {</p>
-<p>_<em>uint(type, BPF</em>MAP<em>TYPE</em>HASH);</p>
-<p>_<em>uint(max</em>entries, 10000);</p>
-<p><strong>type(key, </strong>u32);       // 攻击者 IP</p>
-<p><strong>type(value, </strong>u8);      // 占位</p>
-<p>} blocklist SEC(".maps");</p>
-<p>SEC("xdp")</p>
-<p>int xdp<em>drop</em>attackers(struct xdp_md *ctx)</p>
-<p>{</p>
-<p>void <em>data<em>end = (void </em>)(long)ctx->data</em>end;</p>
-<p>void <em>data     = (void </em>)(long)ctx->data;</p>
-<p>struct ethhdr *eth = data;</p>
-<p>if ((void *)(eth + 1) > data_end)</p>
-<p>return XDP_PASS;</p>
-<p>if (eth->h<em>proto != </em><em>constant</em>htons(ETH<em>P</em>IP))</p>
-<p>return XDP_PASS;</p>
-<p>struct iphdr <em>ip = (void </em>)(eth + 1);</p>
-<p>if ((void *)(ip + 1) > data_end)</p>
-<p>return XDP_PASS;</p>
-<p>_<em>u32 src</em>ip = ip->saddr;</p>
-<p>if (bpf<em>map</em>lookup<em>elem(&amp;blocklist, &amp;src</em>ip))</p>
-<p>return XDP_DROP;  // 在网卡驱动层直接丢弃</p>
-<p>return XDP_PASS;</p>
-<p>}</p>
-<p>char LICENSE[] SEC("license") = "GPL";</code></pre></p>
+#include &lt;linux/bpf.h&gt;
+#include &lt;bpf/bpf_helpers.h&gt;
+
+struct {
+    _<em>uint(type, BPF</em>MAP<em>TYPE</em>HASH);
+    _<em>uint(max</em>entries, 10000);
+    <strong>type(key, </strong>u32);       // 攻击者 IP
+    <strong>type(value, </strong>u8);      // 占位
+} blocklist SEC(".maps");
+
+SEC("xdp")
+int xdp<em>drop</em>attackers(struct xdp_md *ctx)
+{
+    void <em>data<em>end = (void </em>)(long)ctx->data</em>end;
+    void <em>data     = (void </em>)(long)ctx->data;
+
+    struct ethhdr *eth = data;
+    if ((void *)(eth + 1) > data_end)
+        return XDP_PASS;
+
+    if (eth->h<em>proto != </em><em>constant</em>htons(ETH<em>P</em>IP))
+        return XDP_PASS;
+
+    struct iphdr <em>ip = (void </em>)(eth + 1);
+    if ((void *)(ip + 1) > data_end)
+        return XDP_PASS;
+
+    _<em>u32 src</em>ip = ip->saddr;
+    if (bpf<em>map</em>lookup<em>elem(&amp;blocklist, &amp;src</em>ip))
+        return XDP_DROP;  // 在网卡驱动层直接丢弃
+
+    return XDP_PASS;
+}
+
+char LICENSE[] SEC("license") = "GPL";</code></pre>
 <div class="tip-box">
 <p><strong>XDP 性能</strong>：XDP 在网卡驱动层执行，比传统 iptables 快 5-10 倍。Cloudflare 用 XDP 处理 L3/L4 DDoS 防御，单核可达 10M+ pps。</p>
 </div>
 <h3>3. HTTP 请求追踪（无侵入 APM）</h3>
 <pre><code># 追踪 nginx 的 HTTP 请求处理时间
-<p>sudo bpftrace -e '</p>
-<p>uprobe:/usr/sbin/nginx:ngx<em>http</em>process_request { @start[tid] = nsecs; }</p>
-<p>uretprobe:/usr/sbin/nginx:ngx<em>http</em>process_request /@start[tid]/ {</p>
-<p>$latency = (nsecs - @start[tid]) / 1000000;</p>
-<p>printf("HTTP request: %d ms\n", $latency);</p>
-<p>delete(@start, tid);</p>
-<p>}'</code></pre></p>
+sudo bpftrace -e '
+uprobe:/usr/sbin/nginx:ngx<em>http</em>process_request { @start[tid] = nsecs; }
+uretprobe:/usr/sbin/nginx:ngx<em>http</em>process_request /@start[tid]/ {
+    $latency = (nsecs - @start[tid]) / 1000000;
+    printf("HTTP request: %d ms\n", $latency);
+    delete(@start, tid);
+}'</code></pre>
 <h2>八、实战场景：安全监控</h2>
 <h3>1. 文件权限变更监控</h3>
 <pre><code># 追踪 chmod/fchmod 调用
-<p>sudo bpftrace -e '</p>
-<p>tracepoint:syscalls:sys<em>enter</em>fchmod {</p>
-<p>printf("chmod by %s (PID %d): fd=%d mode=0%o\n",</p>
-<p>comm, pid, args->fd, args->mode);</p>
-<p>}'</code></pre></p>
+sudo bpftrace -e '
+tracepoint:syscalls:sys<em>enter</em>fchmod {
+    printf("chmod by %s (PID %d): fd=%d mode=0%o\n",
+           comm, pid, args->fd, args->mode);
+}'</code></pre>
 <h3>2. 敏感文件读取监控</h3>
 <pre><code># 监控 /etc/shadow 被谁读取
-<p>sudo bpftrace -e '</p>
-<p>tracepoint:syscalls:sys<em>enter</em>openat</p>
-<p>/str(args->filename) == "/etc/shadow"/ {</p>
-<p>printf("ALERT: %s (PID %d) reading /etc/shadow\n", comm, pid);</p>
-<p>}'</code></pre></p>
+sudo bpftrace -e '
+tracepoint:syscalls:sys<em>enter</em>openat
+/str(args->filename) == "/etc/shadow"/ {
+    printf("ALERT: %s (PID %d) reading /etc/shadow\n", comm, pid);
+}'</code></pre>
 <h3>3. 进程执行审计</h3>
 <pre><code># 实时追踪所有命令执行
-<p>sudo bpftrace -e '</p>
-<p>tracepoint:sched:sched<em>process</em>exec {</p>
-<p>printf("EXEC: %s -> %s (UID %d)\n",</p>
-<p>comm, str(args->filename), args->uid);</p>
-<p>}'</code></pre></p>
+sudo bpftrace -e '
+tracepoint:sched:sched<em>process</em>exec {
+    printf("EXEC: %s -> %s (UID %d)\n",
+           comm, str(args->filename), args->uid);
+}'</code></pre>
 <h2>九、云原生 eBPF 生态</h2>
 <p>以下是云原生场景中最常用的 eBPF 项目：</p>
 <table>
@@ -683,31 +728,38 @@
 <li>加载时 libbpf 根据当前内核的 BTF 自动重定位字段偏移</li>
 </ol>
 <pre><code># 检查内核是否支持 BTF
-<p>ls /sys/kernel/btf/vmlinux</p>
-<h1>生成 vmlinux.h</h1>
-<p>bpftool btf dump file /sys/kernel/btf/vmlinux format c > vmlinux.h</p>
-<h1>编译 CO-RE 程序（关键标志）</h1>
-<p>clang -g -O2 -target bpf \</p>
-<p>-D_<em>TARGET</em>ARCH_x86 \</p>
-<p>-c hello.bpf.c -o hello.bpf.o</code></pre></p>
+ls /sys/kernel/btf/vmlinux
+
+# 生成 vmlinux.h
+bpftool btf dump file /sys/kernel/btf/vmlinux format c > vmlinux.h
+
+# 编译 CO-RE 程序（关键标志）
+clang -g -O2 -target bpf \
+  -D_<em>TARGET</em>ARCH_x86 \
+  -c hello.bpf.c -o hello.bpf.o</code></pre>
 <div class="warning-box">
 <p><strong>内核版本要求</strong>：BTF 从 Linux 5.2 开始支持，5.4+ 默认启用。如果你的生产环境内核低于 5.4，需要手动开启 <code>CONFIG<em>DEBUG</em>INFO_BTF=y</code>。</p>
 </div>
 <h2>十一、调试与排错</h2>
 <h3>常用调试命令</h3>
 <pre><code># 查看已加载的 BPF 程序
-<p>sudo bpftool prog list</p>
-<h1>查看程序详情（含字节码）</h1>
-<p>sudo bpftool prog show id 42</p>
-<h1>查看 BPF Map</h1>
-<p>sudo bpftool map list</p>
-<p>sudo bpftool map dump id 10</p>
-<h1>查看挂载点</h1>
-<p>sudo bpftool perf list</p>
-<h1>查看内核支持的 tracepoint</h1>
-<p>sudo bpftool prog profile</p>
-<h1>验证器日志（加载失败时）</h1>
-<p>sudo cat /sys/kernel/debug/tracing/trace_pipe</code></pre></p>
+sudo bpftool prog list
+
+# 查看程序详情（含字节码）
+sudo bpftool prog show id 42
+
+# 查看 BPF Map
+sudo bpftool map list
+sudo bpftool map dump id 10
+
+# 查看挂载点
+sudo bpftool perf list
+
+# 查看内核支持的 tracepoint
+sudo bpftool prog profile
+
+# 验证器日志（加载失败时）
+sudo cat /sys/kernel/debug/tracing/trace_pipe</code></pre>
 <h3>常见错误排查</h3>
 <table>
 <tr>
@@ -753,9 +805,10 @@
 <li><strong>关注内核版本</strong>：5.4+ 是当前推荐的最低版本，5.10+ 支持更完整</li>
 </ol>
 <pre><code># 检查内核 eBPF 特性支持
-<p>sudo bpftool feature probe</p>
-<h1>一键查看当前内核支持的 BPF 能力</h1>
-<p>sudo bpftool feature probe | grep "bpf_"</code></pre></p>
+sudo bpftool feature probe
+
+# 一键查看当前内核支持的 BPF 能力
+sudo bpftool feature probe | grep "bpf_"</code></pre>
 <div class="tip-box">
 <p><strong>一句话总结</strong>：eBPF 是 Linux 内核的可编程层，用安全、低开销的方式把可观测性、网络和安全能力从内核模块迁移到了沙箱运行时。掌握 bpftrace + BCC + libbpf 三件套，足以覆盖 90% 的生产场景。</p>
 </div>

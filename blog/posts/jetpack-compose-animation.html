@@ -167,236 +167,252 @@
 <h3>1. animate*AsState</h3>
 <p>最基础的动画 API，用于单一值的变化：</p>
 <pre><code>@Composable
-<p>fun FadeInBox(visible: Boolean) {</p>
-<p>val alpha by animateFloatAsState(</p>
-<p>targetValue = if (visible) 1f else 0f,</p>
-<p>animationSpec = tween(durationMillis = 300),</p>
-<p>label = "alpha"</p>
-<p>)</p>
-<p>Box(</p>
-<p>modifier = Modifier</p>
-<p>.size(100.dp)</p>
-<p>.alpha(alpha)</p>
-<p>.background(Color.Blue)</p>
-<p>)</p>
-<p>}</code></pre></p>
+fun FadeInBox(visible: Boolean) {
+    val alpha by animateFloatAsState(
+        targetValue = if (visible) 1f else 0f,
+        animationSpec = tween(durationMillis = 300),
+        label = "alpha"
+    )
+    
+    Box(
+        modifier = Modifier
+            .size(100.dp)
+            .alpha(alpha)
+            .background(Color.Blue)
+    )
+}</code></pre>
 <h3>2. 常用 animate*AsState 函数</h3>
 <pre><code>// 颜色动画
-<p>val color by animateColorAsState(</p>
-<p>targetValue = if (selected) Color.Red else Color.Gray,</p>
-<p>animationSpec = spring(stiffness = Spring.StiffnessLow)</p>
-<p>)</p>
-<p>// 尺寸动画</p>
-<p>val size by animateDpAsState(</p>
-<p>targetValue = if (expanded) 200.dp else 100.dp,</p>
-<p>animationSpec = tween(300, easing = FastOutSlowInEasing)</p>
-<p>)</p>
-<p>// 偏移动画</p>
-<p>val offset by animateIntOffsetAsState(</p>
-<p>targetValue = if (moved) IntOffset(100, 100) else IntOffset.Zero</p>
-<p>)</p>
-<p>// 圆角动画</p>
-<p>val corner by animateDpAsState(</p>
-<p>targetValue = if (rounded) 24.dp else 0.dp</p>
-<p>)</code></pre></p>
+val color by animateColorAsState(
+    targetValue = if (selected) Color.Red else Color.Gray,
+    animationSpec = spring(stiffness = Spring.StiffnessLow)
+)
+
+// 尺寸动画
+val size by animateDpAsState(
+    targetValue = if (expanded) 200.dp else 100.dp,
+    animationSpec = tween(300, easing = FastOutSlowInEasing)
+)
+
+// 偏移动画
+val offset by animateIntOffsetAsState(
+    targetValue = if (moved) IntOffset(100, 100) else IntOffset.Zero
+)
+
+// 圆角动画
+val corner by animateDpAsState(
+    targetValue = if (rounded) 24.dp else 0.dp
+)</code></pre>
 <h2>二、状态动画</h2>
 <h3>1. AnimatedVisibility</h3>
 <p>控制组件显示/隐藏的动画：</p>
 <pre><code>@Composable
-<p>fun ExpandableCard(expanded: Boolean) {</p>
-<p>AnimatedVisibility(</p>
-<p>visible = expanded,</p>
-<p>enter = fadeIn() + expandVertically(),</p>
-<p>exit = fadeOut() + shrinkVertically()</p>
-<p>) {</p>
-<p>Card(</p>
-<p>modifier = Modifier</p>
-<p>.fillMaxWidth()</p>
-<p>.padding(16.dp)</p>
-<p>) {</p>
-<p>Text(</p>
-<p>text = "这是一段可以展开/收起的内容",</p>
-<p>modifier = Modifier.padding(16.dp)</p>
-<p>)</p>
-<p>}</p>
-<p>}</p>
-<p>}</code></pre></p>
+fun ExpandableCard(expanded: Boolean) {
+    AnimatedVisibility(
+        visible = expanded,
+        enter = fadeIn() + expandVertically(),
+        exit = fadeOut() + shrinkVertically()
+    ) {
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+        ) {
+            Text(
+                text = "这是一段可以展开/收起的内容",
+                modifier = Modifier.padding(16.dp)
+            )
+        }
+    }
+}</code></pre>
 <div class="tip-box">
 <p><strong>组合动画</strong>：<code>fadeIn() + expandVertically()</code> 使用 <code>+</code> 组合多个动画效果，它们会同时执行。</p>
 </div>
 <h3>2. AnimatedContent</h3>
 <p>内容切换时的过渡动画：</p>
 <pre><code>@Composable
-<p>fun TabContent(selectedTab: Int) {</p>
-<p>AnimatedContent(</p>
-<p>targetState = selectedTab,</p>
-<p>transitionSpec = {</p>
-<p>if (targetState > initialState) {</p>
-<p>slideInHorizontally { width -> width } + fadeIn() togetherWith</p>
-<p>slideOutHorizontally { width -> -width } + fadeOut()</p>
-<p>} else {</p>
-<p>slideInHorizontally { width -> -width } + fadeIn() togetherWith</p>
-<p>slideOutHorizontally { width -> width } + fadeOut()</p>
-<p>}</p>
-<p>},</p>
-<p>label = "tab-content"</p>
-<p>) { targetTab -></p>
-<p>when (targetTab) {</p>
-<p>0 -> HomeScreen()</p>
-<p>1 -> ProfileScreen()</p>
-<p>2 -> SettingsScreen()</p>
-<p>}</p>
-<p>}</p>
-<p>}</code></pre></p>
+fun TabContent(selectedTab: Int) {
+    AnimatedContent(
+        targetState = selectedTab,
+        transitionSpec = {
+            if (targetState > initialState) {
+                slideInHorizontally { width -> width } + fadeIn() togetherWith
+                    slideOutHorizontally { width -> -width } + fadeOut()
+            } else {
+                slideInHorizontally { width -> -width } + fadeIn() togetherWith
+                    slideOutHorizontally { width -> width } + fadeOut()
+            }
+        },
+        label = "tab-content"
+    ) { targetTab ->
+        when (targetTab) {
+            0 -> HomeScreen()
+            1 -> ProfileScreen()
+            2 -> SettingsScreen()
+        }
+    }
+}</code></pre>
 <h3>3. Crossfade</h3>
 <p>淡入淡出切换两个状态：</p>
 <pre><code>@Composable
-<p>fun LoadingContent(isLoading: Boolean) {</p>
-<p>Crossfade(</p>
-<p>targetState = isLoading,</p>
-<p>animationSpec = tween(500),</p>
-<p>label = "loading-crossfade"</p>
-<p>) { loading -></p>
-<p>if (loading) {</p>
-<p>CircularProgressIndicator()</p>
-<p>} else {</p>
-<p>ContentList()</p>
-<p>}</p>
-<p>}</p>
-<p>}</code></pre></p>
+fun LoadingContent(isLoading: Boolean) {
+    Crossfade(
+        targetState = isLoading,
+        animationSpec = tween(500),
+        label = "loading-crossfade"
+    ) { loading ->
+        if (loading) {
+            CircularProgressIndicator()
+        } else {
+            ContentList()
+        }
+    }
+}</code></pre>
 <h2>三、高级动画</h2>
 <h3>1. Animatable</h3>
 <p>手动控制动画，支持中断和反向：</p>
 <pre><code>@Composable
-<p>fun DraggableBall() {</p>
-<p>val animatable = remember { Animatable(0f) }</p>
-<p>val coroutineScope = rememberCoroutineScope()</p>
-<p>Box(</p>
-<p>modifier = Modifier</p>
-<p>.fillMaxWidth()</p>
-<p>.height(200.dp)</p>
-<p>.pointerInput(Unit) {</p>
-<p>detectTapGestures(</p>
-<p>onPress = { offset -></p>
-<p>// 动画到点击位置</p>
-<p>coroutineScope.launch {</p>
-<p>animatable.animateTo(</p>
-<p>targetValue = offset.x,</p>
-<p>animationSpec = spring(</p>
-<p>dampingRatio = Spring.DampingRatioMediumBouncy,</p>
-<p>stiffness = Spring.StiffnessLow</p>
-<p>)</p>
-<p>)</p>
-<p>}</p>
-<p>}</p>
-<p>)</p>
-<p>}</p>
-<p>) {</p>
-<p>Box(</p>
-<p>modifier = Modifier</p>
-<p>.offset { IntOffset(animatable.value.roundToInt(), 0) }</p>
-<p>.size(50.dp)</p>
-<p>.background(Color.Red, CircleShape())</p>
-<p>)</p>
-<p>}</p>
-<p>}</code></pre></p>
+fun DraggableBall() {
+    val animatable = remember { Animatable(0f) }
+    val coroutineScope = rememberCoroutineScope()
+    
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(200.dp)
+            .pointerInput(Unit) {
+                detectTapGestures(
+                    onPress = { offset ->
+                        // 动画到点击位置
+                        coroutineScope.launch {
+                            animatable.animateTo(
+                                targetValue = offset.x,
+                                animationSpec = spring(
+                                    dampingRatio = Spring.DampingRatioMediumBouncy,
+                                    stiffness = Spring.StiffnessLow
+                                )
+                            )
+                        }
+                    }
+                )
+            }
+    ) {
+        Box(
+            modifier = Modifier
+                .offset { IntOffset(animatable.value.roundToInt(), 0) }
+                .size(50.dp)
+                .background(Color.Red, CircleShape())
+        )
+    }
+}</code></pre>
 <h3>2. Transition</h3>
 <p>管理多状态动画：</p>
 <pre><code>enum class ButtonState {
-<p>Idle, Pressed, Loading, Success</p>
-<p>}</p>
-<p>@Composable</p>
-<p>fun AnimatedButton() {</p>
-<p>var buttonState by remember { mutableStateOf(ButtonState.Idle) }</p>
-<p>val transition = updateTransition(buttonState, label = "button-state")</p>
-<p>val bgColor by transition.animateColor(label = "bg-color") { state -></p>
-<p>when (state) {</p>
-<p>ButtonState.Idle -> Color.Blue</p>
-<p>ButtonState.Pressed -> Color.DarkGray</p>
-<p>ButtonState.Loading -> Color.Gray</p>
-<p>ButtonState.Success -> Color.Green</p>
-<p>}</p>
-<p>}</p>
-<p>val elevation by transition.animateDp(label = "elevation") { state -></p>
-<p>if (state == ButtonState.Pressed) 2.dp else 8.dp</p>
-<p>}</p>
-<p>Button(</p>
-<p>onClick = { /<em> 处理点击 </em>/ },</p>
-<p>colors = ButtonDefaults.buttonColors(containerColor = bgColor),</p>
-<p>modifier = Modifier.shadow(elevation)</p>
-<p>) {</p>
-<p>AnimatedContent(buttonState, label = "button-content") { state -></p>
-<p>when (state) {</p>
-<p>ButtonState.Idle -> Text("提交")</p>
-<p>ButtonState.Pressed -> Text("按下")</p>
-<p>ButtonState.Loading -> CircularProgressIndicator()</p>
-<p>ButtonState.Success -> Text("完成")</p>
-<p>}</p>
-<p>}</p>
-<p>}</p>
-<p>}</code></pre></p>
+    Idle, Pressed, Loading, Success
+}
+
+@Composable
+fun AnimatedButton() {
+    var buttonState by remember { mutableStateOf(ButtonState.Idle) }
+    
+    val transition = updateTransition(buttonState, label = "button-state")
+    
+    val bgColor by transition.animateColor(label = "bg-color") { state ->
+        when (state) {
+            ButtonState.Idle -> Color.Blue
+            ButtonState.Pressed -> Color.DarkGray
+            ButtonState.Loading -> Color.Gray
+            ButtonState.Success -> Color.Green
+        }
+    }
+    
+    val elevation by transition.animateDp(label = "elevation") { state ->
+        if (state == ButtonState.Pressed) 2.dp else 8.dp
+    }
+    
+    Button(
+        onClick = { /<em> 处理点击 </em>/ },
+        colors = ButtonDefaults.buttonColors(containerColor = bgColor),
+        modifier = Modifier.shadow(elevation)
+    ) {
+        AnimatedContent(buttonState, label = "button-content") { state ->
+            when (state) {
+                ButtonState.Idle -> Text("提交")
+                ButtonState.Pressed -> Text("按下")
+                ButtonState.Loading -> CircularProgressIndicator()
+                ButtonState.Success -> Text("完成")
+            }
+        }
+    }
+}</code></pre>
 <h2>AnimationSpec 详解</h2>
 <p>AnimationSpec 定义动画的执行方式：</p>
 <pre><code>// 1. tween - 时间插值动画
-<p>tween&lt;Float>(</p>
-<p>durationMillis = 300,</p>
-<p>delayMillis = 100,</p>
-<p>easing = FastOutSlowInEasing</p>
-<p>)</p>
-<p>// 2. spring - 弹簧动画（物理模拟）</p>
-<p>spring&lt;Float>(</p>
-<p>dampingRatio = Spring.DampingRatioNoBouncy,</p>
-<p>stiffness = Spring.StiffnessMedium</p>
-<p>)</p>
-<p>// 3. keyframes - 关键帧动画</p>
-<p>keyframes&lt;Float> {</p>
-<p>durationMillis = 500</p>
-<p>0f at 0 with LinearEasing</p>
-<p>0.5f at 200 with FastOutLinearInEasing</p>
-<p>1f at 500</p>
-<p>}</p>
-<p>// 4. repeatable - 重复动画</p>
-<p>repeatable&lt;Float>(</p>
-<p>iterations = 3,</p>
-<p>animation = tween(300),</p>
-<p>repeatMode = RepeatMode.Reverse</p>
-<p>)</p>
-<p>// 5. infiniteRepeatable - 无限循环</p>
-<p>infiniteRepeatable&lt;Float>(</p>
-<p>animation = tween(300),</p>
-<p>repeatMode = RepeatMode.Restart</p>
-<p>)</code></pre></p>
+tween&lt;Float>(
+    durationMillis = 300,
+    delayMillis = 100,
+    easing = FastOutSlowInEasing
+)
+
+// 2. spring - 弹簧动画（物理模拟）
+spring&lt;Float>(
+    dampingRatio = Spring.DampingRatioNoBouncy,
+    stiffness = Spring.StiffnessMedium
+)
+
+// 3. keyframes - 关键帧动画
+keyframes&lt;Float> {
+    durationMillis = 500
+    0f at 0 with LinearEasing
+    0.5f at 200 with FastOutLinearInEasing
+    1f at 500
+}
+
+// 4. repeatable - 重复动画
+repeatable&lt;Float>(
+    iterations = 3,
+    animation = tween(300),
+    repeatMode = RepeatMode.Reverse
+)
+
+// 5. infiniteRepeatable - 无限循环
+infiniteRepeatable&lt;Float>(
+    animation = tween(300),
+    repeatMode = RepeatMode.Restart
+)</code></pre>
 <div class="warning-box">
 <p><strong>性能提示</strong>：<code>spring</code> 动画基于物理模拟，可能触发多次重组，在复杂 UI 中注意性能。</p>
 </div>
 <h2>实战案例：点赞动画</h2>
 <pre><code>@Composable
-<p>fun LikeButton(</p>
-<p>isLiked: Boolean,</p>
-<p>onLike: () -> Unit</p>
-<p>) {</p>
-<p>val scale by animateFloatAsState(</p>
-<p>targetValue = if (isLiked) 1.2f else 1f,</p>
-<p>animationSpec = spring(</p>
-<p>stiffness = Spring.StiffnessMedium,</p>
-<p>dampingRatio = Spring.DampingRatioMediumBouncy</p>
-<p>),</p>
-<p>label = "like-scale"</p>
-<p>)</p>
-<p>val color by animateColorAsState(</p>
-<p>targetValue = if (isLiked) Color.Red else Color.Gray,</p>
-<p>label = "like-color"</p>
-<p>)</p>
-<p>Icon(</p>
-<p>imageVector = if (isLiked) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,</p>
-<p>contentDescription = "点赞",</p>
-<p>tint = color,</p>
-<p>modifier = Modifier</p>
-<p>.scale(scale)</p>
-<p>.clickable { onLike() }</p>
-<p>.size(32.dp)</p>
-<p>)</p>
-<p>}</code></pre></p>
+fun LikeButton(
+    isLiked: Boolean,
+    onLike: () -> Unit
+) {
+    val scale by animateFloatAsState(
+        targetValue = if (isLiked) 1.2f else 1f,
+        animationSpec = spring(
+            stiffness = Spring.StiffnessMedium,
+            dampingRatio = Spring.DampingRatioMediumBouncy
+        ),
+        label = "like-scale"
+    )
+    
+    val color by animateColorAsState(
+        targetValue = if (isLiked) Color.Red else Color.Gray,
+        label = "like-color"
+    )
+    
+    Icon(
+        imageVector = if (isLiked) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
+        contentDescription = "点赞",
+        tint = color,
+        modifier = Modifier
+            .scale(scale)
+            .clickable { onLike() }
+            .size(32.dp)
+    )
+}</code></pre>
 <h2>最佳实践</h2>
 <ul>
 <li><strong>优先使用声明式 API</strong>：<code>animate*AsState</code> 和 <code>AnimatedVisibility</code> 覆盖大部分场景</li>

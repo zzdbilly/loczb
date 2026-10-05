@@ -194,31 +194,36 @@
 </table>
 <h3>启用 WAL 模式</h3>
 <pre><code>-- 启用 WAL
-<p>PRAGMA journal_mode = WAL;</p>
-<p>-- 查询当前模式</p>
-<p>PRAGMA journal_mode;</p>
-<p>-- 返回: wal</p>
-<p>-- 关闭 WAL</p>
-<p>PRAGMA journal_mode = DELETE;</code></pre></p>
+PRAGMA journal_mode = WAL;
+
+-- 查询当前模式
+PRAGMA journal_mode;
+-- 返回: wal
+
+-- 关闭 WAL
+PRAGMA journal_mode = DELETE;</code></pre>
 <div class="tip-box">
 <p><strong>推荐</strong>：生产环境默认启用 WAL 模式。设置是持久化的，无需每次连接都设置。</p>
 </div>
 <h3>WAL 文件说明</h3>
 <pre><code># WAL 模式会产生三个文件
-<p>database.db          # 主数据库文件</p>
-<p>database.db-wal      # WAL 日志文件（写入记录）</p>
-<p>database.db-shm      # 共享内存文件（索引）</p>
-<h1>WAL 文件会自动 checkpoint 到主文件</h1>
-<h1>文件大小控制在 wal_autocheckpoint 限制内</code></pre></h1>
+database.db          # 主数据库文件
+database.db-wal      # WAL 日志文件（写入记录）
+database.db-shm      # 共享内存文件（索引）
+
+# WAL 文件会自动 checkpoint 到主文件
+# 文件大小控制在 wal_autocheckpoint 限制内</code></pre>
 <h3>Checkpoint 控制</h3>
 <pre><code>-- 设置自动 checkpoint 阈限（页数）
-<p>-- 默认 1000 页（约 4MB）</p>
-<p>PRAGMA wal_autocheckpoint = 1000;</p>
-<p>-- 手动 checkpoint</p>
-<p>PRAGMA wal_checkpoint;</p>
-<p>-- 返回: busy|log|checkpointed</p>
-<p>-- FULL checkpoint（完全合并）</p>
-<p>PRAGMA wal_checkpoint(TRUNCATE);</code></pre></p>
+-- 默认 1000 页（约 4MB）
+PRAGMA wal_autocheckpoint = 1000;
+
+-- 手动 checkpoint
+PRAGMA wal_checkpoint;
+-- 返回: busy|log|checkpointed
+
+-- FULL checkpoint（完全合并）
+PRAGMA wal_checkpoint(TRUNCATE);</code></pre>
 <h2>二、并发与锁</h2>
 <h3>SQLite 锁级别</h3>
 <table>
@@ -255,42 +260,50 @@
 </table>
 <h3>WAL 模式并发特性</h3>
 <pre><code># WAL 模式下：
-<h1>- 多个读取者可以同时工作</h1>
-<h1>- 写入时不阻塞读取</h1>
-<h1>- 但同时只能有一个写入者</h1>
-<h1>解决方案：</h1>
-<h1>1. 使用连接池</h1>
-<h1>2. 批量写入减少锁竞争</h1>
-<h1>3. 调整 busy_timeout</code></pre></h1>
+# - 多个读取者可以同时工作
+# - 写入时不阻塞读取
+# - 但同时只能有一个写入者
+
+# 解决方案：
+# 1. 使用连接池
+# 2. 批量写入减少锁竞争
+# 3. 调整 busy_timeout</code></pre>
 <h3>Busy Timeout</h3>
 <pre><code>-- 设置等待锁的超时（毫秒）
-<p>PRAGMA busy_timeout = 5000;</p>
-<p>-- 写入时会等待最多 5 秒</p>
-<p>-- 而不是立即返回 SQLITE_BUSY 错误</code></pre></p>
+PRAGMA busy_timeout = 5000;
+
+-- 写入时会等待最多 5 秒
+-- 而不是立即返回 SQLITE_BUSY 错误</code></pre>
 <h2>三、索引优化</h2>
 <h3>创建索引</h3>
 <pre><code>-- 单列索引
-<p>CREATE INDEX idx<em>users</em>email ON users(email);</p>
-<p>-- 多列索引（注意顺序）</p>
-<p>CREATE INDEX idx<em>orders</em>user<em>date ON orders(user</em>id, created_at);</p>
-<p>-- 覆盖索引（包含查询所需所有列）</p>
-<p>CREATE INDEX idx<em>users</em>cover ON users(email, name, created_at);</p>
-<p>-- 唯一索引</p>
-<p>CREATE UNIQUE INDEX idx<em>users</em>email_unique ON users(email);</p>
-<p>-- 条件索引（部分索引）</p>
-<p>CREATE INDEX idx<em>active</em>users ON users(email) WHERE active = 1;</code></pre></p>
+CREATE INDEX idx<em>users</em>email ON users(email);
+
+-- 多列索引（注意顺序）
+CREATE INDEX idx<em>orders</em>user<em>date ON orders(user</em>id, created_at);
+
+-- 覆盖索引（包含查询所需所有列）
+CREATE INDEX idx<em>users</em>cover ON users(email, name, created_at);
+
+-- 唯一索引
+CREATE UNIQUE INDEX idx<em>users</em>email_unique ON users(email);
+
+-- 条件索引（部分索引）
+CREATE INDEX idx<em>active</em>users ON users(email) WHERE active = 1;</code></pre>
 <h3>索引使用分析</h3>
 <pre><code>-- 查看查询计划
-<p>EXPLAIN QUERY PLAN SELECT * FROM users WHERE email = 'test@example.com';</p>
-<p>-- 返回:</p>
-<p>-- QUERY PLAN</p>
-<p>-- `--SEARCH users USING INDEX idx<em>users</em>email (email=?)</p>
-<p>-- 未使用索引的情况</p>
-<p>EXPLAIN QUERY PLAN SELECT * FROM users WHERE name LIKE '%test%';</p>
-<p>-- QUERY PLAN</p>
-<p>-- `--SCAN users USING COVERING INDEX idx<em>users</em>cover  (全表扫描)</p>
-<p>-- 分析查询效率</p>
-<p>EXPLAIN SELECT * FROM users WHERE email = 'test@example.com';</code></pre></p>
+EXPLAIN QUERY PLAN SELECT * FROM users WHERE email = 'test@example.com';
+-- 返回:
+-- QUERY PLAN
+-- `--SEARCH users USING INDEX idx<em>users</em>email (email=?)
+
+-- 未使用索引的情况
+EXPLAIN QUERY PLAN SELECT * FROM users WHERE name LIKE '%test%';
+-- QUERY PLAN
+-- `--SCAN users USING COVERING INDEX idx<em>users</em>cover  (全表扫描)
+
+-- 分析查询效率
+EXPLAIN SELECT * FROM users WHERE email = 'test@example.com';</code></pre>
 <h3>索引最佳实践</h3>
 <ul>
 <li>WHERE 条件列优先索引</li>
@@ -300,133 +313,160 @@
 <li>避免过度索引（影响写入性能）</li>
 </ul>
 <pre><code>-- 最左匹配原则示例
-<p>CREATE INDEX idx<em>multi ON users(status, role, created</em>at);</p>
-<p>-- 使用索引</p>
-<p>SELECT * FROM users WHERE status = 'active';              -- ✓</p>
-<p>SELECT * FROM users WHERE status = 'active' AND role = 'admin'; -- ✓</p>
-<p>-- 不使用索引</p>
-<p>SELECT * FROM users WHERE role = 'admin';                 -- ✗</p>
-<p>SELECT * FROM users WHERE created_at > '2024-01-01';      -- ✗</code></pre></p>
+CREATE INDEX idx<em>multi ON users(status, role, created</em>at);
+
+-- 使用索引
+SELECT * FROM users WHERE status = 'active';              -- ✓
+SELECT * FROM users WHERE status = 'active' AND role = 'admin'; -- ✓
+
+-- 不使用索引
+SELECT * FROM users WHERE role = 'admin';                 -- ✗
+SELECT * FROM users WHERE created_at > '2024-01-01';      -- ✗</code></pre>
 <h2>四、PRAGMA 性能参数</h2>
 <h3>内存与缓存</h3>
 <pre><code>-- 页缓存大小（页数，每页 4KB）
-<p>-- 默认约 2MB，推荐增加到可用内存的 5-10%</p>
-<p>PRAGMA cache_size = -20000;  -- 负数表示 KB，即 20MB</p>
-<p>-- 临时存储位置</p>
-<p>-- MEMORY: 内存（最快）</p>
-<p>-- FILE: 临时文件</p>
-<p>PRAGMA temp_store = MEMORY;</p>
-<p>-- mmap 大小（映射文件到内存）</p>
-<p>-- 适合大数据库读取场景</p>
-<p>PRAGMA mmap_size = 268435456;  -- 256MB</code></pre></p>
+-- 默认约 2MB，推荐增加到可用内存的 5-10%
+PRAGMA cache_size = -20000;  -- 负数表示 KB，即 20MB
+
+-- 临时存储位置
+-- MEMORY: 内存（最快）
+-- FILE: 临时文件
+PRAGMA temp_store = MEMORY;
+
+-- mmap 大小（映射文件到内存）
+-- 适合大数据库读取场景
+PRAGMA mmap_size = 268435456;  -- 256MB</code></pre>
 <h3>同步与安全</h3>
 <pre><code>-- 同步模式（写入可靠性）
-<p>-- OFF:    最快，崩溃可能损坏数据</p>
-<p>-- NORMAL: 中等，小概率损坏</p>
-<p>-- FULL:   最安全，性能稍慢</p>
-<p>PRAGMA synchronous = NORMAL;  -- 推荐</p>
-<p>-- 锁定模式</p>
-<p>-- NORMAL: 正常锁</p>
-<p>-- EXCLUSIVE: 独占模式，防止其他进程访问</p>
-<p>PRAGMA locking_mode = EXCLUSIVE;</code></pre></p>
+-- OFF:    最快，崩溃可能损坏数据
+-- NORMAL: 中等，小概率损坏
+-- FULL:   最安全，性能稍慢
+PRAGMA synchronous = NORMAL;  -- 推荐
+
+-- 锁定模式
+-- NORMAL: 正常锁
+-- EXCLUSIVE: 独占模式，防止其他进程访问
+PRAGMA locking_mode = EXCLUSIVE;</code></pre>
 <div class="warning-box">
 <p><strong>警告</strong>：<code>synchronous = OFF</code> 在极端情况下可能丢失数据，仅在可接受数据丢失的场景使用（如临时缓存）。</p>
 </div>
 <h3>其他优化参数</h3>
 <pre><code>-- 自动 VACUUM
-<p>-- NONE:   不自动整理</p>
-<p>-- INCREMENTAL: 增量整理</p>
-<p>-- FULL:   完全整理</p>
-<p>PRAGMA auto_vacuum = INCREMENTAL;</p>
-<p>-- 页大小（创建数据库时设置）</p>
-<p>-- 默认 4096，大数据库可用更大页</p>
-<p>PRAGMA page_size = 4096;</p>
-<p>-- 外键约束（默认关闭）</p>
-<p>PRAGMA foreign_keys = ON;</p>
-<p>-- 递归触发器深度</p>
-<p>PRAGMA recursive_triggers = 0;</code></pre></p>
+-- NONE:   不自动整理
+-- INCREMENTAL: 增量整理
+-- FULL:   完全整理
+PRAGMA auto_vacuum = INCREMENTAL;
+
+-- 页大小（创建数据库时设置）
+-- 默认 4096，大数据库可用更大页
+PRAGMA page_size = 4096;
+
+-- 外键约束（默认关闭）
+PRAGMA foreign_keys = ON;
+
+-- 递归触发器深度
+PRAGMA recursive_triggers = 0;</code></pre>
 <h2>五、批量写入优化</h2>
 <h3>使用事务</h3>
 <pre><code>-- 单条插入（每次都写入磁盘）
-<p>INSERT INTO users (name) VALUES ('a');</p>
-<p>INSERT INTO users (name) VALUES ('b');</p>
-<p>INSERT INTO users (name) VALUES ('c');</p>
-<p>-- 性能：慢</p>
-<p>-- 批量插入（单次写入）</p>
-<p>BEGIN TRANSACTION;</p>
-<p>INSERT INTO users (name) VALUES ('a');</p>
-<p>INSERT INTO users (name) VALUES ('b');</p>
-<p>INSERT INTO users (name) VALUES ('c');</p>
-<p>COMMIT;</p>
-<p>-- 性能：快 10-50 倍</code></pre></p>
+INSERT INTO users (name) VALUES ('a');
+INSERT INTO users (name) VALUES ('b');
+INSERT INTO users (name) VALUES ('c');
+-- 性能：慢
+
+-- 批量插入（单次写入）
+BEGIN TRANSACTION;
+INSERT INTO users (name) VALUES ('a');
+INSERT INTO users (name) VALUES ('b');
+INSERT INTO users (name) VALUES ('c');
+COMMIT;
+-- 性能：快 10-50 倍</code></pre>
 <h3>预编译语句</h3>
 <pre><code>-- Python 示例
-<p>import sqlite3</p>
-<p>conn = sqlite3.connect('db.sqlite')</p>
-<p>cursor = conn.cursor()</p>
-<h1>预编译</h1>
-<p>stmt = cursor.prepare('INSERT INTO users (name, email) VALUES (?, ?)')</p>
-<h1>批量执行</h1>
-<p>for user in users:</p>
-<p>stmt.execute((user.name, user.email))</p>
-<p>conn.commit()</code></pre></p>
+import sqlite3
+
+conn = sqlite3.connect('db.sqlite')
+cursor = conn.cursor()
+
+# 预编译
+stmt = cursor.prepare('INSERT INTO users (name, email) VALUES (?, ?)')
+
+# 批量执行
+for user in users:
+    stmt.execute((user.name, user.email))
+
+conn.commit()</code></pre>
 <h3>Python 批量插入</h3>
 <pre><code>import sqlite3
-<p>conn = sqlite3.connect('db.sqlite')</p>
-<p>cursor = conn.cursor()</p>
-<h1>方法1：executemany</h1>
-<p>cursor.executemany(</p>
-<p>'INSERT INTO users (name, email) VALUES (?, ?)',</p>
-<p>[(u['name'], u['email']) for u in users]</p>
-<p>)</p>
-<h1>方法2：直接插入多行</h1>
-<p>values = ','.join([f"('{u['name']}', '{u['email']}')" for u in users])</p>
-<p>cursor.execute(f'INSERT INTO users (name, email) VALUES {values}')</p>
-<p>conn.commit()</code></pre></p>
+
+conn = sqlite3.connect('db.sqlite')
+cursor = conn.cursor()
+
+# 方法1：executemany
+cursor.executemany(
+    'INSERT INTO users (name, email) VALUES (?, ?)',
+    [(u['name'], u['email']) for u in users]
+)
+
+# 方法2：直接插入多行
+values = ','.join([f"('{u['name']}', '{u['email']}')" for u in users])
+cursor.execute(f'INSERT INTO users (name, email) VALUES {values}')
+
+conn.commit()</code></pre>
 <h2>六、查询优化技巧</h2>
 <h3>避免 SELECT *</h3>
 <pre><code>-- 不推荐
-<p>SELECT * FROM users;</p>
-<p>-- 推荐：只查需要的列</p>
-<p>SELECT id, name FROM users;</code></pre></p>
+SELECT * FROM users;
+
+-- 推荐：只查需要的列
+SELECT id, name FROM users;</code></pre>
 <h3>使用 LIMIT</h3>
 <pre><code>-- 分页查询
-<p>SELECT * FROM users ORDER BY id LIMIT 20 OFFSET 40;</p>
-<p>-- 更高效的方式（使用游标）</p>
-<p>SELECT * FROM users WHERE id > 40 ORDER BY id LIMIT 20;</code></pre></p>
+SELECT * FROM users ORDER BY id LIMIT 20 OFFSET 40;
+
+-- 更高效的方式（使用游标）
+SELECT * FROM users WHERE id > 40 ORDER BY id LIMIT 20;</code></pre>
 <h3>避免函数在索引列上</h3>
 <pre><code>-- 不使用索引
-<p>SELECT * FROM users WHERE LOWER(email) = 'test@example.com';</p>
-<p>-- 使用索引</p>
-<p>SELECT * FROM users WHERE email = 'test@example.com COLLATE NOCASE';</code></pre></p>
+SELECT * FROM users WHERE LOWER(email) = 'test@example.com';
+
+-- 使用索引
+SELECT * FROM users WHERE email = 'test@example.com COLLATE NOCASE';</code></pre>
 <h3>JOIN 优化</h3>
 <pre><code>-- 小表驱动大表
-<p>SELECT * FROM small_table s</p>
-<p>JOIN large<em>table l ON s.id = l.small</em>id;</p>
-<p>-- 使用 EXISTS 替代 IN</p>
-<p>SELECT * FROM users u</p>
-<p>WHERE EXISTS (SELECT 1 FROM orders o WHERE o.user_id = u.id);</p>
-<p>-- 比 IN 更高效</p>
-<p>-- WHERE id IN (SELECT user_id FROM orders)</code></pre></p>
+SELECT * FROM small_table s
+JOIN large<em>table l ON s.id = l.small</em>id;
+
+-- 使用 EXISTS 替代 IN
+SELECT * FROM users u
+WHERE EXISTS (SELECT 1 FROM orders o WHERE o.user_id = u.id);
+
+-- 比 IN 更高效
+-- WHERE id IN (SELECT user_id FROM orders)</code></pre>
 <h2>七、监控与分析</h2>
 <pre><code>-- 查看数据库状态
-<p>PRAGMA integrity_check;</p>
-<p>PRAGMA quick_check;</p>
-<p>-- 查看表信息</p>
-<p>PRAGMA table_info(users);</p>
-<p>-- 查看索引列表</p>
-<p>PRAGMA index_list(users);</p>
-<p>PRAGMA index<em>info(idx</em>users_email);</p>
-<p>-- 查看数据库大小</p>
-<p>SELECT name, pgsize * page<em>size / 1024 / 1024 AS size</em>mb</p>
-<p>FROM dbstat</p>
-<p>GROUP BY name;</p>
-<p>-- 统计表行数</p>
-<p>SELECT COUNT(*) FROM users;</p>
-<p>-- 分析查询时间</p>
-<p>.timer on</p>
-<p>SELECT * FROM users WHERE email = 'test@example.com';</p>
-<p>-- Run Time: real 0.001 user 0.000000 sys 0.000000</code></pre></p>
+PRAGMA integrity_check;
+PRAGMA quick_check;
+
+-- 查看表信息
+PRAGMA table_info(users);
+
+-- 查看索引列表
+PRAGMA index_list(users);
+PRAGMA index<em>info(idx</em>users_email);
+
+-- 查看数据库大小
+SELECT name, pgsize * page<em>size / 1024 / 1024 AS size</em>mb
+FROM dbstat
+GROUP BY name;
+
+-- 统计表行数
+SELECT COUNT(*) FROM users;
+
+-- 分析查询时间
+.timer on
+SELECT * FROM users WHERE email = 'test@example.com';
+-- Run Time: real 0.001 user 0.000000 sys 0.000000</code></pre>
 <h2>总结</h2>
 <p>SQLite 性能优化的关键点：</p>
 <ul>
@@ -440,11 +480,11 @@
 <div class="tip-box">
 <p><strong>推荐配置</strong>：</p>
 <pre style="background:none;padding:0;margin:0;">PRAGMA journal_mode = WAL;
-<p>PRAGMA synchronous = NORMAL;</p>
-<p>PRAGMA cache_size = -20000;</p>
-<p>PRAGMA temp_store = MEMORY;</p>
-<p>PRAGMA busy_timeout = 5000;</p>
-<p>PRAGMA foreign_keys = ON;</pre></p>
+PRAGMA synchronous = NORMAL;
+PRAGMA cache_size = -20000;
+PRAGMA temp_store = MEMORY;
+PRAGMA busy_timeout = 5000;
+PRAGMA foreign_keys = ON;</pre>
 </div>
 
         <!-- Related Static -->

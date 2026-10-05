@@ -175,17 +175,17 @@
 </table>
 <h3>协议流程</h3>
 <pre><code>┌─────────────┐    discover tools     ┌─────────────┐
-<p>│   Android   │  ──────────────────>  │    MCP      │</p>
-<p>│   App       │                       │   Server    │</p>
-<p>│   (Host)    │  &lt;──────────────────  │             │</p>
-<p>│             │     tool list         │             │</p>
-<p>│   ┌─────┐   │                       │             │</p>
-<p>│   │MCP  │   │    call tool          │  ┌────────┐ │</p>
-<p>│   │Client│   │  ──────────────────>  │  │ Tool A │ │</p>
-<p>│   └─────┘   │                       │  │ Tool B │ │</p>
-<p>│             │     tool result       │  │ Tool C │ │</p>
-<p>│             │  &lt;──────────────────  │  └────────┘ │</p>
-<p>└─────────────┘                       └─────────────┘</code></pre></p>
+│   Android   │  ──────────────────>  │    MCP      │
+│   App       │                       │   Server    │
+│   (Host)    │  &lt;──────────────────  │             │
+│             │     tool list         │             │
+│   ┌─────┐   │                       │             │
+│   │MCP  │   │    call tool          │  ┌────────┐ │
+│   │Client│   │  ──────────────────>  │  │ Tool A │ │
+│   └─────┘   │                       │  │ Tool B │ │
+│             │     tool result       │  │ Tool C │ │
+│             │  &lt;──────────────────  │  └────────┘ │
+└─────────────┘                       └─────────────┘</code></pre>
 <h2>为什么 Android 需要 MCP？</h2>
 <p>传统上，在 Android 中集成 AI 功能有两种方式：</p>
 <ol>
@@ -210,21 +210,21 @@
 <p>以下是推荐的 Android MCP 架构：</p>
 <h3>整体架构</h3>
 <pre><code>┌─────────────────────────────────────┐
-<p>│          Android App                │</p>
-<p>│  ┌─────────────────────────────┐    │</p>
-<p>│  │      MCP Host Manager       │    │</p>
-<p>│  │  ┌─────┐ ┌─────┐ ┌─────┐  │    │</p>
-<p>│  │  │MCP C│ │MCP C│ │MCP C│  │    │</p>
-<p>│  │  │lient│ │lient│ │lient│  │    │</p>
-<p>│  │  └──┬──┘ └──┬──┘ └──┬──┘  │    │</p>
-<p>│  └─────┼───────┼───────┼─────┘    │</p>
-<p>│        │       │       │           │</p>
-<p>│  ┌─────▼──┐ ┌──▼────┐ ┌▼──────┐   │</p>
-<p>│  │端侧 MCP│ │云 MCP │ │本地   │   │</p>
-<p>│  │ Server │ │Server │ │Service│   │</p>
-<p>│  │(AICore)│ │(HTTP) │ │(Binder)│  │</p>
-<p>│  └────────┘ └───────┘ └───────┘   │</p>
-<p>└─────────────────────────────────────┘</code></pre></p>
+│          Android App                │
+│  ┌─────────────────────────────┐    │
+│  │      MCP Host Manager       │    │
+│  │  ┌─────┐ ┌─────┐ ┌─────┐  │    │
+│  │  │MCP C│ │MCP C│ │MCP C│  │    │
+│  │  │lient│ │lient│ │lient│  │    │
+│  │  └──┬──┘ └──┬──┘ └──┬──┘  │    │
+│  └─────┼───────┼───────┼─────┘    │
+│        │       │       │           │
+│  ┌─────▼──┐ ┌──▼────┐ ┌▼──────┐   │
+│  │端侧 MCP│ │云 MCP │ │本地   │   │
+│  │ Server │ │Server │ │Service│   │
+│  │(AICore)│ │(HTTP) │ │(Binder)│  │
+│  └────────┘ └───────┘ └───────┘   │
+└─────────────────────────────────────┘</code></pre>
 <h3>核心组件</h3>
 <p><strong>MCP Host Manager</strong>：管理多个 MCP Client 连接的生命周期，提供统一的工具调用接口。</p>
 <p><strong>MCP Client</strong>：每个 Server 对应一个 Client，负责协议通信、工具列表缓存、调用路由。</p>
@@ -233,188 +233,206 @@
 <p>下面是基于 Kotlin + Ktor 的 MCP 客户端核心实现：</p>
 <h3>MCP 协议消息定义</h3>
 <pre><code>// MCP 协议基类
-<p>@Serializable</p>
-<p>data class McpMessage(</p>
-<p>val jsonrpc: String = "2.0",</p>
-<p>val id: String,</p>
-<p>val method: String,</p>
-<p>val params: JsonObject? = null</p>
-<p>)</p>
-<p>@Serializable</p>
-<p>data class McpResponse(</p>
-<p>val jsonrpc: String = "2.0",</p>
-<p>val id: String,</p>
-<p>val result: JsonObject? = null,</p>
-<p>val error: McpError? = null</p>
-<p>)</p>
-<p>@Serializable</p>
-<p>data class McpError(</p>
-<p>val code: Int,</p>
-<p>val message: String</p>
-<p>)</p>
-<p>// 工具定义</p>
-<p>@Serializable</p>
-<p>data class ToolDefinition(</p>
-<p>val name: String,</p>
-<p>val description: String,</p>
-<p>@SerialName("input_schema")</p>
-<p>val inputSchema: JsonObject</p>
-<p>)</code></pre></p>
+@Serializable
+data class McpMessage(
+    val jsonrpc: String = "2.0",
+    val id: String,
+    val method: String,
+    val params: JsonObject? = null
+)
+
+@Serializable
+data class McpResponse(
+    val jsonrpc: String = "2.0",
+    val id: String,
+    val result: JsonObject? = null,
+    val error: McpError? = null
+)
+
+@Serializable
+data class McpError(
+    val code: Int,
+    val message: String
+)
+
+// 工具定义
+@Serializable
+data class ToolDefinition(
+    val name: String,
+    val description: String,
+    @SerialName("input_schema")
+    val inputSchema: JsonObject
+)</code></pre>
 <h3>MCP Client 实现</h3>
 <pre><code>class McpClient(
-<p>private val endpoint: String,</p>
-<p>private val client: HttpClient = HttpClient(CIO)</p>
-<p>) {</p>
-<p>private var tools: List&lt;ToolDefinition&gt; = emptyList()</p>
-<p>private var requestId = 0</p>
-<p>// 初始化：发现并缓存工具列表</p>
-<p>suspend fun initialize(): List&lt;ToolDefinition&gt; {</p>
-<p>val response = sendRequest("initialize", buildJsonObject {</p>
-<p>put("protocolVersion", "2025-03-26")</p>
-<p>put("capabilities", buildJsonObject {</p>
-<p>put("tools", buildJsonObject {})</p>
-<p>})</p>
-<p>})</p>
-<p>// 获取工具列表</p>
-<p>val toolsResponse = sendRequest("tools/list", null)</p>
-<p>tools = parseTools(toolsResponse)</p>
-<p>return tools</p>
-<p>}</p>
-<p>// 调用某个工具</p>
-<p>suspend fun callTool(name: String, args: JsonObject): JsonObject {</p>
-<p>val response = sendRequest("tools/call", buildJsonObject {</p>
-<p>put("name", name)</p>
-<p>put("arguments", args)</p>
-<p>})</p>
-<p>return response.result ?: error("Tool call failed")</p>
-<p>}</p>
-<p>// 发送 JSON-RPC 请求</p>
-<p>private suspend fun sendRequest(</p>
-<p>method: String,</p>
-<p>params: JsonObject?</p>
-<p>): McpResponse {</p>
-<p>val message = McpMessage(</p>
-<p>id = (++requestId).toString(),</p>
-<p>method = method,</p>
-<p>params = params</p>
-<p>)</p>
-<p>return client.post(endpoint) {</p>
-<p>contentType(ContentType.Application.Json)</p>
-<p>setBody(message)</p>
-<p>}.body()</p>
-<p>}</p>
-<p>private fun parseTools(response: McpResponse): List&lt;ToolDefinition&gt; {</p>
-<p>val toolsArray = response.result</p>
-<p>?.getJSONArray("tools") ?: return emptyList()</p>
-<p>return Json.decodeFromJsonElement(toolsArray)</p>
-<p>}</p>
-<p>}</code></pre></p>
+    private val endpoint: String,
+    private val client: HttpClient = HttpClient(CIO)
+) {
+    private var tools: List&lt;ToolDefinition&gt; = emptyList()
+    private var requestId = 0
+
+    // 初始化：发现并缓存工具列表
+    suspend fun initialize(): List&lt;ToolDefinition&gt; {
+        val response = sendRequest("initialize", buildJsonObject {
+            put("protocolVersion", "2025-03-26")
+            put("capabilities", buildJsonObject {
+                put("tools", buildJsonObject {})
+            })
+        })
+
+        // 获取工具列表
+        val toolsResponse = sendRequest("tools/list", null)
+        tools = parseTools(toolsResponse)
+        return tools
+    }
+
+    // 调用某个工具
+    suspend fun callTool(name: String, args: JsonObject): JsonObject {
+        val response = sendRequest("tools/call", buildJsonObject {
+            put("name", name)
+            put("arguments", args)
+        })
+        return response.result ?: error("Tool call failed")
+    }
+
+    // 发送 JSON-RPC 请求
+    private suspend fun sendRequest(
+        method: String,
+        params: JsonObject?
+    ): McpResponse {
+        val message = McpMessage(
+            id = (++requestId).toString(),
+            method = method,
+            params = params
+        )
+
+        return client.post(endpoint) {
+            contentType(ContentType.Application.Json)
+            setBody(message)
+        }.body()
+    }
+
+    private fun parseTools(response: McpResponse): List&lt;ToolDefinition&gt; {
+        val toolsArray = response.result
+            ?.getJSONArray("tools") ?: return emptyList()
+        return Json.decodeFromJsonElement(toolsArray)
+    }
+}</code></pre>
 <h3>在 ViewModel 中集成</h3>
 <pre><code>class McpViewModel : ViewModel() {
-<p>private val mcpClients = mutableMapOf&lt;String, McpClient&gt;()</p>
-<p>private val _tools = MutableStateFlow&lt;List&lt;ToolDefinition&gt;&gt;(emptyList())</p>
-<p>val tools: StateFlow&lt;List&lt;ToolDefinition&gt;&gt; = _tools.asStateFlow()</p>
-<p>// 注册 MCP Server</p>
-<p>fun registerServer(id: String, endpoint: String) {</p>
-<p>viewModelScope.launch {</p>
-<p>val client = McpClient(endpoint)</p>
-<p>try {</p>
-<p>val serverTools = client.initialize()</p>
-<p>mcpClients[id] = client</p>
-<p>_tools.update { it + serverTools }</p>
-<p>} catch (e: Exception) {</p>
-<p>Log.e("MCP", "Failed to connect server $id", e)</p>
-<p>}</p>
-<p>}</p>
-<p>}</p>
-<p>// AI 模型调用工具</p>
-<p>fun processWithTools(userQuery: String, aiClient: AiClient) {</p>
-<p>viewModelScope.launch {</p>
-<p>// 1. 将工具定义发送给 AI 模型</p>
-<p>val aiResponse = aiClient.chat(</p>
-<p>userQuery,</p>
-<p>tools = _tools.value</p>
-<p>)</p>
-<p>// 2. AI 模型决定调用哪个工具</p>
-<p>if (aiResponse.hasToolCall()) {</p>
-<p>val toolCall = aiResponse.toolCall</p>
-<p>val targetClient = findClient(toolCall.name)</p>
-<p>// 3. 执行工具调用</p>
-<p>val result = targetClient?.callTool(</p>
-<p>toolCall.name,</p>
-<p>toolCall.arguments</p>
-<p>)</p>
-<p>// 4. 将结果返回给 AI 继续处理</p>
-<p>val finalResponse = aiClient.chat(</p>
-<p>userQuery,</p>
-<p>toolResult = result</p>
-<p>)</p>
-<p>// 展示最终回复</p>
-<p>}</p>
-<p>}</p>
-<p>}</p>
-<p>}</code></pre></p>
+
+    private val mcpClients = mutableMapOf&lt;String, McpClient&gt;()
+    private val _tools = MutableStateFlow&lt;List&lt;ToolDefinition&gt;&gt;(emptyList())
+    val tools: StateFlow&lt;List&lt;ToolDefinition&gt;&gt; = _tools.asStateFlow()
+
+    // 注册 MCP Server
+    fun registerServer(id: String, endpoint: String) {
+        viewModelScope.launch {
+            val client = McpClient(endpoint)
+            try {
+                val serverTools = client.initialize()
+                mcpClients[id] = client
+                _tools.update { it + serverTools }
+            } catch (e: Exception) {
+                Log.e("MCP", "Failed to connect server $id", e)
+            }
+        }
+    }
+
+    // AI 模型调用工具
+    fun processWithTools(userQuery: String, aiClient: AiClient) {
+        viewModelScope.launch {
+            // 1. 将工具定义发送给 AI 模型
+            val aiResponse = aiClient.chat(
+                userQuery,
+                tools = _tools.value
+            )
+
+            // 2. AI 模型决定调用哪个工具
+            if (aiResponse.hasToolCall()) {
+                val toolCall = aiResponse.toolCall
+                val targetClient = findClient(toolCall.name)
+                
+                // 3. 执行工具调用
+                val result = targetClient?.callTool(
+                    toolCall.name,
+                    toolCall.arguments
+                )
+                
+                // 4. 将结果返回给 AI 继续处理
+                val finalResponse = aiClient.chat(
+                    userQuery,
+                    toolResult = result
+                )
+                // 展示最终回复
+            }
+        }
+    }
+}</code></pre>
 <h2>端侧 MCP Server：AICore 集成</h2>
 <p>Android 16+ 的 AICore 可以作为端侧 MCP Server，提供本地 AI 工具：</p>
 <pre><code>class OnDeviceMcpServer(private val context: Context) {
-<p>private val aicoreManager = AICoreManager(context)</p>
-<p>// 注册的工具列表</p>
-<p>val tools = listOf(</p>
-<p>ToolDefinition(</p>
-<p>name = "text_summarize",</p>
-<p>description = "对文本进行智能摘要",</p>
-<p>inputSchema = buildJsonObject {</p>
-<p>put("type", "object")</p>
-<p>put("properties", buildJsonObject {</p>
-<p>put("text", buildJsonObject {</p>
-<p>put("type", "string")</p>
-<p>put("description", "要摘要的文本")</p>
-<p>})</p>
-<p>put("maxLength", buildJsonObject {</p>
-<p>put("type", "number")</p>
-<p>put("description", "摘要最大长度")</p>
-<p>})</p>
-<p>})</p>
-<p>put("required", buildJsonArray {</p>
-<p>add("text")</p>
-<p>})</p>
-<p>}</p>
-<p>),</p>
-<p>ToolDefinition(</p>
-<p>name = "text_classify",</p>
-<p>description = "对文本进行情感分类",</p>
-<p>inputSchema = buildJsonObject {</p>
-<p>put("type", "object")</p>
-<p>put("properties", buildJsonObject {</p>
-<p>put("text", buildJsonObject {</p>
-<p>put("type", "string")</p>
-<p>})</p>
-<p>})</p>
-<p>put("required", buildJsonArray { add("text") })</p>
-<p>}</p>
-<p>)</p>
-<p>)</p>
-<p>// 处理工具调用</p>
-<p>suspend fun handleToolCall(name: String, args: JsonObject): JsonObject {</p>
-<p>return when (name) {</p>
-<p>"text_summarize" -> {</p>
-<p>val text = args["text"]!!.jsonPrimitive.content</p>
-<p>val maxLen = args["maxLength"]?.jsonPrimitive?.int ?: 100</p>
-<p>val summary = aicoreManager.generate(text) {</p>
-<p>maxOutputTokens = maxLen</p>
-<p>temperature = 0.3f</p>
-<p>}</p>
-<p>buildJsonObject { put("summary", summary) }</p>
-<p>}</p>
-<p>"text_classify" -> {</p>
-<p>val text = args["text"]!!.jsonPrimitive.content</p>
-<p>val result = aicoreManager.classify(text)</p>
-<p>buildJsonObject { put("label", result.label) }</p>
-<p>}</p>
-<p>else -> error("Unknown tool: $name")</p>
-<p>}</p>
-<p>}</p>
-<p>}</code></pre></p>
+
+    private val aicoreManager = AICoreManager(context)
+
+    // 注册的工具列表
+    val tools = listOf(
+        ToolDefinition(
+            name = "text_summarize",
+            description = "对文本进行智能摘要",
+            inputSchema = buildJsonObject {
+                put("type", "object")
+                put("properties", buildJsonObject {
+                    put("text", buildJsonObject {
+                        put("type", "string")
+                        put("description", "要摘要的文本")
+                    })
+                    put("maxLength", buildJsonObject {
+                        put("type", "number")
+                        put("description", "摘要最大长度")
+                    })
+                })
+                put("required", buildJsonArray {
+                    add("text")
+                })
+            }
+        ),
+        ToolDefinition(
+            name = "text_classify",
+            description = "对文本进行情感分类",
+            inputSchema = buildJsonObject {
+                put("type", "object")
+                put("properties", buildJsonObject {
+                    put("text", buildJsonObject {
+                        put("type", "string")
+                    })
+                })
+                put("required", buildJsonArray { add("text") })
+            }
+        )
+    )
+
+    // 处理工具调用
+    suspend fun handleToolCall(name: String, args: JsonObject): JsonObject {
+        return when (name) {
+            "text_summarize" -> {
+                val text = args["text"]!!.jsonPrimitive.content
+                val maxLen = args["maxLength"]?.jsonPrimitive?.int ?: 100
+                val summary = aicoreManager.generate(text) {
+                    maxOutputTokens = maxLen
+                    temperature = 0.3f
+                }
+                buildJsonObject { put("summary", summary) }
+            }
+            "text_classify" -> {
+                val text = args["text"]!!.jsonPrimitive.content
+                val result = aicoreManager.classify(text)
+                buildJsonObject { put("label", result.label) }
+            }
+            else -> error("Unknown tool: $name")
+        }
+    }
+}</code></pre>
 <div class="tip-box">
 <p><strong>💡 设计模式</strong>：将 AICore 封装为 MCP Server 有两大好处：一是应用内的 AI 功能按工具粒度解耦，便于测试和扩展；二是同一个 MCP Client 可以同时连接端侧和云端 Server，AI 模型按照工具描述路由请求。</p>
 </div>

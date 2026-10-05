@@ -179,23 +179,23 @@
 <p>对于开发者来说，I/O 2026 最具实用价值的发布是 <strong>Managed Agents</strong>。这是 Gemini API 中的新能力，允许你定义 Agent 的行为、工具和知识源，Google 负责管理底层的推理基础设施。</p>
 <h3>核心概念</h3>
 <pre><code>// Managed Agent 定义示例
-<p>{</p>
-<p>"name": "code-reviewer",</p>
-<p>"model": "gemini-3.5-flash",</p>
-<p>"instructions": "你是代码审查专家，检查代码质量、安全漏洞和性能问题",</p>
-<p>"tools": [{</p>
-<p>"type": "code_execution",</p>
-<p>"config": {</p>
-<p>"language": "python",</p>
-<p>"timeout": 30</p>
-<p>}</p>
-<p>}, {</p>
-<p>"type": "web_search"</p>
-<p>}],</p>
-<p>"knowledge_sources": [</p>
-<p>"projects/my-team/coding-standards.md"</p>
-<p>]</p>
-<p>}</code></pre></p>
+{
+  "name": "code-reviewer",
+  "model": "gemini-3.5-flash",
+  "instructions": "你是代码审查专家，检查代码质量、安全漏洞和性能问题",
+  "tools": [{
+    "type": "code_execution",
+    "config": {
+      "language": "python",
+      "timeout": 30
+    }
+  }, {
+    "type": "web_search"
+  }],
+  "knowledge_sources": [
+    "projects/my-team/coding-standards.md"
+  ]
+}</code></pre>
 <h3>为什么这对开发者重要</h3>
 <ul>
 <li><strong>零基础设施</strong>：不需要管理模型部署、推理服务器或扩缩容</li>

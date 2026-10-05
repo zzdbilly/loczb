@@ -153,9 +153,10 @@
 </table>
 <h2>第一步：创建 GitHub 仓库</h2>
 <pre><code># 仓库命名规则：
-<h1>用户名.github.io</h1>
-<h1>例如我的仓库：</h1>
-<h1>https://github.com/zzdbilly/loczb</code></pre></h1>
+# 用户名.github.io
+
+# 例如我的仓库：
+# https://github.com/zzdbilly/loczb</code></pre>
 <p>GitHub Pages 有两种部署方式：</p>
 <ul>
 <li><strong>用户名.github.io</strong>：仓库名必须与用户名一致，访问地址为 <code>https://用户名.github.io</code></li>
@@ -170,14 +171,15 @@
 <h3>2. 配置 DNS</h3>
 <p>在域名控制台添加 DNS 记录：</p>
 <pre><code># 类型：A
-<h1>主机记录：@</h1>
-<h1>记录值：185.199.108.153</h1>
-<h1>185.199.109.153</h1>
-<h1>185.199.110.153</h1>
-<h1>185.199.111.153</h1>
-<h1>类型：CNAME</h1>
-<h1>主机记录：www</h1>
-<h1>记录值：用户名.github.io</code></pre></h1>
+# 主机记录：@
+# 记录值：185.199.108.153
+#        185.199.109.153
+#        185.199.110.153
+#        185.199.111.153
+
+# 类型：CNAME
+# 主机记录：www
+# 记录值：用户名.github.io</code></pre>
 <p>这四个 IP 是 GitHub Pages 的服务器地址，官方文档会实时更新。</p>
 <h3>3. GitHub 配置自定义域名</h3>
 <p>在仓库 Settings → Pages → Custom domain 中填写你的域名，保存后会自动生成 <code>CNAME</code> 文件。</p>
@@ -192,83 +194,85 @@
 <h2>第四步：配置自动化部署</h2>
 <p>在 <code>.github/workflows/</code> 目录下创建 <code>deploy.yml</code>：</p>
 <pre><code>name: Deploy to GitHub Pages
-<p>on:</p>
-<p>push:</p>
-<p>branches: [ main ]</p>
-<p>permissions:</p>
-<p>contents: read</p>
-<p>pages: write</p>
-<p>id-token: write</p>
-<p>jobs:</p>
-<p>deploy:</p>
-<p>environment:</p>
-<p>name: github-pages</p>
-<p>url: ${{ steps.deployment.outputs.page_url }}</p>
-<p>runs-on: ubuntu-latest</p>
-<p>steps:</p>
-<ul>
-<li>name: Checkout</li>
-</ul>
-<p>uses: actions/checkout@v4</p>
-<ul>
-<li>name: Setup Pages</li>
-</ul>
-<p>uses: actions/configure-pages@v4</p>
-<ul>
-<li>name: Upload artifact</li>
-</ul>
-<p>uses: actions/upload-pages-artifact@v3</p>
-<p>with:</p>
-<p>path: '.'</p>
-<ul>
-<li>name: Deploy to GitHub Pages</li>
-</ul>
-<p>id: deployment</p>
-<p>uses: actions/deploy-pages@v4</code></pre></p>
+
+on:
+  push:
+    branches: [ main ]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4</code></pre>
 <p>这个配置会在每次 push 到 main 分支时自动部署。</p>
 <h2>第五步：博客系统架构</h2>
 <p>我的博客采用纯静态架构：</p>
 <pre><code>loczb/
-<p>├── index.html              # 首页</p>
-<p>├── blog/</p>
-<p>│   ├── index.html          # 博客列表页</p>
-<p>│   ├── posts/              # 文章目录</p>
-<p>│   │   ├── article-1.html</p>
-<p>│   │   └── article-2.html</p>
-<p>│   └── articles.json       # 文章索引（自动生成）</p>
-<p>├── assets/</p>
-<p>│   ├── css/style.css       # 样式文件</p>
-<p>│   ├── js/main.js          # JavaScript</p>
-<p>│   └── images/             # 图片资源</p>
-<p>└── scripts/</p>
-<p>└── generate-articles.js # 自动生成索引脚本</code></pre></p>
+├── index.html              # 首页
+├── blog/
+│   ├── index.html          # 博客列表页
+│   ├── posts/              # 文章目录
+│   │   ├── article-1.html
+│   │   └── article-2.html
+│   └── articles.json       # 文章索引（自动生成）
+├── assets/
+│   ├── css/style.css       # 样式文件
+│   ├── js/main.js          # JavaScript
+│   └── images/             # 图片资源
+└── scripts/
+    └── generate-articles.js # 自动生成索引脚本</code></pre>
 <h3>自动生成文章索引</h3>
 <p>每篇文章的 meta 信息（标题、日期、标签等）都写在 HTML 的 <code>&lt;meta&gt;</code> 标签中，用脚本自动扫描生成索引：</p>
 <pre><code>// scripts/generate-articles.js
-<p>const fs = require('fs');</p>
-<p>const path = require('path');</p>
-<p>const postsDir = './blog/posts';</p>
-<p>const files = fs.readdirSync(postsDir)</p>
-<p>.filter(f => f.endsWith('.html'));</p>
-<p>const articles = files.map(file => {</p>
-<p>const content = fs.readFileSync(</p>
-<p>path.join(postsDir, file), 'utf8'</p>
-<p>);</p>
-<p>return {</p>
-<p>title: extractMeta(content, 'title'),</p>
-<p>date: extractMeta(content, 'publish-date'),</p>
-<p>url: <strong>INLINE<em>CODE</em>0</strong>,</p>
-<p>// ... 其他字段</p>
-<p>};</p>
-<p>});</p>
-<p>// 按日期排序</p>
-<p>articles.sort((a, b) =></p>
-<p>new Date(b.date) - new Date(a.date)</p>
-<p>);</p>
-<p>fs.writeFileSync(</p>
-<p>'./blog/articles.json',</p>
-<p>JSON.stringify(articles, null, 2)</p>
-<p>);</code></pre></p>
+const fs = require('fs');
+const path = require('path');
+
+const postsDir = './blog/posts';
+const files = fs.readdirSync(postsDir)
+  .filter(f => f.endsWith('.html'));
+
+const articles = files.map(file => {
+  const content = fs.readFileSync(
+    path.join(postsDir, file), 'utf8'
+  );
+  return {
+    title: extractMeta(content, 'title'),
+    date: extractMeta(content, 'publish-date'),
+    url: <strong>INLINE<em>CODE</em>0</strong>,
+    // ... 其他字段
+  };
+});
+
+// 按日期排序
+articles.sort((a, b) => 
+  new Date(b.date) - new Date(a.date)
+);
+
+fs.writeFileSync(
+  './blog/articles.json',
+  JSON.stringify(articles, null, 2)
+);</code></pre>
 <p>首页用 JavaScript 动态加载最新 3 篇文章，无需手动更新。</p>
 <h2>第六步：写文章和发布</h2>
 <p>发布新文章的完整流程：</p>

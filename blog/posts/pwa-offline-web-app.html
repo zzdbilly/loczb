@@ -150,30 +150,30 @@
 <h2 id="manifest">manifest.json 配置</h2>
 <p>这是 PWA 的「身份证」，告诉浏览器如何展示你的应用：</p>
 <pre><code>{
-<p>"name": "戒色打卡",</p>
-<p>"short_name": "打卡",</p>
-<p>"description": "自律给我自由 - 习惯追踪器",</p>
-<p>"theme_color": "#6366f1",</p>
-<p>"background_color": "#030712",</p>
-<p>"display": "standalone",</p>
-<p>"orientation": "portrait",</p>
-<p>"scope": "/",</p>
-<p>"start_url": "/",</p>
-<p>"icons": [</p>
-<p>{</p>
-<p>"src": "/icon-192.png",</p>
-<p>"sizes": "192x192",</p>
-<p>"type": "image/png",</p>
-<p>"purpose": "any maskable"</p>
-<p>},</p>
-<p>{</p>
-<p>"src": "/icon-512.png",</p>
-<p>"sizes": "512x512",</p>
-<p>"type": "image/png",</p>
-<p>"purpose": "any maskable"</p>
-<p>}</p>
-<p>]</p>
-<p>}</code></pre></p>
+  "name": "戒色打卡",
+  "short_name": "打卡",
+  "description": "自律给我自由 - 习惯追踪器",
+  "theme_color": "#6366f1",
+  "background_color": "#030712",
+  "display": "standalone",
+  "orientation": "portrait",
+  "scope": "/",
+  "start_url": "/",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}</code></pre>
 <h3>关键配置说明</h3>
 <ul>
 <li><code>display: "standalone"</code> - 隐藏浏览器地址栏，像原生 App</li>
@@ -193,90 +193,91 @@
 <h3>1. 注册 Service Worker</h3>
 <p>在 HTML 中注册：</p>
 <pre><code>&lt;script&gt;
-<p>if ('serviceWorker' in navigator) {</p>
-<p>window.addEventListener('load', () =&gt; {</p>
-<p>navigator.serviceWorker.register('/sw.js')</p>
-<p>.then((registration) =&gt; {</p>
-<p>console.log('✅ Service Worker 注册成功');</p>
-<p>})</p>
-<p>.catch((error) =&gt; {</p>
-<p>console.log('❌ 注册失败:', error);</p>
-<p>});</p>
-<p>});</p>
-<p>}</p>
-<p>&lt;/script&gt;</code></pre></p>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () =&gt; {
+    navigator.serviceWorker.register('/sw.js')
+      .then((registration) =&gt; {
+        console.log('✅ Service Worker 注册成功');
+      })
+      .catch((error) =&gt; {
+        console.log('❌ 注册失败:', error);
+      });
+  });
+}
+&lt;/script&gt;</code></pre>
 <h3>2. Service Worker 生命周期</h3>
 <pre><code>// 安装事件 - 预缓存静态资源
-<p>self.addEventListener('install', (event) => {</p>
-<p>event.waitUntil(</p>
-<p>caches.open(CACHE_NAME).then((cache) => {</p>
-<p>return cache.addAll([</p>
-<p>'/',</p>
-<p>'/index.html',</p>
-<p>'/manifest.json',</p>
-<p>'/favicon.svg'</p>
-<p>]);</p>
-<p>})</p>
-<p>);</p>
-<p>self.skipWaiting(); // 跳过等待，立即激活</p>
-<p>});</p>
-<p>// 激活事件 - 清理旧缓存</p>
-<p>self.addEventListener('activate', (event) => {</p>
-<p>event.waitUntil(</p>
-<p>caches.keys().then((cacheNames) => {</p>
-<p>return Promise.all(</p>
-<p>cacheNames</p>
-<p>.filter((name) => name !== CACHE_NAME)</p>
-<p>.map((name) => caches.delete(name))</p>
-<p>);</p>
-<p>})</p>
-<p>);</p>
-<p>self.clients.claim(); // 立即控制所有页面</p>
-<p>});</code></pre></p>
+self.addEventListener('install', (event) => {
+  event.waitUntil(
+    caches.open(CACHE_NAME).then((cache) => {
+      return cache.addAll([
+        '/',
+        '/index.html',
+        '/manifest.json',
+        '/favicon.svg'
+      ]);
+    })
+  );
+  self.skipWaiting(); // 跳过等待，立即激活
+});
+
+// 激活事件 - 清理旧缓存
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
+    caches.keys().then((cacheNames) => {
+      return Promise.all(
+        cacheNames
+          .filter((name) => name !== CACHE_NAME)
+          .map((name) => caches.delete(name))
+      );
+    })
+  );
+  self.clients.claim(); // 立即控制所有页面
+});</code></pre>
 <h2 id="cache">缓存策略详解</h2>
 <p>选择正确的缓存策略是 PWA 性能的关键：</p>
 <h3>策略一：缓存优先（Cache First）</h3>
 <p>适用于不常变化的静态资源：</p>
 <pre><code>self.addEventListener('fetch', (event) => {
-<p>event.respondWith(</p>
-<p>caches.match(event.request).then((cached) => {</p>
-<p>return cached || fetch(event.request);</p>
-<p>})</p>
-<p>);</p>
-<p>});</code></pre></p>
+  event.respondWith(
+    caches.match(event.request).then((cached) => {
+      return cached || fetch(event.request);
+    })
+  );
+});</code></pre>
 <h3>策略二：网络优先（Network First）</h3>
 <p>适用于需要实时性的 API 请求：</p>
 <pre><code>self.addEventListener('fetch', (event) => {
-<p>if (event.request.url.includes('/api/')) {</p>
-<p>event.respondWith(</p>
-<p>fetch(event.request)</p>
-<p>.then((response) => {</p>
-<p>// 缓存成功响应</p>
-<p>const clone = response.clone();</p>
-<p>caches.open(CACHE_NAME).then((cache) => {</p>
-<p>cache.put(event.request, clone);</p>
-<p>});</p>
-<p>return response;</p>
-<p>})</p>
-<p>.catch(() => caches.match(event.request)) // 离线用缓存</p>
-<p>);</p>
-<p>}</p>
-<p>});</code></pre></p>
+  if (event.request.url.includes('/api/')) {
+    event.respondWith(
+      fetch(event.request)
+        .then((response) => {
+          // 缓存成功响应
+          const clone = response.clone();
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(event.request, clone);
+          });
+          return response;
+        })
+        .catch(() => caches.match(event.request)) // 离线用缓存
+    );
+  }
+});</code></pre>
 <h3>策略三：Stale While Revalidate</h3>
 <p>先返回缓存，后台更新：</p>
 <pre><code>self.addEventListener('fetch', (event) => {
-<p>event.respondWith(</p>
-<p>caches.match(event.request).then((cached) => {</p>
-<p>const fetchPromise = fetch(event.request).then((response) => {</p>
-<p>caches.open(CACHE_NAME).then((cache) => {</p>
-<p>cache.put(event.request, response.clone());</p>
-<p>});</p>
-<p>return response;</p>
-<p>});</p>
-<p>return cached || fetchPromise;</p>
-<p>})</p>
-<p>);</p>
-<p>});</code></pre></p>
+  event.respondWith(
+    caches.match(event.request).then((cached) => {
+      const fetchPromise = fetch(event.request).then((response) => {
+        caches.open(CACHE_NAME).then((cache) => {
+          cache.put(event.request, response.clone());
+        });
+        return response;
+      });
+      return cached || fetchPromise;
+    })
+  );
+});</code></pre>
 <div class="success-box">
 <p><strong>✅ 最佳实践：</strong></p>
 <ul>
@@ -288,26 +289,28 @@
 <h2 id="push">推送通知</h2>
 <p>PWA 支持后台推送，即使应用未打开也能收到通知：</p>
 <pre><code>// 监听推送事件
-<p>self.addEventListener('push', (event) => {</p>
-<p>const data = event.data?.json() || {};</p>
-<p>event.waitUntil(</p>
-<p>self.registration.showNotification(data.title || '新消息', {</p>
-<p>body: data.body || '您有一条新通知',</p>
-<p>icon: '/icon-192.png',</p>
-<p>badge: '/favicon-32x32.png',</p>
-<p>tag: 'notification-' + Date.now(),</p>
-<p>vibrate: [200, 100, 200],</p>
-<p>data: { url: data.url || '/' }</p>
-<p>})</p>
-<p>);</p>
-<p>});</p>
-<p>// 点击通知跳转</p>
-<p>self.addEventListener('notificationclick', (event) => {</p>
-<p>event.notification.close();</p>
-<p>event.waitUntil(</p>
-<p>clients.openWindow(event.notification.data.url)</p>
-<p>);</p>
-<p>});</code></pre></p>
+self.addEventListener('push', (event) => {
+  const data = event.data?.json() || {};
+  
+  event.waitUntil(
+    self.registration.showNotification(data.title || '新消息', {
+      body: data.body || '您有一条新通知',
+      icon: '/icon-192.png',
+      badge: '/favicon-32x32.png',
+      tag: 'notification-' + Date.now(),
+      vibrate: [200, 100, 200],
+      data: { url: data.url || '/' }
+    })
+  );
+});
+
+// 点击通知跳转
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+  event.waitUntil(
+    clients.openWindow(event.notification.data.url)
+  );
+});</code></pre>
 <h2 id="deploy">部署与测试</h2>
 <h3>1. 本地测试</h3>
 <p>Chrome DevTools 提供了完整的 PWA 调试工具：</p>

@@ -162,41 +162,46 @@
 <p>Live Updates 是 Android 16 最引人注目的通知新特性。它允许通知内容实时更新，并在锁屏和状态栏上显示持续变化的信息。</p>
 <h3>基本用法</h3>
 <pre><code>// 创建 Live Update 通知
-<p>val liveUpdateBuilder = Notification.Builder(this, CHANNEL_ID)</p>
-<p>.setContentTitle("打车进行中")</p>
-<p>.setSmallIcon(R.drawable.ic_car)</p>
-<p>.setLiveUpdate(true)  // 标记为 Live Update</p>
-<p>.setOngoing(true)</p>
-<p>// 动态更新内容</p>
-<p>val update = Notification.LiveUpdate()</p>
-<p>.addText("距离目的地: 3.2km")</p>
-<p>.addText("预计到达: 8分钟")</p>
-<p>.addProgressBar(3200, currentDistance, false)</p>
-<p>liveUpdateBuilder.setLiveUpdateContent(update)</p>
-<p>notificationManager.notify(NOTIFICATION_ID, liveUpdateBuilder.build())</code></pre></p>
+val liveUpdateBuilder = Notification.Builder(this, CHANNEL_ID)
+    .setContentTitle("打车进行中")
+    .setSmallIcon(R.drawable.ic_car)
+    .setLiveUpdate(true)  // 标记为 Live Update
+    .setOngoing(true)
+
+// 动态更新内容
+val update = Notification.LiveUpdate()
+    .addText("距离目的地: 3.2km")
+    .addText("预计到达: 8分钟")
+    .addProgressBar(3200, currentDistance, false)
+
+liveUpdateBuilder.setLiveUpdateContent(update)
+notificationManager.notify(NOTIFICATION_ID, liveUpdateBuilder.build())</code></pre>
 <h3>更新频率控制</h3>
 <pre><code>// Live Updates 支持高频更新（相比普通通知有更高的更新限额）
-<p>// Android 16 放宽了通知更新频率限制</p>
-<p>// 最多每 1 秒更新一次（普通通知限制为 5 秒）</p>
-<p>val policy = Notification.UpdatePolicy(</p>
-<p>minIntervalMs = 1000L,</p>
-<p>maxUpdatesPerMinute = 30</p>
-<p>)</p>
-<p>liveUpdateBuilder.setUpdatePolicy(policy)</p>
-<p>// 实时更新场景</p>
-<p>lifecycleScope.launch {</p>
-<p>locationFlow.collect { location -></p>
-<p>val update = Notification.LiveUpdate()</p>
-<p>.addText("当前位置已更新")</p>
-<p>.addProgressBar(100, location.accuracy.toInt(), false)</p>
-<p>notificationManager.notify(</p>
-<p>NOTIFICATION_ID,</p>
-<p>liveUpdateBuilder</p>
-<p>.setLiveUpdateContent(update)</p>
-<p>.build()</p>
-<p>)</p>
-<p>}</p>
-<p>}</code></pre></p>
+// Android 16 放宽了通知更新频率限制
+
+// 最多每 1 秒更新一次（普通通知限制为 5 秒）
+val policy = Notification.UpdatePolicy(
+    minIntervalMs = 1000L,
+    maxUpdatesPerMinute = 30
+)
+liveUpdateBuilder.setUpdatePolicy(policy)
+
+// 实时更新场景
+lifecycleScope.launch {
+    locationFlow.collect { location ->
+        val update = Notification.LiveUpdate()
+            .addText("当前位置已更新")
+            .addProgressBar(100, location.accuracy.toInt(), false)
+        
+        notificationManager.notify(
+            NOTIFICATION_ID,
+            liveUpdateBuilder
+                .setLiveUpdateContent(update)
+                .build()
+        )
+    }
+}</code></pre>
 <div class="warning-box">
 <p><strong>注意</strong>：即使有更高的更新限额，也不应滥用 Live Updates。频繁更新会导致电池消耗增加。建议仅在用户明确关注的状态（导航、运动、下载进度）使用。</p>
 </div>
@@ -229,52 +234,57 @@
 </tr>
 </table>
 <pre><code>// 计时器示例
-<p>val timerUpdate = Notification.LiveUpdate()</p>
-<p>.addCounter("剩余时间", remainingSeconds)</p>
-<p>.addText("番茄时钟工作中 🍅")</p>
-<p>// 运动追踪示例</p>
-<p>val workoutUpdate = Notification.LiveUpdate()</p>
-<p>.addMetric("配速", "5:30", "/km")</p>
-<p>.addMetric("心率", "142", "bpm")</p>
-<p>.addProgressBar(10000, currentSteps, false)</code></pre></p>
+val timerUpdate = Notification.LiveUpdate()
+    .addCounter("剩余时间", remainingSeconds)
+    .addText("番茄时钟工作中 🍅")
+
+// 运动追踪示例
+val workoutUpdate = Notification.LiveUpdate()
+    .addMetric("配速", "5:30", "/km")
+    .addMetric("心率", "142", "bpm")
+    .addProgressBar(10000, currentSteps, false)</code></pre>
 <h2>二、Rich Ongoing：信息密度革命</h2>
 <p>Rich Ongoing 是 Android 16 为持续通知设计的全新模板，大幅提升了信息展示能力。</p>
 <h3>传统 Ongoing 的限制</h3>
 <pre><code>// Android 15 及之前：只能显示简单的文本+进度条
-<p>// 信息密度低，用户无法在通知面板快速获取关键信息</p>
-<p>val oldOngoing = Notification.Builder(this, CHANNEL_ID)</p>
-<p>.setContentTitle("下载中")</p>
-<p>.setContentText("进度: 45%")</p>
-<p>.setProgress(100, 45, false)</p>
-<p>.setOngoing(true)</p>
-<p>.build()</code></pre></p>
+// 信息密度低，用户无法在通知面板快速获取关键信息
+val oldOngoing = Notification.Builder(this, CHANNEL_ID)
+    .setContentTitle("下载中")
+    .setContentText("进度: 45%")
+    .setProgress(100, 45, false)
+    .setOngoing(true)
+    .build()</code></pre>
 <h3>Rich Ongoing 新模板</h3>
 <pre><code>// Android 16：Rich Ongoing 支持结构化内容
-<p>val richOngoing = Notification.Builder(this, CHANNEL_ID)</p>
-<p>.setContentTitle("音乐播放中")</p>
-<p>.setSmallIcon(R.drawable.ic_music)</p>
-<p>.setOngoing(true)</p>
-<p>.setStyle(Notification.MediaStyle())</p>
-<p>.setRichOngoing {</p>
-<p>// 左侧：专辑封面</p>
-<p>coverArt(albumCoverBitmap)</p>
-<p>// 中间：元数据区域</p>
-<p>metadata {</p>
-<p>primary("月光曲")      // 当前曲目</p>
-<p>secondary("贝多芬")   // 艺术家</p>
-<p>tertiary("古典钢琴精选") // 专辑</p>
-<p>}</p>
-<p>// 底部：进度条</p>
-<p>playbackProgress(currentPosition, duration)</p>
-<p>// 操作按钮（最多 4 个）</p>
-<p>actions(</p>
-<p>Action(R.drawable.skip_prev, "上一首"),</p>
-<p>Action(R.drawable.play_pause, "暂停"),</p>
-<p>Action(R.drawable.skip_next, "下一首"),</p>
-<p>Action(R.drawable.heart, "收藏")</p>
-<p>)</p>
-<p>}</p>
-<p>.build()</code></pre></p>
+
+val richOngoing = Notification.Builder(this, CHANNEL_ID)
+    .setContentTitle("音乐播放中")
+    .setSmallIcon(R.drawable.ic_music)
+    .setOngoing(true)
+    .setStyle(Notification.MediaStyle())
+    .setRichOngoing {
+        // 左侧：专辑封面
+        coverArt(albumCoverBitmap)
+        
+        // 中间：元数据区域
+        metadata {
+            primary("月光曲")      // 当前曲目
+            secondary("贝多芬")   // 艺术家
+            tertiary("古典钢琴精选") // 专辑
+        }
+        
+        // 底部：进度条
+        playbackProgress(currentPosition, duration)
+        
+        // 操作按钮（最多 4 个）
+        actions(
+            Action(R.drawable.skip_prev, "上一首"),
+            Action(R.drawable.play_pause, "暂停"),
+            Action(R.drawable.skip_next, "下一首"),
+            Action(R.drawable.heart, "收藏")
+        )
+    }
+    .build()</code></pre>
 <h3>信息展示区域划分</h3>
 <table>
 <tr>
@@ -316,21 +326,23 @@
 <h2>三、Bubble API 增强</h2>
 <p>Android 16 将 Bubble 从 Beta 提升为正式 API，并增加了新能力：</p>
 <pre><code>// Android 16 - Bubble 正式版 API
-<p>val bubbleData = Notification.BubbleMetadata.Builder()</p>
-<p>.setDesiredHeight(600)  // 支持自定义高度</p>
-<p>.setShowAsBubble(true)</p>
-<p>.setBubbleIcon(Icon.createWithResource(this, R.drawable.bubble_icon))</p>
-<p>.setAutoExpandBubble(true)</p>
-<p>.setSuppressNotification(true)  // 不显示重复通知</p>
-<p>.build()</p>
-<p>// 新特性：浮动工具栏</p>
-<p>bubbleData.setFloatingToolbar {</p>
-<p>addAction("截图", screenshotIntent)</p>
-<p>addAction("最小化", minimizeIntent)</p>
-<p>}</p>
-<p>// 新特性：多实例 Bubble</p>
-<p>// 同一会话可以创建多个 Bubble 窗口</p>
-<p>bubbleData.setAllowMultipleInstances(true)</code></pre></p>
+val bubbleData = Notification.BubbleMetadata.Builder()
+    .setDesiredHeight(600)  // 支持自定义高度
+    .setShowAsBubble(true)
+    .setBubbleIcon(Icon.createWithResource(this, R.drawable.bubble_icon))
+    .setAutoExpandBubble(true)
+    .setSuppressNotification(true)  // 不显示重复通知
+    .build()
+
+// 新特性：浮动工具栏
+bubbleData.setFloatingToolbar {
+    addAction("截图", screenshotIntent)
+    addAction("最小化", minimizeIntent)
+}
+
+// 新特性：多实例 Bubble
+// 同一会话可以创建多个 Bubble 窗口
+bubbleData.setAllowMultipleInstances(true)</code></pre>
 <h2>四、通知优先级改革</h2>
 <p>Android 16 重新设计了通知优先级系统，引入了更细粒度的控制：</p>
 <table>
@@ -366,15 +378,16 @@
 </tr>
 </table>
 <pre><code>// 新增：CRITICAL 级别（仅限特定类别使用）
-<p>// 适用于：医疗警报、安全警告、地震预警等</p>
-<p>val criticalNotification = Notification.Builder(this, CHANNEL_ID)</p>
-<p>.setContentTitle("🚨 地震预警")</p>
-<p>.setContentText("预计震级 6.2，请立即避险")</p>
-<p>.setImportance(NotificationManager.IMPORTANCE_CRITICAL)</p>
-<p>.setCategory(Notification.CATEGORY_ALARM)</p>
-<p>.setCriticalAlert(true)     // 启用紧急警报行为</p>
-<p>.setFullScreenIntent(pendingIntent, true)  // 强制全屏</p>
-<p>.build()</code></pre></p>
+// 适用于：医疗警报、安全警告、地震预警等
+
+val criticalNotification = Notification.Builder(this, CHANNEL_ID)
+    .setContentTitle("🚨 地震预警")
+    .setContentText("预计震级 6.2，请立即避险")
+    .setImportance(NotificationManager.IMPORTANCE_CRITICAL)
+    .setCategory(Notification.CATEGORY_ALARM)
+    .setCriticalAlert(true)     // 启用紧急警报行为
+    .setFullScreenIntent(pendingIntent, true)  // 强制全屏
+    .build()</code></pre>
 <div class="warning-box">
 <p><strong>CRITICAL 级别限制</strong>：</p>
 <ul>
@@ -386,45 +399,50 @@
 </div>
 <h2>五、Channel 管理最佳实践</h2>
 <pre><code>// Android 16 推荐的 Channel 设计策略
-<p>class NotificationChannelManager(private val context: Context) {</p>
-<p>fun createChannels() {</p>
-<p>// 1. 渠道分类清晰</p>
-<p>createChannel(</p>
-<p>"messages", "私信消息",</p>
-<p>"好友私信和群聊消息",</p>
-<p>NotificationManager.IMPORTANCE_HIGH</p>
-<p>)</p>
-<p>createChannel(</p>
-<p>"social", "社交动态",</p>
-<p>"点赞、评论、关注通知",</p>
-<p>NotificationManager.IMPORTANCE_DEFAULT</p>
-<p>)</p>
-<p>createChannel(</p>
-<p>"system", "系统通知",</p>
-<p>"版本更新、账号安全等",</p>
-<p>NotificationManager.IMPORTANCE_LOW</p>
-<p>)</p>
-<p>// 2. 支持渠道分组</p>
-<p>val msgGroup = NotificationChannelGroup("communication", "通讯")</p>
-<p>notificationManager.createNotificationChannelGroup(msgGroup)</p>
-<p>// 3. 优化优先级策略</p>
-<p>getChannel("messages")?.let {</p>
-<p>it.setAllowBubbles(true)</p>
-<p>it.setShowBadge(true)</p>
-<p>it.enableLights(true)</p>
-<p>it.setLightColor(Color.RED)</p>
-<p>}</p>
-<p>}</p>
-<p>private fun createChannel(</p>
-<p>id: String, name: String, desc: String, importance: Int</p>
-<p>) {</p>
-<p>val channel = NotificationChannel(id, name, importance).apply {</p>
-<p>description = desc</p>
-<p>setShowBadge(importance >= NotificationManager.IMPORTANCE_DEFAULT)</p>
-<p>}</p>
-<p>notificationManager.createNotificationChannel(channel)</p>
-<p>}</p>
-<p>}</code></pre></p>
+
+class NotificationChannelManager(private val context: Context) {
+    
+    fun createChannels() {
+        // 1. 渠道分类清晰
+        createChannel(
+            "messages", "私信消息",
+            "好友私信和群聊消息",
+            NotificationManager.IMPORTANCE_HIGH
+        )
+        createChannel(
+            "social", "社交动态",
+            "点赞、评论、关注通知",
+            NotificationManager.IMPORTANCE_DEFAULT
+        )
+        createChannel(
+            "system", "系统通知",
+            "版本更新、账号安全等",
+            NotificationManager.IMPORTANCE_LOW
+        )
+        
+        // 2. 支持渠道分组
+        val msgGroup = NotificationChannelGroup("communication", "通讯")
+        notificationManager.createNotificationChannelGroup(msgGroup)
+        
+        // 3. 优化优先级策略
+        getChannel("messages")?.let {
+            it.setAllowBubbles(true)
+            it.setShowBadge(true)
+            it.enableLights(true)
+            it.setLightColor(Color.RED)
+        }
+    }
+    
+    private fun createChannel(
+        id: String, name: String, desc: String, importance: Int
+    ) {
+        val channel = NotificationChannel(id, name, importance).apply {
+            description = desc
+            setShowBadge(importance >= NotificationManager.IMPORTANCE_DEFAULT)
+        }
+        notificationManager.createNotificationChannel(channel)
+    }
+}</code></pre>
 <h2>六、迁移指南：Android 15 → Android 16</h2>
 <table>
 <tr>

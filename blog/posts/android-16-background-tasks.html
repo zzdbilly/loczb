@@ -219,19 +219,20 @@
 <li><strong>网络约束更严格</strong>：<code>setRequiredNetworkType(JobInfo.NETWORK<em>TYPE</em>UNMETERED)</code> 的 Job 在 Wi-Fi 断开时会被更积极地终止。</li>
 </ul>
 <pre><code>// Android 16：JobScheduler 执行时间受 Standby Bucket 影响
-<p>val job = JobInfo.Builder(JOB_ID, ComponentName(context, MyJobService::class.java))</p>
-<p>.setRequiredNetworkType(JobInfo.NETWORK<em>TYPE</em>UNMETERED)</p>
-<p>.setPersisted(true)</p>
-<p>.setExpedited(true)     // ⚠️ 后台时可能延迟</p>
-<p>.build()</p>
-<p>// 建议改用 WorkManager，它内部已经适配了这些限制</p>
-<p>val workRequest = PeriodicWorkRequestBuilder&lt;SyncWorker&gt;(15, TimeUnit.MINUTES)</p>
-<p>.setConstraints(</p>
-<p>Constraints.Builder()</p>
-<p>.setRequiredNetworkType(NetworkType.UNMETERED)</p>
-<p>.build()</p>
-<p>)</p>
-<p>.build()</code></pre></p>
+val job = JobInfo.Builder(JOB_ID, ComponentName(context, MyJobService::class.java))
+    .setRequiredNetworkType(JobInfo.NETWORK<em>TYPE</em>UNMETERED)
+    .setPersisted(true)
+    .setExpedited(true)     // ⚠️ 后台时可能延迟
+    .build()
+
+// 建议改用 WorkManager，它内部已经适配了这些限制
+val workRequest = PeriodicWorkRequestBuilder&lt;SyncWorker&gt;(15, TimeUnit.MINUTES)
+    .setConstraints(
+        Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.UNMETERED)
+            .build()
+    )
+    .build()</code></pre>
 <div class="tip-box">
 <p><strong>迁移建议</strong>：直接使用 WorkManager 而非 JobScheduler。WorkManager 在 API 23+ 上自动选择 <code>JobScheduler</code> 或 <code>AlarmManager + BroadcastReceiver</code> 实现，且已经适配了各版本限制。你不需要自己处理版本差异。</p>
 </div>
@@ -250,17 +251,18 @@
 <h3>1. Constraint 设计原则</h3>
 <p>Constraint 决定了 WorkManager 何时调度你的任务。约束条件越多，系统越难找到合适的执行窗口。</p>
 <pre><code>// ❌ 过度约束：几乎不可能同时满足
-<p>val constraints = Constraints.Builder()</p>
-<p>.setRequiredNetworkType(NetworkType.UNMETERED)     // 需要 Wi-Fi</p>
-<p>.setRequiresBatteryNotLow(true)                     // 电量不低</p>
-<p>.setRequiresStorageNotLow(true)                     // 存储不低</p>
-<p>.setRequiresDeviceIdle(true)                        // 设备空闲</p>
-<p>.setRequiresCharging(true)                          // 正在充电</p>
-<p>.build()</p>
-<p>// ✅ 合理约束：只约束真正必要的条件</p>
-<p>val constraints = Constraints.Builder()</p>
-<p>.setRequiredNetworkType(NetworkType.CONNECTED)      // 只需网络</p>
-<p>.build()</code></pre></p>
+val constraints = Constraints.Builder()
+    .setRequiredNetworkType(NetworkType.UNMETERED)     // 需要 Wi-Fi
+    .setRequiresBatteryNotLow(true)                     // 电量不低
+    .setRequiresStorageNotLow(true)                     // 存储不低
+    .setRequiresDeviceIdle(true)                        // 设备空闲
+    .setRequiresCharging(true)                          // 正在充电
+    .build()
+
+// ✅ 合理约束：只约束真正必要的条件
+val constraints = Constraints.Builder()
+    .setRequiredNetworkType(NetworkType.CONNECTED)      // 只需网络
+    .build()</code></pre>
 <table>
 <tr>
 <th>约束条件</th>
@@ -306,20 +308,22 @@
 <h3>2. 延迟容忍度规划</h3>
 <p>后台任务的核心问题是：你的任务能容忍多长时间的延迟？不同的容忍度对应不同的调度策略：</p>
 <pre><code>// 立即执行（但可能被系统延迟）— Expedited Work
-<p>val urgentWork = OneTimeWorkRequestBuilder&lt;UploadWorker&gt;()</p>
-<p>.setExpedited(OutOfQuotaPolicy.RUN<em>AS</em>NON<em>EXPEDITED</em>WORK_REQUEST)</p>
-<p>.build()</p>
-<p>// 可延迟 — 普通一次性任务</p>
-<p>val normalWork = OneTimeWorkRequestBuilder&lt;CleanupWorker&gt;()</p>
-<p>.setInitialDelay(5, TimeUnit.MINUTES)    // 最早 5 分钟后执行</p>
-<p>.build()</p>
-<p>// 可大量延迟 — 定期任务（最短间隔 15 分钟）</p>
-<p>val periodicWork = PeriodicWorkRequestBuilder&lt;SyncWorker&gt;(1, TimeUnit.HOURS)</p>
-<p>.setBackoffCriteria(                     // 失败后指数退避</p>
-<p>BackoffPolicy.EXPONENTIAL,</p>
-<p>30, TimeUnit.SECONDS</p>
-<p>)</p>
-<p>.build()</code></pre></p>
+val urgentWork = OneTimeWorkRequestBuilder&lt;UploadWorker&gt;()
+    .setExpedited(OutOfQuotaPolicy.RUN<em>AS</em>NON<em>EXPEDITED</em>WORK_REQUEST)
+    .build()
+
+// 可延迟 — 普通一次性任务
+val normalWork = OneTimeWorkRequestBuilder&lt;CleanupWorker&gt;()
+    .setInitialDelay(5, TimeUnit.MINUTES)    // 最早 5 分钟后执行
+    .build()
+
+// 可大量延迟 — 定期任务（最短间隔 15 分钟）
+val periodicWork = PeriodicWorkRequestBuilder&lt;SyncWorker&gt;(1, TimeUnit.HOURS)
+    .setBackoffCriteria(                     // 失败后指数退避
+        BackoffPolicy.EXPONENTIAL,
+        30, TimeUnit.SECONDS
+    )
+    .build()</code></pre>
 <div class="tip-box">
 <p><strong>延迟容忍度决策</strong>：<br></p>
 <p>• 用户正在等待结果 → <code>setExpedited()</code>（配额耗尽降级为普通任务）<br></p>
@@ -329,35 +333,39 @@
 </div>
 <h3>3. WorkManager 链式任务</h3>
 <pre><code>// 复杂后台流程：下载 → 解析 → 上传
-<p>val downloadWork = OneTimeWorkRequestBuilder&lt;DownloadWorker&gt;()</p>
-<p>.setConstraints(</p>
-<p>Constraints.Builder()</p>
-<p>.setRequiredNetworkType(NetworkType.CONNECTED)</p>
-<p>.build()</p>
-<p>)</p>
-<p>.build()</p>
-<p>val parseWork = OneTimeWorkRequestBuilder&lt;ParseWorker&gt;().build()</p>
-<p>val uploadWork = OneTimeWorkRequestBuilder&lt;UploadWorker&gt;()</p>
-<p>.setConstraints(</p>
-<p>Constraints.Builder()</p>
-<p>.setRequiredNetworkType(NetworkType.UNMETERED)</p>
-<p>.build()</p>
-<p>)</p>
-<p>.build()</p>
-<p>// 链式调度</p>
-<p>WorkManager.getInstance(context)</p>
-<p>.beginWith(downloadWork)</p>
-<p>.then(parseWork)</p>
-<p>.then(uploadWork)</p>
-<p>.enqueue()</p>
-<p>// 监听最终结果</p>
-<p>WorkManager.getInstance(context)</p>
-<p>.getWorkInfoByIdLiveData(uploadWork.id)</p>
-<p>.observe(lifecycleOwner) { workInfo -></p>
-<p>if (workInfo?.state == WorkInfo.State.SUCCEEDED) {</p>
-<p>showToast("同步完成")</p>
-<p>}</p>
-<p>}</code></pre></p>
+val downloadWork = OneTimeWorkRequestBuilder&lt;DownloadWorker&gt;()
+    .setConstraints(
+        Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
+    )
+    .build()
+
+val parseWork = OneTimeWorkRequestBuilder&lt;ParseWorker&gt;().build()
+
+val uploadWork = OneTimeWorkRequestBuilder&lt;UploadWorker&gt;()
+    .setConstraints(
+        Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.UNMETERED)
+            .build()
+    )
+    .build()
+
+// 链式调度
+WorkManager.getInstance(context)
+    .beginWith(downloadWork)
+    .then(parseWork)
+    .then(uploadWork)
+    .enqueue()
+
+// 监听最终结果
+WorkManager.getInstance(context)
+    .getWorkInfoByIdLiveData(uploadWork.id)
+    .observe(lifecycleOwner) { workInfo ->
+        if (workInfo?.state == WorkInfo.State.SUCCEEDED) {
+            showToast("同步完成")
+        }
+    }</code></pre>
 <h2>四、前台服务新规详解</h2>
 <h3>1. Short-lived Foreground Service</h3>
 <p>Android 16 引入了 <strong>short-lived foreground service</strong>（短生命周期前台服务），适用于需要短暂高优先级执行的场景：</p>
@@ -367,13 +375,13 @@
 <li>适用于：快速文件操作、短时数据处理、一次性通知发送</li>
 </ul>
 <pre><code>// Android 16：Short-lived FGS
-<p>if (Build.VERSION.SDK<em>INT >= Build.VERSION</em>CODES.VANILLA<em>ICE</em>CREAM) {</p>
-<p>// 使用短生命周期前台服务</p>
-<p>val shortLivedType = ServiceInfo.FOREGROUND<em>SERVICE</em>TYPE<em>SHORT</em>LIVED</p>
-<p>startForeground(NOTIFICATION_ID, notification, shortLivedType)</p>
-<p>} else {</p>
-<p>startForeground(NOTIFICATION_ID, notification)</p>
-<p>}</code></pre></p>
+if (Build.VERSION.SDK<em>INT >= Build.VERSION</em>CODES.VANILLA<em>ICE</em>CREAM) {
+    // 使用短生命周期前台服务
+    val shortLivedType = ServiceInfo.FOREGROUND<em>SERVICE</em>TYPE<em>SHORT</em>LIVED
+    startForeground(NOTIFICATION_ID, notification, shortLivedType)
+} else {
+    startForeground(NOTIFICATION_ID, notification)
+}</code></pre>
 <div class="warning-box">
 <p><strong>3 分钟是硬限制</strong>：超时后系统会终止服务并抛出 <code>ForegroundServiceDidNotStartInTimeException</code>。如果你的任务可能超过 3 分钟，请使用带类型的 FGS 或迁移到 WorkManager。</p>
 </div>
@@ -420,22 +428,22 @@
 <p><strong>超时后果</strong>：超时后，系统首先发送 <code>onTimeout()</code> 回调（Android 16 新增），给你一个短暂窗口做清理。如果你不主动停止服务，系统会强制终止并上报 ANR 或崩溃。</p>
 </div>
 <pre><code>// Android 16：处理 FGS 超时
-<p>override fun onTimeout(startId: Int, fgsType: Int) {</p>
-<p>// 系统给了最后机会做清理</p>
-<p>cleanupResources()</p>
-<p>stopSelf()</p>
-<p>super.onTimeout(startId, fgsType)</p>
-<p>}</code></pre></p>
+override fun onTimeout(startId: Int, fgsType: Int) {
+    // 系统给了最后机会做清理
+    cleanupResources()
+    stopSelf()
+    super.onTimeout(startId, fgsType)
+}</code></pre>
 <h3>3. foregroundServiceType 声明清单</h3>
 <p>Android 16 要求 <code>foregroundServiceType</code> 必须在两个地方声明：</p>
 <pre><code>&lt;!-- AndroidManifest.xml --&gt;
-<p>&lt;service</p>
-<p>android:name=".SyncService"</p>
-<p>android:foregroundServiceType="dataSync"</p>
-<p>android:exported="false" /&gt;</code></pre></p>
+&lt;service
+    android:name=".SyncService"
+    android:foregroundServiceType="dataSync"
+    android:exported="false" /&gt;</code></pre>
 <pre><code>// 代码中启动时也必须声明匹配的类型
-<p>val type = ServiceInfo.FOREGROUND<em>SERVICE</em>TYPE<em>DATA</em>SYNC</p>
-<p>startForeground(NOTIFICATION_ID, notification, type)</code></pre></p>
+val type = ServiceInfo.FOREGROUND<em>SERVICE</em>TYPE<em>DATA</em>SYNC
+startForeground(NOTIFICATION_ID, notification, type)</code></pre>
 <div class="tip-box">
 <p><strong>类型选择指南</strong>：<br></p>
 <p>• 数据同步/上传下载 → <code>dataSync</code>（有超时）<br></p>
@@ -449,61 +457,69 @@
 <p>数据同步是后台任务限制影响最大的场景。传统的"后台 Service 持续同步"方案在 Android 16 上几乎不可行。推荐方案：<strong>FCM + WorkManager</strong>。</p>
 <h3>1. 推拉结合架构</h3>
 <pre><code>// 推：FCM 触发即时同步
-<p>class SyncFirebaseMessagingService : FirebaseMessagingService() {</p>
-<p>override fun onMessageReceived(message: RemoteMessage) {</p>
-<p>// 收到推送，触发 WorkManager 立即同步</p>
-<p>val syncWork = OneTimeWorkRequestBuilder&lt;SyncWorker&gt;()</p>
-<p>.setExpedited(OutOfQuotaPolicy.RUN<em>AS</em>NON<em>EXPEDITED</em>WORK_REQUEST)</p>
-<p>.setInputData(workDataOf("syncType" to "push"))</p>
-<p>.build()</p>
-<p>WorkManager.getInstance(this).enqueue(syncWork)</p>
-<p>}</p>
-<p>}</p>
-<p>// 拉：定期轮询兜底</p>
-<p>val periodicSync = PeriodicWorkRequestBuilder&lt;SyncWorker&gt;(1, TimeUnit.HOURS)</p>
-<p>.setConstraints(</p>
-<p>Constraints.Builder()</p>
-<p>.setRequiredNetworkType(NetworkType.CONNECTED)</p>
-<p>.build()</p>
-<p>)</p>
-<p>.build()</p>
-<p>WorkManager.getInstance(context)</p>
-<p>.enqueueUniquePeriodicWork(</p>
-<p>"periodic_sync",</p>
-<p>ExistingPeriodicWorkPolicy.KEEP,</p>
-<p>periodicSync</p>
-<p>)</code></pre></p>
+class SyncFirebaseMessagingService : FirebaseMessagingService() {
+    override fun onMessageReceived(message: RemoteMessage) {
+        // 收到推送，触发 WorkManager 立即同步
+        val syncWork = OneTimeWorkRequestBuilder&lt;SyncWorker&gt;()
+            .setExpedited(OutOfQuotaPolicy.RUN<em>AS</em>NON<em>EXPEDITED</em>WORK_REQUEST)
+            .setInputData(workDataOf("syncType" to "push"))
+            .build()
+        WorkManager.getInstance(this).enqueue(syncWork)
+    }
+}
+
+// 拉：定期轮询兜底
+val periodicSync = PeriodicWorkRequestBuilder&lt;SyncWorker&gt;(1, TimeUnit.HOURS)
+    .setConstraints(
+        Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
+    )
+    .build()
+
+WorkManager.getInstance(context)
+    .enqueueUniquePeriodicWork(
+        "periodic_sync",
+        ExistingPeriodicWorkPolicy.KEEP,
+        periodicSync
+    )</code></pre>
 <h3>2. SyncWorker 实现</h3>
 <pre><code>class SyncWorker(
-<p>context: Context,</p>
-<p>params: WorkerParameters</p>
-<p>) : CoroutineWorker(context, params) {</p>
-<p>override suspend fun doWork(): Result {</p>
-<p>return try {</p>
-<p>val syncType = inputData.getString("syncType") ?: "periodic"</p>
-<p>// 1. 拉取服务端增量数据</p>
-<p>val changes = apiService.getDeltaChanges(lastSyncTimestamp)</p>
-<p>// 2. 本地数据库写入</p>
-<p>database.withTransaction {</p>
-<p>changes.forEach { change -></p>
-<p>database.syncDao().upsert(change.toEntity())</p>
-<p>}</p>
-<p>}</p>
-<p>// 3. 更新同步时间戳</p>
-<p>prefs.edit().putLong("last_sync", System.currentTimeMillis()).apply()</p>
-<p>// 4. 通知 UI 刷新</p>
-<p>LocalBroadcastManager.getInstance(applicationContext)</p>
-<p>.sendBroadcast(Intent("ACTION<em>SYNC</em>COMPLETED"))</p>
-<p>Result.success()</p>
-<p>} catch (e: IOException) {</p>
-<p>// 网络错误，自动重试</p>
-<p>Result.retry()</p>
-<p>} catch (e: Exception) {</p>
-<p>// 非网络错误，标记失败</p>
-<p>Result.failure()</p>
-<p>}</p>
-<p>}</p>
-<p>}</code></pre></p>
+    context: Context,
+    params: WorkerParameters
+) : CoroutineWorker(context, params) {
+
+    override suspend fun doWork(): Result {
+        return try {
+            val syncType = inputData.getString("syncType") ?: "periodic"
+            
+            // 1. 拉取服务端增量数据
+            val changes = apiService.getDeltaChanges(lastSyncTimestamp)
+            
+            // 2. 本地数据库写入
+            database.withTransaction {
+                changes.forEach { change ->
+                    database.syncDao().upsert(change.toEntity())
+                }
+            }
+            
+            // 3. 更新同步时间戳
+            prefs.edit().putLong("last_sync", System.currentTimeMillis()).apply()
+            
+            // 4. 通知 UI 刷新
+            LocalBroadcastManager.getInstance(applicationContext)
+                .sendBroadcast(Intent("ACTION<em>SYNC</em>COMPLETED"))
+            
+            Result.success()
+        } catch (e: IOException) {
+            // 网络错误，自动重试
+            Result.retry()
+        } catch (e: Exception) {
+            // 非网络错误，标记失败
+            Result.failure()
+        }
+    }
+}</code></pre>
 <h3>3. 迁移对照表</h3>
 <table>
 <tr>
@@ -584,13 +600,13 @@
 <h3>2. 电池优化豁免</h3>
 <p>某些 App 需要请求电池优化豁免（REQUEST<em>IGNORE</em>BATTERY_OPTIMIZATIONS），但 Google Play 对此审核严格：</p>
 <pre><code>// 请求电池优化豁免（谨慎使用）
-<p>if (!PowerManagerCompat.isIgnoringBatteryOptimizations(context)) {</p>
-<p>val intent = Intent(</p>
-<p>Settings.ACTION<em>REQUEST</em>IGNORE<em>BATTERY</em>OPTIMIZATIONS,</p>
-<p>Uri.parse("package:${context.packageName}")</p>
-<p>)</p>
-<p>startActivity(intent)</p>
-<p>}</code></pre></p>
+if (!PowerManagerCompat.isIgnoringBatteryOptimizations(context)) {
+    val intent = Intent(
+        Settings.ACTION<em>REQUEST</em>IGNORE<em>BATTERY</em>OPTIMIZATIONS,
+        Uri.parse("package:${context.packageName}")
+    )
+    startActivity(intent)
+}</code></pre>
 <div class="danger-box">
 <p><strong>Google Play 政策</strong>：滥用 <code>REQUEST<em>IGNORE</em>BATTERY_OPTIMIZATIONS</code> 会被 Play Store 拒审或下架。只有明确的用户场景（如 VoIP 通话、运动追踪）才允许请求。如果你的 App 不属于这些类别，请通过优化后台任务来适配，而非请求豁免。</p>
 </div>
@@ -608,31 +624,32 @@
 <p>Android 16 对后台定位的管控进一步收紧：</p>
 <h3>1. 权限要求</h3>
 <pre><code>&lt;!-- 必须同时声明前台和后台位置权限 --&gt;
-<p>&lt;uses-permission android:name="android.permission.ACCESS<em>FINE</em>LOCATION" /&gt;</p>
-<p>&lt;uses-permission android:name="android.permission.ACCESS<em>COARSE</em>LOCATION" /&gt;</p>
-<p>&lt;uses-permission android:name="android.permission.ACCESS<em>BACKGROUND</em>LOCATION" /&gt;</p>
-<p>&lt;!-- 前台服务类型必须声明 location --&gt;</p>
-<p>&lt;service</p>
-<p>android:name=".LocationTrackingService"</p>
-<p>android:foregroundServiceType="location"</p>
-<p>android:exported="false" /&gt;</code></pre></p>
+&lt;uses-permission android:name="android.permission.ACCESS<em>FINE</em>LOCATION" /&gt;
+&lt;uses-permission android:name="android.permission.ACCESS<em>COARSE</em>LOCATION" /&gt;
+&lt;uses-permission android:name="android.permission.ACCESS<em>BACKGROUND</em>LOCATION" /&gt;
+
+&lt;!-- 前台服务类型必须声明 location --&gt;
+&lt;service
+    android:name=".LocationTrackingService"
+    android:foregroundServiceType="location"
+    android:exported="false" /&gt;</code></pre>
 <h3>2. 用户授权流程</h3>
 <p>Android 16 要求后台位置权限必须<strong>从设置页面单独授予</strong>，不能在运行时弹窗请求：</p>
 <pre><code>// 第一步：先请求前台位置权限
-<p>when {</p>
-<p>ContextCompat.checkSelfPermission(context, ACCESS<em>FINE</em>LOCATION)</p>
-<p>== PackageManager.PERMISSION_GRANTED -> {</p>
-<p>// 已有前台权限，引导用户去设置开启后台权限</p>
-<p>val intent = Intent(Settings.ACTION<em>APPLICATION</em>DETAILS_SETTINGS).apply {</p>
-<p>data = Uri.fromParts("package", packageName, null)</p>
-<p>}</p>
-<p>startActivity(intent)</p>
-<p>}</p>
-<p>else -> {</p>
-<p>// 请求前台权限</p>
-<p>requestPermissions(arrayOf(ACCESS<em>FINE</em>LOCATION), LOCATION<em>REQUEST</em>CODE)</p>
-<p>}</p>
-<p>}</code></pre></p>
+when {
+    ContextCompat.checkSelfPermission(context, ACCESS<em>FINE</em>LOCATION) 
+        == PackageManager.PERMISSION_GRANTED -> {
+        // 已有前台权限，引导用户去设置开启后台权限
+        val intent = Intent(Settings.ACTION<em>APPLICATION</em>DETAILS_SETTINGS).apply {
+            data = Uri.fromParts("package", packageName, null)
+        }
+        startActivity(intent)
+    }
+    else -> {
+        // 请求前台权限
+        requestPermissions(arrayOf(ACCESS<em>FINE</em>LOCATION), LOCATION<em>REQUEST</em>CODE)
+    }
+}</code></pre>
 <h3>3. 后台定位的合法场景</h3>
 <p>Google Play 对后台定位的审查非常严格，只有以下场景才会通过审核：</p>
 <ul>
@@ -646,36 +663,40 @@
 </div>
 <h3>4. Geofencing 替代方案</h3>
 <pre><code>// 使用 Geofencing API 替代持续后台定位
-<p>val geofence = Geofence.Builder()</p>
-<p>.setRequestId("store_001")</p>
-<p>.setCircularRegion(latitude, longitude, 200f)  // 200 米半径</p>
-<p>.setExpirationDuration(Geofence.NEVER_EXPIRE)</p>
-<p>.setTransitionTypes(Geofence.GEOFENCE<em>TRANSITION</em>ENTER or Geofence.GEOFENCE<em>TRANSITION</em>EXIT)</p>
-<p>.build()</p>
-<p>val geofencingRequest = GeofencingRequest.Builder()</p>
-<p>.setInitialTrigger(GeofencingRequest.INITIAL<em>TRIGGER</em>ENTER)</p>
-<p>.addGeofence(geofence)</p>
-<p>.build()</p>
-<p>GeofencingClient(context).addGeofences(geofencingRequest, geofencePendingIntent)</p>
-<p>.addOnSuccessListener { /<em> 地理围栏注册成功 </em>/ }</p>
-<p>.addOnFailureListener { e -> /<em> 处理失败 </em>/ }</code></pre></p>
+val geofence = Geofence.Builder()
+    .setRequestId("store_001")
+    .setCircularRegion(latitude, longitude, 200f)  // 200 米半径
+    .setExpirationDuration(Geofence.NEVER_EXPIRE)
+    .setTransitionTypes(Geofence.GEOFENCE<em>TRANSITION</em>ENTER or Geofence.GEOFENCE<em>TRANSITION</em>EXIT)
+    .build()
+
+val geofencingRequest = GeofencingRequest.Builder()
+    .setInitialTrigger(GeofencingRequest.INITIAL<em>TRIGGER</em>ENTER)
+    .addGeofence(geofence)
+    .build()
+
+GeofencingClient(context).addGeofences(geofencingRequest, geofencePendingIntent)
+    .addOnSuccessListener { /<em> 地理围栏注册成功 </em>/ }
+    .addOnFailureListener { e -> /<em> 处理失败 </em>/ }</code></pre>
 <h2>八、兼容测试与按需适配</h2>
 <h3>1. targetSdkVersion 渐进式适配</h3>
 <pre><code>// android { defaultConfig { targetSdk = 36 } }
-<p>// 代码中按版本适配</p>
-<p>fun startSyncForegroundService(context: Context) {</p>
-<p>val intent = Intent(context, SyncService::class.java)</p>
-<p>if (Build.VERSION.SDK<em>INT >= Build.VERSION</em>CODES.VANILLA<em>ICE</em>CREAM) {</p>
-<p>// Android 16+：前台服务启动限制</p>
-<p>// 必须在 type 声明的范围内使用</p>
-<p>context.startForegroundService(intent)</p>
-<p>} else if (Build.VERSION.SDK<em>INT >= Build.VERSION</em>CODES.UPSIDE<em>DOWN</em>CAKE) {</p>
-<p>// Android 14+：需要 foregroundServiceType</p>
-<p>context.startForegroundService(intent)</p>
-<p>} else {</p>
-<p>context.startService(intent)</p>
-<p>}</p>
-<p>}</code></pre></p>
+
+// 代码中按版本适配
+fun startSyncForegroundService(context: Context) {
+    val intent = Intent(context, SyncService::class.java)
+    
+    if (Build.VERSION.SDK<em>INT >= Build.VERSION</em>CODES.VANILLA<em>ICE</em>CREAM) {
+        // Android 16+：前台服务启动限制
+        // 必须在 type 声明的范围内使用
+        context.startForegroundService(intent)
+    } else if (Build.VERSION.SDK<em>INT >= Build.VERSION</em>CODES.UPSIDE<em>DOWN</em>CAKE) {
+        // Android 14+：需要 foregroundServiceType
+        context.startForegroundService(intent)
+    } else {
+        context.startService(intent)
+    }
+}</code></pre>
 <h3>2. 测试场景清单</h3>
 <table>
 <tr>
@@ -716,52 +737,56 @@
 </table>
 <h3>3. adb 调试命令</h3>
 <pre><code># 强制进入 Doze 模式
-<p>adb shell dumpsys deviceidle force-idle</p>
-<h1>退出 Doze 模式</h1>
-<p>adb shell dumpsys deviceidle unforce</p>
-<h1>设置 App Standby Bucket</h1>
-<p>adb shell am set-standby-bucket com.example.app rare</p>
-<h1>查看 App 当前 Bucket</h1>
-<p>adb shell am get-standby-bucket com.example.app</p>
-<h1>查看 WorkManager 任务状态</h1>
-<p>adb shell dumpsys jobscheduler | grep com.example.app</p>
-<h1>模拟 FGS 超时（需要 root 或 debuggable App）</h1>
-<p>adb shell cmd jobscheduler monitor com.example.app</p>
-<h1>查看电池优化状态</h1>
-<p>adb shell dumpsys deviceidle whitelist</code></pre></p>
+adb shell dumpsys deviceidle force-idle
+
+# 退出 Doze 模式
+adb shell dumpsys deviceidle unforce
+
+# 设置 App Standby Bucket
+adb shell am set-standby-bucket com.example.app rare
+
+# 查看 App 当前 Bucket
+adb shell am get-standby-bucket com.example.app
+
+# 查看 WorkManager 任务状态
+adb shell dumpsys jobscheduler | grep com.example.app
+
+# 模拟 FGS 超时（需要 root 或 debuggable App）
+adb shell cmd jobscheduler monitor com.example.app
+
+# 查看电池优化状态
+adb shell dumpsys deviceidle whitelist</code></pre>
 <h3>4. 兼容性工具类</h3>
 <pre><code>object BackgroundTaskCompat {
-<p>/**</p>
-<ul>
-<li>安全地启动前台服务</li>
-<li>Android 16+ 会检查 foregroundServiceType 一致性</li>
-</ul>
-<p>*/</p>
-<p>fun startForegroundServiceSafe(</p>
-<p>context: Context,</p>
-<p>serviceClass: Class&lt;out Service&gt;,</p>
-<p>fgsType: Int? = null</p>
-<p>) {</p>
-<p>val intent = Intent(context, serviceClass)</p>
-<p>if (Build.VERSION.SDK<em>INT >= Build.VERSION</em>CODES.O) {</p>
-<p>context.startForegroundService(intent)</p>
-<p>} else {</p>
-<p>context.startService(intent)</p>
-<p>}</p>
-<p>}</p>
-<p>/**</p>
-<ul>
-<li>判断是否应该使用 WorkManager 而非前台服务</li>
-</ul>
-<p>*/</p>
-<p>fun shouldUseWorkManager(taskDurationMinutes: Long): Boolean {</p>
-<p>return when {</p>
-<p>taskDurationMinutes &lt;= 3 -> false   // 短任务可用 short-lived FGS</p>
-<p>taskDurationMinutes &lt;= 360 -> false  // 中等任务可用 dataSync FGS</p>
-<p>else -> true                          // 超长任务必须用 WorkManager</p>
-<p>}</p>
-<p>}</p>
-<p>}</code></pre></p>
+    
+    /**
+     * 安全地启动前台服务
+     * Android 16+ 会检查 foregroundServiceType 一致性
+     */
+    fun startForegroundServiceSafe(
+        context: Context,
+        serviceClass: Class&lt;out Service&gt;,
+        fgsType: Int? = null
+    ) {
+        val intent = Intent(context, serviceClass)
+        if (Build.VERSION.SDK<em>INT >= Build.VERSION</em>CODES.O) {
+            context.startForegroundService(intent)
+        } else {
+            context.startService(intent)
+        }
+    }
+
+    /**
+     * 判断是否应该使用 WorkManager 而非前台服务
+     */
+    fun shouldUseWorkManager(taskDurationMinutes: Long): Boolean {
+        return when {
+            taskDurationMinutes &lt;= 3 -> false   // 短任务可用 short-lived FGS
+            taskDurationMinutes &lt;= 360 -> false  // 中等任务可用 dataSync FGS
+            else -> true                          // 超长任务必须用 WorkManager
+        }
+    }
+}</code></pre>
 <h2>九、速查表</h2>
 <table>
 <tr>

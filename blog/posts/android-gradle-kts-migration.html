@@ -169,28 +169,28 @@
 <div class="compare-block">
 <div class="compare-label groovy">Groovy</div>
 <pre><code>android {
-<p>compileSdk 34</p>
-<p>defaultConfig {</p>
-<p>applicationId "com.example.app"</p>
-<p>minSdk 24</p>
-<p>targetSdk 34</p>
-<p>versionCode 1</p>
-<p>versionName "1.0"</p>
-<p>}</p>
-<p>}</code></pre></p>
+    compileSdk 34
+    defaultConfig {
+        applicationId "com.example.app"
+        minSdk 24
+        targetSdk 34
+        versionCode 1
+        versionName "1.0"
+    }
+}</code></pre>
 </div>
 <div class="compare-block">
 <div class="compare-label kotlin">KTS</div>
 <pre><code>android {
-<p>compileSdk = 34</p>
-<p>defaultConfig {</p>
-<p>applicationId = "com.example.app"</p>
-<p>minSdk = 24</p>
-<p>targetSdk = 34</p>
-<p>versionCode = 1</p>
-<p>versionName = "1.0"</p>
-<p>}</p>
-<p>}</code></pre></p>
+    compileSdk = 34
+    defaultConfig {
+        applicationId = "com.example.app"
+        minSdk = 24
+        targetSdk = 34
+        versionCode = 1
+        versionName = "1.0"
+    }
+}</code></pre>
 </div>
 </div>
 <p>关键区别：<strong>KTS 中属性赋值必须用 <code>=</code></strong>，Groovy 可以省略。</p>
@@ -199,18 +199,20 @@
 <div class="compare-block">
 <div class="compare-label groovy">Groovy</div>
 <pre><code>// 单引号 = 纯字符串
-<p>implementation 'androidx.core:core-ktx:1.13.0'</p>
-<p>// 双引号 = GString（可插值）</p>
-<p>def ver = "1.13.0"</p>
-<p>implementation "androidx.core:core-ktx:${ver}"</code></pre></p>
+implementation 'androidx.core:core-ktx:1.13.0'
+
+// 双引号 = GString（可插值）
+def ver = "1.13.0"
+implementation "androidx.core:core-ktx:${ver}"</code></pre>
 </div>
 <div class="compare-block">
 <div class="compare-label kotlin">KTS</div>
 <pre><code>// 单引号 / 双引号等价
-<p>implementation("androidx.core:core-ktx:1.13.0")</p>
-<p>// 字符串模板用 $</p>
-<p>val ver = "1.13.0"</p>
-<p>implementation("androidx.core:core-ktx:$ver")</code></pre></p>
+implementation("androidx.core:core-ktx:1.13.0")
+
+// 字符串模板用 $
+val ver = "1.13.0"
+implementation("androidx.core:core-ktx:$ver")</code></pre>
 </div>
 </div>
 <p>关键区别：<strong>依赖声明必须用函数调用形式 <code>implementation("...")</code></strong>，Groovy 可以省略括号。</p>
@@ -219,21 +221,23 @@
 <div class="compare-block">
 <div class="compare-label groovy">Groovy</div>
 <pre><code>// 根 build.gradle
-<p>ext {</p>
-<p>kotlinVersion = '2.0.0'</p>
-<p>composeBom = '2026.04.00'</p>
-<p>}</p>
-<p>// 子模块使用</p>
-<p>implementation "org.jetbrains.kotlin:kotlin-stdlib:${kotlinVersion}"</code></pre></p>
+ext {
+    kotlinVersion = '2.0.0'
+    composeBom = '2026.04.00'
+}
+
+// 子模块使用
+implementation "org.jetbrains.kotlin:kotlin-stdlib:${kotlinVersion}"</code></pre>
 </div>
 <div class="compare-block">
 <div class="compare-label kotlin">KTS</div>
 <pre><code>// 根 build.gradle.kts
-<p>extra["kotlinVersion"] = "2.0.0"</p>
-<p>extra["composeBom"] = "2026.04.00"</p>
-<p>// 子模块使用</p>
-<p>val kotlinVersion: String by extra</p>
-<p>implementation("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")</code></pre></p>
+extra["kotlinVersion"] = "2.0.0"
+extra["composeBom"] = "2026.04.00"
+
+// 子模块使用
+val kotlinVersion: String by extra
+implementation("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")</code></pre>
 </div>
 </div>
 <p>关键区别：<strong>KTS 中 <code>ext</code> 变成 <code>extra</code></strong>，读的时候需要声明类型。</p>
@@ -242,26 +246,26 @@
 <div class="compare-block">
 <div class="compare-label groovy">Groovy</div>
 <pre><code>buildTypes {
-<p>release {</p>
-<p>minifyEnabled true</p>
-<p>proguardFiles getDefaultProguardFile(</p>
-<p>'proguard-android-optimize.txt'),</p>
-<p>'proguard-rules.pro'</p>
-<p>}</p>
-<p>}</code></pre></p>
+    release {
+        minifyEnabled true
+        proguardFiles getDefaultProguardFile(
+            'proguard-android-optimize.txt'),
+            'proguard-rules.pro'
+    }
+}</code></pre>
 </div>
 <div class="compare-block">
 <div class="compare-label kotlin">KTS</div>
 <pre><code>buildTypes {
-<p>release {</p>
-<p>isMinifyEnabled = true</p>
-<p>proguardFiles(</p>
-<p>getDefaultProguardFile(</p>
-<p>"proguard-android-optimize.txt"),</p>
-<p>"proguard-rules.pro"</p>
-<p>)</p>
-<p>}</p>
-<p>}</code></pre></p>
+    release {
+        isMinifyEnabled = true
+        proguardFiles(
+            getDefaultProguardFile(
+                "proguard-android-optimize.txt"),
+            "proguard-rules.pro"
+        )
+    }
+}</code></pre>
 </div>
 </div>
 <p>关键区别：<strong>布尔属性前缀加 <code>is</code></strong>（<code>minifyEnabled</code> → <code>isMinifyEnabled</code>），函数调用加括号。</p>
@@ -270,18 +274,18 @@
 <div class="compare-block">
 <div class="compare-label groovy">Groovy</div>
 <pre><code>plugins {
-<p>id 'com.android.application'</p>
-<p>id 'org.jetbrains.kotlin.android'</p>
-<p>id 'kotlin-parcelize'</p>
-<p>}</code></pre></p>
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+    id 'kotlin-parcelize'
+}</code></pre>
 </div>
 <div class="compare-block">
 <div class="compare-label kotlin">KTS</div>
 <pre><code>plugins {
-<p>id("com.android.application")</p>
-<p>id("org.jetbrains.kotlin.android")</p>
-<p>id("kotlin-parcelize")</p>
-<p>}</code></pre></p>
+    id("com.android.application")
+    id("org.jetbrains.kotlin.android")
+    id("kotlin-parcelize")
+}</code></pre>
 </div>
 </div>
 <p>简单粗暴：所有 <code>id 'xxx'</code> → <code>id("xxx")</code>。</p>
@@ -292,46 +296,50 @@
 <div class="compare-block">
 <div class="compare-label groovy">settings.gradle</div>
 <pre><code>pluginManagement {
-<p>repositories {</p>
-<p>google()</p>
-<p>mavenCentral()</p>
-<p>gradlePluginPortal()</p>
-<p>}</p>
-<p>}</p>
-<p>dependencyResolutionManagement {</p>
-<p>repositoriesMode.set(</p>
-<p>RepositoriesMode.FAIL<em>ON</em>PROJECT_REPOS)</p>
-<p>repositories {</p>
-<p>google()</p>
-<p>mavenCentral()</p>
-<p>}</p>
-<p>}</p>
-<p>rootProject.name = "MyApp"</p>
-<p>include ':app'</p>
-<p>include ':core'</p>
-<p>include ':feature:home'</code></pre></p>
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+
+dependencyResolutionManagement {
+    repositoriesMode.set(
+        RepositoriesMode.FAIL<em>ON</em>PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+rootProject.name = "MyApp"
+include ':app'
+include ':core'
+include ':feature:home'</code></pre>
 </div>
 <div class="compare-block">
 <div class="compare-label kotlin">settings.gradle.kts</div>
 <pre><code>pluginManagement {
-<p>repositories {</p>
-<p>google()</p>
-<p>mavenCentral()</p>
-<p>gradlePluginPortal()</p>
-<p>}</p>
-<p>}</p>
-<p>dependencyResolutionManagement {</p>
-<p>repositoriesMode.set(</p>
-<p>RepositoriesMode.FAIL<em>ON</em>PROJECT_REPOS)</p>
-<p>repositories {</p>
-<p>google()</p>
-<p>mavenCentral()</p>
-<p>}</p>
-<p>}</p>
-<p>rootProject.name = "MyApp"</p>
-<p>include(":app")</p>
-<p>include(":core")</p>
-<p>include(":feature:home")</code></pre></p>
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+
+dependencyResolutionManagement {
+    repositoriesMode.set(
+        RepositoriesMode.FAIL<em>ON</em>PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+rootProject.name = "MyApp"
+include(":app")
+include(":core")
+include(":feature:home")</code></pre>
 </div>
 </div>
 <p>变化点：<code>include ':app'</code> → <code>include(":app")</code>。仅此而已。</p>
@@ -344,32 +352,34 @@
 <div class="compare-block">
 <div class="compare-label groovy">build.gradle</div>
 <pre><code>plugins {
-<p>id 'com.android.application' \</p>
-<p>version '8.5.0' apply false</p>
-<p>id 'org.jetbrains.kotlin.android' \</p>
-<p>version '2.0.0' apply false</p>
-<p>id 'com.android.library' \</p>
-<p>version '8.5.0' apply false</p>
-<p>}</p>
-<p>ext {</p>
-<p>kotlinVersion = '2.0.0'</p>
-<p>composeBom = '2026.04.00'</p>
-<p>coroutines = '1.8.1'</p>
-<p>}</code></pre></p>
+    id 'com.android.application' \
+        version '8.5.0' apply false
+    id 'org.jetbrains.kotlin.android' \
+        version '2.0.0' apply false
+    id 'com.android.library' \
+        version '8.5.0' apply false
+}
+
+ext {
+    kotlinVersion = '2.0.0'
+    composeBom = '2026.04.00'
+    coroutines = '1.8.1'
+}</code></pre>
 </div>
 <div class="compare-block">
 <div class="compare-label kotlin">build.gradle.kts</div>
 <pre><code>plugins {
-<p>id("com.android.application")\</p>
-<p>.version("8.5.0").apply(false)</p>
-<p>id("org.jetbrains.kotlin.android")\</p>
-<p>.version("2.0.0").apply(false)</p>
-<p>id("com.android.library")\</p>
-<p>.version("8.5.0").apply(false)</p>
-<p>}</p>
-<p>extra["kotlinVersion"] = "2.0.0"</p>
-<p>extra["composeBom"] = "2026.04.00"</p>
-<p>extra["coroutines"] = "1.8.1"</code></pre></p>
+    id("com.android.application")\
+        .version("8.5.0").apply(false)
+    id("org.jetbrains.kotlin.android")\
+        .version("2.0.0").apply(false)
+    id("com.android.library")\
+        .version("8.5.0").apply(false)
+}
+
+extra["kotlinVersion"] = "2.0.0"
+extra["composeBom"] = "2026.04.00"
+extra["coroutines"] = "1.8.1"</code></pre>
 </div>
 </div>
 <h3>Step 3: 子模块 build.gradle → build.gradle.kts</h3>
@@ -378,106 +388,124 @@
 <div class="compare-block">
 <div class="compare-label groovy">app/build.gradle</div>
 <pre><code>plugins {
-<p>id 'com.android.application'</p>
-<p>id 'org.jetbrains.kotlin.android'</p>
-<p>}</p>
-<p>android {</p>
-<p>namespace 'com.example.myapp'</p>
-<p>compileSdk 34</p>
-<p>defaultConfig {</p>
-<p>applicationId "com.example.myapp"</p>
-<p>minSdk 24</p>
-<p>targetSdk 34</p>
-<p>versionCode 1</p>
-<p>versionName "1.0"</p>
-<p>testInstrumentationRunner \</p>
-<p>"androidx.test.runner\</p>
-<p>.AndroidJUnitRunner"</p>
-<p>}</p>
-<p>buildTypes {</p>
-<p>release {</p>
-<p>minifyEnabled true</p>
-<p>shrinkResources true</p>
-<p>signingConfig signingConfigs.release</p>
-<p>}</p>
-<p>}</p>
-<p>compileOptions {</p>
-<p>sourceCompatibility JavaVersion.VERSION_17</p>
-<p>targetCompatibility JavaVersion.VERSION_17</p>
-<p>}</p>
-<p>kotlinOptions {</p>
-<p>jvmTarget = '17'</p>
-<p>}</p>
-<p>buildFeatures {</p>
-<p>compose true</p>
-<p>}</p>
-<p>composeOptions {</p>
-<p>kotlinCompilerExtensionVersion \</p>
-<p>'1.5.14'</p>
-<p>}</p>
-<p>}</p>
-<p>dependencies {</p>
-<p>implementation 'androidx.core:core-ktx:1.13.0'</p>
-<p>implementation platform(</p>
-<p>'androidx.compose:compose-bom:2026.04.00')</p>
-<p>implementation 'androidx.compose.ui:ui'</p>
-<p>implementation 'androidx.compose.material3:material3'</p>
-<p>testImplementation 'junit:junit:4.13.2'</p>
-<p>}</code></pre></p>
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+}
+
+android {
+    namespace 'com.example.myapp'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.example.myapp"
+        minSdk 24
+        targetSdk 34
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner \
+            "androidx.test.runner\
+            .AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            shrinkResources true
+            signingConfig signingConfigs.release
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = '17'
+    }
+
+    buildFeatures {
+        compose true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion \
+            '1.5.14'
+    }
+}
+
+dependencies {
+    implementation 'androidx.core:core-ktx:1.13.0'
+    implementation platform(
+        'androidx.compose:compose-bom:2026.04.00')
+    implementation 'androidx.compose.ui:ui'
+    implementation 'androidx.compose.material3:material3'
+    testImplementation 'junit:junit:4.13.2'
+}</code></pre>
 </div>
 <div class="compare-block">
 <div class="compare-label kotlin">app/build.gradle.kts</div>
 <pre><code>plugins {
-<p>id("com.android.application")</p>
-<p>id("org.jetbrains.kotlin.android")</p>
-<p>}</p>
-<p>android {</p>
-<p>namespace = "com.example.myapp"</p>
-<p>compileSdk = 34</p>
-<p>defaultConfig {</p>
-<p>applicationId = "com.example.myapp"</p>
-<p>minSdk = 24</p>
-<p>targetSdk = 34</p>
-<p>versionCode = 1</p>
-<p>versionName = "1.0"</p>
-<p>testInstrumentationRunner =\</p>
-<p>"androidx.test.runner\</p>
-<p>.AndroidJUnitRunner"</p>
-<p>}</p>
-<p>buildTypes {</p>
-<p>release {</p>
-<p>isMinifyEnabled = true</p>
-<p>isShrinkResources = true</p>
-<p>signingConfig =\</p>
-<p>signingConfigs.getByName("release")</p>
-<p>}</p>
-<p>}</p>
-<p>compileOptions {</p>
-<p>sourceCompatibility =\</p>
-<p>JavaVersion.VERSION_17</p>
-<p>targetCompatibility =\</p>
-<p>JavaVersion.VERSION_17</p>
-<p>}</p>
-<p>kotlinOptions {</p>
-<p>jvmTarget = "17"</p>
-<p>}</p>
-<p>buildFeatures {</p>
-<p>compose = true</p>
-<p>}</p>
-<p>composeOptions {</p>
-<p>kotlinCompilerExtensionVersion =\</p>
-<p>"1.5.14"</p>
-<p>}</p>
-<p>}</p>
-<p>dependencies {</p>
-<p>implementation("androidx.core:core-ktx:1.13.0")</p>
-<p>implementation(platform(</p>
-<p>"androidx.compose:compose-bom:2026.04.00"))</p>
-<p>implementation("androidx.compose.ui:ui")</p>
-<p>implementation(\</p>
-<p>"androidx.compose.material3:material3")</p>
-<p>testImplementation("junit:junit:4.13.2")</p>
-<p>}</code></pre></p>
+    id("com.android.application")
+    id("org.jetbrains.kotlin.android")
+}
+
+android {
+    namespace = "com.example.myapp"
+    compileSdk = 34
+
+    defaultConfig {
+        applicationId = "com.example.myapp"
+        minSdk = 24
+        targetSdk = 34
+        versionCode = 1
+        versionName = "1.0"
+
+        testInstrumentationRunner =\
+            "androidx.test.runner\
+            .AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            isMinifyEnabled = true
+            isShrinkResources = true
+            signingConfig =\
+                signingConfigs.getByName("release")
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility =\
+            JavaVersion.VERSION_17
+        targetCompatibility =\
+            JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = "17"
+    }
+
+    buildFeatures {
+        compose = true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion =\
+            "1.5.14"
+    }
+}
+
+dependencies {
+    implementation("androidx.core:core-ktx:1.13.0")
+    implementation(platform(
+        "androidx.compose:compose-bom:2026.04.00"))
+    implementation("androidx.compose.ui:ui")
+    implementation(\
+        "androidx.compose.material3:material3")
+    testImplementation("junit:junit:4.13.2")
+}</code></pre>
 </div>
 </div>
 <div class="warning-box">
@@ -487,33 +515,37 @@
 <p>迁移 KTS 的最佳搭档是 <strong>Gradle Version Catalog</strong>。它比 <code>extra</code> 属性更优雅，也是官方推荐的做法。</p>
 <p>创建 <code>gradle/libs.versions.toml</code>：</p>
 <pre><code>[versions]
-<p>kotlin = "2.0.0"</p>
-<p>agp = "8.5.0"</p>
-<p>compose-bom = "2026.04.00"</p>
-<p>core-ktx = "1.13.0"</p>
-<p>coroutines = "1.8.1"</p>
-<p>[libraries]</p>
-<p>core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }</p>
-<p>compose-ui = { group = "androidx.compose.ui", name = "ui" }</p>
-<p>compose-material3 = { group = "androidx.compose.material3", name = "material3" }</p>
-<p>compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose-bom" }</p>
-<p>junit = { group = "junit", name = "junit", version = "4.13.2" }</p>
-<p>[bundles]</p>
-<p>compose = ["compose-ui", "compose-material3"]</p>
-<p>[plugins]</p>
-<p>android-application = { id = "com.android.application", version.ref = "agp" }</p>
-<p>kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }</code></pre></p>
+kotlin = "2.0.0"
+agp = "8.5.0"
+compose-bom = "2026.04.00"
+core-ktx = "1.13.0"
+coroutines = "1.8.1"
+
+[libraries]
+core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
+compose-ui = { group = "androidx.compose.ui", name = "ui" }
+compose-material3 = { group = "androidx.compose.material3", name = "material3" }
+compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose-bom" }
+junit = { group = "junit", name = "junit", version = "4.13.2" }
+
+[bundles]
+compose = ["compose-ui", "compose-material3"]
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }</code></pre>
 <p>在 KTS 中使用：</p>
 <pre><code>plugins {
-<p>alias(libs.plugins.android.application)</p>
-<p>alias(libs.plugins.kotlin.android)</p>
-<p>}</p>
-<p>dependencies {</p>
-<p>implementation(libs.core.ktx)</p>
-<p>implementation(platform(libs.compose.bom))</p>
-<p>implementation(libs.bundles.compose)</p>
-<p>testImplementation(libs.junit)</p>
-<p>}</code></pre></p>
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+}
+
+dependencies {
+    implementation(libs.core.ktx)
+    implementation(platform(libs.compose.bom))
+    implementation(libs.bundles.compose)
+    testImplementation(libs.junit)
+}</code></pre>
 <div class="tip-box">
 <p><strong>💡 为什么推荐 Version Catalog</strong>：1) 类型安全，IDE 补全完美；2) 版本集中管理，不用到处找 <code>extra</code>；3) 支持 bundles 分组；4) TOML 格式比 Groovy <code>ext</code> 块更易维护。</p>
 </div>
@@ -521,30 +553,32 @@
 <h3>坑 1: kotlinOptions 的 jvmTarget</h3>
 <p>Groovy 里可以写 <code>jvmTarget = '17'</code>，KTS 里这个属性类型是 <code>String?</code>，所以：</p>
 <pre><code>// ❌ 编译错误
-<p>kotlinOptions.jvmTarget = "17"</p>
-<p>// ✅ 正确方式</p>
-<p>kotlinOptions {</p>
-<p>jvmTarget = "17"</p>
-<p>}</p>
-<p>// ✅ 或者用 tasks 配置</p>
-<p>tasks.withType&lt;org.jetbrains.kotlin.gradle.tasks.KotlinCompile&gt; {</p>
-<p>compilerOptions {</p>
-<p>jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)</p>
-<p>}</p>
-<p>}</code></pre></p>
+kotlinOptions.jvmTarget = "17"
+
+// ✅ 正确方式
+kotlinOptions {
+    jvmTarget = "17"
+}
+
+// ✅ 或者用 tasks 配置
+tasks.withType&lt;org.jetbrains.kotlin.gradle.tasks.KotlinCompile&gt; {
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
+    }
+}</code></pre>
 <h3>坑 2: buildConfigField</h3>
 <div class="compare-container">
 <div class="compare-block">
 <div class="compare-label groovy">Groovy</div>
 <pre><code>buildConfigField "String", "API_KEY", \
-<p>'"your-api-key"'</p>
-<p>buildConfigField "boolean", "DEBUG_MODE", "true"</code></pre></p>
+    '"your-api-key"'
+buildConfigField "boolean", "DEBUG_MODE", "true"</code></pre>
 </div>
 <div class="compare-block">
 <div class="compare-label kotlin">KTS</div>
 <pre><code>buildConfigField("String", "API_KEY",
-<p>"\"your-api-key\"")</p>
-<p>buildConfigField("boolean", "DEBUG_MODE", "true")</code></pre></p>
+    "\"your-api-key\"")
+buildConfigField("boolean", "DEBUG_MODE", "true")</code></pre>
 </div>
 </div>
 <p>注意字符串值的引号嵌套：KTS 里外层用 <code>"</code>，内层 Java 值需要 <code>\"</code> 转义。</p>
@@ -553,116 +587,123 @@
 <div class="compare-block">
 <div class="compare-label groovy">Groovy</div>
 <pre><code>sourceSets {
-<p>main {</p>
-<p>java.srcDirs 'src/main/kotlin'</p>
-<p>}</p>
-<p>test {</p>
-<p>java.srcDirs 'src/test/kotlin'</p>
-<p>}</p>
-<p>}</code></pre></p>
+    main {
+        java.srcDirs 'src/main/kotlin'
+    }
+    test {
+        java.srcDirs 'src/test/kotlin'
+    }
+}</code></pre>
 </div>
 <div class="compare-block">
 <div class="compare-label kotlin">KTS</div>
 <pre><code>sourceSets {
-<p>getByName("main") {</p>
-<p>java.srcDirs("src/main/kotlin")</p>
-<p>}</p>
-<p>getByName("test") {</p>
-<p>java.srcDirs("src/test/kotlin")</p>
-<p>}</p>
-<p>}</code></pre></p>
+    getByName("main") {
+        java.srcDirs("src/main/kotlin")
+    }
+    getByName("test") {
+        java.srcDirs("src/test/kotlin")
+    }
+}</code></pre>
 </div>
 </div>
 <p>关键：<code>main</code> / <code>test</code> 在 KTS 中用 <code>getByName("...")</code> 访问。</p>
 <h3>坑 4: 多模块项目的 extra 传递</h3>
 <p>根项目定义的 <code>extra</code> 在子模块中读取时，需要确保类型正确：</p>
 <pre><code>// 根项目 build.gradle.kts
-<p>extra["composeBom"] = "2026.04.00"</p>
-<p>// 子模块 build.gradle.kts</p>
-<p>val composeBom: String by rootProject.extra</p>
-<p>// 或者</p>
-<p>val composeBom = rootProject.extra["composeBom"] as String</code></pre></p>
+extra["composeBom"] = "2026.04.00"
+
+// 子模块 build.gradle.kts
+val composeBom: String by rootProject.extra
+// 或者
+val composeBom = rootProject.extra["composeBom"] as String</code></pre>
 <div class="tip-box">
 <p><strong>💡 更好的做法</strong>：用 Version Catalog 代替 extra 传值，根项目和子模块都通过 <code>libs</code> 访问，不需要 <code>rootProject.extra</code>。</p>
 </div>
 <h3>坑 5: apply plugin 的旧写法</h3>
 <pre><code>// ❌ 旧写法（KTS 中不推荐）
-<p>apply(plugin = "kotlin-kapt")</p>
-<p>// ✅ 新写法（在 plugins 块中声明）</p>
-<p>plugins {</p>
-<p>id("kotlin-kapt")</p>
-<p>}</p>
-<p>// ✅ 或者条件应用</p>
-<p>plugins {</p>
-<p>id("kotlin-kapt") apply false</p>
-<p>}</code></pre></p>
+apply(plugin = "kotlin-kapt")
+
+// ✅ 新写法（在 plugins 块中声明）
+plugins {
+    id("kotlin-kapt")
+}
+
+// ✅ 或者条件应用
+plugins {
+    id("kotlin-kapt") apply false
+}</code></pre>
 <h2>进阶：Convention Plugin</h2>
 <p>当项目有多个子模块，每个模块的 <code>build.gradle.kts</code> 都有大量重复配置。Convention Plugin 可以把公共配置提取出来。</p>
 <h3>目录结构</h3>
 <pre><code>build-logic/
-<p>├── build.gradle.kts</p>
-<p>├── settings.gradle.kts</p>
-<p>└── convention/</p>
-<p>├── build.gradle.kts</p>
-<p>└── src/main/kotlin/</p>
-<p>├── AndroidApplicationConventionPlugin.kt</p>
-<p>├── AndroidLibraryConventionPlugin.kt</p>
-<p>└── KotlinAndroidConventionPlugin.kt</code></pre></p>
+├── build.gradle.kts
+├── settings.gradle.kts
+└── convention/
+    ├── build.gradle.kts
+    └── src/main/kotlin/
+        ├── AndroidApplicationConventionPlugin.kt
+        ├── AndroidLibraryConventionPlugin.kt
+        └── KotlinAndroidConventionPlugin.kt</code></pre>
 <h3>build-logic/settings.gradle.kts</h3>
 <pre><code>pluginManagement {
-<p>repositories {</p>
-<p>google()</p>
-<p>mavenCentral()</p>
-<p>gradlePluginPortal()</p>
-<p>}</p>
-<p>}</p>
-<p>dependencyResolutionManagement {</p>
-<p>repositories {</p>
-<p>google()</p>
-<p>mavenCentral()</p>
-<p>}</p>
-<p>versionCatalogs {</p>
-<p>create("libs") {</p>
-<p>from(files("../gradle/libs.versions.toml"))</p>
-<p>}</p>
-<p>}</p>
-<p>}</p>
-<p>rootProject.name = "build-logic"</p>
-<p>include(":convention")</code></pre></p>
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+
+dependencyResolutionManagement {
+    repositories {
+        google()
+        mavenCentral()
+    }
+    versionCatalogs {
+        create("libs") {
+            from(files("../gradle/libs.versions.toml"))
+        }
+    }
+}
+
+rootProject.name = "build-logic"
+include(":convention")</code></pre>
 <h3>Convention Plugin 示例</h3>
 <pre><code>// AndroidApplicationConventionPlugin.kt
-<p>class AndroidApplicationConventionPlugin : Plugin&lt;Project&gt; {</p>
-<p>override fun apply(target: Project) {</p>
-<p>with(target) {</p>
-<p>with(pluginManager) {</p>
-<p>apply("com.android.application")</p>
-<p>apply("org.jetbrains.kotlin.android")</p>
-<p>}</p>
-<p>extensions.configure&lt;com.android.build.gradle.LibraryExtension&gt; {</p>
-<p>compileSdk = 34</p>
-<p>defaultConfig {</p>
-<p>minSdk = 24</p>
-<p>targetSdk = 34</p>
-<p>}</p>
-<p>compileOptions {</p>
-<p>sourceCompatibility = JavaVersion.VERSION_17</p>
-<p>targetCompatibility = JavaVersion.VERSION_17</p>
-<p>}</p>
-<p>}</p>
-<p>}</p>
-<p>}</p>
-<p>}</code></pre></p>
+class AndroidApplicationConventionPlugin : Plugin&lt;Project&gt; {
+    override fun apply(target: Project) {
+        with(target) {
+            with(pluginManager) {
+                apply("com.android.application")
+                apply("org.jetbrains.kotlin.android")
+            }
+
+            extensions.configure&lt;com.android.build.gradle.LibraryExtension&gt; {
+                compileSdk = 34
+                defaultConfig {
+                    minSdk = 24
+                    targetSdk = 34
+                }
+                compileOptions {
+                    sourceCompatibility = JavaVersion.VERSION_17
+                    targetCompatibility = JavaVersion.VERSION_17
+                }
+            }
+        }
+    }
+}</code></pre>
 <h3>子模块使用</h3>
 <pre><code>// app/build.gradle.kts — 从 80 行缩减到 15 行
-<p>plugins {</p>
-<p>id("convention.android.application")</p>
-<p>}</p>
-<p>android {</p>
-<p>namespace = "com.example.myapp"</p>
-<p>defaultConfig {</p>
-<p>applicationId = "com.example.myapp"</p>
-<p>}</p>
-<p>}</code></pre></p>
+plugins {
+    id("convention.android.application")
+}
+
+android {
+    namespace = "com.example.myapp"
+    defaultConfig {
+        applicationId = "com.example.myapp"
+    }
+}</code></pre>
 <div class="info-box">
 <p><strong>📌 Convention Plugin 的价值</strong>：不只是代码复用。更重要的是<strong>统一约束</strong>——所有模块的 <code>compileSdk</code>、<code>minSdk</code>、<code>jvmTarget</code> 等配置集中管理，不会出现某个模块忘记更新的情况。Now in Android 项目就是这个模式。</p>
 </div>

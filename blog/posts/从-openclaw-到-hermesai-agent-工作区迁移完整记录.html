@@ -241,38 +241,38 @@
 <h3>迁移前：单工作区</h3>
 <p>OpenClaw 时代，一切业务文件都堆在一个大工作区里：</p>
 <pre><code class="language-text">~/.openclaw/
-<p>├── workspace-xiaoma/          # 主工作区</p>
-<p>│   ├── SOUL.md                # 助手人格</p>
-<p>│   ├── MEMORY.md              # 长期记忆</p>
-<p>│   ├── IDENTITY.md            # 身份定位</p>
-<p>│   ├── TOOLS.md               # 工具配置说明</p>
-<p>│   ├── skills/                # 技能目录</p>
-<p>│   ├── memory/                # 按日期的记忆归档</p>
-<p>│   └── nook/                  # 项目仓库集合</p>
-<p>│       ├── project-a/         # 项目 A（独立 git）</p>
-<p>│       ├── project-b/         # 项目 B（独立 git）</p>
-<p>│       └── project-c/         # 项目 C（独立 git）</p>
-<p>├── config.yaml                # 全局配置</p>
-<p>└── logs/                      # 运行日志</p>
-<p></code></pre></p>
+├── workspace-xiaoma/          # 主工作区
+│   ├── SOUL.md                # 助手人格
+│   ├── MEMORY.md              # 长期记忆
+│   ├── IDENTITY.md            # 身份定位
+│   ├── TOOLS.md               # 工具配置说明
+│   ├── skills/                # 技能目录
+│   ├── memory/                # 按日期的记忆归档
+│   └── nook/                  # 项目仓库集合
+│       ├── project-a/         # 项目 A（独立 git）
+│       ├── project-b/         # 项目 B（独立 git）
+│       └── project-c/         # 项目 C（独立 git）
+├── config.yaml                # 全局配置
+└── logs/                      # 运行日志
+</code></pre>
 <p>问题显而易见：<strong>一个工作区塞了所有东西</strong>——人格、记忆、技能、项目、配置混在一起。想开第二个助手？几乎只能复制整个目录。</p>
 <h3>迁移后：多 Profile 结构</h3>
 <p>Hermes 用 Profile（配置文件）隔离一切：</p>
 <pre><code class="language-text">~/.hermes/
-<p>├── workspaces/                # 所有工作区</p>
-<p>│   ├── dev/                   # 开发助手工作区</p>
-<p>│   │   ├── project-a/         # 项目 A</p>
-<p>│   │   ├── project-b/         # 项目 B</p>
-<p>│   │   └── project-c/         # 项目 C</p>
-<p>│   └── ops/                   # 系统助手工作区（全新）</p>
-<p>├── profiles/</p>
-<p>│   ├── dev/                   # 开发助手 profile</p>
-<p>│   │   ├── SOUL.md            # 人格</p>
-<p>│   │   ├── skills/            # 该 profile 的技能</p>
-<p>│   │   └── memories/          # 该 profile 的记忆</p>
-<p>│   └── ops/                   # 系统助手 profile</p>
-<p>└── config.yaml                # 全局配置</p>
-<p></code></pre></p>
+├── workspaces/                # 所有工作区
+│   ├── dev/                   # 开发助手工作区
+│   │   ├── project-a/         # 项目 A
+│   │   ├── project-b/         # 项目 B
+│   │   └── project-c/         # 项目 C
+│   └── ops/                   # 系统助手工作区（全新）
+├── profiles/
+│   ├── dev/                   # 开发助手 profile
+│   │   ├── SOUL.md            # 人格
+│   │   ├── skills/            # 该 profile 的技能
+│   │   └── memories/          # 该 profile 的记忆
+│   └── ops/                   # 系统助手 profile
+└── config.yaml                # 全局配置
+</code></pre>
 <p>变化的核心是<strong>关注点分离</strong>：</p>
 <ul>
 <li>工作区（workspaces）只管"业务文件"：项目代码、草稿、产物</li>
@@ -284,16 +284,13 @@
 <h3>人格文件怎么处理</h3>
 <p>旧的助手人格文件长这样（简化版）：</p>
 <pre><code class="language-markdown">## 身份
-<ul>
-<li>名字：小马</li>
-<li>角色：开发与写作助手</li>
-</ul>
-<h2>核心原则</h2>
-<ul>
-<li>先理解需求再动手</li>
-<li>重要决策先确认</li>
-</ul>
-<p></code></pre></p>
+- 名字：小马
+- 角色：开发与写作助手
+
+## 核心原则
+- 先理解需求再动手
+- 重要决策先确认
+</code></pre>
 <p>新平台对"人格"的承载方式不太一样——它主要读 Profile 里的 SOUL.md，而且支持在每轮对话中注入记忆。迁移时我做的是：</p>
 <ol>
 <li><strong>保留核心</strong>：名字、角色、沟通风格、价值观，原样保留</li>
@@ -307,12 +304,10 @@
 <h3>旧模式：人肉维护 markdown</h3>
 <p>以前我的记忆是这么管的：</p>
 <pre><code class="language-markdown">## 2026-08-15
-<ul>
-<li>用户要求：部署改完验证通过后直接 push</li>
-<li>教训：临时服务用完必须清理</li>
-<li>项目进展：zest 优化完成</li>
-</ul>
-<p></code></pre></p>
+- 用户要求：部署改完验证通过后直接 push
+- 教训：临时服务用完必须清理
+- 项目进展：zest 优化完成
+</code></pre>
 <p>每天一个文件，靠约定维护。问题：</p>
 <ul>
 <li><strong>靠人肉记得"今天该归档了"</strong>，经常忘</li>
@@ -328,15 +323,16 @@
 </ul>
 <p>迁移时我做了一次"记忆断舍离"：</p>
 <pre><code class="language-text">迁移前记忆资产（粗略统计）
-<p>├── 每日记忆文件 约 200 个</p>
-<p>├── 长期记忆文件 1 个（很长）</p>
-<p>└── 项目进展记录 1 个</p>
-<p>迁移后（提炼之后）</p>
-<p>├── 用户画像     1 条（精简版）</p>
-<p>├── 环境与规范   5 条（配置、Git、部署要点）</p>
-<p>├── 项目记忆     4 条（每个项目一行踩坑重点）</p>
-<p>└── 关键教训     4 条（协作方式、回合完整性等）</p>
-<p></code></pre></p>
+├── 每日记忆文件 约 200 个
+├── 长期记忆文件 1 个（很长）
+└── 项目进展记录 1 个
+
+迁移后（提炼之后）
+├── 用户画像     1 条（精简版）
+├── 环境与规范   5 条（配置、Git、部署要点）
+├── 项目记忆     4 条（每个项目一行踩坑重点）
+└── 关键教训     4 条（协作方式、回合完整性等）
+</code></pre>
 <p><strong>数量从几百条压到十几条，但每条都是"高信号"的。</strong> 这其实是一次很好的记忆卫生——旧文件一个没删，全部备份着，随时可查；但注入到新系统的，只有真正影响未来协作的核心事实。</p>
 <blockquote>
 <p>体会：记忆系统迁移的价值不在于"原样搬走"，而在于<strong>借机提炼</strong>。AI 的记忆容量是稀缺资源，装进低价值流水账才是浪费。</p>
@@ -345,30 +341,36 @@
 <h3>旧技能长什么样</h3>
 <p>旧平台的技能是一堆 markdown 文档，命名看心情：</p>
 <pre><code class="language-text">skills/
-<p>├── 写博客的规范.md</p>
-<p>├── 服务器体检.md</p>
-<p>├── deploy-checks.md</p>
-<p>└── backup-steps.txt</p>
-<p></code></pre></p>
+├── 写博客的规范.md
+├── 服务器体检.md
+├── deploy-checks.md
+└── backup-steps.txt
+</code></pre>
 <p>有的有结构，有的没有；有的过时了，有的还引用着已经不存在的目录。迁移时检查了一圈，发现<strong>状态漂移相当严重</strong>——很多技能描述的东西跟现实已经对不上了。</p>
 <h3>新标准：统一的 SKILL.md</h3>
 <p>迁移后，所有技能统一成标准格式：</p>
 <pre><code class="language-markdown">---
-<p>name: blog-post-generator</p>
-<p>description: 博客文章生成规范，确保模板结构正确</p>
-<hr>
-<h1>技能说明</h1>
-<h2>正确生成方式</h2>
-<p>（具体命令）</p>
-<h2>参数说明</h2>
-<p>（参数表）</p>
-<h2>生成后验证</h2>
-<p>（验证命令）</p>
-<h2>发布流程</h2>
-<p>（发布命令）</p>
-<h2>常见错误</h2>
-<p>（避坑清单）</p>
-<p></code></pre></p>
+name: blog-post-generator
+description: 博客文章生成规范，确保模板结构正确
+---
+
+# 技能说明
+
+## 正确生成方式
+（具体命令）
+
+## 参数说明
+（参数表）
+
+## 生成后验证
+（验证命令）
+
+## 发布流程
+（发布命令）
+
+## 常见错误
+（避坑清单）
+</code></pre>
 <p>统一的格式带来几个好处：</p>
 <ul>
 <li><strong>触发条件明确</strong>：description 里写清楚"什么时候用"，系统能自动匹配</li>
@@ -390,11 +392,12 @@
 <li>推送走哪个通道（普通 22 端口还是 443 端口的 SSH over HTTPS）</li>
 </ul>
 <pre><code class="language-bash"># 迁移后的 Git 全局配置示例
-<p>git config --global user.name &quot;my-name&quot;</p>
-<p>git config --global user.email &quot;my@example.com&quot;</p>
-<h1>让 git 走 443 端口 SSH（某些网络环境必需）</h1>
-<p>git config --global url.&quot;ssh://git@ssh.github.com:443/&quot;.insteadOf &quot;git@github.com:&quot;</p>
-<p></code></pre></p>
+git config --global user.name &quot;my-name&quot;
+git config --global user.email &quot;my@example.com&quot;
+
+# 让 git 走 443 端口 SSH（某些网络环境必需）
+git config --global url.&quot;ssh://git@ssh.github.com:443/&quot;.insteadOf &quot;git@github.com:&quot;
+</code></pre>
 <p>这里有个细节值得说：<strong>公网服务器上，22 端口经常被墙/被限速，SSH over 443 是更稳的选择</strong>。这一步配置错了，后面 push 会非常痛苦。</p>
 <h3>包管理器版本差异</h3>
 <p>迁移后环境里的包管理器版本也变了（pnpm 从旧版本升到了 11.x），这直接引发了后面最大的一个坑——下一节细说。</p>
@@ -402,17 +405,18 @@
 <h3>现象：莫名其妙的报错</h3>
 <p>迁移后第一次跑测试，报了个之前从没见过的错：</p>
 <pre><code class="language-text">ERR<em>PNPM</em>IGNORED_BUILDS] Ignored build scripts:
-<p>@prisma/client@6.x.x, @prisma/engines@6.x.x,</p>
-<p>esbuild@0.x.x, prisma@6.x.x, sharp@0.x.x, unrs-resolver@1.x.x</p>
-<p>Run &quot;pnpm approve-builds&quot; to pick which dependencies</p>
-<p>should be allowed to run scripts.</p>
-<p></code></pre></p>
+@prisma/client@6.x.x, @prisma/engines@6.x.x,
+esbuild@0.x.x, prisma@6.x.x, sharp@0.x.x, unrs-resolver@1.x.x
+
+Run &quot;pnpm approve-builds&quot; to pick which dependencies
+should be allowed to run scripts.
+</code></pre>
 <p>更诡异的是，工作区里隔三差五冒出一个 <code>pnpm-workspace.yaml</code>，内容还是占位符：</p>
 <pre><code class="language-yaml">allowBuilds:
-<p>'@prisma/client': set this to true or false</p>
-<p>'@prisma/engines': set this to true or false</p>
-<p>esbuild: set this to true or false</p>
-<p></code></pre></p>
+  '@prisma/client': set this to true or false
+  '@prisma/engines': set this to true or false
+  esbuild: set this to true or false
+</code></pre>
 <h3>根因分析</h3>
 <p>排查之后搞清楚了机制：</p>
 <ol>
@@ -424,62 +428,66 @@
 <h3>正确解法：真实配置 allowBuilds</h3>
 <p>正确的解法是把模板变成真实配置，明确批准这些构建脚本（它们本来就是需要的）：</p>
 <pre><code class="language-yaml"># pnpm-workspace.yaml
-<p>allowBuilds:</p>
-<p>'@prisma/client': true    # prisma client 生成需要 postinstall</p>
-<p>'@prisma/engines': true   # prisma 引擎库</p>
-<p>esbuild: true             # esbuild 二进制</p>
-<p>prisma: true              # prisma CLI</p>
-<p>sharp: true               # 图片处理库</p>
-<p>unrs-resolver: true       # 模块解析</p>
-<p></code></pre></p>
+allowBuilds:
+  '@prisma/client': true    # prisma client 生成需要 postinstall
+  '@prisma/engines': true   # prisma 引擎库
+  esbuild: true             # esbuild 二进制
+  prisma: true              # prisma CLI
+  sharp: true               # 图片处理库
+  unrs-resolver: true       # 模块解析
+</code></pre>
 <p>配完之后一切正常：</p>
 <pre><code class="language-text">.../esbuild@0.28.1/node_modules/esbuild postinstall: Done
-<p>.../node_modules/@prisma/client postinstall:</p>
-<p>✔ Generated Prisma Client (v6.19.3) in 97ms</p>
-<p>.../node_modules/@prisma/client postinstall: Done</p>
-<p>Done in 8.3s using pnpm v11.21.0</p>
-<p>RUN  v4.1.10</p>
-<p>Test Files  4 passed (4)</p>
-<p>Tests  50 passed (50)</p>
-<p></code></pre></p>
+.../node_modules/@prisma/client postinstall:
+  ✔ Generated Prisma Client (v6.19.3) in 97ms
+.../node_modules/@prisma/client postinstall: Done
+Done in 8.3s using pnpm v11.21.0
+
+ RUN  v4.1.10
+ Test Files  4 passed (4)
+      Tests  50 passed (50)
+</code></pre>
 <p><strong>这个坑值得单独写出来</strong>：如果你在 pnpm 11 项目里看到 <code>ERR<em>PNPM</em>IGNORED_BUILDS</code>，先找 <code>pnpm-workspace.yaml</code> 检查 allowBuilds，而不是瞎删文件。安全策略本身是合理的——postinstall 任意执行确实危险——只是新手上路容易懵。</p>
 <h2>测试兼容性修复：环境变严了</h2>
 <h3>现象：老测试过不去</h3>
 <p>迁移后跑测试套件，有几个文件报类型错误，报错信息大致是：</p>
 <pre><code class="language-text">Property 'updatedAt' is missing in type
-<p>'{ id: string; name: string; ... }'</p>
-<p>but required in type 'Habit'</p>
-<p></code></pre></p>
+'{ id: string; name: string; ... }'
+but required in type 'Habit'
+</code></pre>
 <p>原因很直接：<strong>新环境的 TypeScript / Prisma 类型更严格，mock 数据少字段直接编译不过</strong>，而且 vitest 的版本也变了，一些旧的写法不被推荐了。</p>
 <h3>修复：三个典型修改</h3>
 <p>我总结了三类典型修复：</p>
 <p><strong>1. mock 数据补全字段</strong>：</p>
 <pre><code class="language-typescript">// 迁移前：缺字段，类型编译不过
-<p>const mock = { id: &quot;habit-1&quot;, name: &quot;Test&quot;, emoji: &quot;🎯&quot; };</p>
-<p>// 迁移后：补全必填字段</p>
-<p>const mock = {</p>
-<p>id: &quot;habit-1&quot;,</p>
-<p>name: &quot;Test&quot;,</p>
-<p>emoji: &quot;🎯&quot;,</p>
-<p>createdAt: &quot;2026-01-01T00:00:00.000Z&quot;,</p>
-<p>updatedAt: &quot;2026-01-01T00:00:00.000Z&quot;,</p>
-<p>description: null,</p>
-<p>} as any;</p>
-<p></code></pre></p>
+const mock = { id: &quot;habit-1&quot;, name: &quot;Test&quot;, emoji: &quot;🎯&quot; };
+
+// 迁移后：补全必填字段
+const mock = {
+  id: &quot;habit-1&quot;,
+  name: &quot;Test&quot;,
+  emoji: &quot;🎯&quot;,
+  createdAt: &quot;2026-01-01T00:00:00.000Z&quot;,
+  updatedAt: &quot;2026-01-01T00:00:00.000Z&quot;,
+  description: null,
+} as any;
+</code></pre>
 <p><strong>2. 环境变量操作换规范写法</strong>：</p>
 <pre><code class="language-typescript">// 迁移前：直接改 process.env（容易污染其他用例）
-<p>delete process.env.API_TOKEN;</p>
-<p>process.env.NODE_ENV = &quot;production&quot;;</p>
-<p>// 迁移后：用 vi.stubEnv（自动清理）</p>
-<p>vi.stubEnv(&quot;API_TOKEN&quot;, &quot;secret-token&quot;);</p>
-<p>vi.stubEnv(&quot;NODE_ENV&quot;, &quot;production&quot;);</p>
-<p></code></pre></p>
+delete process.env.API_TOKEN;
+process.env.NODE_ENV = &quot;production&quot;;
+
+// 迁移后：用 vi.stubEnv（自动清理）
+vi.stubEnv(&quot;API_TOKEN&quot;, &quot;secret-token&quot;);
+vi.stubEnv(&quot;NODE_ENV&quot;, &quot;production&quot;);
+</code></pre>
 <p><strong>3. 类型断言补强</strong>：</p>
 <pre><code class="language-typescript">// 迁移前：find 返回类型不匹配
-<p>Promise.resolve(mockList.find((b) =&gt; b.id === args.where.id)!);</p>
-<p>// 迁移后：显式断言</p>
-<p>Promise.resolve(mockList.find((b) =&gt; b.id === args.where.id)! as any);</p>
-<p></code></pre></p>
+Promise.resolve(mockList.find((b) =&gt; b.id === args.where.id)!);
+
+// 迁移后：显式断言
+Promise.resolve(mockList.find((b) =&gt; b.id === args.where.id)! as any);
+</code></pre>
 <p>这些修复本身没有业务逻辑变化，纯粹是适配新环境的类型系统。但从这件事我也得到一个经验：<strong>换环境之后，先跑一遍全量测试再谈其他</strong>——测试是最诚实的"环境变化报告"。</p>
 <h2>定时任务的迁移：从心跳到 cron</h2>
 <h3>旧机制：心跳（Heartbeat）</h3>
@@ -488,13 +496,11 @@
 <h3>新机制：显式 cron</h3>
 <p>新平台用标准的 cron 定时任务，语义更清晰：</p>
 <pre><code class="language-text"># 定时任务示例
-<ul>
-<li>每天早上 9:00 发日报            -&gt; 0 9 <em> </em> *</li>
-<li>每 30 分钟检查一次价格变化      -&gt; <em>/30 </em> <em> </em> *</li>
-<li>每周一早上清理临时文件          -&gt; 0 8 <em> </em> 1</li>
-<li>一次性任务：明天 18:00 提醒     -&gt; 2026-08-19T18:00:00</li>
-</ul>
-<p></code></pre></p>
+- 每天早上 9:00 发日报            -&gt; 0 9 <em> </em> *
+- 每 30 分钟检查一次价格变化      -&gt; <em>/30 </em> <em> </em> *
+- 每周一早上清理临时文件          -&gt; 0 8 <em> </em> 1
+- 一次性任务：明天 18:00 提醒     -&gt; 2026-08-19T18:00:00
+</code></pre>
 <p>迁移策略很简单：<strong>把旧的"心跳该做的事"全部转成显式 cron</strong>，能定义的都定义出来，不再依赖隐式的"自己醒"。</p>
 <p>这其实是个更工程化的思路：<strong>隐式机制靠猜，显式机制靠看</strong>。出问题的时候，<code>cron list</code> 一眼就知道有没有任务、上次跑没跑。</p>
 <h2>文档的迁移与修订</h2>
@@ -544,13 +550,13 @@
 <h3>路径漂移的修复</h3>
 <p>迁移最烦的一类问题是<strong>文档里的路径全失效了</strong>：</p>
 <pre><code class="language-diff">- 分析范围：/root/.openclaw/workspace-xiaoma/nook/project-a/
-<p>+ 分析范围：/root/.hermes/workspaces/dev/project-a/</p>
-<p></code></pre></p>
++ 分析范围：/root/.hermes/workspaces/dev/project-a/
+</code></pre>
 <p>这种改动本身一行字，但如果文档多、引用深，就是个体力活。我的做法是：<strong>改完一个目录，立刻全局搜索旧路径前缀，批量替换</strong>：</p>
 <pre><code class="language-bash"># 示例：批量替换路径前缀（注意先备份）
-<p>grep -rl &quot;\.openclaw/workspace-xiaoma&quot; docs/ | xargs -I{} sed -i \</p>
-<p>'s|\.openclaw/workspace-xiaoma|.hermes/workspaces/dev|g' {}</p>
-<p></code></pre></p>
+grep -rl &quot;\.openclaw/workspace-xiaoma&quot; docs/ | xargs -I{} sed -i \
+  's|\.openclaw/workspace-xiaoma|.hermes/workspaces/dev|g' {}
+</code></pre>
 <p>改完必须验证：打开文档抽查、跑一遍文档里提到的命令，确认没引到不存在的文件。</p>
 <h2>验证与收尾</h2>
 <h3>迁移完成 checklist</h3>
@@ -754,7 +760,7 @@
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📅</span> 发布日期</span><span class="post-info-stat-value">2026-08-18</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">⏱️</span> 阅读时间</span><span class="post-info-stat-value">12 min read</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">5096 字</span></div>
-        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📊</span> 章节数</span><span class="post-info-stat-value">21 节 · 27 子节</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📊</span> 章节数</span><span class="post-info-stat-value">15 节 · 27 子节</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">💻</span> 代码块</span><span class="post-info-stat-value">19 段</span></div>
       </div>
       <div class="post-info-section" id="postSidebarTags">

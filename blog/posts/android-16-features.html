@@ -168,16 +168,17 @@
 </ul>
 <h3>实现方式</h3>
 <pre><code>// Live Updates 实现示例
-<p>val liveUpdate = LiveUpdate.Builder(context, "delivery_tracking")</p>
-<p>.setContentTitle("外卖配送中")</p>
-<p>.setContentText("距您还有 1.2 公里")</p>
-<p>.addProgressBar(progress = 0.75f)</p>
-<p>.build()</p>
-<p>// 更新内容</p>
-<p>liveUpdate.update {</p>
-<p>setContentText("距您还有 500 米")</p>
-<p>addProgressBar(progress = 0.92f)</p>
-<p>}</code></pre></p>
+val liveUpdate = LiveUpdate.Builder(context, "delivery_tracking")
+    .setContentTitle("外卖配送中")
+    .setContentText("距您还有 1.2 公里")
+    .addProgressBar(progress = 0.75f)
+    .build()
+
+// 更新内容
+liveUpdate.update {
+    setContentText("距您还有 500 米")
+    addProgressBar(progress = 0.92f)
+}</code></pre>
 <div class="tip-box">
 <p><strong>💡 最佳实践</strong>：Live Updates 不是为了替代普通通知，而是针对「持续关注型」场景优化。对于一次性提醒，继续使用常规通知即可。同时注意不要在短时间内频繁更新，建议更新间隔 ≥ 1 秒。</p>
 </div>

@@ -134,28 +134,31 @@
 <p>Git Worktree 允许你在同一仓库中同时检出多个分支，每个分支有独立的工作目录。所有 worktree 共享同一份 .git 对象存储，不会增加仓库体积。</p>
 <p>核心命令：</p>
 <pre><code class="language-bash"># 创建一个新 worktree
-<p>git worktree add ../project-feature feature-branch</p>
-<h1>列出所有 worktree</h1>
-<p>git worktree list</p>
-<h1>删除 worktree</h1>
-<p>git worktree remove ../project-feature</p>
-<h1>清理过期 worktree</h1>
-<p>git worktree prune</code></pre></p>
+git worktree add ../project-feature feature-branch
+
+# 列出所有 worktree
+git worktree list
+
+# 删除 worktree
+git worktree remove ../project-feature
+
+# 清理过期 worktree
+git worktree prune</code></pre>
 <h2 id="scenarios">核心使用场景</h2>
 <h3>1. 修bug同时继续开发</h3>
 <p>正在开发新功能时，线上突然报 bug：</p>
 <pre><code class="language-bash"># 在当前目录继续开发新功能
-<h1>在新目录检出版本分支修 bug</h1>
-<p>git worktree add ../hotfix release/v2.1</p>
-<p>cd ../hotfix</p>
-<h1>修 bug、commit、push</h1>
-<p>cd -  # 切回原来目录继续开发</code></pre></p>
+# 在新目录检出版本分支修 bug
+git worktree add ../hotfix release/v2.1
+cd ../hotfix
+# 修 bug、commit、push
+cd -  # 切回原来目录继续开发</code></pre>
 <p>整个过程不需要 stash，不需要担心工作丢失。</p>
 <h3>2. 并行 review</h3>
 <p>同时 review 多个 PR 时非常方便：</p>
 <pre><code class="language-bash">git worktree add ../pr-review-1 pr/feature-a
-<p>git worktree add ../pr-review-2 pr/feature-b</p>
-<p>git worktree add ../pr-review-3 pr/feature-c</code></pre></p>
+git worktree add ../pr-review-2 pr/feature-b
+git worktree add ../pr-review-3 pr/feature-c</code></pre>
 <p>在三个 IDE 窗口打开，互不干扰。</p>
 <h2 id="tips">最佳实践</h2>
 <ul>

@@ -136,43 +136,44 @@
 <p>为什么要先复现？因为优化一定要有基准，没有基线就不知道改了有没有效果。</p>
 <h3>建表和造数据</h3>
 <pre><code>CREATE TABLE orders (
-<p>id INT PRIMARY KEY AUTO_INCREMENT,</p>
-<p>user_id INT NOT NULL,</p>
-<p>product_id INT NOT NULL,</p>
-<p>amount DECIMAL(10,2) NOT NULL,</p>
-<p>status VARCHAR(20) NOT NULL DEFAULT &#39;pending&#39;,</p>
-<p>created<em>at DATETIME NOT NULL DEFAULT CURRENT</em>TIMESTAMP,</p>
-<p>category VARCHAR(50),</p>
-<p>INDEX idx<em>user (user</em>id)</p>
-<p>);</p>
-<p>-- 插入 50 万条模拟数据</p>
-<p>-- 用存储过程批量插入，跳过具体代码，重点是后面的查询</p>
-<p></code></pre></p>
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  user_id INT NOT NULL,
+  product_id INT NOT NULL,
+  amount DECIMAL(10,2) NOT NULL,
+  status VARCHAR(20) NOT NULL DEFAULT &#39;pending&#39;,
+  created<em>at DATETIME NOT NULL DEFAULT CURRENT</em>TIMESTAMP,
+  category VARCHAR(50),
+  INDEX idx<em>user (user</em>id)
+);
+
+-- 插入 50 万条模拟数据
+-- 用存储过程批量插入，跳过具体代码，重点是后面的查询
+</code></pre>
 <p>有了数据以后，我们执行一个看起来很正常的查询：</p>
 <pre><code>SELECT * FROM orders
-<p>WHERE status = &#39;completed&#39;</p>
-<p>AND amount &gt; 100</p>
-<p>AND created_at &gt;= &#39;2025-01-01&#39;</p>
-<p>ORDER BY created_at DESC</p>
-<p>LIMIT 20;</p>
-<p></code></pre></p>
+WHERE status = &#39;completed&#39;
+  AND amount &gt; 100
+  AND created_at &gt;= &#39;2025-01-01&#39;
+ORDER BY created_at DESC
+LIMIT 20;
+</code></pre>
 <p>这个查询没有建复合索引，MySQL 只能走全表扫描或者选其中一个索引。我们来 EXPLAIN 一下：</p>
 <pre><code>EXPLAIN SELECT ... -- 同上
-<p></code></pre></p>
+</code></pre>
 <p>结果会看到 <code>type: ALL</code> 或者 <code>type: index</code>，<code>rows</code> 接近 50 万，<code>Extra</code> 里有 <code>Using where; Using filesort</code>。filesort 意味着排序没有走索引，效率极差。</p>
 <h3>什么是 filesort</h3>
 <p><code>filesort</code> 不是真的写到磁盘文件了（小数据量是在内存里），但它意味着 MySQL 不得不把数据拿出来自己排序，而不是从索引顺序直接读取。当排序列上没有索引、或者排序和查询条件不在同一个索引上时，就会触发 filesort。</p>
 <h2>单列索引的局限性</h2>
 <p>大多数人第一反应是：在 <code>created_at</code> 上加个索引。</p>
 <pre><code>CREATE INDEX idx<em>created</em>at ON orders (created_at);
-<p></code></pre></p>
+</code></pre>
 <p>再来 EXPLAIN，发现 <code>type: ref</code> 或者 <code>range</code> 了，rows 减少到了几万行——但是 <code>Extra</code> 里依然是 <code>Using where; Using filesort</code>。</p>
 <p>这就是单列索引的第一个问题：<strong>条件用了一个索引，排序又没用到</strong>。MySQL 只能选一个索引来用，选了 <code>idx<em>created</em>at</code> 可以在时间范围上快速定位，但排序仍然是 filesort。</p>
 <p>单列索引的第二个问题是：<strong>多个单列索引之间，MySQL 只会选其中一个，不是组合使用</strong>。MySQL 有 Index Merge 优化，但那是特例且性能不可预测。</p>
 <h2>复合索引的黄金法则</h2>
 <p>解决上面的问题，最直接的方法就是建复合索引：</p>
 <pre><code>CREATE INDEX idx<em>status</em>amount<em>date ON orders (status, amount, created</em>at DESC);
-<p></code></pre></p>
+</code></pre>
 <p>再 EXPLAIN，结果变成了 <code>type: ref</code>，<code>rows</code> 只有几千，<code>Extra</code> 里终于没了 <code>Using filesort</code>，变成了 <code>Using index condition</code>。</p>
 <h3>最左前缀法则</h3>
 <p>复合索引的核心规则是<strong>最左前缀</strong>：索引 <code>(a, b, c)</code> 可以匹配：
@@ -194,10 +195,10 @@
 <h3>什么是覆盖索引</h3>
 <p>覆盖索引（Covering Index）是指<strong>查询需要的所有列都在索引里</strong>，不需要回表查询。Extra 里会出现 <code>Using index</code>。</p>
 <pre><code>-- 覆盖索引查询
-<p>SELECT user_id, amount, status FROM orders</p>
-<p>WHERE status = &#39;completed&#39;</p>
-<p>AND amount &gt; 100;</p>
-<p></code></pre></p>
+SELECT user_id, amount, status FROM orders
+WHERE status = &#39;completed&#39;
+  AND amount &gt; 100;
+</code></pre>
 <p>如果索引 <code>(status, amount, user_id)</code> 包含了所有查询列，MySQL 就可以在索引 B+ 树上完成查询，完全不碰数据行。这在数据量大时能带来数量级的性能提升。</p>
 <h3>覆盖索引的设计方法</h3>
 <p>设计覆盖索引时，先把 SELECT 列和 WHERE 列罗列出来，然后尝试建一个包含所有这些列的复合索引。但不要把所有列都塞进索引，因为：</p>
@@ -210,43 +211,49 @@
 <h2>MySQL 索引失效的 7 个经典场景</h2>
 <h3>场景 1：索引列参与计算</h3>
 <pre><code>-- 失效
-<p>WHERE YEAR(created_at) = 2025</p>
-<p>-- 生效</p>
-<p>WHERE created<em>at &gt;= &#39;2025-01-01&#39; AND created</em>at &lt; &#39;2026-01-01&#39;</p>
-<p></code></pre></p>
+WHERE YEAR(created_at) = 2025
+
+-- 生效
+WHERE created<em>at &gt;= &#39;2025-01-01&#39; AND created</em>at &lt; &#39;2026-01-01&#39;
+</code></pre>
 <h3>场景 2：隐式类型转换</h3>
 <pre><code>-- user_id 是 VARCHAR
-<p>-- 失效（字符串 vs 数字）</p>
-<p>WHERE user_id = 12345</p>
-<p>-- 生效</p>
-<p>WHERE user_id = &#39;12345&#39;</p>
-<p></code></pre></p>
+-- 失效（字符串 vs 数字）
+WHERE user_id = 12345
+
+-- 生效
+WHERE user_id = &#39;12345&#39;
+</code></pre>
 <h3>场景 3：LIKE 通配符在开头</h3>
 <pre><code>-- 失效
-<p>WHERE name LIKE &#39;%keyword%&#39;</p>
-<p>-- 生效（如果 name 有索引）</p>
-<p>WHERE name LIKE &#39;keyword%&#39;</p>
-<p></code></pre></p>
+WHERE name LIKE &#39;%keyword%&#39;
+
+-- 生效（如果 name 有索引）
+WHERE name LIKE &#39;keyword%&#39;
+</code></pre>
 <h3>场景 4：OR 条件中有非索引列</h3>
 <pre><code>-- 失效（如果 status 有索引但 memo 没有）
-<p>WHERE status = &#39;completed&#39; OR memo LIKE &#39;%refund%&#39;</p>
-<p>-- 改写为 UNION</p>
-<p>SELECT * FROM orders WHERE status = &#39;completed&#39;</p>
-<p>UNION</p>
-<p>SELECT * FROM orders WHERE memo LIKE &#39;%refund%&#39;</p>
-<p></code></pre></p>
+WHERE status = &#39;completed&#39; OR memo LIKE &#39;%refund%&#39;
+
+-- 改写为 UNION
+SELECT * FROM orders WHERE status = &#39;completed&#39;
+UNION
+SELECT * FROM orders WHERE memo LIKE &#39;%refund%&#39;
+</code></pre>
 <h3>场景 5：NOT IN 和 <code>&lt;&gt;</code></h3>
 <pre><code>-- IN 可以用索引
-<p>WHERE status IN (&#39;pending&#39;, &#39;processing&#39;)</p>
-<p>-- NOT IN 通常不会用</p>
-<p>WHERE status NOT IN (&#39;cancelled&#39;, &#39;refunded&#39;)</p>
-<p></code></pre></p>
+WHERE status IN (&#39;pending&#39;, &#39;processing&#39;)
+
+-- NOT IN 通常不会用
+WHERE status NOT IN (&#39;cancelled&#39;, &#39;refunded&#39;)
+</code></pre>
 <h3>场景 6：索引列使用了函数</h3>
 <pre><code>-- 失效
-<p>WHERE UPPER(email) = &#39;USER@EXAMPLE.COM&#39;</p>
-<p>-- MySQL 8.0.13+ 可以建函数索引</p>
-<p>CREATE INDEX idx<em>upper</em>email ON users ((UPPER(email)));</p>
-<p></code></pre></p>
+WHERE UPPER(email) = &#39;USER@EXAMPLE.COM&#39;
+
+-- MySQL 8.0.13+ 可以建函数索引
+CREATE INDEX idx<em>upper</em>email ON users ((UPPER(email)));
+</code></pre>
 <h3>场景 7：数据分布导致优化器放弃索引</h3>
 <p>这可能是最"冤"的一种情况：索引明明建了，查询也符合最左前缀，但 MySQL 发现你要查的数据占比太大了（超过 20-30%），全表扫描比走索引 + 回表更快，于是自动放弃了索引。</p>
 <h2>实测对比：从 2 秒到 10 毫秒</h2>
@@ -291,7 +298,7 @@
 <h2>如何分析你的索引是否有效</h2>
 <h3>用好 EXPLAIN</h3>
 <pre><code>EXPLAIN FORMAT=JSON SELECT ... ;
-<p></code></pre></p>
+</code></pre>
 <p>JSON 格式会给出更详细的信息，包括：
 <ul>
 <li><code>cost_info</code> — 优化器估算的成本</li>
@@ -301,8 +308,8 @@
 </ul>
 <h3>开启慢查询日志</h3>
 <pre><code>SET GLOBAL slow<em>query</em>log = ON;
-<p>SET GLOBAL long<em>query</em>time = 0.5;  -- 超过 500ms 记录</p>
-<p></code></pre></p>
+SET GLOBAL long<em>query</em>time = 0.5;  -- 超过 500ms 记录
+</code></pre>
 <p>定期检查慢查询日志，找出最慢的几条 SQL，逐一 EXPLAIN + 优化。</p>
 <h3>pt-query-digest 工具</h3>
 <p>Percona Toolkit 中的 pt-query-digest 可以分析慢查询日志，按总耗时、平均耗时、出现频率排序，帮你找到最值得优化的查询。</p>
@@ -314,12 +321,12 @@
 <h3>前缀索引</h3>
 <p>对于长字符串字段，可以用前缀索引来节省空间：</p>
 <pre><code>CREATE INDEX idx<em>email</em>prefix ON users (email(10));
-<p></code></pre></p>
+</code></pre>
 <p>但注意：前缀索引无法用于 ORDER BY 和 GROUP BY。</p>
 <h3>索引排序与 ORDER BY</h3>
 <p>MySQL 8 支持在索引定义时指定排序方向：</p>
 <pre><code>CREATE INDEX idx<em>user</em>date ON orders (user<em>id, created</em>at DESC);
-<p></code></pre></p>
+</code></pre>
 <p>这样做了以后，<code>ORDER BY created_at DESC</code> 就可以直接走索引，不需要 filesort。</p>
 <h2>写多读少的场景如何妥协</h2>
 <p>不是所有场景都适合疯狂建索引。对于写多读少的表（如日志表、事件流）：</p>
@@ -330,10 +337,11 @@
 </ul>
 <h2>监控索引使用情况</h2>
 <pre><code>-- 查看索引使用统计
-<p>SELECT * FROM sys.schema<em>unused</em>indexes;</p>
-<p>-- 查看索引使用频率</p>
-<p>SELECT * FROM performance<em>schema.table</em>io<em>waits</em>summary<em>by</em>index_usage;</p>
-<p></code></pre></p>
+SELECT * FROM sys.schema<em>unused</em>indexes;
+
+-- 查看索引使用频率
+SELECT * FROM performance<em>schema.table</em>io<em>waits</em>summary<em>by</em>index_usage;
+</code></pre>
 <p>定期用这两个查询清理从未使用的索引，释放写入性能。</p>
 <h2>总结一下</h2>
 <p>索引优化的核心就是这几件事：</p>

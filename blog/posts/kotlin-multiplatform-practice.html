@@ -196,77 +196,81 @@
 <h2>项目搭建</h2>
 <h3>目录结构</h3>
 <pre><code>MyApp/
-<p>├── shared/                         # KMP shared module</p>
-<p>│   ├── build.gradle.kts</p>
-<p>│   └── src/</p>
-<p>│       ├── commonMain/kotlin/</p>
-<p>│       │   └── com/example/shared/</p>
-<p>│       │       ├── domain/</p>
-<p>│       │       │   ├── model/</p>
-<p>│       │       │   ├── repository/</p>
-<p>│       │       │   └── usecase/</p>
-<p>│       │       ├── data/</p>
-<p>│       │       │   ├── repository/</p>
-<p>│       │       │   ├── network/</p>
-<p>│       │       │   └── storage/</p>
-<p>│       │       └── AppModule.kt</p>
-<p>│       ├── androidMain/kotlin/</p>
-<p>│       │   └── com/example/shared/</p>
-<p>│       │       └── platform/</p>
-<p>│       └── iosMain/kotlin/</p>
-<p>│           └── com/example/shared/</p>
-<p>│               └── platform/</p>
-<p>├── androidApp/                     # Android 应用</p>
-<p>│   ├── build.gradle.kts</p>
-<p>│   └── src/main/</p>
-<p>├── iosApp/                         # iOS 应用</p>
-<p>│   └── iosApp/</p>
-<p>└── build.gradle.kts</code></pre></p>
+├── shared/                         # KMP shared module
+│   ├── build.gradle.kts
+│   └── src/
+│       ├── commonMain/kotlin/
+│       │   └── com/example/shared/
+│       │       ├── domain/
+│       │       │   ├── model/
+│       │       │   ├── repository/
+│       │       │   └── usecase/
+│       │       ├── data/
+│       │       │   ├── repository/
+│       │       │   ├── network/
+│       │       │   └── storage/
+│       │       └── AppModule.kt
+│       ├── androidMain/kotlin/
+│       │   └── com/example/shared/
+│       │       └── platform/
+│       └── iosMain/kotlin/
+│           └── com/example/shared/
+│               └── platform/
+├── androidApp/                     # Android 应用
+│   ├── build.gradle.kts
+│   └── src/main/
+├── iosApp/                         # iOS 应用
+│   └── iosApp/
+└── build.gradle.kts</code></pre>
 <h3>shared/build.gradle.kts</h3>
 <pre><code>plugins {
-<p>kotlin("multiplatform")</p>
-<p>kotlin("native.cocoapods")  // iOS 集成需要</p>
-<p>id("com.android.library")</p>
-<p>id("org.jetbrains.kotlinx.serialization")</p>
-<p>}</p>
-<p>kotlin {</p>
-<p>androidTarget()</p>
-<p>iosX64()</p>
-<p>iosArm64()</p>
-<p>iosSimulatorArm64()</p>
-<p>cocoapods {</p>
-<p>summary = "Shared module for MyApp"</p>
-<p>homepage = "https://github.com/zzdbilly/MyApp"</p>
-<p>ios.deploymentTarget = "15.0"</p>
-<p>podfile = project.file("../iosApp/Podfile")</p>
-<p>framework {</p>
-<p>baseName = "shared"</p>
-<p>isStatic = true  // 推荐使用静态框架</p>
-<p>}</p>
-<p>}</p>
-<p>sourceSets {</p>
-<p>commonMain.dependencies {</p>
-<p>implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1")</p>
-<p>implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")</p>
-<p>implementation("io.ktor:ktor-client-core:2.3.11")</p>
-<p>implementation("io.ktor:ktor-client-content-negotiation:2.3.11")</p>
-<p>implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.11")</p>
-<p>implementation("androidx.datastore:datastore-core-okio:1.1.1")</p>
-<p>}</p>
-<p>androidMain.dependencies {</p>
-<p>implementation("io.ktor:ktor-client-okhttp:2.3.11")</p>
-<p>implementation("androidx.datastore:datastore-preferences:1.1.1")</p>
-<p>}</p>
-<p>iosMain.dependencies {</p>
-<p>implementation("io.ktor:ktor-client-darwin:2.3.11")</p>
-<p>}</p>
-<p>}</p>
-<p>}</p>
-<p>android {</p>
-<p>namespace = "com.example.shared"</p>
-<p>compileSdk = 34</p>
-<p>defaultConfig { minSdk = 24 }</p>
-<p>}</code></pre></p>
+    kotlin("multiplatform")
+    kotlin("native.cocoapods")  // iOS 集成需要
+    id("com.android.library")
+    id("org.jetbrains.kotlinx.serialization")
+}
+
+kotlin {
+    androidTarget()
+    iosX64()
+    iosArm64()
+    iosSimulatorArm64()
+
+    cocoapods {
+        summary = "Shared module for MyApp"
+        homepage = "https://github.com/zzdbilly/MyApp"
+        ios.deploymentTarget = "15.0"
+        podfile = project.file("../iosApp/Podfile")
+        framework {
+            baseName = "shared"
+            isStatic = true  // 推荐使用静态框架
+        }
+    }
+
+    sourceSets {
+        commonMain.dependencies {
+            implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1")
+            implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
+            implementation("io.ktor:ktor-client-core:2.3.11")
+            implementation("io.ktor:ktor-client-content-negotiation:2.3.11")
+            implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.11")
+            implementation("androidx.datastore:datastore-core-okio:1.1.1")
+        }
+        androidMain.dependencies {
+            implementation("io.ktor:ktor-client-okhttp:2.3.11")
+            implementation("androidx.datastore:datastore-preferences:1.1.1")
+        }
+        iosMain.dependencies {
+            implementation("io.ktor:ktor-client-darwin:2.3.11")
+        }
+    }
+}
+
+android {
+    namespace = "com.example.shared"
+    compileSdk = 34
+    defaultConfig { minSdk = 24 }
+}</code></pre>
 <div class="tip-box">
 <p><strong>💡 iOS 引擎选择</strong>：Ktor 在 iOS 上用 <code>ktor-client-darwin</code>（基于 NSURLSession），而不是 OkHttp。这是 KMP 的精髓——同一套 API，不同平台用不同的底层实现。</p>
 </div>
@@ -278,44 +282,48 @@
 </ul>
 <h3>示例 1：日志</h3>
 <pre><code>// commonMain - 声明期望
-<p>expect object Logger {</p>
-<p>fun d(tag: String, message: String)</p>
-<p>fun e(tag: String, message: String, throwable: Throwable? = null)</p>
-<p>}</p>
-<p>// androidMain - Android 实现</p>
-<p>actual object Logger {</p>
-<p>actual fun d(tag: String, message: String) {</p>
-<p>android.util.Log.d(tag, message)</p>
-<p>}</p>
-<p>actual fun e(tag: String, message: String, throwable: Throwable?) {</p>
-<p>android.util.Log.e(tag, message, throwable)</p>
-<p>}</p>
-<p>}</p>
-<p>// iosMain - iOS 实现</p>
-<p>actual object Logger {</p>
-<p>actual fun d(tag: String, message: String) {</p>
-<p>NSLog("[$tag] $message")</p>
-<p>}</p>
-<p>actual fun e(tag: String, message: String, throwable: Throwable?) {</p>
-<p>NSLog("[$tag] ERROR: $message ${throwable?.stackTraceToString() ?: ""}")</p>
-<p>}</p>
-<p>}</code></pre></p>
+expect object Logger {
+    fun d(tag: String, message: String)
+    fun e(tag: String, message: String, throwable: Throwable? = null)
+}
+
+// androidMain - Android 实现
+actual object Logger {
+    actual fun d(tag: String, message: String) {
+        android.util.Log.d(tag, message)
+    }
+    actual fun e(tag: String, message: String, throwable: Throwable?) {
+        android.util.Log.e(tag, message, throwable)
+    }
+}
+
+// iosMain - iOS 实现
+actual object Logger {
+    actual fun d(tag: String, message: String) {
+        NSLog("[$tag] $message")
+    }
+    actual fun e(tag: String, message: String, throwable: Throwable?) {
+        NSLog("[$tag] ERROR: $message ${throwable?.stackTraceToString() ?: ""}")
+    }
+}</code></pre>
 <h3>示例 2：平台线程调度器</h3>
 <pre><code>// commonMain
-<p>expect object AppDispatchers {</p>
-<p>val io: CoroutineDispatcher</p>
-<p>val main: CoroutineDispatcher</p>
-<p>}</p>
-<p>// androidMain</p>
-<p>actual object AppDispatchers {</p>
-<p>actual val io: CoroutineDispatcher = Dispatchers.IO</p>
-<p>actual val main: CoroutineDispatcher = Dispatchers.Main</p>
-<p>}</p>
-<p>// iosMain</p>
-<p>actual object AppDispatchers {</p>
-<p>actual val io: CoroutineDispatcher = Dispatchers.Default</p>
-<p>actual val main: CoroutineDispatcher = Dispatchers.Main</p>
-<p>}</code></pre></p>
+expect object AppDispatchers {
+    val io: CoroutineDispatcher
+    val main: CoroutineDispatcher
+}
+
+// androidMain
+actual object AppDispatchers {
+    actual val io: CoroutineDispatcher = Dispatchers.IO
+    actual val main: CoroutineDispatcher = Dispatchers.Main
+}
+
+// iosMain
+actual object AppDispatchers {
+    actual val io: CoroutineDispatcher = Dispatchers.Default
+    actual val main: CoroutineDispatcher = Dispatchers.Main
+}</code></pre>
 <div class="warning-box">
 <p><strong>⚠️ iOS Main Dispatcher 的坑</strong>：KMP 的 <code>Dispatchers.Main</code> 在 iOS 上需要额外依赖 <code>kotlinx-coroutines-core</code> 的 Main 支持。确保 shared module 的 iosMain 依赖中包含 <code>kotlinx-coroutines-core</code>，否则运行时崩溃。</p>
 </div>
@@ -323,318 +331,356 @@
 <p>Ktor 是 KMP 生态中最成熟的 HTTP 客户端，API 设计类似 Retrofit，但完全基于 Kotlin 协程。</p>
 <h3>API 接口定义</h3>
 <pre><code>// commonMain/domain/model/User.kt
-<p>@Serializable</p>
-<p>data class User(</p>
-<p>val id: String,</p>
-<p>val name: String,</p>
-<p>val email: String,</p>
-<p>val avatar: String</p>
-<p>)</p>
-<p>@Serializable</p>
-<p>data class LoginRequest(</p>
-<p>val email: String,</p>
-<p>val password: String</p>
-<p>)</p>
-<p>@Serializable</p>
-<p>data class LoginResponse(</p>
-<p>val token: String,</p>
-<p>val user: User</p>
-<p>)</p>
-<p>@Serializable</p>
-<p>data class ApiError(</p>
-<p>val code: Int,</p>
-<p>val message: String</p>
-<p>)</code></pre></p>
+@Serializable
+data class User(
+    val id: String,
+    val name: String,
+    val email: String,
+    val avatar: String
+)
+
+@Serializable
+data class LoginRequest(
+    val email: String,
+    val password: String
+)
+
+@Serializable
+data class LoginResponse(
+    val token: String,
+    val user: User
+)
+
+@Serializable
+data class ApiError(
+    val code: Int,
+    val message: String
+)</code></pre>
 <h3>Ktor 客户端配置</h3>
 <pre><code>// commonMain/data/network/HttpClientFactory.kt
-<p>object HttpClientFactory {</p>
-<p>fun create(baseUrl: String): HttpClient {</p>
-<p>return HttpClient {</p>
-<p>defaultRequest {</p>
-<p>url(baseUrl)</p>
-<p>contentType(ContentType.Application.Json)</p>
-<p>}</p>
-<p>install(ContentNegotiation) {</p>
-<p>json(Json {</p>
-<p>prettyPrint = false</p>
-<p>isLenient = true</p>
-<p>ignoreUnknownKeys = true</p>
-<p>encodeDefaults = true</p>
-<p>})</p>
-<p>}</p>
-<p>install(Logging) {</p>
-<p>logger = object : Logger {</p>
-<p>override fun log(message: String) {</p>
-<p>Logger.d("Ktor", message)</p>
-<p>}</p>
-<p>}</p>
-<p>level = LogLevel.INFO</p>
-<p>}</p>
-<p>// Token 拦截器</p>
-<p>install(Auth) {</p>
-<p>bearer {</p>
-<p>loadTokens {</p>
-<p>// 从 DataStore 读取 token</p>
-<p>val token = tokenProvider.getToken()</p>
-<p>if (token != null) {</p>
-<p>BearerTokens(token, "")</p>
-<p>} else {</p>
-<p>null</p>
-<p>}</p>
-<p>}</p>
-<p>refreshTokens {</p>
-<p>// Token 刷新逻辑</p>
-<p>val response = client.post("/auth/refresh") {</p>
-<p>setBody(mapOf("refreshToken" to oldTokens?.refreshToken))</p>
-<p>}</p>
-<p>val newToken = response.body&lt;LoginResponse&gt;()</p>
-<p>BearerTokens(newToken.token, "")</p>
-<p>}</p>
-<p>}</p>
-<p>}</p>
-<p>}</p>
-<p>}</p>
-<p>}</code></pre></p>
+object HttpClientFactory {
+    fun create(baseUrl: String): HttpClient {
+        return HttpClient {
+            defaultRequest {
+                url(baseUrl)
+                contentType(ContentType.Application.Json)
+            }
+
+            install(ContentNegotiation) {
+                json(Json {
+                    prettyPrint = false
+                    isLenient = true
+                    ignoreUnknownKeys = true
+                    encodeDefaults = true
+                })
+            }
+
+            install(Logging) {
+                logger = object : Logger {
+                    override fun log(message: String) {
+                        Logger.d("Ktor", message)
+                    }
+                }
+                level = LogLevel.INFO
+            }
+
+            // Token 拦截器
+            install(Auth) {
+                bearer {
+                    loadTokens {
+                        // 从 DataStore 读取 token
+                        val token = tokenProvider.getToken()
+                        if (token != null) {
+                            BearerTokens(token, "")
+                        } else {
+                            null
+                        }
+                    }
+                    refreshTokens {
+                        // Token 刷新逻辑
+                        val response = client.post("/auth/refresh") {
+                            setBody(mapOf("refreshToken" to oldTokens?.refreshToken))
+                        }
+                        val newToken = response.body&lt;LoginResponse&gt;()
+                        BearerTokens(newToken.token, "")
+                    }
+                }
+            }
+        }
+    }
+}</code></pre>
 <h3>Repository 实现</h3>
 <pre><code>// commonMain/domain/repository/UserRepository.kt
-<p>interface UserRepository {</p>
-<p>suspend fun login(email: String, password: String): Result&lt;User&gt;</p>
-<p>suspend fun getProfile(): Result&lt;User&gt;</p>
-<p>suspend fun logout()</p>
-<p>}</p>
-<p>// commonMain/data/repository/UserRepositoryImpl.kt</p>
-<p>class UserRepositoryImpl(</p>
-<p>private val httpClient: HttpClient,</p>
-<p>private val storage: TokenStorage</p>
-<p>) : UserRepository {</p>
-<p>override suspend fun login(email: String, password: String): Result&lt;User&gt; = runCatching {</p>
-<p>val response = httpClient.post("/auth/login") {</p>
-<p>setBody(LoginRequest(email, password))</p>
-<p>}</p>
-<p>val loginResponse = response.body&lt;LoginResponse&gt;()</p>
-<p>storage.saveToken(loginResponse.token)</p>
-<p>loginResponse.user</p>
-<p>}</p>
-<p>override suspend fun getProfile(): Result&lt;User&gt; = runCatching {</p>
-<p>httpClient.get("/user/profile").body&lt;User&gt;()</p>
-<p>}</p>
-<p>override suspend fun logout() {</p>
-<p>storage.clearToken()</p>
-<p>}</p>
-<p>}</code></pre></p>
+interface UserRepository {
+    suspend fun login(email: String, password: String): Result&lt;User&gt;
+    suspend fun getProfile(): Result&lt;User&gt;
+    suspend fun logout()
+}
+
+// commonMain/data/repository/UserRepositoryImpl.kt
+class UserRepositoryImpl(
+    private val httpClient: HttpClient,
+    private val storage: TokenStorage
+) : UserRepository {
+
+    override suspend fun login(email: String, password: String): Result&lt;User&gt; = runCatching {
+        val response = httpClient.post("/auth/login") {
+            setBody(LoginRequest(email, password))
+        }
+        val loginResponse = response.body&lt;LoginResponse&gt;()
+        storage.saveToken(loginResponse.token)
+        loginResponse.user
+    }
+
+    override suspend fun getProfile(): Result&lt;User&gt; = runCatching {
+        httpClient.get("/user/profile").body&lt;User&gt;()
+    }
+
+    override suspend fun logout() {
+        storage.clearToken()
+    }
+}</code></pre>
 <h2>数据存储：DataStore 跨平台</h2>
 <p>Preferences DataStore 可以在 KMP 中直接使用，但初始化方式需要通过 <code>expect/actual</code> 处理。</p>
 <pre><code>// commonMain/data/storage/SettingsStorage.kt
-<p>interface SettingsStorage {</p>
-<p>suspend fun getString(key: String): String?</p>
-<p>suspend fun putString(key: String, value: String)</p>
-<p>suspend fun getBoolean(key: String): Boolean?</p>
-<p>suspend fun putBoolean(key: String, value: Boolean)</p>
-<p>suspend fun remove(key: String)</p>
-<p>suspend fun clear()</p>
-<p>}</p>
-<p>// commonMain - 使用 DataStore 实现</p>
-<p>class DataStoreSettingsStorage(</p>
-<p>private val dataStore: DataStore&lt;Preferences&gt;</p>
-<p>) : SettingsStorage {</p>
-<p>override suspend fun getString(key: String): String? =</p>
-<p>dataStore.data.map { it[stringPreferencesKey(key)] }.first()</p>
-<p>override suspend fun putString(key: String, value: String) {</p>
-<p>dataStore.edit { it[stringPreferencesKey(key)] = value }</p>
-<p>}</p>
-<p>override suspend fun getBoolean(key: String): Boolean? =</p>
-<p>dataStore.data.map { it[booleanPreferencesKey(key)] }.first()</p>
-<p>override suspend fun putBoolean(key: String, value: Boolean) {</p>
-<p>dataStore.edit { it[booleanPreferencesKey(key)] = value }</p>
-<p>}</p>
-<p>override suspend fun remove(key: String) {</p>
-<p>dataStore.edit { it.remove(stringPreferencesKey(key)) }</p>
-<p>}</p>
-<p>override suspend fun clear() {</p>
-<p>dataStore.edit { it.clear() }</p>
-<p>}</p>
-<p>}</code></pre></p>
+interface SettingsStorage {
+    suspend fun getString(key: String): String?
+    suspend fun putString(key: String, value: String)
+    suspend fun getBoolean(key: String): Boolean?
+    suspend fun putBoolean(key: String, value: Boolean)
+    suspend fun remove(key: String)
+    suspend fun clear()
+}
+
+// commonMain - 使用 DataStore 实现
+class DataStoreSettingsStorage(
+    private val dataStore: DataStore&lt;Preferences&gt;
+) : SettingsStorage {
+
+    override suspend fun getString(key: String): String? =
+        dataStore.data.map { it[stringPreferencesKey(key)] }.first()
+
+    override suspend fun putString(key: String, value: String) {
+        dataStore.edit { it[stringPreferencesKey(key)] = value }
+    }
+
+    override suspend fun getBoolean(key: String): Boolean? =
+        dataStore.data.map { it[booleanPreferencesKey(key)] }.first()
+
+    override suspend fun putBoolean(key: String, value: Boolean) {
+        dataStore.edit { it[booleanPreferencesKey(key)] = value }
+    }
+
+    override suspend fun remove(key: String) {
+        dataStore.edit { it.remove(stringPreferencesKey(key)) }
+    }
+
+    override suspend fun clear() {
+        dataStore.edit { it.clear() }
+    }
+}</code></pre>
 <pre><code>// commonMain - DataStore 创建需要 expect
-<p>expect fun createDataStore(): DataStore&lt;Preferences&gt;</p>
-<p>// androidMain</p>
-<p>actual fun createDataStore(): DataStore&lt;Preferences&gt; {</p>
-<p>val context = ApplicationHolder.context  // 通过 expect/actual 拿到 Context</p>
-<p>return PreferenceDataStoreFactory.createWithPath(</p>
-<p>produceFile = { context.dataStoreFile("shared<em>prefs.preferences</em>pb") }</p>
-<p>)</p>
-<p>}</p>
-<p>// iosMain - 使用 okio 的文件路径</p>
-<p>actual fun createDataStore(): DataStore&lt;Preferences&gt; {</p>
-<p>return PreferenceDataStoreFactory.createWithPath(</p>
-<p>produceFile = {</p>
-<p>val documentDirectory = NSSearchPathForDirectoriesInDomains(</p>
-<p>NSDocumentDirectory, NSUserDomainMask, true</p>
-<p>).first() as String</p>
-<p>path = "$documentDirectory/shared<em>prefs.preferences</em>pb"</p>
-<p>okio.Path.toPath(path)</p>
-<p>}</p>
-<p>)</p>
-<p>}</code></pre></p>
+expect fun createDataStore(): DataStore&lt;Preferences&gt;
+
+// androidMain
+actual fun createDataStore(): DataStore&lt;Preferences&gt; {
+    val context = ApplicationHolder.context  // 通过 expect/actual 拿到 Context
+    return PreferenceDataStoreFactory.createWithPath(
+        produceFile = { context.dataStoreFile("shared<em>prefs.preferences</em>pb") }
+    )
+}
+
+// iosMain - 使用 okio 的文件路径
+actual fun createDataStore(): DataStore&lt;Preferences&gt; {
+    return PreferenceDataStoreFactory.createWithPath(
+        produceFile = {
+            val documentDirectory = NSSearchPathForDirectoriesInDomains(
+                NSDocumentDirectory, NSUserDomainMask, true
+            ).first() as String
+            path = "$documentDirectory/shared<em>prefs.preferences</em>pb"
+            okio.Path.toPath(path)
+        }
+    )
+}</code></pre>
 <h2>UseCase 层</h2>
 <pre><code>// commonMain/domain/usecase/LoginUseCase.kt
-<p>class LoginUseCase(</p>
-<p>private val userRepository: UserRepository,</p>
-<p>private val settingsStorage: SettingsStorage</p>
-<p>) {</p>
-<p>suspend operator fun invoke(email: String, password: String): Result&lt;User&gt; {</p>
-<p>return userRepository.login(email, password).onSuccess { user -></p>
-<p>// 登录成功后缓存用户信息</p>
-<p>settingsStorage.putString("user_id", user.id)</p>
-<p>settingsStorage.putString("user_name", user.name)</p>
-<p>}</p>
-<p>}</p>
-<p>}</p>
-<p>// commonMain/domain/usecase/GetUserProfileUseCase.kt</p>
-<p>class GetUserProfileUseCase(</p>
-<p>private val userRepository: UserRepository</p>
-<p>) {</p>
-<p>suspend operator fun invoke(): Result&lt;User&gt; {</p>
-<p>return userRepository.getProfile()</p>
-<p>}</p>
-<p>}</code></pre></p>
+class LoginUseCase(
+    private val userRepository: UserRepository,
+    private val settingsStorage: SettingsStorage
+) {
+    suspend operator fun invoke(email: String, password: String): Result&lt;User&gt; {
+        return userRepository.login(email, password).onSuccess { user ->
+            // 登录成功后缓存用户信息
+            settingsStorage.putString("user_id", user.id)
+            settingsStorage.putString("user_name", user.name)
+        }
+    }
+}
+
+// commonMain/domain/usecase/GetUserProfileUseCase.kt
+class GetUserProfileUseCase(
+    private val userRepository: UserRepository
+) {
+    suspend operator fun invoke(): Result&lt;User&gt; {
+        return userRepository.getProfile()
+    }
+}</code></pre>
 <h2>依赖注入</h2>
 <p>KMP 中没有 Hilt/Dagger（它们依赖 Android），但有轻量替代方案。推荐两种：</p>
 <h3>方案 1: 手动 DI（最简单）</h3>
 <pre><code>// commonMain/AppModule.kt
-<p>class AppModule {</p>
-<p>// 懒加载，线程安全</p>
-<p>val httpClient: HttpClient by lazy {</p>
-<p>HttpClientFactory.create("https://api.example.com")</p>
-<p>}</p>
-<p>val settingsStorage: SettingsStorage by lazy {</p>
-<p>DataStoreSettingsStorage(createDataStore())</p>
-<p>}</p>
-<p>val userRepository: UserRepository by lazy {</p>
-<p>UserRepositoryImpl(httpClient, settingsStorage)</p>
-<p>}</p>
-<p>val loginUseCase: LoginUseCase by lazy {</p>
-<p>LoginUseCase(userRepository, settingsStorage)</p>
-<p>}</p>
-<p>val getUserProfileUseCase: GetUserProfileUseCase by lazy {</p>
-<p>GetUserProfileUseCase(userRepository)</p>
-<p>}</p>
-<p>}</p>
-<p>// 全局单例</p>
-<p>object AppModuleProvider {</p>
-<p>lateinit var appModule: AppModule</p>
-<p>fun init() {</p>
-<p>appModule = AppModule()</p>
-<p>}</p>
-<p>}</code></pre></p>
+class AppModule {
+    // 懒加载，线程安全
+    val httpClient: HttpClient by lazy {
+        HttpClientFactory.create("https://api.example.com")
+    }
+
+    val settingsStorage: SettingsStorage by lazy {
+        DataStoreSettingsStorage(createDataStore())
+    }
+
+    val userRepository: UserRepository by lazy {
+        UserRepositoryImpl(httpClient, settingsStorage)
+    }
+
+    val loginUseCase: LoginUseCase by lazy {
+        LoginUseCase(userRepository, settingsStorage)
+    }
+
+    val getUserProfileUseCase: GetUserProfileUseCase by lazy {
+        GetUserProfileUseCase(userRepository)
+    }
+}
+
+// 全局单例
+object AppModuleProvider {
+    lateinit var appModule: AppModule
+
+    fun init() {
+        appModule = AppModule()
+    }
+}</code></pre>
 <h3>方案 2: Koin（推荐）</h3>
 <pre><code>// commonMain/di/AppModule.kt
-<p>val sharedModule = module {</p>
-<p>single { HttpClientFactory.create("https://api.example.com") }</p>
-<p>single { DataStoreSettingsStorage(createDataStore()) }</p>
-<p>single&lt;UserRepository&gt; { UserRepositoryImpl(get(), get()) }</p>
-<p>single { LoginUseCase(get(), get()) }</p>
-<p>single { GetUserProfileUseCase(get()) }</p>
-<p>}</p>
-<p>// Android 端启动</p>
-<p>class MyApplication : Application() {</p>
-<p>override fun onCreate() {</p>
-<p>super.onCreate()</p>
-<p>startKoin {</p>
-<p>androidContext(this@MyApplication)</p>
-<p>modules(sharedModule)</p>
-<p>}</p>
-<p>}</p>
-<p>}</p>
-<p>// iOS 端启动（在 AppDelegate 中）</p>
-<p>fun initializeKoin() {</p>
-<p>startKoin {</p>
-<p>modules(sharedModule)</p>
-<p>}</p>
-<p>}</code></pre></p>
+val sharedModule = module {
+    single { HttpClientFactory.create("https://api.example.com") }
+    single { DataStoreSettingsStorage(createDataStore()) }
+    single&lt;UserRepository&gt; { UserRepositoryImpl(get(), get()) }
+    single { LoginUseCase(get(), get()) }
+    single { GetUserProfileUseCase(get()) }
+}
+
+// Android 端启动
+class MyApplication : Application() {
+    override fun onCreate() {
+        super.onCreate()
+        startKoin {
+            androidContext(this@MyApplication)
+            modules(sharedModule)
+        }
+    }
+}
+
+// iOS 端启动（在 AppDelegate 中）
+fun initializeKoin() {
+    startKoin {
+        modules(sharedModule)
+    }
+}</code></pre>
 <h2>iOS 端集成</h2>
 <h3>通过 CocoaPods 集成</h3>
 <p>在 <code>iosApp/Podfile</code> 中添加：</p>
 <pre><code>target 'iosApp' do
-<p>use_frameworks!</p>
-<p>platform :ios, '15.0'</p>
-<p>pod 'shared', :path => '../shared'</p>
-<p>end</code></pre></p>
+  use_frameworks!
+  platform :ios, '15.0'
+  pod 'shared', :path => '../shared'
+end</code></pre>
 <h3>Swift 中调用</h3>
 <pre><code>// iosApp/ContentView.swift
-<p>import shared</p>
-<p>class LoginViewModel: ObservableObject {</p>
-<p>@Published var user: User?</p>
-<p>@Published var isLoading = false</p>
-<p>@Published var errorMessage: String?</p>
-<p>private let loginUseCase = AppModule.shared.loginUseCase</p>
-<p>func login(email: String, password: String) {</p>
-<p>isLoading = true</p>
-<p>Task {</p>
-<p>do {</p>
-<p>let result = try await loginUseCase(email: email, password: password)</p>
-<p>await MainActor.run {</p>
-<p>switch result {</p>
-<p>case .success(let user):</p>
-<p>self.user = user</p>
-<p>self.isLoading = false</p>
-<p>case .failure(let error):</p>
-<p>self.errorMessage = error.localizedDescription</p>
-<p>self.isLoading = false</p>
-<p>}</p>
-<p>}</p>
-<p>}</p>
-<p>}</p>
-<p>}</p>
-<p>}</code></pre></p>
+import shared
+
+class LoginViewModel: ObservableObject {
+    @Published var user: User?
+    @Published var isLoading = false
+    @Published var errorMessage: String?
+
+    private let loginUseCase = AppModule.shared.loginUseCase
+
+    func login(email: String, password: String) {
+        isLoading = true
+        Task {
+            do {
+                let result = try await loginUseCase(email: email, password: password)
+                await MainActor.run {
+                    switch result {
+                    case .success(let user):
+                        self.user = user
+                        self.isLoading = false
+                    case .failure(let error):
+                        self.errorMessage = error.localizedDescription
+                        self.isLoading = false
+                    }
+                }
+            }
+        }
+    }
+}</code></pre>
 <div class="warning-box">
 <p><strong>⚠️ 协程与 Swift 的交互</strong>：Kotlin 的 <code>suspend</code> 函数导出到 iOS 后，Swift 需要用 <code>async/await</code> 调用。Kotlin 2.0+ 已经原生支持 Swift async/await，不再需要 <code>callbackFlow</code> 包装。</p>
 </div>
 <h2>测试</h2>
 <h3>commonTest：纯 Kotlin 单元测试</h3>
 <pre><code>// commonTest/domain/usecase/LoginUseCaseTest.kt
-<p>class LoginUseCaseTest {</p>
-<p>private lateinit var userRepository: UserRepository</p>
-<p>private lateinit var settingsStorage: SettingsStorage</p>
-<p>private lateinit var loginUseCase: LoginUseCase</p>
-<p>@BeforeTest</p>
-<p>fun setup() {</p>
-<p>userRepository = mockk()</p>
-<p>settingsStorage = mockk(relaxed = true)</p>
-<p>loginUseCase = LoginUseCase(userRepository, settingsStorage)</p>
-<p>}</p>
-<p>@Test</p>
-<p>fun <strong>INLINE<em>CODE</em>0</strong>() = runTest {</p>
-<p>// Given</p>
-<p>val user = User("1", "张小猛", "test@example.com", "avatar.png")</p>
-<p>coEvery { userRepository.login("test@example.com", "123456") } returns Result.success(user)</p>
-<p>// When</p>
-<p>val result = loginUseCase("test@example.com", "123456")</p>
-<p>// Then</p>
-<p>assertTrue(result.isSuccess)</p>
-<p>assertEquals(user, result.getOrNull())</p>
-<p>coVerify { settingsStorage.putString("user_id", "1") }</p>
-<p>coVerify { settingsStorage.putString("user_name", "张小猛") }</p>
-<p>}</p>
-<p>@Test</p>
-<p>fun <strong>INLINE<em>CODE</em>1</strong>() = runTest {</p>
-<p>// Given</p>
-<p>coEvery { userRepository.login(any(), any()) } returns Result.failure(</p>
-<p>RuntimeException("Invalid credentials")</p>
-<p>)</p>
-<p>// When</p>
-<p>val result = loginUseCase("wrong@example.com", "wrong")</p>
-<p>// Then</p>
-<p>assertTrue(result.isFailure)</p>
-<p>}</p>
-<p>}</code></pre></p>
+class LoginUseCaseTest {
+    private lateinit var userRepository: UserRepository
+    private lateinit var settingsStorage: SettingsStorage
+    private lateinit var loginUseCase: LoginUseCase
+
+    @BeforeTest
+    fun setup() {
+        userRepository = mockk()
+        settingsStorage = mockk(relaxed = true)
+        loginUseCase = LoginUseCase(userRepository, settingsStorage)
+    }
+
+    @Test
+    fun <strong>INLINE<em>CODE</em>0</strong>() = runTest {
+        // Given
+        val user = User("1", "张小猛", "test@example.com", "avatar.png")
+        coEvery { userRepository.login("test@example.com", "123456") } returns Result.success(user)
+
+        // When
+        val result = loginUseCase("test@example.com", "123456")
+
+        // Then
+        assertTrue(result.isSuccess)
+        assertEquals(user, result.getOrNull())
+        coVerify { settingsStorage.putString("user_id", "1") }
+        coVerify { settingsStorage.putString("user_name", "张小猛") }
+    }
+
+    @Test
+    fun <strong>INLINE<em>CODE</em>1</strong>() = runTest {
+        // Given
+        coEvery { userRepository.login(any(), any()) } returns Result.failure(
+            RuntimeException("Invalid credentials")
+        )
+
+        // When
+        val result = loginUseCase("wrong@example.com", "wrong")
+
+        // Then
+        assertTrue(result.isFailure)
+    }
+}</code></pre>
 <p>shared/build.gradle.kts 中添加测试依赖：</p>
 <pre><code>sourceSets {
-<p>commonTest.dependencies {</p>
-<p>implementation(kotlin("test"))</p>
-<p>implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.1")</p>
-<p>implementation("io.mockk:mockk:1.13.11")</p>
-<p>}</p>
-<p>}</code></pre></p>
+    commonTest.dependencies {
+        implementation(kotlin("test"))
+        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.1")
+        implementation("io.mockk:mockk:1.13.11")
+    }
+}</code></pre>
 <h2>踩坑记录</h2>
 <h3>坑 1: iOS Framework 类型导出</h3>
 <p>KMP 导出到 iOS 的类型有限制：</p>
@@ -645,9 +691,9 @@
 </ul>
 <p>解决方案：在 iosMain 中写一层薄薄的适配器：</p>
 <pre><code>// iosMain/platform/IosAdapter.kt
-<p>fun List&lt;User&gt;.toNSArray(): NSArray {</p>
-<p>return NSArray(array = this.map { it as AnyObject }.toTypedArray())</p>
-<p>}</code></pre></p>
+fun List&lt;User&gt;.toNSArray(): NSArray {
+    return NSArray(array = this.map { it as AnyObject }.toTypedArray())
+}</code></pre>
 <h3>坑 2: 构建速度</h3>
 <p>iOS Framework 的编译比较慢，尤其是首次构建。建议：</p>
 <ul>
@@ -658,28 +704,32 @@
 <h3>坑 3: 内存管理</h3>
 <p>iOS 端使用 KMP 对象时要注意循环引用：</p>
 <pre><code>// ❌ 可能循环引用
-<p>class ProfileViewModel: ObservableObject {</p>
-<p>private let useCase = KoinHelper.shared.getUserProfileUseCase</p>
-<p>// useCase 持有 HttpClient → HttpClient 持有 closure → ...</p>
-<p>}</p>
-<p>// ✅ 显式管理生命周期</p>
-<p>class ProfileViewModel: ObservableObject {</p>
-<p>private let useCase: GetUserProfileUseCase</p>
-<p>private var handle: DisposableHandle?</p>
-<p>init(useCase: GetUserProfileUseCase) {</p>
-<p>self.useCase = useCase</p>
-<p>}</p>
-<p>deinit {</p>
-<p>handle?.dispose()</p>
-<p>}</p>
-<p>}</code></pre></p>
+class ProfileViewModel: ObservableObject {
+    private let useCase = KoinHelper.shared.getUserProfileUseCase
+    // useCase 持有 HttpClient → HttpClient 持有 closure → ...
+}
+
+// ✅ 显式管理生命周期
+class ProfileViewModel: ObservableObject {
+    private let useCase: GetUserProfileUseCase
+    private var handle: DisposableHandle?
+
+    init(useCase: GetUserProfileUseCase) {
+        self.useCase = useCase
+    }
+
+    deinit {
+        handle?.dispose()
+    }
+}</code></pre>
 <h3>坑 4: 日期时间</h3>
 <p>不要用 <code>java.util.Date</code> 或 <code>java.time</code>（JVM 专属）。使用 <code>kotlinx-datetime</code>：</p>
 <pre><code>// commonMain
-<p>implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.0")</p>
-<p>// 使用</p>
-<p>val now = Clock.System.now()</p>
-<p>val localDate = now.toLocalDateTime(TimeZone.currentSystemDefault())</code></pre></p>
+implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.0")
+
+// 使用
+val now = Clock.System.now()
+val localDate = now.toLocalDateTime(TimeZone.currentSystemDefault())</code></pre>
 <h2>什么时候该用 KMP？</h2>
 <table>
 <tr><th>场景</th><th>推荐度</th><th>说明</th></tr>
