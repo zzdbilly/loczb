@@ -1,0 +1,8 @@
+# loczb 构建链的 Python 依赖
+#
+# markdown: 纯 Markdown 正文（新发文走 blog/posts-src/*.md）编译时使用。
+#   scripts/generate-post.py 的 markdown_to_html() 按正文形态自动选渲染器：
+#   HTML 外壳型正文（存量文章）走零依赖的逐行渲染器；纯 Markdown 正文走这个库。
+#   库缺失时会退回逐行渲染器并打印告警（嵌套列表会被摊平、行内代码可能异常），
+#   所以构建机（含 CI）应当安装本文件声明的依赖，保证「同一份源 → 同一份产物」。
+markdown>=3.5
