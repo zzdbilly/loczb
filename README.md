@@ -112,6 +112,7 @@ loczb/
 │   ├── comment-system/            # Cloudflare Workers + D1 评论系统
 │   └── ai-assistant/              # Cloudflare Workers AI 博客知识库助手
 ├── templates/
+│   ├── post-src-template.md       # ★ 文章源脚手架模板 (复制到 blog/posts-src/ 后改名使用)
 │   ├── blog-post-template.html    # 文章详情页标准化骨架模板
 │   └── partials/                  # 公共布局片段 (nav / footer / skip-link，由 sync-partials.js 注入)
 ├── CNAME                          # 自定义域名配置
@@ -161,7 +162,8 @@ slug: my-new-post
 
 ```bash
 # 1. 从 md 源批量编译文章（末尾自动接索引重建 + verify 门禁）
-python3 scripts/build-posts.py        # 或 npm run build:posts
+#    新文从模板开始：cp templates/post-src-template.md blog/posts-src/my-new-post.md
+python3 scripts/build-posts.py        # 或 npm run build:posts（单篇可加 --slug my-new-post）
 
 # 2. 单独重建全站索引：专栏注入 + 列表分页 + 首页推荐 + Sitemap + RSS + SW 版本
 node scripts/generate-index.js        # 或 npm run build
