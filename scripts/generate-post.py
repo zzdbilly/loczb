@@ -336,6 +336,16 @@ def pure_python_markdown_to_html(md_text):
     return res
 
 
+class MarkdownLibraryMissing(RuntimeError):
+    """纯 Markdown 正文需要 python `markdown` 库；缺失时构建必须失败。
+
+    不做静默降级：实测缺库时复杂表格（对齐语法、无外框竖线的行）、嵌套列表、
+    多行引用全部退化，正文里的 snake_case 还会被吃成斜体（装库 8/10 vs 纯 Python 3/10），
+    且同一份源在两种引擎下产物逐字不同（984 vs 730 字符）—— 静默产出退化 HTML 比
+    构建失败危险得多。
+    """
+
+
 def _looks_like_html_body(md_text):
     """正文是否「HTML 外壳」型（存量 113 篇都是），而不是纯 Markdown。"""
     first = next((l.strip() for l in md_text.split('\n') if l.strip()), '')
@@ -354,8 +364,7 @@ def markdown_to_html(md_text, prefer_library=None):
 
     · 纯 Markdown 正文（以后新写的文章）
       → `markdown` 库（fenced_code/tables/sane_lists），嵌套列表、多行引用、行内代码等
-        语义才正确。依赖见仓库根 requirements.txt；库缺失时退回逐行渲染器并告警
-        （此时嵌套列表会被摊平、行内代码可能异常，所以告警必须可见）。
+        语义才正确。依赖见仓库根 requirements.txt；库缺失时抛 MarkdownLibraryMissing 让构建**直接失败**（不静默降级）。
 
     prefer_library=True/False 可强制指定，用于对照实验。
     """
@@ -364,12 +373,15 @@ def markdown_to_html(md_text, prefer_library=None):
     if prefer_library:
         try:
             import markdown as md_lib
-            return md_lib.markdown(md_text, extensions=['fenced_code', 'tables', 'sane_lists'])
-        except ImportError:
-            import sys
-            print('⚠️  未安装 python `markdown` 库，纯 Markdown 正文退回逐行渲染器'
-                  '（嵌套列表/行内代码语义可能不正确）——请 pip install -r requirements.txt',
-                  file=sys.stderr)
+        except ImportError as e:
+            raise MarkdownLibraryMissing(
+                '缺少 python `markdown` 库：纯 Markdown 正文（新发文走 blog/posts-src/*.md）'
+                '必须用它渲染 —— 缺库时复杂表格（对齐语法、无外框竖线的行）、嵌套列表、'
+                '多行引用会静默退化，正文里的 snake_case 还会被吃成斜体，且同一份源会产出'
+                '与装库机器不同的 HTML。请先执行 `pip install -r requirements.txt`。'
+                f'（原始错误: {e}）'
+            ) from e
+        return md_lib.markdown(md_text, extensions=['fenced_code', 'tables', 'sane_lists'])
     return pure_python_markdown_to_html(md_text)
 
 
