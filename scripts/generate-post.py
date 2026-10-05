@@ -616,7 +616,11 @@ def main():
     # 优先使用 CLI 参数，其次回退到 Frontmatter 元数据
     title = params['title'] or frontmatter.get('title')
     description = params['description'] or frontmatter.get('description') or frontmatter.get('desc') or frontmatter.get('excerpt') or ''
-    article_date = params['article_date'] or frontmatter.get('date') or datetime.now().strftime('%Y-%m-%d')
+    raw_date = params['article_date'] or frontmatter.get('date')
+    if not raw_date or str(raw_date).strip() in ('', 'None', 'null'):
+        print("❌ 缺少发布日期（可通过 Frontmatter 包含 date: ... 或命令行使用 --date），禁止动态兜底以保证构建确定性")
+        sys.exit(1)
+    article_date = str(raw_date)
     read_time = params['read_time'] or frontmatter.get('read_time') or frontmatter.get('readtime')
     tags = params['tags'] or frontmatter.get('tags') or []
     category = params['category'] or frontmatter.get('category') or frontmatter.get('categories') or '开发'

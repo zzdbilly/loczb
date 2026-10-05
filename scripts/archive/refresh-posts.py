@@ -25,6 +25,12 @@ import json
 import glob
 import subprocess
 
+if '--force-run' not in sys.argv:
+    print("⛔ 本脚本已归档停用：自 P3 阶段起，文章真相源已统一至 blog/posts-src/*.md。")
+    print("   全量重新编译请使用: npm run build:posts (或 python3 scripts/build-posts.py)")
+    print("   如确实需要从旧 HTML 反解回刷，请显式传入 --force-run 参数。")
+    sys.exit(1)
+
 TEMPLATE = 'templates/blog-post-template.html'
 POSTS_DIR = 'blog/posts'
 
