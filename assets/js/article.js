@@ -13,6 +13,9 @@
     // === 原创版权卡片与一键引用 ===
     initCopyrightCard();
 
+    // === 自适应数据表格横向滚动容器 ===
+    initTables();
+
     // === 键盘快捷键 ===
     document.addEventListener('keydown', (e) => {
       if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.isContentEditable || (e.target.closest && e.target.closest('input, textarea, select, [contenteditable="true"]'))) return;
@@ -221,6 +224,23 @@
       });
     })();
   });
+
+  // === 自适应数据表格横向滚动容器与无障碍标注 ===
+  function initTables() {
+    const content = document.querySelector('.post-content');
+    if (!content) return;
+    const tables = content.querySelectorAll('table');
+    tables.forEach(table => {
+      if (table.parentElement && table.parentElement.classList.contains('table-wrap')) return;
+      const wrap = document.createElement('div');
+      wrap.className = 'table-wrap';
+      wrap.setAttribute('tabindex', '0');
+      wrap.setAttribute('role', 'region');
+      wrap.setAttribute('aria-label', '可横向滚动数据表格');
+      table.parentNode.insertBefore(wrap, table);
+      wrap.appendChild(table);
+    });
+  }
 
   // === macOS 风格代码块、行数折叠与一键复制 ===
   function initCodeBlocks() {
