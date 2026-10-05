@@ -315,10 +315,23 @@ def pure_python_markdown_to_html(md_text):
     res = re.sub(r'\*([^\*\n]+)\*', r'<em>\1</em>', res)
     res = re.sub(r'_([^_\n]+)_', r'<em>\1</em>', res)
 
-    for i, c in enumerate(inline_codes):
-        res = res.replace(f'\x00IC{i}\x00', c)
-    for i, b in enumerate(code_blocks):
-        res = res.replace(f'\x00CB{i}\x00', b)
+    # 回填占位符。落在 <pre> 区域内的代码块/行内代码只能填「转义后的原文」，不能再包一层
+    # <pre><code>/<code>：那会产出嵌套 <pre>，浏览器把外层提前闭合 → 后续正文漏到 <pre>
+    # 之外变成字面量（实测 2 篇 7 处：页面上直接显示 "## 依赖"、"- Node.js 18+"）。
+    # 源里「用原始 <pre><code> 包住一段带 ``` 围栏的 Markdown 文档」就会踩到。
+    def _restore(text, inside_pre):
+        for i, c in enumerate(inline_codes):
+            val = re.sub(r'^<code>|</code>$', '', c) if inside_pre else c
+            text = text.replace(f'\x00IC{i}\x00', val)
+        for i, b in enumerate(code_blocks):
+            val = re.sub(r'^<pre><code[^>]*>|</code></pre>$', '', b) if inside_pre else b
+            text = text.replace(f'\x00CB{i}\x00', val)
+        return text
+
+    res = ''.join(
+        _restore(part, idx % 2 == 1)
+        for idx, part in enumerate(re.split(r'(<pre\b.*?</pre>)', res, flags=re.S | re.I))
+    )
 
     return res
 
