@@ -601,6 +601,18 @@ def main():
         f.write(html)
     print(f"\n✅ 文章已生成: {output_path}")
 
+    # 同时同步归档至 blog/posts-src/{slug}.md（保证 posts-src 唯一真相源 100% 对齐）
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    proj_root = os.path.dirname(script_dir)
+    src_dir = os.path.join(proj_root, 'blog', 'posts-src')
+    os.makedirs(src_dir, exist_ok=True)
+    src_path = os.path.join(src_dir, f"{slug}.md")
+    if params.get('content_file') and os.path.exists(params['content_file']):
+        if os.path.abspath(params['content_file']) != os.path.abspath(src_path):
+            import shutil
+            shutil.copyfile(params['content_file'], src_path)
+            print(f"  📄 源文件已自动归档至: blog/posts-src/{slug}.md")
+
     # 相关文章由 generate-index.js 构建期内联为静态 HTML，
     # 全站索引（articles-index.json / 列表页 / 静态分页）统一由其重建
 
