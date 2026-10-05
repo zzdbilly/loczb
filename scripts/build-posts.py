@@ -47,6 +47,41 @@ def parse_read_time(val, text=''):
     words = len(re.findall(r'[a-zA-Z]+', text_only))
     return max(1, round((chinese_chars + words) / 350))
 
+PRE_OPEN_RE = re.compile(r'<pre\b', re.I)
+PRE_CLOSE_RE = re.compile(r'</pre>', re.I)
+HTML_INDENTED_RE = re.compile(r'^[ \t]*<')
+
+def normalize_src_indent(body):
+    """去掉正文里 HTML 行前面的缩进，避免 Markdown 把它们当「缩进代码块」。
+
+    背景：blog/posts-src/*.md 的正文是从既有 HTML 反向提取来的，保留着原始缩进
+    （实测 113 篇里 88 篇命中，9799 行缩进、其中 9551 行以 < 开头）。而 Markdown
+    规范把「4 个及以上空格缩进」当缩进代码块，于是整段正文会被转义进 <pre><code>
+    （原始症状：android-16-features 的正文被编译成 &lt;p&gt;… 的纯文本）。
+
+    两条不变量：
+      1. <pre>…</pre> 内部的行一律原样保留 —— 那里的缩进是代码排版语义；
+      2. 不以 < 开头的行不碰 —— Markdown 的列表/引用/嵌套靠行首缩进表达，
+         动它会改变 Markdown 语义。
+    HTML 块内的空白对渲染无意义，所以只去掉「行首缩进 + 紧跟 <」的行是安全的。
+    """
+    out = []
+    in_pre = False
+    for line in body.split('\n'):
+        if in_pre:
+            out.append(line)
+            if PRE_CLOSE_RE.search(line):
+                in_pre = False
+            continue
+        if PRE_OPEN_RE.search(line):
+            out.append(line.lstrip(' \t'))
+            if not PRE_CLOSE_RE.search(line):
+                in_pre = True
+            continue
+        out.append(line.lstrip(' \t') if HTML_INDENTED_RE.match(line) else line)
+    return '\n'.join(out)
+
+
 def build_post(src_file, template_str, dry_run=False):
     slug = os.path.basename(src_file)[:-3]
     with open(src_file, 'r', encoding='utf-8') as f:
@@ -70,7 +105,7 @@ def build_post(src_file, template_str, dry_run=False):
         display_date = str(date_str)[:10]
         iso_date = f"{display_date}T00:00:00+08:00"
 
-    content_html = generate_post.markdown_to_html(md_body)
+    content_html = generate_post.markdown_to_html(normalize_src_indent(md_body))
     content_html = re.sub(r'^<h1>.*?</h1>\s*', '', content_html, count=1)
 
     html, _, _, _ = generate_post.generate_article(
