@@ -6,27 +6,27 @@
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://static.cloudflareinsights.com https://loczb-comments.billycust716.workers.dev; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://loczb-comments.billycust716.workers.dev https://dashscope.aliyuncs.com https://709527.xyz https://www.709527.xyz https://cloudflareinsights.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
     <script>/* 反点击劫持兜底：GitHub Pages 无法下发 X-Frame-Options / CSP frame-ancestors */(function(){if(self===top)return;try{top.location=self.location}catch(e){}setTimeout(function(){if(self!==top){document.documentElement.style.display='none';}},400);})();</script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Git Worktree 高效多分支开发指南 | 张小猛 - loczb</title>
-    <meta name="description" content="Git Worktree 让你同时检出多个分支，切换零成本，告别 stash 和冲突的烦恼。本文详解 worktree 的使用场景和最佳实践。">
+    <title>Markdown 发文链路测试（实验用） | 张小猛 - loczb</title>
+    <meta name="description" content="用纯 Markdown 撰写一篇测试文章，验证 md → html 编译链路对各类 Markdown 语法的处理结果（实验记录）">
 
     <!-- Open Graph -->
-    <meta property="og:title" content="Git Worktree 高效多分支开发指南 | 张小猛 - loczb">
-    <meta property="og:description" content="Git Worktree 让你同时检出多个分支，切换零成本，告别 stash 和冲突的烦恼。本文详解 worktree 的使用场景和最佳实践。">
-    <meta property="og:url" content="https://709527.xyz/blog/posts/git-worktree-multi-branch-guide.html">
+    <meta property="og:title" content="Markdown 发文链路测试（实验用） | 张小猛 - loczb">
+    <meta property="og:description" content="用纯 Markdown 撰写一篇测试文章，验证 md → html 编译链路对各类 Markdown 语法的处理结果（实验记录）">
+    <meta property="og:url" content="https://709527.xyz/blog/posts/md-pipeline-test.html">
     <meta property="og:type" content="article">
     <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
     <meta property="og:site_name" content="loczb">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Git Worktree 高效多分支开发指南 | 张小猛 - loczb">
-    <meta name="twitter:description" content="Git Worktree 让你同时检出多个分支，切换零成本，告别 stash 和冲突的烦恼。本文详解 worktree 的使用场景和最佳实践。">
+    <meta name="twitter:title" content="Markdown 发文链路测试（实验用） | 张小猛 - loczb">
+    <meta name="twitter:description" content="用纯 Markdown 撰写一篇测试文章，验证 md → html 编译链路对各类 Markdown 语法的处理结果（实验记录）">
     <meta name="twitter:image" content="https://709527.xyz/assets/images/og-image.png">
 
         <script type="application/ld+json">
 {
       "@context": "https://schema.org",
       "@type": "Article",
-      "headline": "Git Worktree 高效多分支开发指南",
-      "description": "Git Worktree 让你同时检出多个分支，切换零成本，告别 stash 和冲突的烦恼。本文详解 worktree 的使用场景和最佳实践。",
+      "headline": "Markdown 发文链路测试（实验用）",
+      "description": "用纯 Markdown 撰写一篇测试文章，验证 md → html 编译链路对各类 Markdown 语法的处理结果（实验记录）",
       "image": "https://709527.xyz/assets/images/og-image.png",
       "author": {
             "@type": "Person",
@@ -41,16 +41,16 @@
                   "url": "https://709527.xyz/assets/images/favicon.svg"
             }
       },
-      "datePublished": "2026-06-28T16:00:04+08:00",
-      "dateModified": "2026-06-28T16:00:04+08:00",
-      "url": "https://709527.xyz/blog/posts/git-worktree-multi-branch-guide.html",
+      "datePublished": "2026-10-05T08:25:15+08:00",
+      "dateModified": "2026-10-05T08:25:15+08:00",
+      "url": "https://709527.xyz/blog/posts/md-pipeline-test.html",
       "mainEntityOfPage": {
             "@type": "WebPage",
-            "@id": "https://709527.xyz/blog/posts/git-worktree-multi-branch-guide.html"
+            "@id": "https://709527.xyz/blog/posts/md-pipeline-test.html"
       },
-      "keywords": "Git, 开发技巧, 效率工具",
+      "keywords": "实验记录",
       "articleSection": "开发",
-      "timeRequired": "PT12M",
+      "timeRequired": "PT3M",
       "inLanguage": "zh-CN"
 }
     </script>
@@ -58,7 +58,7 @@
     <link rel="stylesheet" href="../../assets/css/style.css?v=27743e398e">
     <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
     <link rel="alternate icon" href="../../assets/images/favicon.ico">
-    <link rel="canonical" href="https://709527.xyz/blog/posts/git-worktree-multi-branch-guide.html">
+    <link rel="canonical" href="https://709527.xyz/blog/posts/md-pipeline-test.html">
 </head>
 <body>
   <!-- PARTIAL:SKIP_LINK -->
@@ -113,93 +113,96 @@
       </a>
 
       <article class="post-content">
-        <h1>Git Worktree 高效多分支开发指南</h1>
+        <h1>Markdown 发文链路测试（实验用）</h1>
 
         <div class="post-meta">
-          <span class="meta-item"><span aria-hidden="true">📅</span> 2026-06-28 16:00:04</span>
-          <span class="meta-item"><span aria-hidden="true">⏱️</span> 12 min read</span>
+          <span class="meta-item"><span aria-hidden="true">📅</span> 2026-10-05 08:25:15</span>
+          <span class="meta-item"><span aria-hidden="true">⏱️</span> 3 min read</span>
           <span class="meta-item"><span aria-hidden="true">👤</span> 张小猛</span>
         </div>
 
         <div class="post-tags">
-          <span class="tag">Git</span>
-          <span class="tag">开发技巧</span>
-          <span class="tag">效率工具</span>
+          <span class="tag">实验记录</span>
         </div>
 
         
 
-        <p>在日常开发中，我们经常面临这样的场景：正在 A 分支上写代码，突然需要切到 B 分支修一个紧急 bug。这时候要么 stash 当前工作（然后忘记它），要么提交半成品。Git Worktree 优雅解决了这个问题。</p>
-<h2 id="what">什么是 Git Worktree</h2>
-<p>Git Worktree 允许你在同一仓库中同时检出多个分支，每个分支有独立的工作目录。所有 worktree 共享同一份 .git 对象存储，不会增加仓库体积。</p>
-<p>核心命令：</p>
-<pre><code class="language-bash"># 创建一个新 worktree
-git worktree add ../project-feature feature-branch
-
-# 列出所有 worktree
-git worktree list
-
-# 删除 worktree
-git worktree remove ../project-feature
-
-# 清理过期 worktree
-git worktree prune</code></pre>
-<h2 id="scenarios">核心使用场景</h2>
-<h3>1. 修bug同时继续开发</h3>
-<p>正在开发新功能时，线上突然报 bug：</p>
-<pre><code class="language-bash"># 在当前目录继续开发新功能
-# 在新目录检出版本分支修 bug
-git worktree add ../hotfix release/v2.1
-cd ../hotfix
-# 修 bug、commit、push
-cd -  # 切回原来目录继续开发</code></pre>
-<p>整个过程不需要 stash，不需要担心工作丢失。</p>
-<h3>2. 并行 review</h3>
-<p>同时 review 多个 PR 时非常方便：</p>
-<pre><code class="language-bash">git worktree add ../pr-review-1 pr/feature-a
-git worktree add ../pr-review-2 pr/feature-b
-git worktree add ../pr-review-3 pr/feature-c</code></pre>
-<p>在三个 IDE 窗口打开，互不干扰。</p>
-<h2 id="tips">最佳实践</h2>
+        <h2>1. 标题层级</h2>
+<h3>1.1 三级标题</h3>
+<h2>2. 行内元素</h2>
+<p>这里是<strong>加粗</strong>、<em>斜体</em>、<code>行内代码</code>，以及一个<a href="https://709527.xyz">链接</a>。</p>
+<h2>3. 无序列表</h2>
 <ul>
-<li><strong>命名规范</strong>：worktree 目录名用项目名+分支名，如 <code>myapp-feature-x</code></li>
-<li><strong>磁盘清理</strong>：定期执行 <code>git worktree prune</code> 清理过期记录</li>
-<li><strong>避免主 worktree 直接开发</strong>：把主检出当作 hub，用子 worktree 开发实际工作</li>
-<li><strong>自动化脚本</strong>：配合 shell alias 快速创建/切换 worktree</li>
+<li>第一项</li>
+<li>第二项</li>
+<li>第三项</li>
 </ul>
-<h2 id="vs-other">与其他方案的对比</h2>
+<h2>4. 有序列表</h2>
+<ol>
+<li>步骤一</li>
+<li>步骤二</li>
+<li>步骤三</li>
+</ol>
+<h2>5. 代码块</h2>
+<pre><code class="language-bash">python3 scripts/build-posts.py
+node scripts/verify.js
+</code></pre>
+<pre><code class="language-python">def hello(name: str) -&gt; str:
+    return f&quot;hello {name}&quot;
+</code></pre>
+<h2>6. 引用</h2>
+<blockquote>
+<p>这是一段引用。</p>
+</blockquote>
+<h2>7. 表格</h2>
 <table>
-<tr><th>方案</th><th>切换速度</th><th>冲突风险</th><th>磁盘占用</th></tr>
-<tr><td>git stash</td><td>快</td><td>高（容易忘）</td><td>低</td></tr>
-<tr><td>git clone 新仓库</td><td>慢</td><td>无</td><td>高（重复下载）</td></tr>
-<tr><td>git worktree</td><td>极快</td><td>无</td><td>低（共享对象）</td></tr>
+<thead>
+<tr>
+<th>项目</th>
+<th>状态</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>md 编译</td>
+<td>通过</td>
+<td>本次实验</td>
+</tr>
+<tr>
+<td>门禁</td>
+<td>通过</td>
+<td>verify.js</td>
+</tr>
+</tbody>
 </table>
-<h2 id="conclusion">总结</h2>
-<p>Git Worktree 是每个开发者都应该掌握的高效技巧。它解决了多分支并行开发的核心痛点，尤其适合需要频繁切分支修 hotfix 的场景。下次遇到切分支需求时，试试 <code>git worktree add</code>，你会爱上这个功能。</p>
+<h2>8. 分隔线</h2>
+<hr />
+<p>结尾段落。</p>
 
         <!-- Related Static -->
         <div class="related-posts">
           <div class="related-posts-title">📌 相关文章</div>
           <div class="related-posts-list">
-          <a class="related-post-card" href="git-advanced-techniques.html">
-            <div class="related-post-card-title">Git 高级技巧：变基、挑拣和交互式暂存</div>
-            <div class="related-post-card-tags"><span>Git</span><span>版本控制</span><span>开发技巧</span></div>
-          </a>
-          <a class="related-post-card" href="cursor-rules-guide.html">
-            <div class="related-post-card-title">Cursor Rules 实战：自定义 AI 代码助手的进阶指南</div>
-            <div class="related-post-card-tags"><span>Cursor</span><span>AI编程</span><span>效率工具</span></div>
-          </a>
-          <a class="related-post-card" href="ai-code-editor-review-cursor-windsurf-copilot.html">
-            <div class="related-post-card-title">AI 代码编辑器深度横评：Cursor vs Windsurf vs Copilot</div>
-            <div class="related-post-card-tags"><span>AI</span><span>AI 工具</span><span>开发技巧</span></div>
-          </a>
-          <a class="related-post-card" href="md-pipeline-test.html">
-            <div class="related-post-card-title">Markdown 发文链路测试（实验用）</div>
-            <div class="related-post-card-tags"><span>实验记录</span></div>
-          </a>
           <a class="related-post-card" href="idempotent-reproducible-builds.html">
             <div class="related-post-card-title">幂等与可复现：为什么你的构建总在产生无意义的 diff</div>
             <div class="related-post-card-tags"><span>构建</span><span>幂等</span><span>可复现</span></div>
+          </a>
+          <a class="related-post-card" href="技术文档编写指南写出别人真的会看的文档.html">
+            <div class="related-post-card-title">技术文档编写指南写出别人真的会看的文档</div>
+            <div class="related-post-card-tags"><span>技术写作</span><span>文档规范</span><span>工程实践</span></div>
+          </a>
+          <a class="related-post-card" href="ai-助手定时任务投递指南从-agent-废话到-no-agent-脚本.html">
+            <div class="related-post-card-title">AI 助手定时任务投递指南：从 Agent 废话到 No-Agent 脚本</div>
+            <div class="related-post-card-tags"><span>AI</span><span>DevOps</span><span>前端</span></div>
+          </a>
+          <a class="related-post-card" href="2026-年了ai-编程助手到底能帮你干多少活.html">
+            <div class="related-post-card-title">2026 年了，AI 编程助手到底能帮你干多少活？</div>
+            <div class="related-post-card-tags"><span>AI</span><span>前端</span><span>开发</span></div>
+          </a>
+          <a class="related-post-card" href="ai-编码代理实战从-copilot-到-agent.html">
+            <div class="related-post-card-title">AI 编码代理实战：从 Copilot 到 Agent</div>
+            <div class="related-post-card-tags"><span>AI</span><span>AI编程</span><span>Agent</span></div>
           </a>
           </div>
         </div>
@@ -222,9 +225,9 @@ git worktree add ../pr-review-3 pr/feature-c</code></pre>
             </button>
           </div>
           <div class="copyright-list">
-            <div class="copyright-item"><strong>文章标题：</strong>Git Worktree 高效多分支开发指南</div>
+            <div class="copyright-item"><strong>文章标题：</strong>Markdown 发文链路测试（实验用）</div>
             <div class="copyright-item"><strong>文章作者：</strong>张小猛 · loczb</div>
-            <div class="copyright-item"><strong>永久链接：</strong><a href="https://709527.xyz/blog/posts/git-worktree-multi-branch-guide.html">https://709527.xyz/blog/posts/git-worktree-multi-branch-guide.html</a></div>
+            <div class="copyright-item"><strong>永久链接：</strong><a href="https://709527.xyz/blog/posts/md-pipeline-test.html">https://709527.xyz/blog/posts/md-pipeline-test.html</a></div>
             <div class="copyright-item"><strong>版权声明：</strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 国际许可协议。商业转载请联系作者获得授权，非商业转载请注明出处。</div>
           </div>
         </div>
@@ -237,14 +240,14 @@ git worktree add ../pr-review-3 pr/feature-c</code></pre>
     <div class="container container-narrow">
       <!-- Post Nav Prev Next -->
       <nav class="post-nav" aria-label="文章翻页导航">
-        <a href="android-hilt-dependency-injection.html" class="post-nav-card post-nav-prev" rel="prev">
+        <a href="纳指定投把一笔月供当成长期运维来跑.html" class="post-nav-card post-nav-prev" rel="prev">
           <span class="post-nav-label">← 上一篇</span>
-          <span class="post-nav-title">Android Hilt 依赖注入最佳实践：从入门到架构</span>
+          <span class="post-nav-title">纳指定投：把一笔月供当成长期运维来跑</span>
         </a>
-        <a href="ai-code-editor-review-cursor-windsurf-copilot.html" class="post-nav-card post-nav-next" rel="next">
+        <div class="post-nav-card post-nav-next disabled" aria-disabled="true">
           <span class="post-nav-label">下一篇 →</span>
-          <span class="post-nav-title">AI 代码编辑器深度横评：Cursor vs Windsurf vs Copilot</span>
-        </a>
+          <span class="post-nav-title">已是最新篇博文</span>
+        </div>
       </nav>
       <!-- /Post Nav Prev Next -->
       <hr style="border: none; border-top: 1px solid var(--color-border); margin: var(--space-2xl) 0;">
@@ -313,18 +316,16 @@ git worktree add ../pr-review-3 pr/feature-c</code></pre>
       </div>
       <div class="post-info-section">
         <div class="post-info-label">文章信息</div>
-        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📅</span> 发布日期</span><span class="post-info-stat-value">2026-06-28</span></div>
-        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">⏱️</span> 阅读时间</span><span class="post-info-stat-value">12 min read</span></div>
-        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">521 字</span></div>
-        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📊</span> 章节数</span><span class="post-info-stat-value">5 节 · 2 子节</span></div>
-        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">💻</span> 代码块</span><span class="post-info-stat-value">3 段</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📅</span> 发布日期</span><span class="post-info-stat-value">2026-10-05</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">⏱️</span> 阅读时间</span><span class="post-info-stat-value">3 min read</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">117 字</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📊</span> 章节数</span><span class="post-info-stat-value">8 节 · 1 子节</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">💻</span> 代码块</span><span class="post-info-stat-value">2 段</span></div>
       </div>
       <div class="post-info-section" id="postSidebarTags">
         <div class="post-info-label">标签</div>
         <div class="post-info-links">
-          <a href="../../blog/index.html?tag=Git" class="post-info-link"># Git</a>
-          <a href="../../blog/index.html?tag=%E5%BC%80%E5%8F%91%E6%8A%80%E5%B7%A7" class="post-info-link"># 开发技巧</a>
-          <a href="../../blog/index.html?tag=%E6%95%88%E7%8E%87%E5%B7%A5%E5%85%B7" class="post-info-link"># 效率工具</a>
+          <a href="../../blog/index.html?tag=%E5%AE%9E%E9%AA%8C%E8%AE%B0%E5%BD%95" class="post-info-link"># 实验记录</a>
         </div>
       </div>
     </div>

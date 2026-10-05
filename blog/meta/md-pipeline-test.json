@@ -1,0 +1,12 @@
+{
+  "slug": "md-pipeline-test",
+  "title": "Markdown 发文链路测试（实验用）",
+  "description": "用纯 Markdown 撰写一篇测试文章，验证 md → html 编译链路对各类 Markdown 语法的处理结果（实验记录）",
+  "date": "2026-10-05",
+  "dateTime": "2026-10-05 08:25:15",
+  "category": "开发",
+  "tags": [
+    "实验记录"
+  ],
+  "readTime": 3
+}
