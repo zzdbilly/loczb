@@ -6,6 +6,12 @@
 import os
 import re
 import glob
+import sys
+
+if '--force-run' not in sys.argv:
+    print("⛔ 本脚本已归档停用：112/112 篇文章已注入评论组件，重跑 0 变更。")
+    print("   如确实需要重跑，请显式传入 --force-run 参数。")
+    sys.exit(1)
 
 POSTS_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), 'blog', 'posts')  # scripts/archive/ → 仓库根
 COMMENT_SCRIPT_TAG = '  <!-- Comment System -->\n  <script src="../../workers/comment-system/comment-widget.js"></script>\n'

@@ -11,6 +11,11 @@ form-action self、upgrade-insecure-requests，并保留站内既有依赖（Clo
 """
 import glob, os, re, sys
 
+if '--force-run' not in sys.argv:
+    print("⛔ 本脚本已归档停用：meta 版 CSP 已全站注入，重跑会重新改写全站 HTML。")
+    print("   如确实需要重跑，请显式传入 --force-run 参数（建议先加 --dry 只统计）。")
+    sys.exit(1)
+
 DRY = '--dry' in sys.argv
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
