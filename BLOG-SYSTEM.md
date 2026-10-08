@@ -115,6 +115,8 @@ loczb/
 
 ## 三、生成脚本 `generate-post.py`
 
+> ⚠️ **历史兼容入口**：新发文一律走 `build-posts.py`（见上文「md 源优先」）。`generate-post.py` 的 CLI 模式**没有**原子写盘、依赖前置自检、「纯 MD 误判」硬校验与下游失败回滚——这些能力只在 `build-posts.py` 里；它当前的**主用途是作为库被 `build-posts.py` import**（渲染器 + Frontmatter 解析），CLI 仅供兼容历史用法。下文描述的是该脚本的能力与内部结构，不代表推荐入口。
+
 ### 函数清单（按调用顺序）
 
 ```python
@@ -255,8 +257,9 @@ git push
 > （单篇统一用 `--slug <slug>`，未知参数一律 `exit 1` 报错，不再静默转成全量重编译）。旧「从 HTML 反解回刷」
 > 实现归档在 `scripts/archive/refresh-posts.py`，**默认拒绝运行、需显式 `--force-run`**（`scripts/archive/` 下所有归档脚本同此纪律）。
 >
-> 只想发单篇、正文直接用 HTML 写时，也可用 `python3 scripts/generate-post.py templates/post-src-template.md`（或任意自定义路径，Frontmatter 模式）——
-> 它同样会把正文归档进 `posts-src/`，保证源与产物对齐。
+> 只想发单篇时**优先用 `build-posts.py --slug <slug>`**（具备原子写盘 / 依赖前置自检 / 误判校验 / 下游失败回滚）。
+> `python3 scripts/generate-post.py templates/post-src-template.md`（或任意自定义路径，Frontmatter 模式）是**历史兼容入口**——
+> 它同样会把正文归档进 `posts-src/`，保证源与产物对齐，但**缺少上述保护**，不要作为新发文的默认路径。
 
 ### 删除一篇文章（无专用脚本）
 
@@ -366,4 +369,4 @@ git push
 
 ---
 
-*文档版本 v1.5 / 2026-10-08（verify.js 新增 q) category 白名单硬校验（空值不阻断），门禁 16→17 项 a–q；补「构建依赖隔离（仓库内 .venv）」说明；提交口径统一为显式文件列表。上一版 v1.4 / 2026-10-05：CI 改 pnpm 冻结安装 + 门禁改用 `git add -A` + `git diff --cached`；明确 build / build:posts / refresh 三个近义入口；refresh-posts.py 参数白名单化，旧 --post 不再支持；sync-asset-versions 扩到 article.js 内容哈希；build-posts.py 原子写盘 + 下游失败回滚 + 纯 MD 误判硬校验）*
+*文档版本 v1.6 / 2026-10-08（把 `generate-post.py` 的定位写清：CLI 为历史兼容入口、主用途是作为库被 `build-posts.py` import，新发文一律走 `build-posts.py`；`scripts/archive/README.md` 表格补齐 batch-frame-busting.py / batch-meta-csp.py 两行；`--category` 枚举补「思考」。上一版 v1.5 / 2026-10-08（verify.js 新增 q) category 白名单硬校验（空值不阻断），门禁 16→17 项 a–q；补「构建依赖隔离（仓库内 .venv）」说明；提交口径统一为显式文件列表。上一版 v1.4 / 2026-10-05：CI 改 pnpm 冻结安装 + 门禁改用 `git add -A` + `git diff --cached`；明确 build / build:posts / refresh 三个近义入口；refresh-posts.py 参数白名单化，旧 --post 不再支持；sync-asset-versions 扩到 article.js 内容哈希；build-posts.py 原子写盘 + 下游失败回滚 + 纯 MD 误判硬校验）*
