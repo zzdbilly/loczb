@@ -519,12 +519,16 @@ a:hover {
   align-items: center;
   justify-content: center;
   padding: calc(var(--nav-height) + 2.5rem) var(--space-lg) 2.5rem;
-  overflow: hidden;
+  /* 搜索下拉面板在 hero 内部且高度远超 hero 下沿，hidden 会把溢出部分剪掉，
+     故 hero 不再裁剪；装饰层的裁剪下移到 .hero-bg */
+  overflow: visible;
 }
 .hero-bg {
   position: absolute;
   inset: 0;
   z-index: -1;
+  /* 承接原先 .hero 的裁剪职责，保持 .hero-glow / .hero-grid 装饰层原视觉 */
+  overflow: hidden;
 }
 .hero-glow {
   position: absolute;
@@ -3494,7 +3498,9 @@ button.share-btn {
 }
 .hero {
   position: relative;
-  z-index: 1;
+  /* 需高于后续 SECTION.section 的 z-index:1，否则溢出 hero 下沿的搜索下拉面板
+     会被 DOM 靠后的下一节盖住（两者平手时后者胜） */
+  z-index: 2;
 }
 ::view-transition-old(root),
 ::view-transition-new(root) {
@@ -5881,6 +5887,10 @@ pre code.hljs {
 /* Hero Spotlight Quick Search */
 .hero-search-wrapper {
   position: relative;
+  /* .hero-search-wrapper 与 .hero-actions 都因 .animate-on-scroll 的 transform 形成
+     层叠上下文，DOM 靠后的 .hero-actions 会压住 z-index:auto 的 wrapper 子树；
+     显式抬到 30 以压住按钮，保证下拉面板不被遮挡 */
+  z-index: 30;
   max-width: 580px;
   margin: 1.75rem auto 2rem;
   width: 100%;
