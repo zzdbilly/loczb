@@ -23,7 +23,7 @@ loczb/
 │   ├── build-posts.py            # ★ 文章批量编译脚本 (npm run build:posts)
 │   ├── generate-index.js         # 全站 CI 全量索引重建管线 (npm run build)
 │   ├── sync-partials.js          # 公共布局片段同步脚本 (npm run sync-partials)
-│   ├── verify.js                 # 核心门禁校验脚本 (npm run verify，含 a-p 项校验)
+│   ├── verify.js                 # 核心门禁校验脚本 (npm run verify，含 a-q 项校验)
 │   ├── check-links.js            # 自动化死链与静态资源巡检医生 (npm run check-links)
 │   └── refresh-posts.py          # 历史回刷兼容代理 (已废弃，转发至 build-posts.py；旧参数 --post 不再支持，单篇用 --slug)
 ├── assets/
@@ -224,6 +224,11 @@ cd nook/loczb
 
 # 0. 前置：构建依赖（纯 Markdown 正文编译必需，缺了会直接构建失败）
 pip install -r requirements.txt
+#    隔离构建（推荐）：本机 python3 若同时是别的工具 venv（如 Hermes 运行时，其 markdown 版本与锁定值冲突），
+#    别降级 markdown —— 在仓库内建隔离环境，本地编译统一走它：
+#      python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
+#      .venv/bin/python3 scripts/build-posts.py        # 本地编译统一用 .venv/bin/python3
+#    .venv/ 已进 .gitignore；CI 用系统 python3 自装依赖，不受影响。
 
 # 1. 写正文源：从模板复制后改名
 cp templates/post-src-template.md blog/posts-src/{slug}.md
@@ -267,7 +272,7 @@ node scripts/verify.js && node scripts/check-links.js   # 双绿再推
 - ✅ 重建 `blog/index.html` + `blog/page-2..N.html` 静态分页
 - ✅ 内联全站文章的静态「相关文章」与专栏卡
 - ✅ 更新 `index.html` 大卡 + 文章列表 + JS posts 数组
-- ✅ 跑 `scripts/verify.js` 一致性门禁（posts/index/meta 对账 + 主页面 ?v= 一致 + 体积门禁 + 静态相关文章 + 静态分页；非零退出即阻断 push）
+- ✅ 跑 `scripts/verify.js` 一致性门禁（posts/index/meta 对账 + 主页面 ?v= 一致 + 体积门禁 + 静态相关文章 + 静态分页 + category 白名单；非零退出即阻断 push）
   - 体积门禁阈值：`articles-index.json` 超 **250KB 只预警**（非阻断提示）、超 **400KB 阻断**；两条线可用 `INDEX_WARN_BYTES` / `INDEX_FAIL_BYTES` 环境变量覆盖，便于验证门禁行为
   - 当前实测 ≈436 字节/篇（113 篇 49KB），按此外推：581 篇触预警、930 篇触阻断
 
@@ -361,4 +366,4 @@ git push
 
 ---
 
-*文档版本 v1.4 / 2026-10-05（CI 改 pnpm 冻结安装 + 门禁改用 `git add -A` + `git diff --cached`；明确 build / build:posts / refresh 三个近义入口；refresh-posts.py 参数白名单化，旧 --post 不再支持；sync-asset-versions 扩到 article.js 内容哈希；build-posts.py 原子写盘 + 下游失败回滚 + 纯 MD 误判硬校验）*
+*文档版本 v1.5 / 2026-10-08（verify.js 新增 q) category 白名单硬校验（空值不阻断），门禁 16→17 项 a–q；补「构建依赖隔离（仓库内 .venv）」说明；提交口径统一为显式文件列表。上一版 v1.4 / 2026-10-05：CI 改 pnpm 冻结安装 + 门禁改用 `git add -A` + `git diff --cached`；明确 build / build:posts / refresh 三个近义入口；refresh-posts.py 参数白名单化，旧 --post 不再支持；sync-asset-versions 扩到 article.js 内容哈希；build-posts.py 原子写盘 + 下游失败回滚 + 纯 MD 误判硬校验）*
