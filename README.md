@@ -57,7 +57,7 @@
 | **UI 视觉体系** | Bento Grid 2.0 + Spotlight Glow + Glassmorphism | 动态打字机、高对比度双模控制台、macOS 代码块 |
 | **专栏体系** | 6 大核心旗舰系列专栏 | 自动化专栏便当盒、全集目录折叠板、上下篇导航直达 |
 | **本地依赖** | pnpm 12 (Fuse.js / highlight.js) + python `markdown==3.11` | 前端依赖严格冻结锁定 (`pnpm-lock.yaml`)；`markdown` 为构建硬依赖 |
-| **构建与质量**| Python 3 + Node.js + build-posts.py + verify.js + check-links.js | 事务级真原子写盘与回滚、22 项单测、16 项一致性门禁 (a 至 p)、0 死链巡检 |
+| **构建与质量**| Python 3 + Node.js + build-posts.py + verify.js + check-links.js | 事务级真原子写盘与回滚、22 项单测、17 项一致性门禁 (a 至 q)、0 死链巡检 |
 | **边缘计算** | Cloudflare Workers + D1 数据库 | 支撑无服务器全球低延迟评论系统 |
 | **自动化工作流**| 本地脚本链 + GitHub Actions CI | 本地编译 + 门禁验证；push 后 CI 严格复核（`.github/workflows/verify.yml`：pnpm 冻结安装 + 单测 + 全量编译 + 源产物一致性 + verify + check-links） |
 
@@ -94,7 +94,7 @@ loczb/
 │   ├── generate-post.py           # 底层单篇发文渲染器 (Frontmatter / CLI 两种模式)
 │   ├── build-posts.py             # ★ 文章源编译构建管线 (pnpm run build:posts，支持真原子写盘与事务回滚)
 │   ├── generate-index.js          # 全站索引重建管线 (pnpm run build)
-│   ├── verify.js                  # 核心一致性门禁 (pnpm run verify，涵盖 a 至 p 16 项校验)
+│   ├── verify.js                  # 核心一致性门禁 (pnpm run verify，涵盖 a 至 q 17 项校验)
 │   ├── check-links.js             # 死链与静态资源巡检医生 (pnpm run check-links)
 │   ├── sync-partials.js           # 公共布局片段同步 (pnpm run sync-partials)
 │   ├── sync-asset-versions.js     # style.css / article.js 内容哈希版本号自动同步
@@ -145,6 +145,15 @@ pnpm install --frozen-lockfile
 # 2. 安装 Python 编译依赖 (纯 Markdown 正文编译必需，缺失会直接构建失败并提示)
 pip install -r requirements.txt   # python markdown：复杂表格对齐、嵌套列表、多行引用等标准语法
 ```
+
+> **构建依赖隔离（推荐）**：本机 `python3` 若同时是别的工具的 venv（如 Hermes 运行时），其 `markdown`
+> 版本可能与 `requirements.txt` 锁定的 `markdown==3.11` 冲突（`pip check` 会报错）。**别为了消除冲突而降级 markdown**——
+> 在仓库内建一个隔离环境即可，本地编译统一走它：
+> ```bash
+> python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
+> .venv/bin/python3 scripts/build-posts.py     # 本地编译/构建统一用 .venv/bin/python3
+> ```
+> `.venv/` 已加入 `.gitignore`（CI 会 `git add -A` 比对产物，未忽略会误报）；CI 用系统 `python3` 自装依赖，不受影响。
 
 Frontmatter 示例（`slug` 与 `read_time` 建议显式给；`date` 带时分秒可避免同日文章排序歧义）：
 
@@ -222,12 +231,15 @@ node scripts/build-series.js
 
 ### 3. 代码提交与推送规范
 
-遵循 Conventional Commits 规范，统一使用 **Git SSH** 协议推送：
+遵循 Conventional Commits 规范，统一使用 **Git SSH** 协议推送。提交用**显式文件列表**（先 `git status --porcelain` 看清变更，再逐个 `git add`），别用 `git add -A` 一把梭：
 ```bash
-git add -A
+git status --porcelain          # 先看本次到底改了哪些文件
+git add <具体文件> ...           # 显式列文件（新增文章 = posts-src/*.md + posts/*.html + meta/*.json + 索引/分页等连带产物）
 git commit -m "feat(blog): 新增博文"
 git push origin main
 ```
+
+> 例外：`.github/workflows/verify.yml` 里 CI 内部仍用 `git add -A`，那是为了让**未跟踪的新产物**也参与源↔产物一致性比对（机器校验手法），不是给人照抄的提交步骤。
 
 ---
 

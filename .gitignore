@@ -15,6 +15,9 @@ build/
 .next/
 out/
 
+# 本地构建依赖隔离环境（仓库内 venv；勿提交——CI 会 git add -A 做产物比对）
+.venv/
+
 # Environment
 *.env
 .env

@@ -25,6 +25,8 @@
  *   p) article.js 引用版本：模板 + 全部文章页的 <script src="…article.js?v="> 必须等于
  *      assets/js/article.js 的内容哈希（sha256 前 10 位）。作用同 i)，挡住「改了 article.js
  *      却没重建」导致老访客吃 10 分钟旧脚本。
+ *   q) category 白名单：blog/meta/*.json 的 category 为空只走 b) 的非阻断提示；
+ *      若有值却不在白名单（AI | Android | Kotlin | 前端 | 思考 | DevOps | 数据库 | 系统编程 | 安全 | 开发）→ 阻断。
  *
  * 本地 Run: node scripts/verify.js
  * generate-post.py 在索引重建成功后自动调用。
@@ -585,6 +587,26 @@ function contentCheck(name, count, samples) {
   if (stale.length) fail(`p) ${stale.length} 处 article.js 引用版本 ≠ 当前内容哈希 ${expectedHash}（改 JS 后未重建）: ${stale.slice(0, 5).join(', ')}${stale.length > 5 ? ' …' : ''}`);
   if (!missing.length && !noVersion.length && !stale.length) {
     infos.push(`p) article.js 引用版本 ${expectedHash}：模板 + ${htmlSlugs.size} 篇文章页全部一致`);
+  }
+}
+
+// ── q) category 白名单硬校验 ─────────────────────────────
+// 模板 templates/post-src-template.md 声明「分类只能从这 10 个里选（verify.js 会核对）」。
+// 这里落实该承诺：category 为空仍走 b) 的非阻断提示（不追溯存量、不变严），
+// 一旦 category 有值却不在白名单 → fail 阻断 push。
+const CATEGORY_WHITELIST = ['AI', 'Android', 'Kotlin', '前端', '思考', 'DevOps', '数据库', '系统编程', '安全', '开发'];
+{
+  const bad = [];
+  for (const slug of metaSlugs) {
+    let meta;
+    try { meta = JSON.parse(readText(`blog/meta/${slug}.json`)); } catch (e) { continue; }
+    const cat = meta.category;
+    if (cat && !CATEGORY_WHITELIST.includes(cat)) bad.push(`${slug}(category=${JSON.stringify(cat)})`);
+  }
+  if (bad.length) {
+    fail(`q) ${bad.length} 篇文章 category 不在白名单内（${CATEGORY_WHITELIST.join(' | ')}）: ${bad.slice(0, 5).join(', ')}${bad.length > 5 ? ' …' : ''}`);
+  } else {
+    infos.push(`q) category 白名单校验通过（${metaSlugs.size} 篇，空值不阻断）`);
   }
 }
 
