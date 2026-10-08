@@ -1,6 +1,21 @@
 {
   "posts": [
     {
+      "slug": "holiday-return-to-work-preparation",
+      "title": "假期后的复工准备：把开工第一天当成一次灰度上线",
+      "date": "2026-10-08",
+      "dateTime": "2026-10-08 10:30:00",
+      "category": "思考",
+      "tags": [
+        "复工准备",
+        "精力管理",
+        "工程师视角",
+        "节奏复位"
+      ],
+      "readTime": 13,
+      "url": "blog/posts/holiday-return-to-work-preparation.html"
+    },
+    {
       "slug": "national-day-planned-maintenance",
       "title": "国庆假期：把七天长假当成一次计划内停机维护",
       "date": "2026-10-05",
@@ -1793,9 +1808,9 @@
     "安全"
   ],
   "stats": {
-    "totalPosts": 114,
-    "totalTags": 300,
-    "latestDate": "2026-10-05",
+    "totalPosts": 115,
+    "totalTags": 302,
+    "latestDate": "2026-10-08",
     "oldestDate": "2026-02-15"
   }
 }

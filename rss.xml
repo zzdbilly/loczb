@@ -7,6 +7,14 @@
     <language>zh-CN</language>
     <atom:link href="https://709527.xyz/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>假期后的复工准备：把开工第一天当成一次灰度上线</title>
+      <link>https://709527.xyz/blog/posts/holiday-return-to-work-preparation.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/holiday-return-to-work-preparation.html</guid>
+      <description>长假结束不等于状态自动恢复。与其硬切回工作节奏，不如把复工当成一次灰度上线：先预热、再冒烟测试、最后逐步放大流量，用可验证的指标确认自己真的回到了正轨。</description>
+      <category>思考</category>
+      <pubDate>Thu, 08 Oct 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
       <title>国庆假期：把七天长假当成一次计划内停机维护</title>
       <link>https://709527.xyz/blog/posts/national-day-planned-maintenance.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/national-day-planned-maintenance.html</guid>
@@ -157,14 +165,6 @@
       <description>周五晚不该是工作的延续，也不该是报复性熬夜。给每一个辛苦了一周的程序员一份可落地的框架：告别、转换、收尾，三件小事让周末真正休息过来。</description>
       <category>思考</category>
       <pubDate>Fri, 14 Aug 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>2026 年了，AI 编程助手到底能帮你干多少活？</title>
-      <link>https://709527.xyz/blog/posts/2026-年了ai-编程助手到底能帮你干多少活.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/2026-年了ai-编程助手到底能帮你干多少活.html</guid>
-      <description>结合当前 Agent 编程趋势，聊聊 AI 助手能做/不能做/边界三层认知、五种实战协作心法，以及开发者如何重新定位自己</description>
-      <category>开发</category>
-      <pubDate>Wed, 12 Aug 2026 00:00:00 +0800</pubDate>
     </item>
   </channel>
 </rss>
