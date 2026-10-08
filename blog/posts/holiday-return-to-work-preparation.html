@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <script>document.documentElement.classList.add("js");try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://static.cloudflareinsights.com https://loczb-comments.billycust716.workers.dev; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://loczb-comments.billycust716.workers.dev https://dashscope.aliyuncs.com https://709527.xyz https://www.709527.xyz https://cloudflareinsights.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
+    <script>/* 反点击劫持兜底：GitHub Pages 无法下发 X-Frame-Options / CSP frame-ancestors */(function(){if(self===top)return;try{top.location=self.location}catch(e){}setTimeout(function(){if(self!==top){document.documentElement.style.display='none';}},400);})();</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>假期后的复工准备：把开工第一天当成一次灰度上线 | 张小猛 - loczb</title>
+    <meta name="description" content="长假结束不等于状态自动恢复。与其硬切回工作节奏，不如把复工当成一次灰度上线：先预热、再冒烟测试、最后逐步放大流量，用可验证的指标确认自己真的回到了正轨。">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="假期后的复工准备：把开工第一天当成一次灰度上线 | 张小猛 - loczb">
+    <meta property="og:description" content="长假结束不等于状态自动恢复。与其硬切回工作节奏，不如把复工当成一次灰度上线：先预热、再冒烟测试、最后逐步放大流量，用可验证的指标确认自己真的回到了正轨。">
+    <meta property="og:url" content="https://709527.xyz/blog/posts/holiday-return-to-work-preparation.html">
+    <meta property="og:type" content="article">
+    <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
+    <meta property="og:site_name" content="loczb">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="假期后的复工准备：把开工第一天当成一次灰度上线 | 张小猛 - loczb">
+    <meta name="twitter:description" content="长假结束不等于状态自动恢复。与其硬切回工作节奏，不如把复工当成一次灰度上线：先预热、再冒烟测试、最后逐步放大流量，用可验证的指标确认自己真的回到了正轨。">
+    <meta name="twitter:image" content="https://709527.xyz/assets/images/og-image.png">
+
+        <script type="application/ld+json">
+{
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "假期后的复工准备：把开工第一天当成一次灰度上线",
+      "description": "长假结束不等于状态自动恢复。与其硬切回工作节奏，不如把复工当成一次灰度上线：先预热、再冒烟测试、最后逐步放大流量，用可验证的指标确认自己真的回到了正轨。",
+      "image": "https://709527.xyz/assets/images/og-image.png",
+      "author": {
+            "@type": "Person",
+            "name": "张小猛",
+            "url": "https://709527.xyz/about/"
+      },
+      "publisher": {
+            "@type": "Organization",
+            "name": "loczb",
+            "logo": {
+                  "@type": "ImageObject",
+                  "url": "https://709527.xyz/assets/images/favicon.svg"
+            }
+      },
+      "datePublished": "2026-10-08T10:30:00+08:00",
+      "dateModified": "2026-10-08T10:30:00+08:00",
+      "url": "https://709527.xyz/blog/posts/holiday-return-to-work-preparation.html",
+      "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://709527.xyz/blog/posts/holiday-return-to-work-preparation.html"
+      },
+      "keywords": "复工准备, 精力管理, 工程师视角, 节奏复位",
+      "articleSection": "思考",
+      "timeRequired": "PT13M",
+      "inLanguage": "zh-CN"
+}
+    </script>
+
+    <link rel="stylesheet" href="../../assets/css/style.css?v=1c8566107b">
+    <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
+    <link rel="alternate icon" href="../../assets/images/favicon.ico">
+    <link rel="canonical" href="https://709527.xyz/blog/posts/holiday-return-to-work-preparation.html">
+</head>
+<body>
+  <!-- PARTIAL:SKIP_LINK -->
+  <a href="#main-content" class="skip-link">跳至主要内容</a>
+  <!-- /PARTIAL:SKIP_LINK -->
+
+  <!-- Navigation -->
+<!-- PARTIAL:NAV -->
+  <nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">
+      loc<span>zb</span>
+    </a>
+    <button class="nav-toggle" aria-label="打开菜单" aria-expanded="false" aria-controls="nav-links-menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <div class="nav-overlay"></div>
+    <ul class="nav-links" id="nav-links-menu">
+      <li><a href="/" class="nav-link" data-nav="home">首页</a></li>
+      <li><a href="/projects/" class="nav-link" data-nav="projects">项目</a></li>
+      <li><a href="/blog/" class="nav-link active" data-nav="blog">博客</a></li>
+      <li><a href="/about/" class="nav-link" data-nav="about">关于</a></li>
+    </ul>
+    <button class="theme-toggle" aria-label="切换主题" title="切换亮/暗模式">
+      <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="5"></circle>
+        <line x1="12" y1="1" x2="12" y2="3"></line>
+        <line x1="12" y1="21" x2="12" y2="23"></line>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+        <line x1="1" y1="12" x2="3" y2="12"></line>
+        <line x1="21" y1="12" x2="23" y2="12"></line>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+      </svg>
+      <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+      </svg>
+    </button>
+  </div>
+</nav>
+  <!-- /PARTIAL:NAV -->
+  <main class="section" id="main-content" style="padding-bottom: 0; padding-top: var(--space-4xl);">
+    <div class="container container-narrow">
+      <a href="../index.html" class="back-link">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        返回博客列表
+      </a>
+
+      <article class="post-content">
+        <h1>假期后的复工准备：把开工第一天当成一次灰度上线</h1>
+
+        <div class="post-meta">
+          <span class="meta-item"><span aria-hidden="true">📅</span> 2026-10-08 10:30:00</span>
+          <span class="meta-item"><span aria-hidden="true">⏱️</span> 13 min read</span>
+          <span class="meta-item"><span aria-hidden="true">👤</span> 张小猛</span>
+        </div>
+
+        <div class="post-tags">
+          <span class="tag">复工准备</span>
+          <span class="tag">精力管理</span>
+          <span class="tag">工程师视角</span>
+          <span class="tag">节奏复位</span>
+        </div>
+
+        
+
+        <h2>写在前面：这篇文章写给谁</h2>
+<p>如果你每次长假结束都要花好几天才找回工作状态、开工头两天效率低得可怜、或者一坐到工位就莫名烦躁，这篇文章是写给你的。我做了十多年开发，早些年每次假期回来都是同一个剧本：开工第一天靠意志力硬撑，结果下午就开始刷消息、看邮件、反复切窗口，一整天下来真正推进的事一件没有；到了周三才慢慢进入状态，等于白白浪费了两三天。</p>
+<p>后来我换了个思路——不再把复工当成「按一下开关就切回去」，而是当成一次<strong>灰度上线</strong>：先给系统预热，再跑一轮冒烟测试确认链路还通，最后逐步把流量放大到全量。这篇文章就是我这两年实操下来的一套方法，全是判断和取舍，不讲「加油」也不灌鸡汤。</p>
+<p>前置条件：你刚结束一个连续几天的假期，准备回到日常的工作节奏；你不追求开工第一天就满负荷，只希望这一周的效率曲线是往上走的，而不是前三天趴着、后两天赶工。</p>
+<h2>一、先纠正一个认知：复工不是按一下开关</h2>
+<h3>状态恢复是有斜率的，不是阶跃的</h3>
+<p>很多人对复工的默认假设是「开关模型」：假期最后一天是关，开工第一天是开，中间没有过渡。这个假设在物理世界就不成立——你的作息、注意力、对项目的上下文记忆，都是缓慢变化的量，不可能在跨过午夜十二点的那一刻全部复位。</p>
+<p>软件上线也不会这么干。哪怕只是改了一行配置，正规流程也是灰度：先让一小部分流量进来观察，稳定了再放大。人比软件脆弱得多，凭什么要求自己一步切到全量。</p>
+<h3>为什么硬切会失败：上下文缺失</h3>
+<p>开工第一天效率低，核心原因往往不是懒，而是<strong>上下文缺失</strong>。放假的这几天里，你脑子里关于项目的那套工作记忆被清掉了大半：某个正在改的分支叫什么、那个待办的决策卡在哪、上周那个 bug 复现路径是什么——这些信息放假前是热的，回来时已经凉了。</p>
+<p>上下文缺失不是靠「振作」能补回来的，只能靠重新加载。而加载是有成本的，你得给它时间。硬切的做法是假装它还在，直接冲进最难的活，结果就是反复卡壳、反复切窗口，越做越烦躁。</p>
+<h3>别把复工焦虑当成矫情</h3>
+<p>假期结束前后的那点烦躁和低落，是真实存在的状态波动，不是「意志力不够」。它的成因很朴素：你从一个高自由、低约束的时段，被推回到一个高约束、多中断的时段，同时还要面对积压的信息和任务。把它当成一个需要处理的系统状态，比当成一个需要克服的性格缺陷有用得多。</p>
+<p>处理它的方式不是「别想太多」，而是降低切换的落差：复工前一天就开始小幅回归作息，第一天把任务量压下来，给状态一个爬坡的坡道，而不是一道墙。</p>
+<h3>我的目标：让这周的效率曲线向上走</h3>
+<p>我给复工定的目标只有一句话：<strong>这一周的效率是往上爬的，不是先塌一个坑再填。</strong></p>
+<p>注意这个方向。不是「第一天就恢复满血」（不现实），也不是「随便混混到周末再说」（浪费一周），而是让曲线单调向上。产出是给公司的，状态是自己的，只有「这周越做越顺」这件事对你真正有长期价值。</p>
+<h2>二、开工前的那几个小时：先给系统预热</h2>
+<h3>睡眠复位：别用一次晚睡去还假期的债</h3>
+<p>复工前一天晚上最容易踩的坑，是「反正明天要早起，今晚早点睡」——然后因为睡得比平时早太多，躺下翻来覆去，反而更累。生物钟不是开关，是一个有惯性的系统。</p>
+<p>我的做法是<strong>只做小幅平移</strong>：假期如果习惯一点睡，复工前一天就挪到十二点，而不是直接跳到十一点。起床时间比睡觉时间更重要——固定一个接近工作日的起床点，用早晨的光照和活动把节律锚住。连续两三天小幅前移，比一夜之间硬掰回工作日作息稳得多。</p>
+<h3>身体复位：把饮食和作息一起调回来</h3>
+<p>假期里的饮食和作息通常比平时松散，这部分债在复工时会以「困、胀、提不起劲」的形式还回来。复工前一天开始，把三餐时间拉回工作日的点，减少重油重糖，多喝水——这不是养生说教，是把身体的输入输出节奏提前对齐，省得开工第一天一半的精力拿去消化。</p>
+<h3>环境复位：把工作台先恢复成可用状态</h3>
+<p>开工第一天手忙脚乱，很多时候是环境没准备好：桌面堆着假期的杂物、电脑还没开机预热、开发环境因为放了几天没动而各种过期。这些都是可以提前清掉的摩擦。</p>
+<p>我在复工前一天会花二十分钟做一次「环境巡检」：把工作台清干净、给机器做一次更新、把假期里改过的依赖或分支过一遍。这不是仪式感，是消除启动阻力——把开工第一天会分散注意力的杂事，提前在低压力时段处理掉。</p>
+<h3>信息复位：把消息入口从洪水调成涓流</h3>
+<p>假期里刻意关掉的通知，开工时会一次性涌回来。如果开工第一件事就是打开收件箱和所有群，你等于把一整周的积压信息灌进一个还没预热的脑子，注意力瞬间被冲垮。</p>
+<p>我的原则是<strong>分级放行</strong>：开工前先只恢复最必要的通道（直属协作、线上告警），其余的群和订阅源按天分批放。信息不是越多越好，积压的绝大多数消息在放几天后会发现根本不用回。</p>
+<pre><code class="language-text">复工前一天的环境巡检清单（示例）
+1. 工作台清空，只留当天要用的东西
+2. 机器更新到最新，开发环境确认能跑起来
+3. 假期里改过的分支 / stash 过一遍，决定去留
+4. 通知分级：只开必要通道，其余按天放行
+</code></pre>
+<h2>三、开工第一天：把复工当成一次灰度上线</h2>
+<h3>避开两个常见的错误开场</h3>
+<p>开工第一天有两种看起来很努力、实际在掉状态的开场方式。一是「一上来清空收件箱」：把积压消息从头清到尾，看起来在处理正事，其实是用低价值的重复劳动逃避真正需要动脑的那件事。二是「一上来就开长会」：用会议填满上午，把最清醒的时段交给同步和汇报，等到下午精力回落才轮到自己的活。</p>
+<p>正确的开场是反过来的：先用一段不被打断的时间跑完冒烟测试、启动那件深度活，把消息和会议往后放。</p>
+<h3>第一件事不是干活，是跑冒烟测试</h3>
+<p>灰度上线的第一步从来不是「上核心功能」，而是「确认系统还活着」。开工第一天同理：先别碰最难的活，先做一轮<strong>冒烟测试</strong>——用几件低风险、能快速确认链路还通的小事，把上下文重新加载起来。</p>
+<p>我会先看线上告警历史，确认假期期间没有遗留事故；再翻一遍自己负责模块的最近提交和待办，把「现在系统处于什么状态」重新建立起来。这一轮不产出业务价值，但它决定了后面几天你是带着清晰的上下文开工，还是带着一脑袋问号瞎撞。</p>
+<h3>任务重排：假期前的优先级大概率已经失效</h3>
+<p>放假前你列的待办，是按当时的上下文排的。放了几天回来，外部环境可能已经变了：某个依赖别人推进的活有了新进展、某个原本紧急的事因为跨了假期而自然降级、某个新需求插了进来。直接照旧清单干，等于拿着过期的地图找路。</p>
+<p>开工第一天我必做的一件事，是把清单<strong>重排一遍</strong>，而不是照着做。重排的动作包括：删掉已经没意义的条目、把被假期阻塞的事挪到能推进的位置、把真正紧急且重要的两件事挑出来放到最前面。清单不是越多越安心，是越准越省力。</p>
+<h3>只挑一件「深度活」开头</h3>
+<p>重排之后，从清单里挑<strong>一件事</strong>——一件需要连续注意力、当天能见到进展的深度任务——作为当天的锚。不是三件，是一件。</p>
+<p>原因和灰度一个道理：你的注意力带宽刚恢复，把它全部投给一件事，才有机会进入状态、拿到正反馈；一旦同时铺开三件，就变成了频繁切换，每件都只做了个开头，到下班一件都没完成，挫败感反过来又消耗第二天的状态。</p>
+<h3>给切换留出缓冲，别把日历排满</h3>
+<p>灰度上线永远留缓冲。开工第一天的日历同理：别把每个小时都排上会议和任务，上午留出两段不被会议切碎的连续时间，给那件深度活。</p>
+<p>排满的日历一旦被一个临时会议打乱，后面全线崩；留了缓冲的日历，意外只消耗缓冲，不破坏整体节奏。这条和排假期是同一个原则，只是把窗口从「七天」缩小到「一天」。</p>
+<h2>四、第一周：从灰度逐步放大到全量</h2>
+<h3>第二天到第三天：开始并行多件事</h3>
+<p>第一天单线程跑通之后，第二、三天可以把并行度提上来：同时推进两三件事，恢复正常的协作和会议节奏。这一步对应灰度里的「放大流量」——观察第一天没出问题，才把负载加上去。</p>
+<p>判断能不能放大的标准只有一条：第一天那件深度活有没有按预期推进完。推完了，说明上下文加载得不错，可以加量；没推完，说明第一天排得太满或者选错了任务，第二天继续单线程，别硬加。</p>
+<h3>周中：做一次中期回看</h3>
+<p>到了周三或周四，安排一次半小时的<strong>中期回看</strong>：这一周到现在，哪件事推进得比预期快、哪件卡住了、卡在什么地方。这个动作的价值在于，它能在周中就纠正方向，而不是等到周五才发现整周跑偏了。</p>
+<p>回看不是自我批判，是调整。卡住的事要么拆小、要么找人、要么明确推迟——但一定要给它一个明确的处置，不允许它含糊地悬在那里继续耗你的认知资源。</p>
+<h3>别在第一周就拍跨周的大决策</h3>
+<p>假期回来往往有一批「要不要做」的决策在等着：要不要接那个新项目、要不要换工具链、要不要调整方向。这些高影响决策最忌讳在状态还没复位时拍板——你的判断力还在爬坡，此时做的决定质量最低。</p>
+<p>我的做法是：把这类决策<strong>推迟到第一周结束</strong>，期间只做信息收集，不做取舍。等效率曲线爬到正常水平，再回头拍板。慢一点，但错得少。</p>
+<h3>周末前：把悬念清干净</h3>
+<p>这一周结束前，我会花一点时间把「没做完的事」明确地放下：把进度写进任务系统、把「下周第一件事」写下来、把悬而未决的决策标出来。这和收假前的收尾是同一件事——<strong>明确地放下，而不是含糊地悬着</strong>。悬着的任务会在后台持续占用注意力，明确放下的任务不会。</p>
+<h2>五、怎么验证复工是成功的</h2>
+<h3>三个可观测指标</h3>
+<p>复工做没做好，不看感觉，看指标。我给自己定了三个可观测的：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">指标</th>
+<th style="text-align: left;">达标线</th>
+<th style="text-align: left;">不达标说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">节奏</td>
+<td style="text-align: left;">第一天能连续专注一段完整时间</td>
+<td style="text-align: left;">上下文没加载起来，或日历排太满</td>
+</tr>
+<tr>
+<td style="text-align: left;">推进</td>
+<td style="text-align: left;">第一天那件深度活当天有可见进展</td>
+<td style="text-align: left;">选错了任务，或同时铺得太开</td>
+</tr>
+<tr>
+<td style="text-align: left;">情绪</td>
+<td style="text-align: left;">想到第二天上班是平常心，不是抵触</td>
+<td style="text-align: left;">某个债（多半是睡眠或关系）还没处理</td>
+</tr>
+</tbody>
+</table>
+<p>三个都达标，这次复工就是成功的。有一个不达标，说明对应的环节没做到位，下次调整那一步就行。</p>
+<h3>失败也没关系：灰度允许回滚</h3>
+<p>不是每次复工都会顺。可能开工当天就被临时事故打乱，可能重排后发现清单整个方向都错了。这没关系——灰度上线的价值恰恰在于<strong>允许回滚</strong>：发现不对就退回去，先单线程稳住，而不是硬着头皮全量推进。</p>
+<p>把这次的经验记下来（哪件事选对了、哪个环节最容易塌），下次复工的排法就会更准。复工和上线一样，是个迭代过程，不是一次性发布。</p>
+<h2>结尾：把「预热」的思路带回日常</h2>
+<p>写到这里，其实我真正想说的不是「假期结束该怎么办」。我想说的是：<strong>灰度上线的思路，可以带回日常。</strong></p>
+<p>你不需要等到长假结束才需要预热。每个周一都是一次小型复工，甚至每天早晨都是一次微型复工。区别只在于你有没有把它当一次有节奏的上线来对待——是硬切进去随波逐流，还是先预热、再冒烟、最后逐步放大。</p>
+<p>假期会结束，节奏可以重新拿回来。把它当成一次灰度上线，这一周结束的时候你会发现，你不是熬过来的，是顺过来的。</p>
+
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="national-day-planned-maintenance.html">
+            <div class="related-post-card-title">国庆假期：把七天长假当成一次计划内停机维护</div>
+            <div class="related-post-card-tags"><span>国庆假期</span><span>精力管理</span><span>工程师视角</span></div>
+          </a>
+          <a class="related-post-card" href="纳指定投把一笔月供当成长期运维来跑.html">
+            <div class="related-post-card-title">纳指定投：把一笔月供当成长期运维来跑</div>
+            <div class="related-post-card-tags"><span>理财</span><span>指数基金</span><span>定投</span></div>
+          </a>
+          <a class="related-post-card" href="tech-manager-vs-pm-vs-po.html">
+            <div class="related-post-card-title">技术经理、项目经理、产品经理的区别</div>
+            <div class="related-post-card-tags"><span>职场</span><span>团队管理</span><span>角色认知</span></div>
+          </a>
+          <a class="related-post-card" href="how-engineers-report.html">
+            <div class="related-post-card-title">技术人员如何做好汇报</div>
+            <div class="related-post-card-tags"><span>职场</span><span>沟通</span><span>汇报</span></div>
+          </a>
+          <a class="related-post-card" href="quick-energy-recovery.html">
+            <div class="related-post-card-title">如何快速恢复能量，让自己快乐起来</div>
+            <div class="related-post-card-tags"><span>能量管理</span><span>情绪</span><span>生活方式</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
+
+        <!-- Post Copyright & License Card -->
+        <div class="post-copyright-card">
+          <div class="copyright-header">
+            <div class="copyright-badge">
+              <span>📜</span>
+              <span>原创与知识共享协议</span>
+            </div>
+            <button class="copyright-cite-btn" id="copy-cite-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+              </svg>
+              <span>复制 Markdown 引用</span>
+            </button>
+          </div>
+          <div class="copyright-list">
+            <div class="copyright-item"><strong>文章标题：</strong>假期后的复工准备：把开工第一天当成一次灰度上线</div>
+            <div class="copyright-item"><strong>文章作者：</strong>张小猛 · loczb</div>
+            <div class="copyright-item"><strong>永久链接：</strong><a href="https://709527.xyz/blog/posts/holiday-return-to-work-preparation.html">https://709527.xyz/blog/posts/holiday-return-to-work-preparation.html</a></div>
+            <div class="copyright-item"><strong>版权声明：</strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 国际许可协议。商业转载请联系作者获得授权，非商业转载请注明出处。</div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </main>
+
+  <!-- Related Posts / Navigation -->
+  <section class="section" aria-label="读完之后" style="padding-top: 0;">
+    <div class="container container-narrow">
+      <!-- Post Nav Prev Next -->
+      <nav class="post-nav" aria-label="文章翻页导航">
+        <a href="national-day-planned-maintenance.html" class="post-nav-card post-nav-prev" rel="prev">
+          <span class="post-nav-label">← 上一篇</span>
+          <span class="post-nav-title">国庆假期：把七天长假当成一次计划内停机维护</span>
+        </a>
+        <div class="post-nav-card post-nav-next disabled" aria-disabled="true">
+          <span class="post-nav-label">下一篇 →</span>
+          <span class="post-nav-title">已是最新篇博文</span>
+        </div>
+      </nav>
+      <!-- /Post Nav Prev Next -->
+      <hr style="border: none; border-top: 1px solid var(--color-border); margin: var(--space-2xl) 0;">
+
+      <div class="blog-topics" style="margin-bottom: var(--space-xl); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+        <div>
+          <span class="topic-label">读完之后:</span>
+          <a href="../index.html" class="topic-tag">返回博客列表</a>
+          <a href="../index.html?view=series" class="topic-tag">浏览全部专栏</a>
+        </div>
+        <a href="#main-content" class="topic-tag" style="margin-left: auto;">↑ 回到顶部</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+<!-- PARTIAL:FOOTER -->
+  <footer class="footer" role="contentinfo">
+  <div class="footer-inner">
+    <p class="footer-signature">写代码，做产品，也认真生活。</p>
+    <div class="footer-social">
+      <a href="https://github.com/zzdbilly" class="footer-social-link" target="_blank" rel="noopener" aria-label="GitHub">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+      </a>
+      <a href="https://twitter.com/zzdbilly" class="footer-social-link" target="_blank" rel="noopener" aria-label="X (Twitter)">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      </a>
+      <a href="/rss.xml" class="footer-social-link" target="_blank" rel="noopener" aria-label="RSS 订阅">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+      </a>
+    </div>
+    <div class="footer-links">
+      <a href="/" class="footer-link">首页</a>
+      <a href="/projects/" class="footer-link">项目</a>
+      <a href="/blog/" class="footer-link">博客</a>
+      <a href="/about/" class="footer-link">关于</a>
+    </div>
+    <p class="footer-copyright">&copy; 2026 张小猛 · loczb · Built with care</p>
+  </div>
+</footer>
+  <!-- /PARTIAL:FOOTER -->
+
+  <script defer src="../../assets/js/main.js"></script>
+  <script defer src="../../assets/js/article.js?v=c9f1a378ea"></script>
+  <script defer src="../../assets/js/share.js"></script>
+  <!-- Back to Top & Reading Progress -->
+  <button class="back-to-top" id="backToTop" aria-label="回到顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
+  <div class="reading-progress" id="readingProgress"></div>
+
+  <!-- Post Sidebar Info（左侧） -->
+  <div class="post-sidebar-info" id="postSidebar">
+    <div class="post-info-card">
+      <div class="post-info-section">
+        <div class="post-info-label">作者</div>
+        <div class="post-info-author">
+          <div class="post-info-avatar">小</div>
+          <div>
+            <div class="post-info-author-name">张小猛</div>
+            <div class="post-info-author-desc">写代码，做产品</div>
+          </div>
+        </div>
+      </div>
+      <div class="post-info-section">
+        <div class="post-info-label">文章信息</div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📅</span> 发布日期</span><span class="post-info-stat-value">2026-10-08</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">⏱️</span> 阅读时间</span><span class="post-info-stat-value">13 min read</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">3721 字</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📊</span> 章节数</span><span class="post-info-stat-value">7 节 · 19 子节</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">💻</span> 代码块</span><span class="post-info-stat-value">1 段</span></div>
+      </div>
+      <div class="post-info-section" id="postSidebarTags">
+        <div class="post-info-label">标签</div>
+        <div class="post-info-links">
+          <a href="../../blog/index.html?tag=%E5%A4%8D%E5%B7%A5%E5%87%86%E5%A4%87" class="post-info-link"># 复工准备</a>
+          <a href="../../blog/index.html?tag=%E7%B2%BE%E5%8A%9B%E7%AE%A1%E7%90%86" class="post-info-link"># 精力管理</a>
+          <a href="../../blog/index.html?tag=%E5%B7%A5%E7%A8%8B%E5%B8%88%E8%A7%86%E8%A7%92" class="post-info-link"># 工程师视角</a>
+          <a href="../../blog/index.html?tag=%E8%8A%82%E5%A5%8F%E5%A4%8D%E4%BD%8D" class="post-info-link"># 节奏复位</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Post TOC -->
+  <div class="post-toc-container" id="postToc">
+    <nav class="post-toc" aria-label="文章目录">
+      <div class="post-toc-title">目录</div>
+      <ul class="post-toc-list" id="tocList">
+      </ul>
+    </nav>
+  </div>
+
+  <!-- Comment System -->
+  <script src="../../workers/comment-system/comment-widget.js?v=a650e91e3e" defer></script>
+
+  <!-- highlight.js 代码语法高亮（本地完整构建，无外部依赖） -->
+  <script defer src="../../assets/vendor/highlight/highlight.min.js"></script>
+  <script>
+    /* 语法高亮改为「可见优先、空闲补齐」：
+       highlight.js 要遍历全篇代码块并生成数百个 span，若在 DOMContentLoaded 里同步跑完，
+       会在关键路径上长时间占住主线程（2026-09-27 实测本页长任务 1548ms、DCL 3651ms；
+       改动后长任务 145ms、DCL 1378ms）。这里 DCL 阶段只登记观察，实际高亮交给
+       IntersectionObserver（近屏 800px 内优先）+ requestIdleCallback（剩余块每片 ≤4 块），
+       首屏代码块的着色时机与视觉基本无变化。 */
+    (function() {
+      function canPaint(b) {
+        return !b.classList.contains('hljs') && !b.closest('.codehilite');
+      }
+      function paint(b) {
+        if (!canPaint(b)) return;
+        try { hljs.highlightElement(b); } catch (e) {}
+      }
+      function init() {
+        var blocks = [].slice.call(document.querySelectorAll('pre code')).filter(canPaint);
+        if (!blocks.length) return;
+        if ('IntersectionObserver' in window) {
+          var io = new IntersectionObserver(function(entries, obs) {
+            entries.forEach(function(en) {
+              if (!en.isIntersecting) return;
+              paint(en.target);
+              obs.unobserve(en.target);
+            });
+          }, { rootMargin: '800px 0px' });
+          blocks.forEach(function(b) { io.observe(b); });
+        }
+        var i = 0;
+        var idle = window.requestIdleCallback || window.setTimeout;
+        var step = function() {
+          var quota = 4;
+          while (i < blocks.length && quota-- > 0) paint(blocks[i++]);
+          if (i < blocks.length) idle(step);
+        };
+        idle(step); // 不在 DCL 里同步跑：可见块由 IntersectionObserver 处理，其余走空闲分片
+      }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+      } else {
+        init();
+      }
+    })();
+  </script>
+
+  <!-- Cloudflare Web Analytics -->
+  <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "29e7cff6f37448989538e2165cb79187"}'></script>
+</body>
+</html>
