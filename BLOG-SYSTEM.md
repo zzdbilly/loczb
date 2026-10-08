@@ -157,7 +157,7 @@ python3 scripts/generate-post.py "标题" "描述" \
 
 **必需参数**：
 - `--tags`：逗号分隔标签
-- `--category`：文章分类（Android | Kotlin | AI | 前端 | DevOps | 安全 | 数据库 | 系统编程 | 开发）
+- `--category`：文章分类（Android | Kotlin | AI | 前端 | 思考 | DevOps | 安全 | 数据库 | 系统编程 | 开发）
 
 **可选参数**：
 - `--date YYYY-MM-DD`：指定日期（默认今天）

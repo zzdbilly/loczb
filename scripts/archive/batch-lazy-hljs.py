@@ -6,6 +6,11 @@
 """
 import glob, sys, os
 
+if '--force-run' not in sys.argv:
+    print("⛔ 本脚本已归档停用：语法高亮/TOC/可访问性批量手术已执行完毕（dry-run 复核 0 变更）。")
+    print("   如确实需要重跑，请显式传入 --force-run 参数（建议先加 --dry 只统计）。")
+    sys.exit(1)
+
 DRY = '--dry' in sys.argv
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 

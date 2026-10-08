@@ -1,7 +1,15 @@
 /**
  * Time Progress Bar
  * 时光进度条 - 显示今年已过去多少%、本月还剩多少天
+ *
+ * [已归档 · 禁止无脑重跑] 容器 .time-progress-container 已于 3c15377 移除，组件全站下线。
  */
+
+if (!process.argv.includes('--force-run')) {
+  console.error("⛔ 本脚本已归档停用：时光进度条组件已全站下线（容器 .time-progress-container 于 3c15377 移除）。");
+  console.error("   如确实需要重新加载该组件，请显式传入 --force-run 参数。");
+  process.exit(1);
+}
 
 class TimeProgress {
   constructor(containerSelector) {
