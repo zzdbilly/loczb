@@ -1,6 +1,21 @@
 {
   "posts": [
     {
+      "slug": "freedom-then-wealth-or-wealth-then-freedom",
+      "title": "先自由后财富，还是先财富后自由",
+      "date": "2026-10-10",
+      "dateTime": "2026-10-10 15:00:00",
+      "category": "思考",
+      "tags": [
+        "自由",
+        "财富",
+        "职业选择",
+        "长期主义"
+      ],
+      "readTime": 14,
+      "url": "blog/posts/freedom-then-wealth-or-wealth-then-freedom.html"
+    },
+    {
       "slug": "holiday-return-to-work-preparation",
       "title": "假期后的复工准备：把开工第一天当成一次灰度上线",
       "date": "2026-10-08",
@@ -1808,9 +1823,9 @@
     "安全"
   ],
   "stats": {
-    "totalPosts": 115,
-    "totalTags": 302,
-    "latestDate": "2026-10-08",
+    "totalPosts": 116,
+    "totalTags": 304,
+    "latestDate": "2026-10-10",
     "oldestDate": "2026-02-15"
   }
 }

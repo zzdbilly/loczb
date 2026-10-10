@@ -7,6 +7,14 @@
     <language>zh-CN</language>
     <atom:link href="https://709527.xyz/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>先自由后财富，还是先财富后自由</title>
+      <link>https://709527.xyz/blog/posts/freedom-then-wealth-or-wealth-then-freedom.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/freedom-then-wealth-or-wealth-then-freedom.html</guid>
+      <description>大多数人把它当成二选一，其实问错了。把「自由」和「财富」各拆成两半再交叉，顺序问题会变成结构问题——我给四条能拿去做判断的判据。</description>
+      <category>思考</category>
+      <pubDate>Sat, 10 Oct 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
       <title>假期后的复工准备：把开工第一天当成一次灰度上线</title>
       <link>https://709527.xyz/blog/posts/holiday-return-to-work-preparation.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/holiday-return-to-work-preparation.html</guid>
@@ -157,14 +165,6 @@
       <description>恢复与创造并重，让周末不再越休越累——从识别消耗型休息、主动回血，到用小小创造留下属于你的痕迹。</description>
       <category>思考</category>
       <pubDate>Sun, 16 Aug 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>程序员的周五晚上，如何有意义地度过</title>
-      <link>https://709527.xyz/blog/posts/程序员的周五晚上如何有意义地度过.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/程序员的周五晚上如何有意义地度过.html</guid>
-      <description>周五晚不该是工作的延续，也不该是报复性熬夜。给每一个辛苦了一周的程序员一份可落地的框架：告别、转换、收尾，三件小事让周末真正休息过来。</description>
-      <category>思考</category>
-      <pubDate>Fri, 14 Aug 2026 00:00:00 +0800</pubDate>
     </item>
   </channel>
 </rss>
