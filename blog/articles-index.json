@@ -1,6 +1,21 @@
 {
   "posts": [
     {
+      "slug": "what-matters-most-for-ordinary-people-in-the-ai-era",
+      "title": "AI 时代，我们普通人最重要的是什么",
+      "date": "2026-10-11",
+      "dateTime": "2026-10-11 16:30:00",
+      "category": "思考",
+      "tags": [
+        "AI时代",
+        "判断力",
+        "个人成长",
+        "长期主义"
+      ],
+      "readTime": 14,
+      "url": "blog/posts/what-matters-most-for-ordinary-people-in-the-ai-era.html"
+    },
+    {
       "slug": "freedom-then-wealth-or-wealth-then-freedom",
       "title": "先自由后财富，还是先财富后自由",
       "date": "2026-10-10",
@@ -1823,9 +1838,9 @@
     "安全"
   ],
   "stats": {
-    "totalPosts": 116,
-    "totalTags": 304,
-    "latestDate": "2026-10-10",
+    "totalPosts": 117,
+    "totalTags": 306,
+    "latestDate": "2026-10-11",
     "oldestDate": "2026-02-15"
   }
 }
