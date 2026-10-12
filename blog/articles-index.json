@@ -1,6 +1,21 @@
 {
   "posts": [
     {
+      "slug": "how-to-spend-the-afternoon-work-block-well",
+      "title": "下午不是太长，是结构太薄",
+      "date": "2026-10-12",
+      "dateTime": "2026-10-12 17:30:00",
+      "category": "思考",
+      "tags": [
+        "精力管理",
+        "工作节奏",
+        "时间管理",
+        "效率"
+      ],
+      "readTime": 14,
+      "url": "blog/posts/how-to-spend-the-afternoon-work-block-well.html"
+    },
+    {
       "slug": "what-matters-most-for-ordinary-people-in-the-ai-era",
       "title": "AI 时代，普通人真正稀缺的是什么",
       "date": "2026-10-11",
@@ -1838,9 +1853,9 @@
     "安全"
   ],
   "stats": {
-    "totalPosts": 117,
-    "totalTags": 306,
-    "latestDate": "2026-10-11",
+    "totalPosts": 118,
+    "totalTags": 308,
+    "latestDate": "2026-10-12",
     "oldestDate": "2026-02-15"
   }
 }

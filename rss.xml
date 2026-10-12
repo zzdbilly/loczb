@@ -7,6 +7,14 @@
     <language>zh-CN</language>
     <atom:link href="https://709527.xyz/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>下午不是太长，是结构太薄</title>
+      <link>https://709527.xyz/blog/posts/how-to-spend-the-afternoon-work-block-well.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/how-to-spend-the-afternoon-work-block-well.html</guid>
+      <description>大多数人以为下午难熬是因为它太长，其实是这段时间里没有结构。把午后当成一段低带宽时段来设计——切块、错配任务、压低启动门槛，时间有了形状，人就不容易被它拖着走。</description>
+      <category>思考</category>
+      <pubDate>Mon, 12 Oct 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
       <title>AI 时代，普通人真正稀缺的是什么</title>
       <link>https://709527.xyz/blog/posts/what-matters-most-for-ordinary-people-in-the-ai-era.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/what-matters-most-for-ordinary-people-in-the-ai-era.html</guid>
@@ -157,14 +165,6 @@
       <description>用工程师的思维看带娃：需求分析、状态监控、容错设计、灰度发布、日志排查——原来养孩子比写代码更像在做系统运维</description>
       <category>思考</category>
       <pubDate>Wed, 19 Aug 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>从 OpenClaw 到 Hermes：AI Agent 工作区迁移完整记录</title>
-      <link>https://709527.xyz/blog/posts/从-openclaw-到-hermesai-agent-工作区迁移完整记录.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/从-openclaw-到-hermesai-agent-工作区迁移完整记录.html</guid>
-      <description>一次真实的 AI Agent 平台迁移复盘：身份、记忆、技能、项目与定时任务的全量迁移方向、踩坑与验证方法</description>
-      <category>DevOps</category>
-      <pubDate>Tue, 18 Aug 2026 00:00:00 +0800</pubDate>
     </item>
   </channel>
 </rss>
