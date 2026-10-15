@@ -1,6 +1,21 @@
 {
   "posts": [
     {
+      "slug": "how-to-build-passive-income",
+      "title": "没有一开始就被动的收入：把重复劳动变成资产",
+      "date": "2026-10-15",
+      "dateTime": "2026-10-15 09:30:00",
+      "category": "思考",
+      "tags": [
+        "被动收入",
+        "资产思维",
+        "个人成长",
+        "长期主义"
+      ],
+      "readTime": 14,
+      "url": "blog/posts/how-to-build-passive-income.html"
+    },
+    {
       "slug": "how-to-spend-the-afternoon-work-block-well",
       "title": "下午不是太长，是结构太薄",
       "date": "2026-10-12",
@@ -1853,9 +1868,9 @@
     "安全"
   ],
   "stats": {
-    "totalPosts": 118,
-    "totalTags": 308,
-    "latestDate": "2026-10-12",
+    "totalPosts": 119,
+    "totalTags": 310,
+    "latestDate": "2026-10-15",
     "oldestDate": "2026-02-15"
   }
 }
