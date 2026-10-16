@@ -1,6 +1,21 @@
 {
   "posts": [
     {
+      "slug": "make-the-most-of-your-api-quota",
+      "title": "额度不是存款：省下来的那部分，是最贵的浪费",
+      "date": "2026-10-16",
+      "dateTime": "2026-10-16 21:30:00",
+      "category": "思考",
+      "tags": [
+        "AI",
+        "API 额度",
+        "成本管理",
+        "工作流"
+      ],
+      "readTime": 14,
+      "url": "blog/posts/make-the-most-of-your-api-quota.html"
+    },
+    {
       "slug": "how-to-build-passive-income",
       "title": "没有一开始就被动的收入：把重复劳动变成资产",
       "date": "2026-10-15",
@@ -1868,9 +1883,9 @@
     "安全"
   ],
   "stats": {
-    "totalPosts": 119,
-    "totalTags": 310,
-    "latestDate": "2026-10-15",
+    "totalPosts": 120,
+    "totalTags": 312,
+    "latestDate": "2026-10-16",
     "oldestDate": "2026-02-15"
   }
 }
