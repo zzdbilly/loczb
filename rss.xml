@@ -7,6 +7,14 @@
     <language>zh-CN</language>
     <atom:link href="https://709527.xyz/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>额度不是存款：省下来的那部分，是最贵的浪费</title>
+      <link>https://709527.xyz/blog/posts/make-the-most-of-your-api-quota.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/make-the-most-of-your-api-quota.html</guid>
+      <description>AI 额度不会生息，只会过期。用不完的那部分不是省下来的，是沉没掉的。把额度当成有保质期的库存：盘点、分层、调度、例行体检。</description>
+      <category>思考</category>
+      <pubDate>Fri, 16 Oct 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
       <title>没有一开始就被动的收入：把重复劳动变成资产</title>
       <link>https://709527.xyz/blog/posts/how-to-build-passive-income.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/how-to-build-passive-income.html</guid>
@@ -157,14 +165,6 @@
       <description>久坐、熬夜、高压是程序员的职业三件套，但健康和代码一样可以工程化管理。从颈椎腰椎到睡眠饮食，从运动体检到心理减压，一份可以直接落地的健康维护方案。</description>
       <category>思考</category>
       <pubDate>Sun, 23 Aug 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>AI 助手定时任务投递指南：从 Agent 废话到 No-Agent 脚本</title>
-      <link>https://709527.xyz/blog/posts/ai-助手定时任务投递指南从-agent-废话到-no-agent-脚本.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/ai-助手定时任务投递指南从-agent-废话到-no-agent-脚本.html</guid>
-      <description>一份基于真实踩坑经验的定时任务投递实战：LLM 生成 vs 脚本直投，如何让机器人每天准时、干净、以「回复」样式把日报送到你面前。</description>
-      <category>开发</category>
-      <pubDate>Thu, 20 Aug 2026 00:00:00 +0800</pubDate>
     </item>
   </channel>
 </rss>
