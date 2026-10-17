@@ -55,7 +55,7 @@
 }
     </script>
 
-    <link rel="stylesheet" href="../../assets/css/style.css?v=8a8f6ab552">
+    <link rel="stylesheet" href="../../assets/css/style.css?v=c8e170d8f9">
     <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
     <link rel="alternate icon" href="../../assets/images/favicon.ico">
     <link rel="canonical" href="https://709527.xyz/blog/posts/kotlin-flow-advanced.html">
@@ -113,7 +113,6 @@
       </a>
 
       <article class="post-content">
-        <div class="post-category-badge"><span class="badge-dot" aria-hidden="true"></span><span>Android</span></div>
         <h1>Kotlin Flow 进阶：背压策略与共享流</h1>
 
         <div class="post-meta">
@@ -155,10 +154,6 @@
           </details>
         </div>
         <!-- /Series Card Widget -->
-
-        <hr class="post-header-divider">
-
-        
 
         <p>用 Kotlin Flow 替换 LiveData 之后，很多人止步于 <code>flow { }</code> + <code>collect { }</code> 的基本用法。但当生产者发射速度超过消费者处理速度时，问题就来了——背压（Backpressure）。当你想让多个订阅者共享同一个数据源时，冷流的热化——共享流（SharedFlow / StateFlow）就是必修课。</p>
 <p>本文是 Kotlin Flow 进阶篇，聚焦两个实战核心：背压策略与共享流机制。</p>
