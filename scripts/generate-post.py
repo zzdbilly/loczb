@@ -471,6 +471,7 @@ def generate_article(title, description, article_date, read_time, tags, content_
     
     # 专栏 Banner（series 来自 frontmatter，属不可信文本，转义后再插入）
     series_html = f'<div class="series-banner spotlight-card"><div class="series-badge">📌 专栏收录</div><div class="series-title">{html_escape(str(series), quote=True)}</div></div>' if series else ''
+    category_badge_html = f'<div class="post-category-badge"><span class="badge-dot" aria-hidden="true"></span><span>{html_escape(str(category), quote=True)}</span></div>' if category else ''
     
     # 输出转义：同一份值同时落在 <title>/<h1> 文本与 <meta content="..."> 属性里，
     # 统一按属性语义用 html_escape(quote=True)，文本上下文同样安全
@@ -483,6 +484,7 @@ def generate_article(title, description, article_date, read_time, tags, content_
     html = html.replace('{{DESCRIPTION}}', description_esc)
     html = html.replace('{{OG_URL}}', og_url)
     html = html.replace('{{JSON_LD}}', json_ld)
+    html = html.replace('{{ARTICLE_CATEGORY_BADGE}}', category_badge_html)
     html = html.replace('{{ARTICLE_TITLE}}', title_text_esc)
     html = html.replace('{{ARTICLE_DATE}}', html_escape(str(article_date), quote=True))
     html = html.replace('{{ARTICLE_READ_TIME}}', f"{read_time} min read")

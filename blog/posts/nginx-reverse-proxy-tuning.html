@@ -55,7 +55,7 @@
 }
     </script>
 
-    <link rel="stylesheet" href="../../assets/css/style.css?v=c8e170d8f9">
+    <link rel="stylesheet" href="../../assets/css/style.css?v=8a8f6ab552">
     <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
     <link rel="alternate icon" href="../../assets/images/favicon.ico">
     <link rel="canonical" href="https://709527.xyz/blog/posts/nginx-reverse-proxy-tuning.html">
@@ -113,6 +113,7 @@
       </a>
 
       <article class="post-content">
+        <div class="post-category-badge"><span class="badge-dot" aria-hidden="true"></span><span>DevOps</span></div>
         <h1>Nginx 反向代理性能调优：从入门到生产</h1>
 
         <div class="post-meta">
@@ -154,6 +155,10 @@
           </details>
         </div>
         <!-- /Series Card Widget -->
+
+        <hr class="post-header-divider">
+
+        
 
         <p>Nginx 作为反向代理几乎是现代 Web 架构的标配。但很多人止步于 <code>proxy_pass</code> 的基本配置，默认参数跑起来能工作，一上量就出问题——502 频发、SSL 握手拖慢首字节、缓存没命中反而多了一跳、限流太粗暴误杀正常用户。</p>
 <p>本文从反向代理基础概念出发，逐层深入到 worker 调优、负载均衡、SSL 加速、缓存策略、压缩传输、限流安全和监控体系，最后给出一份可直接用于生产环境的检查清单。</p>
