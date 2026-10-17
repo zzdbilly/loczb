@@ -7,6 +7,9 @@
   'use strict';
 
   document.addEventListener('DOMContentLoaded', () => {
+    // === 顶部极光阅读进度条 ===
+    initReadingProgressBar();
+
     // === macOS 风格代码块与复制功能 ===
     initCodeBlocks();
 
@@ -224,6 +227,30 @@
       });
     })();
   });
+
+  // === 顶部极光阅读进度条 ===
+  function initReadingProgressBar() {
+    const nav = document.querySelector('.nav');
+    if (!nav || document.getElementById('readingProgressBar')) return;
+
+    const bar = document.createElement('div');
+    bar.id = 'readingProgressBar';
+    bar.className = 'reading-progress-bar';
+    nav.appendChild(bar);
+
+    function updateProgress() {
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      if (docHeight <= 0) {
+        bar.style.width = '0%';
+        return;
+      }
+      const progress = Math.min(100, Math.max(0, (window.scrollY / docHeight) * 100));
+      bar.style.width = progress + '%';
+    }
+
+    window.addEventListener('scroll', updateProgress, { passive: true });
+    updateProgress();
+  }
 
   // === 自适应数据表格横向滚动容器与无障碍标注 ===
   function initTables() {
