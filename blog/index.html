@@ -109,7 +109,7 @@
         <div class="blog-hero-info">
           <div class="status-pill" style="margin-bottom: 0.5rem;">
             <span class="pulse-dot"></span>
-            <span><!-- POSTS_COUNT -->120<!-- /POSTS_COUNT --> 篇深度文章 · 持续迭代中</span>
+            <span><!-- POSTS_COUNT -->121<!-- /POSTS_COUNT --> 篇深度文章 · 持续迭代中</span>
           </div>
           <h1 class="blog-hero-title">技术<span class="gradient-text">博客</span></h1>
           <p class="blog-hero-subtitle">Android、Kotlin、端侧 AI、全栈架构与开发思考</p>
@@ -163,7 +163,7 @@
           <button class="view-toggle-btn active" data-view="list" role="tab" aria-selected="true" aria-controls="blog-list">
             <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h7"/></svg>
             <span class="tab-text">全部文章</span>
-            <span class="tab-badge"><!-- POSTS_COUNT -->120<!-- /POSTS_COUNT --></span>
+            <span class="tab-badge"><!-- POSTS_COUNT -->121<!-- /POSTS_COUNT --></span>
           </button>
           <button class="view-toggle-btn" data-view="series" role="tab" aria-selected="false" aria-controls="series-view">
             <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><line x1="9" y1="7" x2="15" y2="7"/><line x1="9" y1="11" x2="13" y2="11"/></svg>
@@ -179,6 +179,28 @@
       </div>
       <div class="blog-list-container" id="blog-list">
         <!-- Post List -->
+        <article class="blog-list-item spotlight-card animate-on-scroll" data-category="思考" data-tags="休息,精力管理,自我管理,生活方式" data-page="1">
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-10-17</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 14 min</span>
+              </div>
+              <span class="blog-list-tag">思考</span>
+            </div>
+            <h3 class="blog-list-title">
+              <a href="posts/rest-is-not-stolen-time.html">休息不是偷来的：它排在忙的前面</a>
+            </h3>
+            <p class="blog-list-excerpt">把休息定义成「从忙里偷出来的剩余物」，会连着毁掉三件事：质量、顺序和正当性。忙的时候最不该省的，恰恰就是它。</p>
+          </div>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#休息</span> <span class="tag-pill">#精力管理</span> <span class="tag-pill">#自我管理</span>
+            </div>
+            <a href="posts/rest-is-not-stolen-time.html" class="blog-read-more" aria-label="阅读全文：休息不是偷来的：它排在忙的前面"><span>阅读全文</span><span class="read-more-arrow">→</span></a>
+          </div>
+        </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="思考" data-tags="AI,API 额度,成本管理,工作流" data-page="1">
           <div>
             <div class="blog-list-header">
@@ -377,39 +399,17 @@
             <a href="posts/idempotent-reproducible-builds.html" class="blog-read-more" aria-label="阅读全文：幂等与可复现：为什么你的构建总在产生无意义的 diff"><span>阅读全文</span><span class="read-more-arrow">→</span></a>
           </div>
         </article>
-        <article class="blog-list-item spotlight-card animate-on-scroll" data-category="思考" data-tags="职场,团队管理,角色认知" data-page="1">
-          <div>
-            <div class="blog-list-header">
-              <div class="blog-list-meta">
-                <span class="blog-date">📅 2026-09-21</span>
-                <span>·</span>
-                <span class="blog-read-time">⏱️ 12 min</span>
-              </div>
-              <span class="blog-list-tag">思考</span>
-            </div>
-            <h3 class="blog-list-title">
-              <a href="posts/tech-manager-vs-pm-vs-po.html">技术经理、项目经理、产品经理的区别</a>
-            </h3>
-            <p class="blog-list-excerpt">三个都叫「经理」的岗位到底差在哪：对什么负责、权力从哪来、时间花在哪、失败长什么样，以及想转过去要提前补什么。</p>
-          </div>
-          <div class="blog-list-footer">
-            <div class="blog-list-tags">
-              <span class="tag-pill">#职场</span> <span class="tag-pill">#团队管理</span> <span class="tag-pill">#角色认知</span>
-            </div>
-            <a href="posts/tech-manager-vs-pm-vs-po.html" class="blog-read-more" aria-label="阅读全文：技术经理、项目经理、产品经理的区别"><span>阅读全文</span><span class="read-more-arrow">→</span></a>
-          </div>
-        </article>
       <!-- /Post List -->
       </div>
       <!-- 分页 -->
-      <div class="pagination" id="pagination" data-total-pages="12" data-static-page="1">
+      <div class="pagination" id="pagination" data-total-pages="13" data-static-page="1">
         <span class="pagination-btn pagination-prev disabled" aria-disabled="true" title="上一页"><span class="pagination-arrow">←</span></span>
         <div class="pagination-pages">
           <span class="pagination-btn active" aria-current="page">1</span>
           <a href="page-2.html" class="pagination-btn">2</a>
           <a href="page-3.html" class="pagination-btn">3</a>
           <span class="pagination-ellipsis">···</span>
-          <a href="page-12.html" class="pagination-btn">12</a>
+          <a href="page-13.html" class="pagination-btn">13</a>
         </div>
         <a href="page-2.html" class="pagination-btn pagination-next" rel="next" aria-label="下一页" title="下一页"><span class="pagination-arrow">→</span></a>
       </div>
