@@ -48,9 +48,9 @@
   --nav-height: 73px;
   --color-border: rgba(255, 255, 255, 0.15);
   --color-border-hover: rgba(255, 255, 255, 0.25);
-  --font-sans: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Text", "Segoe UI", Roboto, "Helvetica Neue", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Source Han Sans SC", "Noto Sans SC", sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
   --font-serif: Georgia, "Times New Roman", "Songti SC", "SimSun", serif;
-  --font-mono: "SF Mono", Monaco, Consolas, "Courier New", monospace;
+  --font-mono: "JetBrains Mono", "Cascadia Code", "Fira Code", "SF Mono", Menlo, Monaco, Consolas, "Roboto Mono", "Courier New", monospace;
   --text-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);
   --text-sm: clamp(0.875rem, 0.8rem + 0.375vw, 1rem);
   --text-base: clamp(1rem, 0.9rem + 0.5vw, 1.125rem);
@@ -3390,7 +3390,7 @@ button.share-btn {
 }
 .post-toc-container {
   position: fixed;
-  right: 2rem;
+  right: max(1.5rem, calc((100% - 800px) / 2 - 250px));
   top: 180px;
   width: 220px;
   max-height: calc(100vh - 220px);
@@ -3399,9 +3399,14 @@ button.share-btn {
   display: none;
   z-index: 50;
 }
-@media (min-width: 1200px) {
+@media (min-width: 1366px) {
   .post-toc-container {
     display: block;
+  }
+}
+@media (max-width: 1365px) {
+  .post-toc-container {
+    display: none !important;
   }
 }
 .post-toc {
@@ -3608,7 +3613,7 @@ button.share-btn {
   display: block;
   opacity: 1;
 }
-@media (max-width: 1199px) {
+@media (max-width: 1365px) {
   .mobile-toc-btn {
     display: flex;
   }
@@ -3828,7 +3833,7 @@ body .toc-drawer .toc-h2 {
   margin: 0;
   font-size: 0.9rem;
   white-space: pre;
-  line-height: 1.5;
+  line-height: 1.6;
   font-family: var(--font-mono);
   border: 1px solid var(--color-border);
 }
@@ -3837,7 +3842,7 @@ body .toc-drawer .toc-h2 {
   border-color: #3f3f46;
 }
 .post-content pre code {
-  line-height: 1.5;
+  line-height: 1.6;
   display: block;
   background: transparent;
   padding: 0;
@@ -7329,7 +7334,7 @@ html, body {
   display: none;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1365px) {
   .mobile-reading-toolbar {
     display: flex;
     position: fixed;
