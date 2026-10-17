@@ -1,6 +1,21 @@
 {
   "posts": [
     {
+      "slug": "rest-is-not-stolen-time",
+      "title": "休息不是偷来的：它排在忙的前面",
+      "date": "2026-10-17",
+      "dateTime": "2026-10-17 19:15:00",
+      "category": "思考",
+      "tags": [
+        "休息",
+        "精力管理",
+        "自我管理",
+        "生活方式"
+      ],
+      "readTime": 14,
+      "url": "blog/posts/rest-is-not-stolen-time.html"
+    },
+    {
       "slug": "make-the-most-of-your-api-quota",
       "title": "额度不是存款：省下来的那部分，是最贵的浪费",
       "date": "2026-10-16",
@@ -1883,9 +1898,9 @@
     "安全"
   ],
   "stats": {
-    "totalPosts": 120,
-    "totalTags": 312,
-    "latestDate": "2026-10-16",
+    "totalPosts": 121,
+    "totalTags": 313,
+    "latestDate": "2026-10-17",
     "oldestDate": "2026-02-15"
   }
 }
