@@ -277,7 +277,7 @@ node scripts/verify.js && node scripts/check-links.js   # 双绿再推
 - ✅ 更新 `index.html` 大卡 + 文章列表 + JS posts 数组
 - ✅ 跑 `scripts/verify.js` 一致性门禁（posts/index/meta 对账 + 主页面 ?v= 一致 + 体积门禁 + 静态相关文章 + 静态分页 + category 白名单；非零退出即阻断 push）
   - 体积门禁阈值：`articles-index.json` 超 **250KB 只预警**（非阻断提示）、超 **400KB 阻断**；两条线可用 `INDEX_WARN_BYTES` / `INDEX_FAIL_BYTES` 环境变量覆盖，便于验证门禁行为
-  - 当前实测 ≈436 字节/篇（113 篇 49KB），按此外推：581 篇触预警、930 篇触阻断
+  - 当前实测 ≈447 字节/篇（121 篇 52.9KB，2026-10-17 实测），按此外推：572 篇触预警、915 篇触阻断
 
 ### 推送后自动完成
 - **GitHub Pages** 推送后自动构建部署（常规 1-2 分钟；若线上仍旧版，查首页 `last-modified` 判断是否漏触发构建）
@@ -338,11 +338,11 @@ node scripts/verify.js && node scripts/check-links.js   # 双绿再推
 | 正文形态 | 渲染器 | 原因 |
 |---------|--------|------|
 | HTML 外壳型（首行以 `<` 开头，存量 111 篇） | 零依赖逐行渲染器 | 与线上产物逐字一致，重建不产生无意义 diff；不受「构建机装没装库」影响 |
-| 纯 Markdown 型（首行是 `## 标题` 等，存量 2 篇 + 以后新写的） | python `markdown` 库 | 复杂表格对齐语法、无外框竖线的表格行、嵌套列表、多行引用才正确；正文里的 `snake_case` 不会被吃成斜体 |
+| 纯 Markdown 型（首行是 `## 标题` 等，存量 10 篇 + 以后新写的；2026-10-17 实测） | python `markdown` 库 | 复杂表格对齐语法、无外框竖线的表格行、嵌套列表、多行引用才正确；正文里的 `snake_case` 不会被吃成斜体 |
 
 ⚠️ **`requirements.txt` 是构建机的硬依赖**：纯 Markdown 正文缺库时 `build-posts.py` **直接
 exit 1**（不再静默退回逐行渲染器）。实测两种引擎在同一份复杂语法样例上装库 8/10 项 vs
-纯 Python 3/10，且产物逐字不同（984 vs 730 字符）⇒ 缺库时整站重建都会失败（因为那 2 篇）。
+纯 Python 3/10，且产物逐字不同（984 vs 730 字符）⇒ 缺库时整站重建都会失败（因为那 10 篇）。
 重建前先 `python3 -c 'import markdown'` 确认。
 
 ⚠️ **不支持 GFM 扩展**：删除线 `~~`、任务列表 `[x]` 两个引擎都不认，需要另加扩展
