@@ -8,6 +8,7 @@
     "build:posts": "python3 scripts/build-posts.py",
     "verify": "node scripts/verify.js",
     "check-links": "node scripts/check-links.js",
+    "privacy-scan": "python3 scripts/privacy-scan.py",
     "test": "python3 -m unittest discover -s tests",
     "refresh": "python3 scripts/build-posts.py",
     "sync-partials": "node scripts/sync-partials.js"
