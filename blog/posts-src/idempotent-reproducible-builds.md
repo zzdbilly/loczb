@@ -467,7 +467,7 @@ PY
 <li>首页、列表页、索引 JSON、sitemap、RSS 五处都能查到本次发布的标识。</li>
 <li>若线上持续 404，先看首页响应头的 <code>last-modified</code>：它若不包含本次构建时间，说明站点构建没有被触发，用一次空提交触发重建，而不是归因于内容错误。</li>
 </ul>
-<pre><code class="language-bash">git -c user.name=zzdbilly -c user.email=billycust716@gmail.com commit -m &quot;新增文章：示例标题（example-slug）&quot;
+<pre><code class="language-bash">git -c user.name=zzdbilly -c user.email=you@example.com commit -m &quot;新增文章：示例标题（example-slug）&quot;
 git log -1 --format='%ae'
 curl -sS -o /dev/null -w '%{http_code}\n' -A 'Mozilla/5.0' https://example.com/blog/posts/example-slug.html
 </code></pre>

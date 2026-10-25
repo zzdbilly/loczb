@@ -229,7 +229,7 @@ Espresso 的所有 API 归成三类：**onView** 定位元素、**perform** 执�
 @Test
 fun login_withWrongPassword_showsInlineError() {
     // Arrange：用 test tag 而非 id 定位，重命名 id 不应弄断测试
-    onView(withId(R.id.et_account)).perform(typeText("zhangmeng@demo.com"), closeSoftKeyboard())
+    onView(withId(R.id.et_account)).perform(typeText("user@example.com"), closeSoftKeyboard())
     onView(withId(R.id.et_password)).perform(typeText("wrong-pass"), closeSoftKeyboard())
 
     // Act
