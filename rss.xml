@@ -7,6 +7,14 @@
     <language>zh-CN</language>
     <atom:link href="https://709527.xyz/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>仓库边界就是发布边界：一次静态站隐私自查复盘</title>
+      <link>https://709527.xyz/blog/posts/personal-site-privacy-boundary.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/personal-site-privacy-boundary.html</guid>
+      <description>静态站的隐私面不在数据存储，而在发布边界。一次自查查出的凭据、真实邮箱与产物残留，以及为什么轮换永远排在清理前面。</description>
+      <category>安全</category>
+      <pubDate>Sun, 25 Oct 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
       <title>休息不是偷来的：它排在忙的前面</title>
       <link>https://709527.xyz/blog/posts/rest-is-not-stolen-time.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/rest-is-not-stolen-time.html</guid>
@@ -157,14 +165,6 @@
       <description>王阳明说「知行合一」「事上磨练」，这些四百年前的话，恰好是今天对抗焦虑、内耗和拖延最硬核的方法论。从程序员视角拆解心学的核心概念与实践方式。</description>
       <category>思考</category>
       <pubDate>Mon, 24 Aug 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>程序员的注意力管理：比时间更稀缺的资源</title>
-      <link>https://709527.xyz/blog/posts/程序员的注意力管理比时间更稀缺的资源.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/程序员的注意力管理比时间更稀缺的资源.html</guid>
-      <description>时间对人人平等，注意力的质量却天差地别。把注意力当作可管理的系统资源：看清泄漏点，用深度时段、批处理、通知分级和精力匹配拿回有效算力。</description>
-      <category>思考</category>
-      <pubDate>Sun, 23 Aug 2026 00:00:00 +0800</pubDate>
     </item>
   </channel>
 </rss>

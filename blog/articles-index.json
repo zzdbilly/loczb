@@ -1,6 +1,21 @@
 {
   "posts": [
     {
+      "slug": "personal-site-privacy-boundary",
+      "title": "仓库边界就是发布边界：一次静态站隐私自查复盘",
+      "date": "2026-10-25",
+      "dateTime": "2026-10-25 10:30:00",
+      "category": "安全",
+      "tags": [
+        "隐私",
+        "个人网站",
+        "发布边界",
+        "凭据管理"
+      ],
+      "readTime": 14,
+      "url": "blog/posts/personal-site-privacy-boundary.html"
+    },
+    {
       "slug": "rest-is-not-stolen-time",
       "title": "休息不是偷来的：它排在忙的前面",
       "date": "2026-10-17",
@@ -1886,6 +1901,7 @@
     }
   ],
   "categories": [
+    "安全",
     "思考",
     "开发",
     "Android",
@@ -1894,13 +1910,12 @@
     "前端",
     "AI",
     "数据库",
-    "系统编程",
-    "安全"
+    "系统编程"
   ],
   "stats": {
-    "totalPosts": 121,
-    "totalTags": 313,
-    "latestDate": "2026-10-17",
+    "totalPosts": 122,
+    "totalTags": 316,
+    "latestDate": "2026-10-25",
     "oldestDate": "2026-02-15"
   }
 }
