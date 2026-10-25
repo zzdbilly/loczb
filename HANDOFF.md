@@ -142,7 +142,7 @@ node scripts/setup-ai-assistant.js
 ```javascript
 // assets/js/ai-config.js (自动生成，不要手动修改)
 window.AI_ASSISTANT_CONFIG = {
-  apiKey: 'sk-<REDACTED-ROTATED-KEY>',
+  apiKey: 'sk-<REDACTED-ROTATE-THIS-KEY>',
   apiUrl: 'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions',
   model: 'qwen3.5-plus'
 };
