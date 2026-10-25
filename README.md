@@ -41,7 +41,7 @@
 ---
 
 ### 🛠️ 基础设施与云端生态
-- 🩺 **自动化死链巡检医生（`scripts/check-links.js`）** — 极速全量扫描 130 个 HTML 页面中的内链与资源引用，保障 0 死链（2026-10-05 实测：130 个 HTML、4100 条内链与资源引用、0 死链）。
+- 🩺 **自动化死链巡检医生（`scripts/check-links.js`）** — 极速全量扫描 138 个 HTML 页面中的内链与资源引用，保障 0 死链（2026-10-18 实测：138 个 HTML、4330 条内链与资源引用、0 死链）。
 - 🔄 **Service Worker 离线强缓存与构建自动版本同步** — 构建时按 `sha256(articles-index.json + search.js + style.css)` 前 8 位生成 `c-xxxxxxxx` 缓存版本（内容哈希：内容不变版本不变），避免旧缓存残留。
 - 💬 **评论系统** — Cloudflare Workers + Cloudflare D1 边缘数据库，支持嵌套树状回复、Token 鉴权与独立管理后台。
 - 📡 **全自动化索引与 SEO** — `sitemap.xml`、`rss.xml`、JSON-LD 结构化数据与 Open Graph 社交分享卡片全自动构建。
