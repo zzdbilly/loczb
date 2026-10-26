@@ -7422,13 +7422,6 @@ html, body {
     line-height: 1.8;
   }
 
-  /* 手机端 h1：41.6px 在 390px 屏上每行只放得下 7 个字，长标题会被切成 4 行 */
-  .post-content h1 {
-    font-size: 1.95rem;
-    line-height: 1.32;
-    letter-spacing: -0.015em;
-  }
-
   .post-content h2 {
     font-size: 1.35rem;
     margin-top: 2rem;
