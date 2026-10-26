@@ -144,7 +144,7 @@
 <p><code>WHERE deleted_at IS NULL</code> 本身不值钱，值钱的是它必须出现在所有地方。</p>
 <p>具体到位置：列表查询的 <code>where</code>、详情查询的 <code>where</code>、<code>include</code> 里每个关联表的 <code>where</code>、<code>JOIN</code> 的 <code>on</code> 子句、聚合的 <code>count</code>／<code>sum</code>、原生 SQL、报表导出、定时同步任务、后台运维脚本、BI 工具直连。这不是一个「记得加一次」的条件，而是一个必须沿着所有读路径复制的不变式。</p>
 <h3>这条谓词要出现的所有地方</h3>
-<p>我数过一个中等规模的模块，读路径有四十七处，其中十一处是 ORM 生成的，三十六处是散在各处的 <code>where</code>。加上这个条件之后，数据库层面的正确性被降级成了代码层面的约定——而约定是靠人执行的。</p>
+<p>翻过一个中等规模的模块：读路径几十处，绝大多数是散在各处的 <code>where</code>，只有少数收在 ORM 的统一入口里。加上这个条件之后，数据库层面的正确性被降级成了代码层面的约定——而约定是靠人执行的。</p>
 <pre><code class="language-ts">// 每个读入口都得挂一次 scope，漏一个就是一次静默的数据事故
 export async function listOrders(userId: string) {
   return prisma.order.findMany({
