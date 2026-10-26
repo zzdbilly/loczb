@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <script>document.documentElement.classList.add("js");try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://static.cloudflareinsights.com https://loczb-comments.billycust716.workers.dev; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://loczb-comments.billycust716.workers.dev https://dashscope.aliyuncs.com https://709527.xyz https://www.709527.xyz https://cloudflareinsights.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
+    <script>/* 反点击劫持兜底：GitHub Pages 无法下发 X-Frame-Options / CSP frame-ancestors */(function(){if(self===top)return;try{top.location=self.location}catch(e){}setTimeout(function(){if(self!==top){document.documentElement.style.display='none';}},400);})();</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>软删除买的是后悔药，付的是每条查询的利息 | 张小猛 - loczb</title>
+    <meta name="description" content="恢复能力该放在备份层和审计表里，不该靠主表上一个 deleted_at 换成每条查询永久付息的隐性契约。">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="软删除买的是后悔药，付的是每条查询的利息 | 张小猛 - loczb">
+    <meta property="og:description" content="恢复能力该放在备份层和审计表里，不该靠主表上一个 deleted_at 换成每条查询永久付息的隐性契约。">
+    <meta property="og:url" content="https://709527.xyz/blog/posts/soft-delete-costs-interest-on-every-query.html">
+    <meta property="og:type" content="article">
+    <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
+    <meta property="og:site_name" content="loczb">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="软删除买的是后悔药，付的是每条查询的利息 | 张小猛 - loczb">
+    <meta name="twitter:description" content="恢复能力该放在备份层和审计表里，不该靠主表上一个 deleted_at 换成每条查询永久付息的隐性契约。">
+    <meta name="twitter:image" content="https://709527.xyz/assets/images/og-image.png">
+
+        <script type="application/ld+json">
+{
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "软删除买的是后悔药，付的是每条查询的利息",
+      "description": "恢复能力该放在备份层和审计表里，不该靠主表上一个 deleted_at 换成每条查询永久付息的隐性契约。",
+      "image": "https://709527.xyz/assets/images/og-image.png",
+      "author": {
+            "@type": "Person",
+            "name": "张小猛",
+            "url": "https://709527.xyz/about/"
+      },
+      "publisher": {
+            "@type": "Organization",
+            "name": "loczb",
+            "logo": {
+                  "@type": "ImageObject",
+                  "url": "https://709527.xyz/assets/images/favicon.svg"
+            }
+      },
+      "datePublished": "2026-10-26T15:30:00+08:00",
+      "dateModified": "2026-10-26T15:30:00+08:00",
+      "url": "https://709527.xyz/blog/posts/soft-delete-costs-interest-on-every-query.html",
+      "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://709527.xyz/blog/posts/soft-delete-costs-interest-on-every-query.html"
+      },
+      "keywords": "数据库设计, 软删除, 数据建模, PostgreSQL",
+      "articleSection": "数据库",
+      "timeRequired": "PT16M",
+      "inLanguage": "zh-CN"
+}
+    </script>
+
+    <link rel="stylesheet" href="../../assets/css/style.css?v=c8e170d8f9">
+    <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
+    <link rel="alternate icon" href="../../assets/images/favicon.ico">
+    <link rel="canonical" href="https://709527.xyz/blog/posts/soft-delete-costs-interest-on-every-query.html">
+</head>
+<body>
+  <!-- PARTIAL:SKIP_LINK -->
+  <a href="#main-content" class="skip-link">跳至主要内容</a>
+  <!-- /PARTIAL:SKIP_LINK -->
+
+  <!-- Navigation -->
+<!-- PARTIAL:NAV -->
+  <nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">
+      loc<span>zb</span>
+    </a>
+    <button class="nav-toggle" aria-label="打开菜单" aria-expanded="false" aria-controls="nav-links-menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <div class="nav-overlay"></div>
+    <ul class="nav-links" id="nav-links-menu">
+      <li><a href="/" class="nav-link" data-nav="home">首页</a></li>
+      <li><a href="/projects/" class="nav-link" data-nav="projects">项目</a></li>
+      <li><a href="/blog/" class="nav-link active" data-nav="blog">博客</a></li>
+      <li><a href="/about/" class="nav-link" data-nav="about">关于</a></li>
+    </ul>
+    <button class="theme-toggle" aria-label="切换主题" title="切换亮/暗模式">
+      <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="5"></circle>
+        <line x1="12" y1="1" x2="12" y2="3"></line>
+        <line x1="12" y1="21" x2="12" y2="23"></line>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+        <line x1="1" y1="12" x2="3" y2="12"></line>
+        <line x1="21" y1="12" x2="23" y2="12"></line>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+      </svg>
+      <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+      </svg>
+    </button>
+  </div>
+</nav>
+  <!-- /PARTIAL:NAV -->
+  <main class="section" id="main-content" style="padding-bottom: 0; padding-top: var(--space-4xl);">
+    <div class="container container-narrow">
+      <a href="../index.html" class="back-link">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        返回博客列表
+      </a>
+
+      <article class="post-content">
+        <h1>软删除买的是后悔药，付的是每条查询的利息</h1>
+
+        <div class="post-meta">
+          <span class="meta-item"><span aria-hidden="true">📅</span> 2026-10-26 15:30:00</span>
+          <span class="meta-item"><span aria-hidden="true">⏱️</span> 16 min read</span>
+          <span class="meta-item"><span aria-hidden="true">👤</span> 张小猛</span>
+        </div>
+
+        <div class="post-tags">
+          <span class="tag">数据库设计</span>
+          <span class="tag">软删除</span>
+          <span class="tag">数据建模</span>
+          <span class="tag">PostgreSQL</span>
+        </div>
+
+        
+
+        <h2>一笔看起来划算的买卖</h2>
+<p>上个项目的运营同学在群里发了一份「近期活跃用户」名单，说准备做一轮召回。名单发出去十分钟，有人回了一句：这里面有好几个是上个月自己注销的账号。</p>
+<p>查下去不复杂。导出脚本是两周前新加的，写脚本的同学不知道 <code>users</code> 表上有一个 <code>deleted_at</code> 字段——这个字段从来没进过文档，它的全部存在感就是散落在几十处 <code>where</code> 里的一个条件。新脚本没带这个条件，于是把「逻辑上已经不存在的人」原样交了出去。</p>
+<p>这件事之后我重新算了一遍软删除的账。当初加那个字段花了十几分钟：一个 nullable 时间戳、一个 <code>@updatedAt</code> 风格的赋值、把 <code>delete</code> 换成 <code>update</code>。买到的能力是「误删能救回来」，价格看起来只有十几分钟。</p>
+<p>但账单不是一次性的。它是一个按查询计息的负债：每一条读路径、每一个 JOIN、每一次 schema 演进、每一个新入职的同事，都要再付一次。这篇文章就是把这笔账逐笔摊开——不是要证明软删除一无是处，而是想说清它到底在为什么收费。</p>
+<h3>出事的那条查询</h3>
+<p>值得说明的是，那份名单的 SQL 单看没有任何毛病：字段选对了、时间范围对、索引命中、执行时间也在可接受范围内。它错的地方在语义层——它回答的是「哪些行还在表里」，而运营问的是「哪些人还是用户」。</p>
+<p>这两件事在加了软删除之后就不再等价，而数据库没有任何机制会提醒你它们不等价。</p>
+<h3>后悔药的定价方式</h3>
+<p>我把这笔账拆成六笔利息：过滤税、唯一索引冲突、级联失效、表与索引膨胀、语义混淆、合规落差。每一笔都能指出钱花在哪一行代码、哪一个约束上。先记账，再说什么时候这笔账是划算的。</p>
+<h2>第一笔：过滤税</h2>
+<p><code>WHERE deleted_at IS NULL</code> 本身不值钱，值钱的是它必须出现在所有地方。</p>
+<p>具体到位置：列表查询的 <code>where</code>、详情查询的 <code>where</code>、<code>include</code> 里每个关联表的 <code>where</code>、<code>JOIN</code> 的 <code>on</code> 子句、聚合的 <code>count</code>／<code>sum</code>、原生 SQL、报表导出、定时同步任务、后台运维脚本、BI 工具直连。这不是一个「记得加一次」的条件，而是一个必须沿着所有读路径复制的不变式。</p>
+<h3>这条谓词要出现的所有地方</h3>
+<p>我数过一个中等规模的模块，读路径有四十七处，其中十一处是 ORM 生成的，三十六处是散在各处的 <code>where</code>。加上这个条件之后，数据库层面的正确性被降级成了代码层面的约定——而约定是靠人执行的。</p>
+<pre><code class="language-ts">// 每个读入口都得挂一次 scope，漏一个就是一次静默的数据事故
+export async function listOrders(userId: string) {
+  return prisma.order.findMany({
+    where: { userId, deleted_at: null },
+    include: {
+      items: { where: { deleted_at: null } }, // 关联表也得再来一次
+    },
+  });
+}
+</code></pre>
+<p>注意上面这段的形状：一个函数里出现两次同样的条件，而它们之间没有任何约束关系。下一次有人加一个 <code>comments</code> 关联，第三个条件会不会写上，取决于他当天有没有看到这段代码。</p>
+<h3>漏掉的代价是静默的</h3>
+<p>这是它跟大部分 bug 的区别。忘记加事务，并发下会报错；忘记加索引，慢查询会被监控抓到；忘记加 <code>deleted_at IS NULL</code>，什么都不会发生——直到某个把已删数据当真的人做了决定。</p>
+<p>没有异常、没有日志、没有告警。系统在「看起来一切正常」的状态下把错误的数据交出去，而你发现它的时机，往往是有人拿着这份数据来问你为什么。</p>
+<h2>第二笔：唯一索引跟软删除打架</h2>
+<p>用户注销账号，半年后想回来，用同一个邮箱重新注册——<code>unique constraint violation</code>。因为旧的那一行还在，还占着 <code>email</code> 的唯一键。</p>
+<p>这是软删除最典型的翻车点，也是最难在代码评审里看出来的：注册失败的错误信息指向「邮箱已被使用」，而用户明明已经注销了，客服查后台也查不到这个邮箱对应的有效账号。</p>
+<h3>被软删的行仍然占着键</h3>
+<p>唯一约束是数据库层面的、无条件的。它不知道 <code>deleted_at</code> 这回事，也不会因为你业务上认为那一行「不存在」就放行。你想让「已删的邮箱可以再次注册」，就必须把唯一性从「全表」缩小到「仍然有效的行」。</p>
+<pre><code class="language-prisma">model User {
+  id         String    @id @default(cuid())
+  email      String    @unique   // 对被软删的行同样生效
+  deleted_at DateTime?
+}
+</code></pre>
+<h3>部分索引能救，但要离开 schema</h3>
+<p>PostgreSQL 支持带条件的唯一索引，问题能解：</p>
+<pre><code class="language-sql">CREATE UNIQUE INDEX users_email_active_key
+  ON users (lower(email))
+  WHERE deleted_at IS NULL;
+</code></pre>
+<p>代价在工具链。Prisma schema 里没有语法能表达「带 <code>WHERE</code> 的唯一索引」，这条 DDL 只能手写进 migration：先 <code>prisma migrate dev --create-only</code> 生成空壳，再手工编辑 SQL。从此这份索引定义脱离 schema 这个单一真相源，谁跑一次 <code>prisma db push</code>，它就可能被静默抹掉。</p>
+<p>顺带一提，MySQL 没有部分索引，同等问题要靠生成列（已删时置 NULL、有效时置邮箱）加唯一键绕过去，绕法本身又要写进文档，否则下一个人看不懂那列是干什么的。</p>
+<p>一个为了「恢复能力」加的字段，最终换来了一个 schema 表达不了的索引、一份手工维护的 migration、一段需要口头传承的 MySQL 绕行方案。这些都是利息。</p>
+<h2>第三笔：外键与级联失效</h2>
+<p><code>ON DELETE CASCADE</code> 的触发条件是「行被删除」。软删除执行的是 <code>UPDATE</code>，外键约束一动不动，级联一次都不会发生。</p>
+<p>于是订单「删」了，<code>order_items</code> 还在；用户注销了，他的收货地址、登录 token、上传文件的元数据、消息记录全都留在原地。这些关联数据本来由数据库在一条语句里原子清掉，现在要在应用层重写一遍。</p>
+<h3>CASCADE 只听 DELETE 的话</h3>
+<p>重写不是把清理逻辑挪个位置那么轻。数据库的级联在一个事务内完成，顺序由约束定义；应用层的「级联」是若干条语句，你得自己规定顺序（先删子还是先删父）、自己包事务、自己保证幂等（重跑一次不能报错，也不能把数据删两遍）。</p>
+<h3>应用层的级联要自己保证原子</h3>
+<p>更现实的问题是覆盖率：任何一张新加的、引用 <code>users</code> 的子表，都要回到那段清理代码里补一行。漏掉的那张表不会报错，它只会安静地把已注销用户的数据留在库里，直到某次数据核对或者合规审查把它翻出来。</p>
+<p>数据库把这件事做对是一次性的，应用层把它做对是持续性的——每加一张表，就重新赌一次。</p>
+<h2>第四笔：表里的幽灵与索引膨胀</h2>
+<p>已删的行还在数据页里，还在每一个索引里，还参与顺序扫描，还会被 <code>ANALYZE</code> 采样进统计信息。</p>
+<p>B-tree 索引不会因为你逻辑上不再查它而收缩。行还在，索引项就在；顺序扫描读的页数不变；优化器估算的行数包含了这些永远不会被返回的行——估算偏离到一定程度，执行计划就可能走错，而这类问题从慢查询日志里看不出原因，因为 SQL 本身写得没问题。</p>
+<h3>索引不知道你逻辑上删了</h3>
+<p>部分索引（<code>WHERE deleted_at IS NULL</code>）可以缓解这一点：索引里只放有效行，体积跟着有效数据走。但它要求每一条查询都带上同样的谓词，优化器才会用这个索引——于是「过滤税」这一笔，在性能层面又收了一次。</p>
+<h3>删得越多，口径越分裂</h3>
+<p>当「删掉的比活着的多」，问题从「浪费一点磁盘」变成「口径分裂」：<code>count(*)</code> 是错的，分页的 <code>total</code> 是错的，导出要加条件，报表和埋点对不上，数据仓库同步过去的宽表里混着两种语义的行。</p>
+<p>每一处都要单独判断「这里该不该过滤」，而判断依据不在数据库里，在那个人脑子里。</p>
+<h2>第五笔：一个字段长出四个字段</h2>
+<p><code>deleted_at</code> 是技术二值：有值或者没值。而业务上真正需要区分的状态，往往不止两种。</p>
+<p>用户自己注销、被风控停用、订阅到期归档、临时冻结——对外表现都是「不能登录」，但恢复路径、通知策略、数据保留期限、是否允许重新注册，每一项都不同。用一个 nullable 时间戳去近似这台状态机，信息必然丢失。</p>
+<h3>二值表达不了状态机</h3>
+<p>丢失的信息会被补回来，方式通常是加字段：<code>deleted_by</code>（谁删的）、<code>delete_reason</code>（为什么）、<code>restored_at</code>（恢复过没有）、<code>is_system_deleted</code>（是用户操作还是系统清理）。半年之后，那张表上有五个字段共同描述「这个账号现在算什么状态」，而没有一个字段能单独回答。</p>
+<h3>字段长成表</h3>
+<p>这就是「一个字段长成一张表」的过程：不是因为设计时想复杂，而是因为用技术标记去近似业务状态，必然要不断打补丁。补丁之间没有互斥关系，于是出现了 <code>deleted_at</code> 有值但 <code>restored_at</code> 也有值、<code>is_system_deleted</code> 为真而 <code>delete_reason</code> 为空的组合——每一种组合在代码里对应一个 <code>if</code>，没人能穷举完。</p>
+<pre><code class="language-sql">CREATE TYPE account_status AS ENUM ('active', 'suspended', 'archived', 'closed');
+
+ALTER TABLE accounts
+  ADD COLUMN status account_status NOT NULL DEFAULT 'active',
+  ADD COLUMN status_changed_at timestamptz NOT NULL DEFAULT now();
+</code></pre>
+<p>枚举把「互斥且完备」写进了类型里。<code>archived</code> 和 <code>closed</code> 的区别写在类型定义旁边，而不是藏在三个布尔字段的组合里。读代码的人不需要还原状态机，他直接看得见。</p>
+<h2>第六笔：合规上的反讽</h2>
+<p>这一笔不谈法律，只核对工程事实。</p>
+<p>如果隐私政策里写了「你可以要求我们删除你的数据」，而实现是 <code>UPDATE users SET deleted_at = now()</code>，那么对外承诺的删除和实际执行的删除是两件事。数据还在主表里、还在从库上、还在备份里、还在数据仓库的宽表里、还在某个没人记得的导出文件里。</p>
+<h3>承诺删除和打了标记不是一回事</h3>
+<p>用户按下「删除账号」时理解的是数据消失。系统做的是给一行打个标记，然后继续在每一条查询里把它过滤掉。这两者之间的差距，不会因为前端提示写得温和就变小。</p>
+<h3>要留痕就建留痕的表</h3>
+<p>反过来看，确实存在必须保留历史的场景：财务凭证、审计要求、争议处理。这类诉求是合理的，问题在于把它塞进主表。</p>
+<p>正确的位置是单独的 history／audit 表：写时复制一份旧行，记下操作人、时间、原因、来源。主表保持窄，保持「删了就是删了」。这样审计轨迹是完整的（因为它是为审计而设计的），主表也不会变成一个既存当前状态又存历史状态的混合体。</p>
+<p>把两件事压进一张表，两边都做不好：主表变胖、查询变慢、语义变糊，而审计轨迹依然缺字段——因为 <code>deleted_at</code> 记不下「谁」和「为什么」。</p>
+<h2>这笔账什么时候是划算的</h2>
+<p>写到这里必须公平一点：软删除不是一无是处，它在三种场景下确实成立。但要看清它成立的原因，以及那个原因是否真的需要一个主表字段。</p>
+<h3>三种它确实成立的场景</h3>
+<ul>
+<li><strong>短窗口撤销</strong>：误点删除后十五分钟内能恢复。这个需求是真的，但它要的是「一份临时副本」，不是「主表上的永久标记」。回收站表加 TTL 清理能做得更好：主表删除就是删除，撤销是从回收站搬回来，过期由定时任务物理清理。</li>
+<li><strong>法规或审计要求保留历史</strong>：需求是真的，位置错了。history／audit 表按写时复制保存旧版本，主表只承载当前状态，职责单一。</li>
+<li><strong>业务状态本身就有「已取消／已归档」语义</strong>：那就用 <code>status</code> 枚举，值叫 <code>cancelled</code>、<code>archived</code>，不要叫 <code>deleted</code>。名字对了，过滤条件自然变成「哪些状态参与业务」，而不是「哪些行被逻辑删了」——前者是业务规则，写在领域层是合理的；后者是技术补丁，散在每一处 <code>where</code> 里。</li>
+</ul>
+<h3>分界线在哪</h3>
+<p>一句话能分开：<strong>这个标记是为了让数据消失，还是为了让数据进入另一种状态？</strong></p>
+<p>前者属于生命周期管理和备份层，不该出现在表结构里；后者属于状态机，应该是一个有语义的枚举。软删除的问题在于它把这两件事混成了一个字段——于是两种诉求都得到了一个勉强的近似。</p>
+<h2>怎么把账做平</h2>
+<p>如果认同上面的记账，落地动作是四个，按投入产出排序。</p>
+<h3>恢复能力挪到备份层</h3>
+<p>这是整个主张的核心。误删要能救回来，靠的不是表上的标记，是备份加恢复演练：</p>
+<ul>
+<li><strong>PITR</strong>：WAL 归档加基础备份，能恢复到任意时间点。误删发生在 14:32，就恢复到 14:31:59。</li>
+<li><strong>定期逻辑备份</strong>：<code>pg_dump</code> 出来的东西用于跨版本迁移、单表恢复、以及「只想捞回一张表」的场景。</li>
+<li><strong>定期恢复演练</strong>：这一项最容易被跳过，也是唯一能证明前两项有效的动作。没演过的备份不叫备份，叫「我以为是备份的文件」。</li>
+</ul>
+<p>演练要落到可验证的数字上：恢复到某个时间点需要多久、能接受丢多少数据（RPO／RTO），每季度真跑一次，把耗时记下来。这笔投入是一次性的，而且不随查询数量增长——这正是它跟软删除在成本结构上的根本区别。</p>
+<h3>状态交给枚举，历史交给副本，撤销交给回收站</h3>
+<p>三条各自对应一种真实需求，互不重叠：</p>
+<ol>
+<li>主表的业务状态用 <code>status</code> 枚举表达，名字用业务语言。</li>
+<li>要留历史，写时复制进 history 表，主表保持窄。</li>
+<li>要撤销窗口，用回收站表加 TTL，主表删除就是删除。</li>
+</ol>
+<p>第三条的表结构大致是这样：</p>
+<pre><code class="language-sql">CREATE TABLE deleted_orders (
+  id          uuid PRIMARY KEY,
+  payload     jsonb NOT NULL,          -- 删除瞬间的整行快照
+  deleted_by  uuid NOT NULL,
+  deleted_at  timestamptz NOT NULL DEFAULT now(),
+  purge_after timestamptz NOT NULL     -- 过期由定时任务物理删除
+);
+
+CREATE INDEX deleted_orders_purge_idx ON deleted_orders (purge_after);
+</code></pre>
+<p>它的好处不只是「主表干净」。回收站表的行有明确的生命周期（到期就物理删），所以磁盘增长是有界的；而主表上的软删除行没有终点，删了就是永久占位。</p>
+<h2>判据</h2>
+<p>三条问句。任何一条答不上来，就先别加那个字段：</p>
+<ol>
+<li><strong>这个字段是为了让数据消失，还是让数据换状态？</strong> 如果是前者，它属于备份层和生命周期管理，不属于 schema。</li>
+<li><strong>明天新增一条读路径（报表、导出、BI 直连、数据同步），谁会记得加这个谓词？</strong> 如果答案是「靠 code review」，那这个不变式其实没有保障，只是在赌评审的人当天状态好。</li>
+<li><strong>如果用户现在要求删除，我能诚实地说「删了」吗？</strong> 如果不能，那么「删除」这个功能要么改承诺，要么改实现，不能靠一个 nullable 时间戳把差距盖住。</li>
+</ol>
+<h2>收束</h2>
+<p>软删除真正卖的不是「恢复能力」，是「暂时不用想恢复这件事」——十分钟加一个字段，把问题往后推。</p>
+<p>代价是把数据库的一次性正确性，换成了代码里的持续约定。过滤条件要复制到每条读路径，唯一约束要让位给手写 migration，级联要在应用层重写，索引里躺着永远不会返回的行，一个技术二值被迫承担一台状态机，对外承诺的删除变成一个标记。这些都不是 bug，是设计选择的正常账单，只是它按月寄、按查询寄。</p>
+<p>备份层的投入形状正好相反：配一次 PITR，写一次演练脚本，每季度跑一次，成本固定，不随读路径数量增长。</p>
+<p>所以我的判断是：<strong>删除语义应该只有一种，就是删除。可恢复性属于运维，不属于 schema。</strong></p>
+
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="postgresql-从-17-到-18生产环境升级实战.html">
+            <div class="related-post-card-title">PostgreSQL 从 17 到 18：生产环境升级实战</div>
+            <div class="related-post-card-tags"><span>PostgreSQL</span><span>数据库</span><span>DevOps</span></div>
+          </a>
+          <a class="related-post-card" href="prisma-orm-完全指南从入门到实战.html">
+            <div class="related-post-card-title">Prisma ORM 完全指南：从入门到实战</div>
+            <div class="related-post-card-tags"><span>Prisma</span><span>TypeScript</span><span>PostgreSQL</span></div>
+          </a>
+          <a class="related-post-card" href="postgresql-index-optimization.html">
+            <div class="related-post-card-title">PostgreSQL 索引优化实战</div>
+            <div class="related-post-card-tags"><span>PostgreSQL</span><span>索引优化</span><span>B-Tree</span></div>
+          </a>
+          <a class="related-post-card" href="mysql-索引优化实战从慢查询到最佳实践.html">
+            <div class="related-post-card-title">MySQL 索引优化实战：从慢查询到最佳实践</div>
+            <div class="related-post-card-tags"><span>MySQL</span><span>数据库</span><span>索引优化</span></div>
+          </a>
+          <a class="related-post-card" href="sqlite-wal-performance.html">
+            <div class="related-post-card-title">SQLite 进阶：WAL 模式与性能优化</div>
+            <div class="related-post-card-tags"><span>SQLite</span><span>数据库</span><span>WAL</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
+
+        <!-- Post Copyright & License Card -->
+        <div class="post-copyright-card">
+          <div class="copyright-header">
+            <div class="copyright-badge">
+              <span>📜</span>
+              <span>原创与知识共享协议</span>
+            </div>
+            <button class="copyright-cite-btn" id="copy-cite-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+              </svg>
+              <span>复制 Markdown 引用</span>
+            </button>
+          </div>
+          <div class="copyright-list">
+            <div class="copyright-item"><strong>文章标题：</strong>软删除买的是后悔药，付的是每条查询的利息</div>
+            <div class="copyright-item"><strong>文章作者：</strong>张小猛 · loczb</div>
+            <div class="copyright-item"><strong>永久链接：</strong><a href="https://709527.xyz/blog/posts/soft-delete-costs-interest-on-every-query.html">https://709527.xyz/blog/posts/soft-delete-costs-interest-on-every-query.html</a></div>
+            <div class="copyright-item"><strong>版权声明：</strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 国际许可协议。商业转载请联系作者获得授权，非商业转载请注明出处。</div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </main>
+
+  <!-- Related Posts / Navigation -->
+  <section class="section" aria-label="读完之后" style="padding-top: 0;">
+    <div class="container container-narrow">
+      <!-- Post Nav Prev Next -->
+      <nav class="post-nav" aria-label="文章翻页导航">
+        <a href="personal-site-privacy-boundary.html" class="post-nav-card post-nav-prev" rel="prev">
+          <span class="post-nav-label">← 上一篇</span>
+          <span class="post-nav-title">仓库边界就是发布边界：一次静态站隐私自查复盘</span>
+        </a>
+        <div class="post-nav-card post-nav-next disabled" aria-disabled="true">
+          <span class="post-nav-label">下一篇 →</span>
+          <span class="post-nav-title">已是最新篇博文</span>
+        </div>
+      </nav>
+      <!-- /Post Nav Prev Next -->
+      <hr style="border: none; border-top: 1px solid var(--color-border); margin: var(--space-2xl) 0;">
+
+      <div class="blog-topics" style="margin-bottom: var(--space-xl); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+        <div>
+          <span class="topic-label">读完之后:</span>
+          <a href="../index.html" class="topic-tag">返回博客列表</a>
+          <a href="../index.html?view=series" class="topic-tag">浏览全部专栏</a>
+        </div>
+        <a href="#main-content" class="topic-tag" style="margin-left: auto;">↑ 回到顶部</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+<!-- PARTIAL:FOOTER -->
+  <footer class="footer" role="contentinfo">
+  <div class="footer-inner">
+    <p class="footer-signature">写代码，做产品，也认真生活。</p>
+    <div class="footer-social">
+      <a href="https://github.com/zzdbilly" class="footer-social-link" target="_blank" rel="noopener" aria-label="GitHub">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+      </a>
+      <a href="https://twitter.com/zzdbilly" class="footer-social-link" target="_blank" rel="noopener" aria-label="X (Twitter)">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      </a>
+      <a href="/rss.xml" class="footer-social-link" target="_blank" rel="noopener" aria-label="RSS 订阅">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+      </a>
+    </div>
+    <div class="footer-links">
+      <a href="/" class="footer-link">首页</a>
+      <a href="/projects/" class="footer-link">项目</a>
+      <a href="/blog/" class="footer-link">博客</a>
+      <a href="/about/" class="footer-link">关于</a>
+    </div>
+    <p class="footer-copyright">&copy; 2026 张小猛 · loczb · Built with care</p>
+  </div>
+</footer>
+  <!-- /PARTIAL:FOOTER -->
+
+  <script defer src="../../assets/js/main.js"></script>
+  <script defer src="../../assets/js/article.js?v=c9f1a378ea"></script>
+  <script defer src="../../assets/js/share.js"></script>
+  <!-- Back to Top & Reading Progress -->
+  <button class="back-to-top" id="backToTop" aria-label="回到顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
+  <div class="reading-progress" id="readingProgress"></div>
+
+  <!-- Post Sidebar Info（左侧） -->
+  <div class="post-sidebar-info" id="postSidebar">
+    <div class="post-info-card">
+      <div class="post-info-section">
+        <div class="post-info-label">作者</div>
+        <div class="post-info-author">
+          <div class="post-info-avatar">小</div>
+          <div>
+            <div class="post-info-author-name">张小猛</div>
+            <div class="post-info-author-desc">写代码，做产品</div>
+          </div>
+        </div>
+      </div>
+      <div class="post-info-section">
+        <div class="post-info-label">文章信息</div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📅</span> 发布日期</span><span class="post-info-stat-value">2026-10-26</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">⏱️</span> 阅读时间</span><span class="post-info-stat-value">16 min read</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">4368 字</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📊</span> 章节数</span><span class="post-info-stat-value">11 节 · 18 子节</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">💻</span> 代码块</span><span class="post-info-stat-value">5 段</span></div>
+      </div>
+      <div class="post-info-section" id="postSidebarTags">
+        <div class="post-info-label">标签</div>
+        <div class="post-info-links">
+          <a href="../../blog/index.html?tag=%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1" class="post-info-link"># 数据库设计</a>
+          <a href="../../blog/index.html?tag=%E8%BD%AF%E5%88%A0%E9%99%A4" class="post-info-link"># 软删除</a>
+          <a href="../../blog/index.html?tag=%E6%95%B0%E6%8D%AE%E5%BB%BA%E6%A8%A1" class="post-info-link"># 数据建模</a>
+          <a href="../../blog/index.html?tag=PostgreSQL" class="post-info-link"># PostgreSQL</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Post TOC -->
+  <div class="post-toc-container" id="postToc">
+    <nav class="post-toc" aria-label="文章目录">
+      <div class="post-toc-title">目录</div>
+      <ul class="post-toc-list" id="tocList">
+      </ul>
+    </nav>
+  </div>
+
+  <!-- Comment System -->
+  <script src="../../workers/comment-system/comment-widget.js?v=a650e91e3e" defer></script>
+
+  <!-- highlight.js 代码语法高亮（本地完整构建，无外部依赖） -->
+  <script defer src="../../assets/vendor/highlight/highlight.min.js"></script>
+  <script>
+    /* 语法高亮改为「可见优先、空闲补齐」：
+       highlight.js 要遍历全篇代码块并生成数百个 span，若在 DOMContentLoaded 里同步跑完，
+       会在关键路径上长时间占住主线程（2026-09-27 实测本页长任务 1548ms、DCL 3651ms；
+       改动后长任务 145ms、DCL 1378ms）。这里 DCL 阶段只登记观察，实际高亮交给
+       IntersectionObserver（近屏 800px 内优先）+ requestIdleCallback（剩余块每片 ≤4 块），
+       首屏代码块的着色时机与视觉基本无变化。 */
+    (function() {
+      function canPaint(b) {
+        return !b.classList.contains('hljs') && !b.closest('.codehilite');
+      }
+      function paint(b) {
+        if (!canPaint(b)) return;
+        try { hljs.highlightElement(b); } catch (e) {}
+      }
+      function init() {
+        var blocks = [].slice.call(document.querySelectorAll('pre code')).filter(canPaint);
+        if (!blocks.length) return;
+        if ('IntersectionObserver' in window) {
+          var io = new IntersectionObserver(function(entries, obs) {
+            entries.forEach(function(en) {
+              if (!en.isIntersecting) return;
+              paint(en.target);
+              obs.unobserve(en.target);
+            });
+          }, { rootMargin: '800px 0px' });
+          blocks.forEach(function(b) { io.observe(b); });
+        }
+        var i = 0;
+        var idle = window.requestIdleCallback || window.setTimeout;
+        var step = function() {
+          var quota = 4;
+          while (i < blocks.length && quota-- > 0) paint(blocks[i++]);
+          if (i < blocks.length) idle(step);
+        };
+        idle(step); // 不在 DCL 里同步跑：可见块由 IntersectionObserver 处理，其余走空闲分片
+      }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+      } else {
+        init();
+      }
+    })();
+  </script>
+
+  <!-- Cloudflare Web Analytics -->
+  <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "29e7cff6f37448989538e2165cb79187"}'></script>
+</body>
+</html>

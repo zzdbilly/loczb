@@ -1,6 +1,21 @@
 {
   "posts": [
     {
+      "slug": "soft-delete-costs-interest-on-every-query",
+      "title": "软删除买的是后悔药，付的是每条查询的利息",
+      "date": "2026-10-26",
+      "dateTime": "2026-10-26 15:30:00",
+      "category": "数据库",
+      "tags": [
+        "数据库设计",
+        "软删除",
+        "数据建模",
+        "PostgreSQL"
+      ],
+      "readTime": 16,
+      "url": "blog/posts/soft-delete-costs-interest-on-every-query.html"
+    },
+    {
       "slug": "personal-site-privacy-boundary",
       "title": "仓库边界就是发布边界：一次静态站隐私自查复盘",
       "date": "2026-10-25",
@@ -1901,6 +1916,7 @@
     }
   ],
   "categories": [
+    "数据库",
     "安全",
     "思考",
     "开发",
@@ -1909,13 +1925,12 @@
     "Kotlin",
     "前端",
     "AI",
-    "数据库",
     "系统编程"
   ],
   "stats": {
-    "totalPosts": 122,
-    "totalTags": 316,
-    "latestDate": "2026-10-25",
+    "totalPosts": 123,
+    "totalTags": 319,
+    "latestDate": "2026-10-26",
     "oldestDate": "2026-02-15"
   }
 }

@@ -1,0 +1,15 @@
+{
+  "slug": "soft-delete-costs-interest-on-every-query",
+  "title": "软删除买的是后悔药，付的是每条查询的利息",
+  "description": "恢复能力该放在备份层和审计表里，不该靠主表上一个 deleted_at 换成每条查询永久付息的隐性契约。",
+  "date": "2026-10-26",
+  "dateTime": "2026-10-26 15:30:00",
+  "category": "数据库",
+  "tags": [
+    "数据库设计",
+    "软删除",
+    "数据建模",
+    "PostgreSQL"
+  ],
+  "readTime": 16
+}

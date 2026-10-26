@@ -7,6 +7,14 @@
     <language>zh-CN</language>
     <atom:link href="https://709527.xyz/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>软删除买的是后悔药，付的是每条查询的利息</title>
+      <link>https://709527.xyz/blog/posts/soft-delete-costs-interest-on-every-query.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/soft-delete-costs-interest-on-every-query.html</guid>
+      <description>恢复能力该放在备份层和审计表里，不该靠主表上一个 deleted_at 换成每条查询永久付息的隐性契约。</description>
+      <category>数据库</category>
+      <pubDate>Mon, 26 Oct 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
       <title>仓库边界就是发布边界：一次静态站隐私自查复盘</title>
       <link>https://709527.xyz/blog/posts/personal-site-privacy-boundary.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/personal-site-privacy-boundary.html</guid>
@@ -157,14 +165,6 @@
       <description>一个移动端开发者和 AI 编程助手协作一年的真实复盘：从不敢信、到滥信踩坑、再到建立边界和验收习惯。</description>
       <category>思考</category>
       <pubDate>Tue, 01 Sep 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>心学不是鸡汤：一个程序员的阳明心学实践手册</title>
-      <link>https://709527.xyz/blog/posts/心学不是鸡汤一个程序员的阳明心学实践手册.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/心学不是鸡汤一个程序员的阳明心学实践手册.html</guid>
-      <description>王阳明说「知行合一」「事上磨练」，这些四百年前的话，恰好是今天对抗焦虑、内耗和拖延最硬核的方法论。从程序员视角拆解心学的核心概念与实践方式。</description>
-      <category>思考</category>
-      <pubDate>Mon, 24 Aug 2026 00:00:00 +0800</pubDate>
     </item>
   </channel>
 </rss>
