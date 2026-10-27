@@ -25,11 +25,11 @@ CSP = (
     # 见 search.js:40、comment-widget.js:81/94），缺了它兜底路径会被 CSP 静默掐断。
     "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net "
     "https://static.cloudflareinsights.com "
-    "https://loczb-comments.billycust716.workers.dev; "
+    "https://loczb-comments.billymust.workers.dev; "
     "style-src 'self' 'unsafe-inline'; "
     "img-src 'self' data: https:; "
     "font-src 'self' data:; "
-    "connect-src 'self' https://loczb-comments.billycust716.workers.dev "
+    "connect-src 'self' https://loczb-comments.billymust.workers.dev "
     "https://dashscope.aliyuncs.com https://709527.xyz https://www.709527.xyz "
     # Cloudflare 轻量分析：beacon.min.js 被允许后它还会 XHR 上报到 cloudflareinsights.com，
     # 本地实测这一条漏了会被 CSP 掐掉（"Connecting to ... violates connect-src"）→ 分析静默丢失。

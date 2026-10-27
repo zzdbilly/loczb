@@ -12,7 +12,7 @@
 
   // ========== 配置 ==========
   // 部署后替换为实际 Workers URL
-  const API_BASE = 'https://loczb-comments.billycust716.workers.dev';
+  const API_BASE = 'https://loczb-comments.billymust.workers.dev';
   const API_URL = API_BASE + '/api/comments';
   // CSS 路径（相对于站点根目录，GitHub Pages 也能访问）
   // ?v= 的内容哈希由 scripts/sync-widget-version.js 自动写入（勿手改）：
