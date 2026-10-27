@@ -1,6 +1,6 @@
 ---
 title: "净化器不是防线，是过滤器：渲染第三方内容的两道门"
-description: "净化只能降低已知 payload 命中的概率，它是过滤器；CSP 才决定被绕过之后对方能拿走什么。拿我自己站上那套 DOMPurify 加 meta 版 CSP 复盘。"
+description: "净化只降低已知 payload 的命中概率，是过滤器；CSP 才决定被绕过之后能拿走什么。用我站上的 DOMPurify 与 meta 版 CSP 复盘。"
 date: 2026-10-26 18:20:00
 category: 安全
 tags: ["XSS", "CSP", "内容净化", "Web 安全"]

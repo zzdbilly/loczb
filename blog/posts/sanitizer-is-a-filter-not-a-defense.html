@@ -7,18 +7,18 @@
     <script>/* 反点击劫持兜底：GitHub Pages 无法下发 X-Frame-Options / CSP frame-ancestors */(function(){if(self===top)return;try{top.location=self.location}catch(e){}setTimeout(function(){if(self!==top){document.documentElement.style.display='none';}},400);})();</script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>净化器不是防线，是过滤器：渲染第三方内容的两道门 | 张小猛 - loczb</title>
-    <meta name="description" content="净化只能降低已知 payload 命中的概率，它是过滤器；CSP 才决定被绕过之后对方能拿走什么。拿我自己站上那套 DOMPurify 加 meta 版 CSP 复盘。">
+    <meta name="description" content="净化只降低已知 payload 的命中概率，是过滤器；CSP 才决定被绕过之后能拿走什么。用我站上的 DOMPurify 与 meta 版 CSP 复盘。">
 
     <!-- Open Graph -->
     <meta property="og:title" content="净化器不是防线，是过滤器：渲染第三方内容的两道门 | 张小猛 - loczb">
-    <meta property="og:description" content="净化只能降低已知 payload 命中的概率，它是过滤器；CSP 才决定被绕过之后对方能拿走什么。拿我自己站上那套 DOMPurify 加 meta 版 CSP 复盘。">
+    <meta property="og:description" content="净化只降低已知 payload 的命中概率，是过滤器；CSP 才决定被绕过之后能拿走什么。用我站上的 DOMPurify 与 meta 版 CSP 复盘。">
     <meta property="og:url" content="https://709527.xyz/blog/posts/sanitizer-is-a-filter-not-a-defense.html">
     <meta property="og:type" content="article">
     <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
     <meta property="og:site_name" content="loczb">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="净化器不是防线，是过滤器：渲染第三方内容的两道门 | 张小猛 - loczb">
-    <meta name="twitter:description" content="净化只能降低已知 payload 命中的概率，它是过滤器；CSP 才决定被绕过之后对方能拿走什么。拿我自己站上那套 DOMPurify 加 meta 版 CSP 复盘。">
+    <meta name="twitter:description" content="净化只降低已知 payload 的命中概率，是过滤器；CSP 才决定被绕过之后能拿走什么。用我站上的 DOMPurify 与 meta 版 CSP 复盘。">
     <meta name="twitter:image" content="https://709527.xyz/assets/images/og-image.png">
 
         <script type="application/ld+json">
@@ -26,7 +26,7 @@
       "@context": "https://schema.org",
       "@type": "Article",
       "headline": "净化器不是防线，是过滤器：渲染第三方内容的两道门",
-      "description": "净化只能降低已知 payload 命中的概率，它是过滤器；CSP 才决定被绕过之后对方能拿走什么。拿我自己站上那套 DOMPurify 加 meta 版 CSP 复盘。",
+      "description": "净化只降低已知 payload 的命中概率，是过滤器；CSP 才决定被绕过之后能拿走什么。用我站上的 DOMPurify 与 meta 版 CSP 复盘。",
       "image": "https://709527.xyz/assets/images/og-image.png",
       "author": {
             "@type": "Person",
