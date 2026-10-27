@@ -12,7 +12,7 @@
       <guid isPermaLink="true">https://709527.xyz/blog/posts/sanitizer-is-a-filter-not-a-defense.html</guid>
       <description>净化只降低已知 payload 的命中概率，是过滤器；CSP 才决定被绕过之后能拿走什么。用我站上的 DOMPurify 与 meta 版 CSP 复盘。</description>
       <category>安全</category>
-      <pubDate>Mon, 26 Oct 2026 00:00:00 +0800</pubDate>
+      <pubDate>Tue, 27 Oct 2026 00:00:00 +0800</pubDate>
     </item>
     <item>
       <title>软删除买的是后悔药，付的是每条查询的利息</title>
