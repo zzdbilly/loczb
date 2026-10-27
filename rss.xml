@@ -10,7 +10,7 @@
       <title>净化器不是防线，是过滤器：渲染第三方内容的两道门</title>
       <link>https://709527.xyz/blog/posts/sanitizer-is-a-filter-not-a-defense.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/sanitizer-is-a-filter-not-a-defense.html</guid>
-      <description>净化只能降低已知 payload 命中的概率，它是过滤器；CSP 才决定被绕过之后对方能拿走什么。拿我自己站上那套 DOMPurify 加 meta 版 CSP 复盘。</description>
+      <description>净化只降低已知 payload 的命中概率，是过滤器；CSP 才决定被绕过之后能拿走什么。用我站上的 DOMPurify 与 meta 版 CSP 复盘。</description>
       <category>安全</category>
       <pubDate>Mon, 26 Oct 2026 00:00:00 +0800</pubDate>
     </item>
