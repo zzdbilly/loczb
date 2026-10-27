@@ -7,6 +7,14 @@
     <language>zh-CN</language>
     <atom:link href="https://709527.xyz/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>净化器不是防线，是过滤器：渲染第三方内容的两道门</title>
+      <link>https://709527.xyz/blog/posts/sanitizer-is-a-filter-not-a-defense.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/sanitizer-is-a-filter-not-a-defense.html</guid>
+      <description>净化只能降低已知 payload 命中的概率，它是过滤器；CSP 才决定被绕过之后对方能拿走什么。拿我自己站上那套 DOMPurify 加 meta 版 CSP 复盘。</description>
+      <category>安全</category>
+      <pubDate>Mon, 26 Oct 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
       <title>软删除买的是后悔药，付的是每条查询的利息</title>
       <link>https://709527.xyz/blog/posts/soft-delete-costs-interest-on-every-query.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/soft-delete-costs-interest-on-every-query.html</guid>
@@ -157,14 +165,6 @@
       <description>写了没人看、看了找不到答案、找到了已经过期——技术文档的三大死法。这篇把我维护博客和项目文档攒下的规范全摊开：读者画像、Diátaxis 分层、结构措辞红线、代码示例标准、docs-as-code 工作流、常见反模式和发布前检查清单。</description>
       <category>开发</category>
       <pubDate>Thu, 03 Sep 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>和 AI 结对写代码这一年，我学会了怎么放手</title>
-      <link>https://709527.xyz/blog/posts/和ai结对写代码这一年我学会了怎么放手.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/和ai结对写代码这一年我学会了怎么放手.html</guid>
-      <description>一个移动端开发者和 AI 编程助手协作一年的真实复盘：从不敢信、到滥信踩坑、再到建立边界和验收习惯。</description>
-      <category>思考</category>
-      <pubDate>Tue, 01 Sep 2026 00:00:00 +0800</pubDate>
     </item>
   </channel>
 </rss>

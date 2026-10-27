@@ -1,6 +1,21 @@
 {
   "posts": [
     {
+      "slug": "sanitizer-is-a-filter-not-a-defense",
+      "title": "净化器不是防线，是过滤器：渲染第三方内容的两道门",
+      "date": "2026-10-26",
+      "dateTime": "2026-10-26 18:20:00",
+      "category": "安全",
+      "tags": [
+        "XSS",
+        "CSP",
+        "内容净化",
+        "Web 安全"
+      ],
+      "readTime": 16,
+      "url": "blog/posts/sanitizer-is-a-filter-not-a-defense.html"
+    },
+    {
       "slug": "soft-delete-costs-interest-on-every-query",
       "title": "软删除买的是后悔药，付的是每条查询的利息",
       "date": "2026-10-26",
@@ -1916,8 +1931,8 @@
     }
   ],
   "categories": [
-    "数据库",
     "安全",
+    "数据库",
     "思考",
     "开发",
     "Android",
@@ -1928,8 +1943,8 @@
     "系统编程"
   ],
   "stats": {
-    "totalPosts": 123,
-    "totalTags": 319,
+    "totalPosts": 124,
+    "totalTags": 323,
     "latestDate": "2026-10-26",
     "oldestDate": "2026-02-15"
   }

