@@ -119,11 +119,11 @@ Content-Security-Policy: default-src 'self'; script-src 'self' https://comments.
 
 这一圈是我当时最没有预期到的。
 
-同一个 Cloudflare 账户下，我还跑着另一个 Worker：一个用来临时分享文本的 pastebin。它在我心里的定位是「跟博客无关的独立小工具」。改名之后，它也跟着换了地址——因为 `workers.dev` 子域是**账户级**的，不是 Worker 级的。
+同一个 Cloudflare 账户下，我还跑着另一个 Worker：一个用来临时分享文本的小工具。它在我心里的定位是「跟博客无关的独立小工具」。改名之后，它也跟着换了地址——因为 `workers.dev` 子域是**账户级**的，不是 Worker 级的。
 
 结果是我博客首页和项目页上的两个项目链接变成了死链。
 
-请注意这里的因果结构：**我改名的动机跟 pastebin 毫无关系，但改名顺手把它打断了。** 我不是「忘了改 pastebin」，我是「根本不知道 pastebin 在这个半径之内」。它的地址出现在我博客的 HTML 里，这一条引用关系把两个本来独立的项目连成了一条耦合链——而这条链在我做决策时不在我的视野里。
+请注意这里的因果结构：**我改名的动机跟它毫无关系，但改名顺手把它打断了。** 我不是「忘了改它」，我是「根本不知道它在这个半径之内」。它的地址出现在我博客的 HTML 里，这一条引用关系把两个本来独立的项目连成了一条耦合链——而这条链在我做决策时不在我的视野里。
 
 ### 副本与派生：两种性质不同的漏法
 
@@ -140,11 +140,11 @@ Content-Security-Policy: default-src 'self'; script-src 'self' https://comments.
 ```yaml
 # 项目清单：地址集中在一处，脚本不写死链接
 projects:
-  - name: loczb
-    url: https://709527.xyz
-    repo: nook/loczb
-  - name: pastebin
-    url: https://pastebin.<account>.workers.dev
+  - name: blog
+    url: https://blog.example.com
+    repo: sites/blog
+  - name: text-share
+    url: https://text.<account>.workers.dev
     status: active
 ```
 
@@ -160,7 +160,7 @@ projects:
 
 文档这一圈最不缺，也最不值钱——因为没人跑它。
 
-我盘出来的有：pastebin 源码里的 `og:url`、它的 README、一份私有部署文档 `DEPLOY.md`、三个技能文档、工作区 README、还有项目总览的记忆文件。
+我盘出来的有：那个小工具源码里的 `og:url`、它的 README、一份私有部署文档、三个技能文档、工作区 README、还有项目总览的记忆文件。
 
 其中 `DEPLOY.md` 值得一提：它里面写的地址，是一个**根本不存在**的子域变体——不是旧值，也不是新值，是某次手抄时拼错的第三种形态。这份文档从来没有被验证过，因为它描述的操作我已经很久没做了。
 
@@ -286,7 +286,7 @@ python3 - <<'PY'
 import urllib.request as u, urllib.error as e
 urls = ['/', '/blog/', '/about/', '/projects/', '/404.html']
 for p in urls:
-    req = u.Request('https://709527.xyz' + p, headers={'User-Agent': 'Mozilla/5.0'})
+    req = u.Request('https://blog.example.com' + p, headers={'User-Agent': 'Mozilla/5.0'})
     try:
         print(p, u.urlopen(req, timeout=20).status)
     except e.HTTPError as ex:

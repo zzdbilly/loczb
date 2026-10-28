@@ -249,9 +249,9 @@ async function loadComments(slug) {
 <h2>半径第四圈：衍生标识，你只是想改评论，却打断了另一个项目</h2>
 <h3>你只改了评论，它顺手打断了另一个项目</h3>
 <p>这一圈是我当时最没有预期到的。</p>
-<p>同一个 Cloudflare 账户下，我还跑着另一个 Worker：一个用来临时分享文本的 pastebin。它在我心里的定位是「跟博客无关的独立小工具」。改名之后，它也跟着换了地址——因为 <code>workers.dev</code> 子域是<strong>账户级</strong>的，不是 Worker 级的。</p>
+<p>同一个 Cloudflare 账户下，我还跑着另一个 Worker：一个用来临时分享文本的小工具。它在我心里的定位是「跟博客无关的独立小工具」。改名之后，它也跟着换了地址——因为 <code>workers.dev</code> 子域是<strong>账户级</strong>的，不是 Worker 级的。</p>
 <p>结果是我博客首页和项目页上的两个项目链接变成了死链。</p>
-<p>请注意这里的因果结构：<strong>我改名的动机跟 pastebin 毫无关系，但改名顺手把它打断了。</strong> 我不是「忘了改 pastebin」，我是「根本不知道 pastebin 在这个半径之内」。它的地址出现在我博客的 HTML 里，这一条引用关系把两个本来独立的项目连成了一条耦合链——而这条链在我做决策时不在我的视野里。</p>
+<p>请注意这里的因果结构：<strong>我改名的动机跟它毫无关系，但改名顺手把它打断了。</strong> 我不是「忘了改它」，我是「根本不知道它在这个半径之内」。它的地址出现在我博客的 HTML 里，这一条引用关系把两个本来独立的项目连成了一条耦合链——而这条链在我做决策时不在我的视野里。</p>
 <h3>副本与派生：两种性质不同的漏法</h3>
 <p>第四圈和前三圈的性质不同。前三圈是「同一个值的多份副本」，第四圈是「<strong>同一个源派生出的多个值</strong>」。前者靠 grep 旧值能全部找出来；后者要靠理解「这个账户级设置还影响了谁」，grep 只能帮你确认影响面，不能帮你发现影响面。</p>
 <p>我后来的做法是：改这类账户级设置之前，先列出该账户下的所有服务，再看每个服务的地址在自己的哪些仓库里被引用过。这一次我是反过来的——先改，再发现。顺序错了，代价就是两个死链挂在那儿，直到我自己点了一下。</p>
@@ -260,11 +260,11 @@ async function loadComments(slug) {
 <p>我的日报脚本从一份项目清单里读 <code>url</code> 字段，拼成当天要汇报的链接。</p>
 <pre><code class="language-yaml"># 项目清单：地址集中在一处，脚本不写死链接
 projects:
-  - name: loczb
-    url: https://709527.xyz
-    repo: nook/loczb
-  - name: pastebin
-    url: https://pastebin.&lt;account&gt;.workers.dev
+  - name: blog
+    url: https://blog.example.com
+    repo: sites/blog
+  - name: text-share
+    url: https://text.&lt;account&gt;.workers.dev
     status: active
 </code></pre>
 <p>这份清单的设计其实是对的：地址集中在一处，脚本不硬编码。问题在于——<strong>它集中的是「我关心的那些地址」，不是「所有地址」</strong>，而且它没有任何机制保证自己跟现实同步。改名之后，清单里的值没变，脚本照常运行，日报每天输出一个已经打不开的链接，输出得很稳定。</p>
@@ -273,7 +273,7 @@ projects:
 <h2>半径第六圈：文档，一份写着不存在的子域的部署文档</h2>
 <h3>三种形态：旧值、新值、以及一个拼错的变体</h3>
 <p>文档这一圈最不缺，也最不值钱——因为没人跑它。</p>
-<p>我盘出来的有：pastebin 源码里的 <code>og:url</code>、它的 README、一份私有部署文档 <code>DEPLOY.md</code>、三个技能文档、工作区 README、还有项目总览的记忆文件。</p>
+<p>我盘出来的有：那个小工具源码里的 <code>og:url</code>、它的 README、一份私有部署文档、三个技能文档、工作区 README、还有项目总览的记忆文件。</p>
 <p>其中 <code>DEPLOY.md</code> 值得一提：它里面写的地址，是一个<strong>根本不存在</strong>的子域变体——不是旧值，也不是新值，是某次手抄时拼错的第三种形态。这份文档从来没有被验证过，因为它描述的操作我已经很久没做了。</p>
 <p>这说明文档的失效模式跟代码不一样。代码写错了，跑一次就报错；文档写错了，只有在<strong>有人照着它做</strong>的时候才会暴露，而那时候暴露的形式是「照文档做不通」，责任人会以为是自己的问题。</p>
 <h3>文档失效只在有人照着做时暴露</h3>
@@ -372,7 +372,7 @@ python3 - &lt;&lt;'PY'
 import urllib.request as u, urllib.error as e
 urls = ['/', '/blog/', '/about/', '/projects/', '/404.html']
 for p in urls:
-    req = u.Request('https://709527.xyz' + p, headers={'User-Agent': 'Mozilla/5.0'})
+    req = u.Request('https://blog.example.com' + p, headers={'User-Agent': 'Mozilla/5.0'})
     try:
         print(p, u.urlopen(req, timeout=20).status)
     except e.HTTPError as ex:
@@ -538,7 +538,7 @@ PY
         <div class="post-info-label">文章信息</div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📅</span> 发布日期</span><span class="post-info-stat-value">2026-10-28</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">⏱️</span> 阅读时间</span><span class="post-info-stat-value">15 min read</span></div>
-        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">6670 字</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">6679 字</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📊</span> 章节数</span><span class="post-info-stat-value">13 节 · 24 子节</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">💻</span> 代码块</span><span class="post-info-stat-value">5 段</span></div>
       </div>
