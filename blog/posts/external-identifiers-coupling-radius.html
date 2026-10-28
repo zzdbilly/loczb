@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <script>document.documentElement.classList.add("js");try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://static.cloudflareinsights.com https://loczb-comments.billymust.workers.dev; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://loczb-comments.billymust.workers.dev https://dashscope.aliyuncs.com https://709527.xyz https://www.709527.xyz https://cloudflareinsights.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
+    <script>/* 反点击劫持兜底：GitHub Pages 无法下发 X-Frame-Options / CSP frame-ancestors */(function(){if(self===top)return;try{top.location=self.location}catch(e){}setTimeout(function(){if(self!==top){document.documentElement.style.display='none';}},400);})();</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>别人的一次改名，是你的全站停机：外部标识符的耦合半径 | 张小猛 - loczb</title>
+    <meta name="description" content="一次账户子域改名暴露 9 处隐藏副本。外部标识符被写了几遍，改名成本就是几倍、停机半径就是几圈——硬编码等于把发布权交给别人。">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="别人的一次改名，是你的全站停机：外部标识符的耦合半径 | 张小猛 - loczb">
+    <meta property="og:description" content="一次账户子域改名暴露 9 处隐藏副本。外部标识符被写了几遍，改名成本就是几倍、停机半径就是几圈——硬编码等于把发布权交给别人。">
+    <meta property="og:url" content="https://709527.xyz/blog/posts/external-identifiers-coupling-radius.html">
+    <meta property="og:type" content="article">
+    <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
+    <meta property="og:site_name" content="loczb">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="别人的一次改名，是你的全站停机：外部标识符的耦合半径 | 张小猛 - loczb">
+    <meta name="twitter:description" content="一次账户子域改名暴露 9 处隐藏副本。外部标识符被写了几遍，改名成本就是几倍、停机半径就是几圈——硬编码等于把发布权交给别人。">
+    <meta name="twitter:image" content="https://709527.xyz/assets/images/og-image.png">
+
+        <script type="application/ld+json">
+{
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "别人的一次改名，是你的全站停机：外部标识符的耦合半径",
+      "description": "一次账户子域改名暴露 9 处隐藏副本。外部标识符被写了几遍，改名成本就是几倍、停机半径就是几圈——硬编码等于把发布权交给别人。",
+      "image": "https://709527.xyz/assets/images/og-image.png",
+      "author": {
+            "@type": "Person",
+            "name": "张小猛",
+            "url": "https://709527.xyz/about/"
+      },
+      "publisher": {
+            "@type": "Organization",
+            "name": "loczb",
+            "logo": {
+                  "@type": "ImageObject",
+                  "url": "https://709527.xyz/assets/images/favicon.svg"
+            }
+      },
+      "datePublished": "2026-10-28T17:20:00+08:00",
+      "dateModified": "2026-10-28T17:20:00+08:00",
+      "url": "https://709527.xyz/blog/posts/external-identifiers-coupling-radius.html",
+      "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://709527.xyz/blog/posts/external-identifiers-coupling-radius.html"
+      },
+      "keywords": "配置管理, 部署, 耦合, 工程实践",
+      "articleSection": "DevOps",
+      "timeRequired": "PT15M",
+      "inLanguage": "zh-CN"
+}
+    </script>
+
+    <link rel="stylesheet" href="../../assets/css/style.css?v=c8e170d8f9">
+    <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
+    <link rel="alternate icon" href="../../assets/images/favicon.ico">
+    <link rel="canonical" href="https://709527.xyz/blog/posts/external-identifiers-coupling-radius.html">
+</head>
+<body>
+  <!-- PARTIAL:SKIP_LINK -->
+  <a href="#main-content" class="skip-link">跳至主要内容</a>
+  <!-- /PARTIAL:SKIP_LINK -->
+
+  <!-- Navigation -->
+<!-- PARTIAL:NAV -->
+  <nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">
+      loc<span>zb</span>
+    </a>
+    <button class="nav-toggle" aria-label="打开菜单" aria-expanded="false" aria-controls="nav-links-menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <div class="nav-overlay"></div>
+    <ul class="nav-links" id="nav-links-menu">
+      <li><a href="/" class="nav-link" data-nav="home">首页</a></li>
+      <li><a href="/projects/" class="nav-link" data-nav="projects">项目</a></li>
+      <li><a href="/blog/" class="nav-link active" data-nav="blog">博客</a></li>
+      <li><a href="/about/" class="nav-link" data-nav="about">关于</a></li>
+    </ul>
+    <button class="theme-toggle" aria-label="切换主题" title="切换亮/暗模式">
+      <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="5"></circle>
+        <line x1="12" y1="1" x2="12" y2="3"></line>
+        <line x1="12" y1="21" x2="12" y2="23"></line>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+        <line x1="1" y1="12" x2="3" y2="12"></line>
+        <line x1="21" y1="12" x2="23" y2="12"></line>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+      </svg>
+      <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+      </svg>
+    </button>
+  </div>
+</nav>
+  <!-- /PARTIAL:NAV -->
+  <main class="section" id="main-content" style="padding-bottom: 0; padding-top: var(--space-4xl);">
+    <div class="container container-narrow">
+      <a href="../index.html" class="back-link">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        返回博客列表
+      </a>
+
+      <article class="post-content">
+        <h1>别人的一次改名，是你的全站停机：外部标识符的耦合半径</h1>
+
+        <div class="post-meta">
+          <span class="meta-item"><span aria-hidden="true">📅</span> 2026-10-28 17:20:00</span>
+          <span class="meta-item"><span aria-hidden="true">⏱️</span> 15 min read</span>
+          <span class="meta-item"><span aria-hidden="true">👤</span> 张小猛</span>
+        </div>
+
+        <div class="post-tags">
+          <span class="tag">配置管理</span>
+          <span class="tag">部署</span>
+          <span class="tag">耦合</span>
+          <span class="tag">工程实践</span>
+        </div>
+
+        
+
+        <h2>一个改名的下午：我改的是别人的设置，停的是自己的站</h2>
+<p>事情的开头跟我自己的服务器没有关系。</p>
+<p>我把 Cloudflare 账户的 <code>workers.dev</code> 子域改了个名——从旧账号名换成一个新名字。这个动作在控制台上是一次点击，语义上是一次「账户级设置变更」，影响面是「该账户下所有 Worker 的默认域名」。我当时心里的预期是：评论服务会换地址，我改一下前端就够了，十分钟的事。</p>
+<p>十分钟之后，全站评论区坏了。</p>
+<p>不是报错，不是 500，不是构建失败。是读者打开任意一篇文章，往下滚到评论区，看到一行「评论加载失败」。而我的构建、我的 CI、我的死链巡检、我的部署检查，全部是绿的。它们没有一个人在看我。</p>
+<p>这件事的性质值得先说清楚，因为它决定了后面所有讨论的方向：<strong>我改的是别人家的一个设置，停的是我自己的站。</strong> 那个子域不是我控制的命名空间里的一个变量，它是 Cloudflare 账户的一个属性；它一变，所有挂在上面的地址同时变，而我的仓库并不知道这件事发生过。</p>
+<p>一天下来，我在自己的项目里挖出 9 处需要跟着改的地方。9 处不是一个特别大的数字，但它分布得很有意思——从最前端的运行时请求，一直到我自己写给未来的「待办记忆」。我没有按文件清单去改，而是按<strong>离改名的距离</strong>去量：以那次改名为圆心，一圈一圈往外，看每一圈的半径有多长，以及每一圈的失效长什么样。</p>
+<p>这篇就是那份测量记录。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">圈层</th>
+<th style="text-align: left;">漏在哪里</th>
+<th style="text-align: left;">为什么容易被忘</th>
+<th style="text-align: left;">失效时的表现</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">第一圈 · 运行时</td>
+<td style="text-align: left;">评论组件里硬编码的 <code>API_BASE</code></td>
+<td style="text-align: left;">它在业务代码里，不像配置</td>
+<td style="text-align: left;">评论区空白，无报错</td>
+</tr>
+<tr>
+<td style="text-align: left;">第二圈 · 策略层</td>
+<td style="text-align: left;">文章模板 CSP 的 <code>script-src</code> / <code>connect-src</code></td>
+<td style="text-align: left;">同一个值在同一个文件里写了两遍</td>
+<td style="text-align: left;">请求被浏览器拦截</td>
+</tr>
+<tr>
+<td style="text-align: left;">第二圈 · 策略层</td>
+<td style="text-align: left;">18 个页面各自内联的同一份 CSP</td>
+<td style="text-align: left;">不走文章模板，生成链覆盖不到</td>
+<td style="text-align: left;">同上，且是逐个页面</td>
+</tr>
+<tr>
+<td style="text-align: left;">第三圈 · 隐形文件</td>
+<td style="text-align: left;"><code>_headers</code> 里的一份 CSP</td>
+<td style="text-align: left;">对当前托管平台不生效</td>
+<td style="text-align: left;">无表现，但文件公开可读</td>
+</tr>
+<tr>
+<td style="text-align: left;">第四圈 · 衍生标识</td>
+<td style="text-align: left;">同账户另一个 Worker 的项目链接</td>
+<td style="text-align: left;">改名动机与它无关</td>
+<td style="text-align: left;">两个死链</td>
+</tr>
+<tr>
+<td style="text-align: left;">第五圈 · 看板与脚本</td>
+<td style="text-align: left;">日报脚本读的 <code>url</code> 字段</td>
+<td style="text-align: left;">数据在配置里，不在代码里</td>
+<td style="text-align: left;">每天输出旧地址</td>
+</tr>
+<tr>
+<td style="text-align: left;">第六圈 · 文档</td>
+<td style="text-align: left;">源码 OG 标签、README、部署文档、技能文档</td>
+<td style="text-align: left;">文档没人跑，自然没人验</td>
+<td style="text-align: left;">读者与未来的自己走错</td>
+</tr>
+<tr>
+<td style="text-align: left;">第七圈 · 记忆与状态</td>
+<td style="text-align: left;">一条写着旧结论的待写入记忆</td>
+<td style="text-align: left;">它描述的是「现状」，会自我延续</td>
+<td style="text-align: left;">把过期判断当事实引用</td>
+</tr>
+</tbody>
+</table>
+<p>表里的顺序不是按修复难度排的，是按<strong>离圆心由近到远</strong>排的。越往外，越不疼，也越容易被留下来；但恰恰是最外圈的那些，会在半年后变成「为什么文档上写的地址打不开」这类没人认领的问题。</p>
+<h2>半径第一圈：运行时，前端一声不响地坏掉</h2>
+<h3>一个字符串常量，决定了评论区能不能用</h3>
+<p>评论组件的初始化代码里，评论服务地址是一个字符串常量。</p>
+<pre><code class="language-js">// 改造前的样子：地址直接写在组件里
+const API_BASE = 'https://comments.&lt;account&gt;.workers.dev';
+
+async function loadComments(slug) {
+  const res = await fetch(`${API_BASE}/list?slug=${encodeURIComponent(slug)}`);
+  if (!res.ok) throw new Error('comments unavailable');
+  return res.json();
+}
+</code></pre>
+<p>这段代码本身没有错。它错在把「外部标识符」当成了常量——而外部标识符的定义就是「它的值由别人决定」。旧地址在新子域生效的那一刻就不再解析，DNS 层面直接查不到，于是 <code>fetch</code> 抛出网络错误，<code>loadComments</code> 走到异常分支，UI 把错误吞掉，渲染成一句「评论加载失败」。</p>
+<h3>它坏掉的时候，没有任何一个监控在看</h3>
+<p>这一圈最值得记的不是「要改」，而是<strong>它为什么没有惊动任何监控</strong>。</p>
+<p>我的构建是静态站点构建，它不执行浏览器里的代码；我的死链巡检扫的是仓库里的内部链接，管不到运行时的 <code>fetch</code>；我的部署检查比对的是线上和本地的文件哈希，两边都是同一个坏文件，自然一致。整条链路上有一个巨大的盲区：<strong>从「页面被正确部署」到「页面里的请求能成功」之间，没有任何东西在验证。</strong></p>
+<h3>三件事确认它是真的活了</h3>
+<p>改到新地址之后，我做了三件事才算确认它真的活了，而不是「我觉得它活了」：</p>
+<ol>
+<li>直接请求 API，看返回码与响应体，确认服务端在新地址上是通的。</li>
+<li>在真浏览器里打开一篇文章页，看 Network 面板里那条评论请求——实测 436ms 成功返回，列表正常渲染出条目。</li>
+<li>确认数据没丢：评论在 D1 里按文章 slug 存储，跟域名无关，改名只换了入口，没换家。</li>
+</ol>
+<p>第三点是我当时最担心的。事后看，它也是这次事故里唯一让人松口气的部分：<strong>入口地址和存储键是两套标识符，它们没有耦合在一起。</strong> 如果当初我把评论按「完整 URL」当键存，这次改名就等于把全站评论清零，那才是真的停机。</p>
+<h2>半径第二圈：策略层，一个地址在同一个文件里写了两遍</h2>
+<h3>script-src 与 connect-src，各自记了一遍</h3>
+<p>修好前端之后，我以为结束了。然后控制台报了 CSP 违规。</p>
+<p>内容安全策略是一份白名单：它告诉浏览器「这个页面允许从哪些源加载脚本、允许向哪些源发请求」。评论服务的地址必须同时出现在两个指令里——<code>script-src</code>（加载 SDK）和 <code>connect-src</code>（发起 XHR/fetch）。也就是说，<strong>同一个值，在同一个文件里，被写了两遍。</strong></p>
+<pre><code class="language-http">Content-Security-Policy: default-src 'self'; script-src 'self' https://comments.&lt;account&gt;.workers.dev; connect-src 'self' https://comments.&lt;account&gt;.workers.dev; img-src 'self' data:; style-src 'self' 'unsafe-inline'
+</code></pre>
+<p>这一圈的特点是：<strong>它不是「忘了改」，而是「改了一遍以为改完了」。</strong> 前端改完、页面能加载、SDK 脚本也能下下来，但请求发不出去——因为 <code>connect-src</code> 还是旧的。表现上跟第一圈几乎一样（评论区空白），排查方向却完全不同。这就是副本的代价：两份副本让你有两次机会只改一半。</p>
+<h3>模板之外的 18 个页面，生成链覆盖不到</h3>
+<p>更麻烦的是第二圈的下一层。我的文章页由模板生成，模板里的 CSP 改一处，所有文章页跟着变——这部分是可控的。但站上还有一批页面<strong>不走文章模板</strong>：首页、关于页、项目页、404、离线页，以及从第 2 页到第 13 页的分页列表。这些页面各自内联了同一份 CSP，一共 18 个文件。</p>
+<p>它们由索引重建脚本产出，而索引重建脚本不读文章模板。也就是说，<strong>生成链覆盖不到它们</strong>——不是「脚本有 bug」，是这些页面的 CSP 从一开始就是复制粘贴出来的字面量，从来没被参数化。我最后是逐个页面改的，因为改生成脚本的风险（影响 18 个页面的结构）大于改 18 处字符串的风险。这是一次有意识的妥协，不是最优解。</p>
+<h2>半径第三圈：隐形文件，不生效但公开可读</h2>
+<h3>一个对当前平台不生效的文件，为什么还要改</h3>
+<p>仓库里有个 <code>_headers</code> 文件。</p>
+<p>它的用途是给 Cloudflare Pages 用的：Pages 支持用一个纯文本文件声明响应头，包括 CSP。而我现在的托管是 GitHub Pages，完全不认这个文件——它不生效，不在任何请求路径上，也不被任何页面引用。</p>
+<p>按「生效路径」去排查，它根本不该出现在清单里。但它在仓库里，而仓库是公开的；我用浏览器直接访问那个路径，返回 200，内容明明白白写着旧子域的 CSP。</p>
+<p>这一圈暴露的是一个判断错误：<strong>我把「不生效」和「不重要」当成了同一件事。</strong></p>
+<p>对功能而言它确实不重要——改不改，站点行为一样。但对另外两件事它很重要：</p>
+<ul>
+<li>它是<strong>给别人看的</strong>。任何人（包括未来的我）读这个仓库，会认为这是这个站点的头部策略声明。里面写着旧地址，就是一份错误的现状描述。</li>
+<li>它是<strong>为迁移准备的</strong>。哪天真的迁到 Pages，这个文件会立刻变成生效路径，而那时候没人会记得它里面有个过期域名——它会在迁移当天制造一次「怎么刚迁完评论就坏了」的二次事故。</li>
+</ul>
+<h3>从「生效路径」换到「仓库视角」</h3>
+<p>第三圈之后我调整了排查顺序：不再只问「哪些地方在生效路径上」，而是问「<strong>哪些地方写着这个值</strong>」。前者是运行时视角，后者是仓库视角。改名这类事件，仓库视角才是完整视角。</p>
+<h2>半径第四圈：衍生标识，你只是想改评论，却打断了另一个项目</h2>
+<h3>你只改了评论，它顺手打断了另一个项目</h3>
+<p>这一圈是我当时最没有预期到的。</p>
+<p>同一个 Cloudflare 账户下，我还跑着另一个 Worker：一个用来临时分享文本的 pastebin。它在我心里的定位是「跟博客无关的独立小工具」。改名之后，它也跟着换了地址——因为 <code>workers.dev</code> 子域是<strong>账户级</strong>的，不是 Worker 级的。</p>
+<p>结果是我博客首页和项目页上的两个项目链接变成了死链。</p>
+<p>请注意这里的因果结构：<strong>我改名的动机跟 pastebin 毫无关系，但改名顺手把它打断了。</strong> 我不是「忘了改 pastebin」，我是「根本不知道 pastebin 在这个半径之内」。它的地址出现在我博客的 HTML 里，这一条引用关系把两个本来独立的项目连成了一条耦合链——而这条链在我做决策时不在我的视野里。</p>
+<h3>副本与派生：两种性质不同的漏法</h3>
+<p>第四圈和前三圈的性质不同。前三圈是「同一个值的多份副本」，第四圈是「<strong>同一个源派生出的多个值</strong>」。前者靠 grep 旧值能全部找出来；后者要靠理解「这个账户级设置还影响了谁」，grep 只能帮你确认影响面，不能帮你发现影响面。</p>
+<p>我后来的做法是：改这类账户级设置之前，先列出该账户下的所有服务，再看每个服务的地址在自己的哪些仓库里被引用过。这一次我是反过来的——先改，再发现。顺序错了，代价就是两个死链挂在那儿，直到我自己点了一下。</p>
+<h2>半径第五圈：看板与脚本，日报每天都在念旧地址</h2>
+<h3>地址集中在一处，漂移还是会发生</h3>
+<p>我的日报脚本从一份项目清单里读 <code>url</code> 字段，拼成当天要汇报的链接。</p>
+<pre><code class="language-yaml"># 项目清单：地址集中在一处，脚本不写死链接
+projects:
+  - name: loczb
+    url: https://709527.xyz
+    repo: nook/loczb
+  - name: pastebin
+    url: https://pastebin.&lt;account&gt;.workers.dev
+    status: active
+</code></pre>
+<p>这份清单的设计其实是对的：地址集中在一处，脚本不硬编码。问题在于——<strong>它集中的是「我关心的那些地址」，不是「所有地址」</strong>，而且它没有任何机制保证自己跟现实同步。改名之后，清单里的值没变，脚本照常运行，日报每天输出一个已经打不开的链接，输出得很稳定。</p>
+<h3>对账要测现实，不是测记忆</h3>
+<p>这一圈的教训不是「配置要集中」（那部分我早就做了），而是：<strong>集中之后还需要一条「与现实对账」的路径。</strong> 配置是声明，现实是事实，两者之间的漂移是静默的——声明不会自己发现自己是错的。对账可以很土：定期把那批 URL 全部请求一遍，看返回码。土办法的价值在于它测的是现实，不是我的记忆。</p>
+<h2>半径第六圈：文档，一份写着不存在的子域的部署文档</h2>
+<h3>三种形态：旧值、新值、以及一个拼错的变体</h3>
+<p>文档这一圈最不缺，也最不值钱——因为没人跑它。</p>
+<p>我盘出来的有：pastebin 源码里的 <code>og:url</code>、它的 README、一份私有部署文档 <code>DEPLOY.md</code>、三个技能文档、工作区 README、还有项目总览的记忆文件。</p>
+<p>其中 <code>DEPLOY.md</code> 值得一提：它里面写的地址，是一个<strong>根本不存在</strong>的子域变体——不是旧值，也不是新值，是某次手抄时拼错的第三种形态。这份文档从来没有被验证过，因为它描述的操作我已经很久没做了。</p>
+<p>这说明文档的失效模式跟代码不一样。代码写错了，跑一次就报错；文档写错了，只有在<strong>有人照着它做</strong>的时候才会暴露，而那时候暴露的形式是「照文档做不通」，责任人会以为是自己的问题。</p>
+<h3>文档失效只在有人照着做时暴露</h3>
+<p>我对文档的处理原则因此改了一条：<strong>凡是包含外部标识符的文档，标识符必须来自可复制的单一位置，而不是手打。</strong> 手打一个域名，出错概率不高，但错了不会有人告诉你。</p>
+<h2>半径最外圈：记忆与状态，一条差点被写成「现状」的待写入记忆</h2>
+<h3>记忆的语法是陈述句，没有时间戳</h3>
+<p>最后一圈最阴。</p>
+<p>我有一条<strong>待写入</strong>的记忆，内容是：「旧子域暴露在 143 页里，需要 token 才能改，暂不处理。」</p>
+<p>这条记忆写于问题解决之前，描述的是当时的判断。事情在一天之内就解决了——143 页全部换成了新值。如果这条记忆按原样写进去，它会变成一条<strong>假事实</strong>：一个已经过期的结论，以「现状」的语法被存储下来，然后在未来某次决策里被当成前提引用。</p>
+<p>记忆层的危险不在「记错」，而在<strong>记忆的语法是陈述句，没有时间戳语义</strong>。代码里的注释过期了，你读的时候知道它是注释；记忆过期了，你读的时候以为它是事实。它的失效是无声的，而且它会<strong>自我强化</strong>——基于它做出的决策，又会变成新的记忆。</p>
+<h3>把状态改写成事件</h3>
+<p>我最后没写那条，改写成了「已处理 + 处理方式 + 验证手段」。差别在于：前者是一个悬而未决的状态，后者是一个已关闭的事件。状态会被继承，事件不会。</p>
+<h2>为什么漏：不是马虎，是同一个值被写了 N 遍</h2>
+<h3>每一份副本，在当时都是合理的决定</h3>
+<p>把七圈摊开看，我漏的原因只有一个，而且它不在任何单独一圈里。</p>
+<p><strong>这个值在我系统里存在 9 份副本，没有一份是「源」。</strong></p>
+<p>不是我不小心。恰恰相反，每一份副本在当时都是合理的决定：把地址写在组件里，是因为组件要独立可用；把 CSP 内联在页面里，是因为静态站点没有服务端可以统一注入；在文档里手打地址，是因为写文档的时候地址就在浏览器标签页上。每一个决定单独看都说得通，合起来就是一个<strong>改了要改 9 次、且没有任何机制提醒你漏了第 7 次</strong>的结构。</p>
+<p>副本数与漏的概率不是线性关系，是指数式的心态关系：改完前 5 处，你会产生「差不多都改完了」的确定感，而剩下 4 处正好落在你没在看的圈层里。确定感本身是漏的原因之一。</p>
+<h3>每份副本都是一次发布权的让渡</h3>
+<p>还有一层更结构性的话要说：<strong>每一份副本，都是一次发布权的让渡。</strong></p>
+<p>地址写死在 9 个地方，意味着这个地址的任何变更都要经过 9 次人工操作才能落地——而这 9 次操作的触发条件，是「有人记得」。如果这个值由别人控制（比如账户子域），那么变更的发起权在别人手上，落地的执行权在我手上，两者之间没有任何自动连接。别人按一下，我要跑一天。这就是「别人的一次改名，是你的全站停机」在工程上的准确含义：<strong>不是他不该改，是我没有把「他改了」这件事变成「我的系统自动跟上」。</strong></p>
+<h2>单点来源：把半径收到一个点上</h2>
+<h3>目标：一个定义，其余全是引用</h3>
+<p>设计上的目标很明确：让这个值在全系统里<strong>只有一个定义</strong>，其余全部是引用。</p>
+<h3>构建时注入：把地址从代码里赶出去</h3>
+<p>静态站点没有服务端，最接近「运行时注入」的手段是构建时注入。地址从配置读，构建产物里写死——注意，产物里写死是没问题的，因为产物是<strong>生成物</strong>，下次构建会重新生成；有问题的是<strong>源文件里写死</strong>。</p>
+<pre><code class="language-js">// 构建脚本里：一次读取，多处注入
+const fs = require('node:fs');
+const cfg = JSON.parse(fs.readFileSync('site.config.json', 'utf8'));
+const commentsBase = cfg.services.comments.baseUrl;
+
+const runtime = `window.__SITE__ = ${JSON.stringify({
+  commentsApi: commentsBase,
+  csp: `script-src 'self' ${commentsBase}; connect-src 'self' ${commentsBase}`,
+})};`;
+fs.writeFileSync('assets/site-runtime.js', runtime);
+</code></pre>
+<p>这段代码的价值不在技巧，在<strong>它把「两份副本」变成了「一次求值」</strong>。模板里 CSP 的两个指令都从同一个 <code>commentsBase</code> 拼出来，物理上不可能只改一半。</p>
+<h3>三种注入手段，按站点形态选</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">手段</th>
+<th style="text-align: left;">适用场景</th>
+<th style="text-align: left;">代价</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">构建时变量注入</td>
+<td style="text-align: left;">静态站点、产物可重建</td>
+<td style="text-align: left;">改值要重新构建并发布</td>
+</tr>
+<tr>
+<td style="text-align: left;">CI 环境变量</td>
+<td style="text-align: left;">同一份源码部署到多环境</td>
+<td style="text-align: left;">本地构建与线上可能不一致</td>
+</tr>
+<tr>
+<td style="text-align: left;">模板变量 / 配置中心</td>
+<td style="text-align: left;">有服务端渲染或运行时配置</td>
+<td style="text-align: left;">引入一个额外的可用性依赖</td>
+</tr>
+</tbody>
+</table>
+<p>我用的是第一种，因为站点是纯静态的，产物本来就要重建。如果换成有服务端的形态，配置中心更合适——但要注意它会变成新的单点：配置中心挂了，全站起不来。<strong>收拢耦合不是消灭依赖，是把散落的依赖换成一个你知情的依赖。</strong></p>
+<h3>什么该硬编码：少数不该动态化的地方</h3>
+<p>这里要公平一点，不然容易滑向「一切皆配置」的教条。</p>
+<p>有几类值我仍然写死，而且认为写死是对的：</p>
+<ul>
+<li><strong>规范里定义的常量</strong>。HTTP 方法名、状态码、协议前缀，这些不随部署环境变，抽成配置只是把常量搬到更远的地方。</li>
+<li><strong>安全边界上的值</strong>。CSP 里 <code>'self'</code> 的有无、<code>'unsafe-inline'</code> 的开关，这类决定的语义是「我允许什么」，它应该被读到、被 review，而不是被一个环境变量在部署时悄悄替换。</li>
+<li><strong>一次性脚本里的地址</strong>。跑完就删的迁移脚本，为了让它可配置而引入一套机制，是把成本花在了不会重复发生的地方。</li>
+</ul>
+<p>判断标准不是「这个值会不会变」，而是「<strong>它变的时候，有没有第二个人需要知道</strong>」。需要，就单点来源；不需要，写死更诚实。</p>
+<h2>两个反直觉点</h2>
+<h3>账户级设置的半径，大于你以为的范围</h3>
+<p>我改名的动机是「评论服务的地址不好看」，而我实际影响的是「该账户下所有 Worker 的默认域名」。</p>
+<p>这里有个认知错位值得单独说：我在控制台上操作的对象是<strong>一个账户属性</strong>，但我脑子里想的是<strong>一个服务的地址</strong>。对象和心智模型不匹配，半径就会被低估一个数量级。</p>
+<p>同样的结构在很多地方存在：改一个组织名，所有仓库的默认 Pages 域名一起变；改一个项目 ID，所有引用它的 webhook 一起失效；改一个数据库实例名，所有连接串一起断。<strong>平台把它们设计成全局的，因为它们本来就是全局的；而使用者往往把它们当成局部的，因为操作入口是局部的。</strong> 一次点击的界面尺度，跟它的影响半径没有关系。</p>
+<h3>失效是静默的</h3>
+<p>这一点比上一点更值得记住。</p>
+<p>整个事故里，我没有收到任何一条告警。构建成功、部署成功、死链巡检通过、文件哈希一致。坏掉的东西是「浏览器里一个 <code>fetch</code> 返回了网络错误，而 UI 把它渲染成一句人话」。</p>
+<p>静默失效的共同特征是：<strong>错误被捕获了，然后被翻译成了正常状态。</strong> 评论区的「加载失败」在视觉上跟「这篇文章还没有评论」几乎一样；项目页的死链在视觉上跟「链接有点旧」几乎一样。系统没有报错，系统只是安静地少了一块功能。</p>
+<p>对抗静默失效的办法不是加更多日志，是加<strong>端到端的断言</strong>：不是「文件部署了吗」，而是「页面里的那个请求成功了吗」。前者我一直在测，后者我从来没测过。这次之后我加了一条最朴素的检查——定期把关键外部地址请求一遍，非 2xx 就报警。它拦不住所有问题，但它能拦住「地址已经不存在了而我还以为它在」这一类。</p>
+<p>我用来盘副本的也是同一类土办法：</p>
+<pre><code class="language-bash"># 1. 旧值还剩几处（改完之后这一条必须是 0）
+grep -rn --exclude-dir=.git --exclude-dir=node_modules \
+  -e '&lt;old-account&gt;' . | wc -l
+
+# 2. 新值铺开了几处（应与预期页数一致）
+grep -rl --exclude-dir=.git -e 'comments.&lt;account&gt;.workers.dev' . | wc -l
+
+# 3. 线上抽查：抓一批真实 URL 逐个看返回码
+python3 - &lt;&lt;'PY'
+import urllib.request as u, urllib.error as e
+urls = ['/', '/blog/', '/about/', '/projects/', '/404.html']
+for p in urls:
+    req = u.Request('https://709527.xyz' + p, headers={'User-Agent': 'Mozilla/5.0'})
+    try:
+        print(p, u.urlopen(req, timeout=20).status)
+    except e.HTTPError as ex:
+        print(p, ex.code)
+PY
+</code></pre>
+<p>第 3 条是我这次唯一算得上「验证」的动作：线上抓了 38 个 URL 逐个核对。38 不是全站，但覆盖了每一类模板产出的页面——比「首页能打开」有意义得多。</p>
+<h2>量半径的六条判据</h2>
+<h3>六条问句，动手前先答一遍</h3>
+<p>下次遇到「某个外部标识符要变」，我会先回答这六个问题，再动手：</p>
+<ol>
+<li><strong>这个值在我的系统里有几份副本？</strong> 不是「几个文件」，是「几处字面量」——同一个文件里写两遍算两份。</li>
+<li><strong>这些副本里，有几份在生效路径上？</strong> 生效路径之外的（比如给未来用的 <code>_headers</code>）不算功能风险，但算现状描述风险。</li>
+<li><strong>这个标识符是哪个层级的？</strong> 服务级、账户级、组织级——层级越高，半径越大，跟我的改动动机越无关。</li>
+<li><strong>同一个源还派生了哪些值？</strong> 同账户的其它服务、同一项目的其它环境，它们有没有被我的站点引用。</li>
+<li><strong>失效会以什么形式出现？</strong> 如果答案是「静默地少一块功能」，那它必须在改完之后被主动验证一次。</li>
+<li><strong>谁会读到这个值？</strong> 只有构建进程，还是也包括人和未来的自己——后者的副本必须来自可复制的单一位置。</li>
+</ol>
+<p>六个问题里，第 3 和第 4 个是我这次答错的。它们不涉及任何技术细节，只涉及「我知道自己在动什么吗」。</p>
+<h2>收束：这次改名的真正成本不是那 9 处修改</h2>
+<p>9 处修改加起来不到一小时。真正花掉一天的是<strong>发现</strong>：我不知道半径有多长，只能一圈一圈往外摸，每摸到一圈就以为到底了，然后被下一圈打回来。</p>
+<p>这不是一次配置管理事故，配置管理只是它的表现形式。它的实质是：<strong>我的系统里有一批「我以为它是常量、其实是别人的变量」的东西，而它们之间没有任何一致性约束。</strong> 只要这个结构不变，下一次改名——不管是我的还是别人的——还会重演一遍，只是漏的那几处换一批。</p>
+<p>所以这次之后我做的事很具体，也很无聊：把评论服务地址收进一份配置，让模板从它求值；把 18 个页面的 CSP 改成由生成脚本统一产出；把 <code>_headers</code> 和文档里的地址改成引用同一份配置；把「关键外部地址可达性」加进定期检查。</p>
+<p>没做的是「建一套配置管理体系」。那需要我先证明自己有第二个消费方，而我现在只有一个。</p>
+<p>如果要把这次的收获压成一句话：<strong>耦合半径不是由代码量决定的，是由这个值被写了几遍决定的。</strong> 写一遍，半径是一；写九遍，半径就是九，而且你只会记得前五遍。别人改一次名，你就要跑九趟——这不是他给你添麻烦，是你把发布权分九次交了出去。</p>
+
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="nextjs-prisma-部署-vercel-常见踩坑外键约束与构建时数据修复.html">
+            <div class="related-post-card-title">Next.js + Prisma 部署 Vercel 常见踩坑：外键约束与构建时数据修复</div>
+            <div class="related-post-card-tags"><span>Next.js</span><span>Prisma</span><span>Vercel</span></div>
+          </a>
+          <a class="related-post-card" href="idempotent-reproducible-builds.html">
+            <div class="related-post-card-title">幂等与可复现：为什么你的构建总在产生无意义的 diff</div>
+            <div class="related-post-card-tags"><span>构建</span><span>幂等</span><span>可复现</span></div>
+          </a>
+          <a class="related-post-card" href="技术文档编写指南写出别人真的会看的文档.html">
+            <div class="related-post-card-title">技术文档编写指南写出别人真的会看的文档</div>
+            <div class="related-post-card-tags"><span>技术写作</span><span>文档规范</span><span>工程实践</span></div>
+          </a>
+          <a class="related-post-card" href="ai-agent-实战用子代理并行驱动多项目开发.html">
+            <div class="related-post-card-title">AI Agent 实战：用子代理并行驱动多项目开发</div>
+            <div class="related-post-card-tags"><span>AI</span><span>Agent</span><span>工程实践</span></div>
+          </a>
+          <a class="related-post-card" href="software-engineer-learns-from-manufacturing-lean.html">
+            <div class="related-post-card-title">软件工程师能从制造业学到什么：精益思维重塑开发流程</div>
+            <div class="related-post-card-tags"><span>工程实践</span><span>思考</span><span>工程思维</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
+
+        <!-- Post Copyright & License Card -->
+        <div class="post-copyright-card">
+          <div class="copyright-header">
+            <div class="copyright-badge">
+              <span>📜</span>
+              <span>原创与知识共享协议</span>
+            </div>
+            <button class="copyright-cite-btn" id="copy-cite-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+              </svg>
+              <span>复制 Markdown 引用</span>
+            </button>
+          </div>
+          <div class="copyright-list">
+            <div class="copyright-item"><strong>文章标题：</strong>别人的一次改名，是你的全站停机：外部标识符的耦合半径</div>
+            <div class="copyright-item"><strong>文章作者：</strong>张小猛 · loczb</div>
+            <div class="copyright-item"><strong>永久链接：</strong><a href="https://709527.xyz/blog/posts/external-identifiers-coupling-radius.html">https://709527.xyz/blog/posts/external-identifiers-coupling-radius.html</a></div>
+            <div class="copyright-item"><strong>版权声明：</strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 国际许可协议。商业转载请联系作者获得授权，非商业转载请注明出处。</div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </main>
+
+  <!-- Related Posts / Navigation -->
+  <section class="section" aria-label="读完之后" style="padding-top: 0;">
+    <div class="container container-narrow">
+      <!-- Post Nav Prev Next -->
+      <nav class="post-nav" aria-label="文章翻页导航">
+        <a href="sanitizer-is-a-filter-not-a-defense.html" class="post-nav-card post-nav-prev" rel="prev">
+          <span class="post-nav-label">← 上一篇</span>
+          <span class="post-nav-title">净化器不是防线，是过滤器：渲染第三方内容的两道门</span>
+        </a>
+        <div class="post-nav-card post-nav-next disabled" aria-disabled="true">
+          <span class="post-nav-label">下一篇 →</span>
+          <span class="post-nav-title">已是最新篇博文</span>
+        </div>
+      </nav>
+      <!-- /Post Nav Prev Next -->
+      <hr style="border: none; border-top: 1px solid var(--color-border); margin: var(--space-2xl) 0;">
+
+      <div class="blog-topics" style="margin-bottom: var(--space-xl); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+        <div>
+          <span class="topic-label">读完之后:</span>
+          <a href="../index.html" class="topic-tag">返回博客列表</a>
+          <a href="../index.html?view=series" class="topic-tag">浏览全部专栏</a>
+        </div>
+        <a href="#main-content" class="topic-tag" style="margin-left: auto;">↑ 回到顶部</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+<!-- PARTIAL:FOOTER -->
+  <footer class="footer" role="contentinfo">
+  <div class="footer-inner">
+    <p class="footer-signature">写代码，做产品，也认真生活。</p>
+    <div class="footer-social">
+      <a href="https://github.com/zzdbilly" class="footer-social-link" target="_blank" rel="noopener" aria-label="GitHub">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+      </a>
+      <a href="https://twitter.com/zzdbilly" class="footer-social-link" target="_blank" rel="noopener" aria-label="X (Twitter)">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      </a>
+      <a href="/rss.xml" class="footer-social-link" target="_blank" rel="noopener" aria-label="RSS 订阅">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+      </a>
+    </div>
+    <div class="footer-links">
+      <a href="/" class="footer-link">首页</a>
+      <a href="/projects/" class="footer-link">项目</a>
+      <a href="/blog/" class="footer-link">博客</a>
+      <a href="/about/" class="footer-link">关于</a>
+    </div>
+    <p class="footer-copyright">&copy; 2026 张小猛 · loczb · Built with care</p>
+  </div>
+</footer>
+  <!-- /PARTIAL:FOOTER -->
+
+  <script defer src="../../assets/js/main.js"></script>
+  <script defer src="../../assets/js/article.js?v=c9f1a378ea"></script>
+  <script defer src="../../assets/js/share.js"></script>
+  <!-- Back to Top & Reading Progress -->
+  <button class="back-to-top" id="backToTop" aria-label="回到顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
+  <div class="reading-progress" id="readingProgress"></div>
+
+  <!-- Post Sidebar Info（左侧） -->
+  <div class="post-sidebar-info" id="postSidebar">
+    <div class="post-info-card">
+      <div class="post-info-section">
+        <div class="post-info-label">作者</div>
+        <div class="post-info-author">
+          <div class="post-info-avatar">小</div>
+          <div>
+            <div class="post-info-author-name">张小猛</div>
+            <div class="post-info-author-desc">写代码，做产品</div>
+          </div>
+        </div>
+      </div>
+      <div class="post-info-section">
+        <div class="post-info-label">文章信息</div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📅</span> 发布日期</span><span class="post-info-stat-value">2026-10-28</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">⏱️</span> 阅读时间</span><span class="post-info-stat-value">15 min read</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">6597 字</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📊</span> 章节数</span><span class="post-info-stat-value">13 节 · 24 子节</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">💻</span> 代码块</span><span class="post-info-stat-value">5 段</span></div>
+      </div>
+      <div class="post-info-section" id="postSidebarTags">
+        <div class="post-info-label">标签</div>
+        <div class="post-info-links">
+          <a href="../../blog/index.html?tag=%E9%85%8D%E7%BD%AE%E7%AE%A1%E7%90%86" class="post-info-link"># 配置管理</a>
+          <a href="../../blog/index.html?tag=%E9%83%A8%E7%BD%B2" class="post-info-link"># 部署</a>
+          <a href="../../blog/index.html?tag=%E8%80%A6%E5%90%88" class="post-info-link"># 耦合</a>
+          <a href="../../blog/index.html?tag=%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5" class="post-info-link"># 工程实践</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Post TOC -->
+  <div class="post-toc-container" id="postToc">
+    <nav class="post-toc" aria-label="文章目录">
+      <div class="post-toc-title">目录</div>
+      <ul class="post-toc-list" id="tocList">
+      </ul>
+    </nav>
+  </div>
+
+  <!-- Comment System -->
+  <script src="../../workers/comment-system/comment-widget.js?v=5d8a6a1796" defer></script>
+
+  <!-- highlight.js 代码语法高亮（本地完整构建，无外部依赖） -->
+  <script defer src="../../assets/vendor/highlight/highlight.min.js"></script>
+  <script>
+    /* 语法高亮改为「可见优先、空闲补齐」：
+       highlight.js 要遍历全篇代码块并生成数百个 span，若在 DOMContentLoaded 里同步跑完，
+       会在关键路径上长时间占住主线程（2026-09-27 实测本页长任务 1548ms、DCL 3651ms；
+       改动后长任务 145ms、DCL 1378ms）。这里 DCL 阶段只登记观察，实际高亮交给
+       IntersectionObserver（近屏 800px 内优先）+ requestIdleCallback（剩余块每片 ≤4 块），
+       首屏代码块的着色时机与视觉基本无变化。 */
+    (function() {
+      function canPaint(b) {
+        return !b.classList.contains('hljs') && !b.closest('.codehilite');
+      }
+      function paint(b) {
+        if (!canPaint(b)) return;
+        try { hljs.highlightElement(b); } catch (e) {}
+      }
+      function init() {
+        var blocks = [].slice.call(document.querySelectorAll('pre code')).filter(canPaint);
+        if (!blocks.length) return;
+        if ('IntersectionObserver' in window) {
+          var io = new IntersectionObserver(function(entries, obs) {
+            entries.forEach(function(en) {
+              if (!en.isIntersecting) return;
+              paint(en.target);
+              obs.unobserve(en.target);
+            });
+          }, { rootMargin: '800px 0px' });
+          blocks.forEach(function(b) { io.observe(b); });
+        }
+        var i = 0;
+        var idle = window.requestIdleCallback || window.setTimeout;
+        var step = function() {
+          var quota = 4;
+          while (i < blocks.length && quota-- > 0) paint(blocks[i++]);
+          if (i < blocks.length) idle(step);
+        };
+        idle(step); // 不在 DCL 里同步跑：可见块由 IntersectionObserver 处理，其余走空闲分片
+      }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+      } else {
+        init();
+      }
+    })();
+  </script>
+
+  <!-- Cloudflare Web Analytics -->
+  <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "29e7cff6f37448989538e2165cb79187"}'></script>
+</body>
+</html>

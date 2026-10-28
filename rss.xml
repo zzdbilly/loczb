@@ -7,6 +7,14 @@
     <language>zh-CN</language>
     <atom:link href="https://709527.xyz/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>别人的一次改名，是你的全站停机：外部标识符的耦合半径</title>
+      <link>https://709527.xyz/blog/posts/external-identifiers-coupling-radius.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/external-identifiers-coupling-radius.html</guid>
+      <description>一次账户子域改名暴露 9 处隐藏副本。外部标识符被写了几遍，改名成本就是几倍、停机半径就是几圈——硬编码等于把发布权交给别人。</description>
+      <category>DevOps</category>
+      <pubDate>Wed, 28 Oct 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
       <title>净化器不是防线，是过滤器：渲染第三方内容的两道门</title>
       <link>https://709527.xyz/blog/posts/sanitizer-is-a-filter-not-a-defense.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/sanitizer-is-a-filter-not-a-defense.html</guid>
@@ -157,14 +165,6 @@
       <description>截至 2026 年 9 月的主流 VPS 厂商盘点、选型维度、下单开机、新机安全加固、Docker/Caddy 日常使用与费用控制的全流程实操指南。</description>
       <category>DevOps</category>
       <pubDate>Tue, 08 Sep 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>技术文档编写指南写出别人真的会看的文档</title>
-      <link>https://709527.xyz/blog/posts/技术文档编写指南写出别人真的会看的文档.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/技术文档编写指南写出别人真的会看的文档.html</guid>
-      <description>写了没人看、看了找不到答案、找到了已经过期——技术文档的三大死法。这篇把我维护博客和项目文档攒下的规范全摊开：读者画像、Diátaxis 分层、结构措辞红线、代码示例标准、docs-as-code 工作流、常见反模式和发布前检查清单。</description>
-      <category>开发</category>
-      <pubDate>Thu, 03 Sep 2026 00:00:00 +0800</pubDate>
     </item>
   </channel>
 </rss>

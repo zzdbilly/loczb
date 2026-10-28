@@ -144,7 +144,7 @@
             <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
             </svg>
-            <input type="text" id="home-search-input" placeholder="即时检索 124 篇博文、专栏与项目..." autocomplete="off" aria-label="站内搜索：检索博文、专栏与项目">
+            <input type="text" id="home-search-input" placeholder="即时检索 125 篇博文、专栏与项目..." autocomplete="off" aria-label="站内搜索：检索博文、专栏与项目">
             <kbd class="search-kbd" id="search-kbd-badge">⌘K</kbd>
           </div>
           <div id="home-search-results" class="blog-search-results hero-search-dropdown"></div>
@@ -162,7 +162,7 @@
               <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
               <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
             </svg>
-            阅读 <!-- POSTS_COUNT -->124<!-- /POSTS_COUNT --> 篇博文
+            阅读 <!-- POSTS_COUNT -->125<!-- /POSTS_COUNT --> 篇博文
           </a>
         </div>
       </div>
@@ -183,26 +183,45 @@
         <article class="blog-card-featured animate-on-scroll" id="home-featured-post" style="display: block;">
           <div class="blog-card-header">
             <div class="blog-card-meta">
+              <span class="blog-date">2026-10-28</span>
+              <span>·</span>
+              <span class="blog-read-time">15 min</span>
+            </div>
+            <span class="blog-list-tag">DevOps</span>
+          </div>
+          <h3 class="blog-card-title">
+            <a href="blog/posts/external-identifiers-coupling-radius.html">别人的一次改名，是你的全站停机：外部标识符的耦合半径</a>
+          </h3>
+          <p class="blog-card-excerpt">一次账户子域改名暴露 9 处隐藏副本。外部标识符被写了几遍，改名成本就是几倍、停机半径就是几圈——硬编码等于把发布权交给别人。...</p>
+          <div class="blog-card-tags">
+            <span class="tech-tag">配置管理</span>
+            <span class="tech-tag">部署</span>
+            <span class="tech-tag">耦合</span>
+            <span class="tech-tag">工程实践</span>
+          </div>
+        </article>
+        
+        <!-- 最新文章列表 -->
+                <div class="blog-list">
+        <article class="blog-mini-card animate-on-scroll" data-category="安全" data-page="1">
+          <div class="blog-mini-card-header">
+            <div class="blog-list-meta">
               <span class="blog-date">2026-10-27</span>
               <span>·</span>
               <span class="blog-read-time">16 min</span>
             </div>
             <span class="blog-list-tag">安全</span>
           </div>
-          <h3 class="blog-card-title">
+          <h3 class="blog-mini-card-title">
             <a href="blog/posts/sanitizer-is-a-filter-not-a-defense.html">净化器不是防线，是过滤器：渲染第三方内容的两道门</a>
           </h3>
-          <p class="blog-card-excerpt">净化只降低已知 payload 的命中概率，是过滤器；CSP 才决定被绕过之后能拿走什么。用我站上的 DOMPurify 与 meta 版 CSP 复盘。...</p>
-          <div class="blog-card-tags">
+          <p class="blog-mini-card-excerpt">净化只降低已知 payload 的命中概率，是过滤器；CSP 才决定被绕过之后能拿走什么。用我站上的 DOMPurify 与 meta 版 CSP 复盘。</p>
+          <div class="blog-mini-card-tags">
             <span class="tech-tag">XSS</span>
             <span class="tech-tag">CSP</span>
             <span class="tech-tag">内容净化</span>
-            <span class="tech-tag">Web 安全</span>
           </div>
         </article>
-        
-        <!-- 最新文章列表 -->
-                <div class="blog-list">
         <article class="blog-mini-card animate-on-scroll" data-category="数据库" data-page="1">
           <div class="blog-mini-card-header">
             <div class="blog-list-meta">
@@ -222,31 +241,12 @@
             <span class="tech-tag">数据建模</span>
           </div>
         </article>
-        <article class="blog-mini-card animate-on-scroll" data-category="安全" data-page="1">
-          <div class="blog-mini-card-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-10-25</span>
-              <span>·</span>
-              <span class="blog-read-time">14 min</span>
-            </div>
-            <span class="blog-list-tag">安全</span>
-          </div>
-          <h3 class="blog-mini-card-title">
-            <a href="blog/posts/personal-site-privacy-boundary.html">仓库边界就是发布边界：一次静态站隐私自查复盘</a>
-          </h3>
-          <p class="blog-mini-card-excerpt">静态站的隐私面不在数据存储，而在发布边界。一次自查查出的凭据、真实邮箱与产物残留，以及为什么轮换永远排在清理前面。</p>
-          <div class="blog-mini-card-tags">
-            <span class="tech-tag">隐私</span>
-            <span class="tech-tag">个人网站</span>
-            <span class="tech-tag">发布边界</span>
-          </div>
-        </article>
         </div>
         <!-- /最新文章列表 --></div>
 
       <div class="blog-view-all" style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
         <a href="blog/index.html" class="btn btn-secondary">
-          浏览全部文章 (<!-- POSTS_COUNT -->124<!-- /POSTS_COUNT --> 篇)
+          浏览全部文章 (<!-- POSTS_COUNT -->125<!-- /POSTS_COUNT --> 篇)
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M5 12h14M12 5l7 7-7 7"/>
           </svg>
@@ -290,7 +290,7 @@
               </div>
               <div class="terminal-line">
                 <span class="terminal-prompt">➜</span>
-                <span class="terminal-text"><span class="terminal-highlight">live_pulse</span> — 🟢 <!-- POSTS_COUNT -->124<!-- /POSTS_COUNT --> 篇博文 · 6 大专栏 · 原生 Android / 系统架构 / 端侧 AI 实战</span>
+                <span class="terminal-text"><span class="terminal-highlight">live_pulse</span> — 🟢 <!-- POSTS_COUNT -->125<!-- /POSTS_COUNT --> 篇博文 · 6 大专栏 · 原生 Android / 系统架构 / 端侧 AI 实战</span>
               </div>
             </div>
           </div>
@@ -398,7 +398,7 @@
           
           <div class="bento-metrics-grid">
             <div class="bento-metric-item">
-              <div class="bento-metric-num"><!-- POSTS_COUNT -->124<!-- /POSTS_COUNT --></div>
+              <div class="bento-metric-num"><!-- POSTS_COUNT -->125<!-- /POSTS_COUNT --></div>
               <div class="bento-metric-title">篇技术与思考博文</div>
             </div>
             <div class="bento-metric-item">

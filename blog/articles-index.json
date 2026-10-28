@@ -1,6 +1,21 @@
 {
   "posts": [
     {
+      "slug": "external-identifiers-coupling-radius",
+      "title": "别人的一次改名，是你的全站停机：外部标识符的耦合半径",
+      "date": "2026-10-28",
+      "dateTime": "2026-10-28 17:20:00",
+      "category": "DevOps",
+      "tags": [
+        "配置管理",
+        "部署",
+        "耦合",
+        "工程实践"
+      ],
+      "readTime": 15,
+      "url": "blog/posts/external-identifiers-coupling-radius.html"
+    },
+    {
       "slug": "sanitizer-is-a-filter-not-a-defense",
       "title": "净化器不是防线，是过滤器：渲染第三方内容的两道门",
       "date": "2026-10-27",
@@ -1931,21 +1946,21 @@
     }
   ],
   "categories": [
+    "DevOps",
     "安全",
     "数据库",
     "思考",
     "开发",
     "Android",
-    "DevOps",
     "Kotlin",
     "前端",
     "AI",
     "系统编程"
   ],
   "stats": {
-    "totalPosts": 124,
-    "totalTags": 323,
-    "latestDate": "2026-10-27",
+    "totalPosts": 125,
+    "totalTags": 325,
+    "latestDate": "2026-10-28",
     "oldestDate": "2026-02-15"
   }
 }
