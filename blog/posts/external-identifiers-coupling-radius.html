@@ -395,8 +395,9 @@ PY
 <h2>收束：这次改名的真正成本不是那 9 处修改</h2>
 <p>9 处修改加起来不到一小时。真正花掉一天的是<strong>发现</strong>：我不知道半径有多长，只能一圈一圈往外摸，每摸到一圈就以为到底了，然后被下一圈打回来。</p>
 <p>这不是一次配置管理事故，配置管理只是它的表现形式。它的实质是：<strong>我的系统里有一批「我以为它是常量、其实是别人的变量」的东西，而它们之间没有任何一致性约束。</strong> 只要这个结构不变，下一次改名——不管是我的还是别人的——还会重演一遍，只是漏的那几处换一批。</p>
-<p>所以这次之后我做的事很具体，也很无聊：把评论服务地址收进一份配置，让模板从它求值；把 18 个页面的 CSP 改成由生成脚本统一产出；把 <code>_headers</code> 和文档里的地址改成引用同一份配置；把「关键外部地址可达性」加进定期检查。</p>
-<p>没做的是「建一套配置管理体系」。那需要我先证明自己有第二个消费方，而我现在只有一个。</p>
+<p>所以这次之后，我给自己列了四件事，都还没动手：把评论服务地址收进一份配置，让模板从它求值；把 18 个页面的 CSP 改成由生成脚本统一产出；把 <code>_headers</code> 和文档里的地址改成引用同一份配置；把「关键外部地址可达性」加进定期检查。</p>
+<p>没有计划做的是「建一套配置管理体系」。那需要我先证明自己有第二个消费方，而我现在只有一个。</p>
+<p>写这篇的时候，这四件事还挂在待办上——这次实际做完的只有一件事：把所有副本换成新值，然后量出半径有多长。但半径量出来了，下一次至少不用从第一圈重新摸。</p>
 <p>如果要把这次的收获压成一句话：<strong>耦合半径不是由代码量决定的，是由这个值被写了几遍决定的。</strong> 写一遍，半径是一；写九遍，半径就是九，而且你只会记得前五遍。别人改一次名，你就要跑九趟——这不是他给你添麻烦，是你把发布权分九次交了出去。</p>
 
         <!-- Related Static -->
@@ -537,7 +538,7 @@ PY
         <div class="post-info-label">文章信息</div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📅</span> 发布日期</span><span class="post-info-stat-value">2026-10-28</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">⏱️</span> 阅读时间</span><span class="post-info-stat-value">15 min read</span></div>
-        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">6597 字</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">6670 字</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📊</span> 章节数</span><span class="post-info-stat-value">13 节 · 24 子节</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">💻</span> 代码块</span><span class="post-info-stat-value">5 段</span></div>
       </div>
