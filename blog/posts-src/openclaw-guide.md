@@ -102,7 +102,7 @@ cron add '{
   runtime: "subagent",
   agentId: "bailian/glm-5",  // 小马，擅长编程
   task: "开发一个 XXX 功能",
-  cwd: "/root/.openclaw/workspace/nook"
+  cwd: "/home/user/workspace/projects"
 }</code></pre>
 
         <p><strong>我的工作流程</strong>：</p>

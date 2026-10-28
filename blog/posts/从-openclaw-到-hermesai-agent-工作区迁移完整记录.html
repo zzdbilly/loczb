@@ -241,7 +241,7 @@
 <h3>迁移前：单工作区</h3>
 <p>OpenClaw 时代，一切业务文件都堆在一个大工作区里：</p>
 <pre><code class="language-text">~/.openclaw/
-├── workspace-xiaoma/          # 主工作区
+├── workspace-demo/          # 主工作区
 │   ├── SOUL.md                # 助手人格
 │   ├── MEMORY.md              # 长期记忆
 │   ├── IDENTITY.md            # 身份定位
@@ -549,13 +549,13 @@ Promise.resolve(mockList.find((b) =&gt; b.id === args.where.id)! as any);
 </table>
 <h3>路径漂移的修复</h3>
 <p>迁移最烦的一类问题是<strong>文档里的路径全失效了</strong>：</p>
-<pre><code class="language-diff">- 分析范围：/root/.openclaw/workspace-xiaoma/nook/project-a/
+<pre><code class="language-diff">- 分析范围：/root/.openclaw/workspace-demo/nook/project-a/
 + 分析范围：/root/.hermes/workspaces/dev/project-a/
 </code></pre>
 <p>这种改动本身一行字，但如果文档多、引用深，就是个体力活。我的做法是：<strong>改完一个目录，立刻全局搜索旧路径前缀，批量替换</strong>：</p>
 <pre><code class="language-bash"># 示例：批量替换路径前缀（注意先备份）
-grep -rl &quot;\.openclaw/workspace-xiaoma&quot; docs/ | xargs -I{} sed -i \
-  's|\.openclaw/workspace-xiaoma|.hermes/workspaces/dev|g' {}
+grep -rl &quot;\.openclaw/workspace-demo&quot; docs/ | xargs -I{} sed -i \
+  's|\.openclaw/workspace-demo|.hermes/workspaces/dev|g' {}
 </code></pre>
 <p>改完必须验证：打开文档抽查、跑一遍文档里提到的命令，确认没引到不存在的文件。</p>
 <h2>验证与收尾</h2>

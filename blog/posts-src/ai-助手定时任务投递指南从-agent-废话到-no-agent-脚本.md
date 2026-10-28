@@ -284,11 +284,11 @@ def send_discord_reply(content, channel_id, anchor_message_id, token):
 # 之后所有请求都用 opener.open()，不再用 urlopen()
 </code></pre>
 <h3>坑三：cron 脚本路径必须是相对路径</h3>
-<p><strong>症状</strong>：给任务配置脚本时传了绝对路径 <code>/root/xxx/scripts/daily_report.py</code>，直接被拒绝。</p>
+<p><strong>症状</strong>：给任务配置脚本时传了绝对路径 <code>/home/user/scripts/daily_report.py</code>，直接被拒绝。</p>
 <p><strong>原因</strong>：调度器的脚本参数约定是「相对路径，相对于脚本目录」，只接受文件名。</p>
 <p><strong>解法</strong>：脚本放在约定的 scripts 目录下，配置里只写文件名：</p>
 <pre><code class="language-python">script=&quot;daily_report.py&quot;   # ✅
-script=&quot;/root/.../daily_report.py&quot;  # ❌ 报错
+script=&quot;/home/user/.../daily_report.py&quot;  # ❌ 报错
 </code></pre>
 <h3>坑四：双重投递</h3>
 <p><strong>症状</strong>：频道里每天出现两条日报——一条带引用样式，一条裸消息。</p>

@@ -389,7 +389,7 @@ sudo fail2ban-client status sshd</code></pre>
 # /usr/local/bin/backup-ssh-config.sh
 # SSH 配置自动备份脚本
 
-BACKUP_DIR="/root/ssh-backups"
+BACKUP_DIR="/var/backups/ssh"
 DATE=$(date +%Y%m%d_%H%M%S)
 RETENTION_DAYS=30
 
@@ -515,14 +515,14 @@ scp -P 22222 file.txt yourname@你的服务器公网IP:/home/yourname/
 sftp -P 22222 yourname@你的服务器公网IP</code></pre>
 <h3>6.2 查看备份</h3>
 <pre><code># 列出所有备份
-ls -la /root/ssh-backups/
+ls -la /var/backups/ssh/
 
 # 查看备份内容
-tar -tzf /root/ssh-backups/ssh-config-20260318.tar.gz
+tar -tzf /var/backups/ssh/ssh-config-20260318.tar.gz
 
 # 恢复备份
 cd /
-sudo tar -xzf /root/ssh-backups/ssh-config-20260318.tar.gz
+sudo tar -xzf /var/backups/ssh/ssh-config-20260318.tar.gz
 
 # 查看 SSH 备份日志
 sudo cat /var/log/ssh-backup.log</code></pre>

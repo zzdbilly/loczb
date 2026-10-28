@@ -432,11 +432,11 @@ def send<em>discord</em>reply(content, channel<em>id, anchor</em>message_id, tok
 # 之后所有请求都用 opener.open()，不再用 urlopen()
 </code></pre>
 <h3>坑三：cron 脚本路径必须是相对路径</h3>
-<p><strong>症状</strong>：给任务配置脚本时传了绝对路径 <code>/root/xxx/scripts/daily_report.py</code>，直接被拒绝。</p>
+<p><strong>症状</strong>：给任务配置脚本时传了绝对路径 <code>/home/user/scripts/daily_report.py</code>，直接被拒绝。</p>
 <p><strong>原因</strong>：调度器的脚本参数约定是「相对路径，相对于脚本目录」，只接受文件名。</p>
 <p><strong>解法</strong>：脚本放在约定的 scripts 目录下，配置里只写文件名：</p>
 <pre><code class="language-python">script=&quot;daily_report.py&quot;   # ✅
-script=&quot;/root/.../daily_report.py&quot;  # ❌ 报错
+script=&quot;/home/user/.../daily_report.py&quot;  # ❌ 报错
 </code></pre>
 <h3>坑四：双重投递</h3>
 <p><strong>症状</strong>：频道里每天出现两条日报——一条带引用样式，一条裸消息。</p>
@@ -700,7 +700,7 @@ ENV<em>FILE = &quot;.../.env&quot;       # 放 DISCORD</em>BOT_TOKEN 的文件
         <div class="post-info-label">文章信息</div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📅</span> 发布日期</span><span class="post-info-stat-value">2026-08-20</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">⏱️</span> 阅读时间</span><span class="post-info-stat-value">18 min read</span></div>
-        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">5288 字</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">5289 字</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📊</span> 章节数</span><span class="post-info-stat-value">10 节 · 34 子节</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">💻</span> 代码块</span><span class="post-info-stat-value">25 段</span></div>
       </div>
