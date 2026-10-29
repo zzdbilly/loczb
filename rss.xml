@@ -7,6 +7,14 @@
     <language>zh-CN</language>
     <atom:link href="https://709527.xyz/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>版本号不该手写：缓存失效应当由内容哈希推导</title>
+      <link>https://709527.xyz/blog/posts/cache-version-from-content-hash.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/cache-version-from-content-hash.html</guid>
+      <description>版本号的本质是缓存键。缓存键要么由内容推导，要么就是一份人工维护的谎言——手写的 ?v=1.2 迟早忘，忘了就是新代码配旧缓存，而且不会报错。</description>
+      <category>前端</category>
+      <pubDate>Thu, 29 Oct 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
       <title>别人的一次改名，是你的全站停机：外部标识符的耦合半径</title>
       <link>https://709527.xyz/blog/posts/external-identifiers-coupling-radius.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/external-identifiers-coupling-radius.html</guid>
@@ -157,14 +165,6 @@
       <description>从 JUnit 5 + MockK 到 Compose 语义树断言，从 Robolectric 到 Firebase Test Lab——一个老 Android 开发对测试金字塔的分层打法、Flaky 治理与 CI 取舍，全是踩坑后留下的判断。</description>
       <category>Android</category>
       <pubDate>Thu, 10 Sep 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>主流 VPS 的选择和使用</title>
-      <link>https://709527.xyz/blog/posts/choosing-and-running-a-vps.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/choosing-and-running-a-vps.html</guid>
-      <description>截至 2026 年 9 月的主流 VPS 厂商盘点、选型维度、下单开机、新机安全加固、Docker/Caddy 日常使用与费用控制的全流程实操指南。</description>
-      <category>DevOps</category>
-      <pubDate>Tue, 08 Sep 2026 00:00:00 +0800</pubDate>
     </item>
   </channel>
 </rss>
