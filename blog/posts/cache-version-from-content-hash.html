@@ -174,7 +174,7 @@ cache-control: max-age=600
 </table>
 <p>三条里最容易被忽略的是第三条——它不产生错误，只产生成本，所以没人报 bug。而没有版本号的裸引用，等于把这三条全交给 HTTP 头里的 <code>max-age</code> 去猜。</p>
 <h2>实验设置：只改一个颜色</h2>
-<p>为了把三种策略的差别摆清楚，我做了个对照实验。控制变量只有一个：<code>assets/theme.css</code> 里一个主色值，从 <code>#2b6cb0</code> 改成 <code>#2c5282</code>。除此之外源码一字不动，只改这一行。</p>
+<p>为了把三种策略的差别摆清楚，我把同一个改动分别放进这三种做法里推演了一遍。控制变量只有一个：<code>assets/theme.css</code> 里一个主色值，从 <code>#2b6cb0</code> 改成 <code>#2c5282</code>。除此之外源码一字不动，只改这一行。</p>
 <p>三种策略，分别对应三种给引用挂版本号的方式：</p>
 <table>
 <thead>
@@ -212,16 +212,16 @@ cache-control: max-age=600
 </ul>
 <p>这不是我设计的复杂度，是浏览器缓存的粒度决定的：缓存按 URL 走，而 URL 分散在三个层次里。任何策略都得面对这条链，区别只在于由谁来维护它。</p>
 <h3>判分标准</h3>
-<p>我给每组记三个维度：一是<strong>这次改动能不能让用户看到新颜色</strong>；二是<strong>这次改动有没有波及没变的文件</strong>；三是<strong>这套机制失效时，会不会有东西报错</strong>。第三项权重最高，因为前两项我可以手动验，第三项不行。</p>
+<p>每组看三个维度：一是<strong>这次改动能不能让用户看到新颜色</strong>；二是<strong>这次改动有没有波及没变的文件</strong>；三是<strong>这套机制失效时，会不会有东西报错</strong>。第三项权重最高，因为前两项我可以手动验，第三项不行。</p>
 <h2>实验 A：手写递增</h2>
 <p>最朴素的做法。<code>?v=1.2</code> 改成 <code>?v=1.3</code>，提交。没有脚本、没有依赖、不需要构建流水线配合，改完就能看。</p>
 <h3>它解决了什么</h3>
-<p>它确实解决了冷启动时的问题：只要我改了数字，URL 就变了，缓存就失效。第一次上线的时候，A 组的表现和 C 组没有区别，两者都让用户看到了新颜色。</p>
+<p>它确实解决了冷启动时的问题：只要我改了数字，URL 就变了，缓存就失效。只发生一次改动时，A 组的表现和 C 组没有区别——两者都让用户看到了新颜色。</p>
 <p>它还有一个真实的好处：<strong>人能读懂</strong>。<code>v=1.3</code> 告诉我这是第三次修订，<code>v=1.2</code> 告诉我上一版是什么。排查线上问题时，这个信息有用——虽然它不精确，但足够定位个大概。</p>
 <h3>它引入了什么</h3>
 <p>问题出在第二次、第三次、第十次。手写数字的可靠性等于人的记性，而人的记性在重复劳动里衰减得很快。</p>
 <p>失效有两种形态。第一种是<strong>忘了改</strong>：改完 CSS，构建，推送，数字还是 <code>1.3</code>。URL 没变，边缘节点继续吐旧文件。整个过程没有任何一步会失败——构建成功、部署成功、HTTP 200，唯一错误的是用户看到的颜色。这是最难查的一类 bug，因为所有自动化都在告诉你「一切正常」。</p>
-<p>第二种更隐蔽，是<strong>改漏了</strong>。全站一百多个页面，每个页面都有一个 <code>?v=</code>。我手动替换，编辑器说「已替换 87 处」，剩下的那些还是 <code>1.2</code>。这时候站内是分裂的：</p>
+<p>第二种更隐蔽，是<strong>改漏了</strong>。全站一百多个页面，每个页面都有一个 <code>?v=</code>。手动改的时候，编辑器只会告诉你替换了多少处，它不知道总共该有多少处；漏掉的那些还停在旧 <code>?v=</code> 上。这时候站内是分裂的：</p>
 <table>
 <thead>
 <tr>
@@ -256,7 +256,7 @@ cache-control: max-age=600
 <p>第二种做法看起来聪明得多。构建时把当前时间写进 URL，<code>?v=20261029T1512</code>。不用人记，不用人改，构建一次变一次。</p>
 <h3>它解决了什么</h3>
 <p>它一次性干掉了 A 组的两种失效。忘了改？不存在，脚本生成。改漏了？不存在，全站由同一次构建写同一批文件。从「人会不会记得」这个角度看，B 组是彻底正确的——它把版本号从人工维护变成了自动推导。</p>
-<p>如果只考虑「会不会漏」，B 组就是终点。我一度以为这就是答案。</p>
+<p>如果只考虑「会不会漏」，B 组就是终点。</p>
 <h3>它引入了什么</h3>
 <p>它违反的是三条性质里的第三条：幂等性。内容没变，键也变。</p>
 <p>想象一个平常的下午，我只改了一篇文章的错别字。构建跑起来，时间戳变了，于是全站每篇文章引用的 <code>widget.js?v=...</code> 都变了。一百多个 HTML 文件的 URL 全部是新键，所有用户的缓存全部失效，边缘节点回源拉一遍——尽管那个 JS 的字节一个都没动。</p>
@@ -567,7 +567,7 @@ git add -- blog/posts
         <div class="post-info-label">文章信息</div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📅</span> 发布日期</span><span class="post-info-stat-value">2026-10-29</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">⏱️</span> 阅读时间</span><span class="post-info-stat-value">14 min read</span></div>
-        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">6044 字</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">6068 字</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📊</span> 章节数</span><span class="post-info-stat-value">10 节 · 21 子节</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">💻</span> 代码块</span><span class="post-info-stat-value">4 段</span></div>
       </div>
