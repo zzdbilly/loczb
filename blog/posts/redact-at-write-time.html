@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <script>document.documentElement.classList.add("js");try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://static.cloudflareinsights.com https://loczb-comments.billymust.workers.dev; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://loczb-comments.billymust.workers.dev https://dashscope.aliyuncs.com https://709527.xyz https://www.709527.xyz https://cloudflareinsights.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
+    <script>/* 反点击劫持兜底：GitHub Pages 无法下发 X-Frame-Options / CSP frame-ancestors */(function(){if(self===top)return;try{top.location=self.location}catch(e){}setTimeout(function(){if(self!==top){document.documentElement.style.display='none';}},400);})();</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>脱敏要做在写入端：落盘之后打码，等于没打码 | 张小猛 - loczb</title>
+    <meta name="description" content="打码是一次性闸口，位置必须在数据产生、序列化的那一刻。落盘之后你面对的不再是一条数据，而是一堆不受你控制的副本。">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="脱敏要做在写入端：落盘之后打码，等于没打码 | 张小猛 - loczb">
+    <meta property="og:description" content="打码是一次性闸口，位置必须在数据产生、序列化的那一刻。落盘之后你面对的不再是一条数据，而是一堆不受你控制的副本。">
+    <meta property="og:url" content="https://709527.xyz/blog/posts/redact-at-write-time.html">
+    <meta property="og:type" content="article">
+    <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
+    <meta property="og:site_name" content="loczb">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="脱敏要做在写入端：落盘之后打码，等于没打码 | 张小猛 - loczb">
+    <meta name="twitter:description" content="打码是一次性闸口，位置必须在数据产生、序列化的那一刻。落盘之后你面对的不再是一条数据，而是一堆不受你控制的副本。">
+    <meta name="twitter:image" content="https://709527.xyz/assets/images/og-image.png">
+
+        <script type="application/ld+json">
+{
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "脱敏要做在写入端：落盘之后打码，等于没打码",
+      "description": "打码是一次性闸口，位置必须在数据产生、序列化的那一刻。落盘之后你面对的不再是一条数据，而是一堆不受你控制的副本。",
+      "image": "https://709527.xyz/assets/images/og-image.png",
+      "author": {
+            "@type": "Person",
+            "name": "张小猛",
+            "url": "https://709527.xyz/about/"
+      },
+      "publisher": {
+            "@type": "Organization",
+            "name": "loczb",
+            "logo": {
+                  "@type": "ImageObject",
+                  "url": "https://709527.xyz/assets/images/favicon.svg"
+            }
+      },
+      "datePublished": "2026-10-30T19:20:00+08:00",
+      "dateModified": "2026-10-30T19:20:00+08:00",
+      "url": "https://709527.xyz/blog/posts/redact-at-write-time.html",
+      "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://709527.xyz/blog/posts/redact-at-write-time.html"
+      },
+      "keywords": "隐私, 日志, 密钥管理, 工程实践",
+      "articleSection": "安全",
+      "timeRequired": "PT15M",
+      "inLanguage": "zh-CN"
+}
+    </script>
+
+    <link rel="stylesheet" href="../../assets/css/style.css?v=c8e170d8f9">
+    <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
+    <link rel="alternate icon" href="../../assets/images/favicon.ico">
+    <link rel="canonical" href="https://709527.xyz/blog/posts/redact-at-write-time.html">
+</head>
+<body>
+  <!-- PARTIAL:SKIP_LINK -->
+  <a href="#main-content" class="skip-link">跳至主要内容</a>
+  <!-- /PARTIAL:SKIP_LINK -->
+
+  <!-- Navigation -->
+<!-- PARTIAL:NAV -->
+  <nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">
+      loc<span>zb</span>
+    </a>
+    <button class="nav-toggle" aria-label="打开菜单" aria-expanded="false" aria-controls="nav-links-menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <div class="nav-overlay"></div>
+    <ul class="nav-links" id="nav-links-menu">
+      <li><a href="/" class="nav-link" data-nav="home">首页</a></li>
+      <li><a href="/projects/" class="nav-link" data-nav="projects">项目</a></li>
+      <li><a href="/blog/" class="nav-link active" data-nav="blog">博客</a></li>
+      <li><a href="/about/" class="nav-link" data-nav="about">关于</a></li>
+    </ul>
+    <button class="theme-toggle" aria-label="切换主题" title="切换亮/暗模式">
+      <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="5"></circle>
+        <line x1="12" y1="1" x2="12" y2="3"></line>
+        <line x1="12" y1="21" x2="12" y2="23"></line>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+        <line x1="1" y1="12" x2="3" y2="12"></line>
+        <line x1="21" y1="12" x2="23" y2="12"></line>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+      </svg>
+      <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+      </svg>
+    </button>
+  </div>
+</nav>
+  <!-- /PARTIAL:NAV -->
+  <main class="section" id="main-content" style="padding-bottom: 0; padding-top: var(--space-4xl);">
+    <div class="container container-narrow">
+      <a href="../index.html" class="back-link">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        返回博客列表
+      </a>
+
+      <article class="post-content">
+        <h1>脱敏要做在写入端：落盘之后打码，等于没打码</h1>
+
+        <div class="post-meta">
+          <span class="meta-item"><span aria-hidden="true">📅</span> 2026-10-30 19:20:00</span>
+          <span class="meta-item"><span aria-hidden="true">⏱️</span> 15 min read</span>
+          <span class="meta-item"><span aria-hidden="true">👤</span> 张小猛</span>
+        </div>
+
+        <div class="post-tags">
+          <span class="tag">隐私</span>
+          <span class="tag">日志</span>
+          <span class="tag">密钥管理</span>
+          <span class="tag">工程实践</span>
+        </div>
+
+        
+
+        <h2>我自己的扫描脚本，就是一个「读时打码」的样本</h2>
+<p>站上有个隐私扫描脚本，我写它的时候只想着一个场景：别让一串凭证在我的终端里滚屏时被人瞄见。所以里面有个 <code>mask()</code>——长度超过八位的值留前六位和后四位，中间打三个星号；邮箱留本地部分前两位，域名照旧。命中的每一行在打印前都会过一遍这个函数，屏幕上出现的是 <code>AKIA****************</code> 这种形状。</p>
+<p>这个设计对我当时想解决的问题是有效的。但它有效的原因很窄：它保护的是「终端输出」这一条展示路径。磁盘上那一行原文一个字符都没变，仓库里那一份也没有。脚本从头到尾没有写过盘，它的职责是看一眼、打码、忘掉。</p>
+<h3>它守住的是一条路，不是一批数据</h3>
+<p>我把这段代码翻出来重读的时候，注意到一件自己当初没想到的事：这个脚本的正确性从来不依赖于「数据存成什么样」，只依赖于「我这次是怎么把它显示出来的」。两者的耦合度是零。我改动展示代码，保护就失效；我加一个导出功能，保护就不存在了；下一个同事写个脚本直接读原始文件，他不需要做错任何事，拿到的就是明文。</p>
+<h3>我读这个函数时在骗自己</h3>
+<p>坦白说，我以前看这段代码是有安慰感的。屏幕上那排星号让我觉得「脱敏这件事我做了」。但打码发生在读取之后、输出之前，它改变的是我看见的东西，不是别人能不能看见。这个区别在一切正常的日子里完全不可见，只有出事那天才会显形——而那天你要面对的不是这一条数据，是一堆副本。</p>
+<blockquote>
+<p>打码是一次性的闸口。位置放错，后面所有努力都只是补救；而补救的天花板，是「减少未来被看到的概率」，不是「收回已经写出去的东西」。</p>
+</blockquote>
+<h2>跟着一条明文走完它的一生</h2>
+<p>抽象地谈「写入端」很容易变成口号。所以我换个办法：挑一条具体的明文，让它从产生开始，一站一站往前走，每一站标清楚这一站还能不能撤回、大多数人以为为什么能、以及真实的处置手段是什么。</p>
+<p>先给一张总览，后面逐站展开。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">站台</th>
+<th style="text-align: left;">这一刻还能不能撤</th>
+<th style="text-align: left;">多数人以为能撤的理由</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">一、产生，在内存里</td>
+<td style="text-align: left;">可撤回</td>
+<td style="text-align: left;">还没写盘，改代码就行</td>
+</tr>
+<tr>
+<td style="text-align: left;">二、写进日志文件</td>
+<td style="text-align: left;">还来得及</td>
+<td style="text-align: left;">「只是本地日志」</td>
+</tr>
+<tr>
+<td style="text-align: left;">三、轮转、聚合、检索</td>
+<td style="text-align: left;">开始撤不回</td>
+<td style="text-align: left;">「日志会自己滚掉」</td>
+</tr>
+<tr>
+<td style="text-align: left;">四、备份快照</td>
+<td style="text-align: left;">不可撤回</td>
+<td style="text-align: left;">「备份是压缩包，看不见内容」</td>
+</tr>
+<tr>
+<td style="text-align: left;">五、提交进 git（本地）</td>
+<td style="text-align: left;">还能撤</td>
+<td style="text-align: left;">「还没推，amend 一下就好」</td>
+</tr>
+<tr>
+<td style="text-align: left;">六、推上远端</td>
+<td style="text-align: left;">不可撤回，秒级</td>
+<td style="text-align: left;">「删掉文件就没了」</td>
+</tr>
+<tr>
+<td style="text-align: left;">七、历史、旧 SHA、缓存</td>
+<td style="text-align: left;">已经无法收回</td>
+<td style="text-align: left;">「重写历史就干净了」</td>
+</tr>
+<tr>
+<td style="text-align: left;">八、别人手里的截图与工单</td>
+<td style="text-align: left;">终局</td>
+<td style="text-align: left;">「这个没法处理，认了」</td>
+</tr>
+</tbody>
+</table>
+<p>这张表里只有第一站、第二站和第五站是真正的窗口。后面每一站，你做的动作都叫处置，不叫撤回。</p>
+<h2>第一站：产生，在内存里（可撤回）</h2>
+<p>一个值最早出现在内存里的形态最无害：一个变量，一个结构体字段，一次函数返回值。这一站是唯一一个「改一行代码就能彻底解决」的位置，因为副本还不存在——除了进程自己，没有第二个地方有它。</p>
+<h3>这一站为什么真的能撤</h3>
+<p>因为此刻这个值的生命周期完全由你控制。你可以选择不把它交给任何人：不放进日志的字段、不塞进异常消息、不拼进 URL、不写进缓存 key。这些都是删除动作，不是掩盖动作。掩盖是把它变成星号再传下去，删除是不让它进入传输。</p>
+<h3>大多数人的失误发生在这一站之后半秒</h3>
+<p>问题在于，从「我有一个值」到「这个值出现在某个输出里」，中间隔的代码通常不是你写的。序列化函数不是你写的，日志库不是你写的，HTTP 客户端的 debug 日志不是你写的，ORM 的慢查询日志也不是你写的。你只做了一件事：把一个敏感字段放进了那个会被整体序列化的对象里。</p>
+<p>这一站的可撤回，前提是你在<strong>对象设计</strong>层面就做了决定——这个字段要么根本不属于这个对象，要么它的类型不允许被随手打印。等到它在某个 debug 日志里出现，你已经过了站。</p>
+<h2>第二站：写进日志文件（还来得及）</h2>
+<p>第一份持久化副本通常出现在日志里。这一站的性质和上一站不同：文件系统是可回溯的，你还能 <code>grep</code> 到它、还能覆盖它，只要轮转还没发生、只要没有第二个消费者读过它。</p>
+<h3>「只是本地日志」是这一站最大的错觉</h3>
+<p>本地日志有三个属性让人放松警惕：它在 <code>.gitignore</code> 里、它在 <code>~/.local</code> 或者 <code>/var/log</code> 下、它不跟随代码走。这三个属性都是真的，但它们论证的是「不会被提交」，不是「不会被读」。而实际读它的东西比写它的人多得多：<code>tail -f</code> 的你、排查问题时的同事、装了采集 agent 的机器、打包诊断信息时顺手塞进整个目录的那条 <code>tar</code> 命令。</p>
+<h3>真实的处置手段是什么</h3>
+<p>这一站还能撤，撤法是就地清理：定位到具体文件、具体行，覆盖掉，然后确认没有第二份。麻烦在于你往往不知道有几份——<code>app.log</code>、<code>app.log.1</code>、<code>app.log.2.gz</code>、某个按天切的目录、某个被容器运行时缓存在别处的副本。你要清的是一个集合，而你没拿到这个集合的清单。</p>
+<p>这也是我一直认为「事后洗日志」走不通的原因：它要求你先知道你一共有多少份日志，而这个数字恰恰是你不掌握的。</p>
+<h2>第三站：轮转、聚合、检索索引（开始撤不回）</h2>
+<p>日志一旦进入轮转和聚合，性质就变了。轮转产生多份历史，聚合把多台机器的日志汇到一个地方，检索服务再为这些文本建一次索引——索引本身也是一份存储，而且通常带副本。</p>
+<h3>副本从这一站开始不归你管</h3>
+<p>前面两站，副本都在你的磁盘上，你有 root 或者至少有你自己的家目录。这一站之后，副本在别人的服务里：一个日志平台、一个检索集群、一个对象存储桶。你对自己的机器有删除权，对它们只有「提交一个删除请求」的权利，而且这个请求能不能追溯到全部副本，取决于对方的实现，不取决于你的意愿。</p>
+<h3>「日志会自己滚掉」的假设靠不住</h3>
+<p>滚动策略管的是<strong>主存储</strong>的容量，不是<strong>所有副本</strong>的生命周期。检索索引的保留期常常和原始日志不同，冷存储归档的保留期又更长，监控采样可能只留了一小段文本却永远不删。这三个保留期由三份不同的配置决定，你改了一个，另外两个不受影响。</p>
+<h3>推演到这里，结论已经很清楚</h3>
+<p>我把这条链路在纸上走了一遍，没有做实验，因为它不需要实验：任何一份被你打过码的展示，都不影响链路上任何一站存的原文。第三站之后，你能做的只有两件事——轮换那个值，或者接受它一直在。</p>
+<h2>第四站：备份快照（不可撤回）</h2>
+<p>备份是整条链路上最容易被忽略的一站，因为它天生反直觉：备份的目的是「不要丢东西」，而你现在需要的是「让某个东西消失」。这两个目标在同一个系统里直接冲突。</p>
+<h3>压缩包里没有「只删一条」</h3>
+<p>备份通常是一个归档文件，一个 tar，一个镜像层，一个数据库快照。你在里面删掉一个字段，等于重写整个归档，而重写会产生一个新的归档——旧的那个还在，因为它就是上一次的备份。这个循环没有出口：你为了保证可恢复性而保留历史版本，而历史版本正是泄露的载体。</p>
+<h3>为什么多数团队在这一站放弃</h3>
+<p>因为算账算不过来。为了一个字段去重写全部历史备份，成本是「可能无法恢复到某个时间点」；不重写的成本是「一个已经轮换过的旧值留在归档里」。后者在风险评估里通常被标成低危，因为值已经失效了。</p>
+<p>这个判断是对的，但它恰好证明了我的主张：<strong>让这一站变得无害的不是清理，是轮换。</strong> 轮换让旧值失去价值，于是「备份里还有它」从事故降级成噪音。反过来说，如果你打算靠清理来解决，这一站就是终点站。</p>
+<h2>第五站：提交进 git，本地（还能撤）</h2>
+<p>现在换个载体，从日志换到代码仓库。这个值被人顺手写进了一个 Markdown 文件——不是配置文件，不是 <code>.env</code>，是一份人读的文档，因为「写在文档里方便查」。然后 <code>git add</code>、<code>git commit</code>。</p>
+<h3>这一站是最后一个真正的窗口</h3>
+<p>本地提交是可改的。<code>git commit --amend</code>、<code>git reset</code>、<code>git rebase -i</code> 都能把它从当前分支上抹掉，而且此刻没有任何远端持有它。这是整条链路上性价比最高的一站：成本是一次交互式 rebase，收益是把泄露掐死在传播之前。</p>
+<h3>为什么这个窗口总被错过</h3>
+<p>两个原因。第一，提交时你看的是 diff 的<strong>结构</strong>（改了哪几个文件、加了几行），不是 diff 的<strong>内容</strong>——一个几十位的随机字符串混在两千行文档改动里，视觉上不突出。第二，你默认「我还没推」，而这个默认在有些工作流里不成立：编辑器插件自动提交、CI 在你保存时跑、同事从你的分支拉了一次。窗口的宽度不由你一个人决定。</p>
+<h2>第六站：推上远端（不可撤回，秒级）</h2>
+<p><code>git push</code> 完成的那一刻，性质彻底变了。远端不是「你的仓库的另一份拷贝」，它是一个独立的事实源，有自己的对象库、自己的访问日志、自己的缓存层，以及——如果它是静态托管——一个把仓库文件直接映射成 HTTP 资源的发布器。</p>
+<h3>那次真实的演化</h3>
+<p>这个月早些时候我经手的一次，路径就是这样：一个密钥写进仓库里的一个 Markdown 文件，提交，推上公开仓库，静态托管把它发布出去。随后我直接用浏览器访问了那个文件的 URL，HTTP 200，原文完整。</p>
+<p>删文件没有用，改文件也没有用——新版本干净了，历史提交里还在。这条链路我上次专门写过，这里只取结论：<strong>推送之后，你面对的已经不是一个文件，而是一个可以被任意 GET 的地址。</strong></p>
+<h3>「删掉就没了」是这一站最贵的误会</h3>
+<p>删掉改变的是当前分支的树，不改变已经发布出去的对象。托管方缓存的是内容，不是你的意图。你把文件从 <code>main</code> 上删掉，等于告诉它「下一次构建不要包含这个路径」，它照做了，然后旧的那个 URL 仍然按旧的对象提供——因为它从来没被要求删除任何东西。</p>
+<pre><code class="language-bash"># 判断一个文件到底还在不在对外提供服务，看的是 HTTP 状态，不是仓库
+# 换成你自己的域名与路径；加个一次性查询参数，避开中间缓存造成的假阴性
+python3 - &lt;&lt;'PY'
+import urllib.request as u
+url = &quot;https://blog.example.com/docs/handover.md&quot;
+req = u.Request(url, headers={&quot;User-Agent&quot;: &quot;Mozilla/5.0&quot;})
+try:
+    r = u.urlopen(req, timeout=15)
+    print(r.status, len(r.read()), &quot;bytes&quot;)   # 200 就是还在
+except Exception as e:
+    print(&quot;gone:&quot;, e)
+PY
+</code></pre>
+<h2>第七站：历史、旧 SHA、缓存、镜像（已经无法收回）</h2>
+<p>这一站是我上次真正吃到的教训，也是「清理无效」最硬的证据：<strong>重写历史并强推之后，当前分支确实干净了，但平台仍然按旧的 commit SHA 提供旧版本</strong>。我实测了那个旧 SHA 对应的页面，返回 200，正文里那串值原样在里面。</p>
+<h3>重写历史清掉的是什么</h3>
+<p>它清掉的是「从当前分支可达的对象」。这个范围比你以为的小：分支只是引用，对象还在对象库里；对象库只是你这一份，对面还有一份；对面的那一份上面，还有一层 CDN 缓存、一层构建产物、若干份被 fork 或者被镜像出去的副本。你的重写动作影响的是第一层。</p>
+<h3>旧 SHA 还能访问，说明什么</h3>
+<p>说明「版本」在托管方那里是一个不可变资源。你推一次，它就多一个版本；你改写历史，它不会回收旧版本，因为旧版本可能正被别的东西引用——一个 PR 链接、一个 issue 里的引用、一次构建记录。回收的成本高于保留的成本，所以它保留。</p>
+<h3>那清理还要不要做</h3>
+<p>要做，但要把它的作用说准确：清理降低的是<strong>未来被检索到的概率</strong>，比如让搜索引擎的索引过期、让后来翻仓库的人看不到。它不改变「已经有人拿到过」这个事实，也无法确认「现在没有人在看」。把清理当成止血，是把概率当成了状态。</p>
+<h2>第八站：别人手里的截图与工单（终局）</h2>
+<p>最后一站没有技术手段。这个值可能出现在一张截图里、一个工单描述里、一次群聊的粘贴里、一份导出给外部厂商的报表里。这些副本的共同点是：它们不在任何你能枚举的系统里，甚至不在任何系统里——截图就是一张图片，OCR 之前它不是文本。</p>
+<h3>终局之所以是终局</h3>
+<p>因为撤回的前提是「你能定位到副本并改写它」。这一站你连定位都做不到。任何声称能「彻底清除」的方案，在这一站都必须停下来，改成另一套逻辑：<strong>让这个值的持有变得没有意义。</strong></p>
+<h3>唯一在这里还有效的动作</h3>
+<p>去服务商那把密钥轮换掉。这不是清理，效果却比所有清理加起来都强——因为它不改变副本的数量，它改变副本的价值。旧值还在那张截图里，只是它已经打不开任何东西了。</p>
+<p>我到现在都觉得这件事值得反复说：泄露处置里最有效的动作，恰好是最不像「处理泄露」的那个动作。它看起来像运维例行工作，实际上是唯一能终止事件的操作。</p>
+<h2>为什么读时脱敏是 fail-open</h2>
+<p>把八站走完，可以回到设计层面了。读时脱敏——在展示、导出、打印的环节打码——的问题不在于它没价值，而在于它的失效方式是静默的。</p>
+<h3>默认值决定了安全模型</h3>
+<p>一个系统里，新代码默认拿到明文还是默认拿到打码值，决定了这个系统的安全下限。读时脱敏的默认值是明文：数据层存原文，任何新写的消费者只要不去调用打码函数，就拿到了原文。它不需要做错任何事，它只是「没想到」。</p>
+<h3>新消费者不需要犯错就能击穿它</h3>
+<p>这是 fail-open 的定义。你守住的那几条路径是靠记忆维持的：你记得终端输出要打码，记得导出功能要打码，但你不会记得三个月后加的那个调试接口、那个报表任务、那个为了排查问题临时写的脚本。而它们全都不需要记得。</p>
+<h3>打码函数被调用几次，取决于人的记性</h3>
+<p>我自己的扫描脚本就是活例子：它能正确打码，是因为<strong>我</strong>在打印前调了它。这个「我」是一次性的、不可扩展的。换成五个人的团队，就等于有五个地方可能忘记调用，而忘记不会报错。</p>
+<h2>写入端的闸口放在哪</h2>
+<p>写入端脱敏的方向正好相反：默认值是打码值，想拿明文必须显式做一件事。它的位置不在展示层，在<strong>序列化之前</strong>——也就是对象变成字节、变成 JSON、变成日志行的那一个函数里。</p>
+<h3>在序列化之前统一过一道 redact</h3>
+<p>关键是「统一」。不是每个调用点自己记得打码，而是所有出口共用同一个序列化入口，脱敏是这个入口的固定步骤。</p>
+<pre><code class="language-python"># 出口只有一个：任何要落盘、上送的东西都必须经过它
+REDACT_KEYS = {&quot;password&quot;, &quot;token&quot;, &quot;secret&quot;, &quot;authorization&quot;, &quot;cookie&quot;}
+
+def redact(obj):
+    if isinstance(obj, dict):
+        return {
+            k: (&quot;&lt;redacted&gt;&quot; if k.lower() in REDACT_KEYS else redact(v))
+            for k, v in obj.items()
+        }
+    if isinstance(obj, (list, tuple)):
+        return [redact(v) for v in obj]
+    return obj
+
+def emit(record, sink):
+    sink.write(json.dumps(redact(record), ensure_ascii=False) + &quot;\n&quot;)
+</code></pre>
+<p>这段代码的代价要说清楚：它是<strong>按字段名</strong>判断的，字段名改了、嵌套层级变了、值被拼进了一个自由文本字段，它就漏。所以它只能算第一道，不能算唯一一道。</p>
+<h3>类型层：让 raw 值根本流不出去</h3>
+<p>比字段名更可靠的判据是类型。把「原始敏感值」做成一个不能直接参与字符串拼接、不能直接参与序列化的类型，漏出去的路径就从「所有出口」收缩到「显式解包的那几处」。</p>
+<pre><code class="language-python">class Secret:
+    &quot;&quot;&quot;持有原文，但拒绝被随手打印或序列化。&quot;&quot;&quot;
+    __slots__ = (&quot;_v&quot;,)
+
+    def __init__(self, value: str):
+        self._v = value
+
+    def reveal(self) -&gt; str:          # 唯一的明文出口，调用点可审计
+        return self._v
+
+    def __repr__(self) -&gt; str:
+        return &quot;Secret(&lt;redacted&gt;)&quot;
+
+    def __str__(self) -&gt; str:
+        raise TypeError(&quot;refusing to stringify a secret; call .reveal() explicitly&quot;)
+</code></pre>
+<p>这段也不是银弹。<code>json.dumps</code> 不会自动认这个类，它遇到 <code>Secret</code> 会直接抛类型错误——抛错是我要的效果，因为它把「悄悄漏」变成了「立刻炸」。真正落地还要给序列化器注册一个 encoder，把 <code>Secret</code> 统一编码成占位符；这属于改造工作量，不是加个类就完事。</p>
+<h3>结构化字段比自由文本可控</h3>
+<p>最省事的一步往往被跳过：让敏感值待在它自己的字段里，不要拼进 <code>message</code> 这种自由文本。<code>login failed for user=alice token=AKIA…</code> 这种行，任何脱敏规则都只能靠正则猜；而 <code>{"event": "login_failed", "user": "alice", "token_ref": "t-9f2"}</code> 这种结构，打码是确定性的——按 key 打，不会误伤别的字符。</p>
+<h3>需要原值的时候，用引用而不是复制</h3>
+<p>排查问题确实需要原值。这时候正确的做法不是「这个字段不打码」，而是存一个可回查的引用：一个 token、一个指向密钥管理服务的键名。日志里只出现引用，需要原值的人拿引用去换取，换取这一步有权限、有审计、有次数限制。</p>
+<pre><code class="language-text">不推荐：{&quot;user&quot;: &quot;alice&quot;, &quot;api_key&quot;: &quot;AKIA****************&quot;}
+推荐  ：{&quot;user&quot;: &quot;alice&quot;, &quot;api_key_ref&quot;: &quot;kv://prod/payments/key-7&quot;}
+
+排查时：用 api_key_ref 去密钥服务换原值（有权限校验 + 审计日志 + 可撤销）
+对账时：比对 api_key_ref 的指纹，不需要看到原值
+</code></pre>
+<h2>事后拿正则洗日志，为什么不可靠</h2>
+<p>写到这可能会有人说：我在日志采集端加一层规则，把疑似凭证的串替换掉，不也一样。这层规则有用，但它承担不了「安全边界」的角色，三个原因。</p>
+<h3>会漏</h3>
+<p>正则靠形状匹配。一个值如果被 base64 过一次、被 URL 编码过、被截断成两段拼在相邻字段里、被放进了一个 JSON 的转义字符串，形状就变了，规则不认。你自己设计的密钥格式你认得，第三方 SDK 打印的东西你认不全。</p>
+<h3>会误伤</h3>
+<p>反过来，规则会命中不该命中的东西：一串长得像密钥的哈希、一份测试用的固定样例、一个用户提交的恰好符合正则的字符串。误伤的代价是日志失真——排查问题的人发现关键字段全是星号，然后他去关掉这层规则。</p>
+<h3>改不了旧副本</h3>
+<p>这一条最致命。规则作用在<strong>新流入</strong>的日志上，对已经轮转归档的那几份、对已经在检索索引里的那些文档、对上游服务自己留的那一份，全都没有作用。你修补的是管道，不是历史。</p>
+<h2>六条判据</h2>
+<p>下面这几条是我给自己定的，用来判断一个脱敏方案到底站在哪一端。</p>
+<ol>
+<li><strong>默认值是明文还是打码值</strong>：新写的代码什么都不做，拿到的是哪一种。拿到明文就是 fail-open。</li>
+<li><strong>出口有几个</strong>：脱敏是否挂在唯一的序列化入口上。挂在每个调用点上的，等于挂在人的记性上。</li>
+<li><strong>脱敏发生在序列化之前还是之后</strong>：之后就是展示层，只保护「你怎么看」，不保护「它怎么被存」。</li>
+<li><strong>有没有类型约束</strong>：原始值是不是一个不能随手 <code>str()</code>、不能随手 <code>json.dumps()</code> 的对象。</li>
+<li><strong>需要原值时怎么拿</strong>：靠「这个字段不打码」，还是靠引用加权限换取。前者是复制明文，后者是受控访问。</li>
+<li><strong>出事后的第一个动作是什么</strong>：是删文件、洗历史，还是轮换。前两个改概率，第三个改价值。</li>
+</ol>
+<p>用这六条量一遍我自己的扫描脚本：第 1 条明文，第 2 条出口多个，第 3 条发生在之后，第 4 条没有类型约束，第 5 条不适用，第 6 条我已经知道答案。六条里五条不合格——而它在我的印象里一直是「隐私这块我做了防护」。</p>
+<h2>最后：这次我实际做完的只有一件</h2>
+<p>写到这里需要说清楚边界，否则这篇会变成一篇我自己的施工报告。</p>
+<p>站上那个隐私扫描脚本，我没有改。它现在仍然是读时打码，<code>mask()</code> 还是只在打印前被调用，磁盘和仓库里的原文一点没动——这篇文章的论点，恰恰是我自己代码的现状。</p>
+<p>我给自己列了三件事，一件都还没动手：</p>
+<ul>
+<li>给扫描脚本加一个 <code>--write</code> 模式，落盘的报告在序列化前就过 redact，而不是打印时才打码；</li>
+<li>给凭据类值加一个不可直接字符串化的包装类型，先在一个小脚本里试，确认不会把正常流程炸掉；</li>
+<li>把那几条「事后洗日志」的正则换成写入端的字段级拦截，正则降级成兜底。</li>
+</ul>
+<p>实际做完的只有两件：把上面六条判据抄进了发布前自查清单；写了这篇文章，把「打码是一次性闸口」这句话从直觉变成了可以逐站指认的东西。</p>
+<p>至于结论，一句话：<strong>打码的正确位置在值产生和序列化的那一刻，因为那是唯一还存在「一条数据」的时刻。</strong> 一旦落盘，你手里剩下的是一堆副本，而副本的问题从来不是「打不打码」，是「你数不清有几份、也够不着其中大部分」。读时打码让你觉得自己在防，写入端打码让你不用防——这中间的差别，不在技巧，在默认值。</p>
+
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="personal-site-privacy-boundary.html">
+            <div class="related-post-card-title">仓库边界就是发布边界：一次静态站隐私自查复盘</div>
+            <div class="related-post-card-tags"><span>隐私</span><span>个人网站</span><span>发布边界</span></div>
+          </a>
+          <a class="related-post-card" href="cache-version-from-content-hash.html">
+            <div class="related-post-card-title">版本号不该手写：缓存失效应当由内容哈希推导</div>
+            <div class="related-post-card-tags"><span>缓存</span><span>构建</span><span>静态站点</span></div>
+          </a>
+          <a class="related-post-card" href="external-identifiers-coupling-radius.html">
+            <div class="related-post-card-title">别人的一次改名，是你的全站停机：外部标识符的耦合半径</div>
+            <div class="related-post-card-tags"><span>配置管理</span><span>部署</span><span>耦合</span></div>
+          </a>
+          <a class="related-post-card" href="idempotent-reproducible-builds.html">
+            <div class="related-post-card-title">幂等与可复现：为什么你的构建总在产生无意义的 diff</div>
+            <div class="related-post-card-tags"><span>构建</span><span>幂等</span><span>可复现</span></div>
+          </a>
+          <a class="related-post-card" href="技术文档编写指南写出别人真的会看的文档.html">
+            <div class="related-post-card-title">技术文档编写指南写出别人真的会看的文档</div>
+            <div class="related-post-card-tags"><span>技术写作</span><span>文档规范</span><span>工程实践</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
+
+        <!-- Post Copyright & License Card -->
+        <div class="post-copyright-card">
+          <div class="copyright-header">
+            <div class="copyright-badge">
+              <span>📜</span>
+              <span>原创与知识共享协议</span>
+            </div>
+            <button class="copyright-cite-btn" id="copy-cite-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+              </svg>
+              <span>复制 Markdown 引用</span>
+            </button>
+          </div>
+          <div class="copyright-list">
+            <div class="copyright-item"><strong>文章标题：</strong>脱敏要做在写入端：落盘之后打码，等于没打码</div>
+            <div class="copyright-item"><strong>文章作者：</strong>张小猛 · loczb</div>
+            <div class="copyright-item"><strong>永久链接：</strong><a href="https://709527.xyz/blog/posts/redact-at-write-time.html">https://709527.xyz/blog/posts/redact-at-write-time.html</a></div>
+            <div class="copyright-item"><strong>版权声明：</strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 国际许可协议。商业转载请联系作者获得授权，非商业转载请注明出处。</div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </main>
+
+  <!-- Related Posts / Navigation -->
+  <section class="section" aria-label="读完之后" style="padding-top: 0;">
+    <div class="container container-narrow">
+      <!-- Post Nav Prev Next -->
+      <nav class="post-nav" aria-label="文章翻页导航">
+        <a href="cache-version-from-content-hash.html" class="post-nav-card post-nav-prev" rel="prev">
+          <span class="post-nav-label">← 上一篇</span>
+          <span class="post-nav-title">版本号不该手写：缓存失效应当由内容哈希推导</span>
+        </a>
+        <div class="post-nav-card post-nav-next disabled" aria-disabled="true">
+          <span class="post-nav-label">下一篇 →</span>
+          <span class="post-nav-title">已是最新篇博文</span>
+        </div>
+      </nav>
+      <!-- /Post Nav Prev Next -->
+      <hr style="border: none; border-top: 1px solid var(--color-border); margin: var(--space-2xl) 0;">
+
+      <div class="blog-topics" style="margin-bottom: var(--space-xl); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+        <div>
+          <span class="topic-label">读完之后:</span>
+          <a href="../index.html" class="topic-tag">返回博客列表</a>
+          <a href="../index.html?view=series" class="topic-tag">浏览全部专栏</a>
+        </div>
+        <a href="#main-content" class="topic-tag" style="margin-left: auto;">↑ 回到顶部</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+<!-- PARTIAL:FOOTER -->
+  <footer class="footer" role="contentinfo">
+  <div class="footer-inner">
+    <p class="footer-signature">写代码，做产品，也认真生活。</p>
+    <div class="footer-social">
+      <a href="https://github.com/zzdbilly" class="footer-social-link" target="_blank" rel="noopener" aria-label="GitHub">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+      </a>
+      <a href="https://twitter.com/zzdbilly" class="footer-social-link" target="_blank" rel="noopener" aria-label="X (Twitter)">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      </a>
+      <a href="/rss.xml" class="footer-social-link" target="_blank" rel="noopener" aria-label="RSS 订阅">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+      </a>
+    </div>
+    <div class="footer-links">
+      <a href="/" class="footer-link">首页</a>
+      <a href="/projects/" class="footer-link">项目</a>
+      <a href="/blog/" class="footer-link">博客</a>
+      <a href="/about/" class="footer-link">关于</a>
+    </div>
+    <p class="footer-copyright">&copy; 2026 张小猛 · loczb · Built with care</p>
+  </div>
+</footer>
+  <!-- /PARTIAL:FOOTER -->
+
+  <script defer src="../../assets/js/main.js"></script>
+  <script defer src="../../assets/js/article.js?v=c9f1a378ea"></script>
+  <script defer src="../../assets/js/share.js"></script>
+  <!-- Back to Top & Reading Progress -->
+  <button class="back-to-top" id="backToTop" aria-label="回到顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
+  <div class="reading-progress" id="readingProgress"></div>
+
+  <!-- Post Sidebar Info（左侧） -->
+  <div class="post-sidebar-info" id="postSidebar">
+    <div class="post-info-card">
+      <div class="post-info-section">
+        <div class="post-info-label">作者</div>
+        <div class="post-info-author">
+          <div class="post-info-avatar">小</div>
+          <div>
+            <div class="post-info-author-name">张小猛</div>
+            <div class="post-info-author-desc">写代码，做产品</div>
+          </div>
+        </div>
+      </div>
+      <div class="post-info-section">
+        <div class="post-info-label">文章信息</div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📅</span> 发布日期</span><span class="post-info-stat-value">2026-10-30</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">⏱️</span> 阅读时间</span><span class="post-info-stat-value">15 min read</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">6253 字</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📊</span> 章节数</span><span class="post-info-stat-value">15 节 · 30 子节</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">💻</span> 代码块</span><span class="post-info-stat-value">4 段</span></div>
+      </div>
+      <div class="post-info-section" id="postSidebarTags">
+        <div class="post-info-label">标签</div>
+        <div class="post-info-links">
+          <a href="../../blog/index.html?tag=%E9%9A%90%E7%A7%81" class="post-info-link"># 隐私</a>
+          <a href="../../blog/index.html?tag=%E6%97%A5%E5%BF%97" class="post-info-link"># 日志</a>
+          <a href="../../blog/index.html?tag=%E5%AF%86%E9%92%A5%E7%AE%A1%E7%90%86" class="post-info-link"># 密钥管理</a>
+          <a href="../../blog/index.html?tag=%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5" class="post-info-link"># 工程实践</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Post TOC -->
+  <div class="post-toc-container" id="postToc">
+    <nav class="post-toc" aria-label="文章目录">
+      <div class="post-toc-title">目录</div>
+      <ul class="post-toc-list" id="tocList">
+      </ul>
+    </nav>
+  </div>
+
+  <!-- Comment System -->
+  <script src="../../workers/comment-system/comment-widget.js?v=5d8a6a1796" defer></script>
+
+  <!-- highlight.js 代码语法高亮（本地完整构建，无外部依赖） -->
+  <script defer src="../../assets/vendor/highlight/highlight.min.js"></script>
+  <script>
+    /* 语法高亮改为「可见优先、空闲补齐」：
+       highlight.js 要遍历全篇代码块并生成数百个 span，若在 DOMContentLoaded 里同步跑完，
+       会在关键路径上长时间占住主线程（2026-09-27 实测本页长任务 1548ms、DCL 3651ms；
+       改动后长任务 145ms、DCL 1378ms）。这里 DCL 阶段只登记观察，实际高亮交给
+       IntersectionObserver（近屏 800px 内优先）+ requestIdleCallback（剩余块每片 ≤4 块），
+       首屏代码块的着色时机与视觉基本无变化。 */
+    (function() {
+      function canPaint(b) {
+        return !b.classList.contains('hljs') && !b.closest('.codehilite');
+      }
+      function paint(b) {
+        if (!canPaint(b)) return;
+        try { hljs.highlightElement(b); } catch (e) {}
+      }
+      function init() {
+        var blocks = [].slice.call(document.querySelectorAll('pre code')).filter(canPaint);
+        if (!blocks.length) return;
+        if ('IntersectionObserver' in window) {
+          var io = new IntersectionObserver(function(entries, obs) {
+            entries.forEach(function(en) {
+              if (!en.isIntersecting) return;
+              paint(en.target);
+              obs.unobserve(en.target);
+            });
+          }, { rootMargin: '800px 0px' });
+          blocks.forEach(function(b) { io.observe(b); });
+        }
+        var i = 0;
+        var idle = window.requestIdleCallback || window.setTimeout;
+        var step = function() {
+          var quota = 4;
+          while (i < blocks.length && quota-- > 0) paint(blocks[i++]);
+          if (i < blocks.length) idle(step);
+        };
+        idle(step); // 不在 DCL 里同步跑：可见块由 IntersectionObserver 处理，其余走空闲分片
+      }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+      } else {
+        init();
+      }
+    })();
+  </script>
+
+  <!-- Cloudflare Web Analytics -->
+  <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "29e7cff6f37448989538e2165cb79187"}'></script>
+</body>
+</html>

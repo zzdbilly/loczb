@@ -7,6 +7,14 @@
     <language>zh-CN</language>
     <atom:link href="https://709527.xyz/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>脱敏要做在写入端：落盘之后打码，等于没打码</title>
+      <link>https://709527.xyz/blog/posts/redact-at-write-time.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/redact-at-write-time.html</guid>
+      <description>打码是一次性闸口，位置必须在数据产生、序列化的那一刻。落盘之后你面对的不再是一条数据，而是一堆不受你控制的副本。</description>
+      <category>安全</category>
+      <pubDate>Fri, 30 Oct 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
       <title>版本号不该手写：缓存失效应当由内容哈希推导</title>
       <link>https://709527.xyz/blog/posts/cache-version-from-content-hash.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/cache-version-from-content-hash.html</guid>
@@ -157,14 +165,6 @@
       <description>自律失败不是道德问题，是机制问题。本文从双曲贴现、多巴胺预期误差和享乐跑步机出发，解释为什么短期欲望总是赢，然后给出一套不靠意志力的欲望组合管理方法：摩擦调节、身份驱动、中间兑现点和每周欲望审计。</description>
       <category>思考</category>
       <pubDate>Fri, 11 Sep 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>别再从 Espresso 开始：Android 测试分层实战手册</title>
-      <link>https://709527.xyz/blog/posts/android-testing-playbook.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/android-testing-playbook.html</guid>
-      <description>从 JUnit 5 + MockK 到 Compose 语义树断言，从 Robolectric 到 Firebase Test Lab——一个老 Android 开发对测试金字塔的分层打法、Flaky 治理与 CI 取舍，全是踩坑后留下的判断。</description>
-      <category>Android</category>
-      <pubDate>Thu, 10 Sep 2026 00:00:00 +0800</pubDate>
     </item>
   </channel>
 </rss>

@@ -1,6 +1,21 @@
 {
   "posts": [
     {
+      "slug": "redact-at-write-time",
+      "title": "脱敏要做在写入端：落盘之后打码，等于没打码",
+      "date": "2026-10-30",
+      "dateTime": "2026-10-30 19:20:00",
+      "category": "安全",
+      "tags": [
+        "隐私",
+        "日志",
+        "密钥管理",
+        "工程实践"
+      ],
+      "readTime": 15,
+      "url": "blog/posts/redact-at-write-time.html"
+    },
+    {
       "slug": "cache-version-from-content-hash",
       "title": "版本号不该手写：缓存失效应当由内容哈希推导",
       "date": "2026-10-29",
@@ -1961,9 +1976,9 @@
     }
   ],
   "categories": [
+    "安全",
     "前端",
     "DevOps",
-    "安全",
     "数据库",
     "思考",
     "开发",
@@ -1973,9 +1988,9 @@
     "系统编程"
   ],
   "stats": {
-    "totalPosts": 126,
-    "totalTags": 327,
-    "latestDate": "2026-10-29",
+    "totalPosts": 127,
+    "totalTags": 329,
+    "latestDate": "2026-10-30",
     "oldestDate": "2026-02-15"
   }
 }
