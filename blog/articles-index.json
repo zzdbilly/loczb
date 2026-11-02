@@ -4,7 +4,7 @@
       "slug": "nullable-claims-die-at-the-boundary",
       "title": "空安全在边界失效：反序列化不经过你的构造函数",
       "date": "2026-11-02",
-      "dateTime": "2026-11-02 17:20:00",
+      "dateTime": "2026-11-02 15:20:00",
       "category": "Kotlin",
       "tags": [
         "空安全",
