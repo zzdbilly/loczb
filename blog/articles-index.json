@@ -1,6 +1,21 @@
 {
   "posts": [
     {
+      "slug": "nullable-claims-die-at-the-boundary",
+      "title": "空安全在边界失效：反序列化不经过你的构造函数",
+      "date": "2026-11-02",
+      "dateTime": "2026-11-02 17:20:00",
+      "category": "Kotlin",
+      "tags": [
+        "空安全",
+        "序列化",
+        "Android",
+        "类型系统"
+      ],
+      "readTime": 14,
+      "url": "blog/posts/nullable-claims-die-at-the-boundary.html"
+    },
+    {
       "slug": "redact-at-write-time",
       "title": "脱敏要做在写入端：落盘之后打码，等于没打码",
       "date": "2026-10-30",
@@ -1976,6 +1991,7 @@
     }
   ],
   "categories": [
+    "Kotlin",
     "安全",
     "前端",
     "DevOps",
@@ -1983,14 +1999,13 @@
     "思考",
     "开发",
     "Android",
-    "Kotlin",
     "AI",
     "系统编程"
   ],
   "stats": {
-    "totalPosts": 127,
-    "totalTags": 329,
-    "latestDate": "2026-10-30",
+    "totalPosts": 128,
+    "totalTags": 332,
+    "latestDate": "2026-11-02",
     "oldestDate": "2026-02-15"
   }
 }

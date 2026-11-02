@@ -7,6 +7,14 @@
     <language>zh-CN</language>
     <atom:link href="https://709527.xyz/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>空安全在边界失效：反序列化不经过你的构造函数</title>
+      <link>https://709527.xyz/blog/posts/nullable-claims-die-at-the-boundary.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/nullable-claims-die-at-the-boundary.html</guid>
+      <description>非空类型保证的是编译期检查点，不是值本身。反序列化、反射与 Java 边界都能绕开这些检查点，所以外部数据必须在入口显式验一遍。</description>
+      <category>Kotlin</category>
+      <pubDate>Mon, 02 Nov 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
       <title>脱敏要做在写入端：落盘之后打码，等于没打码</title>
       <link>https://709527.xyz/blog/posts/redact-at-write-time.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/redact-at-write-time.html</guid>
@@ -157,14 +165,6 @@
       <description>电量见底时怎么用几十分钟把自己拉回来：先分清是累还是空，再抓住低谷里的十分钟，把光照、社交和任务切换的顺序排对，末尾附一份十分钟能做完的最短路径清单。</description>
       <category>思考</category>
       <pubDate>Sun, 13 Sep 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>欲望也要看周期：把长期欲望当成你的核心资产</title>
-      <link>https://709527.xyz/blog/posts/seek-long-term-desires.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/seek-long-term-desires.html</guid>
-      <description>自律失败不是道德问题，是机制问题。本文从双曲贴现、多巴胺预期误差和享乐跑步机出发，解释为什么短期欲望总是赢，然后给出一套不靠意志力的欲望组合管理方法：摩擦调节、身份驱动、中间兑现点和每周欲望审计。</description>
-      <category>思考</category>
-      <pubDate>Fri, 11 Sep 2026 00:00:00 +0800</pubDate>
     </item>
   </channel>
 </rss>

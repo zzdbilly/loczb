@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <script>document.documentElement.classList.add("js");try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://static.cloudflareinsights.com https://loczb-comments.billymust.workers.dev; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://loczb-comments.billymust.workers.dev https://dashscope.aliyuncs.com https://709527.xyz https://www.709527.xyz https://cloudflareinsights.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
+    <script>/* 反点击劫持兜底：GitHub Pages 无法下发 X-Frame-Options / CSP frame-ancestors */(function(){if(self===top)return;try{top.location=self.location}catch(e){}setTimeout(function(){if(self!==top){document.documentElement.style.display='none';}},400);})();</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>空安全在边界失效：反序列化不经过你的构造函数 | 张小猛 - loczb</title>
+    <meta name="description" content="非空类型保证的是编译期检查点，不是值本身。反序列化、反射与 Java 边界都能绕开这些检查点，所以外部数据必须在入口显式验一遍。">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="空安全在边界失效：反序列化不经过你的构造函数 | 张小猛 - loczb">
+    <meta property="og:description" content="非空类型保证的是编译期检查点，不是值本身。反序列化、反射与 Java 边界都能绕开这些检查点，所以外部数据必须在入口显式验一遍。">
+    <meta property="og:url" content="https://709527.xyz/blog/posts/nullable-claims-die-at-the-boundary.html">
+    <meta property="og:type" content="article">
+    <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
+    <meta property="og:site_name" content="loczb">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="空安全在边界失效：反序列化不经过你的构造函数 | 张小猛 - loczb">
+    <meta name="twitter:description" content="非空类型保证的是编译期检查点，不是值本身。反序列化、反射与 Java 边界都能绕开这些检查点，所以外部数据必须在入口显式验一遍。">
+    <meta name="twitter:image" content="https://709527.xyz/assets/images/og-image.png">
+
+        <script type="application/ld+json">
+{
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "空安全在边界失效：反序列化不经过你的构造函数",
+      "description": "非空类型保证的是编译期检查点，不是值本身。反序列化、反射与 Java 边界都能绕开这些检查点，所以外部数据必须在入口显式验一遍。",
+      "image": "https://709527.xyz/assets/images/og-image.png",
+      "author": {
+            "@type": "Person",
+            "name": "张小猛",
+            "url": "https://709527.xyz/about/"
+      },
+      "publisher": {
+            "@type": "Organization",
+            "name": "loczb",
+            "logo": {
+                  "@type": "ImageObject",
+                  "url": "https://709527.xyz/assets/images/favicon.svg"
+            }
+      },
+      "datePublished": "2026-11-02T17:20:00+08:00",
+      "dateModified": "2026-11-02T17:20:00+08:00",
+      "url": "https://709527.xyz/blog/posts/nullable-claims-die-at-the-boundary.html",
+      "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://709527.xyz/blog/posts/nullable-claims-die-at-the-boundary.html"
+      },
+      "keywords": "空安全, 序列化, Android, 类型系统",
+      "articleSection": "Kotlin",
+      "timeRequired": "PT14M",
+      "inLanguage": "zh-CN"
+}
+    </script>
+
+    <link rel="stylesheet" href="../../assets/css/style.css?v=c8e170d8f9">
+    <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
+    <link rel="alternate icon" href="../../assets/images/favicon.ico">
+    <link rel="canonical" href="https://709527.xyz/blog/posts/nullable-claims-die-at-the-boundary.html">
+</head>
+<body>
+  <!-- PARTIAL:SKIP_LINK -->
+  <a href="#main-content" class="skip-link">跳至主要内容</a>
+  <!-- /PARTIAL:SKIP_LINK -->
+
+  <!-- Navigation -->
+<!-- PARTIAL:NAV -->
+  <nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">
+      loc<span>zb</span>
+    </a>
+    <button class="nav-toggle" aria-label="打开菜单" aria-expanded="false" aria-controls="nav-links-menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <div class="nav-overlay"></div>
+    <ul class="nav-links" id="nav-links-menu">
+      <li><a href="/" class="nav-link" data-nav="home">首页</a></li>
+      <li><a href="/projects/" class="nav-link" data-nav="projects">项目</a></li>
+      <li><a href="/blog/" class="nav-link active" data-nav="blog">博客</a></li>
+      <li><a href="/about/" class="nav-link" data-nav="about">关于</a></li>
+    </ul>
+    <button class="theme-toggle" aria-label="切换主题" title="切换亮/暗模式">
+      <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="5"></circle>
+        <line x1="12" y1="1" x2="12" y2="3"></line>
+        <line x1="12" y1="21" x2="12" y2="23"></line>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+        <line x1="1" y1="12" x2="3" y2="12"></line>
+        <line x1="21" y1="12" x2="23" y2="12"></line>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+      </svg>
+      <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+      </svg>
+    </button>
+  </div>
+</nav>
+  <!-- /PARTIAL:NAV -->
+  <main class="section" id="main-content" style="padding-bottom: 0; padding-top: var(--space-4xl);">
+    <div class="container container-narrow">
+      <a href="../index.html" class="back-link">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        返回博客列表
+      </a>
+
+      <article class="post-content">
+        <h1>空安全在边界失效：反序列化不经过你的构造函数</h1>
+
+        <div class="post-meta">
+          <span class="meta-item"><span aria-hidden="true">📅</span> 2026-11-02 17:20:00</span>
+          <span class="meta-item"><span aria-hidden="true">⏱️</span> 14 min read</span>
+          <span class="meta-item"><span aria-hidden="true">👤</span> 张小猛</span>
+        </div>
+
+        <div class="post-tags">
+          <span class="tag">空安全</span>
+          <span class="tag">序列化</span>
+          <span class="tag">Android</span>
+          <span class="tag">类型系统</span>
+        </div>
+
+        
+
+        <h2>空安全在边界失效：反序列化不经过你的构造函数</h2>
+<p><code>val name: String</code> 读起来像一句承诺：这个字段永远有值。写下去的时候我们默认它是运行时不变式，于是整条调用链都省掉了判空。</p>
+<p>它不是不变式，是编译期约定。约定的执行者是编译器插进去的那几个检查点，而这些检查点只存在于「代码真的从这里走过」的位置。对象一旦不走构造函数诞生——反序列化、反射设值、Java 边界——约定就没有执行者了。字段声明还是非空，值还是 null，中间没有任何一步报错。</p>
+<p>这篇文章不谈语法，谈一件事：这三条诞生路径分别把契约维护在哪，失效时失败发生在离现场多远的地方，以及边界校验应该放在哪一层。</p>
+<h2>先看清楚那行声明到底承诺了什么</h2>
+<h3>契约的签约双方</h3>
+<p>非空类型是 Kotlin 类型系统里的一个约束，签约双方是「编译器」和「编译器看得见的代码」。它保证的是：在你写下的这些代码路径上，任何试图把 null 塞进非空位置的行为都会在编译期被拦下，或者在进入函数的第一条指令处被拦下。</p>
+<p>它没有承诺的：运行时内存里的那个字段永远不是 null。类型擦除之后，<code>String</code> 和 <code>String?</code> 在字节码里是同一个 <code>Ljava/lang/String;</code>，JVM 不认识非空。所有的保证都来自编译器生成的检查代码。</p>
+<h3>检查点长什么样</h3>
+<p>把一段直白的 Kotlin 编译后再反编译，能看到编译器替你补的东西。左边是源码，右边（注释里）是它等价的样子——<code>Intrinsics</code> 调用是编译器插入的，命名细节随版本有差异：</p>
+<pre><code class="language-kotlin">// 源码：示意
+data class UserProfile(
+    val id: String,
+    val name: String,
+    val email: String?
+)
+
+fun render(profile: UserProfile, host: String): String =
+    &quot;$host:${profile.name}&quot;
+
+// 反编译视角：大致等价于下面这样，非逐字节还原
+// public UserProfile(String id, String name, String email) {
+//     Intrinsics.checkNotNullParameter(id, &quot;id&quot;);
+//     Intrinsics.checkNotNullParameter(name, &quot;name&quot;);
+//     // email 可空，不插检查
+//     this.id = id;
+//     this.name = name;
+//     this.email = email;
+// }
+//
+// public static final String render(UserProfile profile, String host) {
+//     Intrinsics.checkNotNullParameter(profile, &quot;profile&quot;);
+//     Intrinsics.checkNotNullParameter(host, &quot;host&quot;);
+//     return host + &quot;:&quot; + profile.getName();
+// }
+</code></pre>
+<p>三点值得记住：</p>
+<ul>
+<li>检查发生在<strong>构造器入口</strong>和<strong>公开函数入口</strong>，参数按声明逐个检查。</li>
+<li>字段赋值语句本身不检查。<code>this.name = name</code> 之前的那次 <code>checkNotNullParameter</code> 已经是全部保障。</li>
+<li>只检查「进入这个函数时」，不检查「离开之后」。对象在堆上活了多久、被谁改过，编译器不再管。</li>
+</ul>
+<h3>检查点为什么不是全程保护</h3>
+<p>一个人容易产生的错觉是：构造函数检查过了，所以这个对象之后一直是合法的。实际成立的推论只有一条——构造器执行完的那一刻，字段是合法的。中间只要有任何一条路径能在不执行构造器的情况下写字段，或者能把 null 从编译器不检查的方向送进来，推论就断了。</p>
+<p><code>data class</code> 让这件事更贵。<code>equals</code>、<code>hashCode</code>、<code>toString</code>、<code>copy()</code> 全部由字段直接推导，它们默认字段非空成立。一个坏掉的实例流进集合、流进缓存 key、流进日志格式化，坏的是整片逻辑，不只是一处判空。</p>
+<h2>路径一：走构造函数</h2>
+<h3>契约在这条路上是成立的</h3>
+<p>对象从 <code>UserProfile(...)</code> 或 <code>copy(...)</code> 出来，构造器体的第一条指令就是参数检查。这条路是 Kotlin 世界里唯一被完整覆盖的诞生方式，其余所有方式都要单独论证。</p>
+<p><code>copy()</code> 也在这条路上：它调用合成构造器，同样带检查。所以「先构造一个合法对象，再 copy 改一个字段」是安全的；它不会帮你修好一个本来就坏的对象。</p>
+<h3>一个容易忽略的漏洞：默认值</h3>
+<p>构造器参数有默认值时，如果不传这个参数，走的是合成构造器的另一条分支，默认值表达式求值的结果同样会经过检查。这一点没问题。问题出在从 Java 调用时：默认参数在 Java 侧不存在，Java 调用方必须显式传全部参数，而它传 null 就会在 Kotlin 构造器里被检查拦住——这个方向反而安全，因为检查写在被调用方。</p>
+<h3>这条路的边界在哪</h3>
+<p>边界很清楚：只要对象是在 Kotlin 代码里被 <code>new</code> 出来的，契约成立。一旦构造动作交给别人——框架、反射、native、另一个语言——就要看对方调没调用你的构造器。</p>
+<h2>路径二：绕过构造函数</h2>
+<h3>分配实例，不执行构造器</h3>
+<p>JVM 上有一条所有人都能用的通道：<code>sun.misc.Unsafe.allocateInstance(Class)</code>。它按类的大小在堆上分配内存，把字段置为默认值（引用类型是 null），<strong>不执行任何构造器体</strong>。基于反射的 JSON 库在没有可用无参构造时，走的就是这条通道。</p>
+<p>流程大致是这样：</p>
+<ol>
+<li>反射拿到 <code>Class</code>，读所有字段（含 private final）。</li>
+<li>没有无参构造 → <code>allocateInstance</code> 拿一个字段全为默认值的实例。</li>
+<li><code>Field.setAccessible(true)</code>，逐个把 JSON 里的值写进去。</li>
+<li>JSON 里缺的字段，就保持默认值——引用类型是 null。</li>
+</ol>
+<p>第 4 步就是事故的起点。JSON 里没写 <code>name</code>，目标类声明的是 <code>val name: String</code>，Gson 这类库不会替你检查，它只做「有就写，没有就跳过」。</p>
+<pre><code class="language-kotlin">// 示意：反射绑定，不经过构造器
+val json = &quot;&quot;&quot;{&quot;id&quot;:&quot;u-1&quot;,&quot;email&quot;:null}&quot;&quot;&quot;   // 注意：没有 name
+val profile: UserProfile = gson.fromJson(json, UserProfile::class.java)
+
+// 赋值这一步不会抛异常，name 在内存里是 null
+println(profile.id)      // &quot;u-1&quot;
+println(profile.name)    // 编译期认为是 String，运行时是 null
+</code></pre>
+<h3>赋值那一步为什么不报错</h3>
+<p>因为写入的路径是 <code>Field.set</code>，不是构造器。<code>Field.set</code> 只做类型兼容检查：<code>null</code> 对 <code>Ljava/lang/String;</code> 是合法值。没有任何一层会去问「这个字段在 Kotlin 里是非空的吗」——Kotlin 的非空标记在字节码里没有对应物（部分情况下会以 <code>@NotNull</code> 注解形式出现在元数据里，但那只是注解，不是运行时强制）。</p>
+<p>结果是：<code>fromJson</code> 返回成功，对象看起来正常，坏值已经静默就位。</p>
+<h3>失败被推到了多远</h3>
+<p>这是最值得盯的一点。NPE 不会在 <code>fromJson</code> 那一行抛，也不会在赋值那一行抛。它会在第一次真正读这个字段的地方抛——可能是三层调用之后的 UI 绑定，可能是一个 <code>toString()</code>，可能是日志里拼接字符串，可能是 <code>equals</code> 哈希时。</p>
+<p>栈大概长这样（文字示意，不是某次真实日志）：</p>
+<blockquote>
+<p>java.lang.NullPointerException: Parameter specified as non-null is null:
+    method kotlin.jvm.internal.Intrinsics.checkNotNullParameter, parameter name
+    at com.example.ui.ProfileHeader.render(ProfileHeader.kt)
+    at com.example.ui.ScreenKt.Profile(Screen.kt:41)</p>
+</blockquote>
+<p>栈里从上到下找不到 JSON 入口。栈里出现的是渲染层，而真凶在网络层，中间隔着一个「成功返回」的解码调用。</p>
+<p>这就是失败的距离：<strong>从发生点到报错点，隔了 N 层与 M 分钟</strong>。定位成本按距离涨，不按复杂度涨。判空加在报错的地方，等于在下游堵上游的漏水。</p>
+<h3>为什么这条路径最贵</h3>
+<p>三个原因叠加：</p>
+<ul>
+<li><strong>静默</strong>：解码成功、字段就位、类型正确，没有任何一步发出信号。</li>
+<li><strong>延迟</strong>：报错点和写入点之间隔着任意多层，栈信息误导排查方向。</li>
+<li><strong>扩散</strong>：坏实例可能先进了缓存、进了集合、进了 <code>hashCode</code> 的桶，一份坏数据污染多处。</li>
+</ul>
+<p>相比之下，构造器抛 NPE 是好事——它把失败压在了诞生那一刻，栈顶就是根因。</p>
+<h2>路径三：从 Java 边界进来</h2>
+<h3>平台类型的那把感叹号</h3>
+<p>Kotlin 调 Java 方法时，返回值的类型叫<strong>平台类型</strong>，写法是 <code>String!</code>：它既可以被当成 <code>String</code>，也可以被当成 <code>String?</code>，编译器两边都放行。这不是编译器偷懒，是因为 Java 侧没有非空信息，它不能替你担保。</p>
+<p>它放行的代价是：<strong>这个方向上不插检查</strong>。</p>
+<pre><code class="language-kotlin">// 示意：Java 侧的方法没有 @NonNull 注解
+val token: String = legacyAuth.currentToken()   // 返回 String!，赋给非空类型
+// 上一行没有检查。currentToken() 返回 null 时，token 里就是 null
+</code></pre>
+<p>注意区分两个方向，这决定了检查在谁身上：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">方向</th>
+<th style="text-align: left;">检查在哪</th>
+<th style="text-align: left;">结果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Java 调 Kotlin，传 null 进非空参数</td>
+<td style="text-align: left;">Kotlin 被调方入口</td>
+<td style="text-align: left;">立刻 NPE，栈指向被调方</td>
+</tr>
+<tr>
+<td style="text-align: left;">Kotlin 调 Java，拿到 null 赋给非空类型</td>
+<td style="text-align: left;">没有检查</td>
+<td style="text-align: left;">null 静默进入 Kotlin 世界</td>
+</tr>
+<tr>
+<td style="text-align: left;">Kotlin 内部互相调用</td>
+<td style="text-align: left;">被调方入口</td>
+<td style="text-align: left;">立刻 NPE</td>
+</tr>
+</tbody>
+</table>
+<p>第一行是安全的：检查写在被调用方，跑不掉。第二行是危险的：检查本该在赋值处，而那里什么都没有。Java 边界进来的 null，本质和反射写入的 null 是同一类东西——都是从编译器不插检查的缝隙里渗进来的。</p>
+<h3>平台类型还会传染</h3>
+<p><code>legacyAuth.currentToken()</code> 的返回值一路往下传，只要每一站都声明成非空（编译器允许，因为源头是平台类型），null 就被包在非空类型里穿过了整个调用链。中途没有任何一站会触发检查——检查只在函数入口对<strong>参数</strong>做，而这一路上没人把 null 当参数往外传，它只是存在字段里或者当返回值。</p>
+<p>这种「穿着非空外衣的 null」比裸 null 危险，因为类型系统从此不再提示你判空。</p>
+<h2>同一个 JSON，换一个会调构造器的解析器</h2>
+<p>下面这段是<strong>推演</strong>，不是我在哪个项目里跑过的实验。设定一个固定的坏输入：<code>{"id":"u-1","email":null}</code>，目标类还是前面那个 <code>UserProfile</code>，三条解析路径分别会怎样。为了聚焦，只关心 <code>name</code> 缺失这一件事。</p>
+<h3>推演 A：反射绑定 + Unsafe 分配</h3>
+<p>按路径二的机制走：<code>allocateInstance</code> 造实例，<code>name</code> 保持 null，<code>fromJson</code> 正常返回。坏值进入业务代码，报错点未知。这一路是「失败后移」。</p>
+<h3>推演 B：kotlinx.serialization</h3>
+<p>编译器插件为 <code>UserProfile</code> 生成 <code>serializer()</code>。反序列化时它不是「读字段 → 塞字段」，而是「读完所有字段 → 调用真正的（合成）构造器」。缺 <code>name</code> 就调用不成立即失败：</p>
+<pre><code class="language-kotlin">// 示意：失败发生在边界
+val profile = runCatching {
+    Json.decodeFromString&lt;UserProfile&gt;(json)
+}.getOrElse { e -&gt;
+    when (e) {
+        is MissingFieldException -&gt; log.warn(&quot;字段缺失: ${e.missingFields}&quot;)
+        is JsonDecodingException -&gt; log.warn(&quot;解码失败: ${e.message}&quot;)
+        else -&gt; throw e
+    }
+    null
+}
+</code></pre>
+<p><code>MissingFieldException</code> 是 <code>SerializationException</code> 的子类，<code>missingFields</code> 会列出缺哪些。这样 treat 失败的位置就在解码调用这一行，栈顶是解码器，不是一个不相干的 UI 函数。这一路是「失败前移」。</p>
+<p>一个必须说清的点：构造器被调用了，所以<strong>非空参数检查在构造器入口会生效</strong>，缺字段在到达构造器之前就已经被插件的生成代码拦下。两层都拦。</p>
+<h3>推演 C：Moshi，取决于有没有 Kotlin 支持</h3>
+<p>这条要写得准确，不能一概而论。Moshi 的行为取决于适配器是怎么来的：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">配置</th>
+<th style="text-align: left;">非空属性的缺失/为 null</th>
+<th style="text-align: left;">失败时机</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">启用 <code>KotlinJsonAdapterFactory</code>（反射）</td>
+<td style="text-align: left;">校验非空与必填，抛 <code>JsonDataException</code></td>
+<td style="text-align: left;">解码时，边界</td>
+</tr>
+<tr>
+<td style="text-align: left;">用 moshi-kotlin-codegen 生成适配器</td>
+<td style="text-align: left;">生成代码调用构造器并校验</td>
+<td style="text-align: left;">解码时，边界</td>
+</tr>
+<tr>
+<td style="text-align: left;">只注册普通反射适配器，不带 Kotlin 支持</td>
+<td style="text-align: left;">走无参构造 + 字段直写，非空不被校验</td>
+<td style="text-align: left;">可能静默产生 null</td>
+</tr>
+</tbody>
+</table>
+<p>第三行是真正的坑：同一个库，加不加那一行 <code>add(KotlinJsonAdapterFactory())</code>，行为是两套。这类「配置决定契约」的库比「永远不校验」的库更危险，因为你以为自己在安全的那一档。</p>
+<h3>三路对照</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">维度</th>
+<th style="text-align: left;">反射 + Unsafe</th>
+<th style="text-align: left;">kotlinx.serialization</th>
+<th style="text-align: left;">Moshi + Kotlin 支持</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">是否执行构造器</td>
+<td style="text-align: left;">否</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">是</td>
+</tr>
+<tr>
+<td style="text-align: left;">缺字段的后果</td>
+<td style="text-align: left;">字段为 null，静默</td>
+<td style="text-align: left;"><code>MissingFieldException</code></td>
+<td style="text-align: left;"><code>JsonDataException</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">失败位置</td>
+<td style="text-align: left;">首次读取处，距离未知</td>
+<td style="text-align: left;">解码调用处</td>
+<td style="text-align: left;">解码调用处</td>
+</tr>
+<tr>
+<td style="text-align: left;">栈是否指向根因</td>
+<td style="text-align: left;">否</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">是</td>
+</tr>
+<tr>
+<td style="text-align: left;">是否依赖配置正确</td>
+<td style="text-align: left;">不依赖（永远不校验）</td>
+<td style="text-align: left;">不依赖</td>
+<td style="text-align: left;">依赖，配错就退化成 A</td>
+</tr>
+</tbody>
+</table>
+<p>推演的结论只有一句：<strong>把「谁负责构造」这件事从框架手里拿回来，失败就会自己前移</strong>。换一个会调构造器的解码器，后面那层手写校验就可以省掉。</p>
+<h2>边界校验应该放在哪</h2>
+<h3>入口一次性验证，不要沿途补</h3>
+<p>正确的位置是数据进入系统的第一站：HTTP 响应体解析完、文件读完、SharedPreferences 读出来的那一刻。在这个点做一次完整校验，通过之后的对象就可以当非空用，沿途不再判空。</p>
+<p>沿途补判空的坏处不是啰嗦，是<strong>它把「这里可能有 null」变成了常态</strong>。每一处 <code>?.</code> 都在告诉后来的读者：这个字段的来源不可信。当所有字段都不可信，类型系统就退化成注释。</p>
+<h3>选会调构造器的序列化方案</h3>
+<p>这是成本最低的一步，也是收益最直接的一步：</p>
+<ul>
+<li>新代码优先 kotlinx.serialization：编译期生成 serializer，失败在边界，错误信息带字段名。</li>
+<li>存量 Gson 代码如果要保留，至少给关键模型加显式校验入口，别直接 <code>fromJson</code> 就往下发。</li>
+<li>Moshi 用的话，确认 <code>KotlinJsonAdapterFactory</code> 真的注册了，别只在文档里注册。</li>
+</ul>
+<p>代价要说清楚：kotlinx.serialization 需要编译器插件，对构建链有侵入；它要求类在编译期可见（动态代理生成的类不行）；对多态和自定义格式的支持需要额外写 <code>SerializersModule</code>。这些是真实成本，不是可以忽略的细节。</p>
+<h3>把「未验证」和「已验证」在类型上分开</h3>
+<p>比「记得校验」更可靠的做法，是让类型系统替你记住。核心思路：<strong>未验证的原始数据用一个独立类型装，验证通过的才允许构造成领域对象，而领域对象的构造器是私有的。</strong></p>
+<pre><code class="language-kotlin">// 示意：用私有构造器 + 工厂把「已验证」变成一种类型事实
+@JvmInline
+value class RawJson(val text: String)
+
+data class UserProfile private constructor(
+    val id: String,
+    val name: String
+) {
+    companion object {
+        fun from(raw: RawJson): Result&lt;UserProfile&gt; {
+            val obj = runCatching { jsonParser.parseObject(raw.text) }.getOrNull()
+                ?: return Result.failure(IllegalArgumentException(&quot;malformed json&quot;))
+            val id = obj[&quot;id&quot;] ?: return Result.failure(IllegalArgumentException(&quot;missing id&quot;))
+            val name = obj[&quot;name&quot;] ?: return Result.failure(IllegalArgumentException(&quot;missing name&quot;))
+            return Result.success(UserProfile(id, name))
+        }
+    }
+}
+</code></pre>
+<p>要点在 <code>private constructor</code>：外部代码拿不到构造入口，只能走 <code>from</code>。这样「这个对象一定被校验过」不再依赖人的自觉，而是依赖可见性。代价是失去了 <code>copy()</code> 的便利（私有构造器下 <code>copy</code> 也受限），以及和序列化框架的兼容会变麻烦——框架要能调私有构造器，得额外配置。</p>
+<p>这是权衡，不是教条。小项目里一个 <code>require(...)</code> 就够；模型多、边界多的项目值得上类型隔离。</p>
+<h3>校验失败怎么处理</h3>
+<p>三种处理方式，选哪种取决于数据性质：</p>
+<ul>
+<li><strong>整个响应判失败</strong>：适用于一致性要求高的场景。一个字段缺失说明服务端契约变了，继续用半成品数据只会把问题拖远。</li>
+<li><strong>字段降级 + 上报</strong>：适用于展示型数据。<code>name</code> 缺失就显示占位，同时打点。前提是降级值在类型上显式（<code>String?</code> 或者 <code>Unknown</code> 分支），不要偷偷塞空串——空串会一路通过所有非空检查。</li>
+<li><strong>直接崩</strong>：适用开发期和内部工具。生产环境里「崩在边界」好过「坏数据流进下游」，但要有崩溃聚合，否则等于没有信号。</li>
+</ul>
+<p>不推荐的做法是 <code>catch (e: Exception) { return null }</code> 一把梭。它把「字段缺失」和「网络断了」混成同一个 null，上游无法区分该重试还是该报错。</p>
+<h2>判断自己的代码处在哪条路径上</h2>
+<h3>五个问题</h3>
+<p>拿现有代码过一遍，命中任何一个都说明边界上有缺口：</p>
+<ol>
+<li>这个类的实例，有没有可能不是我 new 出来的？（反射、ORM、mock、缓存反序列化）</li>
+<li>解码用的库，会不会调用我的构造器？不确定就去查文档，别猜。</li>
+<li>有没有字段是从 Java 方法直接赋给非空类型的？有的话，那个赋值处没有检查。</li>
+<li><code>data class</code> 的 <code>equals</code> / <code>hashCode</code> 有没有可能作用在坏实例上？如果坏实例进过集合，答案是「可能」。</li>
+<li>判空是集中在入口，还是散在各处？散着就是没有边界。</li>
+</ol>
+<h3>代价对照</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">做法</th>
+<th style="text-align: left;">一次性成本</th>
+<th style="text-align: left;">长期成本</th>
+<th style="text-align: left;">失败位置</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">手写 <code>require</code> 校验</td>
+<td style="text-align: left;">低</td>
+<td style="text-align: left;">每个新字段都要记得加</td>
+<td style="text-align: left;">入口</td>
+</tr>
+<tr>
+<td style="text-align: left;">换 kotlinx.serialization</td>
+<td style="text-align: left;">中，要动构建链</td>
+<td style="text-align: left;">低，生成代码自动校验</td>
+<td style="text-align: left;">入口</td>
+</tr>
+<tr>
+<td style="text-align: left;">Moshi + Kotlin 工厂</td>
+<td style="text-align: left;">低</td>
+<td style="text-align: left;">低，但要防配置退化</td>
+<td style="text-align: left;">入口</td>
+</tr>
+<tr>
+<td style="text-align: left;">私有构造器 + 工厂</td>
+<td style="text-align: left;">中高，要改调用点</td>
+<td style="text-align: left;">低，编译期强制</td>
+<td style="text-align: left;">入口</td>
+</tr>
+<tr>
+<td style="text-align: left;">沿途判空</td>
+<td style="text-align: left;">零</td>
+<td style="text-align: left;">高，且随代码量线性涨</td>
+<td style="text-align: left;">不确定</td>
+</tr>
+</tbody>
+</table>
+<p>这张表的读法是：所有「一次性成本」都不会消失，只是从入口挪到了别处。选哪一行取决于你能接受成本出现在哪个时间点，而不是能不能省掉。</p>
+<h2>收束：类型声明是承诺，不是守门人</h2>
+<p>回到开头那句 <code>val name: String</code>。它承诺的东西比我们以为的少：它承诺「经过编译器的代码路径会检查」，不承诺「这个值永远有值」。这个区别在对象走构造器时看不出来，在对象不走构造器时就是全部。</p>
+<p>三条诞生路径的差别，本质是「谁执行了契约」的差别：</p>
+<ul>
+<li>走构造器：编译器在入口执行，失败立刻、定位精准。</li>
+<li>绕过构造器：没人执行，失败后移到离现场很远的地方。</li>
+<li>从 Java 边界进来：编译器主动放弃执行，null 穿着非空外衣往下走。</li>
+</ul>
+<p>所以边界校验不是「防御性编程」的多余动作，它是把契约从编译器手里接过来、在运行时补一次执行。补的位置只有一个正确答案：数据第一次进入系统的那个点。补完之后，往后每一层都可以坦然地不判空——那才是类型声明应有的样子。</p>
+<p>真正需要警惕的不是「有人传了 null」，而是「代码里到处都在防 null」。后者说明边界的执行者一直缺席，只是还没轮到那次报错。</p>
+
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="kotlin-coroutines-并发实战从入门到优雅的并发编程.html">
+            <div class="related-post-card-title">Kotlin Coroutines 并发实战：从入门到优雅的并发编程</div>
+            <div class="related-post-card-tags"><span>Kotlin</span><span>协程</span><span>并发</span></div>
+          </a>
+          <a class="related-post-card" href="kotlin-scope-functions-实战选择五个函数一个决策树.html">
+            <div class="related-post-card-title">Kotlin Scope Functions 实战选择：五个函数一个决策树</div>
+            <div class="related-post-card-tags"><span>Kotlin</span><span>Android</span><span>最佳实践</span></div>
+          </a>
+          <a class="related-post-card" href="kotlin-coroutine-exception-handling.html">
+            <div class="related-post-card-title">Kotlin Coroutine 异常处理机制全面解析</div>
+            <div class="related-post-card-tags"><span>Kotlin</span><span>协程</span><span>异常处理</span></div>
+          </a>
+          <a class="related-post-card" href="android-gradle-kts-migration.html">
+            <div class="related-post-card-title">Android Gradle 迁移到 KTS 完整指南：从 Groovy 到 Kotlin DSL</div>
+            <div class="related-post-card-tags"><span>Android</span><span>Gradle</span><span>KTS</span></div>
+          </a>
+          <a class="related-post-card" href="kotlin-multiplatform-practice.html">
+            <div class="related-post-card-title">Kotlin Multiplatform 实战：共享业务逻辑到 iOS</div>
+            <div class="related-post-card-tags"><span>Kotlin Multiplatform</span><span>KMP</span><span>Android</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
+
+        <!-- Post Copyright & License Card -->
+        <div class="post-copyright-card">
+          <div class="copyright-header">
+            <div class="copyright-badge">
+              <span>📜</span>
+              <span>原创与知识共享协议</span>
+            </div>
+            <button class="copyright-cite-btn" id="copy-cite-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+              </svg>
+              <span>复制 Markdown 引用</span>
+            </button>
+          </div>
+          <div class="copyright-list">
+            <div class="copyright-item"><strong>文章标题：</strong>空安全在边界失效：反序列化不经过你的构造函数</div>
+            <div class="copyright-item"><strong>文章作者：</strong>张小猛 · loczb</div>
+            <div class="copyright-item"><strong>永久链接：</strong><a href="https://709527.xyz/blog/posts/nullable-claims-die-at-the-boundary.html">https://709527.xyz/blog/posts/nullable-claims-die-at-the-boundary.html</a></div>
+            <div class="copyright-item"><strong>版权声明：</strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 国际许可协议。商业转载请联系作者获得授权，非商业转载请注明出处。</div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </main>
+
+  <!-- Related Posts / Navigation -->
+  <section class="section" aria-label="读完之后" style="padding-top: 0;">
+    <div class="container container-narrow">
+      <!-- Post Nav Prev Next -->
+      <nav class="post-nav" aria-label="文章翻页导航">
+        <a href="redact-at-write-time.html" class="post-nav-card post-nav-prev" rel="prev">
+          <span class="post-nav-label">← 上一篇</span>
+          <span class="post-nav-title">脱敏要做在写入端：落盘之后打码，等于没打码</span>
+        </a>
+        <div class="post-nav-card post-nav-next disabled" aria-disabled="true">
+          <span class="post-nav-label">下一篇 →</span>
+          <span class="post-nav-title">已是最新篇博文</span>
+        </div>
+      </nav>
+      <!-- /Post Nav Prev Next -->
+      <hr style="border: none; border-top: 1px solid var(--color-border); margin: var(--space-2xl) 0;">
+
+      <div class="blog-topics" style="margin-bottom: var(--space-xl); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+        <div>
+          <span class="topic-label">读完之后:</span>
+          <a href="../index.html" class="topic-tag">返回博客列表</a>
+          <a href="../index.html?view=series" class="topic-tag">浏览全部专栏</a>
+        </div>
+        <a href="#main-content" class="topic-tag" style="margin-left: auto;">↑ 回到顶部</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+<!-- PARTIAL:FOOTER -->
+  <footer class="footer" role="contentinfo">
+  <div class="footer-inner">
+    <p class="footer-signature">写代码，做产品，也认真生活。</p>
+    <div class="footer-social">
+      <a href="https://github.com/zzdbilly" class="footer-social-link" target="_blank" rel="noopener" aria-label="GitHub">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+      </a>
+      <a href="https://twitter.com/zzdbilly" class="footer-social-link" target="_blank" rel="noopener" aria-label="X (Twitter)">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      </a>
+      <a href="/rss.xml" class="footer-social-link" target="_blank" rel="noopener" aria-label="RSS 订阅">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+      </a>
+    </div>
+    <div class="footer-links">
+      <a href="/" class="footer-link">首页</a>
+      <a href="/projects/" class="footer-link">项目</a>
+      <a href="/blog/" class="footer-link">博客</a>
+      <a href="/about/" class="footer-link">关于</a>
+    </div>
+    <p class="footer-copyright">&copy; 2026 张小猛 · loczb · Built with care</p>
+  </div>
+</footer>
+  <!-- /PARTIAL:FOOTER -->
+
+  <script defer src="../../assets/js/main.js"></script>
+  <script defer src="../../assets/js/article.js?v=c9f1a378ea"></script>
+  <script defer src="../../assets/js/share.js"></script>
+  <!-- Back to Top & Reading Progress -->
+  <button class="back-to-top" id="backToTop" aria-label="回到顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
+  <div class="reading-progress" id="readingProgress"></div>
+
+  <!-- Post Sidebar Info（左侧） -->
+  <div class="post-sidebar-info" id="postSidebar">
+    <div class="post-info-card">
+      <div class="post-info-section">
+        <div class="post-info-label">作者</div>
+        <div class="post-info-author">
+          <div class="post-info-avatar">小</div>
+          <div>
+            <div class="post-info-author-name">张小猛</div>
+            <div class="post-info-author-desc">写代码，做产品</div>
+          </div>
+        </div>
+      </div>
+      <div class="post-info-section">
+        <div class="post-info-label">文章信息</div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📅</span> 发布日期</span><span class="post-info-stat-value">2026-11-02</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">⏱️</span> 阅读时间</span><span class="post-info-stat-value">14 min read</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">4757 字</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📊</span> 章节数</span><span class="post-info-stat-value">9 节 · 22 子节</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">💻</span> 代码块</span><span class="post-info-stat-value">5 段</span></div>
+      </div>
+      <div class="post-info-section" id="postSidebarTags">
+        <div class="post-info-label">标签</div>
+        <div class="post-info-links">
+          <a href="../../blog/index.html?tag=%E7%A9%BA%E5%AE%89%E5%85%A8" class="post-info-link"># 空安全</a>
+          <a href="../../blog/index.html?tag=%E5%BA%8F%E5%88%97%E5%8C%96" class="post-info-link"># 序列化</a>
+          <a href="../../blog/index.html?tag=Android" class="post-info-link"># Android</a>
+          <a href="../../blog/index.html?tag=%E7%B1%BB%E5%9E%8B%E7%B3%BB%E7%BB%9F" class="post-info-link"># 类型系统</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Post TOC -->
+  <div class="post-toc-container" id="postToc">
+    <nav class="post-toc" aria-label="文章目录">
+      <div class="post-toc-title">目录</div>
+      <ul class="post-toc-list" id="tocList">
+      </ul>
+    </nav>
+  </div>
+
+  <!-- Comment System -->
+  <script src="../../workers/comment-system/comment-widget.js?v=5d8a6a1796" defer></script>
+
+  <!-- highlight.js 代码语法高亮（本地完整构建，无外部依赖） -->
+  <script defer src="../../assets/vendor/highlight/highlight.min.js"></script>
+  <script>
+    /* 语法高亮改为「可见优先、空闲补齐」：
+       highlight.js 要遍历全篇代码块并生成数百个 span，若在 DOMContentLoaded 里同步跑完，
+       会在关键路径上长时间占住主线程（2026-09-27 实测本页长任务 1548ms、DCL 3651ms；
+       改动后长任务 145ms、DCL 1378ms）。这里 DCL 阶段只登记观察，实际高亮交给
+       IntersectionObserver（近屏 800px 内优先）+ requestIdleCallback（剩余块每片 ≤4 块），
+       首屏代码块的着色时机与视觉基本无变化。 */
+    (function() {
+      function canPaint(b) {
+        return !b.classList.contains('hljs') && !b.closest('.codehilite');
+      }
+      function paint(b) {
+        if (!canPaint(b)) return;
+        try { hljs.highlightElement(b); } catch (e) {}
+      }
+      function init() {
+        var blocks = [].slice.call(document.querySelectorAll('pre code')).filter(canPaint);
+        if (!blocks.length) return;
+        if ('IntersectionObserver' in window) {
+          var io = new IntersectionObserver(function(entries, obs) {
+            entries.forEach(function(en) {
+              if (!en.isIntersecting) return;
+              paint(en.target);
+              obs.unobserve(en.target);
+            });
+          }, { rootMargin: '800px 0px' });
+          blocks.forEach(function(b) { io.observe(b); });
+        }
+        var i = 0;
+        var idle = window.requestIdleCallback || window.setTimeout;
+        var step = function() {
+          var quota = 4;
+          while (i < blocks.length && quota-- > 0) paint(blocks[i++]);
+          if (i < blocks.length) idle(step);
+        };
+        idle(step); // 不在 DCL 里同步跑：可见块由 IntersectionObserver 处理，其余走空闲分片
+      }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+      } else {
+        init();
+      }
+    })();
+  </script>
+
+  <!-- Cloudflare Web Analytics -->
+  <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "29e7cff6f37448989538e2165cb79187"}'></script>
+</body>
+</html>
