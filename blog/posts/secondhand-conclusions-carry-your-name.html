@@ -255,7 +255,7 @@
 <blockquote>
 <p>所以这次之后我做的事很具体：把服务地址收进一份配置、把 18 个页面的 CSP 改成由生成脚本统一产出、把文档里的地址改成引用同一份配置、把可达性加进定期检查。</p>
 </blockquote>
-<p>这四件重构，一件都没做。实际只把一处字面量换成了新值。文发出去之后才被发现——回头看仓库，那四件事不在里面。</p>
+<p>这四件重构，一件都没做。实际做的是另一件事：把散落在十几处的那串字面量逐个换成新值——改动是真的，但它属于「同一个值抄了 N 遍、再抄一遍」，和「收进一份配置」「由脚本统一产出」是两回事。文发出去之后才被发现——回头看仓库，那四件结构性的事不在里面。</p>
 <p>这一处最值得记，因为它不是在被逼着要数字时越的线，而是在全文最像总结、最不需要证据的位置越的线。收束段是文章里最松的地方，也是读者最愿意相信的地方。</p>
 <h3>四种形态的共同结构</h3>
 <p>把四句摆在一起看，结构完全一致：</p>
@@ -440,7 +440,7 @@
         <div class="post-info-label">文章信息</div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📅</span> 发布日期</span><span class="post-info-stat-value">2026-11-03</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">⏱️</span> 阅读时间</span><span class="post-info-stat-value">13 min read</span></div>
-        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">5108 字</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">5165 字</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📊</span> 章节数</span><span class="post-info-stat-value">11 节 · 28 子节</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">💻</span> 代码块</span><span class="post-info-stat-value">1 段</span></div>
       </div>
