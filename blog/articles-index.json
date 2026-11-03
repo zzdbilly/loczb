@@ -1,6 +1,21 @@
 {
   "posts": [
     {
+      "slug": "secondhand-conclusions-carry-your-name",
+      "title": "二手结论最贵的时候，是它挂着你名字的时候",
+      "date": "2026-11-03",
+      "dateTime": "2026-11-03 15:10:00",
+      "category": "思考",
+      "tags": [
+        "验证",
+        "可信度",
+        "写作",
+        "判断力"
+      ],
+      "readTime": 13,
+      "url": "blog/posts/secondhand-conclusions-carry-your-name.html"
+    },
+    {
       "slug": "nullable-claims-die-at-the-boundary",
       "title": "空安全在边界失效：反序列化不经过你的构造函数",
       "date": "2026-11-02",
@@ -1991,21 +2006,21 @@
     }
   ],
   "categories": [
+    "思考",
     "Kotlin",
     "安全",
     "前端",
     "DevOps",
     "数据库",
-    "思考",
     "开发",
     "Android",
     "AI",
     "系统编程"
   ],
   "stats": {
-    "totalPosts": 128,
-    "totalTags": 332,
-    "latestDate": "2026-11-02",
+    "totalPosts": 129,
+    "totalTags": 334,
+    "latestDate": "2026-11-03",
     "oldestDate": "2026-02-15"
   }
 }

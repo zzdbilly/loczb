@@ -7,6 +7,14 @@
     <language>zh-CN</language>
     <atom:link href="https://709527.xyz/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>二手结论最贵的时候，是它挂着你名字的时候</title>
+      <link>https://709527.xyz/blog/posts/secondhand-conclusions-carry-your-name.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/secondhand-conclusions-carry-your-name.html</guid>
+      <description>未经自己验证的结论，署名之前成本是零；署名之后错误全归你，还以一手身份继续外传。不确定性不会消失，只是从内容转移到签名。</description>
+      <category>思考</category>
+      <pubDate>Tue, 03 Nov 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
       <title>空安全在边界失效：反序列化不经过你的构造函数</title>
       <link>https://709527.xyz/blog/posts/nullable-claims-die-at-the-boundary.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/nullable-claims-die-at-the-boundary.html</guid>
@@ -157,14 +165,6 @@
       <description>写给\&quot;干活行、汇报不行\&quot;的工程师：把汇报当成降低对方决策成本的产品来做，附可直接抄的四个模板。</description>
       <category>思考</category>
       <pubDate>Wed, 16 Sep 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>如何快速恢复能量，让自己快乐起来</title>
-      <link>https://709527.xyz/blog/posts/quick-energy-recovery.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/quick-energy-recovery.html</guid>
-      <description>电量见底时怎么用几十分钟把自己拉回来：先分清是累还是空，再抓住低谷里的十分钟，把光照、社交和任务切换的顺序排对，末尾附一份十分钟能做完的最短路径清单。</description>
-      <category>思考</category>
-      <pubDate>Sun, 13 Sep 2026 00:00:00 +0800</pubDate>
     </item>
   </channel>
 </rss>
