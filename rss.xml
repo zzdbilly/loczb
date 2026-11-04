@@ -7,6 +7,14 @@
     <language>zh-CN</language>
     <atom:link href="https://709527.xyz/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>装到主屏的那份，是你召回不了的版本</title>
+      <link>https://709527.xyz/blog/posts/installed-pwa-is-a-second-release.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/installed-pwa-is-a-second-release.html</guid>
+      <description>部署完成只完成了第一次发布。第二次发布发生在每个已安装的客户端上，完成时间、触发条件与失败形态都不在你手里——验收必须拆成浏览器与安装态两条路径。</description>
+      <category>前端</category>
+      <pubDate>Wed, 04 Nov 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
       <title>二手结论最贵的时候，是它挂着你名字的时候</title>
       <link>https://709527.xyz/blog/posts/secondhand-conclusions-carry-your-name.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/secondhand-conclusions-carry-your-name.html</guid>
@@ -157,14 +165,6 @@
       <description>三个都叫「经理」的岗位到底差在哪：对什么负责、权力从哪来、时间花在哪、失败长什么样，以及想转过去要提前补什么。</description>
       <category>思考</category>
       <pubDate>Mon, 21 Sep 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>技术人员如何做好汇报</title>
-      <link>https://709527.xyz/blog/posts/how-engineers-report.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/how-engineers-report.html</guid>
-      <description>写给\&quot;干活行、汇报不行\&quot;的工程师：把汇报当成降低对方决策成本的产品来做，附可直接抄的四个模板。</description>
-      <category>思考</category>
-      <pubDate>Wed, 16 Sep 2026 00:00:00 +0800</pubDate>
     </item>
   </channel>
 </rss>

@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <script>document.documentElement.classList.add("js");try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://static.cloudflareinsights.com https://loczb-comments.billymust.workers.dev; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://loczb-comments.billymust.workers.dev https://dashscope.aliyuncs.com https://709527.xyz https://www.709527.xyz https://cloudflareinsights.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
+    <script>/* 反点击劫持兜底：GitHub Pages 无法下发 X-Frame-Options / CSP frame-ancestors */(function(){if(self===top)return;try{top.location=self.location}catch(e){}setTimeout(function(){if(self!==top){document.documentElement.style.display='none';}},400);})();</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>装到主屏的那份，是你召回不了的版本 | 张小猛 - loczb</title>
+    <meta name="description" content="部署完成只完成了第一次发布。第二次发布发生在每个已安装的客户端上，完成时间、触发条件与失败形态都不在你手里——验收必须拆成浏览器与安装态两条路径。">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="装到主屏的那份，是你召回不了的版本 | 张小猛 - loczb">
+    <meta property="og:description" content="部署完成只完成了第一次发布。第二次发布发生在每个已安装的客户端上，完成时间、触发条件与失败形态都不在你手里——验收必须拆成浏览器与安装态两条路径。">
+    <meta property="og:url" content="https://709527.xyz/blog/posts/installed-pwa-is-a-second-release.html">
+    <meta property="og:type" content="article">
+    <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
+    <meta property="og:site_name" content="loczb">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="装到主屏的那份，是你召回不了的版本 | 张小猛 - loczb">
+    <meta name="twitter:description" content="部署完成只完成了第一次发布。第二次发布发生在每个已安装的客户端上，完成时间、触发条件与失败形态都不在你手里——验收必须拆成浏览器与安装态两条路径。">
+    <meta name="twitter:image" content="https://709527.xyz/assets/images/og-image.png">
+
+        <script type="application/ld+json">
+{
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "装到主屏的那份，是你召回不了的版本",
+      "description": "部署完成只完成了第一次发布。第二次发布发生在每个已安装的客户端上，完成时间、触发条件与失败形态都不在你手里——验收必须拆成浏览器与安装态两条路径。",
+      "image": "https://709527.xyz/assets/images/og-image.png",
+      "author": {
+            "@type": "Person",
+            "name": "张小猛",
+            "url": "https://709527.xyz/about/"
+      },
+      "publisher": {
+            "@type": "Organization",
+            "name": "loczb",
+            "logo": {
+                  "@type": "ImageObject",
+                  "url": "https://709527.xyz/assets/images/favicon.svg"
+            }
+      },
+      "datePublished": "2026-11-04T17:10:00+08:00",
+      "dateModified": "2026-11-04T17:10:00+08:00",
+      "url": "https://709527.xyz/blog/posts/installed-pwa-is-a-second-release.html",
+      "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://709527.xyz/blog/posts/installed-pwa-is-a-second-release.html"
+      },
+      "keywords": "PWA, Service Worker, 缓存, 发布",
+      "articleSection": "前端",
+      "timeRequired": "PT15M",
+      "inLanguage": "zh-CN"
+}
+    </script>
+
+    <link rel="stylesheet" href="../../assets/css/style.css?v=c8e170d8f9">
+    <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
+    <link rel="alternate icon" href="../../assets/images/favicon.ico">
+    <link rel="canonical" href="https://709527.xyz/blog/posts/installed-pwa-is-a-second-release.html">
+</head>
+<body>
+  <!-- PARTIAL:SKIP_LINK -->
+  <a href="#main-content" class="skip-link">跳至主要内容</a>
+  <!-- /PARTIAL:SKIP_LINK -->
+
+  <!-- Navigation -->
+<!-- PARTIAL:NAV -->
+  <nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">
+      loc<span>zb</span>
+    </a>
+    <button class="nav-toggle" aria-label="打开菜单" aria-expanded="false" aria-controls="nav-links-menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <div class="nav-overlay"></div>
+    <ul class="nav-links" id="nav-links-menu">
+      <li><a href="/" class="nav-link" data-nav="home">首页</a></li>
+      <li><a href="/projects/" class="nav-link" data-nav="projects">项目</a></li>
+      <li><a href="/blog/" class="nav-link active" data-nav="blog">博客</a></li>
+      <li><a href="/about/" class="nav-link" data-nav="about">关于</a></li>
+    </ul>
+    <button class="theme-toggle" aria-label="切换主题" title="切换亮/暗模式">
+      <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="5"></circle>
+        <line x1="12" y1="1" x2="12" y2="3"></line>
+        <line x1="12" y1="21" x2="12" y2="23"></line>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+        <line x1="1" y1="12" x2="3" y2="12"></line>
+        <line x1="21" y1="12" x2="23" y2="12"></line>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+      </svg>
+      <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+      </svg>
+    </button>
+  </div>
+</nav>
+  <!-- /PARTIAL:NAV -->
+  <main class="section" id="main-content" style="padding-bottom: 0; padding-top: var(--space-4xl);">
+    <div class="container container-narrow">
+      <a href="../index.html" class="back-link">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        返回博客列表
+      </a>
+
+      <article class="post-content">
+        <h1>装到主屏的那份，是你召回不了的版本</h1>
+
+        <div class="post-meta">
+          <span class="meta-item"><span aria-hidden="true">📅</span> 2026-11-04 17:10:00</span>
+          <span class="meta-item"><span aria-hidden="true">⏱️</span> 15 min read</span>
+          <span class="meta-item"><span aria-hidden="true">👤</span> 张小猛</span>
+        </div>
+
+        <div class="post-tags">
+          <span class="tag">PWA</span>
+          <span class="tag">Service Worker</span>
+          <span class="tag">缓存</span>
+          <span class="tag">发布</span>
+        </div>
+
+        
+
+        <h2>同一份代码，两次发布</h2>
+<h3>一次绿了的流水线，和一个没人问的问题</h3>
+<p>我对「发布完成」的判据长期只有三条：流水线绿了，线上页面能打开，页面上的字是新写的。三条都满足，这事就从待办里划掉。</p>
+<p>这套判据在浏览器里成立。用户下次刷新拿到的就是新东西，刷新的成本接近零，他也不觉得这算「等了一次发布」。</p>
+<p>装到主屏的那份不成立。它是 <code>display: "standalone"</code> 的独立窗口，没有地址栏，也没有刷新按钮。它下次启动时读哪份缓存、由哪个版本的 Service Worker 接管、窗口里跑的是哪一次构建的 JS，这些都不由我决定。我能决定的只有一件事：我把什么推到了服务器上。至于这份东西什么时候落进某个具体设备，取决于那个设备的用户什么时候打开它、系统什么时候把它冻结、又什么时候让它恢复。</p>
+<p>所以同一份代码有两次发布。第一次由我做，第二次由每个已安装的客户端各自做。我做不了第二次，只能让它更容易发生，并且在它没发生时知道自己不知道。</p>
+<h3>把「发布」拆成两条轨道</h3>
+<p>拆开之后有些词立刻变形。比如「验收」——在两条轨道上根本不是同一件事：轨道 A 的验收是<strong>比对</strong>，可以写进脚本，跑一次两秒钟；轨道 B 的验收是<strong>制造一个场景再观察</strong>，只能写进清单，而且每次都要有人真的去做。</p>
+<p>再比如「回滚」。轨道 A 回滚是把上一个提交重新推一遍，几分钟后线上就是旧的。轨道 B 里没有回滚这个动作：已经装到主屏上的那份不会因为我退回一版就跟着退回去，它可能还停在更早的版本上，而我连它在哪个版本都不知道。</p>
+<p>下面两张清单，是同一个提交在两条轨道上的两套生命周期。</p>
+<h2>轨道 A：部署，判据在你自己手里</h2>
+<h3>触发条件：一次 push</h3>
+<p>轨道 A 的触发完全确定：我推了，托管方收到，构建开始。没有用户参与，没有设备状态参与。这也是它容易被当成「发布」的全部的原因——它是唯一一次有明确起点的发布。</p>
+<h3>完成判据：线上字节与本地逐字节一致</h3>
+<p>我不再拿「页面能打开」「标题对得上」当判据。标题对得上只证明 HTML 里有那串字，证明不了这份 HTML 就是你刚提交的那份——中间隔着 CDN 缓存、构建缓存、分支没同步。可以用的判据是哈希：把线上取回来的响应体和本地工作树里的文件算 sha256，两个值相等，这次部署才算完成。</p>
+<p>这个判据的好处是它可重复、可脚本化、不依赖我的眼睛。坏处是它只覆盖服务器上那一侧。服务器上对，不代表任何人手里对。</p>
+<h3>失败形态：会吵的那几种</h3>
+<p>轨道 A 的失败几乎都会主动来找我：构建报错、502/500、CDN 还发着上一个副本、分支落后被拒推。它们的共同点是<strong>在我盯着的时候发生</strong>，所以最迟几分钟内就会暴露。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">项</th>
+<th style="text-align: left;">轨道 A（部署）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">触发条件</td>
+<td style="text-align: left;">一次 push，确定发生</td>
+</tr>
+<tr>
+<td style="text-align: left;">完成判据</td>
+<td style="text-align: left;">线上响应体与本地 HEAD 逐字节一致</td>
+</tr>
+<tr>
+<td style="text-align: left;">失败形态</td>
+<td style="text-align: left;">构建失败 / 5xx / 旧副本 / 推不上去</td>
+</tr>
+<tr>
+<td style="text-align: left;">可观测性</td>
+<td style="text-align: left;">高，可脚本轮询</td>
+</tr>
+<tr>
+<td style="text-align: left;">等待时长</td>
+<td style="text-align: left;">分钟级，且可预期</td>
+</tr>
+<tr>
+<td style="text-align: left;">谁承担等待</td>
+<td style="text-align: left;">我</td>
+</tr>
+<tr>
+<td style="text-align: left;">回滚</td>
+<td style="text-align: left;">重推上一个提交，分钟级生效</td>
+</tr>
+</tbody>
+</table>
+<h2>轨道 B：安装态召回，判据不在你手里</h2>
+<h3>触发条件：由用户的手和设备的状态共同决定</h3>
+<p>一台设备上已经装好的应用，要换到新版本，需要三件事同时成立：用户再次打开它、浏览器在某个时机去检查 <code>/sw.js</code> 有没有变、检查到的结果被允许生效。这三件事里没有一件是我能调的。我能做的是把新版本放上去，然后等。</p>
+<p>「等」在这里不是个修辞。它意味着发布这件事从一次动作变成了一段没有终点的状态：有些设备很快就换了，有些可能很久都停在旧版，而我收不到任何回执。</p>
+<h3>完成判据：没有一个你能直接读到的信号</h3>
+<p>轨道 A 有 <code>curl</code> 和哈希。轨道 B 没有对应的东西。我无法向「所有已安装客户端」发一次查询，也拿不到它们的版本号。能看到的只有日志里零散的请求，而有日志的只是打开过的那部分设备。</p>
+<p>这意味着完成判据只能退化成一句很难受的话：<strong>我不知道它完成没有。</strong> 严谨一点的说法是，我知道它「可能」完成了，因为我做了能让它完成的事；但我没有任何证据。</p>
+<h3>失败形态：静默停留</h3>
+<p>轨道 B 的失败不报错、不掉线、不发通知。用户打开应用，看到的是上一次发布的首页，标题、卡片、甚至那篇刚发的文章都不在。他不会认为「这个站发布了但我收到了旧版」，他会认为「这个站没更新」，或者根本不认为有问题——他不知道自己错过了什么。</p>
+<p>这是两条轨道最本质的差别：轨道 A 失败会让你知道，轨道 B 失败只会让用户看到一个自洽的旧世界。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">项</th>
+<th style="text-align: left;">轨道 B（安装态召回）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">触发条件</td>
+<td style="text-align: left;">用户下次打开 + SW 更新检查 + 允许生效，三者同时</td>
+</tr>
+<tr>
+<td style="text-align: left;">完成判据</td>
+<td style="text-align: left;">无法直接观测，只能间接推断</td>
+</tr>
+<tr>
+<td style="text-align: left;">失败形态</td>
+<td style="text-align: left;">静默停留在旧版，无报错</td>
+</tr>
+<tr>
+<td style="text-align: left;">可观测性</td>
+<td style="text-align: left;">低，只能靠真机逐个看</td>
+</tr>
+<tr>
+<td style="text-align: left;">等待时长</td>
+<td style="text-align: left;">不确定，可能以天计</td>
+</tr>
+<tr>
+<td style="text-align: left;">谁承担等待</td>
+<td style="text-align: left;">用户，且他不知道自己在等</td>
+</tr>
+<tr>
+<td style="text-align: left;">回滚</td>
+<td style="text-align: left;">没有对应动作，旧版本可能仍在某些设备上活着</td>
+</tr>
+</tbody>
+</table>
+<h2>两张清单逐行对照</h2>
+<h3>同一行，两种答案</h3>
+<p>把两张表叠起来看，差异集中在四行：触发、判据、失败形态、回滚。这四行恰好是「发布」这个词在工程语境里的全部内涵。四行里有三行在轨道 B 上是空的或者不可观测的，那这次发布就只能算完成了一半。</p>
+<h3>哪些是「你以为完成了其实没有」</h3>
+<ul>
+<li><strong>「CI 绿了」</strong>：只说明产物可复现，不说明有人拿到。</li>
+<li><strong>「线上打开是新版」</strong>：说明我这条路通了，说明不了别人那条。</li>
+<li><strong>「用户没反馈问题」</strong>：安装态的失败本来就不会被当成问题反馈，它是「这站最近没更新」。</li>
+<li><strong>「缓存版本号变了」</strong>：说明新缓存名已经被写进 <code>sw.js</code>，不说明任何设备已经激活了它。</li>
+</ul>
+<p>这四条我都在不同时期当成过完成信号。它们共同的问题是把<strong>服务端的状态</strong>当成了<strong>客户端的状态</strong>。</p>
+<h2>更新链路：install → waiting → activate</h2>
+<h3>版本常量由内容哈希推导</h3>
+<p>站上的 <code>sw.js</code> 开头是这么写的：版本常量不是人填的，是构建时用文章索引、搜索脚本、样式表三个文件的内容算出来的哈希前 8 位，缓存名再拼上这个版本。内容一变，缓存名就变；缓存名一变，<code>activate</code> 阶段就会把名字不等于当前值的整份缓存删掉。</p>
+<pre><code class="language-js">// 版本由构建管线算出，不是手写的
+const SW_VERSION = 'c-1f3a9d2e';         // sha256(索引 + 搜索脚本 + 样式表)[:8]
+const CACHE_NAME = 'site-' + SW_VERSION; // 前缀随意，名字里带着版本才是关键
+</code></pre>
+<p>这段设计解决的是「缓存不该混着用」：新旧两份内容不会被塞进同一个缓存桶，旧桶会被清掉。它解决不了的是「谁先加载哪一份」——那是下面三个阶段的事。</p>
+<h3>install：新脚本先落盘，旧页面照跑</h3>
+<p>浏览器发现 <code>/sw.js</code> 的字节变了，会把新脚本装进一个新的 worker。这个 worker 在 <code>install</code> 事件里做预热：把核心页面和静态资源抓一遍塞进当前版本的缓存。抓取失败，整个安装失败，旧 worker 继续服役——这是好事，它保证你不会因为一次网络抖动而失去离线能力。</p>
+<p>站上的 <code>install</code> 里还调了 <code>self.skipWaiting()</code>：</p>
+<pre><code class="language-js">self.addEventListener('install', (event) =&gt; {
+  event.waitUntil(
+    caches.open(CACHE_NAME).then((cache) =&gt; cache.addAll(CORE_URLS))
+  );
+  self.skipWaiting();   // 不等所有页面关闭，直接进入激活
+});
+
+self.addEventListener('activate', (event) =&gt; {
+  event.waitUntil(
+    caches.keys().then((names) =&gt;
+      Promise.all(
+        names
+          .filter((name) =&gt; name !== CACHE_NAME)  // 删掉所有旧版本缓存
+          .map((name) =&gt; caches.delete(name))
+      )
+    )
+  );
+  self.clients.claim();  // 接管已经打开的页面
+});
+</code></pre>
+<p>不加 <code>skipWaiting()</code> 的话，新 worker 装完会停在 waiting 状态，一直等到<strong>所有受控页面都关闭</strong>才 activate。加了它，新 worker 立刻上位。站上两者都用了：<code>skipWaiting()</code> 让它别等，<code>clients.claim()</code> 让它把手头已经开着的页面也接过来。</p>
+<h3>waiting：等的是「没有页面在用它」</h3>
+<p>waiting 这个状态存在的理由很朴素：一个正在运行的页面，它的 JS 已经在内存里了。如果新 worker 在页面还开着的时候就把缓存换掉，这个页面后续的懒加载请求会拿到新版本的文件，配上旧版本的运行时——这是最难受的一种错配，报错信息会指向一个你没改过的地方。</p>
+<p>所以规范的选择是等。等所有受控客户端都关闭，旧的 worker 自然退场，新的接手。这个策略在普通网页上成立，因为「关掉标签页」是用户的日常动作。</p>
+<h3>activate：换缓存名，删掉旧的那份</h3>
+<p>activate 干两件事：把名字不等于当前 <code>CACHE_NAME</code> 的缓存全部删掉，然后 <code>clients.claim()</code> 接管现存页面。第一件事有个副作用值得留意——<strong>它是按名字删的</strong>。如果有别的代码往同一个 origin 下写过缓存，名字不匹配就会被一起清掉。这是命名前缀要带项目标识的原因。</p>
+<p><code>clients.claim()</code> 之后，页面发出的下一个请求会走新 worker。注意这句话的主语是「下一个请求」。</p>
+<h3>skipWaiting 换的是控制权，不是页面</h3>
+<p>这是最容易混淆的一点，也是我在写这套东西时想了很久的地方：</p>
+<p><code>skipWaiting()</code> + <code>clients.claim()</code> 解决的是「谁在处理网络请求」，不解决「页面里已经跑起来的 JavaScript 是哪个版本」。窗口里那份文档、已经执行过的脚本、已经应用过的样式，都在内存里。换掉网络层不会让它们重新加载。</p>
+<p>结果是一种很别扭的中间态：网络层已经是新的，页面看上去还是旧的。用户点一个链接，新页面是新版本；用户留在原地，看到的是旧版本，而且不知道差别在哪。要越过这道坎，仍然需要一次导航或一次 <code>location.reload()</code>——而 standalone 窗口里没有那个刷新按钮。</p>
+<p>有些实现会在 <code>controllerchange</code> 时自动刷一次页面。站上没有这么做，我也倾向于不做：在用户正在读文章的时候把页面重载掉，代价比「他看到的是稍早的版本」大。</p>
+<h2>为什么安装态里，那个等待条件难以自然满足</h2>
+<h3>「关闭所有标签页」在安装态里没有对应动作</h3>
+<p>轨道 B 的整个假设是「用户会关掉它」。可主屏应用的使用方式和标签页不一样：它不是一堆并列的页签中的一个，它是一个图标，点开、用完、按 home 键离开。离开不等于关闭，进程可能还挂着，页面可能还在内存里。</p>
+<p>没有 <code>skipWaiting()</code> 的时候，这个差异是致命的：waiting 的 worker 等的条件在安装态里可能要很久才成立一次。站上用了 <code>skipWaiting()</code>，所以这一条被绕过了——但绕过的是激活，不是用户看到的画面。</p>
+<h3>冻结与 resume：平台相关，需要真机验证</h3>
+<p>移动系统对后台应用普遍有冻结机制：一段时间不活跃就挂起，下次打开时尝试恢复而不是重新冷启动。这类行为的细节随平台和版本不同，我按「可能恢复」来设计，不按「一定冷启动」。</p>
+<p>具体到某个平台会不会保留独立的存储容器、resume 时会不会重新检查 <code>sw.js</code>、主屏应用的存储是否与浏览器标签页共享，这些行为随系统版本变化，也和安装方式有关。<strong>这一条我给不出通用结论，只能写成平台相关、需要真机验证。</strong> 我能确定的只有推论方向：越接近「恢复」而不是「冷启动」，页面里旧代码存活的时间就越长。</p>
+<h3>sw.js 自己也要过 HTTP 缓存这一关</h3>
+<p>还有一层容易被忽略：Service Worker 脚本的更新检查本身是一个网络请求，而这个请求也受 HTTP 缓存约束。站上的静态资源响应头长这样：</p>
+<pre><code class="language-http">GET /sw.js HTTP/1.1
+Host: blog.example.com
+
+HTTP/1.1 200 OK
+content-type: application/javascript
+cache-control: max-age=600
+etag: &quot;6f1c9a7e2b&quot;
+</code></pre>
+<p><code>max-age=600</code> 是十分钟。浏览器在导航时会去要一次 <code>/sw.js</code>，但在这十分钟内它可能直接用手里的副本回答自己，于是「检查更新」这一步看到的还是旧脚本。十分钟不算长，但它的存在说明：连「浏览器什么时候知道有新版本」这个最上游的环节，都有缓存参与。</p>
+<p>这条对发布的含义是：<strong>推完之后立刻验收，看到的可能是缓存，不是部署结果。</strong> 所以要带 cache-bust 参数、要看哈希，而不是看「我刷新了一下，好像还是旧的」。</p>
+<h2>验收拆成两条路径</h2>
+<h3>路径一：浏览器里，可重复地制造旧版本</h3>
+<p>浏览器这条路径的好处是可以反复折腾。DevTools 里能清缓存、能注销 Service Worker、能模拟离线，能把「旧版本」这个状态随手造出来再消掉。这条路径要测的是三件事：</p>
+<ol>
+<li>新版本能不能被检测到（<code>/sw.js</code> 的字节确实变了）。</li>
+<li>检测到之后能不能激活（缓存名换了，旧缓存被删）。</li>
+<li>激活之后页面拿到的是不是新内容（导航一次，比对标题或哈希）。</li>
+</ol>
+<p>这三步任何一步失败，问题都在我的代码或构建里，与用户无关。这是唯一一条我能独立闭环的路径。</p>
+<h3>路径二：安装态，只能制造一次现场</h3>
+<p>安装态这条路径不能反复折腾，因为它模拟的正是「用户不会配合」的那个场景。要做的是把应用装到主屏，正常用一次，然后推一个新版本，<strong>不做任何清理</strong>，再打开它，看它给你哪个版本。</p>
+<p>关键在「不做任何清理」：不清缓存、不注销 worker、不在 DevTools 里点 Update。任何一次清理都会把你要观察的那个状态抹掉，测出来的东西就变成了路径一。</p>
+<p>要在没有地址栏的窗口里看状态，只能靠远程调试：</p>
+<pre><code class="language-js">// 安装态窗口连上调试器后，在 Console 里跑
+const reg = await navigator.serviceWorker.getRegistration();
+console.log({
+  active: reg?.active?.scriptURL,
+  waiting: reg?.waiting?.scriptURL ?? null,
+  controlled: navigator.serviceWorker.controller?.scriptURL ?? null,
+  caches: await caches.keys()
+});
+</code></pre>
+<p><code>waiting</code> 非空说明新 worker 卡在等待；<code>caches</code> 里有不止一个名字说明旧缓存还在；<code>active</code> 和 <code>controlled</code> 不一致说明页面还没被新 worker 接管。这三个值合起来，能回答「这台设备现在到底在哪个版本上」——这是轨道 B 唯一能拿到的直接证据，而且只对眼前这一台有效。</p>
+<h3>各自测什么</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">维度</th>
+<th style="text-align: left;">路径一（浏览器）</th>
+<th style="text-align: left;">路径二（安装态）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">目的</td>
+<td style="text-align: left;">证明新版本本身可用</td>
+<td style="text-align: left;">证明新版本能落到已安装的客户端</td>
+</tr>
+<tr>
+<td style="text-align: left;">可重复性</td>
+<td style="text-align: left;">高，随时清随时造</td>
+<td style="text-align: left;">低，一次现场只能用一次</td>
+</tr>
+<tr>
+<td style="text-align: left;">主要手段</td>
+<td style="text-align: left;">清缓存、注销 worker、离线模拟</td>
+<td style="text-align: left;">装到主屏、正常使用、不清理、观察</td>
+</tr>
+<tr>
+<td style="text-align: left;">能发现的问题</td>
+<td style="text-align: left;">构建错、缓存键错、资源 404</td>
+<td style="text-align: left;">激活条件不成立、旧页面存活、检查被 HTTP 缓存挡住</td>
+</tr>
+<tr>
+<td style="text-align: left;">结论强度</td>
+<td style="text-align: left;">强，可脚本化</td>
+<td style="text-align: left;">弱，只能代表这一台设备</td>
+</tr>
+</tbody>
+</table>
+<h2>判据：什么算两条路径都过</h2>
+<h3>一张可执行的验收表</h3>
+<p>我把验收写成两张必须都勾的表，任何一张没勾就不写「已发布」：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">#</th>
+<th style="text-align: left;">检查项</th>
+<th style="text-align: left;">轨道</th>
+<th style="text-align: left;">通过标准</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">线上响应体与本地 HEAD 哈希一致</td>
+<td style="text-align: left;">A</td>
+<td style="text-align: left;">两个 sha256 相等</td>
+</tr>
+<tr>
+<td style="text-align: left;">2</td>
+<td style="text-align: left;">首页/列表/索引都含新内容</td>
+<td style="text-align: left;">A</td>
+<td style="text-align: left;">三处都能查到</td>
+</tr>
+<tr>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;"><code>/sw.js</code> 里的版本常量已变</td>
+<td style="text-align: left;">A</td>
+<td style="text-align: left;">与上一个版本不同</td>
+</tr>
+<tr>
+<td style="text-align: left;">4</td>
+<td style="text-align: left;">浏览器路径能检出并激活新版本</td>
+<td style="text-align: left;">B</td>
+<td style="text-align: left;">缓存名切换、旧缓存消失</td>
+</tr>
+<tr>
+<td style="text-align: left;">5</td>
+<td style="text-align: left;">安装态冷启动后内容是新的</td>
+<td style="text-align: left;">B</td>
+<td style="text-align: left;">无清理情况下看到新内容</td>
+</tr>
+<tr>
+<td style="text-align: left;">6</td>
+<td style="text-align: left;">安装态里页面能完成一次导航</td>
+<td style="text-align: left;">B</td>
+<td style="text-align: left;">导航后内容与线上一致</td>
+</tr>
+</tbody>
+</table>
+<p>前三条是脚本，后三条是人。这个分工不是懒，是承认后三条没有可靠的自动化方式。</p>
+<h3>出问题时先看失败形态</h3>
+<p>两条路径的失败长得不一样，从现象就能反推在哪一段：</p>
+<ul>
+<li><strong>浏览器里也是旧的</strong>：问题在部署或缓存键，先查轨道 A。</li>
+<li><strong>浏览器新、安装态旧</strong>：缓存键没问题，问题在召回——检查是不是卡在 waiting、是不是页面没被接管、是不是 <code>/sw.js</code> 的检查被 HTTP 缓存挡住。</li>
+<li><strong>安装态新、但页面里有一段行为还是旧的</strong>：<code>skipWaiting</code> 生效了、控制权换了，但页面没重新加载。这是「控制权 ≠ 已渲染页面」那一节说的情况。</li>
+</ul>
+<p>第二种是最容易被漏掉的一种，因为它只在一个不给地址栏的窗口里出现。</p>
+<h2>收束：把第二次发布写进清单</h2>
+<p>我现在对「发布」的定义改成了两个句子：</p>
+<blockquote>
+<p>部署完成 = 线上字节与我提交的字节一致。
+召回完成 = 至少一台已安装的客户端在没有人工清理的情况下拿到了新版本。</p>
+</blockquote>
+<p>第二句永远只能给出「至少一台」这种强度的结论。这不是方法不够好，是这件事本身的结构：安装态的版本分布没有中央视图，你手上没有那份名单。承认这一点，比假装有一条命令能查全体设备要诚实得多。</p>
+<p>落到动作上，我给自己加了三条，都还没写进自动化：</p>
+<ol>
+<li><strong>发布汇报里分两栏</strong>：轨道 A 写实测哈希，轨道 B 写「跑了几台、什么平台、观察结果」。B 栏空着就写「未验证」，不写「已发布」。</li>
+<li><strong>打算每篇新文章发布后，至少在一台真机上装一次主屏应用</strong>，不做清理，看它给哪个版本。这一条是为了保住「知道自己在不知道」的状态，不是为了收集数据。</li>
+<li><strong>把 <code>sw.js</code> 的检查路径单独当一件事看</strong>：它有自己的 HTTP 缓存，<code>max-age=600</code> 意味着「推完之后的最初十分钟」里，连「有没有新版本」这个判断都可能是旧的。验收要么等过这个窗口，要么带 cache-bust。</li>
+</ol>
+<p>这三条做完，第二次发布仍然不在我手里。但至少它从我视野之外，挪到了清单上——一件知道自己没做完的事，和一件以为自己做完的事，后果差得很远。</p>
+
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="pwa-offline-web-app.html">
+            <div class="related-post-card-title">PWA 实战：从零打造离线可用 Web 应用</div>
+            <div class="related-post-card-tags"><span>PWA</span><span>Service Worker</span><span>前端</span></div>
+          </a>
+          <a class="related-post-card" href="cache-version-from-content-hash.html">
+            <div class="related-post-card-title">版本号不该手写：缓存失效应当由内容哈希推导</div>
+            <div class="related-post-card-tags"><span>缓存</span><span>构建</span><span>静态站点</span></div>
+          </a>
+          <a class="related-post-card" href="web-worker-与前端多线程开发把主线程从繁重计算中解放出来.html">
+            <div class="related-post-card-title">Web Worker 与前端多线程开发：把主线程从繁重计算中解放出来</div>
+            <div class="related-post-card-tags"><span>前端</span><span>前端开发</span><span>JavaScript</span></div>
+          </a>
+          <a class="related-post-card" href="ai-agent-实战用子代理并行驱动多项目开发.html">
+            <div class="related-post-card-title">AI Agent 实战：用子代理并行驱动多项目开发</div>
+            <div class="related-post-card-tags"><span>AI</span><span>Agent</span><span>工程实践</span></div>
+          </a>
+          <a class="related-post-card" href="当-ai-编程-agent-有了眼睛safari-mcp-server-深度解读.html">
+            <div class="related-post-card-title">当 AI 编程 Agent 有了\&quot;眼睛\&quot;：Safari MCP Server 深度解读</div>
+            <div class="related-post-card-tags"><span>AI</span><span>MCP</span><span>WebKit</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
+
+        <!-- Post Copyright & License Card -->
+        <div class="post-copyright-card">
+          <div class="copyright-header">
+            <div class="copyright-badge">
+              <span>📜</span>
+              <span>原创与知识共享协议</span>
+            </div>
+            <button class="copyright-cite-btn" id="copy-cite-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+              </svg>
+              <span>复制 Markdown 引用</span>
+            </button>
+          </div>
+          <div class="copyright-list">
+            <div class="copyright-item"><strong>文章标题：</strong>装到主屏的那份，是你召回不了的版本</div>
+            <div class="copyright-item"><strong>文章作者：</strong>张小猛 · loczb</div>
+            <div class="copyright-item"><strong>永久链接：</strong><a href="https://709527.xyz/blog/posts/installed-pwa-is-a-second-release.html">https://709527.xyz/blog/posts/installed-pwa-is-a-second-release.html</a></div>
+            <div class="copyright-item"><strong>版权声明：</strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 国际许可协议。商业转载请联系作者获得授权，非商业转载请注明出处。</div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </main>
+
+  <!-- Related Posts / Navigation -->
+  <section class="section" aria-label="读完之后" style="padding-top: 0;">
+    <div class="container container-narrow">
+      <!-- Post Nav Prev Next -->
+      <nav class="post-nav" aria-label="文章翻页导航">
+        <a href="secondhand-conclusions-carry-your-name.html" class="post-nav-card post-nav-prev" rel="prev">
+          <span class="post-nav-label">← 上一篇</span>
+          <span class="post-nav-title">二手结论最贵的时候，是它挂着你名字的时候</span>
+        </a>
+        <div class="post-nav-card post-nav-next disabled" aria-disabled="true">
+          <span class="post-nav-label">下一篇 →</span>
+          <span class="post-nav-title">已是最新篇博文</span>
+        </div>
+      </nav>
+      <!-- /Post Nav Prev Next -->
+      <hr style="border: none; border-top: 1px solid var(--color-border); margin: var(--space-2xl) 0;">
+
+      <div class="blog-topics" style="margin-bottom: var(--space-xl); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+        <div>
+          <span class="topic-label">读完之后:</span>
+          <a href="../index.html" class="topic-tag">返回博客列表</a>
+          <a href="../index.html?view=series" class="topic-tag">浏览全部专栏</a>
+        </div>
+        <a href="#main-content" class="topic-tag" style="margin-left: auto;">↑ 回到顶部</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+<!-- PARTIAL:FOOTER -->
+  <footer class="footer" role="contentinfo">
+  <div class="footer-inner">
+    <p class="footer-signature">写代码，做产品，也认真生活。</p>
+    <div class="footer-social">
+      <a href="https://github.com/zzdbilly" class="footer-social-link" target="_blank" rel="noopener" aria-label="GitHub">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+      </a>
+      <a href="https://twitter.com/zzdbilly" class="footer-social-link" target="_blank" rel="noopener" aria-label="X (Twitter)">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      </a>
+      <a href="/rss.xml" class="footer-social-link" target="_blank" rel="noopener" aria-label="RSS 订阅">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+      </a>
+    </div>
+    <div class="footer-links">
+      <a href="/" class="footer-link">首页</a>
+      <a href="/projects/" class="footer-link">项目</a>
+      <a href="/blog/" class="footer-link">博客</a>
+      <a href="/about/" class="footer-link">关于</a>
+    </div>
+    <p class="footer-copyright">&copy; 2026 张小猛 · loczb · Built with care</p>
+  </div>
+</footer>
+  <!-- /PARTIAL:FOOTER -->
+
+  <script defer src="../../assets/js/main.js"></script>
+  <script defer src="../../assets/js/article.js?v=c9f1a378ea"></script>
+  <script defer src="../../assets/js/share.js"></script>
+  <!-- Back to Top & Reading Progress -->
+  <button class="back-to-top" id="backToTop" aria-label="回到顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
+  <div class="reading-progress" id="readingProgress"></div>
+
+  <!-- Post Sidebar Info（左侧） -->
+  <div class="post-sidebar-info" id="postSidebar">
+    <div class="post-info-card">
+      <div class="post-info-section">
+        <div class="post-info-label">作者</div>
+        <div class="post-info-author">
+          <div class="post-info-avatar">小</div>
+          <div>
+            <div class="post-info-author-name">张小猛</div>
+            <div class="post-info-author-desc">写代码，做产品</div>
+          </div>
+        </div>
+      </div>
+      <div class="post-info-section">
+        <div class="post-info-label">文章信息</div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📅</span> 发布日期</span><span class="post-info-stat-value">2026-11-04</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">⏱️</span> 阅读时间</span><span class="post-info-stat-value">15 min read</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">5059 字</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📊</span> 章节数</span><span class="post-info-stat-value">9 节 · 23 子节</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">💻</span> 代码块</span><span class="post-info-stat-value">4 段</span></div>
+      </div>
+      <div class="post-info-section" id="postSidebarTags">
+        <div class="post-info-label">标签</div>
+        <div class="post-info-links">
+          <a href="../../blog/index.html?tag=PWA" class="post-info-link"># PWA</a>
+          <a href="../../blog/index.html?tag=Service%20Worker" class="post-info-link"># Service Worker</a>
+          <a href="../../blog/index.html?tag=%E7%BC%93%E5%AD%98" class="post-info-link"># 缓存</a>
+          <a href="../../blog/index.html?tag=%E5%8F%91%E5%B8%83" class="post-info-link"># 发布</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Post TOC -->
+  <div class="post-toc-container" id="postToc">
+    <nav class="post-toc" aria-label="文章目录">
+      <div class="post-toc-title">目录</div>
+      <ul class="post-toc-list" id="tocList">
+      </ul>
+    </nav>
+  </div>
+
+  <!-- Comment System -->
+  <script src="../../workers/comment-system/comment-widget.js?v=5d8a6a1796" defer></script>
+
+  <!-- highlight.js 代码语法高亮（本地完整构建，无外部依赖） -->
+  <script defer src="../../assets/vendor/highlight/highlight.min.js"></script>
+  <script>
+    /* 语法高亮改为「可见优先、空闲补齐」：
+       highlight.js 要遍历全篇代码块并生成数百个 span，若在 DOMContentLoaded 里同步跑完，
+       会在关键路径上长时间占住主线程（2026-09-27 实测本页长任务 1548ms、DCL 3651ms；
+       改动后长任务 145ms、DCL 1378ms）。这里 DCL 阶段只登记观察，实际高亮交给
+       IntersectionObserver（近屏 800px 内优先）+ requestIdleCallback（剩余块每片 ≤4 块），
+       首屏代码块的着色时机与视觉基本无变化。 */
+    (function() {
+      function canPaint(b) {
+        return !b.classList.contains('hljs') && !b.closest('.codehilite');
+      }
+      function paint(b) {
+        if (!canPaint(b)) return;
+        try { hljs.highlightElement(b); } catch (e) {}
+      }
+      function init() {
+        var blocks = [].slice.call(document.querySelectorAll('pre code')).filter(canPaint);
+        if (!blocks.length) return;
+        if ('IntersectionObserver' in window) {
+          var io = new IntersectionObserver(function(entries, obs) {
+            entries.forEach(function(en) {
+              if (!en.isIntersecting) return;
+              paint(en.target);
+              obs.unobserve(en.target);
+            });
+          }, { rootMargin: '800px 0px' });
+          blocks.forEach(function(b) { io.observe(b); });
+        }
+        var i = 0;
+        var idle = window.requestIdleCallback || window.setTimeout;
+        var step = function() {
+          var quota = 4;
+          while (i < blocks.length && quota-- > 0) paint(blocks[i++]);
+          if (i < blocks.length) idle(step);
+        };
+        idle(step); // 不在 DCL 里同步跑：可见块由 IntersectionObserver 处理，其余走空闲分片
+      }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+      } else {
+        init();
+      }
+    })();
+  </script>
+
+  <!-- Cloudflare Web Analytics -->
+  <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "29e7cff6f37448989538e2165cb79187"}'></script>
+</body>
+</html>

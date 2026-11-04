@@ -1,6 +1,21 @@
 {
   "posts": [
     {
+      "slug": "installed-pwa-is-a-second-release",
+      "title": "装到主屏的那份，是你召回不了的版本",
+      "date": "2026-11-04",
+      "dateTime": "2026-11-04 17:10:00",
+      "category": "前端",
+      "tags": [
+        "PWA",
+        "Service Worker",
+        "缓存",
+        "发布"
+      ],
+      "readTime": 15,
+      "url": "blog/posts/installed-pwa-is-a-second-release.html"
+    },
+    {
       "slug": "secondhand-conclusions-carry-your-name",
       "title": "二手结论最贵的时候，是它挂着你名字的时候",
       "date": "2026-11-03",
@@ -2006,10 +2021,10 @@
     }
   ],
   "categories": [
+    "前端",
     "思考",
     "Kotlin",
     "安全",
-    "前端",
     "DevOps",
     "数据库",
     "开发",
@@ -2018,9 +2033,9 @@
     "系统编程"
   ],
   "stats": {
-    "totalPosts": 129,
-    "totalTags": 334,
-    "latestDate": "2026-11-03",
+    "totalPosts": 130,
+    "totalTags": 335,
+    "latestDate": "2026-11-04",
     "oldestDate": "2026-02-15"
   }
 }

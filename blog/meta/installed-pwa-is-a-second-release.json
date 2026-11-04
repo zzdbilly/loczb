@@ -1,0 +1,15 @@
+{
+  "slug": "installed-pwa-is-a-second-release",
+  "title": "装到主屏的那份，是你召回不了的版本",
+  "description": "部署完成只完成了第一次发布。第二次发布发生在每个已安装的客户端上，完成时间、触发条件与失败形态都不在你手里——验收必须拆成浏览器与安装态两条路径。",
+  "date": "2026-11-04",
+  "dateTime": "2026-11-04 17:10:00",
+  "category": "前端",
+  "tags": [
+    "PWA",
+    "Service Worker",
+    "缓存",
+    "发布"
+  ],
+  "readTime": 15
+}
