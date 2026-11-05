@@ -1,6 +1,21 @@
 {
   "posts": [
     {
+      "slug": "offset-pagination-drifts-on-write",
+      "title": "分页是一个会漂移的坐标：OFFSET 在写入发生时开始说谎",
+      "date": "2026-11-05",
+      "dateTime": "2026-11-05 15:45:00",
+      "category": "数据库",
+      "tags": [
+        "分页",
+        "SQL",
+        "一致性",
+        "API 设计"
+      ],
+      "readTime": 15,
+      "url": "blog/posts/offset-pagination-drifts-on-write.html"
+    },
+    {
       "slug": "installed-pwa-is-a-second-release",
       "title": "装到主屏的那份，是你召回不了的版本",
       "date": "2026-11-04",
@@ -2021,21 +2036,21 @@
     }
   ],
   "categories": [
+    "数据库",
     "前端",
     "思考",
     "Kotlin",
     "安全",
     "DevOps",
-    "数据库",
     "开发",
     "Android",
     "AI",
     "系统编程"
   ],
   "stats": {
-    "totalPosts": 130,
-    "totalTags": 335,
-    "latestDate": "2026-11-04",
+    "totalPosts": 131,
+    "totalTags": 339,
+    "latestDate": "2026-11-05",
     "oldestDate": "2026-02-15"
   }
 }

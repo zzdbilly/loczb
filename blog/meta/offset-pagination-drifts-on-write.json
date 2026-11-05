@@ -1,0 +1,15 @@
+{
+  "slug": "offset-pagination-drifts-on-write",
+  "title": "分页是一个会漂移的坐标：OFFSET 在写入发生时开始说谎",
+  "description": "OFFSET 把「第几页」定义成相对当前位置的距离，而列表内容会变。它不报错，只是在你翻页时默默重复一条或吞掉一条。分页是一致性问题，不是 UI 问题。",
+  "date": "2026-11-05",
+  "dateTime": "2026-11-05 15:45:00",
+  "category": "数据库",
+  "tags": [
+    "分页",
+    "SQL",
+    "一致性",
+    "API 设计"
+  ],
+  "readTime": 15
+}

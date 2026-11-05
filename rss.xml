@@ -7,6 +7,14 @@
     <language>zh-CN</language>
     <atom:link href="https://709527.xyz/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>分页是一个会漂移的坐标：OFFSET 在写入发生时开始说谎</title>
+      <link>https://709527.xyz/blog/posts/offset-pagination-drifts-on-write.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/offset-pagination-drifts-on-write.html</guid>
+      <description>OFFSET 把「第几页」定义成相对当前位置的距离，而列表内容会变。它不报错，只是在你翻页时默默重复一条或吞掉一条。分页是一致性问题，不是 UI 问题。</description>
+      <category>数据库</category>
+      <pubDate>Thu, 05 Nov 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
       <title>装到主屏的那份，是你召回不了的版本</title>
       <link>https://709527.xyz/blog/posts/installed-pwa-is-a-second-release.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/installed-pwa-is-a-second-release.html</guid>
@@ -157,14 +165,6 @@
       <description>从 mtime 并列裁决、无条件写盘到不对称正则，拆开构建噪声的三个真实来源，给出元数据 sidecar 与「零改动」门禁的落地实现。</description>
       <category>开发</category>
       <pubDate>Sun, 27 Sep 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>技术经理、项目经理、产品经理的区别</title>
-      <link>https://709527.xyz/blog/posts/tech-manager-vs-pm-vs-po.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/tech-manager-vs-pm-vs-po.html</guid>
-      <description>三个都叫「经理」的岗位到底差在哪：对什么负责、权力从哪来、时间花在哪、失败长什么样，以及想转过去要提前补什么。</description>
-      <category>思考</category>
-      <pubDate>Mon, 21 Sep 2026 00:00:00 +0800</pubDate>
     </item>
   </channel>
 </rss>
