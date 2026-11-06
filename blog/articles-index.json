@@ -1,6 +1,21 @@
 {
   "posts": [
     {
+      "slug": "pool-size-is-a-queue-length",
+      "title": "连接池不是并发旋钮，是排队区的长度",
+      "date": "2026-11-06",
+      "dateTime": "2026-11-06 15:15:00",
+      "category": "数据库",
+      "tags": [
+        "连接池",
+        "性能",
+        "PostgreSQL",
+        "容量规划"
+      ],
+      "readTime": 14,
+      "url": "blog/posts/pool-size-is-a-queue-length.html"
+    },
+    {
       "slug": "offset-pagination-drifts-on-write",
       "title": "分页是一个会漂移的坐标：OFFSET 在写入发生时开始说谎",
       "date": "2026-11-05",
@@ -2048,9 +2063,9 @@
     "系统编程"
   ],
   "stats": {
-    "totalPosts": 131,
-    "totalTags": 339,
-    "latestDate": "2026-11-05",
+    "totalPosts": 132,
+    "totalTags": 342,
+    "latestDate": "2026-11-06",
     "oldestDate": "2026-02-15"
   }
 }

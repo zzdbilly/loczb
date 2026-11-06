@@ -7,6 +7,14 @@
     <language>zh-CN</language>
     <atom:link href="https://709527.xyz/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>连接池不是并发旋钮，是排队区的长度</title>
+      <link>https://709527.xyz/blog/posts/pool-size-is-a-queue-length.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/pool-size-is-a-queue-length.html</guid>
+      <description>把池调大只改变谁能同时进去，不改变数据库能同时干多少活。吞吐上限是 min(N,C)/R——超出 C 的那部分池，只是把排队从应用内存搬进了数据库的锁队列。</description>
+      <category>数据库</category>
+      <pubDate>Fri, 06 Nov 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
       <title>分页是一个会漂移的坐标：OFFSET 在写入发生时开始说谎</title>
       <link>https://709527.xyz/blog/posts/offset-pagination-drifts-on-write.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/offset-pagination-drifts-on-write.html</guid>
@@ -157,14 +165,6 @@
       <description>一个程序员对纳指100定投的完整记录：它是什么、摊平了什么、摩擦成本在哪、我给自己定了哪些执行规则，以及怎么验证自己没做错。</description>
       <category>思考</category>
       <pubDate>Mon, 28 Sep 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>幂等与可复现：为什么你的构建总在产生无意义的 diff</title>
-      <link>https://709527.xyz/blog/posts/idempotent-reproducible-builds.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/idempotent-reproducible-builds.html</guid>
-      <description>从 mtime 并列裁决、无条件写盘到不对称正则，拆开构建噪声的三个真实来源，给出元数据 sidecar 与「零改动」门禁的落地实现。</description>
-      <category>开发</category>
-      <pubDate>Sun, 27 Sep 2026 00:00:00 +0800</pubDate>
     </item>
   </channel>
 </rss>

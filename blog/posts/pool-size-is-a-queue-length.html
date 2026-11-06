@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <script>document.documentElement.classList.add("js");try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://static.cloudflareinsights.com https://loczb-comments.billymust.workers.dev; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://loczb-comments.billymust.workers.dev https://dashscope.aliyuncs.com https://709527.xyz https://www.709527.xyz https://cloudflareinsights.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
+    <script>/* 反点击劫持兜底：GitHub Pages 无法下发 X-Frame-Options / CSP frame-ancestors */(function(){if(self===top)return;try{top.location=self.location}catch(e){}setTimeout(function(){if(self!==top){document.documentElement.style.display='none';}},400);})();</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>连接池不是并发旋钮，是排队区的长度 | 张小猛 - loczb</title>
+    <meta name="description" content="把池调大只改变谁能同时进去，不改变数据库能同时干多少活。吞吐上限是 min(N,C)/R——超出 C 的那部分池，只是把排队从应用内存搬进了数据库的锁队列。">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="连接池不是并发旋钮，是排队区的长度 | 张小猛 - loczb">
+    <meta property="og:description" content="把池调大只改变谁能同时进去，不改变数据库能同时干多少活。吞吐上限是 min(N,C)/R——超出 C 的那部分池，只是把排队从应用内存搬进了数据库的锁队列。">
+    <meta property="og:url" content="https://709527.xyz/blog/posts/pool-size-is-a-queue-length.html">
+    <meta property="og:type" content="article">
+    <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
+    <meta property="og:site_name" content="loczb">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="连接池不是并发旋钮，是排队区的长度 | 张小猛 - loczb">
+    <meta name="twitter:description" content="把池调大只改变谁能同时进去，不改变数据库能同时干多少活。吞吐上限是 min(N,C)/R——超出 C 的那部分池，只是把排队从应用内存搬进了数据库的锁队列。">
+    <meta name="twitter:image" content="https://709527.xyz/assets/images/og-image.png">
+
+        <script type="application/ld+json">
+{
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "连接池不是并发旋钮，是排队区的长度",
+      "description": "把池调大只改变谁能同时进去，不改变数据库能同时干多少活。吞吐上限是 min(N,C)/R——超出 C 的那部分池，只是把排队从应用内存搬进了数据库的锁队列。",
+      "image": "https://709527.xyz/assets/images/og-image.png",
+      "author": {
+            "@type": "Person",
+            "name": "张小猛",
+            "url": "https://709527.xyz/about/"
+      },
+      "publisher": {
+            "@type": "Organization",
+            "name": "loczb",
+            "logo": {
+                  "@type": "ImageObject",
+                  "url": "https://709527.xyz/assets/images/favicon.svg"
+            }
+      },
+      "datePublished": "2026-11-06T15:15:00+08:00",
+      "dateModified": "2026-11-06T15:15:00+08:00",
+      "url": "https://709527.xyz/blog/posts/pool-size-is-a-queue-length.html",
+      "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://709527.xyz/blog/posts/pool-size-is-a-queue-length.html"
+      },
+      "keywords": "连接池, 性能, PostgreSQL, 容量规划",
+      "articleSection": "数据库",
+      "timeRequired": "PT14M",
+      "inLanguage": "zh-CN"
+}
+    </script>
+
+    <link rel="stylesheet" href="../../assets/css/style.css?v=c8e170d8f9">
+    <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
+    <link rel="alternate icon" href="../../assets/images/favicon.ico">
+    <link rel="canonical" href="https://709527.xyz/blog/posts/pool-size-is-a-queue-length.html">
+</head>
+<body>
+  <!-- PARTIAL:SKIP_LINK -->
+  <a href="#main-content" class="skip-link">跳至主要内容</a>
+  <!-- /PARTIAL:SKIP_LINK -->
+
+  <!-- Navigation -->
+<!-- PARTIAL:NAV -->
+  <nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">
+      loc<span>zb</span>
+    </a>
+    <button class="nav-toggle" aria-label="打开菜单" aria-expanded="false" aria-controls="nav-links-menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <div class="nav-overlay"></div>
+    <ul class="nav-links" id="nav-links-menu">
+      <li><a href="/" class="nav-link" data-nav="home">首页</a></li>
+      <li><a href="/projects/" class="nav-link" data-nav="projects">项目</a></li>
+      <li><a href="/blog/" class="nav-link active" data-nav="blog">博客</a></li>
+      <li><a href="/about/" class="nav-link" data-nav="about">关于</a></li>
+    </ul>
+    <button class="theme-toggle" aria-label="切换主题" title="切换亮/暗模式">
+      <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="5"></circle>
+        <line x1="12" y1="1" x2="12" y2="3"></line>
+        <line x1="12" y1="21" x2="12" y2="23"></line>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+        <line x1="1" y1="12" x2="3" y2="12"></line>
+        <line x1="21" y1="12" x2="23" y2="12"></line>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+      </svg>
+      <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+      </svg>
+    </button>
+  </div>
+</nav>
+  <!-- /PARTIAL:NAV -->
+  <main class="section" id="main-content" style="padding-bottom: 0; padding-top: var(--space-4xl);">
+    <div class="container container-narrow">
+      <a href="../index.html" class="back-link">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        返回博客列表
+      </a>
+
+      <article class="post-content">
+        <h1>连接池不是并发旋钮，是排队区的长度</h1>
+
+        <div class="post-meta">
+          <span class="meta-item"><span aria-hidden="true">📅</span> 2026-11-06 15:15:00</span>
+          <span class="meta-item"><span aria-hidden="true">⏱️</span> 14 min read</span>
+          <span class="meta-item"><span aria-hidden="true">👤</span> 张小猛</span>
+        </div>
+
+        <div class="post-tags">
+          <span class="tag">连接池</span>
+          <span class="tag">性能</span>
+          <span class="tag">PostgreSQL</span>
+          <span class="tag">容量规划</span>
+        </div>
+
+        
+
+        <h2>一个公式，三个数字</h2>
+<p>服务变慢的时候，第一眼往往落在连接池上：池里在排队，那就把池调大。这个动作背后有一个隐含前提——池是吞吐的瓶颈。前提成立时它有效，前提不成立时它让问题更难看清，因为改完以后指标会朝两个方向同时动。</p>
+<p>把这件事写成一行：</p>
+<pre><code class="language-text">吞吐 ≈ min(N, C) / R
+
+N = 池允许同时持有的连接数（应用侧的上限）
+C = 数据库实际能并行服务的请求数
+    （受 CPU 核数、IO 带宽与延迟、锁争用共同约束）
+R = 一次请求从取到连接、到归还连接的平均时长
+</code></pre>
+<p>这行式子里只有 N 是配置项。C 由机器和工作负载决定，R 由代码结构决定。池能改的只有一个字母，而吞吐取决于三个字母的比值。</p>
+<h3>直觉成立的那一半</h3>
+<p>当 N &lt; C 时，应用侧确实卡住了数据库：数据库还有余力，但只有 N 个请求能同时进去。这时把 N 往上调，吞吐沿着 N/R 这条线上升，一直升到 N 追上 C 为止。这一段是线性的，也是「调大池有用」这个经验的全部来源。</p>
+<p>注意这个区间的位置：N &lt; C 意味着数据库是闲着的，CPU 没打满，锁等待不高。这是可以从外部观测到的状态，不需要猜。</p>
+<h3>直觉反过来的那一半</h3>
+<p>一旦 N &gt; C，<code>min(N, C)</code> 取的是 C。再往上加连接，式子的分子不动，分母 R 反而会因为争用变长。于是吞吐不升，延迟上升，而观测到的现象是「池还是不够用」——因为请求在池外的等待时间没变短，在池内的执行时间变长了。</p>
+<p>这就是那个动作失效的地方：它在 N &lt; C 时是对的，在 N &gt; C 时是反向的，而两种状态在监控面板上都表现为「慢」。</p>
+<h3>三个数字各管什么</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">数字</th>
+<th style="text-align: left;">由谁决定</th>
+<th style="text-align: left;">改池配置能不能动它</th>
+<th style="text-align: left;">动它的直接后果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">N</td>
+<td style="text-align: left;">应用配置</td>
+<td style="text-align: left;">能</td>
+<td style="text-align: left;">改变同时持有连接的数量</td>
+</tr>
+<tr>
+<td style="text-align: left;">C</td>
+<td style="text-align: left;">CPU、IO、锁、数据分布</td>
+<td style="text-align: left;">不能</td>
+<td style="text-align: left;">由硬件与工作负载决定</td>
+</tr>
+<tr>
+<td style="text-align: left;">R</td>
+<td style="text-align: left;">事务边界、查询、外部调用</td>
+<td style="text-align: left;">不能</td>
+<td style="text-align: left;">只能改代码，不能改配置</td>
+</tr>
+</tbody>
+</table>
+<p>这张表是整篇文章的骨架：唯一能靠改配置移动的，是那个在 N &gt; C 之后就不起作用的字母。</p>
+<h2>N：池限住的是「同时持有」，不是「并发」</h2>
+<h3>池里没有并发，只有占位</h3>
+<p>一个连接是一份被租出去的资源，不是一个线程。池的计数器记的是「此刻有几个连接被借出还没归还」，不是「有几个请求在处理」。这两者在 R 很长的时候会严重脱节：一百个请求在途，池里可能只有八个连接被持有，另外九十二个在池的等待队列里排着。</p>
+<p>所以「并发」这个词在讨论池的时候要先拆开：</p>
+<ul>
+<li><strong>在途请求数</strong>：从进入应用到返回响应，包括排队的那部分。</li>
+<li><strong>持有连接数</strong>：真正握住一份数据库会话的数量，上限是 N。</li>
+</ul>
+<p>池限制的是后者。用前者去调后者，就会得出「并发上不去所以要加池」这种把两个量混在一起的结论。</p>
+<h3>排队的人也算并发</h3>
+<p>从客户端看，一个在池队列里等待的请求和在数据库里执行的请求没有区别——它都还没返回，都占着内存、占着上游的连接、占着用户的时间。区别在服务端：排队的那部分不消耗数据库的 CPU，也不持有任何锁。</p>
+<p>这一点决定了后面所有的判断：<strong>排队发生在哪一层，决定了它有多贵</strong>。在应用内存里排队，代价是一个协程或一个线程的栈；在数据库的锁队列里排队，代价是一个后端进程、一份内存基线，以及持锁期间阻塞别人。</p>
+<h3>N 是一个被装饰过的常量</h3>
+<p>生产配置里的池从来不只是「最大连接数」一个数字，它通常是一组联动参数：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">参数</th>
+<th style="text-align: left;">作用</th>
+<th style="text-align: left;">配置失当时的典型现象</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">最大连接数</td>
+<td style="text-align: left;">上限 N</td>
+<td style="text-align: left;">撞数据库硬上限，新请求连不上</td>
+</tr>
+<tr>
+<td style="text-align: left;">最小空闲数</td>
+<td style="text-align: left;">预热与抖动缓冲</td>
+<td style="text-align: left;">冷启动时集中建连，出现尖刺</td>
+</tr>
+<tr>
+<td style="text-align: left;">取连接超时</td>
+<td style="text-align: left;">排队多久就放弃</td>
+<td style="text-align: left;">排队时间被截断，看起来「很快失败」</td>
+</tr>
+<tr>
+<td style="text-align: left;">空闲回收</td>
+<td style="text-align: left;">释放长期不用的连接</td>
+<td style="text-align: left;">低频时段池被抽干，突发时排队</td>
+</tr>
+<tr>
+<td style="text-align: left;">最大存活时长</td>
+<td style="text-align: left;">定期换掉旧连接</td>
+<td style="text-align: left;">长于负载均衡的摘除周期，连到已下线的节点</td>
+</tr>
+</tbody>
+</table>
+<p>其中「最大存活时长」最容易被忽略：连接是有年龄的，而它对面的数据库节点可能在某次发布后就不在了。池里留着一批比节点还老的连接，表现出来不是错误，是间歇性的超时。</p>
+<h2>C：数据库真正能同时干活的份数</h2>
+<h3>C 从哪来</h3>
+<p>数据库的并行服务能力不是抽象的，它由几件具体的东西卡住：</p>
+<ul>
+<li><strong>CPU 核数</strong>：同一时刻真正在跑的查询数不会超过可用的执行线程数。超出的部分在操作系统的运行队列里等，不在做计算。</li>
+<li><strong>IO 带宽与延迟</strong>：数据页不在内存里的时候，一次查询的进度取决于磁盘。并发上去以后，IO 队列深度增加，单次读的延迟上升。</li>
+<li><strong>锁</strong>：写同一行、同一张表的请求只能串行。热点行的更新，其并行度在那一行上等于 1，无论你开多少连接。</li>
+<li><strong>连接自身的成本</strong>：以 PostgreSQL 为例，每个连接对应一个独立的操作系统进程，有固定的内存基线，切换要付上下文切换的代价。连接数不是免费的并发度，它本身就是要花钱的。</li>
+</ul>
+<h3>为什么 C 不随 N 增长</h3>
+<p>并发度是「同时被服务的请求数」，它需要资源来支撑。N 增加的是「同时被允许进入的请求数」，进入以后要抢的还是那几份资源。抢的人多了，单位时间内完成的量不会变多，只会让每个人的等待变长。</p>
+<p>一个常被引用的起步估计是「C 在 CPU 核数的量级」，而不是几十上百。这个说法的价值在于给出数量级，不在于给出答案：真实的 C 取决于查询是 CPU 密集型还是 IO 等待型、有多少写冲突、缓存命中率有多高。它需要测，不能照抄。</p>
+<h3>C 不是常数</h3>
+<p>C 会随负载移动，而且是往下移动：</p>
+<ul>
+<li>一批大查询同时进来，每个都吃掉一个核的一段时间，可服务的并发数下降。</li>
+<li>热点行被频繁更新，那条记录上的并行度接近 1，整张表的有效 C 被拉低。</li>
+<li>长事务持锁不放，后来的请求在锁队列里等，看起来是「数据库卡住了」，实际是 C 被一个事务占住了。</li>
+</ul>
+<p>这一点解释了为什么按峰值调好的 N，在另一个峰值的形状下就不合适：不是 N 变了，是 C 变了。而 N 是写死在配置里的，C 是随流量实时变化的。</p>
+<h2>R：被忽略的那个变量</h2>
+<h3>R 里装了什么</h3>
+<p>R 是连接从被借出到被归还的整段时间。它不等于查询的执行时间，通常比执行时间长得多：</p>
+<pre><code class="language-text">R = 取连接等待
+  + BEGIN 到 COMMIT 之间的全部时间
+      ├─ 语句执行
+      ├─ 锁等待
+      └─ 应用代码（ORM 懒加载、外部 HTTP 调用、日志、序列化）
+  + COMMIT 之后、归还之前的清理
+</code></pre>
+<p>第二项里的「应用代码」是最常见的隐性成本。在事务里调一次外部接口，那条连接在整个网络往返期间都被占着，而数据库什么也没干。这段时间会计入 R，也就会计入「池不够用」的观感，但它跟数据库的容量没有关系。</p>
+<h3>事务边界决定 R 的下限</h3>
+<p>R 有一个由代码结构决定的下限：事务开得越早、提交得越晚，R 就越长。常见的几种拉长方式：</p>
+<ul>
+<li>在事务开始之后才做参数校验、权限查询、远程调用。</li>
+<li>用 ORM 的懒加载，在事务里触发一串本来可以预取的查询。</li>
+<li>把「读一批、算一会儿、写一批」放进同一个事务，中间的计算时间也算持有时长。</li>
+<li>事务里等待用户交互或消息队列的响应。</li>
+</ul>
+<p>这些做法在功能上都对，在容量上都贵：它们让一份连接在大部分时间里处于「占着但不干活」的状态。</p>
+<h3>降 R 的杠杆比加 N 长</h3>
+<p>Little's Law 给出的是同一个式子的另一种写法：并发数 L 等于吞吐 λ 乘以停留时间 W。反过来读，吞吐等于并发除以停留时间。</p>
+<pre><code class="language-text">λ = L / W
+
+W 减半，在 C 允许的范围内，λ 翻倍      ← 改代码
+L 翻倍，在 L &gt; C 之后，λ 不变          ← 改配置
+</code></pre>
+<p>两条路的区别不在幅度，在方向：一条是把同样的资源用得更紧凑，另一条是把更多的请求塞进同一个瓶颈。前者没有上限（只要 R 里还有可压缩的部分），后者在 N 追上 C 的那一刻就结束了。</p>
+<h2>N 超过 C 之后</h2>
+<h3>排队搬家</h3>
+<p>池调大最直接的后果不是变快，是把等待的位置换了。原来在应用内存里排队的请求，现在进了数据库，变成了锁等待、CPU 时间片竞争和运行队列里的等待。</p>
+<p>这个搬家在指标上的样子很有特征：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">观测项</th>
+<th style="text-align: left;">搬家前</th>
+<th style="text-align: left;">搬家后</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">池等待时间 p99</td>
+<td style="text-align: left;">高</td>
+<td style="text-align: left;">下降</td>
+</tr>
+<tr>
+<td style="text-align: left;">数据库活跃会话数</td>
+<td style="text-align: left;">接近 N</td>
+<td style="text-align: left;">接近新 N</td>
+</tr>
+<tr>
+<td style="text-align: left;">数据库 CPU</td>
+<td style="text-align: left;">有余量</td>
+<td style="text-align: left;">打满或接近打满</td>
+</tr>
+<tr>
+<td style="text-align: left;">锁等待</td>
+<td style="text-align: left;">低</td>
+<td style="text-align: left;">上升</td>
+</tr>
+<tr>
+<td style="text-align: left;">端到端延迟</td>
+<td style="text-align: left;">高</td>
+<td style="text-align: left;">不变或更高</td>
+</tr>
+</tbody>
+</table>
+<p>（表中数值方向为示意，不是实测。）</p>
+<p>只看第一行会得出「池调大有效」的结论，因为等待确实从池里消失了。它没有消失，只是换了地方，而且换到了一个更贵的地方——在那里等待的连接还占着后端进程和内存。</p>
+<h3>反馈环</h3>
+<p>把上面几行连起来，会得到一个自我强化的循环：</p>
+<ol>
+<li>N 调大，池等待下降。</li>
+<li>更多请求同时进入数据库，争用上升。</li>
+<li>争用上升拉长了每条语句的执行时间，R 变长。</li>
+<li>R 变长意味着单位连接的服务速率下降，池再次显得不够。</li>
+<li>回到第 1 步。</li>
+</ol>
+<p>这个环的可怕之处在于每一轮都有「证据」支持下一步：池等待时间确实高，活跃连接数确实贴着上限。指标没说谎，是读数的人把「结果」当成了「原因」。R 变长本来就是 N 变大的产物，用它去论证 N 还要再大，逻辑上是自证。</p>
+<h3>故障形态从「慢」变成「连不上」</h3>
+<p>在 N 还远小于数据库上限的时候，调大的代价是延迟。当 N 乘以实例数逼近数据库的硬上限时，代价换了一种形式：新的连接建立请求被拒绝。</p>
+<p>这时候的现象不是变慢，是直接失败——而且失败的位置很分散：应用启动时连不上、健康检查超时、迁移脚本和备份任务拿不到连接、运维想上去看一眼也连不上。以 PostgreSQL 为例，<code>max_connections</code> 是硬上限，<code>superuser_reserved_connections</code> 会预留几个位置给超级用户，但那是最后的安全垫，不是容量规划的一部分。</p>
+<p>「慢」是可以降级的，「连不上」不能。这就是为什么池的上限要留余量：留的不是性能余量，是故障时的操作余量。</p>
+<h3>多实例把 N 乘起来</h3>
+<p>单机讨论池大小是安全的，多实例讨论池大小是危险的，因为连接数是相乘的：</p>
+<pre><code class="language-text">总连接数 ≈ 实例数 × 每实例池大小 + 迁移/备份/运维连接
+</code></pre>
+<p>横向扩容的直觉是「加机器分担压力」，对连接数来说恰恰相反：每加一个实例，就从数据库的同一个上限里再切走一份。自动扩缩容把这件事放大——流量高峰触发扩容，扩容触发连接数翻倍，连接数翻倍触发数据库拒绝连接，拒绝连接触发健康检查失败，健康检查失败触发重启。整条链上没有任何一步是错的，合起来是一次雪崩。</p>
+<p>托管方案通常在中间放一个外部池化层来解决这个乘法：应用连池化层，池化层用少量后端连接服务大量前端连接。按事务级池化的话，一个后端连接在不同事务之间被不同客户端复用。代价是会话语义被削弱——会话级的预处理语句、会话级临时表、咨询锁、<code>LISTEN/NOTIFY</code> 这类依赖「同一个会话」的特性会受影响。具体产品的行为差异很大，选型时要按自己用到的特性逐条核对，不能按「兼容 PostgreSQL」一句话带过。</p>
+<h3>超时链路要对齐</h3>
+<p>池的等待超时、语句超时、上游网关超时，三者构成一条链。这条链的每一环都要满足两个条件：外层比内层长，内层真的会取消工作。</p>
+<pre><code class="language-text">网关 / 上游超时        10s   ← 最外层，决定用户等多久
+语句超时                5s   ← 服务端执行上限
+取连接等待超时          2s   ← 池队列上限
+</code></pre>
+<p>如果顺序反了——网关 3 秒、语句 30 秒——用户在 3 秒时收到超时，应用放弃了等待，但数据库里那条语句还在跑。它继续占着 CPU、继续持锁、继续消耗连接。这类「客户端已经走了、服务端还在干」的请求叫幽灵负载，它的直接效果是拉长 R，而拉长 R 又会让更多人排队，于是又有更多人超时。</p>
+<p>语句超时必须是<strong>服务端</strong>的超时（例如 PostgreSQL 的 <code>statement_timeout</code>），只在客户端放弃等待不算取消。这一条经常被写错：客户端设了超时，以为工作停了，其实只是自己不再听了。</p>
+<h2>观测：先有指标，再动参数</h2>
+<p>调池之前要能回答一个问题：现在的瓶颈是 N、C 还是 R。三个答案对应三种完全不同的动作，而它们在「服务变慢」这个描述下长得一模一样。</p>
+<h3>池侧看什么</h3>
+<ul>
+<li><strong>取连接等待时间的 p50 与 p99</strong>：平均值会把少数长等待抹平，而队列的痛感全在尾部。</li>
+<li><strong>活跃连接数 / 空闲连接数 / 总数</strong>：三者一起看，能区分「池满了」和「池空着但请求慢」。</li>
+<li><strong>取连接超时次数</strong>：这是队列溢出到失败的直接计数。</li>
+<li><strong>连接创建速率</strong>：持续建连说明连接寿命太短，或者池在频繁回收，本身就是一个成本项。</li>
+</ul>
+<h3>数据库侧看什么</h3>
+<ul>
+<li><strong>CPU 使用率与运行队列长度</strong>：判断 C 是否已经被吃满。</li>
+<li><strong>活跃会话数与上限的比例</strong>：判断离「连不上」还有多远。</li>
+<li><strong>锁等待</strong>：按等待事件分类，而不是只看总数。等锁和等 IO 是两种病。</li>
+<li><strong>按持有时长分桶的语句分布</strong>：不只看最慢的那条，要看「有多少条落在中间那段」——那才是 R 的主体。</li>
+</ul>
+<h3>一条判据</h3>
+<p>把两侧的读数交叉，能得到一个不需要猜的判断：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">池等待 p99</th>
+<th style="text-align: left;">数据库 CPU / 锁等待</th>
+<th style="text-align: left;">结论</th>
+<th style="text-align: left;">动作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">高</td>
+<td style="text-align: left;">低</td>
+<td style="text-align: left;">N 是瓶颈</td>
+<td style="text-align: left;">加 N，加到 C 的量级为止</td>
+</tr>
+<tr>
+<td style="text-align: left;">高</td>
+<td style="text-align: left;">高</td>
+<td style="text-align: left;">C 是瓶颈</td>
+<td style="text-align: left;">降 R，不要动 N</td>
+</tr>
+<tr>
+<td style="text-align: left;">低</td>
+<td style="text-align: left;">高</td>
+<td style="text-align: left;">C 是瓶颈，池不是</td>
+<td style="text-align: left;">降 R 或扩数据库</td>
+</tr>
+<tr>
+<td style="text-align: left;">低</td>
+<td style="text-align: left;">低</td>
+<td style="text-align: left;">瓶颈不在数据库</td>
+<td style="text-align: left;">去查上游、网络、应用代码</td>
+</tr>
+</tbody>
+</table>
+<p>（此表为判断逻辑示意，不含实测数据。）</p>
+<p>四种组合里只有第一种支持「调大池」。另外三种情况下调大池，最好的结果是没效果，常见的结果是让下一轮的读数更难解释。</p>
+<h2>调整顺序：先 R，后 N，最后中间层</h2>
+<h3>第一步：把 R 拆开</h3>
+<p>先量，不改。目标是找出 R 里占比最大的那一段，以及那段是不是「占着连接但不干活」。</p>
+<pre><code class="language-sql">-- 示例：按事务已持续时长排序，看谁把连接占住了
+SELECT pid,
+       now() - xact_start       AS xact_age,
+       state,
+       wait_event_type,
+       wait_event,
+       left(query, 80)          AS query_head
+FROM pg_stat_activity
+WHERE backend_type = 'client backend'
+  AND xact_start IS NOT NULL
+ORDER BY xact_age DESC
+LIMIT 20;
+</code></pre>
+<p>读这张表的方法：<code>state = active</code> 且 <code>wait_event_type = Lock</code> 的，是锁争用；<code>state = idle in transaction</code> 的，是应用拿着事务在等别的东西——这一类是纯浪费，它占着连接、可能持着锁，而数据库没有为它做任何事。<code>idle in transaction</code> 的时长分布，往往就是「加池没用」的根因。</p>
+<p>对应的动作按收益排序：</p>
+<ol>
+<li>把外部调用挪出事务边界。这一步通常是单项收益最大的。</li>
+<li>给长事务加语句超时，让跑飞的查询自己结束。</li>
+<li>补索引、改查询，压掉执行时间——这是执行计划那一层的事，和池无关。</li>
+<li>收敛事务范围，只包住必须原子的写。</li>
+</ol>
+<h3>第二步：按 C 定 N</h3>
+<p>N 的目标不是「尽可能大」，是「刚好喂满 C，并留出运维余量」。推导方式：</p>
+<ul>
+<li>估计 C 的量级（核数级别起步，用压测校正）。</li>
+<li>观察 R 里「数据库真正在干活」的比例。比例高，N 接近 C 就够；比例低，说明大量时间花在等外部系统上，这时调大 N 确实能提高吞吐，但那是在为一段本不该存在的持有时长买单。</li>
+<li>从数据库硬上限里扣掉迁移、备份、监控、运维要用的连接，剩下的才是应用可用的总额度。</li>
+<li>把总额度除以最大实例数（不是当前实例数），得到每实例的 N。</li>
+</ul>
+<p>最后一条是关键：N 要按<strong>最大</strong>实例数算，因为扩缩容的时候没人会记得回来改池大小。</p>
+<h3>第三步：才轮到池化层</h3>
+<p>如果做完前两步，连接数仍然被实例数乘爆，那才需要考虑在中间放池化层。它是一个正确的工具，但它解决的是「连接数」问题，不是「慢」问题——把池化层加到一条 R 很长的链路上，只会让排队的位置再换一次。</p>
+<pre><code class="language-ts">// 示例：三个超时成链，且最内层是服务端超时
+const pool = new Pool({
+  max: 8,                          // N：按 C 与最大实例数推导，不按峰值 QPS 拍
+  connectionTimeoutMillis: 2_000,  // 取连接等待上限
+  idleTimeoutMillis: 30_000,
+  maxLifetimeSeconds: 1_800,       // 短于负载均衡摘除周期
+  options: '-c statement_timeout=5000', // 服务端取消，客户端放弃不算
+});
+</code></pre>
+<p>配置本身不复杂，复杂的是每个数字背后的依据。<code>max: 8</code> 这个值如果没有推导过程，它和 <code>max: 80</code> 一样是猜的。</p>
+<h2>判据</h2>
+<p>把上面的推演收成几条可以在评审里直接用的判断：</p>
+<ul>
+<li><strong>加 N 之前，先说出 C 的估计值和 R 的构成。</strong> 说不出来就还没到调参的阶段。</li>
+<li><strong>池等待高 + 数据库 CPU 低</strong>，才是加 N 的许可。缺一半条件就不成立。</li>
+<li><strong>端到端慢但池等待低</strong>，说明瓶颈不在池，动它只会制造新的变量。</li>
+<li><strong>任何一次 N 的调整都要能预测哪条指标会变。</strong> 预测不了，就是没想清楚机制。</li>
+<li><strong>池大小必须和实例数一起算。</strong> 单机上的合理值，乘上二十个实例就是事故。</li>
+<li><strong>三个超时要有明确的大小关系，且最内层真的会取消工作。</strong> 否则超时只是让客户端先走，活还留在数据库里。</li>
+<li><strong>上限要留出非应用连接。</strong> 留的是故障时还能登进去看的余地。</li>
+</ul>
+<p>回到开头那行式子：<code>吞吐 ≈ min(N, C) / R</code>。池改的是 N，而 N 在追上 C 之后就不再出现在分子里。真正决定这条线高度的是 R，也就是一段请求要占着连接多久；而 R 由事务边界、查询形状、外部调用位置决定，全都在代码里，不在配置里。</p>
+<p>所以池大小这个参数的性质要说清楚：它不生产吞吐，它决定队列有多长、等待发生在哪一层。队列长度可以调，服务速率不能靠调队列长度获得。把这两件事分开，<code>max_connections</code> 那一栏就不再是一个可以随手加个零的数字。</p>
+
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="soft-delete-costs-interest-on-every-query.html">
+            <div class="related-post-card-title">软删除买的是后悔药，付的是每条查询的利息</div>
+            <div class="related-post-card-tags"><span>数据库设计</span><span>软删除</span><span>数据建模</span></div>
+          </a>
+          <a class="related-post-card" href="postgresql-从-17-到-18生产环境升级实战.html">
+            <div class="related-post-card-title">PostgreSQL 从 17 到 18：生产环境升级实战</div>
+            <div class="related-post-card-tags"><span>PostgreSQL</span><span>数据库</span><span>DevOps</span></div>
+          </a>
+          <a class="related-post-card" href="prisma-orm-完全指南从入门到实战.html">
+            <div class="related-post-card-title">Prisma ORM 完全指南：从入门到实战</div>
+            <div class="related-post-card-tags"><span>Prisma</span><span>TypeScript</span><span>PostgreSQL</span></div>
+          </a>
+          <a class="related-post-card" href="postgresql-index-optimization.html">
+            <div class="related-post-card-title">PostgreSQL 索引优化实战</div>
+            <div class="related-post-card-tags"><span>PostgreSQL</span><span>索引优化</span><span>B-Tree</span></div>
+          </a>
+          <a class="related-post-card" href="offset-pagination-drifts-on-write.html">
+            <div class="related-post-card-title">分页是一个会漂移的坐标：OFFSET 在写入发生时开始说谎</div>
+            <div class="related-post-card-tags"><span>分页</span><span>SQL</span><span>一致性</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
+
+        <!-- Post Copyright & License Card -->
+        <div class="post-copyright-card">
+          <div class="copyright-header">
+            <div class="copyright-badge">
+              <span>📜</span>
+              <span>原创与知识共享协议</span>
+            </div>
+            <button class="copyright-cite-btn" id="copy-cite-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+              </svg>
+              <span>复制 Markdown 引用</span>
+            </button>
+          </div>
+          <div class="copyright-list">
+            <div class="copyright-item"><strong>文章标题：</strong>连接池不是并发旋钮，是排队区的长度</div>
+            <div class="copyright-item"><strong>文章作者：</strong>张小猛 · loczb</div>
+            <div class="copyright-item"><strong>永久链接：</strong><a href="https://709527.xyz/blog/posts/pool-size-is-a-queue-length.html">https://709527.xyz/blog/posts/pool-size-is-a-queue-length.html</a></div>
+            <div class="copyright-item"><strong>版权声明：</strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 国际许可协议。商业转载请联系作者获得授权，非商业转载请注明出处。</div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </main>
+
+  <!-- Related Posts / Navigation -->
+  <section class="section" aria-label="读完之后" style="padding-top: 0;">
+    <div class="container container-narrow">
+      <!-- Post Nav Prev Next -->
+      <nav class="post-nav" aria-label="文章翻页导航">
+        <a href="offset-pagination-drifts-on-write.html" class="post-nav-card post-nav-prev" rel="prev">
+          <span class="post-nav-label">← 上一篇</span>
+          <span class="post-nav-title">分页是一个会漂移的坐标：OFFSET 在写入发生时开始说谎</span>
+        </a>
+        <div class="post-nav-card post-nav-next disabled" aria-disabled="true">
+          <span class="post-nav-label">下一篇 →</span>
+          <span class="post-nav-title">已是最新篇博文</span>
+        </div>
+      </nav>
+      <!-- /Post Nav Prev Next -->
+      <hr style="border: none; border-top: 1px solid var(--color-border); margin: var(--space-2xl) 0;">
+
+      <div class="blog-topics" style="margin-bottom: var(--space-xl); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+        <div>
+          <span class="topic-label">读完之后:</span>
+          <a href="../index.html" class="topic-tag">返回博客列表</a>
+          <a href="../index.html?view=series" class="topic-tag">浏览全部专栏</a>
+        </div>
+        <a href="#main-content" class="topic-tag" style="margin-left: auto;">↑ 回到顶部</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+<!-- PARTIAL:FOOTER -->
+  <footer class="footer" role="contentinfo">
+  <div class="footer-inner">
+    <p class="footer-signature">写代码，做产品，也认真生活。</p>
+    <div class="footer-social">
+      <a href="https://github.com/zzdbilly" class="footer-social-link" target="_blank" rel="noopener" aria-label="GitHub">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+      </a>
+      <a href="https://twitter.com/zzdbilly" class="footer-social-link" target="_blank" rel="noopener" aria-label="X (Twitter)">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      </a>
+      <a href="/rss.xml" class="footer-social-link" target="_blank" rel="noopener" aria-label="RSS 订阅">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+      </a>
+    </div>
+    <div class="footer-links">
+      <a href="/" class="footer-link">首页</a>
+      <a href="/projects/" class="footer-link">项目</a>
+      <a href="/blog/" class="footer-link">博客</a>
+      <a href="/about/" class="footer-link">关于</a>
+    </div>
+    <p class="footer-copyright">&copy; 2026 张小猛 · loczb · Built with care</p>
+  </div>
+</footer>
+  <!-- /PARTIAL:FOOTER -->
+
+  <script defer src="../../assets/js/main.js"></script>
+  <script defer src="../../assets/js/article.js?v=c9f1a378ea"></script>
+  <script defer src="../../assets/js/share.js"></script>
+  <!-- Back to Top & Reading Progress -->
+  <button class="back-to-top" id="backToTop" aria-label="回到顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
+  <div class="reading-progress" id="readingProgress"></div>
+
+  <!-- Post Sidebar Info（左侧） -->
+  <div class="post-sidebar-info" id="postSidebar">
+    <div class="post-info-card">
+      <div class="post-info-section">
+        <div class="post-info-label">作者</div>
+        <div class="post-info-author">
+          <div class="post-info-avatar">小</div>
+          <div>
+            <div class="post-info-author-name">张小猛</div>
+            <div class="post-info-author-desc">写代码，做产品</div>
+          </div>
+        </div>
+      </div>
+      <div class="post-info-section">
+        <div class="post-info-label">文章信息</div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📅</span> 发布日期</span><span class="post-info-stat-value">2026-11-06</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">⏱️</span> 阅读时间</span><span class="post-info-stat-value">14 min read</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">5337 字</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📊</span> 章节数</span><span class="post-info-stat-value">8 节 · 23 子节</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">💻</span> 代码块</span><span class="post-info-stat-value">7 段</span></div>
+      </div>
+      <div class="post-info-section" id="postSidebarTags">
+        <div class="post-info-label">标签</div>
+        <div class="post-info-links">
+          <a href="../../blog/index.html?tag=%E8%BF%9E%E6%8E%A5%E6%B1%A0" class="post-info-link"># 连接池</a>
+          <a href="../../blog/index.html?tag=%E6%80%A7%E8%83%BD" class="post-info-link"># 性能</a>
+          <a href="../../blog/index.html?tag=PostgreSQL" class="post-info-link"># PostgreSQL</a>
+          <a href="../../blog/index.html?tag=%E5%AE%B9%E9%87%8F%E8%A7%84%E5%88%92" class="post-info-link"># 容量规划</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Post TOC -->
+  <div class="post-toc-container" id="postToc">
+    <nav class="post-toc" aria-label="文章目录">
+      <div class="post-toc-title">目录</div>
+      <ul class="post-toc-list" id="tocList">
+      </ul>
+    </nav>
+  </div>
+
+  <!-- Comment System -->
+  <script src="../../workers/comment-system/comment-widget.js?v=5d8a6a1796" defer></script>
+
+  <!-- highlight.js 代码语法高亮（本地完整构建，无外部依赖） -->
+  <script defer src="../../assets/vendor/highlight/highlight.min.js"></script>
+  <script>
+    /* 语法高亮改为「可见优先、空闲补齐」：
+       highlight.js 要遍历全篇代码块并生成数百个 span，若在 DOMContentLoaded 里同步跑完，
+       会在关键路径上长时间占住主线程（2026-09-27 实测本页长任务 1548ms、DCL 3651ms；
+       改动后长任务 145ms、DCL 1378ms）。这里 DCL 阶段只登记观察，实际高亮交给
+       IntersectionObserver（近屏 800px 内优先）+ requestIdleCallback（剩余块每片 ≤4 块），
+       首屏代码块的着色时机与视觉基本无变化。 */
+    (function() {
+      function canPaint(b) {
+        return !b.classList.contains('hljs') && !b.closest('.codehilite');
+      }
+      function paint(b) {
+        if (!canPaint(b)) return;
+        try { hljs.highlightElement(b); } catch (e) {}
+      }
+      function init() {
+        var blocks = [].slice.call(document.querySelectorAll('pre code')).filter(canPaint);
+        if (!blocks.length) return;
+        if ('IntersectionObserver' in window) {
+          var io = new IntersectionObserver(function(entries, obs) {
+            entries.forEach(function(en) {
+              if (!en.isIntersecting) return;
+              paint(en.target);
+              obs.unobserve(en.target);
+            });
+          }, { rootMargin: '800px 0px' });
+          blocks.forEach(function(b) { io.observe(b); });
+        }
+        var i = 0;
+        var idle = window.requestIdleCallback || window.setTimeout;
+        var step = function() {
+          var quota = 4;
+          while (i < blocks.length && quota-- > 0) paint(blocks[i++]);
+          if (i < blocks.length) idle(step);
+        };
+        idle(step); // 不在 DCL 里同步跑：可见块由 IntersectionObserver 处理，其余走空闲分片
+      }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+      } else {
+        init();
+      }
+    })();
+  </script>
+
+  <!-- Cloudflare Web Analytics -->
+  <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "29e7cff6f37448989538e2165cb79187"}'></script>
+</body>
+</html>
