@@ -252,15 +252,30 @@ R = 一次请求从取到连接、到归还连接的平均时长
 <p>这一点解释了为什么按峰值调好的 N，在另一个峰值的形状下就不合适：不是 N 变了，是 C 变了。而 N 是写死在配置里的，C 是随流量实时变化的。</p>
 <h2>R：被忽略的那个变量</h2>
 <h3>R 里装了什么</h3>
-<p>R 是连接从被借出到被归还的整段时间。它不等于查询的执行时间，通常比执行时间长得多：</p>
-<pre><code class="language-text">R = 取连接等待
-  + BEGIN 到 COMMIT 之间的全部时间
-      ├─ 语句执行
-      ├─ 锁等待
-      └─ 应用代码（ORM 懒加载、外部 HTTP 调用、日志、序列化）
-  + COMMIT 之后、归还之前的清理
-</code></pre>
-<p>第二项里的「应用代码」是最常见的隐性成本。在事务里调一次外部接口，那条连接在整个网络往返期间都被占着，而数据库什么也没干。这段时间会计入 R，也就会计入「池不够用」的观感，但它跟数据库的容量没有关系。</p>
+<p>R 是连接从被借出到被归还的整段时间。它不等于查询的执行时间，通常比执行时间长得多。按段拆开是三个部分：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">阶段</th>
+<th style="text-align: left;">这一段里装了什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">取连接等待</td>
+<td style="text-align: left;">在池队列里排队的时间，与数据库无关</td>
+</tr>
+<tr>
+<td style="text-align: left;">BEGIN 到 COMMIT</td>
+<td style="text-align: left;">语句执行、锁等待，以及事务里跑的全部应用代码</td>
+</tr>
+<tr>
+<td style="text-align: left;">归还前清理</td>
+<td style="text-align: left;">回滚点与状态复位、连接的健康检查</td>
+</tr>
+</tbody>
+</table>
+<p>第二段里的「应用代码」是最常见的隐性成本。在事务里调一次外部接口，那条连接在整个网络往返期间都被占着，而数据库什么也没干。这段时间会计入 R，也就会计入「池不够用」的观感，但它跟数据库的容量没有关系。</p>
 <h3>事务边界决定 R 的下限</h3>
 <p>R 有一个由代码结构决定的下限：事务开得越早、提交得越晚，R 就越长。常见的几种拉长方式：</p>
 <ul>
@@ -271,13 +286,8 @@ R = 一次请求从取到连接、到归还连接的平均时长
 </ul>
 <p>这些做法在功能上都对，在容量上都贵：它们让一份连接在大部分时间里处于「占着但不干活」的状态。</p>
 <h3>降 R 的杠杆比加 N 长</h3>
-<p>Little's Law 给出的是同一个式子的另一种写法：并发数 L 等于吞吐 λ 乘以停留时间 W。反过来读，吞吐等于并发除以停留时间。</p>
-<pre><code class="language-text">λ = L / W
-
-W 减半，在 C 允许的范围内，λ 翻倍      ← 改代码
-L 翻倍，在 L &gt; C 之后，λ 不变          ← 改配置
-</code></pre>
-<p>两条路的区别不在幅度，在方向：一条是把同样的资源用得更紧凑，另一条是把更多的请求塞进同一个瓶颈。前者没有上限（只要 R 里还有可压缩的部分），后者在 N 追上 C 的那一刻就结束了。</p>
+<p>Little's Law 给出的是同一个式子的另一种写法：并发数 L 等于吞吐 λ 乘以停留时间 W。反过来读，吞吐等于并发除以停留时间，<code>λ = L / W</code>。</p>
+<p>这个读法把两个动作摆在一起看：把 W 减半，在 C 允许的范围内，λ 翻倍；把 L 翻倍，在 L 超过 C 之后，λ 不变。两条路的区别不在幅度，在方向：一条是把同样的资源用得更紧凑，另一条是把更多的请求塞进同一个瓶颈。前者没有上限（只要 R 里还有可压缩的部分），后者在 N 追上 C 的那一刻就结束了。</p>
 <h2>N 超过 C 之后</h2>
 <h3>排队搬家</h3>
 <p>池调大最直接的后果不是变快，是把等待的位置换了。原来在应用内存里排队的请求，现在进了数据库，变成了锁等待、CPU 时间片竞争和运行队列里的等待。</p>
@@ -335,17 +345,38 @@ L 翻倍，在 L &gt; C 之后，λ 不变          ← 改配置
 <p>这时候的现象不是变慢，是直接失败——而且失败的位置很分散：应用启动时连不上、健康检查超时、迁移脚本和备份任务拿不到连接、运维想上去看一眼也连不上。以 PostgreSQL 为例，<code>max_connections</code> 是硬上限，<code>superuser_reserved_connections</code> 会预留几个位置给超级用户，但那是最后的安全垫，不是容量规划的一部分。</p>
 <p>「慢」是可以降级的，「连不上」不能。这就是为什么池的上限要留余量：留的不是性能余量，是故障时的操作余量。</p>
 <h3>多实例把 N 乘起来</h3>
-<p>单机讨论池大小是安全的，多实例讨论池大小是危险的，因为连接数是相乘的：</p>
-<pre><code class="language-text">总连接数 ≈ 实例数 × 每实例池大小 + 迁移/备份/运维连接
-</code></pre>
+<p>单机讨论池大小是安全的，多实例讨论池大小是危险的，因为连接数是相乘的：<code>总连接数 ≈ 实例数 × 每实例池大小 + 迁移/备份/运维连接</code>。</p>
 <p>横向扩容的直觉是「加机器分担压力」，对连接数来说恰恰相反：每加一个实例，就从数据库的同一个上限里再切走一份。自动扩缩容把这件事放大——流量高峰触发扩容，扩容触发连接数翻倍，连接数翻倍触发数据库拒绝连接，拒绝连接触发健康检查失败，健康检查失败触发重启。整条链上没有任何一步是错的，合起来是一次雪崩。</p>
 <p>托管方案通常在中间放一个外部池化层来解决这个乘法：应用连池化层，池化层用少量后端连接服务大量前端连接。按事务级池化的话，一个后端连接在不同事务之间被不同客户端复用。代价是会话语义被削弱——会话级的预处理语句、会话级临时表、咨询锁、<code>LISTEN/NOTIFY</code> 这类依赖「同一个会话」的特性会受影响。具体产品的行为差异很大，选型时要按自己用到的特性逐条核对，不能按「兼容 PostgreSQL」一句话带过。</p>
 <h3>超时链路要对齐</h3>
 <p>池的等待超时、语句超时、上游网关超时，三者构成一条链。这条链的每一环都要满足两个条件：外层比内层长，内层真的会取消工作。</p>
-<pre><code class="language-text">网关 / 上游超时        10s   ← 最外层，决定用户等多久
-语句超时                5s   ← 服务端执行上限
-取连接等待超时          2s   ← 池队列上限
-</code></pre>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">层</th>
+<th style="text-align: right;">示例值</th>
+<th style="text-align: left;">它决定什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">网关 / 上游超时</td>
+<td style="text-align: right;">10s</td>
+<td style="text-align: left;">用户最长等多久，最外层</td>
+</tr>
+<tr>
+<td style="text-align: left;">语句超时（服务端）</td>
+<td style="text-align: right;">5s</td>
+<td style="text-align: left;">一条语句最多跑多久，到点由数据库取消</td>
+</tr>
+<tr>
+<td style="text-align: left;">取连接等待超时</td>
+<td style="text-align: right;">2s</td>
+<td style="text-align: left;">在池队列里最多排多久</td>
+</tr>
+</tbody>
+</table>
+<p>（表内数值为示例，用于说明大小关系，不是推荐配置。）</p>
 <p>如果顺序反了——网关 3 秒、语句 30 秒——用户在 3 秒时收到超时，应用放弃了等待，但数据库里那条语句还在跑。它继续占着 CPU、继续持锁、继续消耗连接。这类「客户端已经走了、服务端还在干」的请求叫幽灵负载，它的直接效果是拉长 R，而拉长 R 又会让更多人排队，于是又有更多人超时。</p>
 <p>语句超时必须是<strong>服务端</strong>的超时（例如 PostgreSQL 的 <code>statement_timeout</code>），只在客户端放弃等待不算取消。这一条经常被写错：客户端设了超时，以为工作停了，其实只是自己不再听了。</p>
 <h2>观测：先有指标，再动参数</h2>
@@ -601,9 +632,9 @@ const pool = new Pool({
         <div class="post-info-label">文章信息</div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📅</span> 发布日期</span><span class="post-info-stat-value">2026-11-06</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">⏱️</span> 阅读时间</span><span class="post-info-stat-value">14 min read</span></div>
-        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">5337 字</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">5428 字</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📊</span> 章节数</span><span class="post-info-stat-value">8 节 · 23 子节</span></div>
-        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">💻</span> 代码块</span><span class="post-info-stat-value">7 段</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">💻</span> 代码块</span><span class="post-info-stat-value">3 段</span></div>
       </div>
       <div class="post-info-section" id="postSidebarTags">
         <div class="post-info-label">标签</div>
