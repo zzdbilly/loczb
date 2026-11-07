@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <script>document.documentElement.classList.add("js");try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://static.cloudflareinsights.com https://loczb-comments.billymust.workers.dev; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://loczb-comments.billymust.workers.dev https://dashscope.aliyuncs.com https://709527.xyz https://www.709527.xyz https://cloudflareinsights.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
+    <script>/* 反点击劫持兜底：GitHub Pages 无法下发 X-Frame-Options / CSP frame-ancestors */(function(){if(self===top)return;try{top.location=self.location}catch(e){}setTimeout(function(){if(self!==top){document.documentElement.style.display='none';}},400);})();</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>看不见的那部分工作，决定了你以后能跑多快 | 张小猛 - loczb</title>
+    <meta name="description" content="门禁不产出功能，也不改变页面上的任何像素；它把「确知」和「撤回」的成本压下来，真正放大的是你敢试错的次数。">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="看不见的那部分工作，决定了你以后能跑多快 | 张小猛 - loczb">
+    <meta property="og:description" content="门禁不产出功能，也不改变页面上的任何像素；它把「确知」和「撤回」的成本压下来，真正放大的是你敢试错的次数。">
+    <meta property="og:url" content="https://709527.xyz/blog/posts/invisible-work-sets-your-speed.html">
+    <meta property="og:type" content="article">
+    <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
+    <meta property="og:site_name" content="loczb">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="看不见的那部分工作，决定了你以后能跑多快 | 张小猛 - loczb">
+    <meta name="twitter:description" content="门禁不产出功能，也不改变页面上的任何像素；它把「确知」和「撤回」的成本压下来，真正放大的是你敢试错的次数。">
+    <meta name="twitter:image" content="https://709527.xyz/assets/images/og-image.png">
+
+        <script type="application/ld+json">
+{
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "看不见的那部分工作，决定了你以后能跑多快",
+      "description": "门禁不产出功能，也不改变页面上的任何像素；它把「确知」和「撤回」的成本压下来，真正放大的是你敢试错的次数。",
+      "image": "https://709527.xyz/assets/images/og-image.png",
+      "author": {
+            "@type": "Person",
+            "name": "张小猛",
+            "url": "https://709527.xyz/about/"
+      },
+      "publisher": {
+            "@type": "Organization",
+            "name": "loczb",
+            "logo": {
+                  "@type": "ImageObject",
+                  "url": "https://709527.xyz/assets/images/favicon.svg"
+            }
+      },
+      "datePublished": "2026-11-07T20:30:00+08:00",
+      "dateModified": "2026-11-07T20:30:00+08:00",
+      "url": "https://709527.xyz/blog/posts/invisible-work-sets-your-speed.html",
+      "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://709527.xyz/blog/posts/invisible-work-sets-your-speed.html"
+      },
+      "keywords": "工程实践, 自动化, 反馈, 质量",
+      "articleSection": "思考",
+      "timeRequired": "PT13M",
+      "inLanguage": "zh-CN"
+}
+    </script>
+
+    <link rel="stylesheet" href="../../assets/css/style.css?v=c8e170d8f9">
+    <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
+    <link rel="alternate icon" href="../../assets/images/favicon.ico">
+    <link rel="canonical" href="https://709527.xyz/blog/posts/invisible-work-sets-your-speed.html">
+</head>
+<body>
+  <!-- PARTIAL:SKIP_LINK -->
+  <a href="#main-content" class="skip-link">跳至主要内容</a>
+  <!-- /PARTIAL:SKIP_LINK -->
+
+  <!-- Navigation -->
+<!-- PARTIAL:NAV -->
+  <nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">
+      loc<span>zb</span>
+    </a>
+    <button class="nav-toggle" aria-label="打开菜单" aria-expanded="false" aria-controls="nav-links-menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <div class="nav-overlay"></div>
+    <ul class="nav-links" id="nav-links-menu">
+      <li><a href="/" class="nav-link" data-nav="home">首页</a></li>
+      <li><a href="/projects/" class="nav-link" data-nav="projects">项目</a></li>
+      <li><a href="/blog/" class="nav-link active" data-nav="blog">博客</a></li>
+      <li><a href="/about/" class="nav-link" data-nav="about">关于</a></li>
+    </ul>
+    <button class="theme-toggle" aria-label="切换主题" title="切换亮/暗模式">
+      <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="5"></circle>
+        <line x1="12" y1="1" x2="12" y2="3"></line>
+        <line x1="12" y1="21" x2="12" y2="23"></line>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+        <line x1="1" y1="12" x2="3" y2="12"></line>
+        <line x1="21" y1="12" x2="23" y2="12"></line>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+      </svg>
+      <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+      </svg>
+    </button>
+  </div>
+</nav>
+  <!-- /PARTIAL:NAV -->
+  <main class="section" id="main-content" style="padding-bottom: 0; padding-top: var(--space-4xl);">
+    <div class="container container-narrow">
+      <a href="../index.html" class="back-link">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        返回博客列表
+      </a>
+
+      <article class="post-content">
+        <h1>看不见的那部分工作，决定了你以后能跑多快</h1>
+
+        <div class="post-meta">
+          <span class="meta-item"><span aria-hidden="true">📅</span> 2026-11-07 20:30:00</span>
+          <span class="meta-item"><span aria-hidden="true">⏱️</span> 13 min read</span>
+          <span class="meta-item"><span aria-hidden="true">👤</span> 张小猛</span>
+        </div>
+
+        <div class="post-tags">
+          <span class="tag">工程实践</span>
+          <span class="tag">自动化</span>
+          <span class="tag">反馈</span>
+          <span class="tag">质量</span>
+        </div>
+
+        
+
+        <h2>看不见的那部分工作，决定了你以后能跑多快</h2>
+<p>改一行文案，真正花时间的往往不是改。是改完之后那段不确定：页面会不会崩、链接会不会断、别的地方会不会跟着变。这段不确定有多长，决定了你一天能改几处，也决定了你敢不敢动那些真正该动的地方。</p>
+<p>我们平时说「快」，说的几乎是同一件事：写得快、上线快、迭代快。但这几种快混在一起就没法比较了。我把它们拆成三个，各自量不同的东西。</p>
+<h2>一、先给三个速度起名字</h2>
+<h3>V1：把想法变成改动</h3>
+<p>这一段包括想清楚、找到该改的地方、把改动写下去、让它在本机跑起来。它最容易被看见，也最容易被当成全部。编辑器、补全、脚手架、模板，主要都在压这一段。它的上限受两件事限制：你对代码的熟悉程度，和你要跨越的认知距离。</p>
+<p>V1 有一个特点：它有进度感。文件在变，屏幕在变，你能感觉到自己在推进。这种手感很容易被误认成工作的全部。</p>
+<h3>V2：从改完到「我确信它没坏」</h3>
+<p>这一段里没有产出。你只是在等：等构建、等测试、等 CI、等自己把页面点一遍。它的长度不由你多努力决定，而由链条决定——构建要多久，检查覆盖到哪，失败信息能不能读懂。</p>
+<p>「确信」听起来是主观的，但它的成本是客观的。你不知道有没有坏，就只能用时间去换确定性：全量跑一遍、手工点十个页面、或者干脆等第二天看线上有没有人报错。最后这种最贵，因为它在用真实用户做检查。</p>
+<h3>V3：从发现错了到回到已知良好状态</h3>
+<p>这一段包括定位、回滚、重做，以及向别人解释。它的成本高度非线性。错误在几分钟内被发现，上下文还在脑子里，撤回近乎免费；错误在几小时后被发现，你得先把自己重新载入那个状态——真正贵的不是回滚命令，是重建上下文。</p>
+<p>三个速度不是并列的，是串联的。一次改动的总时长不是三者相加，因为不同改动可以并行；但长期产出受最慢的那一环限制。这一点后面还会回来。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">速度</th>
+<th style="text-align: left;">量的是什么</th>
+<th style="text-align: left;">谁在影响它</th>
+<th style="text-align: left;">变慢时的体感</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">V1</td>
+<td style="text-align: left;">想法到改动</td>
+<td style="text-align: left;">熟练度、工具、代码结构</td>
+<td style="text-align: left;">卡住，但看得见</td>
+</tr>
+<tr>
+<td style="text-align: left;">V2</td>
+<td style="text-align: left;">改动到确知</td>
+<td style="text-align: left;">构建链、检查覆盖、错误信息</td>
+<td style="text-align: left;">等待，像在浪费生命</td>
+</tr>
+<tr>
+<td style="text-align: left;">V3</td>
+<td style="text-align: left;">出错到复原</td>
+<td style="text-align: left;">版本控制、可回滚的粒度、上下文</td>
+<td style="text-align: left;">慌乱，且常在深夜</td>
+</tr>
+</tbody>
+</table>
+<p>需要说明一句：V1、V2、V3 是分析框架，不是测量结果。我没有给它们计时，也不打算编一组数字出来。本文后面出现的「几秒」「几小时」都是示意，指量级差异，不是实测值。</p>
+<h2>二、门禁只碰 V2，但它改的是 V3 的价码</h2>
+<p>门禁、构建脚本、检查器，这些工作的共同点是：它们不产出任何功能。装上去之后，用户看不到任何变化，页面一个像素都没动。</p>
+<h3>为什么 V2 是隐藏的瓶颈</h3>
+<p>V1 有明确的进度感，V2 没有。V2 像编译：你盯着日志，什么也没发生。人对等待的忍耐有限，于是会自发地减少等待——攒一批改动，再统一验证。这个策略是理性的，但它有一个副作用：一次失败时，你可能不知道是哪一处改坏的。</p>
+<p>批处理变大，是 V2 变慢的后果。而批处理变大，又让 V3 变贵。这条链条平时没人提，因为它跨了两个阶段，而人习惯在自己的阶段里找原因。</p>
+<h3>撤回成本决定了你敢下多大的注</h3>
+<p>这里是最反直觉的一环。门禁并不直接让你写得更快，它是把「错了也能退回来」这件事变便宜。</p>
+<p>当撤回便宜，单次改动的最优规模就会变大，试错的最优次数也会变多。反过来，如果每次改错都要花半天收拾，理性策略是只做最有把握的那一个改动——看起来稳，实际上把探索的空间关掉了。你会开始避开那些「改坏了不好收场」的地方，而那些地方往往正是结构问题所在。</p>
+<h3>被放大的不是速度，是试错次数</h3>
+<p>可以用一个粗略的关系来描述我现在的理解：长期产出大致等于试错次数乘以单次试错的期望收益。这个式子是示意的，但方向清楚——右边两项里，更容易被工程手段改变的是第一项。</p>
+<p>十次尝试里成一次，前提是九次失败都能被便宜地撤回。如果每次失败都要付出一次「事故」的代价，你只会试一次，而那一次未必对。所以门禁真正的产出不是「快」，是「敢」：敢改结构、敢动模板、敢在别人也在改的时候动发布链。</p>
+<h2>三、五道检查，每一道都来自一次事故</h2>
+<p>我这套发布链上的检查不是设计出来的，是长出来的。每加一道，前面通常都有一次真实的不愉快。</p>
+<h3>单测：最早的那一道</h3>
+<p>最早只有单测，一条 <code>python3 -m unittest discover -s tests</code> 就能跑完。它管的是纯逻辑：解析、渲染、路径拼接。它给了最初的确定感，也给了最早的错觉——单测绿了，就以为没事了。它看不见页面，看不见链接，也看不见仓库里躺着什么。</p>
+<h3>产物一致性：漏掉一个 rss.xml</h3>
+<p>有一次我改了某篇文章的 description，忘了把所有产物重新编译并提交。这条链会同时写出文章页、元数据、列表页、首页、RSS、sitemap；我凭记忆列了一份要 add 的名单，漏了 rss.xml。</p>
+<p>CI 里那条断言很直接：重新构建一次，<code>git add -A</code>，然后 <code>git diff --cached --exit-code</code>。它当场变红。</p>
+<p>这件事教我的不是「要记得」，而是「记得」不可靠。产物是一组由同一份源生成的集合，任何一个成员掉队，仓库就处在一个不会被任何单测发现的不一致状态里——源码是对的，构建也是对的，只有提交进去的那份快照是错的。</p>
+<h3>内链检查：全站重建之后才敢说没断</h3>
+<p>内链检查的来历没那么戏剧性。每次全站重建，都会重写所有文章页里的相关文章、上一篇、下一篇；这些链接是生成的，而生成的链接会指向不存在的地址——删文、改 slug、只重建一部分，都会留下这种空洞。</p>
+<p>于是有了内链检查：重建完，把所有内部链接抓出来逐个核对。它检查的不是我亲手写的链接，是我没写、由脚本生成的那些链接。这一类东西的共同点是：写的时候不存在，坏的时候也没人盯着。</p>
+<h3>隐私扫描：密钥进了公开仓库</h3>
+<p>有一次，一个密钥被写进了仓库里的一个 Markdown 文件，推到了公开仓库。发现的时候，那个文件本身可以直接下载。</p>
+<p>事后回看，最刺人的不是「写错了」，是「没有任何一步会拦住它」：单测不管内容，构建不管内容，内链检查只管链接。整条链上没有一个环节的职责包含「这个仓库里不该有这种东西」。</p>
+<p>后来补的扫描器带正例和负例自检：一批必须命中的样本，一批必须不命中的样本。这个设计比规则本身更重要——一个规则写错、从不命中的扫描器，和一个干净通过的扫描器，输出完全一样。</p>
+<h3>提交钩子：把漏 add 挡在 commit 之前</h3>
+<p>rss.xml 那次之后，加了 pre-commit：提交前自动构建一次，比对「暂存区」和「工作区」，有产物没 add 就阻断，并列出文件名。</p>
+<p>它把同一类错误的发现位置从 push 之后挪到了 commit 之前。这个位移的价值不在省时间，在于 V3 变了：东西还没推出去，撤回只是补一个 add；推出去之后再发现，撤回就是一次公开的返工。</p>
+<h2>四、钩子不是保险箱：它的三个漏口</h2>
+<p>这道钩子有三处结构性弱点。我知道它们存在，还是留着它——因为承认局限比假装没有更有用。</p>
+<h3>它住在 .git/hooks 里，不进版本控制</h3>
+<p>钩子文件跟着工作副本走，不在仓库里。换一台机器、重新克隆一次，它就不在了。</p>
+<p>而「我们有 pre-commit」这句话会被继续讲下去。讲的人以为在讲仓库，其实在讲某一台电脑。这种错位不会报错，它只是让保护在某个时刻静默消失。</p>
+<h3>--no-verify 一行就绕过去了</h3>
+<p>任何本地钩子都能被一个参数跳过。它不是权限边界，是提醒。设计它的目的是减少疏忽，不是防止故意。所以它挡不住「我赶时间」，而「我赶时间」恰好是最需要它的时候。</p>
+<h3>找不到 .venv 就降级放行</h3>
+<p>钩子要跑构建，构建依赖本机的虚拟环境。找不到就降级放行——这是一个明确的 fail-open。</p>
+<p>fail-open 在「可用性优先」的场景里是合理选择：不能让一个环境问题把所有人锁死。但它意味着钩子的有效性依赖一台机器的目录状态，而这个状态没有任何检查在看着。三道漏口指向同一件事：这套保护是本地的、自觉的、有条件的。它抬高了平均水平，没有抬高下限。</p>
+<h2>五、批量操作里的文件名，是另一类看不见的坑</h2>
+<h3>core.quotepath 与八进制转义</h3>
+<p>git 默认会把非 ASCII 文件名在状态输出里转义成八进制。中文标题的页面文件正好中招。我用 <code>awk</code> 和 <code>cut</code> 从状态输出里拼 add 名单，拿到的是一串转义后的字符串，和真实文件名对不上。</p>
+<p>一次漏了 36 个页面。奇怪的不是漏，是漏完之后一切看起来都正常：脚本跑完了，没有报错，我也没有理由去数一遍。</p>
+<h3>换成 -z 解析，或者按目录 add</h3>
+<p>两个修法。一是让 git 输出原始字节，按 NUL 切分，路径不经过引号转义；二是干脆按目录整块加，不去逐条拼名单。</p>
+<pre><code class="language-bash">git -c core.quotepath=false status --porcelain
+git status --porcelain -z | tr '\0' '\n'
+</code></pre>
+<p>这里的原则不是「小心一点」，是让中间格式不需要人肉解码。任何要经过一次转译才能用的输出，迟早会在某次转译里出错，而出错时它通常不声不响。</p>
+<h2>六、为什么这类工作总被算成额外成本</h2>
+<h3>它不出现在功能清单上</h3>
+<p>功能清单上的每一项都能被演示：点了有反应，页面上有变化。门禁不能演示。你没法在会上说「我这周加了三个检查」，然后期待和「上线了搜索」一样的反应。</p>
+<h3>它的收益是「没发生的事」</h3>
+<p>门禁的产出是负数：没有发生的事故、没有浪费的下午、没有推出去又撤回的提交。负数不可见。你只能通过反事实去感受它——如果没有这道检查，那次会怎样。反事实没法写进周报，也没法在复盘会上被量化。</p>
+<h3>出事故时它才被想起</h3>
+<p>平时它是噪音，出事时它是嫌疑人。「为什么又红了」——注意这句话的语气：红的那一下，人先怪检查，而不是先怪改动。</p>
+<p>检查的存在感，几乎全部来自它拦人的时刻。这是一个很糟糕的激励结构：它做得越好，越不被注意；它一旦出错，立刻被记住。</p>
+<h2>七、门禁的三种坏味道</h2>
+<h3>假阳性：狼来了之后，红灯也不看了</h3>
+<p>一道检查如果偶尔误报，人的反应不是「再确认一下」，是「它又抽风了」。红灯的信用是消耗品，用一次少一次。</p>
+<p>误报率高的检查，最后会训练出一群看见红也继续推的人。这比没有检查更糟——没有检查时，人至少知道自己没有保护；有一道总在误报的检查时，人以为自己有。</p>
+<h3>盲区：只扫改动，存量永远不报错</h3>
+<p>隐私扫描默认只扫「相对主干的改动」。这是有意的取舍：快、噪音少、和本次提交相关。但它有一个必须说清楚的后果——对存量它永远不报错。</p>
+<p>不报错不等于干净，只等于没看。一个只扫 diff 的检查器，最危险的时刻是被当成「全库体检」的时候。要真的看存量，得显式换基线或者跑全量模式，而那通常不在日常路径上。</p>
+<h3>维护成本转嫁给别人</h3>
+<p>钩子依赖本机环境，规则住在一个不进版本控制的文件里，坏了只有写它的人知道怎么修。于是维护成本没有消失，它被转给了下一个克隆仓库的人——而那个人通常不知道有这回事。</p>
+<p>看不见的工作如果只对作者可见，它就还没有真正完成。它只是从「没做」变成了「某个人在做」。</p>
+<h2>八、什么不该做成门禁</h2>
+<p>反过来说，不是所有能自动化的判断都该变成门禁。有几类东西，我倾向于不让它们进提交路径。</p>
+<h3>需要解释的判断</h3>
+<p>文案的语气、命名的品味、抽象的层次——这些能被讨论，不能被断言。把它们写成规则，规则会先于判断失效：你要么不断加例外，要么开始写违反直觉的代码去讨好检查。</p>
+<h3>依赖外部网络的检查</h3>
+<p>网络抖动会产生假红，假红会消耗红灯的信用。外部依赖适合放进定期巡检，不适合放在每次提交都要过的地方。</p>
+<h3>几分钟才出结果的检查</h3>
+<p>本地钩子的耐心窗口只有几十秒。超过这个窗口，人就开始找绕过的方法，而绕过的方法通常是一个参数的事。慢检查应该去 CI，快检查才配留在本地。</p>
+<h3>一次性迁移的规则</h3>
+<p>为一次重构写的检查，重构完成后就变成了负担。它会继续拦人，而没人记得它为什么存在。规则也会过期，只是过期时不报警。</p>
+<h2>九、判断一道门禁值不值得留</h2>
+<h3>四个问题</h3>
+<ol>
+<li>它回答的是非题吗？能在几十秒内给出是或否，而不是「你自己看看」。</li>
+<li>它误报的时候，人会不会因此忽略下一次真报？</li>
+<li>它失效的时候，是静默通过还是明确失败？fail-open 必须被写下来，不能靠人猜。</li>
+<li>它坏了谁修？如果答案依赖某台机器上的某个人，它迟早会消失。</li>
+</ol>
+<h3>它得能证明自己没瞎</h3>
+<p>正例必须命中，负例必须不命中。没有自检的检查器，你无法区分「规则正确且没有违规」和「规则写错了、永远不命中」。这两者的输出完全一样，而后者更常见，因为它看起来一样绿。</p>
+<h3>一条可以落地的判据</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">判据</th>
+<th style="text-align: left;">通过的样子</th>
+<th style="text-align: left;">不通过的样子</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">反馈速度</td>
+<td style="text-align: left;">几十秒内出结果</td>
+<td style="text-align: left;">要等到推送之后</td>
+</tr>
+<tr>
+<td style="text-align: left;">信号可信</td>
+<td style="text-align: left;">红了就真的有问题</td>
+<td style="text-align: left;">偶尔抽风，大家已经习惯</td>
+</tr>
+<tr>
+<td style="text-align: left;">失效方式</td>
+<td style="text-align: left;">明确报错，或明确标注降级</td>
+<td style="text-align: left;">静默跳过，没人知道</td>
+</tr>
+<tr>
+<td style="text-align: left;">自检</td>
+<td style="text-align: left;">正例命中、负例不命中</td>
+<td style="text-align: left;">从没验证过它会不会响</td>
+</tr>
+<tr>
+<td style="text-align: left;">归属</td>
+<td style="text-align: left;">跟着仓库走，谁都能修</td>
+<td style="text-align: left;">只存在于某台机器上</td>
+</tr>
+</tbody>
+</table>
+<h2>十、收束：先修跑道，再谈提速</h2>
+<p>如果只让我改一个地方，我会先改 V3，再改 V2，最后才碰 V1。</p>
+<p>原因不复杂：V3 决定你敢不敢试，V2 决定你试完多久知道结果，V1 只是把想法写下来。它几乎从来不是瓶颈，却是唯一看得见的那个——所以绝大多数工具、教程、方法论都在讲它。</p>
+<p>看不见的那部分工作，不产出任何功能。它不改变页面上任何一个像素，不进功能清单，也没法在演示里被指出来。但它决定了你以后能以多快的速度安全地改东西：把「确知」从几小时压到几秒，把「撤回」从一次事故压成一次补提交，然后你才敢做那些没门禁时不敢做的改动。</p>
+<p>所以真正被放大的不是速度，是试错次数。而试错次数，是长期里唯一会累积的东西。</p>
+<p>说回现状：钩子仍然住在 <code>.git/hooks</code> 里，扫描器默认仍然只扫改动。这两个漏口我都还没补。写下来是为了不把它们当成已经解决——看不见的工作最容易的结局，就是被讲成已经做完。</p>
+
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="software-engineer-learns-from-manufacturing-lean.html">
+            <div class="related-post-card-title">软件工程师能从制造业学到什么：精益思维重塑开发流程</div>
+            <div class="related-post-card-tags"><span>工程实践</span><span>思考</span><span>工程思维</span></div>
+          </a>
+          <a class="related-post-card" href="redact-at-write-time.html">
+            <div class="related-post-card-title">脱敏要做在写入端：落盘之后打码，等于没打码</div>
+            <div class="related-post-card-tags"><span>隐私</span><span>日志</span><span>密钥管理</span></div>
+          </a>
+          <a class="related-post-card" href="cache-version-from-content-hash.html">
+            <div class="related-post-card-title">版本号不该手写：缓存失效应当由内容哈希推导</div>
+            <div class="related-post-card-tags"><span>缓存</span><span>构建</span><span>静态站点</span></div>
+          </a>
+          <a class="related-post-card" href="external-identifiers-coupling-radius.html">
+            <div class="related-post-card-title">别人的一次改名，是你的全站停机：外部标识符的耦合半径</div>
+            <div class="related-post-card-tags"><span>配置管理</span><span>部署</span><span>耦合</span></div>
+          </a>
+          <a class="related-post-card" href="idempotent-reproducible-builds.html">
+            <div class="related-post-card-title">幂等与可复现：为什么你的构建总在产生无意义的 diff</div>
+            <div class="related-post-card-tags"><span>构建</span><span>幂等</span><span>可复现</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
+
+        <!-- Post Copyright & License Card -->
+        <div class="post-copyright-card">
+          <div class="copyright-header">
+            <div class="copyright-badge">
+              <span>📜</span>
+              <span>原创与知识共享协议</span>
+            </div>
+            <button class="copyright-cite-btn" id="copy-cite-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+              </svg>
+              <span>复制 Markdown 引用</span>
+            </button>
+          </div>
+          <div class="copyright-list">
+            <div class="copyright-item"><strong>文章标题：</strong>看不见的那部分工作，决定了你以后能跑多快</div>
+            <div class="copyright-item"><strong>文章作者：</strong>张小猛 · loczb</div>
+            <div class="copyright-item"><strong>永久链接：</strong><a href="https://709527.xyz/blog/posts/invisible-work-sets-your-speed.html">https://709527.xyz/blog/posts/invisible-work-sets-your-speed.html</a></div>
+            <div class="copyright-item"><strong>版权声明：</strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 国际许可协议。商业转载请联系作者获得授权，非商业转载请注明出处。</div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </main>
+
+  <!-- Related Posts / Navigation -->
+  <section class="section" aria-label="读完之后" style="padding-top: 0;">
+    <div class="container container-narrow">
+      <!-- Post Nav Prev Next -->
+      <nav class="post-nav" aria-label="文章翻页导航">
+        <a href="pool-size-is-a-queue-length.html" class="post-nav-card post-nav-prev" rel="prev">
+          <span class="post-nav-label">← 上一篇</span>
+          <span class="post-nav-title">连接池不是并发旋钮，是排队区的长度</span>
+        </a>
+        <div class="post-nav-card post-nav-next disabled" aria-disabled="true">
+          <span class="post-nav-label">下一篇 →</span>
+          <span class="post-nav-title">已是最新篇博文</span>
+        </div>
+      </nav>
+      <!-- /Post Nav Prev Next -->
+      <hr style="border: none; border-top: 1px solid var(--color-border); margin: var(--space-2xl) 0;">
+
+      <div class="blog-topics" style="margin-bottom: var(--space-xl); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+        <div>
+          <span class="topic-label">读完之后:</span>
+          <a href="../index.html" class="topic-tag">返回博客列表</a>
+          <a href="../index.html?view=series" class="topic-tag">浏览全部专栏</a>
+        </div>
+        <a href="#main-content" class="topic-tag" style="margin-left: auto;">↑ 回到顶部</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+<!-- PARTIAL:FOOTER -->
+  <footer class="footer" role="contentinfo">
+  <div class="footer-inner">
+    <p class="footer-signature">写代码，做产品，也认真生活。</p>
+    <div class="footer-social">
+      <a href="https://github.com/zzdbilly" class="footer-social-link" target="_blank" rel="noopener" aria-label="GitHub">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+      </a>
+      <a href="https://twitter.com/zzdbilly" class="footer-social-link" target="_blank" rel="noopener" aria-label="X (Twitter)">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      </a>
+      <a href="/rss.xml" class="footer-social-link" target="_blank" rel="noopener" aria-label="RSS 订阅">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+      </a>
+    </div>
+    <div class="footer-links">
+      <a href="/" class="footer-link">首页</a>
+      <a href="/projects/" class="footer-link">项目</a>
+      <a href="/blog/" class="footer-link">博客</a>
+      <a href="/about/" class="footer-link">关于</a>
+    </div>
+    <p class="footer-copyright">&copy; 2026 张小猛 · loczb · Built with care</p>
+  </div>
+</footer>
+  <!-- /PARTIAL:FOOTER -->
+
+  <script defer src="../../assets/js/main.js"></script>
+  <script defer src="../../assets/js/article.js?v=c9f1a378ea"></script>
+  <script defer src="../../assets/js/share.js"></script>
+  <!-- Back to Top & Reading Progress -->
+  <button class="back-to-top" id="backToTop" aria-label="回到顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
+  <div class="reading-progress" id="readingProgress"></div>
+
+  <!-- Post Sidebar Info（左侧） -->
+  <div class="post-sidebar-info" id="postSidebar">
+    <div class="post-info-card">
+      <div class="post-info-section">
+        <div class="post-info-label">作者</div>
+        <div class="post-info-author">
+          <div class="post-info-avatar">小</div>
+          <div>
+            <div class="post-info-author-name">张小猛</div>
+            <div class="post-info-author-desc">写代码，做产品</div>
+          </div>
+        </div>
+      </div>
+      <div class="post-info-section">
+        <div class="post-info-label">文章信息</div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📅</span> 发布日期</span><span class="post-info-stat-value">2026-11-07</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">⏱️</span> 阅读时间</span><span class="post-info-stat-value">13 min read</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">4475 字</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📊</span> 章节数</span><span class="post-info-stat-value">11 节 · 29 子节</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">💻</span> 代码块</span><span class="post-info-stat-value">1 段</span></div>
+      </div>
+      <div class="post-info-section" id="postSidebarTags">
+        <div class="post-info-label">标签</div>
+        <div class="post-info-links">
+          <a href="../../blog/index.html?tag=%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5" class="post-info-link"># 工程实践</a>
+          <a href="../../blog/index.html?tag=%E8%87%AA%E5%8A%A8%E5%8C%96" class="post-info-link"># 自动化</a>
+          <a href="../../blog/index.html?tag=%E5%8F%8D%E9%A6%88" class="post-info-link"># 反馈</a>
+          <a href="../../blog/index.html?tag=%E8%B4%A8%E9%87%8F" class="post-info-link"># 质量</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Post TOC -->
+  <div class="post-toc-container" id="postToc">
+    <nav class="post-toc" aria-label="文章目录">
+      <div class="post-toc-title">目录</div>
+      <ul class="post-toc-list" id="tocList">
+      </ul>
+    </nav>
+  </div>
+
+  <!-- Comment System -->
+  <script src="../../workers/comment-system/comment-widget.js?v=5d8a6a1796" defer></script>
+
+  <!-- highlight.js 代码语法高亮（本地完整构建，无外部依赖） -->
+  <script defer src="../../assets/vendor/highlight/highlight.min.js"></script>
+  <script>
+    /* 语法高亮改为「可见优先、空闲补齐」：
+       highlight.js 要遍历全篇代码块并生成数百个 span，若在 DOMContentLoaded 里同步跑完，
+       会在关键路径上长时间占住主线程（2026-09-27 实测本页长任务 1548ms、DCL 3651ms；
+       改动后长任务 145ms、DCL 1378ms）。这里 DCL 阶段只登记观察，实际高亮交给
+       IntersectionObserver（近屏 800px 内优先）+ requestIdleCallback（剩余块每片 ≤4 块），
+       首屏代码块的着色时机与视觉基本无变化。 */
+    (function() {
+      function canPaint(b) {
+        return !b.classList.contains('hljs') && !b.closest('.codehilite');
+      }
+      function paint(b) {
+        if (!canPaint(b)) return;
+        try { hljs.highlightElement(b); } catch (e) {}
+      }
+      function init() {
+        var blocks = [].slice.call(document.querySelectorAll('pre code')).filter(canPaint);
+        if (!blocks.length) return;
+        if ('IntersectionObserver' in window) {
+          var io = new IntersectionObserver(function(entries, obs) {
+            entries.forEach(function(en) {
+              if (!en.isIntersecting) return;
+              paint(en.target);
+              obs.unobserve(en.target);
+            });
+          }, { rootMargin: '800px 0px' });
+          blocks.forEach(function(b) { io.observe(b); });
+        }
+        var i = 0;
+        var idle = window.requestIdleCallback || window.setTimeout;
+        var step = function() {
+          var quota = 4;
+          while (i < blocks.length && quota-- > 0) paint(blocks[i++]);
+          if (i < blocks.length) idle(step);
+        };
+        idle(step); // 不在 DCL 里同步跑：可见块由 IntersectionObserver 处理，其余走空闲分片
+      }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+      } else {
+        init();
+      }
+    })();
+  </script>
+
+  <!-- Cloudflare Web Analytics -->
+  <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "29e7cff6f37448989538e2165cb79187"}'></script>
+</body>
+</html>

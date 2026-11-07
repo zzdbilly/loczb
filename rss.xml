@@ -7,6 +7,14 @@
     <language>zh-CN</language>
     <atom:link href="https://709527.xyz/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>看不见的那部分工作，决定了你以后能跑多快</title>
+      <link>https://709527.xyz/blog/posts/invisible-work-sets-your-speed.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/invisible-work-sets-your-speed.html</guid>
+      <description>门禁不产出功能，也不改变页面上的任何像素；它把「确知」和「撤回」的成本压下来，真正放大的是你敢试错的次数。</description>
+      <category>思考</category>
+      <pubDate>Sat, 07 Nov 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
       <title>连接池不是并发旋钮，是排队区的长度</title>
       <link>https://709527.xyz/blog/posts/pool-size-is-a-queue-length.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/pool-size-is-a-queue-length.html</guid>
@@ -157,14 +165,6 @@
       <description>七天长假不是停机，而是一次难得的长维护窗口。用运维的视角重排假期：先盘点欠下的债，再按精力曲线排期，最后用三个可观测指标验证这次维护有没有成功。</description>
       <category>思考</category>
       <pubDate>Mon, 05 Oct 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>纳指定投：把一笔月供当成长期运维来跑</title>
-      <link>https://709527.xyz/blog/posts/纳指定投把一笔月供当成长期运维来跑.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/纳指定投把一笔月供当成长期运维来跑.html</guid>
-      <description>一个程序员对纳指100定投的完整记录：它是什么、摊平了什么、摩擦成本在哪、我给自己定了哪些执行规则，以及怎么验证自己没做错。</description>
-      <category>思考</category>
-      <pubDate>Mon, 28 Sep 2026 00:00:00 +0800</pubDate>
     </item>
   </channel>
 </rss>

@@ -1,6 +1,21 @@
 {
   "posts": [
     {
+      "slug": "invisible-work-sets-your-speed",
+      "title": "看不见的那部分工作，决定了你以后能跑多快",
+      "date": "2026-11-07",
+      "dateTime": "2026-11-07 20:30:00",
+      "category": "思考",
+      "tags": [
+        "工程实践",
+        "自动化",
+        "反馈",
+        "质量"
+      ],
+      "readTime": 13,
+      "url": "blog/posts/invisible-work-sets-your-speed.html"
+    },
+    {
       "slug": "pool-size-is-a-queue-length",
       "title": "连接池不是并发旋钮，是排队区的长度",
       "date": "2026-11-06",
@@ -2051,9 +2066,9 @@
     }
   ],
   "categories": [
+    "思考",
     "数据库",
     "前端",
-    "思考",
     "Kotlin",
     "安全",
     "DevOps",
@@ -2063,9 +2078,9 @@
     "系统编程"
   ],
   "stats": {
-    "totalPosts": 132,
-    "totalTags": 342,
-    "latestDate": "2026-11-06",
+    "totalPosts": 133,
+    "totalTags": 344,
+    "latestDate": "2026-11-07",
     "oldestDate": "2026-02-15"
   }
 }
