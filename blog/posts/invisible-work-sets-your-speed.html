@@ -185,8 +185,8 @@
 <h3>被放大的不是速度，是试错次数</h3>
 <p>可以用一个粗略的关系来描述我现在的理解：长期产出大致等于试错次数乘以单次试错的期望收益。这个式子是示意的，但方向清楚——右边两项里，更容易被工程手段改变的是第一项。</p>
 <p>十次尝试里成一次，前提是九次失败都能被便宜地撤回。如果每次失败都要付出一次「事故」的代价，你只会试一次，而那一次未必对。所以门禁真正的产出不是「快」，是「敢」：敢改结构、敢动模板、敢在别人也在改的时候动发布链。</p>
-<h2>三、五道检查，每一道都来自一次事故</h2>
-<p>我这套发布链上的检查不是设计出来的，是长出来的。每加一道，前面通常都有一次真实的不愉快。</p>
+<h2>三、五道检查，各自有一个具体的理由</h2>
+<p>我这套发布链上的检查不是设计出来的，是长出来的。每加一道，前面都有具体的理由：有的是事故，有的是一条迟早会出事的机制。</p>
 <h3>单测：最早的那一道</h3>
 <p>最早只有单测，一条 <code>python3 -m unittest discover -s tests</code> 就能跑完。它管的是纯逻辑：解析、渲染、路径拼接。它给了最初的确定感，也给了最早的错觉——单测绿了，就以为没事了。它看不见页面，看不见链接，也看不见仓库里躺着什么。</p>
 <h3>产物一致性：漏掉一个 rss.xml</h3>
@@ -443,7 +443,7 @@ git status --porcelain -z | tr '\0' '\n'
         <div class="post-info-label">文章信息</div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📅</span> 发布日期</span><span class="post-info-stat-value">2026-11-07</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">⏱️</span> 阅读时间</span><span class="post-info-stat-value">13 min read</span></div>
-        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">4475 字</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">4488 字</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📊</span> 章节数</span><span class="post-info-stat-value">11 节 · 29 子节</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">💻</span> 代码块</span><span class="post-info-stat-value">1 段</span></div>
       </div>
