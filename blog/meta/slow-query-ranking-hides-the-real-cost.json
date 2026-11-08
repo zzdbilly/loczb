@@ -1,0 +1,15 @@
+{
+  "slug": "slow-query-ranking-hides-the-real-cost",
+  "title": "慢查询排行榜的第一名，往往不是最该动的那条",
+  "description": "慢查询日志按单次耗时过滤，看不见又快又频繁的查询。单次耗时是单价，调用次数是次数，乘积才是要从预算里扣掉的总支出。",
+  "date": "2026-11-08",
+  "dateTime": "2026-11-08 16:00:00",
+  "category": "数据库",
+  "tags": [
+    "性能优化",
+    "SQL",
+    "可观测性",
+    "PostgreSQL"
+  ],
+  "readTime": 14
+}

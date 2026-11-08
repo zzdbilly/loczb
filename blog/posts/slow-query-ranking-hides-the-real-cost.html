@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <script>document.documentElement.classList.add("js");try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://static.cloudflareinsights.com https://loczb-comments.billymust.workers.dev; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://loczb-comments.billymust.workers.dev https://dashscope.aliyuncs.com https://709527.xyz https://www.709527.xyz https://cloudflareinsights.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
+    <script>/* 反点击劫持兜底：GitHub Pages 无法下发 X-Frame-Options / CSP frame-ancestors */(function(){if(self===top)return;try{top.location=self.location}catch(e){}setTimeout(function(){if(self!==top){document.documentElement.style.display='none';}},400);})();</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>慢查询排行榜的第一名，往往不是最该动的那条 | 张小猛 - loczb</title>
+    <meta name="description" content="慢查询日志按单次耗时过滤，看不见又快又频繁的查询。单次耗时是单价，调用次数是次数，乘积才是要从预算里扣掉的总支出。">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="慢查询排行榜的第一名，往往不是最该动的那条 | 张小猛 - loczb">
+    <meta property="og:description" content="慢查询日志按单次耗时过滤，看不见又快又频繁的查询。单次耗时是单价，调用次数是次数，乘积才是要从预算里扣掉的总支出。">
+    <meta property="og:url" content="https://709527.xyz/blog/posts/slow-query-ranking-hides-the-real-cost.html">
+    <meta property="og:type" content="article">
+    <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
+    <meta property="og:site_name" content="loczb">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="慢查询排行榜的第一名，往往不是最该动的那条 | 张小猛 - loczb">
+    <meta name="twitter:description" content="慢查询日志按单次耗时过滤，看不见又快又频繁的查询。单次耗时是单价，调用次数是次数，乘积才是要从预算里扣掉的总支出。">
+    <meta name="twitter:image" content="https://709527.xyz/assets/images/og-image.png">
+
+        <script type="application/ld+json">
+{
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "慢查询排行榜的第一名，往往不是最该动的那条",
+      "description": "慢查询日志按单次耗时过滤，看不见又快又频繁的查询。单次耗时是单价，调用次数是次数，乘积才是要从预算里扣掉的总支出。",
+      "image": "https://709527.xyz/assets/images/og-image.png",
+      "author": {
+            "@type": "Person",
+            "name": "张小猛",
+            "url": "https://709527.xyz/about/"
+      },
+      "publisher": {
+            "@type": "Organization",
+            "name": "loczb",
+            "logo": {
+                  "@type": "ImageObject",
+                  "url": "https://709527.xyz/assets/images/favicon.svg"
+            }
+      },
+      "datePublished": "2026-11-08T16:00:00+08:00",
+      "dateModified": "2026-11-08T16:00:00+08:00",
+      "url": "https://709527.xyz/blog/posts/slow-query-ranking-hides-the-real-cost.html",
+      "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://709527.xyz/blog/posts/slow-query-ranking-hides-the-real-cost.html"
+      },
+      "keywords": "性能优化, SQL, 可观测性, PostgreSQL",
+      "articleSection": "数据库",
+      "timeRequired": "PT14M",
+      "inLanguage": "zh-CN"
+}
+    </script>
+
+    <link rel="stylesheet" href="../../assets/css/style.css?v=c8e170d8f9">
+    <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
+    <link rel="alternate icon" href="../../assets/images/favicon.ico">
+    <link rel="canonical" href="https://709527.xyz/blog/posts/slow-query-ranking-hides-the-real-cost.html">
+</head>
+<body>
+  <!-- PARTIAL:SKIP_LINK -->
+  <a href="#main-content" class="skip-link">跳至主要内容</a>
+  <!-- /PARTIAL:SKIP_LINK -->
+
+  <!-- Navigation -->
+<!-- PARTIAL:NAV -->
+  <nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">
+      loc<span>zb</span>
+    </a>
+    <button class="nav-toggle" aria-label="打开菜单" aria-expanded="false" aria-controls="nav-links-menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <div class="nav-overlay"></div>
+    <ul class="nav-links" id="nav-links-menu">
+      <li><a href="/" class="nav-link" data-nav="home">首页</a></li>
+      <li><a href="/projects/" class="nav-link" data-nav="projects">项目</a></li>
+      <li><a href="/blog/" class="nav-link active" data-nav="blog">博客</a></li>
+      <li><a href="/about/" class="nav-link" data-nav="about">关于</a></li>
+    </ul>
+    <button class="theme-toggle" aria-label="切换主题" title="切换亮/暗模式">
+      <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="5"></circle>
+        <line x1="12" y1="1" x2="12" y2="3"></line>
+        <line x1="12" y1="21" x2="12" y2="23"></line>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+        <line x1="1" y1="12" x2="3" y2="12"></line>
+        <line x1="21" y1="12" x2="23" y2="12"></line>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+      </svg>
+      <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+      </svg>
+    </button>
+  </div>
+</nav>
+  <!-- /PARTIAL:NAV -->
+  <main class="section" id="main-content" style="padding-bottom: 0; padding-top: var(--space-4xl);">
+    <div class="container container-narrow">
+      <a href="../index.html" class="back-link">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        返回博客列表
+      </a>
+
+      <article class="post-content">
+        <h1>慢查询排行榜的第一名，往往不是最该动的那条</h1>
+
+        <div class="post-meta">
+          <span class="meta-item"><span aria-hidden="true">📅</span> 2026-11-08 16:00:00</span>
+          <span class="meta-item"><span aria-hidden="true">⏱️</span> 14 min read</span>
+          <span class="meta-item"><span aria-hidden="true">👤</span> 张小猛</span>
+        </div>
+
+        <div class="post-tags">
+          <span class="tag">性能优化</span>
+          <span class="tag">SQL</span>
+          <span class="tag">可观测性</span>
+          <span class="tag">PostgreSQL</span>
+        </div>
+
+        
+
+        <h2>两张账单，回答两个不同的问题</h2>
+<p>慢查询日志打开，按耗时倒序，排在最上面的那条通常很显眼：一次四秒多，扫描行数吓人，执行计划里挂着全表扫描。它看起来就是当天最该动的东西。</p>
+<p>动手之前值得先算一笔账：这条查询一小时跑了几次。假设是二十次，它一小时吃掉八十四秒；另一条每次八毫秒、一小时跑九万次的查询，吃掉的是十二分钟。前者单价高，后者总支出高，差了八倍多。要修的是后者，可它在按单次耗时排序的榜上排在几十名之外，甚至从来没进过榜。</p>
+<p>这两个视角对应两张不同的账单：</p>
+<ul>
+<li><strong>账单 A：单价表。</strong> 按单次平均耗时排序，回答「哪一条单独跑起来最贵」。</li>
+<li><strong>账单 B：总支出表。</strong> 按一段时间内的累计耗时排序，回答「谁吃掉了最多的时间预算」。</li>
+</ul>
+<p>两张表的第一名经常不是同一条。而优化预算——你和数据库这一周的注意力——应该跟着 B 走。</p>
+<h3>单价、次数、总支出</h3>
+<p>把一次查询的成本拆开，只有三个量：单次耗时是<strong>单价</strong>，调用次数是<strong>次数</strong>，两者的乘积是<strong>总支出</strong>。慢查询日志只记录单价超过某个数的条目，它天生是一张单价表；而数据库一小时的 CPU 时间是有限的，能被消耗掉的只有总支出。</p>
+<p>这不是两个指标谁更准的问题，是它们回答的问题不同。单价表适合找异常：某条平时 5ms 的查询突然变成 3s，说明执行计划变了、统计信息旧了、或者锁等了。总支出表适合排优先级：在一堆都「不算慢」的查询里，决定先动哪一条。</p>
+<p>用找异常的表去排优先级，会得到一个系统性偏向：越慢的越靠前，越频繁的越沉底。而频繁的那一类，恰恰是总量的大头。</p>
+<hr />
+<h2>账单 A：单价表回答「哪一条单独跑最贵」</h2>
+<p>先看单价。下面这张表是示例数据，只用于对比两种排序会得出什么结论，不是任何真实系统的测量值。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">查询</th>
+<th style="text-align: right;">平均耗时</th>
+<th style="text-align: right;">调用次数/小时</th>
+<th style="text-align: right;">累计耗时/小时</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">月度报表聚合</td>
+<td style="text-align: right;">4,200 ms</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">84 s</td>
+</tr>
+<tr>
+<td style="text-align: left;">后台导出明细</td>
+<td style="text-align: right;">1,750 ms</td>
+<td style="text-align: right;">40</td>
+<td style="text-align: right;">70 s</td>
+</tr>
+<tr>
+<td style="text-align: left;">商品列表分页</td>
+<td style="text-align: right;">45 ms</td>
+<td style="text-align: right;">5,000</td>
+<td style="text-align: right;">225 s</td>
+</tr>
+<tr>
+<td style="text-align: left;">会话校验</td>
+<td style="text-align: right;">3 ms</td>
+<td style="text-align: right;">200,000</td>
+<td style="text-align: right;">600 s</td>
+</tr>
+<tr>
+<td style="text-align: left;">订单详情</td>
+<td style="text-align: right;">8 ms</td>
+<td style="text-align: right;">90,000</td>
+<td style="text-align: right;">720 s</td>
+</tr>
+</tbody>
+</table>
+<p>按平均耗时排序，第一名是月度报表聚合，4.2 秒。它也是慢查询日志里唯一稳定出现的那条：阈值设在 200ms，只有它和后台导出会被记录下来。其余三条在任何一次日志巡检里都不会露面。</p>
+<h3>这张表怎么读</h3>
+<p>单价表读的是「形状」：哪条查询的耗时明显偏离它应有的量级。报表聚合 4.2 秒，如果它扫的是整月订单，这个量级可能合理；如果它只是按主键取一行，那说明索引没走对。后台导出 1.75 秒，配上四十次的调用频率，看起来像一个人工触发的操作，不算失控。</p>
+<p>它读不出的是「份额」。4,200ms 这个数字很刺眼，但乘以 20 之后只有 84 秒；8ms 这个数字毫不起眼，乘以 90,000 之后是 720 秒。前者的视觉冲击是后者的五百倍，实际支出只有后者的九分之一。</p>
+<h2>账单 B：总支出表回答「谁吃掉了预算」</h2>
+<p>同一批查询，换一个排序键：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">查询</th>
+<th style="text-align: right;">累计耗时/小时</th>
+<th style="text-align: right;">占比</th>
+<th style="text-align: right;">平均耗时</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">订单详情</td>
+<td style="text-align: right;">720 s</td>
+<td style="text-align: right;">42%</td>
+<td style="text-align: right;">8 ms</td>
+</tr>
+<tr>
+<td style="text-align: left;">会话校验</td>
+<td style="text-align: right;">600 s</td>
+<td style="text-align: right;">35%</td>
+<td style="text-align: right;">3 ms</td>
+</tr>
+<tr>
+<td style="text-align: left;">商品列表分页</td>
+<td style="text-align: right;">225 s</td>
+<td style="text-align: right;">13%</td>
+<td style="text-align: right;">45 ms</td>
+</tr>
+<tr>
+<td style="text-align: left;">月度报表聚合</td>
+<td style="text-align: right;">84 s</td>
+<td style="text-align: right;">5%</td>
+<td style="text-align: right;">4,200 ms</td>
+</tr>
+<tr>
+<td style="text-align: left;">后台导出明细</td>
+<td style="text-align: right;">70 s</td>
+<td style="text-align: right;">4%</td>
+<td style="text-align: right;">1,750 ms</td>
+</tr>
+</tbody>
+</table>
+<p>第一名换成了订单详情，8ms。它在单价表里排第四，在日志里根本不出现。第二名会话校验 3ms，单价表里排第五。两条加起来占掉一小时预算的七成多，而它们中的任何一条，单看都不会让人产生「需要优化」的念头。</p>
+<p>这五条合计约 1,699 秒，接近一小时预算的一半。剩下的一半分布在长尾里，多数是只跑过几次的临时查询。</p>
+<h3>两张表的差额从哪来</h3>
+<p>差额来自次数。单价和总支出之间只隔着一个乘法，但乘法的两端在观测上的地位完全不对等：单次耗时被日志、APM、慢查询面板反复呈现，调用次数要么在另一套指标里，要么压根没采。把两个不同系统里的数字手工乘起来，是排优先级时最容易漏掉的一步。</p>
+<p>还有一个更隐蔽的原因：调用次数高的查询，往往是「正常」的查询。订单详情、会话校验、商品列表，它们是业务主路径，每次请求都要跑，跑得又快，没有报警，没有错误率，dashboard 上是一条平稳的线。平稳意味着没人看它。</p>
+<hr />
+<h2>盲区是结构性的：日志按阈值过滤</h2>
+<p>慢查询日志不是采样器，它是一条规则的执行结果：单次执行时间超过阈值就记，没超过就不记。</p>
+<pre><code class="language-text"># MySQL：阈值单位是秒，只看单次执行时长
+long_query_time = 0.2
+
+# PostgreSQL：同理，只看单条语句自身的执行时间
+log_min_duration_statement = 200ms
+</code></pre>
+<p>一条 8ms 的查询在 200ms 的阈值下永远不会被写入，无论它一小时跑九万次还是一千万次。这不是配置错了，是「慢查询」这个词的定义本身：它定义的是单次慢，不是累计贵。</p>
+<h3>阈值是一个定义，不是一个采样偏差</h3>
+<p>把阈值从 200ms 调到 10ms，订单详情会出现在日志里，但代价是日志量按数量级上涨，磁盘、IO、解析成本都跟着涨，而且真正想找的那条 4 秒查询会被淹在几万条 8ms 的记录里。调阈值解决的是「看不看得见」，解决不了「看见了怎么排序」。</p>
+<p>真正的缺口不是记录粒度，是<strong>没有一张按累计耗时聚合的表</strong>。日志适合回答「刚才发生了什么」，账本适合回答「这个月钱花在哪」。拿日志当账本用，等于拿流水当报表。</p>
+<h3>日志不是账本</h3>
+<p>流水和报表的差别在聚合维度。日志的每一条是一个事件，带时间、带语句、带耗时；账本的每一行是一个<strong>形状</strong>，带调用次数、总耗时、均值、行数。前者能还原现场，后者能排优先级。两者都需要，但不能互相替代。</p>
+<hr />
+<h2>把 calls 和 total 放进同一张表</h2>
+<p>两张账单里，B 表才是优化对象。它不需要额外埋点，主流数据库都有一张按语句形状聚合的视图，只是默认不在日常巡检的视野里。</p>
+<h3>PostgreSQL：pg_stat_statements</h3>
+<pre><code class="language-sql">SELECT
+    queryid,
+    calls,
+    round(total_exec_time::numeric, 1) AS total_ms,
+    round(mean_exec_time::numeric, 2)  AS mean_ms,
+    rows,
+    left(query, 60) AS query_head
+FROM pg_stat_statements
+ORDER BY total_exec_time DESC
+LIMIT 20;
+</code></pre>
+<p><code>calls</code> 是调用次数，<code>total_exec_time</code> 是累计执行时间，<code>mean_exec_time</code> 是均值，<code>rows</code> 是返回或影响的行数。按 <code>total_exec_time</code> 排序，得到的就是账单 B；按 <code>mean_exec_time</code> 排序，得到的是账单 A。同一个视图，两个排序键，两种结论。</p>
+<p>列名跟版本走。PostgreSQL 13 起这两列叫 <code>total_exec_time</code> 和 <code>mean_exec_time</code>，更早的版本里叫 <code>total_time</code> 和 <code>mean_time</code>，升级过大版本的环境里，两种写法都可能遇到。写查询前先看一眼视图定义，比记版本号可靠。</p>
+<p>这个视图不是默认就有的：它属于额外扩展，要装好并在 <code>shared_preload_libraries</code> 里登记，重启后才有数据。也就是说，一个环境里很可能根本没有账本，只有日志——这本身就是盲区的一部分。</p>
+<h3>MySQL：events_statements_summary_by_digest</h3>
+<pre><code class="language-sql">SELECT
+    SCHEMA_NAME,
+    COUNT_STAR                        AS calls,
+    ROUND(SUM_TIMER_WAIT / 1e12, 1)   AS total_s,
+    ROUND(AVG_TIMER_WAIT / 1e9, 2)    AS mean_ms,
+    LEFT(DIGEST_TEXT, 60)             AS digest_head
+FROM performance_schema.events_statements_summary_by_digest
+ORDER BY SUM_TIMER_WAIT DESC
+LIMIT 20;
+</code></pre>
+<p><code>COUNT_STAR</code> 是次数，<code>SUM_TIMER_WAIT</code> 是累计等待时间，<code>AVG_TIMER_WAIT</code> 是均值。计时单位是皮秒，所以除 <code>1e12</code> 得秒、除 <code>1e9</code> 得毫秒——单位写错会让整张表的量级失真，这是这类查询最常见的低级错误。</p>
+<p>前提是 <code>performance_schema</code> 开着，并且 digest 消费者处于启用状态。如果这两项被关掉，视图存在但为空，看起来像「没有慢查询」，实际是「没有采集」。</p>
+<p>把这两个查询固定成巡检脚本，每天跑一次、把结果按 <code>total</code> 排序存下来，比每周翻一次慢日志有用得多。账本的价值在趋势：某条查询的 total 占比从 5% 涨到 30%，即使它的 mean 没变，也说明调用量涨了五倍，该看的是上游为什么变多了。</p>
+<hr />
+<h2>均值的第二个陷阱：双峰与 p99</h2>
+<p>账单 B 也有它自己的坑。<code>mean_exec_time</code> 是一个平均数，而平均数对分布形状不敏感。</p>
+<p>假设一条查询一小时跑 20 万次：99% 的调用是 1ms，1% 的调用是 2.1 秒。算术结果是均值约 22ms，累计约 4,398 秒。下面这组数字同样是示例，只用于说明均值和分位数的差距。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">指标</th>
+<th style="text-align: right;">值（示例）</th>
+<th style="text-align: left;">读法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">p50</td>
+<td style="text-align: right;">1 ms</td>
+<td style="text-align: left;">一半的请求感觉不到</td>
+</tr>
+<tr>
+<td style="text-align: left;">p95</td>
+<td style="text-align: right;">3 ms</td>
+<td style="text-align: left;">绝大多数请求正常</td>
+</tr>
+<tr>
+<td style="text-align: left;">p99</td>
+<td style="text-align: right;">2,100 ms</td>
+<td style="text-align: left;">每 100 个请求里有 1 个在等两秒</td>
+</tr>
+<tr>
+<td style="text-align: left;">mean</td>
+<td style="text-align: right;">22 ms</td>
+<td style="text-align: left;">看起来「还行」</td>
+</tr>
+<tr>
+<td style="text-align: left;">calls/h</td>
+<td style="text-align: right;">200,000</td>
+<td style="text-align: left;">支出的大头在这里</td>
+</tr>
+</tbody>
+</table>
+<p>均值 22ms 放进任何一张性能报表都不刺眼，p99 是 2.1 秒，用户感知到的是后者。双峰分布下，均值落在两座峰之间的空地上，它描述的那个「典型请求」在现实里可能一次都不存在。</p>
+<h3>双峰长什么样</h3>
+<p>双峰通常有明确的成因，而不是随机噪声：</p>
+<ul>
+<li>缓存命中与未命中。命中 0.5ms，未命中要走一次完整查询。</li>
+<li>索引命中与全表扫描。参数不同，执行计划分叉。</li>
+<li>预热与冷启动。连接池新建连接、页面缓存为空。</li>
+<li>锁等待。同样的语句，撞上锁就排队，没撞上就返回。</li>
+</ul>
+<p>这四类成因有一个共同点：它们都由<strong>参数或运行时状态</strong>决定，而不是由 SQL 文本决定。按语句聚合的视图看不见参数，所以双峰在账单 B 里会被压成一个温和的均值。</p>
+<h3>分位数从哪来</h3>
+<p><code>pg_stat_statements</code> 只给总量和均值，不给分位数。要拿到 p99，得换一条采集路径：专门的统计扩展、驱动侧或代理侧的埋点、对采样日志做聚合，或者数据库自带的直方图能力。具体哪一种可用，取决于版本、部署形态和能不能重启——没有普适答案。</p>
+<p>工程上的折中是：用账单 B 找候选，用分位数确认候选。B 表告诉你「这条查询花掉了 30% 的预算」，p99 告诉你「这 30% 是均匀花掉的，还是集中在 1% 的调用上」。两个答案对应完全不同的修法。</p>
+<hr />
+<h2>三类查询，三种修法</h2>
+<p>把账单 A 和账单 B 交叉，会得到三类需要处理的查询。它们的特征和修法不在同一个层面上，用错工具等于白改。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">类型</th>
+<th style="text-align: left;">特征</th>
+<th style="text-align: left;">优先动作</th>
+<th style="text-align: left;">常见的错修</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">高频短</td>
+<td style="text-align: left;">mean 低、calls 高、total 高</td>
+<td style="text-align: left;">减调用次数：批量化、缓存、消除 N+1</td>
+<td style="text-align: left;">给它加索引（它已经走索引了）</td>
+</tr>
+<tr>
+<td style="text-align: left;">低频长</td>
+<td style="text-align: left;">mean 高、calls 低、total 中低</td>
+<td style="text-align: left;">重写 SQL、改执行计划、补索引、预聚合</td>
+<td style="text-align: left;">上缓存（命中率低，还多一层不一致）</td>
+</tr>
+<tr>
+<td style="text-align: left;">两高</td>
+<td style="text-align: left;">mean 高、calls 高、total 最高</td>
+<td style="text-align: left;">先拆访问路径，再谈单条优化</td>
+<td style="text-align: left;">直接调参或加机器，把成本往后推</td>
+</tr>
+</tbody>
+</table>
+<h3>高频短：问题在次数，不在单条</h3>
+<p>订单详情 8ms、会话校验 3ms，这两条查询本身没有可优化的空间：走的是主键或唯一索引，返回一行，执行计划稳定。对它们做 SQL 层面的优化，收益接近零。</p>
+<p>能动的是次数。三种手段，按侵入性从低到高：</p>
+<ul>
+<li><strong>批量化</strong>：把循环里的 N 次单行查询合并成一次 <code>IN</code> 查询或一次 join。</li>
+<li><strong>缓存</strong>：对读多写少、容忍短暂不一致的数据，在应用层加一层带过期时间的缓存。</li>
+<li><strong>消除 N+1</strong>：这不是「优化查询」，是改调用方式，下一节单独说。</li>
+</ul>
+<p>判断该用哪一种，看数据的变化频率和一致性要求。会话校验适合缓存，订单详情适合批量，商品列表适合两者结合。共同点是：都不去动那条 SQL。</p>
+<h3>低频长：问题在执行路径</h3>
+<p>报表聚合 4.2 秒、导出 1.75 秒，这类查询的 total 不高，但单次执行会占住连接、拉高 p99、在高峰期制造尖刺。它们值得改，理由是体验和资源占用，不是预算份额。</p>
+<p>可动的方向：把全表扫描改成范围扫描（补上过滤字段的索引）、把多次聚合合并成一次、把结果预计算成汇总表、把导出改成异步任务。这些都属于「让单次更便宜」，收益体现在单价上，不会体现在账单 B 的排名上——改完以后它在 B 表里还是第五名，但那次 4 秒的尖刺消失了。</p>
+<h3>两高：先确认它真的是同一条</h3>
+<p>mean 高、calls 也高，通常意味着这条查询被放在了不该放的位置：一个本该异步的任务被同步调用，或者一个本该分页的列表被一次性拉全。这时候先拆访问路径——限流、分页、异步化、改数据模型——比直接优化 SQL 更有效。</p>
+<p>这一类也最容易改错方向。因为它同时具备「慢」和「频繁」两个特征，两张表都指着它，人会本能地认为优先级最高、动手最安全。但两高往往说明架构层面的调用关系错了，单条 SQL 优化只能把 800ms 压到 600ms，而调用次数还挂在那里。</p>
+<hr />
+<h2>N+1：单条 SQL 一点都不慢</h2>
+<p>高频短查询最典型的来源是 N+1。它的形状很好认：</p>
+<pre><code class="language-text"># 一次请求里的调用形状（伪代码）
+orders = query(&quot;SELECT * FROM orders WHERE user_id = ?&quot;, uid)
+
+for o in orders:
+    o.items = query(&quot;SELECT * FROM order_items WHERE order_id = ?&quot;, o.id)
+
+# 总次数 = 1 + N。N = 50 时，单条 1 ms 的查询变成一次请求 51 ms
+</code></pre>
+<p>单条 <code>order_items</code> 查询 1ms，在任何慢查询日志里都不会出现，在 <code>pg_stat_statements</code> 里它的 <code>mean_exec_time</code> 是 1ms，看起来完全健康。但它的 <code>calls</code> 是请求数乘以 50，<code>total_exec_time</code> 是单条查询的五十倍。账本上它排得很靠前，单价表上它排得很靠后——这正是两张账单分离的典型样本。</p>
+<h3>修法在调用侧</h3>
+<p>N+1 不可能靠给 <code>order_id</code> 加索引解决，索引早就有了。它要改的是取数方式：</p>
+<ul>
+<li>一次 <code>WHERE order_id IN (...)</code> 取回全部明细，在应用层按 <code>order_id</code> 分组。</li>
+<li>用一次 join 把主表和明细一起取回，注意结果集膨胀对行数的影响。</li>
+<li>用 ORM 的预加载（eager loading）能力，把「访问时再查」改成「一次查完」。</li>
+</ul>
+<p>这三种做法的共同点是：SQL 从 N 条变成 1 条，单条可能比原来略慢（返回行更多），但总支出下降。这正好说明为什么优化目标要定在总支出上——如果盯着单条耗时，批量查询看起来「变慢了」，会被误判成退步。</p>
+<hr />
+<h2>digest 归一化抹掉了参数偏斜</h2>
+<p>账单 B 的第三层问题在聚合方式。<code>pg_stat_statements</code> 和 MySQL 的 digest 表都不是按原始 SQL 文本分组的，它们先把字面量替换成占位符，再按「形状」聚合。<code>WHERE tenant_id = 42</code> 和 <code>WHERE tenant_id = 97</code> 会落进同一行。</p>
+<p>好处很直接：参数不同的同一条 SQL 被合成一条，账本不会被几万个字面量变体撑爆。没有这层归一化，账单 B 根本没法读。</p>
+<p>代价也很直接：<strong>参数维度的偏斜被平均掉了</strong>。</p>
+<pre><code class="language-text">-- 示例：归一化之后的一行
+SELECT * FROM orders WHERE tenant_id = ? AND created_at &gt; ?
+    calls: 12,000    mean: 4 ms    total: 48 s
+
+-- 可能的真实分布（示例）
+    tenant_id = 'small'   11,900 次 × 1 ms
+    tenant_id = 'large'     100 次 × 400 ms
+</code></pre>
+<p>聚合后的 4ms 均值看起来无害，而那个大租户的每一次查询都在扫全表。这类偏斜在单租户压测里发现不了，在账本的均值里也发现不了，只有按参数维度拆开才看得见。</p>
+<h3>归一化的好处与代价</h3>
+<p>归一化是一个有意的信息损失。它牺牲了「哪一次调用慢」，换来了「这一类语句总共多慢」。做容量规划时这个交换划算，做根因定位时不划算。</p>
+<p>要找回参数维度，得靠另一条路径：按业务维度（租户、用户、接口）在应用侧计时，或者对慢查询做采样日志并保留绑定参数，或者在驱动层按参数哈希分组。具体能不能做，取决于链路里有没有保留原始参数——很多代理和连接池会把它们丢掉。</p>
+<p>一个可操作的习惯：当账单 B 上某条查询的 total 很高，但 p99 正常、均值也正常时，先怀疑参数偏斜，而不是怀疑采集错了。</p>
+<hr />
+<h2>判据：预算该跟着哪张表走</h2>
+<p>把上面的内容压成几条可执行的判断：</p>
+<ol>
+<li><strong>先看 B 表，再看 A 表。</strong> 决定「先动谁」用 total，决定「这条查询本身有没有毛病」用 mean。顺序反了，会花一周去修一条占比 5% 的报表。</li>
+<li><strong>给一个明确的时间窗。</strong> 一小时、一天、一周都可以，但两次比较必须用同一个窗口。跨窗口比较总量没有意义。</li>
+<li><strong>算出份额，而不只是排名。</strong> 「第一名」不如「占 42%」有信息量。份额决定投入上限：占 5% 的查询，优化到零也只回收 5%。</li>
+<li><strong>对每条候选问三个问题。</strong> 能不能减少次数（批量、缓存、消除 N+1）？能不能降低单价（索引、重写、预计算）？能不能把结果搬到别处（物化、异步）？三个都不能，就先放着。</li>
+<li><strong>均值对不上体感时看 p99。</strong> 均值正常而用户抱怨慢，几乎总是分布问题，不是采集问题。</li>
+<li><strong>均值、p99 都正常但 total 高，查参数偏斜。</strong> 归一化会把一个大客户的坏参数藏进一个好看的均值里。</li>
+<li><strong>改完回同一张表复测。</strong> 用同一个窗口、同一个排序键、同一个口径。改前改后如果换了统计方式，数字的变化说明不了任何事。</li>
+</ol>
+<h3>一个容易被忽略的前提</h3>
+<p>账单 B 的前提是「数据库时间是一个固定预算」。单机单实例时这个前提成立；主从分离、分库分表、读写分离之后，「总支出」要按实例分别算，跨实例求和会把不同规格的机器混在一起。</p>
+<p>同理，<code>total_exec_time</code> 统计的是执行时间，不含网络传输、结果集序列化、应用侧反序列化。一条返回十万行的查询，账本上可能只记了 200ms，实际在链路上花掉的时间是它的好几倍。账单 B 是数据库内部的账本，不是端到端的账本。</p>
+<hr />
+<h2>收束</h2>
+<p>慢查询排行榜没有错，它回答的是「哪一条单独跑起来最贵」，这个问题在排查执行计划突变时不可替代。它错在被当成优先级列表用——按单价排序的榜，天生看不见那些又快又频繁的查询，而后者往往占着最大的一块时间预算。</p>
+<p>两张账单的分工可以记成一句话：<strong>A 表找毛病，B 表定顺序。</strong> 单价告诉你这条查询有没有问题，总支出告诉你这个问题值多少钱。优化是一种预算行为，预算按支出编，不按单价编。</p>
+<p>下次打开慢查询日志，看到那条四秒的报表查询时，先别急着加索引。去把同一时间窗的 <code>calls</code> 和 <code>total</code> 拉出来，按 total 排一遍。第一名很可能是一条 8ms 的查询，它一直在那里，只是从来没有进过任何一张榜。</p>
+
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="postgresql-从-17-到-18生产环境升级实战.html">
+            <div class="related-post-card-title">PostgreSQL 从 17 到 18：生产环境升级实战</div>
+            <div class="related-post-card-tags"><span>PostgreSQL</span><span>数据库</span><span>DevOps</span></div>
+          </a>
+          <a class="related-post-card" href="pool-size-is-a-queue-length.html">
+            <div class="related-post-card-title">连接池不是并发旋钮，是排队区的长度</div>
+            <div class="related-post-card-tags"><span>连接池</span><span>性能</span><span>PostgreSQL</span></div>
+          </a>
+          <a class="related-post-card" href="offset-pagination-drifts-on-write.html">
+            <div class="related-post-card-title">分页是一个会漂移的坐标：OFFSET 在写入发生时开始说谎</div>
+            <div class="related-post-card-tags"><span>分页</span><span>SQL</span><span>一致性</span></div>
+          </a>
+          <a class="related-post-card" href="soft-delete-costs-interest-on-every-query.html">
+            <div class="related-post-card-title">软删除买的是后悔药，付的是每条查询的利息</div>
+            <div class="related-post-card-tags"><span>数据库设计</span><span>软删除</span><span>数据建模</span></div>
+          </a>
+          <a class="related-post-card" href="prisma-orm-完全指南从入门到实战.html">
+            <div class="related-post-card-title">Prisma ORM 完全指南：从入门到实战</div>
+            <div class="related-post-card-tags"><span>Prisma</span><span>TypeScript</span><span>PostgreSQL</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
+
+        <!-- Post Copyright & License Card -->
+        <div class="post-copyright-card">
+          <div class="copyright-header">
+            <div class="copyright-badge">
+              <span>📜</span>
+              <span>原创与知识共享协议</span>
+            </div>
+            <button class="copyright-cite-btn" id="copy-cite-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+              </svg>
+              <span>复制 Markdown 引用</span>
+            </button>
+          </div>
+          <div class="copyright-list">
+            <div class="copyright-item"><strong>文章标题：</strong>慢查询排行榜的第一名，往往不是最该动的那条</div>
+            <div class="copyright-item"><strong>文章作者：</strong>张小猛 · loczb</div>
+            <div class="copyright-item"><strong>永久链接：</strong><a href="https://709527.xyz/blog/posts/slow-query-ranking-hides-the-real-cost.html">https://709527.xyz/blog/posts/slow-query-ranking-hides-the-real-cost.html</a></div>
+            <div class="copyright-item"><strong>版权声明：</strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 国际许可协议。商业转载请联系作者获得授权，非商业转载请注明出处。</div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </main>
+
+  <!-- Related Posts / Navigation -->
+  <section class="section" aria-label="读完之后" style="padding-top: 0;">
+    <div class="container container-narrow">
+      <!-- Post Nav Prev Next -->
+      <nav class="post-nav" aria-label="文章翻页导航">
+        <a href="invisible-work-sets-your-speed.html" class="post-nav-card post-nav-prev" rel="prev">
+          <span class="post-nav-label">← 上一篇</span>
+          <span class="post-nav-title">看不见的那部分工作，决定了你以后能跑多快</span>
+        </a>
+        <div class="post-nav-card post-nav-next disabled" aria-disabled="true">
+          <span class="post-nav-label">下一篇 →</span>
+          <span class="post-nav-title">已是最新篇博文</span>
+        </div>
+      </nav>
+      <!-- /Post Nav Prev Next -->
+      <hr style="border: none; border-top: 1px solid var(--color-border); margin: var(--space-2xl) 0;">
+
+      <div class="blog-topics" style="margin-bottom: var(--space-xl); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+        <div>
+          <span class="topic-label">读完之后:</span>
+          <a href="../index.html" class="topic-tag">返回博客列表</a>
+          <a href="../index.html?view=series" class="topic-tag">浏览全部专栏</a>
+        </div>
+        <a href="#main-content" class="topic-tag" style="margin-left: auto;">↑ 回到顶部</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+<!-- PARTIAL:FOOTER -->
+  <footer class="footer" role="contentinfo">
+  <div class="footer-inner">
+    <p class="footer-signature">写代码，做产品，也认真生活。</p>
+    <div class="footer-social">
+      <a href="https://github.com/zzdbilly" class="footer-social-link" target="_blank" rel="noopener" aria-label="GitHub">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+      </a>
+      <a href="https://twitter.com/zzdbilly" class="footer-social-link" target="_blank" rel="noopener" aria-label="X (Twitter)">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      </a>
+      <a href="/rss.xml" class="footer-social-link" target="_blank" rel="noopener" aria-label="RSS 订阅">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+      </a>
+    </div>
+    <div class="footer-links">
+      <a href="/" class="footer-link">首页</a>
+      <a href="/projects/" class="footer-link">项目</a>
+      <a href="/blog/" class="footer-link">博客</a>
+      <a href="/about/" class="footer-link">关于</a>
+    </div>
+    <p class="footer-copyright">&copy; 2026 张小猛 · loczb · Built with care</p>
+  </div>
+</footer>
+  <!-- /PARTIAL:FOOTER -->
+
+  <script defer src="../../assets/js/main.js"></script>
+  <script defer src="../../assets/js/article.js?v=c9f1a378ea"></script>
+  <script defer src="../../assets/js/share.js"></script>
+  <!-- Back to Top & Reading Progress -->
+  <button class="back-to-top" id="backToTop" aria-label="回到顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
+  <div class="reading-progress" id="readingProgress"></div>
+
+  <!-- Post Sidebar Info（左侧） -->
+  <div class="post-sidebar-info" id="postSidebar">
+    <div class="post-info-card">
+      <div class="post-info-section">
+        <div class="post-info-label">作者</div>
+        <div class="post-info-author">
+          <div class="post-info-avatar">小</div>
+          <div>
+            <div class="post-info-author-name">张小猛</div>
+            <div class="post-info-author-desc">写代码，做产品</div>
+          </div>
+        </div>
+      </div>
+      <div class="post-info-section">
+        <div class="post-info-label">文章信息</div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📅</span> 发布日期</span><span class="post-info-stat-value">2026-11-08</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">⏱️</span> 阅读时间</span><span class="post-info-stat-value">14 min read</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">5210 字</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📊</span> 章节数</span><span class="post-info-stat-value">11 节 · 15 子节</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">💻</span> 代码块</span><span class="post-info-stat-value">5 段</span></div>
+      </div>
+      <div class="post-info-section" id="postSidebarTags">
+        <div class="post-info-label">标签</div>
+        <div class="post-info-links">
+          <a href="../../blog/index.html?tag=%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96" class="post-info-link"># 性能优化</a>
+          <a href="../../blog/index.html?tag=SQL" class="post-info-link"># SQL</a>
+          <a href="../../blog/index.html?tag=%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7" class="post-info-link"># 可观测性</a>
+          <a href="../../blog/index.html?tag=PostgreSQL" class="post-info-link"># PostgreSQL</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Post TOC -->
+  <div class="post-toc-container" id="postToc">
+    <nav class="post-toc" aria-label="文章目录">
+      <div class="post-toc-title">目录</div>
+      <ul class="post-toc-list" id="tocList">
+      </ul>
+    </nav>
+  </div>
+
+  <!-- Comment System -->
+  <script src="../../workers/comment-system/comment-widget.js?v=5d8a6a1796" defer></script>
+
+  <!-- highlight.js 代码语法高亮（本地完整构建，无外部依赖） -->
+  <script defer src="../../assets/vendor/highlight/highlight.min.js"></script>
+  <script>
+    /* 语法高亮改为「可见优先、空闲补齐」：
+       highlight.js 要遍历全篇代码块并生成数百个 span，若在 DOMContentLoaded 里同步跑完，
+       会在关键路径上长时间占住主线程（2026-09-27 实测本页长任务 1548ms、DCL 3651ms；
+       改动后长任务 145ms、DCL 1378ms）。这里 DCL 阶段只登记观察，实际高亮交给
+       IntersectionObserver（近屏 800px 内优先）+ requestIdleCallback（剩余块每片 ≤4 块），
+       首屏代码块的着色时机与视觉基本无变化。 */
+    (function() {
+      function canPaint(b) {
+        return !b.classList.contains('hljs') && !b.closest('.codehilite');
+      }
+      function paint(b) {
+        if (!canPaint(b)) return;
+        try { hljs.highlightElement(b); } catch (e) {}
+      }
+      function init() {
+        var blocks = [].slice.call(document.querySelectorAll('pre code')).filter(canPaint);
+        if (!blocks.length) return;
+        if ('IntersectionObserver' in window) {
+          var io = new IntersectionObserver(function(entries, obs) {
+            entries.forEach(function(en) {
+              if (!en.isIntersecting) return;
+              paint(en.target);
+              obs.unobserve(en.target);
+            });
+          }, { rootMargin: '800px 0px' });
+          blocks.forEach(function(b) { io.observe(b); });
+        }
+        var i = 0;
+        var idle = window.requestIdleCallback || window.setTimeout;
+        var step = function() {
+          var quota = 4;
+          while (i < blocks.length && quota-- > 0) paint(blocks[i++]);
+          if (i < blocks.length) idle(step);
+        };
+        idle(step); // 不在 DCL 里同步跑：可见块由 IntersectionObserver 处理，其余走空闲分片
+      }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+      } else {
+        init();
+      }
+    })();
+  </script>
+
+  <!-- Cloudflare Web Analytics -->
+  <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "29e7cff6f37448989538e2165cb79187"}'></script>
+</body>
+</html>

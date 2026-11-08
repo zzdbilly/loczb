@@ -7,6 +7,14 @@
     <language>zh-CN</language>
     <atom:link href="https://709527.xyz/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>慢查询排行榜的第一名，往往不是最该动的那条</title>
+      <link>https://709527.xyz/blog/posts/slow-query-ranking-hides-the-real-cost.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/slow-query-ranking-hides-the-real-cost.html</guid>
+      <description>慢查询日志按单次耗时过滤，看不见又快又频繁的查询。单次耗时是单价，调用次数是次数，乘积才是要从预算里扣掉的总支出。</description>
+      <category>数据库</category>
+      <pubDate>Sun, 08 Nov 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
       <title>看不见的那部分工作，决定了你以后能跑多快</title>
       <link>https://709527.xyz/blog/posts/invisible-work-sets-your-speed.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/invisible-work-sets-your-speed.html</guid>
@@ -157,14 +165,6 @@
       <description>长假结束不等于状态自动恢复。与其硬切回工作节奏，不如把复工当成一次灰度上线：先预热、再冒烟测试、最后逐步放大流量，用可验证的指标确认自己真的回到了正轨。</description>
       <category>思考</category>
       <pubDate>Thu, 08 Oct 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>国庆假期：把七天长假当成一次计划内停机维护</title>
-      <link>https://709527.xyz/blog/posts/national-day-planned-maintenance.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/national-day-planned-maintenance.html</guid>
-      <description>七天长假不是停机，而是一次难得的长维护窗口。用运维的视角重排假期：先盘点欠下的债，再按精力曲线排期，最后用三个可观测指标验证这次维护有没有成功。</description>
-      <category>思考</category>
-      <pubDate>Mon, 05 Oct 2026 00:00:00 +0800</pubDate>
     </item>
   </channel>
 </rss>
