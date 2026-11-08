@@ -14,7 +14,7 @@
   2. **核心技术雷达（Tech Radar）**：原生 Android 底座 + 端云协同全栈赋能；
   3. **6 大旗舰专题专栏便当盒（Curated Series）**：聚合展示 AI Agent、Android 16、Kotlin 协程、工程思维等专栏封面芯片；
   4. **工程技术原则（Engineering Principles）**：实用主义优先、毫秒级极致体验、AI 工具化闭环；
-  5. **量化影响力（Track Record）**：121 篇深度博文、6 大专题专栏、5+ 年移动端沉淀；
+  5. **量化影响力（Track Record）**：133 篇深度博文、6 大专题专栏、5+ 年移动端沉淀；
   6. **工程师哲学语录（Philosophy Quote）**：自适应双模引语便当盒。
 - ⌨️ **Hero 动态变幻打字机** — 流畅光标节奏循环变幻，传递鲜明的技术定位。
 - 🔍 **Raycast 级 ⌘K 即时全站微搜索** — 首页与博客页全局 Command Palette 支持，零卡顿毫秒级全文检索博文、专栏与项目，支持键盘 `↑↓` 导航与 `Enter` 秒开。
@@ -26,7 +26,7 @@
 ---
 
 ### 📝 博客与 6 大旗舰系列专栏
-- 📚 **121 篇全量深度文章** — 深度覆盖 `Android`、`Kotlin`、`AI Agent`、`前端`、`DevOps`、`思考`、`数据库`、`系统编程`、`安全`、`开发` 等 10 大垂直领域。
+- 📚 **133 篇全量深度文章** — 深度覆盖 `Android`、`Kotlin`、`AI Agent`、`前端`、`DevOps`、`思考`、`数据库`、`系统编程`、`安全`、`开发` 等 10 大垂直领域。
 - 📖 **6 大核心旗舰系列专栏**（自动化脚本 `scripts/build-series.js` 构建）：
   1. 🤖 **《AI Agent 与本地大模型实战》** (9 篇) — 工作区迁移、定时无废话直投、MCP 协议、本地 RAG 与端侧模型；
   2. 📱 **《Android 16 深度演进与系统适配》** (6 篇) — 前台服务新约束、通知大改、多媒体权限与性能深度优化；
@@ -41,7 +41,7 @@
 ---
 
 ### 🛠️ 基础设施与云端生态
-- 🩺 **自动化死链巡检医生（`scripts/check-links.js`）** — 极速全量扫描 138 个 HTML 页面中的内链与资源引用，保障 0 死链（2026-10-18 实测：138 个 HTML、4330 条内链与资源引用、0 死链）。
+- 🩺 **自动化死链巡检医生（`scripts/check-links.js`）** — 极速全量扫描 151 个 HTML 页面中的内链与资源引用，保障 0 死链（2026-11-08 实测：151 个 HTML、4708 条内链与资源引用、0 死链）。
 - 🔄 **Service Worker 离线强缓存与构建自动版本同步** — 构建时按 `sha256(articles-index.json + search.js + style.css)` 前 8 位生成 `c-xxxxxxxx` 缓存版本（内容哈希：内容不变版本不变），避免旧缓存残留。
 - 💬 **评论系统** — Cloudflare Workers + Cloudflare D1 边缘数据库，支持嵌套树状回复、Token 鉴权与独立管理后台。
 - 📡 **全自动化索引与 SEO** — `sitemap.xml`、`rss.xml`、JSON-LD 结构化数据与 Open Graph 社交分享卡片全自动构建。
@@ -74,7 +74,7 @@ loczb/
 ├── blog/
 │   ├── index.html                 # 博客列表页 (全部文章 / 📚 专题专栏 / 时间归档三重视图)
 │   ├── page-2..N.html             # 构建期静态分页 (每页 10 篇，无 JS 也能翻页)
-│   ├── articles-index.json        # 全站 121 篇博文索引与标签元数据
+│   ├── articles-index.json        # 全站 133 篇博文索引与标签元数据
 │   ├── meta/{slug}.json           # 每篇元数据 sidecar (按需拉取摘要)
 │   ├── posts-src/{slug}.md        # ★ 文章正文源 (Markdown + YAML Frontmatter，唯一真相源)
 │   └── posts/                     # 编译产出的文章 HTML (内嵌专栏卡片、静态相关文章与上下篇直达)

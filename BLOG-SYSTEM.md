@@ -277,7 +277,7 @@ node scripts/verify.js && node scripts/check-links.js   # 双绿再推
 - ✅ 更新 `index.html` 大卡 + 文章列表 + JS posts 数组
 - ✅ 跑 `scripts/verify.js` 一致性门禁（posts/index/meta 对账 + 主页面 ?v= 一致 + 体积门禁 + 静态相关文章 + 静态分页 + category 白名单；非零退出即阻断 push）
   - 体积门禁阈值：`articles-index.json` 超 **250KB 只预警**（非阻断提示）、超 **400KB 阻断**；两条线可用 `INDEX_WARN_BYTES` / `INDEX_FAIL_BYTES` 环境变量覆盖，便于验证门禁行为
-  - 当前实测 ≈447 字节/篇（121 篇 52.9KB，2026-10-17 实测），按此外推：572 篇触预警、915 篇触阻断
+  - 当前实测 ≈446 字节/篇（133 篇 59.4KB，2026-11-08 实测），按此外推：573 篇触 250KB 预警线、917 篇触 400KB 阻断线
 
 ### 推送后自动完成
 - **GitHub Pages** 推送后自动构建部署（常规 1-2 分钟；若线上仍旧版，查首页 `last-modified` 判断是否漏触发构建）
