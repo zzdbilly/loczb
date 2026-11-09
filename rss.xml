@@ -7,6 +7,14 @@
     <language>zh-CN</language>
     <atom:link href="https://709527.xyz/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>技术债不按数量累积，按到期日聚集</title>
+      <link>https://709527.xyz/blog/posts/tech-debt-matures-on-a-date.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/tech-debt-matures-on-a-date.html</guid>
+      <description>技术债的风险不按数量累积，而按到期日聚集——而大部分债的到期日，不归你定。</description>
+      <category>思考</category>
+      <pubDate>Mon, 09 Nov 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
       <title>慢查询排行榜的第一名，往往不是最该动的那条</title>
       <link>https://709527.xyz/blog/posts/slow-query-ranking-hides-the-real-cost.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/slow-query-ranking-hides-the-real-cost.html</guid>
@@ -157,14 +165,6 @@
       <description>大多数人把它当成二选一，其实问错了。把「自由」和「财富」各拆成两半再交叉，顺序问题会变成结构问题——我给四条能拿去做判断的判据。</description>
       <category>思考</category>
       <pubDate>Sat, 10 Oct 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>假期后的复工准备：把开工第一天当成一次灰度上线</title>
-      <link>https://709527.xyz/blog/posts/holiday-return-to-work-preparation.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/holiday-return-to-work-preparation.html</guid>
-      <description>长假结束不等于状态自动恢复。与其硬切回工作节奏，不如把复工当成一次灰度上线：先预热、再冒烟测试、最后逐步放大流量，用可验证的指标确认自己真的回到了正轨。</description>
-      <category>思考</category>
-      <pubDate>Thu, 08 Oct 2026 00:00:00 +0800</pubDate>
     </item>
   </channel>
 </rss>

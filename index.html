@@ -144,7 +144,7 @@
             <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
             </svg>
-            <input type="text" id="home-search-input" placeholder="即时检索 134 篇博文、专栏与项目..." autocomplete="off" aria-label="站内搜索：检索博文、专栏与项目">
+            <input type="text" id="home-search-input" placeholder="即时检索 135 篇博文、专栏与项目..." autocomplete="off" aria-label="站内搜索：检索博文、专栏与项目">
             <kbd class="search-kbd" id="search-kbd-badge">⌘K</kbd>
           </div>
           <div id="home-search-results" class="blog-search-results hero-search-dropdown"></div>
@@ -162,7 +162,7 @@
               <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
               <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
             </svg>
-            阅读 <!-- POSTS_COUNT -->134<!-- /POSTS_COUNT --> 篇博文
+            阅读 <!-- POSTS_COUNT -->135<!-- /POSTS_COUNT --> 篇博文
           </a>
         </div>
       </div>
@@ -183,26 +183,45 @@
         <article class="blog-card-featured animate-on-scroll" id="home-featured-post" style="display: block;">
           <div class="blog-card-header">
             <div class="blog-card-meta">
+              <span class="blog-date">2026-11-09</span>
+              <span>·</span>
+              <span class="blog-read-time">14 min</span>
+            </div>
+            <span class="blog-list-tag">思考</span>
+          </div>
+          <h3 class="blog-card-title">
+            <a href="blog/posts/tech-debt-matures-on-a-date.html">技术债不按数量累积，按到期日聚集</a>
+          </h3>
+          <p class="blog-card-excerpt">技术债的风险不按数量累积，而按到期日聚集——而大部分债的到期日，不归你定。...</p>
+          <div class="blog-card-tags">
+            <span class="tech-tag">技术债</span>
+            <span class="tech-tag">依赖管理</span>
+            <span class="tech-tag">风险</span>
+            <span class="tech-tag">工程判断</span>
+          </div>
+        </article>
+        
+        <!-- 最新文章列表 -->
+                <div class="blog-list">
+        <article class="blog-mini-card animate-on-scroll" data-category="数据库" data-page="1">
+          <div class="blog-mini-card-header">
+            <div class="blog-list-meta">
               <span class="blog-date">2026-11-08</span>
               <span>·</span>
               <span class="blog-read-time">14 min</span>
             </div>
             <span class="blog-list-tag">数据库</span>
           </div>
-          <h3 class="blog-card-title">
+          <h3 class="blog-mini-card-title">
             <a href="blog/posts/slow-query-ranking-hides-the-real-cost.html">慢查询排行榜的第一名，往往不是最该动的那条</a>
           </h3>
-          <p class="blog-card-excerpt">慢查询日志按单次耗时过滤，看不见又快又频繁的查询。单次耗时是单价，调用次数是次数，乘积才是要从预算里扣掉的总支出。...</p>
-          <div class="blog-card-tags">
+          <p class="blog-mini-card-excerpt">慢查询日志按单次耗时过滤，看不见又快又频繁的查询。单次耗时是单价，调用次数是次数，乘积才是要从预算里扣掉的总支出。</p>
+          <div class="blog-mini-card-tags">
             <span class="tech-tag">性能优化</span>
             <span class="tech-tag">SQL</span>
             <span class="tech-tag">可观测性</span>
-            <span class="tech-tag">PostgreSQL</span>
           </div>
         </article>
-        
-        <!-- 最新文章列表 -->
-                <div class="blog-list">
         <article class="blog-mini-card animate-on-scroll" data-category="思考" data-page="1">
           <div class="blog-mini-card-header">
             <div class="blog-list-meta">
@@ -222,31 +241,12 @@
             <span class="tech-tag">反馈</span>
           </div>
         </article>
-        <article class="blog-mini-card animate-on-scroll" data-category="数据库" data-page="1">
-          <div class="blog-mini-card-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-11-06</span>
-              <span>·</span>
-              <span class="blog-read-time">14 min</span>
-            </div>
-            <span class="blog-list-tag">数据库</span>
-          </div>
-          <h3 class="blog-mini-card-title">
-            <a href="blog/posts/pool-size-is-a-queue-length.html">连接池不是并发旋钮，是排队区的长度</a>
-          </h3>
-          <p class="blog-mini-card-excerpt">把池调大只改变谁能同时进去，不改变数据库能同时干多少活。吞吐上限是 min(N,C)/R——超出 C 的那部分池，只是把排队从应用内存搬进了数据库的锁队列。</p>
-          <div class="blog-mini-card-tags">
-            <span class="tech-tag">连接池</span>
-            <span class="tech-tag">性能</span>
-            <span class="tech-tag">PostgreSQL</span>
-          </div>
-        </article>
         </div>
         <!-- /最新文章列表 --></div>
 
       <div class="blog-view-all" style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
         <a href="blog/index.html" class="btn btn-secondary">
-          浏览全部文章 (<!-- POSTS_COUNT -->134<!-- /POSTS_COUNT --> 篇)
+          浏览全部文章 (<!-- POSTS_COUNT -->135<!-- /POSTS_COUNT --> 篇)
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M5 12h14M12 5l7 7-7 7"/>
           </svg>
@@ -290,7 +290,7 @@
               </div>
               <div class="terminal-line">
                 <span class="terminal-prompt">➜</span>
-                <span class="terminal-text"><span class="terminal-highlight">live_pulse</span> — 🟢 <!-- POSTS_COUNT -->134<!-- /POSTS_COUNT --> 篇博文 · 6 大专栏 · 原生 Android / 系统架构 / 端侧 AI 实战</span>
+                <span class="terminal-text"><span class="terminal-highlight">live_pulse</span> — 🟢 <!-- POSTS_COUNT -->135<!-- /POSTS_COUNT --> 篇博文 · 6 大专栏 · 原生 Android / 系统架构 / 端侧 AI 实战</span>
               </div>
             </div>
           </div>
@@ -398,7 +398,7 @@
           
           <div class="bento-metrics-grid">
             <div class="bento-metric-item">
-              <div class="bento-metric-num"><!-- POSTS_COUNT -->134<!-- /POSTS_COUNT --></div>
+              <div class="bento-metric-num"><!-- POSTS_COUNT -->135<!-- /POSTS_COUNT --></div>
               <div class="bento-metric-title">篇技术与思考博文</div>
             </div>
             <div class="bento-metric-item">

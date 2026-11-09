@@ -109,7 +109,7 @@
         <div class="blog-hero-info">
           <div class="status-pill" style="margin-bottom: 0.5rem;">
             <span class="pulse-dot"></span>
-            <span><!-- POSTS_COUNT -->134<!-- /POSTS_COUNT --> 篇深度文章 · 持续迭代中</span>
+            <span><!-- POSTS_COUNT -->135<!-- /POSTS_COUNT --> 篇深度文章 · 持续迭代中</span>
           </div>
           <h1 class="blog-hero-title">技术<span class="gradient-text">博客</span></h1>
           <p class="blog-hero-subtitle">Android、Kotlin、端侧 AI、全栈架构与开发思考</p>
@@ -163,7 +163,7 @@
           <button class="view-toggle-btn active" data-view="list" role="tab" aria-selected="true" aria-controls="blog-list">
             <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h7"/></svg>
             <span class="tab-text">全部文章</span>
-            <span class="tab-badge"><!-- POSTS_COUNT -->134<!-- /POSTS_COUNT --></span>
+            <span class="tab-badge"><!-- POSTS_COUNT -->135<!-- /POSTS_COUNT --></span>
           </button>
           <button class="view-toggle-btn" data-view="series" role="tab" aria-selected="false" aria-controls="series-view">
             <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><line x1="9" y1="7" x2="15" y2="7"/><line x1="9" y1="11" x2="13" y2="11"/></svg>
@@ -179,6 +179,28 @@
       </div>
       <div class="blog-list-container" id="blog-list">
         <!-- Post List -->
+        <article class="blog-list-item spotlight-card animate-on-scroll" data-category="思考" data-tags="技术债,依赖管理,风险,工程判断" data-page="1">
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-11-09</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 14 min</span>
+              </div>
+              <span class="blog-list-tag">思考</span>
+            </div>
+            <h3 class="blog-list-title">
+              <a href="posts/tech-debt-matures-on-a-date.html">技术债不按数量累积，按到期日聚集</a>
+            </h3>
+            <p class="blog-list-excerpt">技术债的风险不按数量累积，而按到期日聚集——而大部分债的到期日，不归你定。</p>
+          </div>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#技术债</span> <span class="tag-pill">#依赖管理</span> <span class="tag-pill">#风险</span>
+            </div>
+            <a href="posts/tech-debt-matures-on-a-date.html" class="blog-read-more" aria-label="阅读全文：技术债不按数量累积，按到期日聚集"><span>阅读全文</span><span class="read-more-arrow">→</span></a>
+          </div>
+        </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="数据库" data-tags="性能优化,SQL,可观测性,PostgreSQL" data-page="1">
           <div>
             <div class="blog-list-header">
@@ -375,28 +397,6 @@
               <span class="tag-pill">#缓存</span> <span class="tag-pill">#构建</span> <span class="tag-pill">#静态站点</span>
             </div>
             <a href="posts/cache-version-from-content-hash.html" class="blog-read-more" aria-label="阅读全文：版本号不该手写：缓存失效应当由内容哈希推导"><span>阅读全文</span><span class="read-more-arrow">→</span></a>
-          </div>
-        </article>
-        <article class="blog-list-item spotlight-card animate-on-scroll" data-category="DevOps" data-tags="配置管理,部署,耦合,工程实践" data-page="1">
-          <div>
-            <div class="blog-list-header">
-              <div class="blog-list-meta">
-                <span class="blog-date">📅 2026-10-28</span>
-                <span>·</span>
-                <span class="blog-read-time">⏱️ 15 min</span>
-              </div>
-              <span class="blog-list-tag">DevOps</span>
-            </div>
-            <h3 class="blog-list-title">
-              <a href="posts/external-identifiers-coupling-radius.html">别人的一次改名，是你的全站停机：外部标识符的耦合半径</a>
-            </h3>
-            <p class="blog-list-excerpt">一次账户子域改名暴露 9 处隐藏副本。外部标识符被写了几遍，改名成本就是几倍、停机半径就是几圈——硬编码等于把发布权交给别人。</p>
-          </div>
-          <div class="blog-list-footer">
-            <div class="blog-list-tags">
-              <span class="tag-pill">#配置管理</span> <span class="tag-pill">#部署</span> <span class="tag-pill">#耦合</span>
-            </div>
-            <a href="posts/external-identifiers-coupling-radius.html" class="blog-read-more" aria-label="阅读全文：别人的一次改名，是你的全站停机：外部标识符的耦合半径"><span>阅读全文</span><span class="read-more-arrow">→</span></a>
           </div>
         </article>
       <!-- /Post List -->
