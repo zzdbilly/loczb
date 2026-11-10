@@ -7,6 +7,14 @@
     <language>zh-CN</language>
     <atom:link href="https://709527.xyz/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>写到一百多篇，瓶颈不是没得写，是认不出自己写过什么</title>
+      <link>https://709527.xyz/blog/posts/archive-becomes-the-enemy-of-new-ideas.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/archive-becomes-the-enemy-of-new-ideas.html</guid>
+      <description>存量到一定规模，「我写过这个吗」就不再是记性问题，而是检索问题。标题拦不住主张，记性也拦不住自己。</description>
+      <category>思考</category>
+      <pubDate>Tue, 10 Nov 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
       <title>技术债不按数量累积，按到期日聚集</title>
       <link>https://709527.xyz/blog/posts/tech-debt-matures-on-a-date.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/tech-debt-matures-on-a-date.html</guid>
@@ -157,14 +165,6 @@
       <description>产出成本趋近于零时，稀缺的东西换了位置。多数人把这个问题问成「该学哪个工具」，真问题是：你有什么值得被 AI 放大。给三样不会被平替的能力和四条判据。</description>
       <category>思考</category>
       <pubDate>Sun, 11 Oct 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>先自由后财富，还是先财富后自由</title>
-      <link>https://709527.xyz/blog/posts/freedom-then-wealth-or-wealth-then-freedom.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/freedom-then-wealth-or-wealth-then-freedom.html</guid>
-      <description>大多数人把它当成二选一，其实问错了。把「自由」和「财富」各拆成两半再交叉，顺序问题会变成结构问题——我给四条能拿去做判断的判据。</description>
-      <category>思考</category>
-      <pubDate>Sat, 10 Oct 2026 00:00:00 +0800</pubDate>
     </item>
   </channel>
 </rss>

@@ -1,6 +1,21 @@
 {
   "posts": [
     {
+      "slug": "archive-becomes-the-enemy-of-new-ideas",
+      "title": "写到一百多篇，瓶颈不是没得写，是认不出自己写过什么",
+      "date": "2026-11-10",
+      "dateTime": "2026-11-10 15:05:00",
+      "category": "思考",
+      "tags": [
+        "写作",
+        "知识管理",
+        "检索",
+        "长期主义"
+      ],
+      "readTime": 14,
+      "url": "blog/posts/archive-becomes-the-enemy-of-new-ideas.html"
+    },
+    {
       "slug": "tech-debt-matures-on-a-date",
       "title": "技术债不按数量累积，按到期日聚集",
       "date": "2026-11-09",
@@ -2108,9 +2123,9 @@
     "系统编程"
   ],
   "stats": {
-    "totalPosts": 135,
-    "totalTags": 348,
-    "latestDate": "2026-11-09",
+    "totalPosts": 136,
+    "totalTags": 349,
+    "latestDate": "2026-11-10",
     "oldestDate": "2026-02-15"
   }
 }
