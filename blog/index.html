@@ -109,7 +109,7 @@
         <div class="blog-hero-info">
           <div class="status-pill" style="margin-bottom: 0.5rem;">
             <span class="pulse-dot"></span>
-            <span><!-- POSTS_COUNT -->136<!-- /POSTS_COUNT --> 篇深度文章 · 持续迭代中</span>
+            <span><!-- POSTS_COUNT -->137<!-- /POSTS_COUNT --> 篇深度文章 · 持续迭代中</span>
           </div>
           <h1 class="blog-hero-title">技术<span class="gradient-text">博客</span></h1>
           <p class="blog-hero-subtitle">Android、Kotlin、端侧 AI、全栈架构与开发思考</p>
@@ -163,7 +163,7 @@
           <button class="view-toggle-btn active" data-view="list" role="tab" aria-selected="true" aria-controls="blog-list">
             <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h7"/></svg>
             <span class="tab-text">全部文章</span>
-            <span class="tab-badge"><!-- POSTS_COUNT -->136<!-- /POSTS_COUNT --></span>
+            <span class="tab-badge"><!-- POSTS_COUNT -->137<!-- /POSTS_COUNT --></span>
           </button>
           <button class="view-toggle-btn" data-view="series" role="tab" aria-selected="false" aria-controls="series-view">
             <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><line x1="9" y1="7" x2="15" y2="7"/><line x1="9" y1="11" x2="13" y2="11"/></svg>
@@ -179,6 +179,28 @@
       </div>
       <div class="blog-list-container" id="blog-list">
         <!-- Post List -->
+        <article class="blog-list-item spotlight-card animate-on-scroll" data-category="安全" data-tags="备份,容灾,运维,可验证性" data-page="1">
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-11-11</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 14 min</span>
+              </div>
+              <span class="blog-list-tag">安全</span>
+            </div>
+            <h3 class="blog-list-title">
+              <a href="posts/backup-is-not-a-copy-without-a-drill.html">备份不是副本：没做过恢复演练的那份，只是一堆还在的字节</a>
+            </h3>
+            <p class="blog-list-excerpt">exit 0、文件在、体积对，证明的只是写进去了。备份该用 RPO、RTO 和一次真的恢复演练来验收。</p>
+          </div>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#备份</span> <span class="tag-pill">#容灾</span> <span class="tag-pill">#运维</span>
+            </div>
+            <a href="posts/backup-is-not-a-copy-without-a-drill.html" class="blog-read-more" aria-label="阅读全文：备份不是副本：没做过恢复演练的那份，只是一堆还在的字节"><span>阅读全文</span><span class="read-more-arrow">→</span></a>
+          </div>
+        </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="思考" data-tags="写作,知识管理,检索,长期主义" data-page="1">
           <div>
             <div class="blog-list-header">
@@ -375,28 +397,6 @@
               <span class="tag-pill">#空安全</span> <span class="tag-pill">#序列化</span> <span class="tag-pill">#Android</span>
             </div>
             <a href="posts/nullable-claims-die-at-the-boundary.html" class="blog-read-more" aria-label="阅读全文：空安全在边界失效：反序列化不经过你的构造函数"><span>阅读全文</span><span class="read-more-arrow">→</span></a>
-          </div>
-        </article>
-        <article class="blog-list-item spotlight-card animate-on-scroll" data-category="安全" data-tags="隐私,日志,密钥管理,工程实践" data-page="1">
-          <div>
-            <div class="blog-list-header">
-              <div class="blog-list-meta">
-                <span class="blog-date">📅 2026-10-30</span>
-                <span>·</span>
-                <span class="blog-read-time">⏱️ 15 min</span>
-              </div>
-              <span class="blog-list-tag">安全</span>
-            </div>
-            <h3 class="blog-list-title">
-              <a href="posts/redact-at-write-time.html">脱敏要做在写入端：落盘之后打码，等于没打码</a>
-            </h3>
-            <p class="blog-list-excerpt">打码是一次性闸口，位置必须在数据产生、序列化的那一刻。落盘之后你面对的不再是一条数据，而是一堆不受你控制的副本。</p>
-          </div>
-          <div class="blog-list-footer">
-            <div class="blog-list-tags">
-              <span class="tag-pill">#隐私</span> <span class="tag-pill">#日志</span> <span class="tag-pill">#密钥管理</span>
-            </div>
-            <a href="posts/redact-at-write-time.html" class="blog-read-more" aria-label="阅读全文：脱敏要做在写入端：落盘之后打码，等于没打码"><span>阅读全文</span><span class="read-more-arrow">→</span></a>
           </div>
         </article>
       <!-- /Post List -->

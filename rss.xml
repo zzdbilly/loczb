@@ -7,6 +7,14 @@
     <language>zh-CN</language>
     <atom:link href="https://709527.xyz/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>备份不是副本：没做过恢复演练的那份，只是一堆还在的字节</title>
+      <link>https://709527.xyz/blog/posts/backup-is-not-a-copy-without-a-drill.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/backup-is-not-a-copy-without-a-drill.html</guid>
+      <description>exit 0、文件在、体积对，证明的只是写进去了。备份该用 RPO、RTO 和一次真的恢复演练来验收。</description>
+      <category>安全</category>
+      <pubDate>Wed, 11 Nov 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
       <title>写到一百多篇，瓶颈不是没得写，是认不出自己写过什么</title>
       <link>https://709527.xyz/blog/posts/archive-becomes-the-enemy-of-new-ideas.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/archive-becomes-the-enemy-of-new-ideas.html</guid>
@@ -157,14 +165,6 @@
       <description>大多数人以为下午难熬是因为它太长，其实是这段时间里没有结构。把午后当成一段低带宽时段来设计——切块、错配任务、压低启动门槛，时间有了形状，人就不容易被它拖着走。</description>
       <category>思考</category>
       <pubDate>Mon, 12 Oct 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>AI 时代，普通人真正稀缺的是什么</title>
-      <link>https://709527.xyz/blog/posts/what-matters-most-for-ordinary-people-in-the-ai-era.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/what-matters-most-for-ordinary-people-in-the-ai-era.html</guid>
-      <description>产出成本趋近于零时，稀缺的东西换了位置。多数人把这个问题问成「该学哪个工具」，真问题是：你有什么值得被 AI 放大。给三样不会被平替的能力和四条判据。</description>
-      <category>思考</category>
-      <pubDate>Sun, 11 Oct 2026 00:00:00 +0800</pubDate>
     </item>
   </channel>
 </rss>

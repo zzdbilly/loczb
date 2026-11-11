@@ -1,0 +1,15 @@
+{
+  "slug": "backup-is-not-a-copy-without-a-drill",
+  "title": "备份不是副本：没做过恢复演练的那份，只是一堆还在的字节",
+  "description": "exit 0、文件在、体积对，证明的只是写进去了。备份该用 RPO、RTO 和一次真的恢复演练来验收。",
+  "date": "2026-11-11",
+  "dateTime": "2026-11-11 15:04:00",
+  "category": "安全",
+  "tags": [
+    "备份",
+    "容灾",
+    "运维",
+    "可验证性"
+  ],
+  "readTime": 14
+}

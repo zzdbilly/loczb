@@ -1,6 +1,21 @@
 {
   "posts": [
     {
+      "slug": "backup-is-not-a-copy-without-a-drill",
+      "title": "备份不是副本：没做过恢复演练的那份，只是一堆还在的字节",
+      "date": "2026-11-11",
+      "dateTime": "2026-11-11 15:04:00",
+      "category": "安全",
+      "tags": [
+        "备份",
+        "容灾",
+        "运维",
+        "可验证性"
+      ],
+      "readTime": 14,
+      "url": "blog/posts/backup-is-not-a-copy-without-a-drill.html"
+    },
+    {
       "slug": "archive-becomes-the-enemy-of-new-ideas",
       "title": "写到一百多篇，瓶颈不是没得写，是认不出自己写过什么",
       "date": "2026-11-10",
@@ -2111,11 +2126,11 @@
     }
   ],
   "categories": [
+    "安全",
     "思考",
     "数据库",
     "前端",
     "Kotlin",
-    "安全",
     "DevOps",
     "开发",
     "Android",
@@ -2123,9 +2138,9 @@
     "系统编程"
   ],
   "stats": {
-    "totalPosts": 136,
-    "totalTags": 349,
-    "latestDate": "2026-11-10",
+    "totalPosts": 137,
+    "totalTags": 352,
+    "latestDate": "2026-11-11",
     "oldestDate": "2026-02-15"
   }
 }
