@@ -234,7 +234,7 @@
 <p>这个 N 不需要很小。一个季度跑一次，比一年跑零次强得多。重要的是它进入日历，而不是停留在「有空的时候」。</p>
 <h2>一份可以照着跑的演练骨架</h2>
 <p>下面是我打算照着跑的东西，是示例，不是实测记录。它把「恢复」拆成几个能分别判定成败的步骤，每一步失败都能定位到环节，而不是笼统地报一个「恢复失败」。</p>
-<p>第一步，先确认归档本身能读。注意这一步和备份脚本里的检查不是一回事：备份脚本检查的是写完了，这里检查的是读得出来。</p>
+<p>第一步，先看清楚现在的备份脚本到底保证了什么。它保证的是「写完了」，不是「读得出来」——这两件事在顺利的时候看起来是同一件，在出问题的时候会分开。</p>
 <pre><code class="language-bash">#!/usr/bin/env bash
 set -euo pipefail
 
@@ -430,7 +430,7 @@ echo &quot;restore took $(( $(date +%s) - START ))s&quot;
         <div class="post-info-label">文章信息</div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📅</span> 发布日期</span><span class="post-info-stat-value">2026-11-11</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">⏱️</span> 阅读时间</span><span class="post-info-stat-value">14 min read</span></div>
-        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">4024 字</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">4034 字</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📊</span> 章节数</span><span class="post-info-stat-value">9 节 · 18 子节</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">💻</span> 代码块</span><span class="post-info-stat-value">3 段</span></div>
       </div>
