@@ -7,6 +7,14 @@
     <language>zh-CN</language>
     <atom:link href="https://709527.xyz/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>只有你能跑通的那套，等于没跑通：可交接性是个技术指标</title>
+      <link>https://709527.xyz/blog/posts/handoverability-is-a-technical-metric.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/handoverability-is-a-technical-metric.html</guid>
+      <description>可交接性不是文档写得漂不漂亮，而是别人在干净环境里不问一句就能从零跑到上线；做不到，可靠性就只存在你的记性里。</description>
+      <category>思考</category>
+      <pubDate>Thu, 12 Nov 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
       <title>备份不是副本：没做过恢复演练的那份，只是一堆还在的字节</title>
       <link>https://709527.xyz/blog/posts/backup-is-not-a-copy-without-a-drill.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/backup-is-not-a-copy-without-a-drill.html</guid>
@@ -157,14 +165,6 @@
       <description>被动收入不是一种能找来的收入，而是一段主动投入沉淀下来的资产。我用三条判据把常见形式量了一遍，真伪立刻分开。</description>
       <category>思考</category>
       <pubDate>Thu, 15 Oct 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>下午不是太长，是结构太薄</title>
-      <link>https://709527.xyz/blog/posts/how-to-spend-the-afternoon-work-block-well.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/how-to-spend-the-afternoon-work-block-well.html</guid>
-      <description>大多数人以为下午难熬是因为它太长，其实是这段时间里没有结构。把午后当成一段低带宽时段来设计——切块、错配任务、压低启动门槛，时间有了形状，人就不容易被它拖着走。</description>
-      <category>思考</category>
-      <pubDate>Mon, 12 Oct 2026 00:00:00 +0800</pubDate>
     </item>
   </channel>
 </rss>

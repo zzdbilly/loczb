@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <script>document.documentElement.classList.add("js");try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://static.cloudflareinsights.com https://loczb-comments.billymust.workers.dev; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://loczb-comments.billymust.workers.dev https://dashscope.aliyuncs.com https://709527.xyz https://www.709527.xyz https://cloudflareinsights.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
+    <script>/* 反点击劫持兜底：GitHub Pages 无法下发 X-Frame-Options / CSP frame-ancestors */(function(){if(self===top)return;try{top.location=self.location}catch(e){}setTimeout(function(){if(self!==top){document.documentElement.style.display='none';}},400);})();</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>只有你能跑通的那套，等于没跑通：可交接性是个技术指标 | 张小猛 - loczb</title>
+    <meta name="description" content="可交接性不是文档写得漂不漂亮，而是别人在干净环境里不问一句就能从零跑到上线；做不到，可靠性就只存在你的记性里。">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="只有你能跑通的那套，等于没跑通：可交接性是个技术指标 | 张小猛 - loczb">
+    <meta property="og:description" content="可交接性不是文档写得漂不漂亮，而是别人在干净环境里不问一句就能从零跑到上线；做不到，可靠性就只存在你的记性里。">
+    <meta property="og:url" content="https://709527.xyz/blog/posts/handoverability-is-a-technical-metric.html">
+    <meta property="og:type" content="article">
+    <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
+    <meta property="og:site_name" content="loczb">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="只有你能跑通的那套，等于没跑通：可交接性是个技术指标 | 张小猛 - loczb">
+    <meta name="twitter:description" content="可交接性不是文档写得漂不漂亮，而是别人在干净环境里不问一句就能从零跑到上线；做不到，可靠性就只存在你的记性里。">
+    <meta name="twitter:image" content="https://709527.xyz/assets/images/og-image.png">
+
+        <script type="application/ld+json">
+{
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "只有你能跑通的那套，等于没跑通：可交接性是个技术指标",
+      "description": "可交接性不是文档写得漂不漂亮，而是别人在干净环境里不问一句就能从零跑到上线；做不到，可靠性就只存在你的记性里。",
+      "image": "https://709527.xyz/assets/images/og-image.png",
+      "author": {
+            "@type": "Person",
+            "name": "张小猛",
+            "url": "https://709527.xyz/about/"
+      },
+      "publisher": {
+            "@type": "Organization",
+            "name": "loczb",
+            "logo": {
+                  "@type": "ImageObject",
+                  "url": "https://709527.xyz/assets/images/favicon.svg"
+            }
+      },
+      "datePublished": "2026-11-12T15:42:00+08:00",
+      "dateModified": "2026-11-12T15:42:00+08:00",
+      "url": "https://709527.xyz/blog/posts/handoverability-is-a-technical-metric.html",
+      "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://709527.xyz/blog/posts/handoverability-is-a-technical-metric.html"
+      },
+      "keywords": "可交接性, 运维, 文档, 单人系统",
+      "articleSection": "思考",
+      "timeRequired": "PT14M",
+      "inLanguage": "zh-CN"
+}
+    </script>
+
+    <link rel="stylesheet" href="../../assets/css/style.css?v=c8e170d8f9">
+    <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
+    <link rel="alternate icon" href="../../assets/images/favicon.ico">
+    <link rel="canonical" href="https://709527.xyz/blog/posts/handoverability-is-a-technical-metric.html">
+</head>
+<body>
+  <!-- PARTIAL:SKIP_LINK -->
+  <a href="#main-content" class="skip-link">跳至主要内容</a>
+  <!-- /PARTIAL:SKIP_LINK -->
+
+  <!-- Navigation -->
+<!-- PARTIAL:NAV -->
+  <nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">
+      loc<span>zb</span>
+    </a>
+    <button class="nav-toggle" aria-label="打开菜单" aria-expanded="false" aria-controls="nav-links-menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <div class="nav-overlay"></div>
+    <ul class="nav-links" id="nav-links-menu">
+      <li><a href="/" class="nav-link" data-nav="home">首页</a></li>
+      <li><a href="/projects/" class="nav-link" data-nav="projects">项目</a></li>
+      <li><a href="/blog/" class="nav-link active" data-nav="blog">博客</a></li>
+      <li><a href="/about/" class="nav-link" data-nav="about">关于</a></li>
+    </ul>
+    <button class="theme-toggle" aria-label="切换主题" title="切换亮/暗模式">
+      <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="5"></circle>
+        <line x1="12" y1="1" x2="12" y2="3"></line>
+        <line x1="12" y1="21" x2="12" y2="23"></line>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+        <line x1="1" y1="12" x2="3" y2="12"></line>
+        <line x1="21" y1="12" x2="23" y2="12"></line>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+      </svg>
+      <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+      </svg>
+    </button>
+  </div>
+</nav>
+  <!-- /PARTIAL:NAV -->
+  <main class="section" id="main-content" style="padding-bottom: 0; padding-top: var(--space-4xl);">
+    <div class="container container-narrow">
+      <a href="../index.html" class="back-link">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        返回博客列表
+      </a>
+
+      <article class="post-content">
+        <h1>只有你能跑通的那套，等于没跑通：可交接性是个技术指标</h1>
+
+        <div class="post-meta">
+          <span class="meta-item"><span aria-hidden="true">📅</span> 2026-11-12 15:42:00</span>
+          <span class="meta-item"><span aria-hidden="true">⏱️</span> 14 min read</span>
+          <span class="meta-item"><span aria-hidden="true">👤</span> 张小猛</span>
+        </div>
+
+        <div class="post-tags">
+          <span class="tag">可交接性</span>
+          <span class="tag">运维</span>
+          <span class="tag">文档</span>
+          <span class="tag">单人系统</span>
+        </div>
+
+        
+
+        <h2>我从来没在干净机器上跑过一遍</h2>
+<p>写这篇文章之前，我先承认一件事：我没有做过一次完整的冷启动测试。</p>
+<p>不是不常做，是没做过。我知道装依赖用哪条命令，知道构建脚本在哪个目录下跑，知道哪一步偶尔要重试，知道报错时先看哪一行。这些知识都在，只是全部装在一个地方——我脑子里。真要有人站到旁边，说「你把这儿从零跑起来给我看」，我能跑通，但过程里会不断有我自己的补丁：这里跳过一下，那里我知道它其实没问题，这个警告不用管。</p>
+<p>这就是问题所在。我验证的从来不是「这套东西能不能跑」，而是「我能不能让它跑」。前一个问题关于系统，后一个问题关于我。单人做的东西，大部分时间都在回答后一个，然后误以为回答了前一个。</p>
+<h2>先把口径定下来：可交接性是个验收项，不是文风</h2>
+<p>「文档写得好不好」是个审美问题，讨论起来没完。可交接性不是。它可以被写成一个动作，然后有人去做，做完有明确的结果：成或者不成。</p>
+<p>我给自己定的口径是：<strong>在一个干净环境里，不问我任何问题，能不能从零跑到上线。</strong> 这里有三个限定。干净环境，指没有我现成的配置、缓存、历史遗留目录。不提问，指过程中不需要发消息确认「这一步报错正常吗」。从零到上线，指不只是本地能打开，还包括改动真的发出去了。</p>
+<h3>它衡量的不是文档的厚度</h3>
+<p>一份三十页的文档可以完全没有可交接性：它写满了背景、架构、设计取舍，却在「装哪个版本的依赖」这一行上含糊。反过来，一份两页的清单可能足够，因为它只写动作和判定标准。</p>
+<p>厚度和可执行性不是一回事，甚至经常负相关。写得长的人往往在解释「为什么」，而接手的人卡住的地方永远是「然后呢」。</p>
+<h3>四个面，四个动作</h3>
+<p>我把这件事拆成四个面。每个面对应一个动作，每个动作都有一个「如果我不在，会怎样」的答案。</p>
+<ul>
+<li>启动面：干净机器上从零跑通一次</li>
+<li>变更面：改一处并上线，全程不问人</li>
+<li>故障面：坏了之后，别人能判断哪里坏了</li>
+<li>退出面：停掉或迁走时，知道要动哪些东西</li>
+</ul>
+<p>这四个面不是调查结论，是我用来给自己挑毛病的一张表。下面的反例都是真的，但我要说清楚：我没有把这四个动作完整做过一遍。写下来是为了不再含糊，不是为了宣布已经做到。</p>
+<h2>启动面：干净机器上，从零到能跑</h2>
+<h3>验收动作</h3>
+<p>找一台没碰过这个项目的机器，或者一个空目录加一份新克隆，从读文档第一行开始，到构建成功为止。规则只有一条：卡住的时候不许问，只能查。查不到，就记下来——那是文档的缺口，不是你的问题。</p>
+<h3>反例一：解释器的路径会烂</h3>
+<p>有一次换机器。仓库搬过去，代码一行没改，构建脚本直接报错。原因不在代码：项目里那个虚拟环境记录的是旧机器上的解释器绝对路径，机器一换，那个路径指向空气。</p>
+<p>修法本身不复杂——删掉环境，按锁定的版本把依赖重装一遍。但这一步没有被写进任何文档。它当时只存在于一段对话里：我这边出错了，我这边修好了，然后继续往下走。下一个遇到同样报错的人，拿到的是同一条错误信息，和一片空白。</p>
+<p>这件事让我意识到一个区分：<strong>能修好</strong>和<strong>能被别人修好</strong>是两件事。前者只依赖我，后者需要一条路径。而我当时只生产了前者的证据。</p>
+<h3>反例二：一道住在不会被提交的目录里的检查</h3>
+<p>更隐蔽的一次是门禁。项目里有一道提交前的检查，会在提交时自动构建一遍，比对暂存区和工作区，漏文件就阻断。它工作得很好，好到我从来不觉得它需要被记住。</p>
+<p>问题是它住在版本控制之外的那个目录里。它不在仓库里，新克隆上根本不存在，也没有任何提示说它缺了。换机器之后，它没有报错，没有警告，只是安静地不在了。之后有一段时间，我以为自己还在被检查，其实没有。直到某次漏了产物、推上去、流水线红了，我才发现那道门一直开着，但门后没人。</p>
+<p>这两件事放在一起看，形状是一样的：<strong>系统里有一部分东西，只存在于「这台机器上曾经发生过什么」，而不存在于仓库里。</strong> 它们不会在启动时喊一声「我不在」，它们的缺席是静默的。</p>
+<h3>缺失的东西不会报错</h3>
+<p>这是我目前认为启动面最难的部分。错误会喊，缺失不会。文档漏了一节，读者不会收到通知；钩子没装，提交照常进行；环境变量没设，程序可能用默认值跑出一个看起来正常的结果。</p>
+<p>所以启动面的验收不能靠「跑起来了吗」，得靠「从零跑起来了吗」。差别在于：前者允许你带着历史，后者不允许。带着历史跑通，证明的是历史，不是系统。</p>
+<h2>变更面：改一处并上线，全程不需要问人</h2>
+<h3>验收动作：把文档里的命令原样粘一遍</h3>
+<p>不是读一遍，是粘一遍。一行不改，一个参数不补，看它是否照做。所有「这里要换成你自己的路径」的地方，都是缺口；所有「应该会看到某个输出」却没有写清楚输出的地方，也是缺口。</p>
+<h3>反例三：一条规则描述着一个已经不存在的机制</h3>
+<p>文档里有一句话，大意是「结果会由网关自动投递，不需要手动处理」。写这句话的时候它是对的。后来那个机制被拿掉了，投递方式换了，句子还在。</p>
+<p>这就是文档腐烂的典型形态：它不是写错了，是写对过。而读的人没有办法从字面上分辨「现在的规则」和「过去的规则」。他照着做，等一个永远不会来的结果，然后开始怀疑自己。</p>
+<p>同一份文档里还有一条，写着仓库在某个路径下。那个路径也搬过一次家。文本没错，指的东西没了。</p>
+<h3>反例四：日期是从上下文里来的</h3>
+<p>还有一个更小的例子，小到不值一提，但它最能说明问题。有一次发布，我把时间写成了未来的日期。不是手滑，是「今天几号」这个信息来自我的上下文，而上下文里的日期比真实时间晚。</p>
+<p>后果不是页面打不开，是排序错了：新文章排到了不该在的位置，索引、列表、订阅源跟着一起偏。这种错误不会让任何门禁变红，它只是让系统的状态和事实差了一点。</p>
+<p>后来我改掉了这个做法：时间从机器上读，并且明确写清时区，不再从记忆或上下文里取。这个改动很小，但它把一类错误从「靠注意力避免」变成了「结构上不会发生」。</p>
+<p>我认为这是变更面真正的验收内容：<strong>不是「这次改对了吗」，而是「这个改法有没有把判断留给人」。</strong> 每一次需要人记住一个前提，都是一次未来的事故。</p>
+<h3>能粘，是二值的</h3>
+<p>命令能不能直接粘，是个二值判断，没有中间状态。能，就是能；需要改一个地方，就是不能。而「需要改一个地方」在文档里通常表现为一句温和的提示：「请将路径替换为你自己的路径。」</p>
+<p>这句话看起来是体贴，实际上是交接漏洞的标记。它意味着作者知道这里有个变量，但没有把它变成参数、配置或者默认值。读者拿到的是一个半成品，还得自己完成最后一步——而最后一步往往是最容易错的一步。</p>
+<h2>故障面：坏了之后，别人先看哪里</h2>
+<h3>验收动作：给一个已经坏掉的系统</h3>
+<p>这一面不太好演，因为坏掉的东西不常有。可以退一步：把系统的一个部件手动停掉，或者改坏一个配置，然后观察对方的第一反应。他打开的是日志、是监控、是文档，还是聊天窗口？</p>
+<p>如果第一反应是来问你，那这一面就是零分。不是他不聪明，是系统没有给他别的入口。</p>
+<h3>反例五：那份按检查顺序写的笔记</h3>
+<p>真正交接出去过两次。留下的不是功能介绍，而是一份按检查顺序排的笔记：先拉代码，核对提交身份，跑类型检查、测试、构建，最后看 diff。</p>
+<pre><code class="language-bash"># 交接笔记里那份检查顺序（示例，按项目替换具体命令）
+git pull --ff-only
+git log -1 --format='%h %an &lt;%ae&gt;'
+git status --porcelain
+npm run typecheck
+npm test
+npm run build
+git diff --stat
+</code></pre>
+<p>这份笔记的价值不在内容，在顺序。功能介绍告诉你这个系统能做什么，检查顺序告诉你「现在这个系统是不是好的」。前者是说明书，后者是诊断路径。接手的人照着走一遍，不需要理解全部设计，就能得出一个自己的结论。</p>
+<p>我后来反复想这件事：为什么顺序比内容重要？因为故障现场最缺的不是知识，是下一步。人在坏掉的东西面前会僵住，需要的是一条「先做这个，再看结果，然后决定」的轨道。轨道可以被写下来，而且写下来之后不依赖写的人在场。</p>
+<h3>顺序本身就是知识</h3>
+<p>所以故障面的文档不该是「系统架构说明」，而该是「从哪一层开始怀疑」。先确认代码是最新的，再确认依赖装对了，再确认构建产物和源一致，再确认部署真的发生了。每一步都有一个可观察的结果，每一步都能排除一批可能。</p>
+<p>这也是我判断一份交接材料好坏的依据：读完它，我能不能独立地得出「这里坏了」的结论，而不是只知道「它坏了」。</p>
+<h2>退出面：停掉、迁走、或者交给下一个人的时候</h2>
+<h3>验收动作：写一张「关掉它」的清单</h3>
+<p>启动是把它打开，退出是把它关掉。大部分人只写前者，因为前者每天在做，后者一辈子做一两次。而恰恰是这一两次，最需要文档。</p>
+<p>清单至少要有四类东西：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">类别</th>
+<th style="text-align: left;">要回答的问题</th>
+<th style="text-align: left;">常见遗漏</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">凭据</td>
+<td style="text-align: left;">哪些密钥、令牌、账号属于这个系统</td>
+<td style="text-align: left;">只写了主账号，忘了机器人或只读令牌</td>
+</tr>
+<tr>
+<td style="text-align: left;">定时任务</td>
+<td style="text-align: left;">有哪些按时间跑的东西，跑在哪里</td>
+<td style="text-align: left;">写在本机的任务表里，不在仓库里</td>
+</tr>
+<tr>
+<td style="text-align: left;">域名与证书</td>
+<td style="text-align: left;">解析指向哪，什么时候到期，谁在续</td>
+<td style="text-align: left;">续期是自动的，但自动的那个东西也要停</td>
+</tr>
+<tr>
+<td style="text-align: left;">钩子与回调</td>
+<td style="text-align: left;">哪些外部系统会在事件发生时打过来</td>
+<td style="text-align: left;">提交钩子、部署钩子、通知回调</td>
+</tr>
+</tbody>
+</table>
+<p>这张表的每一行都有一个共同点：它们不在代码里。代码可以 clone，这些东西不能。</p>
+<h3>反例六：文档里的地址停在搬家前</h3>
+<p>还是那份文档。仓库路径的那一条，在搬家之后就没有再对过。退出面最怕的正是这种：你按文档去找「要改的东西」，文档指的地方已经是空的。你以为自己清理干净了，实际上真正在跑的那份还在别处。</p>
+<p>同一份文档里那条「由网关自动投递」的规则，也属于退出面的问题。它描述的是一个已经停掉的机制。接手的人如果照着它去关，会关错东西；如果不去关，会留下一个没人知道的活口。</p>
+<h3>退出面缺的往往不是步骤，是边界</h3>
+<p>停一个服务不难，难的是知道「这个服务」包括哪些东西。一个人做久了，边界会在脑子里自动补全：这个域名是我的，那个定时任务也是我的，那个回调指向的地址还是我的。这些关系从来没被写下来过，因为它们太日常了，日常到不觉得是知识。</p>
+<p>而交接的时候，恰恰是这些「不算知识」的东西构成了全部工作量。</p>
+<h2>为什么知识型工作天然向个人收拢</h2>
+<p>如果可交接性这么重要，为什么大多数单人项目都没有？我不认为答案是懒。我认为是结构。</p>
+<h3>写下来比做出来慢</h3>
+<p>做一件事，十分钟。把这件事写成别人能照着做的步骤，可能要四十分钟：你得回忆自己跳过了什么，得试一遍「如果我不知道这些，会卡在哪」，得把「这里注意一下」翻译成具体动作。写的成本是做的几倍，而收益延迟发生，还不可见。</p>
+<p>人在这种成本结构下，理性选择永远是先做。文档被推到「这周有空再说」的位置，然后永远没有那一周。</p>
+<h3>手比文档快，而且快到让人觉得不值得记</h3>
+<p>手的速度是即时的：报错，改，跑通，继续。整个过程没有摩擦，也不需要把中间状态外化。写文档则要求你停下来，把已经在脑子里完成的事情重新拆开——这在体感上是一种倒退。</p>
+<p>于是每一次都在做同一个微小的交换：这次先记住，下次再写。单次看，这个交换是划算的。累积起来，系统就长成了只有一个人能操作的样子。</p>
+<h3>记忆的复利是负的</h3>
+<p>更麻烦的是，记忆不是稳定的资产。它会变形：你会记得「当时改过这里」，但记不清改成什么；会记得「那个东西要手动跑一下」，但记不清为什么。半年后，你的记忆已经不是一个可靠的副本，而是一个自信的摘要。</p>
+<p>所以「我记住就行」这个策略，不只是把风险留给未来，它还在持续贬值。你依赖的那份知识，每天都在变得比昨天更不可靠一点。</p>
+<h3>还有一层：结构性的不可见</h3>
+<p>有些东西不是不愿意写，是写不下来。上面提到的钩子目录、虚拟环境里的解释器路径、某台机器上的定时任务——它们在语义上不属于「项目」，所以不会被放进仓库；不在仓库里，就不会出现在任何一次「这个项目有什么」的盘点里。</p>
+<p>它们平时完全隐身，只在换机器、重建环境、或者别人接手的时候现形一次。现形的方式还不是报错，是「东西不见了」。</p>
+<h2>把验收标准换掉</h2>
+<h3>从「我记得怎么弄」到「别人跑通一次」</h3>
+<p>我过去判断一个项目是否健康，看的是「我能不能跑」。这个标准的问题在于，它永远为真——只要我还记得。它衡量的其实是我的状态，不是系统的状态。</p>
+<p>换成的标准是：<strong>别人拿着现有文档，在干净环境里，不问一句，从零跑到上线。</strong> 这个标准会失败，而且失败得很有信息量：它失败在哪一步，缺口就在哪一步。</p>
+<p>它还有个副作用：一旦你知道有人会照这个标准验收，写文档的动力就变了。不是为了记录，是为了通过检查。这两种动机产出的东西不一样。</p>
+<h3>文档不是交付物</h3>
+<p>这句话我想说得准确一点。文档当然要交付，但文档本身不是目的。一份没人照着跑过的文档，和一段没跑过的代码是同一种东西：看起来完成了，实际没有经过验证。</p>
+<p><strong>能跑通的文档才是交付物。</strong> 判断标准也很朴素：有人照着它跑通过一次，并且过程中没有问过作者。</p>
+<h2>我现在的进度：一项半</h2>
+<p>按上面四个面算，我的实际进度是这样的，不做美化：</p>
+<ul>
+<li>启动面：没做过完整的冷启动。我修过换机器时的环境问题，但修法没有写进文档，所以这一面仍然不合格。</li>
+<li>变更面：部分做过。时间改成从机器读并明确时区，是把判断从人身上挪走的一个例子；但文档里那些过期的句子还在，命令也不是每条都能直接粘。</li>
+<li>故障面：有过两次按检查顺序交接的实践，这一面相对最好，但它是笔记，不是仓库里的文件，下一次不一定还在。</li>
+<li>退出面：没有清单。凭据、定时任务、域名、钩子这四类东西散在各处，边界只在我脑子里。</li>
+</ul>
+<p>四个面里，一个半。这个数字不好看，但它是真的。写这篇文章的过程本身也在提醒我：我擅长的是把系统跑起来，不擅长的是让系统在没有我的情况下继续被跑。</p>
+<h2>尾声：可靠性长在哪里</h2>
+<p>一个人维护的系统，最容易产生一种错觉：它很稳。因为它在你的手里确实很稳——你知道它的脾气，知道哪里松了要拧一下，知道哪个警告可以忽略。这种稳是真实的，但它的载体是你。</p>
+<p>可交接性做的事，是把这份稳从人身上搬到系统上。搬的过程没有技术含量，只有枯燥：把跳过的步骤补回来，把隐式的约定写成显式的检查，把「我记得」换成「文档里写着，而且有人跑通过」。</p>
+<p>它不产生新功能，也不让系统变快。它只是让系统的可靠性有一个不依赖某个人的落点。</p>
+<p>我现在能给出的判断只有一句：<strong>只有你能跑通的那套，等于没跑通。</strong> 它跑通过，但跑通的条件里有你，而这个条件不会被交付出去。</p>
+
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="backup-is-not-a-copy-without-a-drill.html">
+            <div class="related-post-card-title">备份不是副本：没做过恢复演练的那份，只是一堆还在的字节</div>
+            <div class="related-post-card-tags"><span>备份</span><span>容灾</span><span>运维</span></div>
+          </a>
+          <a class="related-post-card" href="choosing-and-running-a-vps.html">
+            <div class="related-post-card-title">主流 VPS 的选择和使用</div>
+            <div class="related-post-card-tags"><span>VPS</span><span>DevOps</span><span>运维</span></div>
+          </a>
+          <a class="related-post-card" href="vps-选购与使用指南五个常见场景的配置与避坑.html">
+            <div class="related-post-card-title">VPS 选购与使用指南：五个常见场景的配置与避坑</div>
+            <div class="related-post-card-tags"><span>VPS</span><span>DevOps</span><span>运维</span></div>
+          </a>
+          <a class="related-post-card" href="linux-inode-mechanism-deep-dive.html">
+            <div class="related-post-card-title">Linux inode 机制深入理解：从数据结构到实战排查</div>
+            <div class="related-post-card-tags"><span>Linux</span><span>文件系统</span><span>系统编程</span></div>
+          </a>
+          <a class="related-post-card" href="archive-becomes-the-enemy-of-new-ideas.html">
+            <div class="related-post-card-title">写到一百多篇，瓶颈不是没得写，是认不出自己写过什么</div>
+            <div class="related-post-card-tags"><span>写作</span><span>知识管理</span><span>检索</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
+
+        <!-- Post Copyright & License Card -->
+        <div class="post-copyright-card">
+          <div class="copyright-header">
+            <div class="copyright-badge">
+              <span>📜</span>
+              <span>原创与知识共享协议</span>
+            </div>
+            <button class="copyright-cite-btn" id="copy-cite-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+              </svg>
+              <span>复制 Markdown 引用</span>
+            </button>
+          </div>
+          <div class="copyright-list">
+            <div class="copyright-item"><strong>文章标题：</strong>只有你能跑通的那套，等于没跑通：可交接性是个技术指标</div>
+            <div class="copyright-item"><strong>文章作者：</strong>张小猛 · loczb</div>
+            <div class="copyright-item"><strong>永久链接：</strong><a href="https://709527.xyz/blog/posts/handoverability-is-a-technical-metric.html">https://709527.xyz/blog/posts/handoverability-is-a-technical-metric.html</a></div>
+            <div class="copyright-item"><strong>版权声明：</strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 国际许可协议。商业转载请联系作者获得授权，非商业转载请注明出处。</div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </main>
+
+  <!-- Related Posts / Navigation -->
+  <section class="section" aria-label="读完之后" style="padding-top: 0;">
+    <div class="container container-narrow">
+      <!-- Post Nav Prev Next -->
+      <nav class="post-nav" aria-label="文章翻页导航">
+        <a href="backup-is-not-a-copy-without-a-drill.html" class="post-nav-card post-nav-prev" rel="prev">
+          <span class="post-nav-label">← 上一篇</span>
+          <span class="post-nav-title">备份不是副本：没做过恢复演练的那份，只是一堆还在的字节</span>
+        </a>
+        <div class="post-nav-card post-nav-next disabled" aria-disabled="true">
+          <span class="post-nav-label">下一篇 →</span>
+          <span class="post-nav-title">已是最新篇博文</span>
+        </div>
+      </nav>
+      <!-- /Post Nav Prev Next -->
+      <hr style="border: none; border-top: 1px solid var(--color-border); margin: var(--space-2xl) 0;">
+
+      <div class="blog-topics" style="margin-bottom: var(--space-xl); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+        <div>
+          <span class="topic-label">读完之后:</span>
+          <a href="../index.html" class="topic-tag">返回博客列表</a>
+          <a href="../index.html?view=series" class="topic-tag">浏览全部专栏</a>
+        </div>
+        <a href="#main-content" class="topic-tag" style="margin-left: auto;">↑ 回到顶部</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+<!-- PARTIAL:FOOTER -->
+  <footer class="footer" role="contentinfo">
+  <div class="footer-inner">
+    <p class="footer-signature">写代码，做产品，也认真生活。</p>
+    <div class="footer-social">
+      <a href="https://github.com/zzdbilly" class="footer-social-link" target="_blank" rel="noopener" aria-label="GitHub">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+      </a>
+      <a href="https://twitter.com/zzdbilly" class="footer-social-link" target="_blank" rel="noopener" aria-label="X (Twitter)">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      </a>
+      <a href="/rss.xml" class="footer-social-link" target="_blank" rel="noopener" aria-label="RSS 订阅">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+      </a>
+    </div>
+    <div class="footer-links">
+      <a href="/" class="footer-link">首页</a>
+      <a href="/projects/" class="footer-link">项目</a>
+      <a href="/blog/" class="footer-link">博客</a>
+      <a href="/about/" class="footer-link">关于</a>
+    </div>
+    <p class="footer-copyright">&copy; 2026 张小猛 · loczb · Built with care</p>
+  </div>
+</footer>
+  <!-- /PARTIAL:FOOTER -->
+
+  <script defer src="../../assets/js/main.js"></script>
+  <script defer src="../../assets/js/article.js?v=c9f1a378ea"></script>
+  <script defer src="../../assets/js/share.js"></script>
+  <!-- Back to Top & Reading Progress -->
+  <button class="back-to-top" id="backToTop" aria-label="回到顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
+  <div class="reading-progress" id="readingProgress"></div>
+
+  <!-- Post Sidebar Info（左侧） -->
+  <div class="post-sidebar-info" id="postSidebar">
+    <div class="post-info-card">
+      <div class="post-info-section">
+        <div class="post-info-label">作者</div>
+        <div class="post-info-author">
+          <div class="post-info-avatar">小</div>
+          <div>
+            <div class="post-info-author-name">张小猛</div>
+            <div class="post-info-author-desc">写代码，做产品</div>
+          </div>
+        </div>
+      </div>
+      <div class="post-info-section">
+        <div class="post-info-label">文章信息</div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📅</span> 发布日期</span><span class="post-info-stat-value">2026-11-12</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">⏱️</span> 阅读时间</span><span class="post-info-stat-value">14 min read</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">4836 字</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📊</span> 章节数</span><span class="post-info-stat-value">10 节 · 22 子节</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">💻</span> 代码块</span><span class="post-info-stat-value">1 段</span></div>
+      </div>
+      <div class="post-info-section" id="postSidebarTags">
+        <div class="post-info-label">标签</div>
+        <div class="post-info-links">
+          <a href="../../blog/index.html?tag=%E5%8F%AF%E4%BA%A4%E6%8E%A5%E6%80%A7" class="post-info-link"># 可交接性</a>
+          <a href="../../blog/index.html?tag=%E8%BF%90%E7%BB%B4" class="post-info-link"># 运维</a>
+          <a href="../../blog/index.html?tag=%E6%96%87%E6%A1%A3" class="post-info-link"># 文档</a>
+          <a href="../../blog/index.html?tag=%E5%8D%95%E4%BA%BA%E7%B3%BB%E7%BB%9F" class="post-info-link"># 单人系统</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Post TOC -->
+  <div class="post-toc-container" id="postToc">
+    <nav class="post-toc" aria-label="文章目录">
+      <div class="post-toc-title">目录</div>
+      <ul class="post-toc-list" id="tocList">
+      </ul>
+    </nav>
+  </div>
+
+  <!-- Comment System -->
+  <script src="../../workers/comment-system/comment-widget.js?v=5d8a6a1796" defer></script>
+
+  <!-- highlight.js 代码语法高亮（本地完整构建，无外部依赖） -->
+  <script defer src="../../assets/vendor/highlight/highlight.min.js"></script>
+  <script>
+    /* 语法高亮改为「可见优先、空闲补齐」：
+       highlight.js 要遍历全篇代码块并生成数百个 span，若在 DOMContentLoaded 里同步跑完，
+       会在关键路径上长时间占住主线程（2026-09-27 实测本页长任务 1548ms、DCL 3651ms；
+       改动后长任务 145ms、DCL 1378ms）。这里 DCL 阶段只登记观察，实际高亮交给
+       IntersectionObserver（近屏 800px 内优先）+ requestIdleCallback（剩余块每片 ≤4 块），
+       首屏代码块的着色时机与视觉基本无变化。 */
+    (function() {
+      function canPaint(b) {
+        return !b.classList.contains('hljs') && !b.closest('.codehilite');
+      }
+      function paint(b) {
+        if (!canPaint(b)) return;
+        try { hljs.highlightElement(b); } catch (e) {}
+      }
+      function init() {
+        var blocks = [].slice.call(document.querySelectorAll('pre code')).filter(canPaint);
+        if (!blocks.length) return;
+        if ('IntersectionObserver' in window) {
+          var io = new IntersectionObserver(function(entries, obs) {
+            entries.forEach(function(en) {
+              if (!en.isIntersecting) return;
+              paint(en.target);
+              obs.unobserve(en.target);
+            });
+          }, { rootMargin: '800px 0px' });
+          blocks.forEach(function(b) { io.observe(b); });
+        }
+        var i = 0;
+        var idle = window.requestIdleCallback || window.setTimeout;
+        var step = function() {
+          var quota = 4;
+          while (i < blocks.length && quota-- > 0) paint(blocks[i++]);
+          if (i < blocks.length) idle(step);
+        };
+        idle(step); // 不在 DCL 里同步跑：可见块由 IntersectionObserver 处理，其余走空闲分片
+      }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+      } else {
+        init();
+      }
+    })();
+  </script>
+
+  <!-- Cloudflare Web Analytics -->
+  <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "29e7cff6f37448989538e2165cb79187"}'></script>
+</body>
+</html>

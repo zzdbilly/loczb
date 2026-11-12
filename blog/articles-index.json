@@ -1,6 +1,21 @@
 {
   "posts": [
     {
+      "slug": "handoverability-is-a-technical-metric",
+      "title": "只有你能跑通的那套，等于没跑通：可交接性是个技术指标",
+      "date": "2026-11-12",
+      "dateTime": "2026-11-12 15:42:00",
+      "category": "思考",
+      "tags": [
+        "可交接性",
+        "运维",
+        "文档",
+        "单人系统"
+      ],
+      "readTime": 14,
+      "url": "blog/posts/handoverability-is-a-technical-metric.html"
+    },
+    {
       "slug": "backup-is-not-a-copy-without-a-drill",
       "title": "备份不是副本：没做过恢复演练的那份，只是一堆还在的字节",
       "date": "2026-11-11",
@@ -2126,8 +2141,8 @@
     }
   ],
   "categories": [
-    "安全",
     "思考",
+    "安全",
     "数据库",
     "前端",
     "Kotlin",
@@ -2138,9 +2153,9 @@
     "系统编程"
   ],
   "stats": {
-    "totalPosts": 137,
-    "totalTags": 352,
-    "latestDate": "2026-11-11",
+    "totalPosts": 138,
+    "totalTags": 355,
+    "latestDate": "2026-11-12",
     "oldestDate": "2026-02-15"
   }
 }
