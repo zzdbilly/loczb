@@ -1,6 +1,21 @@
 {
   "posts": [
     {
+      "slug": "replica-lag-is-a-causality-problem",
+      "title": "读副本的延迟不是毫秒问题，是因果问题",
+      "date": "2026-11-13",
+      "dateTime": "2026-11-13 15:27:00",
+      "category": "数据库",
+      "tags": [
+        "复制",
+        "一致性",
+        "分布式",
+        "读写分离"
+      ],
+      "readTime": 14,
+      "url": "blog/posts/replica-lag-is-a-causality-problem.html"
+    },
+    {
       "slug": "handoverability-is-a-technical-metric",
       "title": "只有你能跑通的那套，等于没跑通：可交接性是个技术指标",
       "date": "2026-11-12",
@@ -2141,9 +2156,9 @@
     }
   ],
   "categories": [
+    "数据库",
     "思考",
     "安全",
-    "数据库",
     "前端",
     "Kotlin",
     "DevOps",
@@ -2153,9 +2168,9 @@
     "系统编程"
   ],
   "stats": {
-    "totalPosts": 138,
-    "totalTags": 355,
-    "latestDate": "2026-11-12",
+    "totalPosts": 139,
+    "totalTags": 358,
+    "latestDate": "2026-11-13",
     "oldestDate": "2026-02-15"
   }
 }

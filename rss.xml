@@ -7,6 +7,14 @@
     <language>zh-CN</language>
     <atom:link href="https://709527.xyz/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>读副本的延迟不是毫秒问题，是因果问题</title>
+      <link>https://709527.xyz/blog/posts/replica-lag-is-a-causality-problem.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/replica-lag-is-a-causality-problem.html</guid>
+      <description>复制延迟用毫秒衡量，用户感受到的却是「刚写的东西不见了」。非零延迟就能制造因果断裂，修法不是让副本更快，而是让该读主库的读走主库。</description>
+      <category>数据库</category>
+      <pubDate>Fri, 13 Nov 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
       <title>只有你能跑通的那套，等于没跑通：可交接性是个技术指标</title>
       <link>https://709527.xyz/blog/posts/handoverability-is-a-technical-metric.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/handoverability-is-a-technical-metric.html</guid>
@@ -157,14 +165,6 @@
       <description>AI 额度不会生息，只会过期。用不完的那部分不是省下来的，是沉没掉的。把额度当成有保质期的库存：盘点、分层、调度、例行体检。</description>
       <category>思考</category>
       <pubDate>Fri, 16 Oct 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>没有一开始就被动的收入：把重复劳动变成资产</title>
-      <link>https://709527.xyz/blog/posts/how-to-build-passive-income.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/how-to-build-passive-income.html</guid>
-      <description>被动收入不是一种能找来的收入，而是一段主动投入沉淀下来的资产。我用三条判据把常见形式量了一遍，真伪立刻分开。</description>
-      <category>思考</category>
-      <pubDate>Thu, 15 Oct 2026 00:00:00 +0800</pubDate>
     </item>
   </channel>
 </rss>

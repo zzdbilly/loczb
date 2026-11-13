@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <script>document.documentElement.classList.add("js");try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://static.cloudflareinsights.com https://loczb-comments.billymust.workers.dev; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://loczb-comments.billymust.workers.dev https://dashscope.aliyuncs.com https://709527.xyz https://www.709527.xyz https://cloudflareinsights.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
+    <script>/* 反点击劫持兜底：GitHub Pages 无法下发 X-Frame-Options / CSP frame-ancestors */(function(){if(self===top)return;try{top.location=self.location}catch(e){}setTimeout(function(){if(self!==top){document.documentElement.style.display='none';}},400);})();</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>读副本的延迟不是毫秒问题，是因果问题 | 张小猛 - loczb</title>
+    <meta name="description" content="复制延迟用毫秒衡量，用户感受到的却是「刚写的东西不见了」。非零延迟就能制造因果断裂，修法不是让副本更快，而是让该读主库的读走主库。">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="读副本的延迟不是毫秒问题，是因果问题 | 张小猛 - loczb">
+    <meta property="og:description" content="复制延迟用毫秒衡量，用户感受到的却是「刚写的东西不见了」。非零延迟就能制造因果断裂，修法不是让副本更快，而是让该读主库的读走主库。">
+    <meta property="og:url" content="https://709527.xyz/blog/posts/replica-lag-is-a-causality-problem.html">
+    <meta property="og:type" content="article">
+    <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
+    <meta property="og:site_name" content="loczb">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="读副本的延迟不是毫秒问题，是因果问题 | 张小猛 - loczb">
+    <meta name="twitter:description" content="复制延迟用毫秒衡量，用户感受到的却是「刚写的东西不见了」。非零延迟就能制造因果断裂，修法不是让副本更快，而是让该读主库的读走主库。">
+    <meta name="twitter:image" content="https://709527.xyz/assets/images/og-image.png">
+
+        <script type="application/ld+json">
+{
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "读副本的延迟不是毫秒问题，是因果问题",
+      "description": "复制延迟用毫秒衡量，用户感受到的却是「刚写的东西不见了」。非零延迟就能制造因果断裂，修法不是让副本更快，而是让该读主库的读走主库。",
+      "image": "https://709527.xyz/assets/images/og-image.png",
+      "author": {
+            "@type": "Person",
+            "name": "张小猛",
+            "url": "https://709527.xyz/about/"
+      },
+      "publisher": {
+            "@type": "Organization",
+            "name": "loczb",
+            "logo": {
+                  "@type": "ImageObject",
+                  "url": "https://709527.xyz/assets/images/favicon.svg"
+            }
+      },
+      "datePublished": "2026-11-13T15:27:00+08:00",
+      "dateModified": "2026-11-13T15:27:00+08:00",
+      "url": "https://709527.xyz/blog/posts/replica-lag-is-a-causality-problem.html",
+      "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://709527.xyz/blog/posts/replica-lag-is-a-causality-problem.html"
+      },
+      "keywords": "复制, 一致性, 分布式, 读写分离",
+      "articleSection": "数据库",
+      "timeRequired": "PT14M",
+      "inLanguage": "zh-CN"
+}
+    </script>
+
+    <link rel="stylesheet" href="../../assets/css/style.css?v=c8e170d8f9">
+    <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
+    <link rel="alternate icon" href="../../assets/images/favicon.ico">
+    <link rel="canonical" href="https://709527.xyz/blog/posts/replica-lag-is-a-causality-problem.html">
+</head>
+<body>
+  <!-- PARTIAL:SKIP_LINK -->
+  <a href="#main-content" class="skip-link">跳至主要内容</a>
+  <!-- /PARTIAL:SKIP_LINK -->
+
+  <!-- Navigation -->
+<!-- PARTIAL:NAV -->
+  <nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">
+      loc<span>zb</span>
+    </a>
+    <button class="nav-toggle" aria-label="打开菜单" aria-expanded="false" aria-controls="nav-links-menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <div class="nav-overlay"></div>
+    <ul class="nav-links" id="nav-links-menu">
+      <li><a href="/" class="nav-link" data-nav="home">首页</a></li>
+      <li><a href="/projects/" class="nav-link" data-nav="projects">项目</a></li>
+      <li><a href="/blog/" class="nav-link active" data-nav="blog">博客</a></li>
+      <li><a href="/about/" class="nav-link" data-nav="about">关于</a></li>
+    </ul>
+    <button class="theme-toggle" aria-label="切换主题" title="切换亮/暗模式">
+      <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="5"></circle>
+        <line x1="12" y1="1" x2="12" y2="3"></line>
+        <line x1="12" y1="21" x2="12" y2="23"></line>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+        <line x1="1" y1="12" x2="3" y2="12"></line>
+        <line x1="21" y1="12" x2="23" y2="12"></line>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+      </svg>
+      <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+      </svg>
+    </button>
+  </div>
+</nav>
+  <!-- /PARTIAL:NAV -->
+  <main class="section" id="main-content" style="padding-bottom: 0; padding-top: var(--space-4xl);">
+    <div class="container container-narrow">
+      <a href="../index.html" class="back-link">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        返回博客列表
+      </a>
+
+      <article class="post-content">
+        <h1>读副本的延迟不是毫秒问题，是因果问题</h1>
+
+        <div class="post-meta">
+          <span class="meta-item"><span aria-hidden="true">📅</span> 2026-11-13 15:27:00</span>
+          <span class="meta-item"><span aria-hidden="true">⏱️</span> 14 min read</span>
+          <span class="meta-item"><span aria-hidden="true">👤</span> 张小猛</span>
+        </div>
+
+        <div class="post-tags">
+          <span class="tag">复制</span>
+          <span class="tag">一致性</span>
+          <span class="tag">分布式</span>
+          <span class="tag">读写分离</span>
+        </div>
+
+        
+
+        <h2>延迟是一个时长，因果是一条顺序</h2>
+<p>监控面板上的复制延迟是一条以毫秒为单位的曲线。它偶尔抬头，然后回到零，告警解除，值班结束。但如果在这条曲线抬头的几百毫秒里，正好有用户下了单又跳去详情页，他看到的东西不是「慢」，是「不存在」。</p>
+<p>这是两个不同的度量，常被混成一个：</p>
+<ul>
+<li>延迟回答的是「副本落后了多久」。它是一个时长，连续、可平均、可画分位数。</li>
+<li>因果回答的是「这一次读，有没有看到它本该看到的那次写」。它是一个顺序判断，只有成立与不成立。</li>
+</ul>
+<p>把前者压到很小，不等于后者成立。一条 1ms 的延迟曲线下面，依然可以藏着一次「读到的副本还没回放到我上一次提交」；而一条 200ms 的曲线，如果用户写完之后隔了半分钟才读，可能一次违反都没有。</p>
+<p>问题的源头在读写分离的路由层。写请求进主库，读请求按负载分给任意副本，每一次请求独立选节点。这个设计里没有任何地方保存「这个用户刚刚写到了哪个位置」，所以顺序信息在路由层就丢了。丢的不是精度，是事实。</p>
+<pre><code class="language-text">t=0ms    客户端   POST /orders              -&gt; 主库
+t=1ms    主库     提交完成，返回 201        -&gt; 客户端
+t=2ms    客户端   GET /orders/123           -&gt; 副本 A
+t=2ms    副本 A   回放位置还停在上一次事务  -&gt; 404 Not Found
+t=40ms   副本 A   追上，这一行才可见
+</code></pre>
+<p>（上图是示意，用于说明请求的先后，不代表任何产品的实测时序。）</p>
+<p>注意失败发生的位置：写成功了，读也成功了，两个请求各自的日志都是 200，慢查询里没有记录，错误率没有变化。故障不在任何一个请求内部，而在两个请求之间。</p>
+<h2>四条承诺：把「一致性」拆成可验收的句子</h2>
+<p>笼统地说「最终一致」没有可操作性，因为它不告诉你哪一次读可以旧、旧到什么程度。分布式系统文献里常把这方面的约束拆成四条<strong>会话保证</strong>（session guarantees），单位不是单次请求，而是同一个用户的连续请求构成的那个会话。</p>
+<p>拆开之后，每条都可以单独验收：它承诺什么、谁在破坏它、破坏了用户看到什么、守住它要付什么代价。下面四条各写这四件事。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">承诺</th>
+<th style="text-align: left;">一句话</th>
+<th style="text-align: left;">被破坏时用户看到</th>
+<th style="text-align: left;">守法的主要成本</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">读己之写</td>
+<td style="text-align: left;">自己刚提交的写，自己一定读得到</td>
+<td style="text-align: left;">「我刚存的东西不见了」</td>
+<td style="text-align: left;">写后的一段时间读主库，或校验副本位点</td>
+</tr>
+<tr>
+<td style="text-align: left;">单调读</td>
+<td style="text-align: left;">同一个会话不会先看到新值、再看到旧值</td>
+<td style="text-align: left;">「刚才明明有，刷新又没了」</td>
+<td style="text-align: left;">会话固定到同一个副本</td>
+</tr>
+<tr>
+<td style="text-align: left;">单调写</td>
+<td style="text-align: left;">同一个会话的写按提交顺序生效</td>
+<td style="text-align: left;">「我后改的那次被前一次盖了」</td>
+<td style="text-align: left;">按用户或实体收束写入点</td>
+</tr>
+<tr>
+<td style="text-align: left;">读后写</td>
+<td style="text-align: left;">基于某次读做的写，排在那次读之后</td>
+<td style="text-align: left;">「别人的修改被我的保存覆盖了」</td>
+<td style="text-align: left;">带上读到的版本做条件更新</td>
+</tr>
+</tbody>
+</table>
+<p>四条之间是正交的，不是一条比一条强。会话粘住一个副本能守住单调读，但如果那个副本一直落后于你自己刚提交的写，读己之写照样破。给写后读加位点校验能守住读己之写，但如果两次读分别打到不同副本，单调读仍然会破。把它们当成一张清单逐条问，比记成「一致性等级」更接近实际。</p>
+<h2>第一条：读己之写</h2>
+<h3>它承诺什么</h3>
+<p>同一个会话里，一次写成功返回之后发起的读，必须能看到这次写，或者看到比它更新的状态。范围限定在「自己」：别人什么时候看到不在承诺之内，那是另一条线。</p>
+<h3>谁在破坏它</h3>
+<p>读写分离加上「每个请求独立选节点」。写落在主库，读落在任意副本，副本的回放位置落后于主库的提交位置，读就落在了一个还没有这次写的快照上。破坏者不是「延迟数值大」，而是「读的路由没有携带刚刚那次写的位置」。</p>
+<p>异步复制是最常见的场景，但半同步并不自动解决问题。多数产品的半同步只保证副本收到了日志、或者把日志写进了本地的 relay log，并不保证已经回放完成、对查询可见。PostgreSQL 的 <code>synchronous_commit</code> 有多个等级，其中 <code>remote_apply</code> 才等到副本回放完成，<code>remote_write</code> 只等到写入副本的操作系统；MySQL 一类产品的半同步语义也以「收到并落盘」为主，具体参数名与行为按各自版本文档确认。选错等级，会得到「写变慢了，但读仍然看不到」的结果。</p>
+<h3>破坏了，用户看到什么</h3>
+<ul>
+<li>下单接口返回成功，跳转到详情页显示「订单不存在」，用户返回再点一次，产生重复下单。</li>
+<li>保存个人资料后页面刷新，头像和昵称还是旧的，用户以为没保存成功，再存一遍。</li>
+<li>评论提交成功，但列表里没有自己的评论，于是再发一条，出现两条一样的。</li>
+<li>改完密码立刻重新登录，认证服务读到旧密码，提示密码错误。</li>
+</ul>
+<p>这几类的共同点是：页面全是 200，业务没有抛错，监控里只有一条平平的延迟曲线。</p>
+<h3>守住它要付什么代价</h3>
+<p>有两种守法，代价差别很大。</p>
+<p>第一种是时间窗口：写成功之后的若干秒内，这个会话的读走主库。做法便宜，不需要改协议，但窗口长度是猜的。猜短了，尾部延迟一大就漏；猜长了，主库白扛一批本来可以给副本的读。窗口本质上是用一个常数去覆盖一个没有上界的分布。</p>
+<p>第二种是位点：写完成时取回这次提交在日志里的位置，跟着会话走；读的时候先问副本「你回放到这个位置了吗」，没有就改读主库或者等它追上。位置由数据库比较，不能拿字符串比大小。</p>
+<pre><code class="language-sql">-- PostgreSQL 示意：提交之后取位点，再让副本自己回答「追上没有」
+INSERT INTO orders (id, user_id, status) VALUES ($1, $2, 'created');
+COMMIT;
+
+SELECT pg_current_wal_lsn() AS commit_lsn;
+
+-- 读之前，在候选副本上执行（函数名随版本变过，以所用版本文档为准）
+SELECT
+  pg_is_in_recovery()                    AS is_replica,
+  pg_last_wal_replay_lsn() &gt;= $1::pg_lsn AS caught_up;
+</code></pre>
+<pre><code class="language-ts">// 读路径：位点不够就读主库。注意比较交给数据库，不在应用层比字符串
+async function readYourWrites&lt;T&gt;(
+  session: Session,
+  run: (db: Db) =&gt; Promise&lt;T&gt;,
+): Promise&lt;T&gt; {
+  const replica = pickReplica(session.userId);
+  if (session.minLsn) {
+    const { rows } = await replica.query(
+      &quot;SELECT pg_last_wal_replay_lsn() &gt;= $1::pg_lsn AS ok&quot;,
+      [session.minLsn],
+    );
+    if (!rows[0].ok) return run(primary);
+  }
+  return run(replica);
+}
+</code></pre>
+<p>代价落在三处：多一次位点查询；副本落后时要么等（读的尾延迟变长），要么回主库（主库多承担一部分读）；必须显式定义超时后的行为。超时后回主库，是牺牲容量守住承诺；超时后读副本，是牺牲承诺换取延迟。两种都可以选，但不能选了后者还在文档里写「已保证读己之写」。</p>
+<p>位点的形式随产品不同：PostgreSQL 是 LSN，MySQL 一类是 GTID 或 binlog 文件名加偏移。语义是同一个——这个副本有没有应用到我需要的那个位置。</p>
+<h2>第二条：单调读</h2>
+<h3>它承诺什么</h3>
+<p>同一个会话不会先看到新值、再看到旧值。用户眼里的时间不会倒流，哪怕数据本身还在追赶。</p>
+<h3>谁在破坏它</h3>
+<p>每次读都用轮询或随机的方式选副本。两个副本的回放进度不同，第一次读打到已经追上的那个，看到新值；第二次读打到落后的那个，看到旧值。破坏者不是延迟，是「选节点的策略没有记忆」。</p>
+<p>这一条和读己之写经常一起出现，但成因不同：读己之写破在「自己写的还没到」，单调读破在「两次读落在了不同进度的节点上」。后者甚至不需要有写发生——只要副本之间的进度有差异，重复读同一个对象就可能倒退。</p>
+<h3>破坏了，用户看到什么</h3>
+<p>发帖成功，回到列表看到了自己的帖子，下拉刷新，帖子没了，再刷新，又出现了。计数从 15 变成 12 再变回 15。两个标签页打开同一个账户，余额显示不同的数字。</p>
+<p>这类现象对信任的伤害比「慢」大得多。慢是等一会儿就好，倒退是用户无法判断哪个数字是真的，于是每次操作都要刷新确认一遍。</p>
+<h3>守住它要付什么代价</h3>
+<p>会话固定到同一个副本：按会话标识做哈希，落在一个副本上，整个会话期间不换。代价是负载均衡变差——长会话会集中在少数节点；副本故障时必须换，而且只能换到不更旧的节点，随便挑一个可能把倒流放大成一次明显的回退。</p>
+<p>一致性哈希能把这个代价压小：故障时只重映射一部分会话，而不是把全部会话重新洗牌。</p>
+<pre><code class="language-ts">// 单调读：会话固定副本；换节点时只能往上换，不能往下换
+const ring = new ConsistentHash(replicas, 128);
+
+function replicaFor(session: Session): Replica {
+  return ring.get(session.id) ?? primary;
+}
+
+function onReplicaFailure(session: Session, failed: Replica): Replica {
+  const next = ring.nextAfter(failed);
+  // 新节点的回放位置不得低于旧节点，否则宁可读主库
+  return next.replayedAtLeast(session.lastSeenLsn) ? next : primary;
+}
+</code></pre>
+<p>守住单调读还要在会话里记住「上次读到的最低位点」，换节点时用它做下限。这个字段很小，但它把「随机选一个」变成了「选一个不更旧的」。</p>
+<p>需要说明的是，粘住副本不解决读己之写：副本可能一直落后于你刚提交的写，粘得再稳也只是稳定地看到旧值。两条承诺要分别守。</p>
+<h2>第三条：单调写</h2>
+<h3>它承诺什么</h3>
+<p>同一个会话发出的写，按提交顺序被应用。后提交的不会先落地，先提交的不会覆盖后提交的。</p>
+<h3>谁在破坏它</h3>
+<p>单主复制的场景里，这一条通常是白送的：主库的提交顺序就是日志顺序，副本按顺序回放。破坏一般来自三个地方：</p>
+<ul>
+<li>写被路由到多个接受写入的节点（多主、双写、按分片打散），两个节点之间没有全序。</li>
+<li>客户端并发提交，服务端没有按用户串行化，两个写在不同连接上竞争。</li>
+<li>重试。第一次请求超时但实际成功了，客户端重发，于是同一个逻辑写变成了两次物理写，中间还可能插进别的写。</li>
+</ul>
+<h3>破坏了，用户看到什么</h3>
+<p>改了两次昵称，最后显示的是第一次的。先把任务标记完成、再撤回，过一会儿又变回完成。更隐蔽的是「我的修改被覆盖了」，而两次保存都提示成功——用户只能归因于系统不可靠。</p>
+<h3>守住它要付什么代价</h3>
+<p>按用户或实体维度收束写入点：同一个用户的写永远进同一个主库、同一条连接池队列，需要串行化的部分显式串行。代价是写入扩展性——你放弃了一部分「把写打散到多台」的自由。</p>
+<p>如果业务确实要多写入点，那就只能把「顺序」降级成「可检测的冲突」：给每行带版本号或逻辑时钟，写入时校验版本，冲突就拒绝并让上层处理。代价是写路径要能接受失败、界面要能展示冲突，而不是静默地 last-write-wins。</p>
+<p>幂等键是成本更低的一半：它不保证顺序，但保证重试不会变成第二次写。很多「顺序错了」的案例，实际是「重试多写了一次」。</p>
+<h2>第四条：读后写</h2>
+<h3>它承诺什么</h3>
+<p>基于某次读的结果做出的写，在因果上排在那次读之后。用户读到 v3，基于 v3 改，这次写就应该作用在「已经包含了 v3 的状态」上，而不是作用在一个 v3 已经被别人改过的状态上。</p>
+<h3>谁在破坏它</h3>
+<p>读到旧值，基于旧值写，写到主库。主库此时可能已经是新值，写入把旧前提带了回来，覆盖掉中间那次修改。另一类是同一个人在两个标签页里各读一次、各写一次，后写的那次基于更旧的前提。</p>
+<p>这一条常被误认为「读主库就没事」。读主库只保证你读到的是最新的，不保证你读完之后别人不写。它要的是「我读到的前提在写的时候仍然成立」，那是并发控制，不是路由。</p>
+<h3>破坏了，用户看到什么</h3>
+<p>「我只改了一个字段，别人的改动没了。」库存读到 1，两个人同时扣减，最后是 -1。回复了一条已经被删除的评论，页面上留下一个指向空白的引用。</p>
+<p>这类事故最难受的地方在于它不可复现：两次操作都合法，只是顺序不对，日志里找不到异常。</p>
+<h3>守住它要付什么代价</h3>
+<p>把读到的版本带回写路径，用条件更新让主库拒绝过期前提：</p>
+<pre><code class="language-ts">// 读后写：版本一起带回来，主库只在前提仍成立时才写
+const { rows } = await primary.query(
+  `UPDATE documents
+      SET body = $1, version = version + 1, updated_at = now()
+    WHERE id = $2 AND version = $3
+  RETURNING version`,
+  [body, id, readVersion],
+);
+
+if (rows.length === 0) {
+  throw new ConflictError(&quot;这份内容已被修改，请重新加载&quot;);
+}
+</code></pre>
+<p>代价是引入版本列、写可能失败、界面要能处理冲突。把冲突显示出来，比让它静默地丢一次修改更接近正确。另一种守法是悲观锁：读的时候加锁，写到提交为止。它把冲突变成等待，代价是锁持有时间直接换算成并发上限。</p>
+<h2>两种修法的性质不同：一个赌概率，一个消除条件</h2>
+<p>看到「读到了旧数据」，第一反应通常是让复制更快：加带宽、换同步提交、多挂几个副本、把大事务拆小。这些都对，但它们改变的是概率，不是条件。</p>
+<p>只要「提交」和「副本可见」之间存在非零窗口，就存在读落在窗口里的可能。窗口越小，撞上的机会越少，但撞上的那一次并不会因为窗口小就变得无害——用户看到的仍然是「我刚写的东西不见了」。而且窗口的尾部不由你控制：网络抖动、一个大事务、副本上一次全表扫描，都会把某一次窗口拉长。</p>
+<p>改路由是另一种性质的修法：写后的一段时间读主库、位点校验、会话粘副本、按用户收束写入点。它不降低延迟，它让「这条路径上不存在能违反承诺的节点」。违反的条件被移除，不是被压缩。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">副本延迟（示例）</th>
+<th style="text-align: left;">读己之写被破坏的条件</th>
+<th style="text-align: left;">是否可能被破坏</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">1ms</td>
+<td style="text-align: left;">读在回放完成之前到达</td>
+<td style="text-align: left;">可能</td>
+</tr>
+<tr>
+<td style="text-align: left;">50ms</td>
+<td style="text-align: left;">读在回放完成之前到达</td>
+<td style="text-align: left;">可能</td>
+</tr>
+<tr>
+<td style="text-align: left;">0（读主库或同步回放）</td>
+<td style="text-align: left;">不存在这个回放窗口</td>
+<td style="text-align: left;">不可能</td>
+</tr>
+</tbody>
+</table>
+<p>表里的毫秒只是示意，用于对照三种情形，不是实测数据，也不对应任何概率。重点在前两行的结论完全一样：数值变了，条件没变。</p>
+<p>两种修法不是二选一，而是分层。降低延迟的收益是全站所有读，代价摊在复制链路上；改路由的收益是特定会话的确定性，代价摊在主库容量和实现复杂度上。合理的组合是：用前者把整体概率压下去，用后者给「违反了就会被认为丢数据」的那部分读兜底。</p>
+<p>判断标准可以很具体：如果这次读看到旧值，用户会不会认为自己的操作没生效或者数据丢了？会，就走路由；只是「稍旧但结论不变」，就让副本承担。</p>
+<h2>指标的盲区：延迟 p99 不会报因果断裂</h2>
+<p>延迟指标度量的对象是时间，违反度量的对象是顺序。两者之间没有换算关系。</p>
+<p>设想一次写提交后 2ms 就读副本，而那个副本此刻落后 3ms。这次读违反了读己之写，但当时的复制延迟只有 3ms，任何以毫秒为阈值的分位数都看不到异常。反过来，一次 200ms 的延迟可能一次违反都没造成，因为那段时间里没有人写完之后立刻读。</p>
+<p>（上面两个数字是示意的量级，用来说明「小延迟也能违反、大延迟未必违反」，不是测量结果。）</p>
+<p>这解释了一个常见的误判：故障复盘时看延迟曲线，发现「当时延迟很低」，于是排除了复制的嫌疑，转去查缓存和代码。曲线没错，是它测的东西回答不了这个问题。</p>
+<p><code>Seconds_Behind_Source</code> 一类指标还有额外的局限：它是粗粒度的时间估计，空闲时可能显示 0，复制断开时可能是 NULL，它回答的是「落后大概多久」，不是「我这一次写是否已经可见」。具体语义按所用产品的文档确认。</p>
+<p>能报出违反的指标是另一类东西，都需要在应用层埋：</p>
+<ul>
+<li>写成功之后立刻读回自己写的那条记录，统计读不到的比例。</li>
+<li>同一个会话连续两次读同一个对象，统计版本倒退的次数。</li>
+<li>条件更新返回 0 行的比例——它同时是「读后写被破坏」和「正常并发冲突」的信号，要配合业务语义看。</li>
+<li>会话被路由到主库的比例。这个数突然升高，往往说明副本在落后，而延迟曲线还没反应过来。</li>
+</ul>
+<p>复制延迟告警和一致性告警是两条独立的线。只有前者，等于只监控了「慢」，没有监控「错」。</p>
+<h2>什么时候不必守</h2>
+<p>把四条承诺当成全站默认，会把主库压垮，也会把系统做成一个没有读扩展性的单点。它们只在特定读上必要。</p>
+<p>可以放心读副本的场景：</p>
+<ul>
+<li>报表与分析。读的是分钟级聚合，落后几秒不改变结论。给页面标一句「数据截至某时刻」，比强行读主库更有用。</li>
+<li>内容分发。文章正文、商品描述、图片元数据，读到旧版本不会让用户认为自己的操作丢了。</li>
+<li>明确允许最终一致的写后读。异步任务的状态页、导入进度、通知列表，用户本来就预期它会变。</li>
+<li>可以重试且无副作用的后台任务。失败重跑一次即可，不值得为它加一条主库读路径。</li>
+</ul>
+<p>必须守的场景：</p>
+<ul>
+<li>认证与会话。改密码、改权限之后读到旧值，是安全问题，不是体验问题。</li>
+<li>余额、库存、额度。读到旧值会直接导致超卖或透支。</li>
+<li>订单状态与支付结果。用户刚付完钱，看到「待支付」，接下来就是重复支付。</li>
+<li>任何「写完之后立刻展示结果」的页面。</li>
+</ul>
+<p>判据不是「这张表重不重要」，而是「这一次读如果看到旧值，用户会不会认为自己的操作没生效」。前者是表级判断，后者是读级判断。同一张 <code>orders</code> 表，后台报表扫描可以落后几分钟，下单后的详情页一次都不能落后。</p>
+<h2>把问题从「副本多快」换成「这一个读需要哪条承诺」</h2>
+<p>设计评审时，与其问「复制延迟多少、能不能接受」，不如对每条读路径问四个问题：</p>
+<ol>
+<li>这个读会不会紧跟在同一个用户的写之后？是，就需要读己之写。</li>
+<li>同一个用户会不会在短时间内重复读同一个对象？是，就需要单调读。</li>
+<li>这个用户的写会不会落到多个写入点，或者可能被重试？是，就需要单调写。</li>
+<li>这次写是否基于刚刚读到的内容？是，就需要读后写。</li>
+</ol>
+<p>四个都是「否」，就让它读副本，接受最终一致，并把这个决定写进代码注释——写清楚「这里允许旧数据，因为……」，比默默依赖默认路由可靠。</p>
+<p>有一个是「是」，就为这条路径选路由策略：粘主库、位点校验、固定副本、条件更新。而不是回头去调复制参数，指望把窗口压到不会撞上。</p>
+<p>复制延迟是一条可以优化的曲线，因果是一条必须成立的顺序。前者用毫秒衡量，可以画图、可以定阈值、可以在周报里变小；后者只能用一个「是/否」验收，而它出事的时候，指标上看不出任何异常。</p>
+<p>把「副本多快」换成「这一个读需要哪条承诺」，第一个问题会变得容易，第二个问题才有机会消失。</p>
+
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="offset-pagination-drifts-on-write.html">
+            <div class="related-post-card-title">分页是一个会漂移的坐标：OFFSET 在写入发生时开始说谎</div>
+            <div class="related-post-card-tags"><span>分页</span><span>SQL</span><span>一致性</span></div>
+          </a>
+          <a class="related-post-card" href="slow-query-ranking-hides-the-real-cost.html">
+            <div class="related-post-card-title">慢查询排行榜的第一名，往往不是最该动的那条</div>
+            <div class="related-post-card-tags"><span>性能优化</span><span>SQL</span><span>可观测性</span></div>
+          </a>
+          <a class="related-post-card" href="pool-size-is-a-queue-length.html">
+            <div class="related-post-card-title">连接池不是并发旋钮，是排队区的长度</div>
+            <div class="related-post-card-tags"><span>连接池</span><span>性能</span><span>PostgreSQL</span></div>
+          </a>
+          <a class="related-post-card" href="soft-delete-costs-interest-on-every-query.html">
+            <div class="related-post-card-title">软删除买的是后悔药，付的是每条查询的利息</div>
+            <div class="related-post-card-tags"><span>数据库设计</span><span>软删除</span><span>数据建模</span></div>
+          </a>
+          <a class="related-post-card" href="postgresql-从-17-到-18生产环境升级实战.html">
+            <div class="related-post-card-title">PostgreSQL 从 17 到 18：生产环境升级实战</div>
+            <div class="related-post-card-tags"><span>PostgreSQL</span><span>数据库</span><span>DevOps</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
+
+        <!-- Post Copyright & License Card -->
+        <div class="post-copyright-card">
+          <div class="copyright-header">
+            <div class="copyright-badge">
+              <span>📜</span>
+              <span>原创与知识共享协议</span>
+            </div>
+            <button class="copyright-cite-btn" id="copy-cite-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+              </svg>
+              <span>复制 Markdown 引用</span>
+            </button>
+          </div>
+          <div class="copyright-list">
+            <div class="copyright-item"><strong>文章标题：</strong>读副本的延迟不是毫秒问题，是因果问题</div>
+            <div class="copyright-item"><strong>文章作者：</strong>张小猛 · loczb</div>
+            <div class="copyright-item"><strong>永久链接：</strong><a href="https://709527.xyz/blog/posts/replica-lag-is-a-causality-problem.html">https://709527.xyz/blog/posts/replica-lag-is-a-causality-problem.html</a></div>
+            <div class="copyright-item"><strong>版权声明：</strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 国际许可协议。商业转载请联系作者获得授权，非商业转载请注明出处。</div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </main>
+
+  <!-- Related Posts / Navigation -->
+  <section class="section" aria-label="读完之后" style="padding-top: 0;">
+    <div class="container container-narrow">
+      <!-- Post Nav Prev Next -->
+      <nav class="post-nav" aria-label="文章翻页导航">
+        <a href="handoverability-is-a-technical-metric.html" class="post-nav-card post-nav-prev" rel="prev">
+          <span class="post-nav-label">← 上一篇</span>
+          <span class="post-nav-title">只有你能跑通的那套，等于没跑通：可交接性是个技术指标</span>
+        </a>
+        <div class="post-nav-card post-nav-next disabled" aria-disabled="true">
+          <span class="post-nav-label">下一篇 →</span>
+          <span class="post-nav-title">已是最新篇博文</span>
+        </div>
+      </nav>
+      <!-- /Post Nav Prev Next -->
+      <hr style="border: none; border-top: 1px solid var(--color-border); margin: var(--space-2xl) 0;">
+
+      <div class="blog-topics" style="margin-bottom: var(--space-xl); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+        <div>
+          <span class="topic-label">读完之后:</span>
+          <a href="../index.html" class="topic-tag">返回博客列表</a>
+          <a href="../index.html?view=series" class="topic-tag">浏览全部专栏</a>
+        </div>
+        <a href="#main-content" class="topic-tag" style="margin-left: auto;">↑ 回到顶部</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+<!-- PARTIAL:FOOTER -->
+  <footer class="footer" role="contentinfo">
+  <div class="footer-inner">
+    <p class="footer-signature">写代码，做产品，也认真生活。</p>
+    <div class="footer-social">
+      <a href="https://github.com/zzdbilly" class="footer-social-link" target="_blank" rel="noopener" aria-label="GitHub">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+      </a>
+      <a href="https://twitter.com/zzdbilly" class="footer-social-link" target="_blank" rel="noopener" aria-label="X (Twitter)">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      </a>
+      <a href="/rss.xml" class="footer-social-link" target="_blank" rel="noopener" aria-label="RSS 订阅">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+      </a>
+    </div>
+    <div class="footer-links">
+      <a href="/" class="footer-link">首页</a>
+      <a href="/projects/" class="footer-link">项目</a>
+      <a href="/blog/" class="footer-link">博客</a>
+      <a href="/about/" class="footer-link">关于</a>
+    </div>
+    <p class="footer-copyright">&copy; 2026 张小猛 · loczb · Built with care</p>
+  </div>
+</footer>
+  <!-- /PARTIAL:FOOTER -->
+
+  <script defer src="../../assets/js/main.js"></script>
+  <script defer src="../../assets/js/article.js?v=c9f1a378ea"></script>
+  <script defer src="../../assets/js/share.js"></script>
+  <!-- Back to Top & Reading Progress -->
+  <button class="back-to-top" id="backToTop" aria-label="回到顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
+  <div class="reading-progress" id="readingProgress"></div>
+
+  <!-- Post Sidebar Info（左侧） -->
+  <div class="post-sidebar-info" id="postSidebar">
+    <div class="post-info-card">
+      <div class="post-info-section">
+        <div class="post-info-label">作者</div>
+        <div class="post-info-author">
+          <div class="post-info-avatar">小</div>
+          <div>
+            <div class="post-info-author-name">张小猛</div>
+            <div class="post-info-author-desc">写代码，做产品</div>
+          </div>
+        </div>
+      </div>
+      <div class="post-info-section">
+        <div class="post-info-label">文章信息</div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📅</span> 发布日期</span><span class="post-info-stat-value">2026-11-13</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">⏱️</span> 阅读时间</span><span class="post-info-stat-value">14 min read</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">5528 字</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📊</span> 章节数</span><span class="post-info-stat-value">10 节 · 16 子节</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">💻</span> 代码块</span><span class="post-info-stat-value">5 段</span></div>
+      </div>
+      <div class="post-info-section" id="postSidebarTags">
+        <div class="post-info-label">标签</div>
+        <div class="post-info-links">
+          <a href="../../blog/index.html?tag=%E5%A4%8D%E5%88%B6" class="post-info-link"># 复制</a>
+          <a href="../../blog/index.html?tag=%E4%B8%80%E8%87%B4%E6%80%A7" class="post-info-link"># 一致性</a>
+          <a href="../../blog/index.html?tag=%E5%88%86%E5%B8%83%E5%BC%8F" class="post-info-link"># 分布式</a>
+          <a href="../../blog/index.html?tag=%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB" class="post-info-link"># 读写分离</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Post TOC -->
+  <div class="post-toc-container" id="postToc">
+    <nav class="post-toc" aria-label="文章目录">
+      <div class="post-toc-title">目录</div>
+      <ul class="post-toc-list" id="tocList">
+      </ul>
+    </nav>
+  </div>
+
+  <!-- Comment System -->
+  <script src="../../workers/comment-system/comment-widget.js?v=5d8a6a1796" defer></script>
+
+  <!-- highlight.js 代码语法高亮（本地完整构建，无外部依赖） -->
+  <script defer src="../../assets/vendor/highlight/highlight.min.js"></script>
+  <script>
+    /* 语法高亮改为「可见优先、空闲补齐」：
+       highlight.js 要遍历全篇代码块并生成数百个 span，若在 DOMContentLoaded 里同步跑完，
+       会在关键路径上长时间占住主线程（2026-09-27 实测本页长任务 1548ms、DCL 3651ms；
+       改动后长任务 145ms、DCL 1378ms）。这里 DCL 阶段只登记观察，实际高亮交给
+       IntersectionObserver（近屏 800px 内优先）+ requestIdleCallback（剩余块每片 ≤4 块），
+       首屏代码块的着色时机与视觉基本无变化。 */
+    (function() {
+      function canPaint(b) {
+        return !b.classList.contains('hljs') && !b.closest('.codehilite');
+      }
+      function paint(b) {
+        if (!canPaint(b)) return;
+        try { hljs.highlightElement(b); } catch (e) {}
+      }
+      function init() {
+        var blocks = [].slice.call(document.querySelectorAll('pre code')).filter(canPaint);
+        if (!blocks.length) return;
+        if ('IntersectionObserver' in window) {
+          var io = new IntersectionObserver(function(entries, obs) {
+            entries.forEach(function(en) {
+              if (!en.isIntersecting) return;
+              paint(en.target);
+              obs.unobserve(en.target);
+            });
+          }, { rootMargin: '800px 0px' });
+          blocks.forEach(function(b) { io.observe(b); });
+        }
+        var i = 0;
+        var idle = window.requestIdleCallback || window.setTimeout;
+        var step = function() {
+          var quota = 4;
+          while (i < blocks.length && quota-- > 0) paint(blocks[i++]);
+          if (i < blocks.length) idle(step);
+        };
+        idle(step); // 不在 DCL 里同步跑：可见块由 IntersectionObserver 处理，其余走空闲分片
+      }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+      } else {
+        init();
+      }
+    })();
+  </script>
+
+  <!-- Cloudflare Web Analytics -->
+  <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "29e7cff6f37448989538e2165cb79187"}'></script>
+</body>
+</html>
