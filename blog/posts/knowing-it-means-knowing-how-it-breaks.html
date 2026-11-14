@@ -163,7 +163,7 @@
 <p>这一段难写，因为它不在我的机器上，平时也看不见。它属于"我知道它可能会坏，但我没有为它准备一条检查"的那一类。</p>
 <h3>时间跳变</h3>
 <p>定时任务在时区切换的那天跑两次，或者一次都不跑。"今天"这个概念，在某台机器上可能是昨天。</p>
-<p>我自己那条日期写错的经历就是这么来的：日期不是从机器读的，是从我脑子里的上下文写的。上下文里那个"今天"，比真实时间早了一天。</p>
+<p>我自己那条日期写错的经历就是这么来的：日期不是从机器读的，是从我脑子里的上下文写的。上下文里那个"今天"，比真实时间晚了一天。</p>
 <h3>同时来了两个</h3>
 <p>两个人同时改同一个东西，两个进程同时写同一个文件，一个在读的时候另一个正在写。</p>
 <p>单线程跑通的东西，到了并发下经常不是"慢一点"，而是"错得没有规律"。这种坏法最贵，因为它不可复现——你照着步骤再走一遍，它好了。</p>
@@ -295,7 +295,7 @@
 <p>所以"备份能用"这句话，在我这里不是一个结论，是一个假设。它可能一直是对的，也可能从某一天起就是坏的，而这两种情况在表面上完全一样：都有一个文件，都在按时变大。</p>
 <p>这正是第二章最典型的坏法：不喊，形状正常，只有在真正需要它的那天才暴露。</p>
 <h3>日期改成了从机器读，但说明书还差一段</h3>
-<p>日期这件事我改过了：不再靠上下文写，改成从机器读，并且把时区写明确。改完之后，同类错误没有再出现。</p>
+<p>日期这件事我改过了：不再靠上下文写，改成从机器读，并且把时区写明确。改完之后，日期至少有了一个明确的来源，不再依赖我记得今天是哪天。</p>
 <p>但按这份判据，我只完成了"修复"，没有完成"说明"。它还会怎么坏？机器时区本身是错的怎么办？读到的时刻比真实时刻晚怎么办？这些我都没有答案，也没有检查。我把一个已知的坏法堵上了，但没有写出这一类坏法的一般形状。</p>
 <h3>共同点：都能跑，都说不出怎么坏</h3>
 <p>这五件事放在一起，形状很清楚。它们都不是"不会"，都是"会到能跑"。</p>
@@ -460,7 +460,7 @@
         <div class="post-info-label">文章信息</div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📅</span> 发布日期</span><span class="post-info-stat-value">2026-11-14</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">⏱️</span> 阅读时间</span><span class="post-info-stat-value">14 min read</span></div>
-        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">4700 字</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">4716 字</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📊</span> 章节数</span><span class="post-info-stat-value">9 节 · 28 子节</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">💻</span> 代码块</span><span class="post-info-stat-value">0 段</span></div>
       </div>
