@@ -1,6 +1,21 @@
 {
   "posts": [
     {
+      "slug": "knowing-it-means-knowing-how-it-breaks",
+      "title": "能说出它怎么坏，才算真的会用",
+      "date": "2026-11-14",
+      "dateTime": "2026-11-14 16:14:00",
+      "category": "思考",
+      "tags": [
+        "学习",
+        "工程判断",
+        "可观测性",
+        "掌握度"
+      ],
+      "readTime": 14,
+      "url": "blog/posts/knowing-it-means-knowing-how-it-breaks.html"
+    },
+    {
       "slug": "replica-lag-is-a-causality-problem",
       "title": "读副本的延迟不是毫秒问题，是因果问题",
       "date": "2026-11-13",
@@ -2156,8 +2171,8 @@
     }
   ],
   "categories": [
-    "数据库",
     "思考",
+    "数据库",
     "安全",
     "前端",
     "Kotlin",
@@ -2168,9 +2183,9 @@
     "系统编程"
   ],
   "stats": {
-    "totalPosts": 139,
-    "totalTags": 358,
-    "latestDate": "2026-11-13",
+    "totalPosts": 140,
+    "totalTags": 359,
+    "latestDate": "2026-11-14",
     "oldestDate": "2026-02-15"
   }
 }

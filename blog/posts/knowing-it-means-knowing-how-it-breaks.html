@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <script>document.documentElement.classList.add("js");try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://static.cloudflareinsights.com https://loczb-comments.billymust.workers.dev; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://loczb-comments.billymust.workers.dev https://dashscope.aliyuncs.com https://709527.xyz https://www.709527.xyz https://cloudflareinsights.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
+    <script>/* 反点击劫持兜底：GitHub Pages 无法下发 X-Frame-Options / CSP frame-ancestors */(function(){if(self===top)return;try{top.location=self.location}catch(e){}setTimeout(function(){if(self!==top){document.documentElement.style.display='none';}},400);})();</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>能说出它怎么坏，才算真的会用 | 张小猛 - loczb</title>
+    <meta name="description" content="跑通只证明你走过一条路，不证明你知道路基有多薄；能写出一份「怎么把它弄坏」的说明书，才算摸到了它的边界。">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="能说出它怎么坏，才算真的会用 | 张小猛 - loczb">
+    <meta property="og:description" content="跑通只证明你走过一条路，不证明你知道路基有多薄；能写出一份「怎么把它弄坏」的说明书，才算摸到了它的边界。">
+    <meta property="og:url" content="https://709527.xyz/blog/posts/knowing-it-means-knowing-how-it-breaks.html">
+    <meta property="og:type" content="article">
+    <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
+    <meta property="og:site_name" content="loczb">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="能说出它怎么坏，才算真的会用 | 张小猛 - loczb">
+    <meta name="twitter:description" content="跑通只证明你走过一条路，不证明你知道路基有多薄；能写出一份「怎么把它弄坏」的说明书，才算摸到了它的边界。">
+    <meta name="twitter:image" content="https://709527.xyz/assets/images/og-image.png">
+
+        <script type="application/ld+json">
+{
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "能说出它怎么坏，才算真的会用",
+      "description": "跑通只证明你走过一条路，不证明你知道路基有多薄；能写出一份「怎么把它弄坏」的说明书，才算摸到了它的边界。",
+      "image": "https://709527.xyz/assets/images/og-image.png",
+      "author": {
+            "@type": "Person",
+            "name": "张小猛",
+            "url": "https://709527.xyz/about/"
+      },
+      "publisher": {
+            "@type": "Organization",
+            "name": "loczb",
+            "logo": {
+                  "@type": "ImageObject",
+                  "url": "https://709527.xyz/assets/images/favicon.svg"
+            }
+      },
+      "datePublished": "2026-11-14T16:14:00+08:00",
+      "dateModified": "2026-11-14T16:14:00+08:00",
+      "url": "https://709527.xyz/blog/posts/knowing-it-means-knowing-how-it-breaks.html",
+      "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://709527.xyz/blog/posts/knowing-it-means-knowing-how-it-breaks.html"
+      },
+      "keywords": "学习, 工程判断, 可观测性, 掌握度",
+      "articleSection": "思考",
+      "timeRequired": "PT14M",
+      "inLanguage": "zh-CN"
+}
+    </script>
+
+    <link rel="stylesheet" href="../../assets/css/style.css?v=c8e170d8f9">
+    <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
+    <link rel="alternate icon" href="../../assets/images/favicon.ico">
+    <link rel="canonical" href="https://709527.xyz/blog/posts/knowing-it-means-knowing-how-it-breaks.html">
+</head>
+<body>
+  <!-- PARTIAL:SKIP_LINK -->
+  <a href="#main-content" class="skip-link">跳至主要内容</a>
+  <!-- /PARTIAL:SKIP_LINK -->
+
+  <!-- Navigation -->
+<!-- PARTIAL:NAV -->
+  <nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">
+      loc<span>zb</span>
+    </a>
+    <button class="nav-toggle" aria-label="打开菜单" aria-expanded="false" aria-controls="nav-links-menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <div class="nav-overlay"></div>
+    <ul class="nav-links" id="nav-links-menu">
+      <li><a href="/" class="nav-link" data-nav="home">首页</a></li>
+      <li><a href="/projects/" class="nav-link" data-nav="projects">项目</a></li>
+      <li><a href="/blog/" class="nav-link active" data-nav="blog">博客</a></li>
+      <li><a href="/about/" class="nav-link" data-nav="about">关于</a></li>
+    </ul>
+    <button class="theme-toggle" aria-label="切换主题" title="切换亮/暗模式">
+      <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="5"></circle>
+        <line x1="12" y1="1" x2="12" y2="3"></line>
+        <line x1="12" y1="21" x2="12" y2="23"></line>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+        <line x1="1" y1="12" x2="3" y2="12"></line>
+        <line x1="21" y1="12" x2="23" y2="12"></line>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+      </svg>
+      <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+      </svg>
+    </button>
+  </div>
+</nav>
+  <!-- /PARTIAL:NAV -->
+  <main class="section" id="main-content" style="padding-bottom: 0; padding-top: var(--space-4xl);">
+    <div class="container container-narrow">
+      <a href="../index.html" class="back-link">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        返回博客列表
+      </a>
+
+      <article class="post-content">
+        <h1>能说出它怎么坏，才算真的会用</h1>
+
+        <div class="post-meta">
+          <span class="meta-item"><span aria-hidden="true">📅</span> 2026-11-14 16:14:00</span>
+          <span class="meta-item"><span aria-hidden="true">⏱️</span> 14 min read</span>
+          <span class="meta-item"><span aria-hidden="true">👤</span> 张小猛</span>
+        </div>
+
+        <div class="post-tags">
+          <span class="tag">学习</span>
+          <span class="tag">工程判断</span>
+          <span class="tag">可观测性</span>
+          <span class="tag">掌握度</span>
+        </div>
+
+        
+
+        <h2>跑通一次，为什么就觉得自己会了</h2>
+<p>前一阵换机器，我把一个用熟了的服务重新装起来。重建环境，装回指定的版本，把命令照原样敲一遍，它起来了。</p>
+<p>我在终端前坐了一会儿，心里浮出那句话：这个我会。</p>
+<p>那句话来得太顺，顺到我当时没觉得它有什么问题。后来回头看，它的来源很清楚：一次成功的运行，给出的信息量很小，但形状特别讨人喜欢。路径只有一条，步骤可以重复，每一步都有反馈——装完有提示，启动有日志，请求过去有响应。按顺序做完，世界就给你一个绿色的结果。人很难不被这种结构说服。</p>
+<h3>成功的路径只有一条，坏法有无数条</h3>
+<p>一条路能走通，只证明这条路存在，不证明路基有多厚。</p>
+<p>任何一件能跑的东西，"能跑"这个状态都是狭窄的：版本要对，路径要对，权限要对，输入要在预期范围内，机器上的时间最好是准的。这些条件同时成立，它才给你那个绿色的结果。而坏掉的方式是发散的，几乎每一个条件都有自己的几种坏法，几种坏法还能组合。</p>
+<p>拿钥匙打比方。一把钥匙能开门，只说明齿形对上了。它会不会断在锁里、会不会磨平、会不会有一把看起来一样但差半毫米的，开门这个动作不会告诉你。</p>
+<h3>反馈是单向的</h3>
+<p>绿色的结果只奖励你走对了，不告诉你边界在哪。</p>
+<p>系统不会在成功的时候顺便说一句：如果配置里少一个字段，我会静默用默认值；如果网络断了，我会把上一次的结果再交一遍。这些信息只在坏的时候出现，而坏的时候，你往往不在场。</p>
+<p>所以"我会了"这种感觉，本质上是一次成功留下的余温。它不假，但它测的东西太窄了。</p>
+<h2>说明书第一章：它能以几种方式坏掉</h2>
+<p>我后来给自己定了一个判据，很土，但好用：</p>
+<blockquote>
+<p>给一件你以为自己会的东西，写一份「怎么把它弄坏」的说明书。</p>
+</blockquote>
+<p>不用长。但它得能照着做——按上面的步骤，应该能把它弄坏，并且知道弄坏之后是什么样子。写不出来，就说明我对它的了解停在"能跑"那一层。</p>
+<p>这份说明书的第一章是穷举坏法。不追求数学意义上的完备，只追求"我能想到的、真实会发生的"那一层。写的时候有个窍门：不要从功能出发，从入口出发。</p>
+<h3>输入先弄脏</h3>
+<p>空值、超长、编码不对、前后多了空格、数字传成了字符串、时区不一样。</p>
+<p>这一段最好写，因为大部分坏法都从边界进来。也最容易漏，因为正常使用的时候，输入总是干净的——是我自己敲的，或者是我自己那条路径生成的。一旦换个人用、换个上游用，边界就露出来了。</p>
+<h3>环境变了</h3>
+<p>解释器换了版本，依赖装到了另一个位置，路径里多了一个空格，文件权限从可读变成不可读，环境变量在另一个 shell 里没有。</p>
+<p>这些不算假设。换机器那次，环境就是坏的。而它坏的方式不体面：不是一上来告诉你"环境不对"，是走到一半才说某个东西找不到。前面那几步还是绿的，绿得让人放心。</p>
+<h3>中途断掉</h3>
+<p>写到一半进程被杀，锁没释放，临时文件留在原地，下一次跑的时候把上一次的残留当成正常状态。</p>
+<p>还有一种更隐蔽：重跑一次，发现它不幂等，同一件事被做了两遍。第一遍看起来成功，第二遍也看起来成功，只有把两次的结果放在一起看，才知道多了东西。</p>
+<h3>依赖不见了</h3>
+<p>远端的东西下线，接口改了字段，证书过期，包被撤掉。</p>
+<p>这一段难写，因为它不在我的机器上，平时也看不见。它属于"我知道它可能会坏，但我没有为它准备一条检查"的那一类。</p>
+<h3>时间跳变</h3>
+<p>定时任务在时区切换的那天跑两次，或者一次都不跑。"今天"这个概念，在某台机器上可能是昨天。</p>
+<p>我自己那条日期写错的经历就是这么来的：日期不是从机器读的，是从我脑子里的上下文写的。上下文里那个"今天"，比真实时间早了一天。</p>
+<h3>同时来了两个</h3>
+<p>两个人同时改同一个东西，两个进程同时写同一个文件，一个在读的时候另一个正在写。</p>
+<p>单线程跑通的东西，到了并发下经常不是"慢一点"，而是"错得没有规律"。这种坏法最贵，因为它不可复现——你照着步骤再走一遍，它好了。</p>
+<p>把这几类摊开，可以做个粗糙的对照：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">坏法</th>
+<th style="text-align: left;">从哪进来</th>
+<th style="text-align: left;">会不会当场喊出来</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">输入弄脏</td>
+<td style="text-align: left;">边界</td>
+<td style="text-align: left;">多数会，取决于有没有校验</td>
+</tr>
+<tr>
+<td style="text-align: left;">环境变化</td>
+<td style="text-align: left;">机器与依赖</td>
+<td style="text-align: left;">常常不喊，或者喊得很晚</td>
+</tr>
+<tr>
+<td style="text-align: left;">中途断掉</td>
+<td style="text-align: left;">进程生命周期</td>
+<td style="text-align: left;">看有没有事务和幂等</td>
+</tr>
+<tr>
+<td style="text-align: left;">依赖消失</td>
+<td style="text-align: left;">外部</td>
+<td style="text-align: left;">通常不喊，直到下一次调用</td>
+</tr>
+<tr>
+<td style="text-align: left;">时间跳变</td>
+<td style="text-align: left;">系统时钟</td>
+<td style="text-align: left;">几乎不喊，结果是错的但形状正常</td>
+</tr>
+<tr>
+<td style="text-align: left;">并发</td>
+<td style="text-align: left;">调用方</td>
+<td style="text-align: left;">看运气</td>
+</tr>
+</tbody>
+</table>
+<p>这张表不是知识，是提醒：<strong>坏法里有一大半不会主动告诉你。</strong></p>
+<h2>说明书第二章：坏的时候你怎么知道</h2>
+<h3>会喊的坏法是好坏法</h3>
+<p>抛异常、非零退出、日志里一行刺眼的红、健康检查失败。这些坏法虽然难看，但它们是礼物——它把"出问题了"这件事替你说了。</p>
+<p>对这类坏法，说明书要写的不是"会不会坏"，而是"喊出来之后我第一步看哪里"。顺序本身就是知识。先看进程在不在，再看端口，再看依赖，再看日志的最后一段。写下来，下次就不用在慌乱里重新排列组合。</p>
+<h3>不喊的坏法才要命</h3>
+<p>空结果、默认值、部分成功、降级、退出码是 0 但少写了一半数据。</p>
+<p>这些坏法的共同点是：<strong>输出的形状是对的</strong>。接口返回了，字段都在，类型也对，只是值是空的，或者旧值。你如果只看"跑没跑完"，它会一直是对的。</p>
+<p>我越来越觉得，一套系统里真正值钱的部分，是那些"能证明自己没坏"的地方：一条能对上的总数，一个能比对的时间戳，一次能复算的校验。不是监控面板上好看的曲线，是能回答"这一次和上一次，是不是同一件事"的东西。</p>
+<h3>我要的不是"应该没问题"</h3>
+<p>"应该没问题"是一句感觉。"我怎么知道它没问题"是一个动作。</p>
+<p>这两句话差得很远。前一句可以坐在椅子上说完，后一句要起身去查。写说明书的时候，第二章的每一节最后都应该落成一个动作：看哪个文件、比哪个数、跑哪条命令。落不成动作的，就是我还没想清楚。</p>
+<h2>说明书第三章：怎么回去</h2>
+<h3>先定义什么叫"已知良好"</h3>
+<p>"回去"得有个回去的地方。如果我说不出上一个确定没问题的状态是什么样，那"回退"就只是"再试一次"。</p>
+<p>已知良好状态是可以被描述的：哪个版本、哪份配置、哪个时间点的数据、跑起来之后应该看到什么。描述得出来，回退才是个动作；描述不出来，回退就是碰运气。</p>
+<h3>回退这一步要能跑第二次</h3>
+<p>很多恢复步骤只在第一次有效。第一次回退把目录清了、把状态改了，第二次再跑就卡在"目标已经不存在"或者"目标已经存在"上。</p>
+<p>这类问题平时发现不了，因为恢复这种事不常做。等真需要做第二次的时候，人已经在压力里了，没有心情调试恢复脚本。所以恢复路径也值得被跑第二遍——不是为了这次，是为了下次。</p>
+<h3>数据比代码难回去</h3>
+<p>代码可以回退到某个提交。数据不行，数据只有备份，而备份是一个需要被验证的承诺。</p>
+<p>这也是我后来才想明白的一点：<strong>备份的可用性不是一个属性，是一次演练的结果。</strong> 写了很多次、跑了很多次、文件也在长大，这些都不构成证据。证据只有一条：把它解开，用里面的东西把一件事重新做一遍。</p>
+<h2>写不出来意味着什么</h2>
+<h3>不是不会用，是只走到了第一档</h3>
+<p>我给自己分了三档，说清楚：<strong>这是一个分析用的模型，不是调研结论，没有样本，也没有量表。</strong> 它只用来问自己问题。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">档位</th>
+<th style="text-align: left;">能回答的问题</th>
+<th style="text-align: left;">说明书能写到哪</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">第一档</td>
+<td style="text-align: left;">按什么顺序做，它能跑起来</td>
+<td style="text-align: left;">写不出，或者只有操作步骤</td>
+</tr>
+<tr>
+<td style="text-align: left;">第二档</td>
+<td style="text-align: left;">坏了怎么定位，怎么修回去</td>
+<td style="text-align: left;">写得出第二章和第三章</td>
+</tr>
+<tr>
+<td style="text-align: left;">第三档</td>
+<td style="text-align: left;">它可能怎么坏，坏了怎么知道，怎么回去</td>
+<td style="text-align: left;">三章都能写，且能照着做</td>
+</tr>
+</tbody>
+</table>
+<p>第一档的人不是不会用。他能把事做成，日常也够用。只是他的知识是"路径记忆"：这条路我走过，跟着走就行。路径之外的区域，对他来说是一张白纸。</p>
+<p>第二档是修出来的。坏过一次，查过一次，知道疼在哪，于是有了一套排查顺序。这一档已经比第一档结实很多，但它的知识仍然是被动的——等坏了才启动。</p>
+<p>第三档是往前一步：在它没坏的时候，就能说出它可能怎么坏。这一步不产生新的功能，也不让系统跑得更快，它只做一件事：把"不知道"变成"知道去哪里看"。</p>
+<h3>第二档到第三档，中间隔的不是经验，是表达</h3>
+<p>经验多的人不一定写得出这份说明书。他可能修过很多次，但每次都是临场判断，判断完就过去了，没有沉淀成可以复述的东西。</p>
+<p>写出来这一步之所以关键，是因为它会逼你发现空白。脑子里想的时候，"大概就是环境问题"可以糊过去；落到纸上，"环境问题"必须变成具体的条件和具体的检查。糊不过去的地方，就是没懂的地方。</p>
+<h2>三种假会</h2>
+<h3>跟教程会</h3>
+<p>照着步骤做，确实能跑起来。但会的是那份教程，不是那件东西。换个目录、换个版本、换台机器，教程没覆盖到的地方立刻露出来。</p>
+<p>这不是说教程没用。教程给的是第一档，它本来就不承诺更多。问题在于，很多人（包括我）把第一档当成了终点。</p>
+<h3>只会 happy path</h3>
+<p>正常输入能过，异常输入从来没进过。这类"会"最容易被自己骗，因为演示的时候总是用正常输入，而正常输入永远成功。</p>
+<p>判断方法很直接：能不能说出三个会让它出错的输入。说不出来，就是没试过。</p>
+<h3>只会一种配置</h3>
+<p>默认配置能跑，换一种就不行。或者说，只有我这一台机器上的这套配置能跑。</p>
+<p>单机开发最容易养出这种"会"：所有的隐含条件都在我的机器上恰好成立，而我从来没把它们写下来过。等到换机器，那些条件一个个消失，我还以为是"环境坏了"——其实是"环境终于不再替我兜底了"。</p>
+<h2>用这套判据重看我自己</h2>
+<p>写到这里，我拿这份模板量了量手边几件事。结果不太好看。下面每一条都是反例，不是成绩。</p>
+<h3>每篇发完，几乎都跟着一条修正提交</h3>
+<p>过去一周，我发出去的东西几乎每篇后面都跟着一条修正。类型很固定：去掉没有来源的精确数字；把推演的口吻改回推演；正文和示例对不上，改一处。</p>
+<p>有意思的是，发布流程本身是全绿的。构建过，门禁过，上线也过。机械检查覆盖的是"产物是否一致""链接是否断""格式是否合规"，它不覆盖"这句话是不是真的"。我能跑通发布，但我说不出这套流程会在哪里产出不真实的内容——事实上它已经在产出了，我只是每次事后补一刀。</p>
+<p>按这份判据，发布这件事我停在了第一档偏上：会跑，会修，但预判不了。</p>
+<h3>那道检查住在不会被提交的目录里</h3>
+<p>我有一条本地检查，挂在一个不会被提交的目录里。它在的时候，一切正常；它不在的时候，也不报错。</p>
+<p>这意味着它的失效模式是"静默消失"。我换了机器，它就没有了，而流程照常跑完，看起来毫无异样。我知道这件事，但我一直没有把它写进任何"换机器要做什么"的清单里——也就是说，我知道它会坏，却没有为它准备一条"怎么知道它坏了"的检查。</p>
+<p>这正是第二章该写而我没写的那一节。</p>
+<h3>虚拟环境坏了，我能修，但说不清它为什么坏</h3>
+<p>换机器的时候，环境是坏的。我能修：重建环境，装回指定的版本，它就好了。</p>
+<p>但你要问我它为什么会坏、什么条件下会再坏，我答不上来。我修的是现象，不是原因。这一次我运气好，重装能解决；下一次如果重装不解决，我手里的方案就只有一个，而且已经用掉了。</p>
+<p>一份合格的说明书在这里至少要回答：它依赖哪些外部条件，这些条件里哪一个最容易变，变了之后第一个症状是什么。这三问我都答不出。</p>
+<h3>备份写了很久，从没解压回来跑过</h3>
+<p>备份这件事我做了很久，定时跑，文件也在长大。但我从来没有把它解压回来，用里面的东西把一件事重新做一遍。</p>
+<p>所以"备份能用"这句话，在我这里不是一个结论，是一个假设。它可能一直是对的，也可能从某一天起就是坏的，而这两种情况在表面上完全一样：都有一个文件，都在按时变大。</p>
+<p>这正是第二章最典型的坏法：不喊，形状正常，只有在真正需要它的那天才暴露。</p>
+<h3>日期改成了从机器读，但说明书还差一段</h3>
+<p>日期这件事我改过了：不再靠上下文写，改成从机器读，并且把时区写明确。改完之后，同类错误没有再出现。</p>
+<p>但按这份判据，我只完成了"修复"，没有完成"说明"。它还会怎么坏？机器时区本身是错的怎么办？读到的时刻比真实时刻晚怎么办？这些我都没有答案，也没有检查。我把一个已知的坏法堵上了，但没有写出这一类坏法的一般形状。</p>
+<h3>共同点：都能跑，都说不出怎么坏</h3>
+<p>这五件事放在一起，形状很清楚。它们都不是"不会"，都是"会到能跑"。</p>
+<p>会跑，会修，甚至修得挺熟——但失效模式是模糊的，恢复路径是没有演练过的，检查是缺的。按那份说明书的标准，它们都还停在第一档和第二档之间。</p>
+<p>我不觉得这有什么丢人。丢人的是把这一档说成"我会了"，然后在下一次换机器的时候，重新惊讶一遍。</p>
+<h2>不是所有东西都值得写到第三档</h2>
+<p>写到这里容易滑向另一个极端：好像什么都该写一份完整说明书。不是的。</p>
+<h3>一次性脚本</h3>
+<p>跑一次就删的东西，知道怎么跑就够了。为它写失效模式分析，是在给一个不存在的未来做保险。</p>
+<h3>废弃的工具和玩具</h3>
+<p>已经不用了，或者只有我自己在玩、坏了也没人疼的东西，第一档足够。第三档的知识有维护成本：环境会变，说明书会过期，过期而不自知的说明书比没有更危险。</p>
+<h3>判断标准：谁依赖它、坏了谁疼、多久坏一次</h3>
+<p>我现在的判断很粗糙，就三问：</p>
+<ul>
+<li>除了我，还有谁依赖它？</li>
+<li>它坏掉的时候，疼的是谁？</li>
+<li>它大概多久会坏一次？</li>
+</ul>
+<p>三个答案都轻，就停在第一档；有一个重，就值得写到第二档；如果坏了会安静地错、而且要过很久才被发现，那就值得写到第三档。</p>
+<p>最后一条是关键。<strong>会喊的坏法可以晚点学，不喊的坏法必须早点学。</strong> 因为前者会给你时间，后者不会。</p>
+<h2>收束：会用不是一种感觉，是一份能交出去的说明书</h2>
+<p>"我会了"是一种感觉，它由一次成功产生，也会被下一次成功加固。它不需要证据，所以它经常是错的。</p>
+<p>说明书不一样。它要么写得出来，要么写不出来。写不出来的时候，你会具体地知道自己卡在哪一章：是列不出坏法，还是不知道怎么发现，还是不知道怎么回去。这个"卡住"的位置，比任何自我评估都准。</p>
+<p>我现在的做法很笨：每碰一件准备长期用下去的东西，先不问"我会不会"，先问"我能不能把它弄坏，再说清楚它是怎么坏的"。答不上来，就说明我还在第一档，那就先别急着说会。</p>
+<p>跑通是它给我的答案。怎么坏，才是我给它的答案。</p>
+
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="tech-debt-matures-on-a-date.html">
+            <div class="related-post-card-title">技术债不按数量累积，按到期日聚集</div>
+            <div class="related-post-card-tags"><span>技术债</span><span>依赖管理</span><span>风险</span></div>
+          </a>
+          <a class="related-post-card" href="why-i-started-blogging.html">
+            <div class="related-post-card-title">为什么我开始写博客：从潜水到发声</div>
+            <div class="related-post-card-tags"><span>思考</span><span>学习</span><span>个人成长</span></div>
+          </a>
+          <a class="related-post-card" href="slow-query-ranking-hides-the-real-cost.html">
+            <div class="related-post-card-title">慢查询排行榜的第一名，往往不是最该动的那条</div>
+            <div class="related-post-card-tags"><span>性能优化</span><span>SQL</span><span>可观测性</span></div>
+          </a>
+          <a class="related-post-card" href="linux-ebpf-getting-started.html">
+            <div class="related-post-card-title">Linux eBPF 入门：内核可观测性新范式</div>
+            <div class="related-post-card-tags"><span>eBPF</span><span>Linux 内核</span><span>可观测性</span></div>
+          </a>
+          <a class="related-post-card" href="handoverability-is-a-technical-metric.html">
+            <div class="related-post-card-title">只有你能跑通的那套，等于没跑通：可交接性是个技术指标</div>
+            <div class="related-post-card-tags"><span>可交接性</span><span>运维</span><span>文档</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
+
+        <!-- Post Copyright & License Card -->
+        <div class="post-copyright-card">
+          <div class="copyright-header">
+            <div class="copyright-badge">
+              <span>📜</span>
+              <span>原创与知识共享协议</span>
+            </div>
+            <button class="copyright-cite-btn" id="copy-cite-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+              </svg>
+              <span>复制 Markdown 引用</span>
+            </button>
+          </div>
+          <div class="copyright-list">
+            <div class="copyright-item"><strong>文章标题：</strong>能说出它怎么坏，才算真的会用</div>
+            <div class="copyright-item"><strong>文章作者：</strong>张小猛 · loczb</div>
+            <div class="copyright-item"><strong>永久链接：</strong><a href="https://709527.xyz/blog/posts/knowing-it-means-knowing-how-it-breaks.html">https://709527.xyz/blog/posts/knowing-it-means-knowing-how-it-breaks.html</a></div>
+            <div class="copyright-item"><strong>版权声明：</strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 国际许可协议。商业转载请联系作者获得授权，非商业转载请注明出处。</div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </main>
+
+  <!-- Related Posts / Navigation -->
+  <section class="section" aria-label="读完之后" style="padding-top: 0;">
+    <div class="container container-narrow">
+      <!-- Post Nav Prev Next -->
+      <nav class="post-nav" aria-label="文章翻页导航">
+        <a href="replica-lag-is-a-causality-problem.html" class="post-nav-card post-nav-prev" rel="prev">
+          <span class="post-nav-label">← 上一篇</span>
+          <span class="post-nav-title">读副本的延迟不是毫秒问题，是因果问题</span>
+        </a>
+        <div class="post-nav-card post-nav-next disabled" aria-disabled="true">
+          <span class="post-nav-label">下一篇 →</span>
+          <span class="post-nav-title">已是最新篇博文</span>
+        </div>
+      </nav>
+      <!-- /Post Nav Prev Next -->
+      <hr style="border: none; border-top: 1px solid var(--color-border); margin: var(--space-2xl) 0;">
+
+      <div class="blog-topics" style="margin-bottom: var(--space-xl); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+        <div>
+          <span class="topic-label">读完之后:</span>
+          <a href="../index.html" class="topic-tag">返回博客列表</a>
+          <a href="../index.html?view=series" class="topic-tag">浏览全部专栏</a>
+        </div>
+        <a href="#main-content" class="topic-tag" style="margin-left: auto;">↑ 回到顶部</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+<!-- PARTIAL:FOOTER -->
+  <footer class="footer" role="contentinfo">
+  <div class="footer-inner">
+    <p class="footer-signature">写代码，做产品，也认真生活。</p>
+    <div class="footer-social">
+      <a href="https://github.com/zzdbilly" class="footer-social-link" target="_blank" rel="noopener" aria-label="GitHub">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+      </a>
+      <a href="https://twitter.com/zzdbilly" class="footer-social-link" target="_blank" rel="noopener" aria-label="X (Twitter)">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      </a>
+      <a href="/rss.xml" class="footer-social-link" target="_blank" rel="noopener" aria-label="RSS 订阅">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+      </a>
+    </div>
+    <div class="footer-links">
+      <a href="/" class="footer-link">首页</a>
+      <a href="/projects/" class="footer-link">项目</a>
+      <a href="/blog/" class="footer-link">博客</a>
+      <a href="/about/" class="footer-link">关于</a>
+    </div>
+    <p class="footer-copyright">&copy; 2026 张小猛 · loczb · Built with care</p>
+  </div>
+</footer>
+  <!-- /PARTIAL:FOOTER -->
+
+  <script defer src="../../assets/js/main.js"></script>
+  <script defer src="../../assets/js/article.js?v=c9f1a378ea"></script>
+  <script defer src="../../assets/js/share.js"></script>
+  <!-- Back to Top & Reading Progress -->
+  <button class="back-to-top" id="backToTop" aria-label="回到顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
+  <div class="reading-progress" id="readingProgress"></div>
+
+  <!-- Post Sidebar Info（左侧） -->
+  <div class="post-sidebar-info" id="postSidebar">
+    <div class="post-info-card">
+      <div class="post-info-section">
+        <div class="post-info-label">作者</div>
+        <div class="post-info-author">
+          <div class="post-info-avatar">小</div>
+          <div>
+            <div class="post-info-author-name">张小猛</div>
+            <div class="post-info-author-desc">写代码，做产品</div>
+          </div>
+        </div>
+      </div>
+      <div class="post-info-section">
+        <div class="post-info-label">文章信息</div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📅</span> 发布日期</span><span class="post-info-stat-value">2026-11-14</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">⏱️</span> 阅读时间</span><span class="post-info-stat-value">14 min read</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">4700 字</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📊</span> 章节数</span><span class="post-info-stat-value">9 节 · 28 子节</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">💻</span> 代码块</span><span class="post-info-stat-value">0 段</span></div>
+      </div>
+      <div class="post-info-section" id="postSidebarTags">
+        <div class="post-info-label">标签</div>
+        <div class="post-info-links">
+          <a href="../../blog/index.html?tag=%E5%AD%A6%E4%B9%A0" class="post-info-link"># 学习</a>
+          <a href="../../blog/index.html?tag=%E5%B7%A5%E7%A8%8B%E5%88%A4%E6%96%AD" class="post-info-link"># 工程判断</a>
+          <a href="../../blog/index.html?tag=%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7" class="post-info-link"># 可观测性</a>
+          <a href="../../blog/index.html?tag=%E6%8E%8C%E6%8F%A1%E5%BA%A6" class="post-info-link"># 掌握度</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Post TOC -->
+  <div class="post-toc-container" id="postToc">
+    <nav class="post-toc" aria-label="文章目录">
+      <div class="post-toc-title">目录</div>
+      <ul class="post-toc-list" id="tocList">
+      </ul>
+    </nav>
+  </div>
+
+  <!-- Comment System -->
+  <script src="../../workers/comment-system/comment-widget.js?v=5d8a6a1796" defer></script>
+
+  <!-- highlight.js 代码语法高亮（本地完整构建，无外部依赖） -->
+  <script defer src="../../assets/vendor/highlight/highlight.min.js"></script>
+  <script>
+    /* 语法高亮改为「可见优先、空闲补齐」：
+       highlight.js 要遍历全篇代码块并生成数百个 span，若在 DOMContentLoaded 里同步跑完，
+       会在关键路径上长时间占住主线程（2026-09-27 实测本页长任务 1548ms、DCL 3651ms；
+       改动后长任务 145ms、DCL 1378ms）。这里 DCL 阶段只登记观察，实际高亮交给
+       IntersectionObserver（近屏 800px 内优先）+ requestIdleCallback（剩余块每片 ≤4 块），
+       首屏代码块的着色时机与视觉基本无变化。 */
+    (function() {
+      function canPaint(b) {
+        return !b.classList.contains('hljs') && !b.closest('.codehilite');
+      }
+      function paint(b) {
+        if (!canPaint(b)) return;
+        try { hljs.highlightElement(b); } catch (e) {}
+      }
+      function init() {
+        var blocks = [].slice.call(document.querySelectorAll('pre code')).filter(canPaint);
+        if (!blocks.length) return;
+        if ('IntersectionObserver' in window) {
+          var io = new IntersectionObserver(function(entries, obs) {
+            entries.forEach(function(en) {
+              if (!en.isIntersecting) return;
+              paint(en.target);
+              obs.unobserve(en.target);
+            });
+          }, { rootMargin: '800px 0px' });
+          blocks.forEach(function(b) { io.observe(b); });
+        }
+        var i = 0;
+        var idle = window.requestIdleCallback || window.setTimeout;
+        var step = function() {
+          var quota = 4;
+          while (i < blocks.length && quota-- > 0) paint(blocks[i++]);
+          if (i < blocks.length) idle(step);
+        };
+        idle(step); // 不在 DCL 里同步跑：可见块由 IntersectionObserver 处理，其余走空闲分片
+      }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+      } else {
+        init();
+      }
+    })();
+  </script>
+
+  <!-- Cloudflare Web Analytics -->
+  <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "29e7cff6f37448989538e2165cb79187"}'></script>
+</body>
+</html>
