@@ -281,7 +281,7 @@ fun applyState(state: SyncState) {
 <h2>把缝隙收窄：五个动作</h2>
 <p>这条缝隙没法彻底消除，因为它的成因是「编译时刻」与「运行时刻」之间存在时间差，而任何编译型语言都有这个差。但可以把它的宽度压到很小。</p>
 <h3>一、不写 else，让编译器替你守</h3>
-<p>最有效的一条，也是最容易被「防御性编程」的直觉破坏的一条。</p>
+<p>最有效的一条，也是最容易被「防御性编程」的直觉破坏的一条。我在评审 sealed 的 <code>when</code> 时，会把 <code>else</code> 当成一个需要理由的写法——没有理由就写上它，等于主动把编译器的检查换成了自己的记性。</p>
 <p>对 sealed 类型的 <code>when</code>，不写 <code>else</code>，等于把「新增子类型」这件事变成一次编译错误。这个错误会出现在下一次构建里，出现在改库的人或者升级依赖的人的终端上，而不是出现在用户的会话里。</p>
 <p>代价是：每次库加分支，所有消费点都要改。这个代价正是你想要的——它把一次静默的行为变化，换成了一次显式的代码修改。</p>
 <h3>二、必须写 else 时，让它在默认分支上失败</h3>
@@ -325,7 +325,7 @@ fun `unknown state should fail loudly`() {
 </ul>
 <p>这三条只要命中一条，就值得按前面的五个动作收窄；命中两条以上，<code>else</code> 里写 <code>Unit</code> 这件事应当被当作缺陷处理。</p>
 <h2>判据：五个问题</h2>
-<p>在代码评审里，判断一个 <code>when</code> 是否处在缝隙的风险区，可以依次问五个问题：</p>
+<p>在代码评审里，判断一个 <code>when</code> 是否处在缝隙的风险区，我习惯依次问五个问题：</p>
 <ol>
 <li>这个 <code>when</code> 的主题是 sealed 类型或 enum 吗？如果是，它有没有 <code>else</code>？</li>
 <li>主题的声明和这个 <code>when</code> 在同一个模块里吗？如果不在，消费方是源码依赖还是二进制依赖？</li>
@@ -336,7 +336,7 @@ fun `unknown state should fail loudly`() {
 <p>五个问题里，只要第 4 问的答案是「什么都不做」，这段代码就已经在缝隙里了，与当前是否真的发生了版本错配无关。风险不是等错配发生才存在的，它在写下的那一刻就存在了。</p>
 <h2>收束：把结论标上时间</h2>
 <p><code>when</code> 的穷尽性常被当成类型系统的一个特性来理解：只要类型是 sealed，编译器就会保证你处理了所有情况。</p>
-<p>更准确的说法是：编译器保证的是「在你编译它的那一刻，以它读到的 classpath 为准，你处理了所有情况」。这是一个带前提、带时间戳的结论，前提是「输入集合不再变化」，时间戳是「这次构建」。</p>
+<p>我更愿意把它记成一个带条件的句子：编译器保证的是「在你编译它的那一刻，以它读到的 classpath 为准，你处理了所有情况」。这是一个带前提、带时间戳的结论，前提是「输入集合不再变化」，时间戳是「这次构建」。</p>
 <p>类型系统描述的是源码之间的关系，它不描述源码与运行时加载的字节码之间的关系。后者由构建、交付、部署三个环节共同决定，而这三个环节里没有任何一个会替你做穷尽性检查。</p>
 <p>所以真正需要记住的不是「sealed 加 when 很安全」，而是那条缝隙的位置：它在编译结束与程序启动之间。写代码时能做的是不写 <code>else</code>、让默认分支失败、把消费点收进同一个编译单元；做交付时能做的是升级后强制重编译、核对编译期与运行期的依赖版本。</p>
 <p>这些动作都不难，难的是承认一件事：那段看起来被编译器认证过的 <code>when</code>，认证的有效期只到构建结束。</p>
@@ -479,7 +479,7 @@ fun `unknown state should fail loudly`() {
         <div class="post-info-label">文章信息</div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📅</span> 发布日期</span><span class="post-info-stat-value">2026-11-16</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">⏱️</span> 阅读时间</span><span class="post-info-stat-value">14 min read</span></div>
-        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">5932 字</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">5991 字</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📊</span> 章节数</span><span class="post-info-stat-value">9 节 · 22 子节</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">💻</span> 代码块</span><span class="post-info-stat-value">6 段</span></div>
       </div>
