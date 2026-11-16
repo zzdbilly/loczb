@@ -1,6 +1,21 @@
 {
   "posts": [
     {
+      "slug": "exhaustiveness-is-scoped-to-a-compilation-unit",
+      "title": "穷尽性只在同一个编译单元里成立：跨模块加分支，你的 when 不会红",
+      "date": "2026-11-16",
+      "dateTime": "2026-11-16 16:24:00",
+      "category": "Kotlin",
+      "tags": [
+        "Kotlin",
+        "sealed class",
+        "二进制兼容",
+        "类型系统"
+      ],
+      "readTime": 14,
+      "url": "blog/posts/exhaustiveness-is-scoped-to-a-compilation-unit.html"
+    },
+    {
       "slug": "knowing-it-means-knowing-how-it-breaks",
       "title": "能说出它怎么坏，才算真的会用",
       "date": "2026-11-14",
@@ -2171,11 +2186,11 @@
     }
   ],
   "categories": [
+    "Kotlin",
     "思考",
     "数据库",
     "安全",
     "前端",
-    "Kotlin",
     "DevOps",
     "开发",
     "Android",
@@ -2183,9 +2198,9 @@
     "系统编程"
   ],
   "stats": {
-    "totalPosts": 140,
-    "totalTags": 359,
-    "latestDate": "2026-11-14",
+    "totalPosts": 141,
+    "totalTags": 361,
+    "latestDate": "2026-11-16",
     "oldestDate": "2026-02-15"
   }
 }

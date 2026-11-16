@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <script>document.documentElement.classList.add("js");try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://static.cloudflareinsights.com https://loczb-comments.billymust.workers.dev; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://loczb-comments.billymust.workers.dev https://dashscope.aliyuncs.com https://709527.xyz https://www.709527.xyz https://cloudflareinsights.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
+    <script>/* 反点击劫持兜底：GitHub Pages 无法下发 X-Frame-Options / CSP frame-ancestors */(function(){if(self===top)return;try{top.location=self.location}catch(e){}setTimeout(function(){if(self!==top){document.documentElement.style.display='none';}},400);})();</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>穷尽性只在同一个编译单元里成立：跨模块加分支，你的 when 不会红 | 张小猛 - loczb</title>
+    <meta name="description" content="when 的穷尽性只在你编译它的那一刻成立：消费者不重编译，库新增的子类型就落进 else，或者在运行时抛异常。">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="穷尽性只在同一个编译单元里成立：跨模块加分支，你的 when 不会红 | 张小猛 - loczb">
+    <meta property="og:description" content="when 的穷尽性只在你编译它的那一刻成立：消费者不重编译，库新增的子类型就落进 else，或者在运行时抛异常。">
+    <meta property="og:url" content="https://709527.xyz/blog/posts/exhaustiveness-is-scoped-to-a-compilation-unit.html">
+    <meta property="og:type" content="article">
+    <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
+    <meta property="og:site_name" content="loczb">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="穷尽性只在同一个编译单元里成立：跨模块加分支，你的 when 不会红 | 张小猛 - loczb">
+    <meta name="twitter:description" content="when 的穷尽性只在你编译它的那一刻成立：消费者不重编译，库新增的子类型就落进 else，或者在运行时抛异常。">
+    <meta name="twitter:image" content="https://709527.xyz/assets/images/og-image.png">
+
+        <script type="application/ld+json">
+{
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "穷尽性只在同一个编译单元里成立：跨模块加分支，你的 when 不会红",
+      "description": "when 的穷尽性只在你编译它的那一刻成立：消费者不重编译，库新增的子类型就落进 else，或者在运行时抛异常。",
+      "image": "https://709527.xyz/assets/images/og-image.png",
+      "author": {
+            "@type": "Person",
+            "name": "张小猛",
+            "url": "https://709527.xyz/about/"
+      },
+      "publisher": {
+            "@type": "Organization",
+            "name": "loczb",
+            "logo": {
+                  "@type": "ImageObject",
+                  "url": "https://709527.xyz/assets/images/favicon.svg"
+            }
+      },
+      "datePublished": "2026-11-16T16:24:00+08:00",
+      "dateModified": "2026-11-16T16:24:00+08:00",
+      "url": "https://709527.xyz/blog/posts/exhaustiveness-is-scoped-to-a-compilation-unit.html",
+      "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://709527.xyz/blog/posts/exhaustiveness-is-scoped-to-a-compilation-unit.html"
+      },
+      "keywords": "Kotlin, sealed class, 二进制兼容, 类型系统",
+      "articleSection": "Kotlin",
+      "timeRequired": "PT14M",
+      "inLanguage": "zh-CN"
+}
+    </script>
+
+    <link rel="stylesheet" href="../../assets/css/style.css?v=c8e170d8f9">
+    <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
+    <link rel="alternate icon" href="../../assets/images/favicon.ico">
+    <link rel="canonical" href="https://709527.xyz/blog/posts/exhaustiveness-is-scoped-to-a-compilation-unit.html">
+</head>
+<body>
+  <!-- PARTIAL:SKIP_LINK -->
+  <a href="#main-content" class="skip-link">跳至主要内容</a>
+  <!-- /PARTIAL:SKIP_LINK -->
+
+  <!-- Navigation -->
+<!-- PARTIAL:NAV -->
+  <nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">
+      loc<span>zb</span>
+    </a>
+    <button class="nav-toggle" aria-label="打开菜单" aria-expanded="false" aria-controls="nav-links-menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <div class="nav-overlay"></div>
+    <ul class="nav-links" id="nav-links-menu">
+      <li><a href="/" class="nav-link" data-nav="home">首页</a></li>
+      <li><a href="/projects/" class="nav-link" data-nav="projects">项目</a></li>
+      <li><a href="/blog/" class="nav-link active" data-nav="blog">博客</a></li>
+      <li><a href="/about/" class="nav-link" data-nav="about">关于</a></li>
+    </ul>
+    <button class="theme-toggle" aria-label="切换主题" title="切换亮/暗模式">
+      <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="5"></circle>
+        <line x1="12" y1="1" x2="12" y2="3"></line>
+        <line x1="12" y1="21" x2="12" y2="23"></line>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+        <line x1="1" y1="12" x2="3" y2="12"></line>
+        <line x1="21" y1="12" x2="23" y2="12"></line>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+      </svg>
+      <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+      </svg>
+    </button>
+  </div>
+</nav>
+  <!-- /PARTIAL:NAV -->
+  <main class="section" id="main-content" style="padding-bottom: 0; padding-top: var(--space-4xl);">
+    <div class="container container-narrow">
+      <a href="../index.html" class="back-link">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        返回博客列表
+      </a>
+
+      <article class="post-content">
+        <h1>穷尽性只在同一个编译单元里成立：跨模块加分支，你的 when 不会红</h1>
+
+        <div class="post-meta">
+          <span class="meta-item"><span aria-hidden="true">📅</span> 2026-11-16 16:24:00</span>
+          <span class="meta-item"><span aria-hidden="true">⏱️</span> 14 min read</span>
+          <span class="meta-item"><span aria-hidden="true">👤</span> 张小猛</span>
+        </div>
+
+        <div class="post-tags">
+          <span class="tag">Kotlin</span>
+          <span class="tag">sealed class</span>
+          <span class="tag">二进制兼容</span>
+          <span class="tag">类型系统</span>
+        </div>
+
+        
+
+        <h2>一个编译通过、上线后才出问题的 when</h2>
+<p>下面两段代码分别属于两个模块，放在一起是为了对照。第一段在一个库里：</p>
+<pre><code class="language-kotlin">// core 模块，1.2.0
+package com.example.core
+
+sealed class SyncState {
+    object Idle : SyncState()
+    data class Running(val progress: Int) : SyncState()
+    data class Failed(val reason: String) : SyncState()
+}
+
+// app 模块，编译时依赖 core 1.2.0
+package com.example.app
+
+fun label(state: SyncState): String = when (state) {
+    SyncState.Idle -&gt; &quot;空闲&quot;
+    is SyncState.Running -&gt; &quot;同步中 ${state.progress}%&quot;
+    is SyncState.Failed -&gt; &quot;失败：${state.reason}&quot;
+}
+</code></pre>
+<p>这段代码在被写下的那天是干净的。<code>when</code> 没有 <code>else</code>，编译器认可它穷尽，IDE 不会给黄色提示，代码评审也挑不出毛病。它的正确性建立在一个没有写进类型系统的前提上：<code>SyncState</code> 的子类型集合，从今往后不再变化。</p>
+<p>然后库发了 1.3.0，加了第四个分支，比如 <code>object Paused : SyncState()</code>。应用的源码一行没改。如果应用跟着重新编译，<code>label</code> 立刻变红，问题在构建阶段就被拦下。但如果应用没有被重新编译，只是运行时 classpath 上的那一份 <code>core</code> 换成了 1.3.0，情况就完全不同：<code>label</code> 仍然是那个被编译器认证过的 <code>label</code>，它带着一份只有三个入口的分支表，而传进来的值可以是第四种。</p>
+<p>它会在某个用户点下暂停的那一刻，遇到一个它从未听说过的类型。</p>
+<p>这篇文章只谈这一件事：穷尽性不是类型系统对世界作出的全局承诺，它是一次编译得到的局部结论，带着时间戳。</p>
+<h2>两条线：编译期画一次，运行期画一次</h2>
+<p>把「穷尽」当成一条线，会看不清它。它其实是两条线，画在不同的时刻，用不同的材料。</p>
+<h3>编译期那条线：范围是当时的 classpath</h3>
+<p>编译 <code>label</code> 的时候，编译器做的事情很朴素：它拿到 <code>SyncState</code> 这个 sealed 类型，去 classpath 上把它的直接子类型找齐，然后与 <code>when</code> 里的分支逐一比对，缺一个就报错。</p>
+<p>这里有两个限定词值得盯住。</p>
+<p>第一是<strong>当时</strong>。编译器不预测未来，它只描述它读到的这份字节码。它没有能力知道下个月库里会加什么，也没有能力知道运行时真正加载的是哪个版本的 jar。</p>
+<p>第二是<strong>classpath</strong>。这条线的边界不是「逻辑上的整个程序」，而是「这次编译任务的输入集合」。同一份源码，在依赖 A 版本的 classpath 上编译，结论是穷尽；在依赖 B 版本的 classpath 上编译，结论可能是缺分支。结论跟着输入走，不跟着源码走。</p>
+<p>所以编译期这条线，本质是一次快照式的核对：在时刻 T，以输入集合 S 为准，分支覆盖了全部子类型。它是一份合格的证明，只不过证明的命题里写死了 S。</p>
+<h3>运行期那条线：范围是当前的字节码加当前的库</h3>
+<p>程序真正跑起来时，没有任何人在做核对。JVM 加载 class 文件，执行指令，仅此而已。</p>
+<p>运行期的「范围」由两样东西决定：</p>
+<ul>
+<li>磁盘上那份已经被编译成字节码的分支表，它冻结在编译时刻；</li>
+<li>运行时 classpath 上实际加载到的那个库版本，它可能比编译时新，也可能比编译时旧。</li>
+</ul>
+<p>这两样东西都属于部署与依赖管理，不属于类型检查。它们可以任意错配，而 JVM 不会为此发出任何警告。</p>
+<h3>两条线不重合的地方</h3>
+<p>只要「编译时的库版本」与「运行时的库版本」一致，两条线就重合，穷尽性在两端都成立，这是绝大多数项目的日常状态，也是这个机制平时不为人注意的原因。</p>
+<p>两条线一旦分开，中间就出现一条缝隙。缝隙的大小等于版本差，缝隙里发生的事没有任何编译期检查参与。本文余下的部分，都在描述这条缝隙的形状，以及怎么把它收窄。</p>
+<h2>三种组合，只有第三种是缝隙</h2>
+<p>把「库加了一个子类型」这件事，按消费方的状态分成三种情况，结论完全不同。</p>
+<h3>组合一：同模块新增子类型，下一个编译周期就红</h3>
+<p>如果 sealed 类和使用它的 <code>when</code> 在同一个模块里，新增子类型的开发者本人会在下一次编译时看到错误：</p>
+<pre><code class="language-text">e: app/src/main/kotlin/com/example/app/Label.kt:6:5
+    'when' expression must be exhaustive. Add the 'Paused' branch or an 'else' branch.
+</code></pre>
+<p>这是这个机制里最安全的一种情况：改的人和被影响的人在同一个编译单元里，错误落在改动者的终端上，代价是一次补分支。同一模块内，穷尽性这条线是真实有效的，而且是自动的，不需要任何约定。</p>
+<h3>组合二：跨模块、但消费者重新编译，也会红</h3>
+<p>库和应用分成两个模块，库先发版，应用后构建。这时编译器从 classpath 上读到的是新版本的 <code>core</code>，它看得见 <code>Paused</code>，于是同样报缺分支。</p>
+<p>第二种情况与第一种的差别只在「谁先看到错误」，机制是同一个：只要消费者在新增子类型之后被重新编译过，检查就会发生。</p>
+<p>现代构建工具的增量编译，多数情况下也会在 sealed 层次发生变化时重编依赖方，这让第二种情况在单体仓库里几乎等同于第一种。但要注意，这是构建工具提供的便利，不是语言提供的保证。它的有效期止于「产物还在你的构建系统里」这个前提。</p>
+<h3>组合三：跨模块、只换二进制，没有人在检查</h3>
+<p>第三种情况是把编译产物搬出构建系统之后发生的：应用用 <code>core 1.2.0</code> 编译，交付的时候 classpath 上放的是 <code>core 1.3.0</code>。</p>
+<pre><code class="language-bash"># 应用编译时用的是 1.2.0
+./gradlew :app:assembleDebug -PcoreVersion=1.2.0
+
+# 交付或部署时，运行时依赖被替换成 1.3.0
+# 应用自己的 class 文件一个字节都没变
+java -cp app.jar:core-1.3.0.jar com.example.app.Main
+</code></pre>
+<p>这时没有任何编译器在场。应用的那份字节码是 1.2.0 时代的产物，里面的分支表只有三个入口；<code>core-1.3.0.jar</code> 里的 <code>SyncState</code> 有四个子类型。两边都是合法产物，各自都通过了各自的构建，组合起来却不满足任何一方曾经证明过的命题。</p>
+<p>这种错配在工程里有几种常见形态，都不需要谁犯错：</p>
+<ul>
+<li>库以 aar / jar 的形式跨团队交付，使用方拿到的是预编译产物，自己并不构建库；</li>
+<li>插件或扩展被装进一个宿主程序，宿主与插件各自独立编译、独立发版；</li>
+<li>打包脚本从制品库拉各个模块的二进制，按版本号拼出一个可运行镜像，而版本号来自配置而不是来自构建图；</li>
+<li>依赖声明里同一个库出现在两个位置，最终解析到哪一个由依赖调解决定，与编译时用的不是同一个。</li>
+</ul>
+<p>这些形态的共同点是：<strong>编译期这条线所依赖的输入集合，在运行期被人替换了，而没有任何机制要求重新核对。</strong></p>
+<h3>enum 常量走的是同一条路</h3>
+<p><code>enum class</code> 的 <code>when</code> 也是编译期穷尽，也有同样的问题，只是加一个常量的门槛更低——加常量在很多人眼里是「增量改动」，连 API 评审都可能跳过。</p>
+<p>一个旧的应用字节码遇到新的枚举常量，表现与 sealed 的情况一致：要么落到默认分支，要么在取值的路径上抛出异常。枚举让这件事更容易发生，因为改动的心理成本更低。</p>
+<h3>如果消费方是 Java，编译期这条线根本不存在</h3>
+<p>还有一类消费方值得单独提：Java 代码调用 Kotlin 的 sealed 类型。</p>
+<p>Java 的 <code>switch</code> 没有对 Kotlin sealed 层次的穷尽性检查，IDE 可能给个提示，编译器不强制。也就是说，这类消费方连「编译期那条线」都没有画过，从第一天起就只依赖运行期的行为。跨语言边界时，穷尽性这个保证会直接消失，而不是变弱。</p>
+<h2>else 做了什么：把编译错误换成了默认行为</h2>
+<p>到这里为止，最坏的结果还只是一次异常：程序在遇到未知子类型时明确地失败。加一个 <code>else</code> 会把这件事的性质改变。</p>
+<h3>分支表是编译期写进字节码的</h3>
+<p><code>when</code> 不是解释执行的语法结构，它被编译成一组比较与跳转。对 sealed 类型，编译器知道所有子类型，于是可以生成一张完整的分派表，再加一个兜底入口。</p>
+<p>关键在于：<strong>这张表是编译的产物，不是类型的产物。</strong> 类型在运行时会随库更新，表不会。<code>else</code> 的作用，是让编译器在生成这张表的时候，把「剩下的所有情况」折叠成一个入口，而不是要求在编译期逐一列清。</p>
+<p>于是 <code>else</code> 同时做了两件事：它让当前的编译通过，也让未来新增的子类型不再构成编译错误。</p>
+<h3>空 else 是丢分支最安静的形式</h3>
+<pre><code class="language-kotlin">// 写法 A：默认分支什么都不做
+fun onState(state: SyncState) {
+    when (state) {
+        SyncState.Idle -&gt; idle()
+        is SyncState.Running -&gt; render(state.progress)
+        is SyncState.Failed -&gt; showError(state.reason)
+        else -&gt; Unit
+    }
+}
+
+// 写法 B：默认分支直接失败
+fun onStateStrict(state: SyncState) {
+    when (state) {
+        SyncState.Idle -&gt; idle()
+        is SyncState.Running -&gt; render(state.progress)
+        is SyncState.Failed -&gt; showError(state.reason)
+        else -&gt; error(&quot;unhandled SyncState: ${state::class.qualifiedName}&quot;)
+    }
+}
+</code></pre>
+<p>写法 A 在编译时是对的，在运行时也不会抛异常。库新增 <code>Paused</code> 之后，它依然不抛异常——它会走进 <code>else</code>，什么都不做。</p>
+<p>从外部看，表现是「暂停之后界面没有反应」。日志里没有错误，监控上没有异常率抬升，崩溃平台一片安静。只有一个状态被吞掉了，而吞掉它的那行代码写着 <code>Unit</code>，看上去像是「这里本来就不需要处理」。</p>
+<p>这类问题最难查的地方不在于定位，而在于它不产生任何信号。异常至少会给你一个堆栈；静默的分支丢失只给你一个「感觉不太对」。</p>
+<h3>写日志的 else 只是把问题推迟到日志里</h3>
+<p>比 <code>Unit</code> 好一点的写法是在 <code>else</code> 里打一条日志。它确实留下了痕迹，但要注意它改变了什么、没改变什么：</p>
+<ul>
+<li>改变了：问题从「无痕迹」变成「有痕迹」；</li>
+<li>没改变：控制流依然走默认路径，业务语义依然是错的。</li>
+</ul>
+<p>一条「unhandled state: Paused」的 warn 日志，在流量低的时候可能几天才出现一次，在日志采样、级别过滤、保留周期面前很容易消失。它是一条线索，不是一个保证。</p>
+<p>真正把 <code>else</code> 用对的方式只有一种：让它失败。抛异常、返回错误、让调用方无法忽略。默认分支的语义应该是「这里不该发生」，而不是「这里随便处理一下」。写法 B 里的 <code>error()</code> 抛 <code>IllegalStateException</code>，比运行时的 <code>NoWhenBranchMatchedException</code> 多一样东西：你可以把当前类型名、甚至上下文一起写进去。</p>
+<p>如果这条路径不允许抛异常（比如它在一个必须返回结果的渲染函数里），退一步的做法是返回一个显式的「未知」值，并让它在外层被当作错误处理，而不是当作正常值继续往下传。</p>
+<h2>运行时到底发生什么：看它是不是表达式</h2>
+<p>不带 <code>else</code> 的 <code>when</code> 遇到未知子类型时会发生什么，取决于这个 <code>when</code> 在代码里的角色。</p>
+<pre><code class="language-kotlin">// 表达式：结果被返回，必须产出一个值
+fun label(state: SyncState): String = when (state) {
+    SyncState.Idle -&gt; &quot;空闲&quot;
+    is SyncState.Running -&gt; &quot;同步中 ${state.progress}%&quot;
+    is SyncState.Failed -&gt; &quot;失败：${state.reason}&quot;
+}
+
+// 语句：结果被丢弃，没有人需要它产出值
+fun applyState(state: SyncState) {
+    when (state) {
+        SyncState.Idle -&gt; reset()
+        is SyncState.Running -&gt; render(state.progress)
+        is SyncState.Failed -&gt; showError(state.reason)
+    }
+}
+</code></pre>
+<h3>表达式形态：合成的尾分支抛异常</h3>
+<p><code>label</code> 里的 <code>when</code> 必须产出一个 <code>String</code>。编译器知道所有已知分支都覆盖不到新类型，于是它会在分派表的默认位置合成一个分支，抛出 <code>kotlin.NoWhenBranchMatchedException</code>。</p>
+<p>这个异常继承自 <code>RuntimeException</code>，不需要在签名里声明，也不会被 <code>catch (e: Exception)</code> 之外的任何机制提前发现。它通常在离根因很远的地方被捕获——被一个通用的请求处理器捕获，然后变成 500，或者被一个协程的异常处理器吞掉，变成一条看不出所以然的日志。</p>
+<p>值得一提的是它的消息。这类异常的通告文本通常只包含类型信息，不包含「你的库版本比编译时新」这种判断。运行时并不知道版本差这件事，它只知道有个值没有匹配上。</p>
+<h3>语句形态：可能什么都不做</h3>
+<p><code>applyState</code> 里的 <code>when</code> 不产出值，编译器没有理由为它合成一个抛异常的尾分支。字节码里就是若干次比较加跳转，全都不匹配时，控制流直接落到 <code>when</code> 之后的那条指令。</p>
+<p>于是同样的版本错配，在这里的表现是「什么都不发生」。没有异常，没有日志，没有任何可观测的信号。</p>
+<h3>决定它是不是表达式的，是返回值有没有被用到</h3>
+<p>一个容易误判的地方：<code>when</code> 是表达式还是语句，不由它写在函数体还是写在赋值右侧决定，而由它的值是否被使用决定。</p>
+<p>如果把一个带分支的 <code>when</code> 直接写在函数体里、结果没有人接，它就按语句处理；如果写成 <code>val next = when (state) { ... }</code>，结果被赋给变量，它就按表达式处理，编译器要为「所有情况都有值」负责。</p>
+<p>这类代码在评审时看起来只是「一个分支很多的 if」，很容易被当成无害的写法。</p>
+<p>顺带说明一个版本相关的点：较新的 Kotlin（1.7 起）对 sealed 类型的 <code>when</code> 语句也要求穷尽，更早的版本只给警告；具体的行为边界以所用版本的官方文档为准。这条规则收紧的是编译期，改变不了运行期——它让源码层面的遗漏更早暴露，但对「编译之后库又变了」这件事无能为力。</p>
+<h2>把缝隙收窄：五个动作</h2>
+<p>这条缝隙没法彻底消除，因为它的成因是「编译时刻」与「运行时刻」之间存在时间差，而任何编译型语言都有这个差。但可以把它的宽度压到很小。</p>
+<h3>一、不写 else，让编译器替你守</h3>
+<p>最有效的一条，也是最容易被「防御性编程」的直觉破坏的一条。</p>
+<p>对 sealed 类型的 <code>when</code>，不写 <code>else</code>，等于把「新增子类型」这件事变成一次编译错误。这个错误会出现在下一次构建里，出现在改库的人或者升级依赖的人的终端上，而不是出现在用户的会话里。</p>
+<p>代价是：每次库加分支，所有消费点都要改。这个代价正是你想要的——它把一次静默的行为变化，换成了一次显式的代码修改。</p>
+<h3>二、必须写 else 时，让它在默认分支上失败</h3>
+<p>有些场景确实需要 <code>else</code>：<code>when</code> 的主题不是 sealed 类型，或者兜底分支有明确的业务含义（比如「未知类型一律按不支持处理」）。</p>
+<p>这时把默认分支写成失败，而不是写成 <code>Unit</code>，就像上一节的写法 B。异常的类型不重要，重要的是它在第一次遇到未知状态时就失败，而不是等某个用户走到那条路径上才发现。</p>
+<h3>三、把消费点和声明放进同一个编译单元</h3>
+<p>这是结构性的一条：让「检查穷尽性的人」和「新增子类型的人」处于同一次编译里。</p>
+<p>同一模块内，这条线是自动生效的。跨模块时，可以退一步：把 <code>when</code> 收进库自己提供的一个函数里，让库的维护者承担补分支的责任；应用只调用这个函数，不自己展开分支。</p>
+<p>这个做法有代价：库要为每个消费场景提供一个入口，入口的数量会随场景增长。但它把「谁负责跟上新分支」这个问题，从「所有下游」收缩成了「库自己」。对于分支语义稳定的场景（状态到文案、状态到颜色），这个交换通常是划算的。</p>
+<h3>四、依赖升级后做一次真正的全量重编译</h3>
+<p>第三种组合的成因是「只换二进制」。对应的动作是：升级依赖时，让消费者真正重编译一次，而不是复用上一次的产物。<code>./gradlew :app:clean :app:assembleDebug --rerun-tasks</code> 会让任务失去 up-to-date 判定，强制重跑；<code>./gradlew :app:dependencies --configuration runtimeClasspath</code> 用来看运行期实际解析到的版本。</p>
+<p>这两步都不复杂，难的是把它们放进发布流程，而不是留成一条「升级时记得」的口头约定。</p>
+<p>有一个细节值得强调：<strong>构建缓存与远程缓存会让「重编译」变得不彻底</strong>。缓存命中时，任务被跳过，产物是上一次的。对 sealed 层次这种语义敏感的东西，升级依赖之后绕开缓存跑一次，比省下的那几分钟值钱。</p>
+<h3>五、为「未知子类型」写一组测试</h3>
+<p>测试能覆盖的，是「消费点对每个已知分支的行为」。这本身不足以发现新增子类型，因为测试源码也是按旧版本编译的。</p>
+<p>能做的是两件事：</p>
+<p>第一，在测试里放一个不带 <code>else</code> 的 <code>when</code>，把「分支表的完整性」变成测试模块的编译条件。库升级后，测试模块先红，你就不会在应用模块里才发现。</p>
+<p>第二，为 <code>else</code> 分支写一个显式的断言：给定一个不在预期集合里的输入，函数应该失败，而不是返回默认值。这类测试在正常情况下永远不会通过新类型触发，但它把「默认分支应当失败」这个约定固定了下来，防止后来的人把它改成 <code>Unit</code>。</p>
+<pre><code class="language-kotlin">@Test
+fun `unknown state should fail loudly`() {
+    // 一个测试专用的实现，用来模拟「编译时不存在、运行时出现」的子类型
+    val unknown: SyncState = object : SyncState() {}
+    assertFailsWith&lt;IllegalStateException&gt; { onStateStrict(unknown) }
+}
+</code></pre>
+<p>上面这段代码依赖一个前提：sealed 类在同一个模块内允许匿名子类。跨模块时这个前提不成立，替代做法是把 <code>when</code> 抽成一个接收「状态名 + 载荷」的函数，用字符串模拟未知类型。写法不同，目的相同：让默认路径在测试里被走过一次。</p>
+<h2>什么时候可以接受这条缝隙</h2>
+<p>缝隙的存在不等于必须消除。有些系统里它是可以接受的，有些系统里它不能。</p>
+<h3>单一部署单元、同步发版</h3>
+<p>如果库和应用一起构建、一起打包、一起发布，编译期与运行期的 classpath 由同一次构建产生，两条线天然重合。这时第三种组合不会出现，剩下的风险只在「同模块新增分支」和「跨模块重编译」，两者都会在构建阶段暴露。</p>
+<p>单体仓库、单体制品、每次发版全量重建的系统，属于这一类。</p>
+<h3>内部工具和一次性脚本</h3>
+<p>内部工具的用户是自己人，出错的表现是「这个功能没反应」，排查成本低，修复成本也低。为它设计一套版本对齐机制，收益小于成本。</p>
+<p>这类场景还有一个特点：工具的生命周期短，库的版本变化往往发生在工具被重写之前。缝隙还没来得及造成影响，代码就已经不在了。</p>
+<h3>不能接受的三类场景</h3>
+<p>反过来，三类场景里这条缝隙的代价会明显偏高：</p>
+<ul>
+<li><strong>交付物是不可重建的二进制</strong>：插件、SDK、预编译 aar 交给别人用，你不知道对方运行时会加载哪个版本；</li>
+<li><strong>状态驱动的是不可逆动作</strong>：支付、发货、删除、权限变更，落进 <code>else</code> 的默认行为可能造成真实损失；</li>
+<li><strong>故障不可观测</strong>：没有异常、没有日志、没有指标，问题只能靠用户反馈发现。</li>
+</ul>
+<p>这三条只要命中一条，就值得按前面的五个动作收窄；命中两条以上，<code>else</code> 里写 <code>Unit</code> 这件事应当被当作缺陷处理。</p>
+<h2>判据：五个问题</h2>
+<p>在代码评审里，判断一个 <code>when</code> 是否处在缝隙的风险区，可以依次问五个问题：</p>
+<ol>
+<li>这个 <code>when</code> 的主题是 sealed 类型或 enum 吗？如果是，它有没有 <code>else</code>？</li>
+<li>主题的声明和这个 <code>when</code> 在同一个模块里吗？如果不在，消费方是源码依赖还是二进制依赖？</li>
+<li>这个 <code>when</code> 是表达式还是语句？值有没有被使用？</li>
+<li>如果新增一个子类型，这段代码的表现是编译失败、抛异常，还是什么都不做？</li>
+<li>最后一步：运行时的库版本，有没有任何机制保证与编译时一致？</li>
+</ol>
+<p>五个问题里，只要第 4 问的答案是「什么都不做」，这段代码就已经在缝隙里了，与当前是否真的发生了版本错配无关。风险不是等错配发生才存在的，它在写下的那一刻就存在了。</p>
+<h2>收束：把结论标上时间</h2>
+<p><code>when</code> 的穷尽性常被当成类型系统的一个特性来理解：只要类型是 sealed，编译器就会保证你处理了所有情况。</p>
+<p>更准确的说法是：编译器保证的是「在你编译它的那一刻，以它读到的 classpath 为准，你处理了所有情况」。这是一个带前提、带时间戳的结论，前提是「输入集合不再变化」，时间戳是「这次构建」。</p>
+<p>类型系统描述的是源码之间的关系，它不描述源码与运行时加载的字节码之间的关系。后者由构建、交付、部署三个环节共同决定，而这三个环节里没有任何一个会替你做穷尽性检查。</p>
+<p>所以真正需要记住的不是「sealed 加 when 很安全」，而是那条缝隙的位置：它在编译结束与程序启动之间。写代码时能做的是不写 <code>else</code>、让默认分支失败、把消费点收进同一个编译单元；做交付时能做的是升级后强制重编译、核对编译期与运行期的依赖版本。</p>
+<p>这些动作都不难，难的是承认一件事：那段看起来被编译器认证过的 <code>when</code>，认证的有效期只到构建结束。</p>
+
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="nullable-claims-die-at-the-boundary.html">
+            <div class="related-post-card-title">空安全在边界失效：反序列化不经过你的构造函数</div>
+            <div class="related-post-card-tags"><span>空安全</span><span>序列化</span><span>Android</span></div>
+          </a>
+          <a class="related-post-card" href="kotlin-coroutines-并发实战从入门到优雅的并发编程.html">
+            <div class="related-post-card-title">Kotlin Coroutines 并发实战：从入门到优雅的并发编程</div>
+            <div class="related-post-card-tags"><span>Kotlin</span><span>协程</span><span>并发</span></div>
+          </a>
+          <a class="related-post-card" href="kotlin-scope-functions-实战选择五个函数一个决策树.html">
+            <div class="related-post-card-title">Kotlin Scope Functions 实战选择：五个函数一个决策树</div>
+            <div class="related-post-card-tags"><span>Kotlin</span><span>Android</span><span>最佳实践</span></div>
+          </a>
+          <a class="related-post-card" href="kotlin-coroutine-exception-handling.html">
+            <div class="related-post-card-title">Kotlin Coroutine 异常处理机制全面解析</div>
+            <div class="related-post-card-tags"><span>Kotlin</span><span>协程</span><span>异常处理</span></div>
+          </a>
+          <a class="related-post-card" href="kotlin-240-features.html">
+            <div class="related-post-card-title">Kotlin 2.4.0 重磅发布：Context Parameters 稳定、Destructuring 升级、Lombok 插件进入 Alpha</div>
+            <div class="related-post-card-tags"><span>Kotlin</span><span>编程语言</span><span>JetBrains</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
+
+        <!-- Post Copyright & License Card -->
+        <div class="post-copyright-card">
+          <div class="copyright-header">
+            <div class="copyright-badge">
+              <span>📜</span>
+              <span>原创与知识共享协议</span>
+            </div>
+            <button class="copyright-cite-btn" id="copy-cite-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+              </svg>
+              <span>复制 Markdown 引用</span>
+            </button>
+          </div>
+          <div class="copyright-list">
+            <div class="copyright-item"><strong>文章标题：</strong>穷尽性只在同一个编译单元里成立：跨模块加分支，你的 when 不会红</div>
+            <div class="copyright-item"><strong>文章作者：</strong>张小猛 · loczb</div>
+            <div class="copyright-item"><strong>永久链接：</strong><a href="https://709527.xyz/blog/posts/exhaustiveness-is-scoped-to-a-compilation-unit.html">https://709527.xyz/blog/posts/exhaustiveness-is-scoped-to-a-compilation-unit.html</a></div>
+            <div class="copyright-item"><strong>版权声明：</strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 国际许可协议。商业转载请联系作者获得授权，非商业转载请注明出处。</div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </main>
+
+  <!-- Related Posts / Navigation -->
+  <section class="section" aria-label="读完之后" style="padding-top: 0;">
+    <div class="container container-narrow">
+      <!-- Post Nav Prev Next -->
+      <nav class="post-nav" aria-label="文章翻页导航">
+        <a href="knowing-it-means-knowing-how-it-breaks.html" class="post-nav-card post-nav-prev" rel="prev">
+          <span class="post-nav-label">← 上一篇</span>
+          <span class="post-nav-title">能说出它怎么坏，才算真的会用</span>
+        </a>
+        <div class="post-nav-card post-nav-next disabled" aria-disabled="true">
+          <span class="post-nav-label">下一篇 →</span>
+          <span class="post-nav-title">已是最新篇博文</span>
+        </div>
+      </nav>
+      <!-- /Post Nav Prev Next -->
+      <hr style="border: none; border-top: 1px solid var(--color-border); margin: var(--space-2xl) 0;">
+
+      <div class="blog-topics" style="margin-bottom: var(--space-xl); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+        <div>
+          <span class="topic-label">读完之后:</span>
+          <a href="../index.html" class="topic-tag">返回博客列表</a>
+          <a href="../index.html?view=series" class="topic-tag">浏览全部专栏</a>
+        </div>
+        <a href="#main-content" class="topic-tag" style="margin-left: auto;">↑ 回到顶部</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+<!-- PARTIAL:FOOTER -->
+  <footer class="footer" role="contentinfo">
+  <div class="footer-inner">
+    <p class="footer-signature">写代码，做产品，也认真生活。</p>
+    <div class="footer-social">
+      <a href="https://github.com/zzdbilly" class="footer-social-link" target="_blank" rel="noopener" aria-label="GitHub">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+      </a>
+      <a href="https://twitter.com/zzdbilly" class="footer-social-link" target="_blank" rel="noopener" aria-label="X (Twitter)">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      </a>
+      <a href="/rss.xml" class="footer-social-link" target="_blank" rel="noopener" aria-label="RSS 订阅">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+      </a>
+    </div>
+    <div class="footer-links">
+      <a href="/" class="footer-link">首页</a>
+      <a href="/projects/" class="footer-link">项目</a>
+      <a href="/blog/" class="footer-link">博客</a>
+      <a href="/about/" class="footer-link">关于</a>
+    </div>
+    <p class="footer-copyright">&copy; 2026 张小猛 · loczb · Built with care</p>
+  </div>
+</footer>
+  <!-- /PARTIAL:FOOTER -->
+
+  <script defer src="../../assets/js/main.js"></script>
+  <script defer src="../../assets/js/article.js?v=c9f1a378ea"></script>
+  <script defer src="../../assets/js/share.js"></script>
+  <!-- Back to Top & Reading Progress -->
+  <button class="back-to-top" id="backToTop" aria-label="回到顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
+  <div class="reading-progress" id="readingProgress"></div>
+
+  <!-- Post Sidebar Info（左侧） -->
+  <div class="post-sidebar-info" id="postSidebar">
+    <div class="post-info-card">
+      <div class="post-info-section">
+        <div class="post-info-label">作者</div>
+        <div class="post-info-author">
+          <div class="post-info-avatar">小</div>
+          <div>
+            <div class="post-info-author-name">张小猛</div>
+            <div class="post-info-author-desc">写代码，做产品</div>
+          </div>
+        </div>
+      </div>
+      <div class="post-info-section">
+        <div class="post-info-label">文章信息</div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📅</span> 发布日期</span><span class="post-info-stat-value">2026-11-16</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">⏱️</span> 阅读时间</span><span class="post-info-stat-value">14 min read</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">5932 字</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📊</span> 章节数</span><span class="post-info-stat-value">9 节 · 22 子节</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">💻</span> 代码块</span><span class="post-info-stat-value">6 段</span></div>
+      </div>
+      <div class="post-info-section" id="postSidebarTags">
+        <div class="post-info-label">标签</div>
+        <div class="post-info-links">
+          <a href="../../blog/index.html?tag=Kotlin" class="post-info-link"># Kotlin</a>
+          <a href="../../blog/index.html?tag=sealed%20class" class="post-info-link"># sealed class</a>
+          <a href="../../blog/index.html?tag=%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%85%BC%E5%AE%B9" class="post-info-link"># 二进制兼容</a>
+          <a href="../../blog/index.html?tag=%E7%B1%BB%E5%9E%8B%E7%B3%BB%E7%BB%9F" class="post-info-link"># 类型系统</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Post TOC -->
+  <div class="post-toc-container" id="postToc">
+    <nav class="post-toc" aria-label="文章目录">
+      <div class="post-toc-title">目录</div>
+      <ul class="post-toc-list" id="tocList">
+      </ul>
+    </nav>
+  </div>
+
+  <!-- Comment System -->
+  <script src="../../workers/comment-system/comment-widget.js?v=5d8a6a1796" defer></script>
+
+  <!-- highlight.js 代码语法高亮（本地完整构建，无外部依赖） -->
+  <script defer src="../../assets/vendor/highlight/highlight.min.js"></script>
+  <script>
+    /* 语法高亮改为「可见优先、空闲补齐」：
+       highlight.js 要遍历全篇代码块并生成数百个 span，若在 DOMContentLoaded 里同步跑完，
+       会在关键路径上长时间占住主线程（2026-09-27 实测本页长任务 1548ms、DCL 3651ms；
+       改动后长任务 145ms、DCL 1378ms）。这里 DCL 阶段只登记观察，实际高亮交给
+       IntersectionObserver（近屏 800px 内优先）+ requestIdleCallback（剩余块每片 ≤4 块），
+       首屏代码块的着色时机与视觉基本无变化。 */
+    (function() {
+      function canPaint(b) {
+        return !b.classList.contains('hljs') && !b.closest('.codehilite');
+      }
+      function paint(b) {
+        if (!canPaint(b)) return;
+        try { hljs.highlightElement(b); } catch (e) {}
+      }
+      function init() {
+        var blocks = [].slice.call(document.querySelectorAll('pre code')).filter(canPaint);
+        if (!blocks.length) return;
+        if ('IntersectionObserver' in window) {
+          var io = new IntersectionObserver(function(entries, obs) {
+            entries.forEach(function(en) {
+              if (!en.isIntersecting) return;
+              paint(en.target);
+              obs.unobserve(en.target);
+            });
+          }, { rootMargin: '800px 0px' });
+          blocks.forEach(function(b) { io.observe(b); });
+        }
+        var i = 0;
+        var idle = window.requestIdleCallback || window.setTimeout;
+        var step = function() {
+          var quota = 4;
+          while (i < blocks.length && quota-- > 0) paint(blocks[i++]);
+          if (i < blocks.length) idle(step);
+        };
+        idle(step); // 不在 DCL 里同步跑：可见块由 IntersectionObserver 处理，其余走空闲分片
+      }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+      } else {
+        init();
+      }
+    })();
+  </script>
+
+  <!-- Cloudflare Web Analytics -->
+  <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "29e7cff6f37448989538e2165cb79187"}'></script>
+</body>
+</html>

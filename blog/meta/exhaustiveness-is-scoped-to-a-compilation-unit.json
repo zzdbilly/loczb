@@ -1,0 +1,15 @@
+{
+  "slug": "exhaustiveness-is-scoped-to-a-compilation-unit",
+  "title": "穷尽性只在同一个编译单元里成立：跨模块加分支，你的 when 不会红",
+  "description": "when 的穷尽性只在你编译它的那一刻成立：消费者不重编译，库新增的子类型就落进 else，或者在运行时抛异常。",
+  "date": "2026-11-16",
+  "dateTime": "2026-11-16 16:24:00",
+  "category": "Kotlin",
+  "tags": [
+    "Kotlin",
+    "sealed class",
+    "二进制兼容",
+    "类型系统"
+  ],
+  "readTime": 14
+}
