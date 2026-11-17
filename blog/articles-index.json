@@ -1,6 +1,21 @@
 {
   "posts": [
     {
+      "slug": "a-check-that-cannot-fail-is-a-comment",
+      "title": "不会让流水线变红的检查，只是注释",
+      "date": "2026-11-17",
+      "dateTime": "2026-11-17 15:01:00",
+      "category": "系统编程",
+      "tags": [
+        "CI",
+        "代码质量",
+        "自动化",
+        "工程实践"
+      ],
+      "readTime": 14,
+      "url": "blog/posts/a-check-that-cannot-fail-is-a-comment.html"
+    },
+    {
       "slug": "exhaustiveness-is-scoped-to-a-compilation-unit",
       "title": "穷尽性只在同一个编译单元里成立：跨模块加分支，你的 when 不会红",
       "date": "2026-11-16",
@@ -2186,6 +2201,7 @@
     }
   ],
   "categories": [
+    "系统编程",
     "Kotlin",
     "思考",
     "数据库",
@@ -2194,13 +2210,12 @@
     "DevOps",
     "开发",
     "Android",
-    "AI",
-    "系统编程"
+    "AI"
   ],
   "stats": {
-    "totalPosts": 141,
+    "totalPosts": 142,
     "totalTags": 361,
-    "latestDate": "2026-11-16",
+    "latestDate": "2026-11-17",
     "oldestDate": "2026-02-15"
   }
 }

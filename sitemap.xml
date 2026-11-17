@@ -25,6 +25,12 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://709527.xyz/blog/posts/a-check-that-cannot-fail-is-a-comment.html</loc>
+    <lastmod>2026-11-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://709527.xyz/blog/posts/exhaustiveness-is-scoped-to-a-compilation-unit.html</loc>
     <lastmod>2026-11-16</lastmod>
     <changefreq>monthly</changefreq>
