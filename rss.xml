@@ -7,6 +7,14 @@
     <language>zh-CN</language>
     <atom:link href="https://709527.xyz/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>suspend 不切线程：你以为的后台，只是换了个队列在等</title>
+      <link>https://709527.xyz/blog/posts/suspend-does-not-switch-threads.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/suspend-does-not-switch-threads.html</guid>
+      <description>suspend 回答的是「会不会挂起」，不是「跑在哪个线程」。把两个决定混成一个，就会写出标了 suspend 仍然占满主线程的代码。</description>
+      <category>Kotlin</category>
+      <pubDate>Wed, 18 Nov 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
       <title>不会让流水线变红的检查，只是注释</title>
       <link>https://709527.xyz/blog/posts/a-check-that-cannot-fail-is-a-comment.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/a-check-that-cannot-fail-is-a-comment.html</guid>
@@ -157,14 +165,6 @@
       <description>净化只降低已知 payload 的命中概率，是过滤器；CSP 才决定被绕过之后能拿走什么。用我站上的 DOMPurify 与 meta 版 CSP 复盘。</description>
       <category>安全</category>
       <pubDate>Tue, 27 Oct 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>软删除买的是后悔药，付的是每条查询的利息</title>
-      <link>https://709527.xyz/blog/posts/soft-delete-costs-interest-on-every-query.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/soft-delete-costs-interest-on-every-query.html</guid>
-      <description>恢复能力该放在备份层和审计表里，不该靠主表上一个 deleted_at 换成每条查询永久付息的隐性契约。</description>
-      <category>数据库</category>
-      <pubDate>Mon, 26 Oct 2026 00:00:00 +0800</pubDate>
     </item>
   </channel>
 </rss>

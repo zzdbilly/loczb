@@ -1,0 +1,15 @@
+{
+  "slug": "suspend-does-not-switch-threads",
+  "title": "suspend 不切线程：你以为的后台，只是换了个队列在等",
+  "description": "suspend 回答的是「会不会挂起」，不是「跑在哪个线程」。把两个决定混成一个，就会写出标了 suspend 仍然占满主线程的代码。",
+  "date": "2026-11-18",
+  "dateTime": "2026-11-18 15:25:00",
+  "category": "Kotlin",
+  "tags": [
+    "Kotlin",
+    "协程",
+    "并发",
+    "Android"
+  ],
+  "readTime": 15
+}

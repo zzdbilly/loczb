@@ -1,6 +1,21 @@
 {
   "posts": [
     {
+      "slug": "suspend-does-not-switch-threads",
+      "title": "suspend 不切线程：你以为的后台，只是换了个队列在等",
+      "date": "2026-11-18",
+      "dateTime": "2026-11-18 15:25:00",
+      "category": "Kotlin",
+      "tags": [
+        "Kotlin",
+        "协程",
+        "并发",
+        "Android"
+      ],
+      "readTime": 15,
+      "url": "blog/posts/suspend-does-not-switch-threads.html"
+    },
+    {
       "slug": "a-check-that-cannot-fail-is-a-comment",
       "title": "不会让流水线变红的检查，只是注释",
       "date": "2026-11-17",
@@ -2201,8 +2216,8 @@
     }
   ],
   "categories": [
-    "系统编程",
     "Kotlin",
+    "系统编程",
     "思考",
     "数据库",
     "安全",
@@ -2213,9 +2228,9 @@
     "AI"
   ],
   "stats": {
-    "totalPosts": 142,
+    "totalPosts": 143,
     "totalTags": 361,
-    "latestDate": "2026-11-17",
+    "latestDate": "2026-11-18",
     "oldestDate": "2026-02-15"
   }
 }
