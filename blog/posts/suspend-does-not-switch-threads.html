@@ -185,8 +185,8 @@ scope.launch {                   // 换个上下文，起点就换
 <p>线程归属从来不是 <code>launch</code> 的属性，也不是 <code>suspend</code> 的属性，而是 <code>CoroutineContext</code> 里那个 <code>ContinuationInterceptor</code> 的属性。</p>
 <h2>足迹第二段：进入 suspend 函数，第一个挂起点之前</h2>
 <h3>这一段没有任何魔法</h3>
-<p>调用一个 suspend 函数，在字节码层面是一次普通的方法调用，只是多传了一个 <code>Continuation</code> 参数。编译器会为函数体生成一个状态机，用来在挂起之后恢复现场；但状态机的存在不代表它一定会挂起。</p>
-<p>如果函数体里没有任何挂起点，状态机一次都不会进入挂起分支，这次调用就是一次同步调用，跑在调用方的线程上，直到 <code>return</code>。</p>
+<p>调用一个 suspend 函数，在字节码层面是一次普通的方法调用，只是多传了一个 <code>Continuation</code> 参数。编译器会把真正可能挂起的函数体改写成状态机，用来保存现场、在恢复时接着往下跑；而状态机的存在，并不代表这次调用一定会挂起。</p>
+<p>如果函数体里没有任何挂起点，这套机制连开销都不必产生——这次调用就是一次同步调用，跑在调用方的线程上，直到 <code>return</code>。</p>
 <pre><code class="language-kotlin">suspend fun loadReport(): Report {
     logThread(&quot;进入 loadReport&quot;)        // main —— 与调用方同一个线程
     val bytes = File(cacheDir, &quot;report.bin&quot;).readBytes()
@@ -459,7 +459,7 @@ lifecycleScope.launch {
         <div class="post-info-label">文章信息</div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📅</span> 发布日期</span><span class="post-info-stat-value">2026-11-18</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">⏱️</span> 阅读时间</span><span class="post-info-stat-value">15 min read</span></div>
-        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">5215 字</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">5227 字</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📊</span> 章节数</span><span class="post-info-stat-value">11 节 · 23 子节</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">💻</span> 代码块</span><span class="post-info-stat-value">6 段</span></div>
       </div>
