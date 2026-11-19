@@ -1,6 +1,21 @@
 {
   "posts": [
     {
+      "slug": "daily-publishing-selects-for-easy-topics",
+      "title": "每天都能发一篇的时候，最容易回避的是那篇难写的",
+      "date": "2026-11-19",
+      "dateTime": "2026-11-19 20:50:00",
+      "category": "思考",
+      "tags": [
+        "写作",
+        "日更",
+        "取舍",
+        "长期主义"
+      ],
+      "readTime": 15,
+      "url": "blog/posts/daily-publishing-selects-for-easy-topics.html"
+    },
+    {
       "slug": "suspend-does-not-switch-threads",
       "title": "suspend 不切线程：你以为的后台，只是换了个队列在等",
       "date": "2026-11-18",
@@ -2216,9 +2231,9 @@
     }
   ],
   "categories": [
+    "思考",
     "Kotlin",
     "系统编程",
-    "思考",
     "数据库",
     "安全",
     "前端",
@@ -2228,9 +2243,9 @@
     "AI"
   ],
   "stats": {
-    "totalPosts": 143,
-    "totalTags": 361,
-    "latestDate": "2026-11-18",
+    "totalPosts": 144,
+    "totalTags": 363,
+    "latestDate": "2026-11-19",
     "oldestDate": "2026-02-15"
   }
 }

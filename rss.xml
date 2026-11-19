@@ -7,6 +7,14 @@
     <language>zh-CN</language>
     <atom:link href="https://709527.xyz/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>每天都能发一篇的时候，最容易回避的是那篇难写的</title>
+      <link>https://709527.xyz/blog/posts/daily-publishing-selects-for-easy-topics.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/daily-publishing-selects-for-easy-topics.html</guid>
+      <description>日更真正固定的不是产出，而是截止时间；四项支出里只有收尾有硬期限，于是先被压掉的总是素材和查证。</description>
+      <category>思考</category>
+      <pubDate>Thu, 19 Nov 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
       <title>suspend 不切线程：你以为的后台，只是换了个队列在等</title>
       <link>https://709527.xyz/blog/posts/suspend-does-not-switch-threads.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/suspend-does-not-switch-threads.html</guid>
@@ -157,14 +165,6 @@
       <description>一次账户子域改名暴露 9 处隐藏副本。外部标识符被写了几遍，改名成本就是几倍、停机半径就是几圈——硬编码等于把发布权交给别人。</description>
       <category>DevOps</category>
       <pubDate>Wed, 28 Oct 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>净化器不是防线，是过滤器：渲染第三方内容的两道门</title>
-      <link>https://709527.xyz/blog/posts/sanitizer-is-a-filter-not-a-defense.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/sanitizer-is-a-filter-not-a-defense.html</guid>
-      <description>净化只降低已知 payload 的命中概率，是过滤器；CSP 才决定被绕过之后能拿走什么。用我站上的 DOMPurify 与 meta 版 CSP 复盘。</description>
-      <category>安全</category>
-      <pubDate>Tue, 27 Oct 2026 00:00:00 +0800</pubDate>
     </item>
   </channel>
 </rss>
