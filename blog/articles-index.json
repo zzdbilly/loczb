@@ -1,6 +1,21 @@
 {
   "posts": [
     {
+      "slug": "model-output-is-not-a-data-source",
+      "title": "模型说「今天」的时候，它只是在复述上下文",
+      "date": "2026-11-20",
+      "dateTime": "2026-11-20 15:10:00",
+      "category": "AI",
+      "tags": [
+        "LLM",
+        "工程实践",
+        "数据可验证性",
+        "自动化"
+      ],
+      "readTime": 14,
+      "url": "blog/posts/model-output-is-not-a-data-source.html"
+    },
+    {
       "slug": "daily-publishing-selects-for-easy-topics",
       "title": "每天都能发一篇的时候，最容易回避的是那篇难写的",
       "date": "2026-11-19",
@@ -2231,6 +2246,7 @@
     }
   ],
   "categories": [
+    "AI",
     "思考",
     "Kotlin",
     "系统编程",
@@ -2239,13 +2255,12 @@
     "前端",
     "DevOps",
     "开发",
-    "Android",
-    "AI"
+    "Android"
   ],
   "stats": {
-    "totalPosts": 144,
-    "totalTags": 363,
-    "latestDate": "2026-11-19",
+    "totalPosts": 145,
+    "totalTags": 364,
+    "latestDate": "2026-11-20",
     "oldestDate": "2026-02-15"
   }
 }

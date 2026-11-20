@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <script>document.documentElement.classList.add("js");try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://static.cloudflareinsights.com https://loczb-comments.billymust.workers.dev; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://loczb-comments.billymust.workers.dev https://dashscope.aliyuncs.com https://709527.xyz https://www.709527.xyz https://cloudflareinsights.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
+    <script>/* 反点击劫持兜底：GitHub Pages 无法下发 X-Frame-Options / CSP frame-ancestors */(function(){if(self===top)return;try{top.location=self.location}catch(e){}setTimeout(function(){if(self!==top){document.documentElement.style.display='none';}},400);})();</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>模型说「今天」的时候，它只是在复述上下文 | 张小猛 - loczb</title>
+    <meta name="description" content="模型没有时钟，也没有查询能力。写进外部世界的日期、计数、版本、路径和耗时，应当从权威源现取，而不是从上下文里生成。">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="模型说「今天」的时候，它只是在复述上下文 | 张小猛 - loczb">
+    <meta property="og:description" content="模型没有时钟，也没有查询能力。写进外部世界的日期、计数、版本、路径和耗时，应当从权威源现取，而不是从上下文里生成。">
+    <meta property="og:url" content="https://709527.xyz/blog/posts/model-output-is-not-a-data-source.html">
+    <meta property="og:type" content="article">
+    <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
+    <meta property="og:site_name" content="loczb">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="模型说「今天」的时候，它只是在复述上下文 | 张小猛 - loczb">
+    <meta name="twitter:description" content="模型没有时钟，也没有查询能力。写进外部世界的日期、计数、版本、路径和耗时，应当从权威源现取，而不是从上下文里生成。">
+    <meta name="twitter:image" content="https://709527.xyz/assets/images/og-image.png">
+
+        <script type="application/ld+json">
+{
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "模型说「今天」的时候，它只是在复述上下文",
+      "description": "模型没有时钟，也没有查询能力。写进外部世界的日期、计数、版本、路径和耗时，应当从权威源现取，而不是从上下文里生成。",
+      "image": "https://709527.xyz/assets/images/og-image.png",
+      "author": {
+            "@type": "Person",
+            "name": "张小猛",
+            "url": "https://709527.xyz/about/"
+      },
+      "publisher": {
+            "@type": "Organization",
+            "name": "loczb",
+            "logo": {
+                  "@type": "ImageObject",
+                  "url": "https://709527.xyz/assets/images/favicon.svg"
+            }
+      },
+      "datePublished": "2026-11-20T15:10:00+08:00",
+      "dateModified": "2026-11-20T15:10:00+08:00",
+      "url": "https://709527.xyz/blog/posts/model-output-is-not-a-data-source.html",
+      "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://709527.xyz/blog/posts/model-output-is-not-a-data-source.html"
+      },
+      "keywords": "LLM, 工程实践, 数据可验证性, 自动化",
+      "articleSection": "AI",
+      "timeRequired": "PT14M",
+      "inLanguage": "zh-CN"
+}
+    </script>
+
+    <link rel="stylesheet" href="../../assets/css/style.css?v=c8e170d8f9">
+    <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
+    <link rel="alternate icon" href="../../assets/images/favicon.ico">
+    <link rel="canonical" href="https://709527.xyz/blog/posts/model-output-is-not-a-data-source.html">
+</head>
+<body>
+  <!-- PARTIAL:SKIP_LINK -->
+  <a href="#main-content" class="skip-link">跳至主要内容</a>
+  <!-- /PARTIAL:SKIP_LINK -->
+
+  <!-- Navigation -->
+<!-- PARTIAL:NAV -->
+  <nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">
+      loc<span>zb</span>
+    </a>
+    <button class="nav-toggle" aria-label="打开菜单" aria-expanded="false" aria-controls="nav-links-menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <div class="nav-overlay"></div>
+    <ul class="nav-links" id="nav-links-menu">
+      <li><a href="/" class="nav-link" data-nav="home">首页</a></li>
+      <li><a href="/projects/" class="nav-link" data-nav="projects">项目</a></li>
+      <li><a href="/blog/" class="nav-link active" data-nav="blog">博客</a></li>
+      <li><a href="/about/" class="nav-link" data-nav="about">关于</a></li>
+    </ul>
+    <button class="theme-toggle" aria-label="切换主题" title="切换亮/暗模式">
+      <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="5"></circle>
+        <line x1="12" y1="1" x2="12" y2="3"></line>
+        <line x1="12" y1="21" x2="12" y2="23"></line>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+        <line x1="1" y1="12" x2="3" y2="12"></line>
+        <line x1="21" y1="12" x2="23" y2="12"></line>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+      </svg>
+      <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+      </svg>
+    </button>
+  </div>
+</nav>
+  <!-- /PARTIAL:NAV -->
+  <main class="section" id="main-content" style="padding-bottom: 0; padding-top: var(--space-4xl);">
+    <div class="container container-narrow">
+      <a href="../index.html" class="back-link">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        返回博客列表
+      </a>
+
+      <article class="post-content">
+        <h1>模型说「今天」的时候，它只是在复述上下文</h1>
+
+        <div class="post-meta">
+          <span class="meta-item"><span aria-hidden="true">📅</span> 2026-11-20 15:10:00</span>
+          <span class="meta-item"><span aria-hidden="true">⏱️</span> 14 min read</span>
+          <span class="meta-item"><span aria-hidden="true">👤</span> 张小猛</span>
+        </div>
+
+        <div class="post-tags">
+          <span class="tag">LLM</span>
+          <span class="tag">工程实践</span>
+          <span class="tag">数据可验证性</span>
+          <span class="tag">自动化</span>
+        </div>
+
+        
+
+        <h2>模型说「今天」的时候，它只是在复述上下文</h2>
+<p>「今天」是个很小的词，小到写进正文时不会有人停顿。我因为这个词返工过。</p>
+<p>一次写发布说明，frontmatter 的日期我直接用了对话里出现的「今天」。稿子写完，编译通过，门禁全绿，推上去。第二天翻列表才发现它排在前一天的位置上，差了一天。还有一次更别扭：我写了一个比真实时间更晚的时刻，新文章于是排在列表首位，看上去像「今天已经发过一篇」。两次都不是谁算错了日期。是我把「日期」当成了一个可以从句子里读出来的东西。</p>
+<p>后来规则改成从机器读时间，并且把时区写死：</p>
+<pre><code class="language-bash">TZ=Asia/Shanghai date '+%Y-%m-%d %H:%M:%S %A'
+</code></pre>
+<p>这条命令打印出来的才是日期。对话里那个「今天」，只是某次采样时上下文里恰好出现的两个字。</p>
+<p>把这件小事放大，会得到一个不太舒服的结论：<strong>模型的输出不是数据源</strong>。凡是要写进外部世界、会被别人当成事实使用的值——日期、计数、版本、路径、耗时——都应当从权威源现取，而不是从上下文或记忆里生成。模型没有时钟，也没有查询能力。它给的「今天」是采样时刻的快照，它给的计数是从语言分布里浮现出来的数字。这不是幻觉，是职责错位：把一个生成器当成了数据库。</p>
+<h2>先给一个能当场执行的程序：三道问</h2>
+<p>下面的做法不依赖任何工具，也不需要额外配置。任何准备写进正文的值，落笔之前先过三道问。</p>
+<pre><code class="language-text">1. 它从哪来？
+   上下文 / 记忆                       还是   命令输出 / 文档 / 数据库？
+
+2. 什么时候取的？
+   取的时间与写的时间隔了多久，这中间世界变了吗？
+
+3. 能不能重取？
+   有没有一条命令，能把同样的值再跑一遍？
+</code></pre>
+<p>三道都答不上来的值，要么删掉，要么明写它的时效。没有第四种处理方式。</p>
+<h3>第一问：它从哪来</h3>
+<p>「从哪来」问的不是谁说的，而是这个值第一次进入世界时附着在什么上面。</p>
+<p>「今天是十一月二十号」——如果它来自我上一轮自己写的话，那它只是上下文。如果它来自 <code>date</code> 的输出，它就是时钟。同样一句话，两种来源，可靠性差着一个数量级。</p>
+<p>工程上更要命的是中间层。一个数从数据库查出来，写进日志，被贴进对话，再被我抄进正文——到正文这一步，它已经是「上下文里的一个字符串」了。它可能仍然正确，但它的正确性不再由它自身保证，而是由那条链上每一环都没出错来保证。链越长，越该重取。</p>
+<h3>第二问：什么时候取的</h3>
+<p>值本身没有错，错的是它和现在之间的距离。</p>
+<p>计数类的东西最典型。今天跑出来是五条，三周前跑出来是十五条，两个数在当时都是真的。写进正文时如果不带时间，读者只能默认它是当下的。这就是一条会过期的断言，只是它看起来不像。</p>
+<p>第二问还管另一件事：取值的口径。同一个「篇数」，算不算草稿，算不算被撤下的，算不算另一个目录里的，结果可以差出十几。取的时候用的是哪个口径，写的时候就得是哪个口径，中间不能换。</p>
+<h3>第三问：能不能重取</h3>
+<p>这是三道问里最有操作性的一道，也是唯一能自动化的一道。</p>
+<p>有命令能重跑的，就是可验证的。没有命令能重跑的，就是记忆。记忆不是罪，但记忆必须以记忆的身份出现——写成「我印象里」「上一次看到」，而不是写成事实。</p>
+<p>一个值如果既重要、又重取不出来、又没有时效标注，那它不该出现在正文里。它可以在草稿里待着，等到能取的那天再进来。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">三道问的结果</th>
+<th style="text-align: left;">处理方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">有权威源，能重取，刚取过</td>
+<td style="text-align: left;">直接写，必要时附命令</td>
+</tr>
+<tr>
+<td style="text-align: left;">有权威源，能重取，但取的时间较久</td>
+<td style="text-align: left;">重取一次再写；取不了就标时点</td>
+</tr>
+<tr>
+<td style="text-align: left;">只有记忆，无法重取</td>
+<td style="text-align: left;">删掉，或降级成不带数字的表述</td>
+</tr>
+<tr>
+<td style="text-align: left;">说不清从哪来</td>
+<td style="text-align: left;">删掉，不讨论</td>
+</tr>
+</tbody>
+</table>
+<h2>五类高危值：时间</h2>
+<h3>权威源是时钟，不是句子</h3>
+<p>日期、时刻、时区，这三样东西有一个共同点：它们每秒都在变，而且变化与文本无关。任何从上下文继承来的时间都自带一个隐式的「截至采样时刻」。</p>
+<p>我已经在这上面栽过两次：一次差了一天，一次写到了未来。两次的共同点不是粗心，是我把「今天」当成了一个名词，而它其实是一个指针。</p>
+<h3>写法：绝对时间加时区</h3>
+<p>时间类值的处理规则可以压成三句话：</p>
+<ul>
+<li>取，用 <code>date</code>，并且显式带时区，不依赖机器默认值。</li>
+<li>写，写绝对时间，不写「昨天」「上周」「最近」。</li>
+<li>标，如果非要写相对时间，就在同一句里给出锚点，例如「截至某月某日」。</li>
+</ul>
+<p>相对时间在发布场景里是个陷阱。稿子写于周四，发布在周五，「昨天」就错了；如果还被定时任务延后一天，错得更远。绝对时间不会。</p>
+<p>时区同样。机器跑在哪个时区、读者在哪个时区、站点按哪个时区排序，是三件不同的事。发布链如果按日期字符串排序，时区差八小时就能让一篇文章插到另一篇前面。这个坑不需要谁犯错，缺一个时区标注就够了。</p>
+<h2>五类高危值：计数</h2>
+<h3>计数每天都在漂</h3>
+<p>文章篇数、告警条数、内链数、文件数——这类值的特点是：<strong>它们在一个健康的项目里一定会变</strong>。不变才说明没人干活。</p>
+<p>有一次我在正文里写「0 错误、15 条告警」。发布当天把全库重跑了一遍，真实输出是「0 错误、5 条告警」。命令没变，仓库也没坏，我引的是几周前的结果。这中间文件加了、规则调了、历史告警被清掉了，数字早就不是那个数字。</p>
+<p>这类错误的隐蔽之处在于：它看起来有出处。确实跑过，确实有输出，只是那次跑的不是今天。</p>
+<h3>取法：重跑那条命令，而不是引用上次输出</h3>
+<p>计数类值只有一个可靠来源：现在跑一遍，把输出贴进正文。</p>
+<pre><code class="language-bash"># 篇数：数源文件，不数产物
+ls blog/posts-src/*.md | wc -l
+
+# 某一类问题的条数：重跑同一条命令，并把口径写进正文
+grep -rn &quot;TODO&quot; src/ | wc -l
+
+# 需要排除某些目录时，把排除条件一起写出来
+grep -rn --exclude-dir=node_modules --exclude-dir=.git &quot;TODO&quot; . | wc -l
+</code></pre>
+<p>三条命令里，第三条比前两条更值得学：<strong>口径要跟数字一起写</strong>。同一个仓库，「TODO 有多少条」可以有三个答案，取决于排不排依赖目录、算不算测试、算不算文档。只给数字不给口径，等于给了一个无法复核的断言。</p>
+<p>还有一条经验：能用「若干」「十几」说清的量级，不要强行精确到个位。读者不会因为「十几条告警」而少获得什么，但会因为你写「十五条」而实际只有五条，对整篇文章打折扣。</p>
+<h2>五类高危值：版本与行为</h2>
+<h3>「我记得它改成了报错」不算证据</h3>
+<p>版本类断言有个特殊风险：它描述的不是一个数，而是一个行为。行为错了，读者照着做会直接失败。</p>
+<p>我遇到过一次：某个语言的新版本把一类检查从警告提升为编译错误。这句话在正文里只占半行，但它决定了读者升级之后构建会不会红。我当时的第一反应是「我记得是这样」，第二反应才是去翻变更说明。两个反应之间隔着一次可能的返工。</p>
+<p>版本行为是最不该靠印象的一类值，因为它的可信度与记忆的新鲜度强相关，而记忆的新鲜度没有任何外部标志。你无法从「我很确定」里读出「我上次查是两年前」。</p>
+<h3>取法：查变更说明，再在本机验一次</h3>
+<p>处理版本类断言，两步都要走：</p>
+<pre><code class="language-bash"># 第一步：查发布说明与变更日志，确认这个行为发生在哪个版本
+grep -n -i &quot;breaking\|deprecat\|warning\|error&quot; CHANGELOG.md | head -40
+
+# 第二步：在本机用目标版本复现一次，确认现象与文档一致
+node --version
+</code></pre>
+<p>只做第一步，可能读到一条被后续版本又改回去的记录；只做第二步，可能只验证了一个版本，却写成了「所有版本都这样」。两步都做，才能把断言收缩到「某版本起，某行为如此」这种可以复核的形态。</p>
+<p>写的时候也要收缩。不写「新版本会报错」，写「从某个版本起，这类检查从警告变成错误」。前者是一句情绪，后者是一条可查的事实。</p>
+<h2>五类高危值：路径与标识符</h2>
+<h3>路径会被移动，标识符会被重命名</h3>
+<p>路径与标识符的问题不在真假，在时效。一个路径在写下的那一刻是真的，在下一次重构之后就不是了。而正文里的路径通常以「你可以在这里找到」的口气出现，读者会当成导航。</p>
+<p>标识符同理。函数名、配置键、环境变量、接口字段，任何一处重命名都会让示例代码失效，而失效的方式往往不报错——配置键写错了，程序读不到，走了默认值，行为变了但没声音。</p>
+<h3>取法：写之前确认存在，写的时候给出处</h3>
+<p>路径类值的检查成本极低，低到没有理由不做：</p>
+<pre><code class="language-bash"># 确认路径存在，并且是期望的类型
+test -f path/to/config.yaml &amp;&amp; echo &quot;file ok&quot;
+test -d path/to/dir &amp;&amp; echo &quot;dir ok&quot;
+
+# 确认某个标识符在当前代码里还有定义
+grep -rn &quot;SOME_CONFIG_KEY&quot; src/ | head
+</code></pre>
+<p>这两条命令的价值不在输出，而在它们会失败。一个不存在的路径，<code>test -f</code> 立刻返回非零；一个被重命名的键，<code>grep</code> 立刻返回空。失败得越早，返工越少。</p>
+<p>如果某个路径或标识符属于外部系统、本机无法确认，那就别把它写成确定的事实。写成「以实际部署为准」，比写一个曾经正确过的值更负责。</p>
+<h2>五类高危值：量测</h2>
+<h3>耗时与体积依赖机器</h3>
+<p>耗时、内存占用、产物体积、构建时间——这类值有个共同前提：它们是在某台机器、某个负载、某个版本下测出来的。换一台机器，数字可以差一倍；机器空着和机器忙时，数字也可以差一倍。</p>
+<p>所以量测类值的正文写法，重点不是精确，而是<strong>可复现</strong>。只写「构建耗时 42 秒」，读者无法判断这是冷启动还是热缓存，是笔记本还是共享构建机。写「在同一台机器、清空缓存后，构建耗时约四十秒」，读者至少知道该在什么条件下对照。</p>
+<h3>取法：同机、同口径、写清环境</h3>
+<p>量测的取法没有捷径，只有三条约束：</p>
+<ul>
+<li>同一台机器。跨机器的数字不可比，放在一起会误导。</li>
+<li>同一口径。冷启动与热缓存、单线程与多线程、含不含依赖安装，都要说明。</li>
+<li>写清环境。至少给出运行环境与版本，让读者知道偏差可能来自哪里。</li>
+</ul>
+<p>三条都做到，数字才有意义。做不到，就把数字降级成量级。量级不精确，但它不会撒谎。</p>
+<h2>为什么模型特别容易在这里出错</h2>
+<h3>没有时钟</h3>
+<p>模型不持有时间。它对「现在」的全部信息，来自上下文里出现过的字符串。上下文里写了「今天」，它就按那个今天说话；上下文里没写，它也可能顺着语感补一个日期出来。补出来的日期通常格式正确、语气自然，唯一的缺点是它不对应任何一个真实时刻。</p>
+<p>这不是能力问题，是接口问题。没有时钟的进程，问它几点，只能得到一段文本。</p>
+<h3>没有查询能力</h3>
+<p>模型不连接你的仓库、数据库、监控。它没有被问「现在有多少条告警」时去执行一条命令的通道。它能做的只有两件事：复述上下文里已有的值，或者根据语言分布生成一个看起来合理的值。</p>
+<p>第二件事尤其危险，因为它和第一件事在文本上无法区分。「十五条告警」和「五条告警」都是合法的中文，都可能是模型写的，也都不带出处。</p>
+<h3>上下文是采样时刻的快照</h3>
+<p>即使上下文里的值全是真的，它们也是某个时刻的真。对话越长，这个时刻离现在越远。上下文不会自己过期，它只会越来越旧——没有任何机制会在值失效时把它标红。</p>
+<p>这就是为什么「从上下文继承一个数」和「从数据库读一个数」看起来一样，实际完全不同。后者有事务和时效，前者只有一段文本。</p>
+<h3>语言分布里的数字看起来很像真的</h3>
+<p>帮忙写稿的模型给过一些个位级的数字：「四十七处」「八十七处」「四十个技术债」。这些数字读起来极有说服力，因为它们精确、具体、有零有整，符合人对「实测」的想象。</p>
+<p>但我问出处的时候，答不上来。它们不是从任何一次统计里来的，是从「这类文章里通常会有这种数字」的分布里来的。后来这些位置全部改成了「几十处」，或者干脆去掉数字，只留判断。</p>
+<p>精确不等于真实。一个编出来的四十七，比一句诚实的「几十」更糟，因为它多了一层假装。</p>
+<h2>为什么门禁拦不住</h2>
+<p>发布链上的机械门禁能保证三件事：产物与源一致、没有死链、没有凭据。这三件事都很重要，而且都能自动化。</p>
+<p>它保证不了第四件事：源里的这句话是不是真的。</p>
+<p>这不是门禁的失职。门禁校验的是形式关系——源文件编译出的 HTML 与提交的 HTML 是否逐字节相同，链接指向的目标是否存在，文本里有没有不该出现的密钥。这些都可以用程序判定。「十五条告警」这句话对不对，程序判不了，除非程序知道该去问谁。</p>
+<p>于是真实的兜底方式变得很朴素：发出去，被读者或者被自己发现，然后提交一次修正。我的发布记录里就有若干次这样的提交，标题是「修正某处表述」。它们不是流程的失败，而是流程唯一能提供的那层保护——在机械检查之后，用人再看一遍。</p>
+<p>承认这一点比假装门禁万能更有用。知道门禁拦不住什么，才知道自己该在哪一步停一下。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">检查项</th>
+<th style="text-align: center;">能否自动化</th>
+<th style="text-align: left;">拦得住什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">产物与源一致</td>
+<td style="text-align: center;">能</td>
+<td style="text-align: left;">手改产物、漏编译</td>
+</tr>
+<tr>
+<td style="text-align: left;">死链</td>
+<td style="text-align: center;">能</td>
+<td style="text-align: left;">指向不存在页面的链接</td>
+</tr>
+<tr>
+<td style="text-align: left;">凭据与隐私串</td>
+<td style="text-align: center;">能</td>
+<td style="text-align: left;">误提交的密钥、真实路径</td>
+</tr>
+<tr>
+<td style="text-align: left;">日期是否正确</td>
+<td style="text-align: center;">部分</td>
+<td style="text-align: left;">格式错、未来时间；语义对不对仍要人看</td>
+</tr>
+<tr>
+<td style="text-align: left;">计数是否当下</td>
+<td style="text-align: center;">不能</td>
+<td style="text-align: left;">只能靠发布前重跑</td>
+</tr>
+<tr>
+<td style="text-align: left;">版本行为是否属实</td>
+<td style="text-align: center;">不能</td>
+<td style="text-align: left;">只能靠查文档与实测</td>
+</tr>
+</tbody>
+</table>
+<h2>可执行的纪律：能取则取，不能取则标，只能靠记忆则删</h2>
+<p>三道问和五类值最后要落到三句话上。这三句话不是原则，是动作。</p>
+<h3>能取则取</h3>
+<p>凡是有一条命令能跑出来的值，就去跑。日期用 <code>date</code>，计数用 <code>grep</code> 加 <code>wc</code>，路径用 <code>test -e</code>，版本用 <code>--version</code> 加变更说明，量测用同一台机器重测一次。</p>
+<p>取的动作要留在稿子附近。命令和输出一起记下来，下次有人问「这个数哪来的」，能直接贴。没有命令的值，默认按记忆处理。</p>
+<h3>不能取则标</h3>
+<p>有些值取不到：外部系统的当前状态、别人的机器、已经过去的一次运行。这类值不是不能写，但必须带着时点和口径写。</p>
+<p>「截至某月某日」「按某个口径」「在某个版本上」——这些限定词看起来啰嗦，它们的作用是把一句话从「事实」降级成「某时某地的事实」。降级不是示弱，是准确。</p>
+<h3>只能靠记忆则删</h3>
+<p>最后一类值最麻烦：它重要、取不到、也没有明确的时点。这种值在正文里没有合法位置。</p>
+<p>删掉它，论点通常还在。真正支撑论点的往往不是那个数字，而是数字背后的判断。删掉「四十七处」，还剩「这类问题在代码里分布得很散」——后者才是想让读者记住的东西。</p>
+<p>发布前我会按这三句话过一遍稿子，重点看三类位置：所有日期、所有数字、所有「最近」「目前」「现在」。这三类位置占了事实性错误的大多数。</p>
+<h2>收束：模型可以说「今天」，但只有时钟知道今天是几号</h2>
+<p>回到开头那个词。</p>
+<p>模型说「今天」的时候，它没有说谎，也没有出错。它只是把上下文里的一次采样，用自然的语气复述了一遍。问题出在我这边：我把一句复述当成了查询结果，又把它写进了会被别人当成事实的地方。</p>
+<p>职责错位的修法不是让模型更小心，而是把取值的动作放回它该在的位置。日期问时钟，计数问仓库，版本问文档，路径问文件系统，耗时问同一台机器。模型负责把这些值组织成能读的句子，不负责发明它们。</p>
+<p>三道问可以背下来：它从哪来，什么时候取的，能不能重取。五类值可以贴在显示器边上：时间、计数、版本、路径、量测。</p>
+<p>模型可以说「今天」。但只有时钟知道今天是几号。</p>
+
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="a-check-that-cannot-fail-is-a-comment.html">
+            <div class="related-post-card-title">不会让流水线变红的检查，只是注释</div>
+            <div class="related-post-card-tags"><span>CI</span><span>代码质量</span><span>自动化</span></div>
+          </a>
+          <a class="related-post-card" href="invisible-work-sets-your-speed.html">
+            <div class="related-post-card-title">看不见的那部分工作，决定了你以后能跑多快</div>
+            <div class="related-post-card-tags"><span>工程实践</span><span>自动化</span><span>反馈</span></div>
+          </a>
+          <a class="related-post-card" href="rag-introduction.html">
+            <div class="related-post-card-title">RAG 检索增强生成入门：从理念到落地</div>
+            <div class="related-post-card-tags"><span>RAG</span><span>检索增强生成</span><span>LLM</span></div>
+          </a>
+          <a class="related-post-card" href="local-rag-ollama.html">
+            <div class="related-post-card-title">RAG 本地实践：用 Ollama + Embedding 搭建私有知识库</div>
+            <div class="related-post-card-tags"><span>RAG</span><span>Ollama</span><span>LLM</span></div>
+          </a>
+          <a class="related-post-card" href="openclaw-guide.html">
+            <div class="related-post-card-title">OpenClaw 深度使用指南：从 0 到 1 构建个人 AI Agent</div>
+            <div class="related-post-card-tags"><span>AI</span><span>OpenClaw</span><span>Agent</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
+
+        <!-- Post Copyright & License Card -->
+        <div class="post-copyright-card">
+          <div class="copyright-header">
+            <div class="copyright-badge">
+              <span>📜</span>
+              <span>原创与知识共享协议</span>
+            </div>
+            <button class="copyright-cite-btn" id="copy-cite-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+              </svg>
+              <span>复制 Markdown 引用</span>
+            </button>
+          </div>
+          <div class="copyright-list">
+            <div class="copyright-item"><strong>文章标题：</strong>模型说「今天」的时候，它只是在复述上下文</div>
+            <div class="copyright-item"><strong>文章作者：</strong>张小猛 · loczb</div>
+            <div class="copyright-item"><strong>永久链接：</strong><a href="https://709527.xyz/blog/posts/model-output-is-not-a-data-source.html">https://709527.xyz/blog/posts/model-output-is-not-a-data-source.html</a></div>
+            <div class="copyright-item"><strong>版权声明：</strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 国际许可协议。商业转载请联系作者获得授权，非商业转载请注明出处。</div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </main>
+
+  <!-- Related Posts / Navigation -->
+  <section class="section" aria-label="读完之后" style="padding-top: 0;">
+    <div class="container container-narrow">
+      <!-- Post Nav Prev Next -->
+      <nav class="post-nav" aria-label="文章翻页导航">
+        <a href="daily-publishing-selects-for-easy-topics.html" class="post-nav-card post-nav-prev" rel="prev">
+          <span class="post-nav-label">← 上一篇</span>
+          <span class="post-nav-title">每天都能发一篇的时候，最容易回避的是那篇难写的</span>
+        </a>
+        <div class="post-nav-card post-nav-next disabled" aria-disabled="true">
+          <span class="post-nav-label">下一篇 →</span>
+          <span class="post-nav-title">已是最新篇博文</span>
+        </div>
+      </nav>
+      <!-- /Post Nav Prev Next -->
+      <hr style="border: none; border-top: 1px solid var(--color-border); margin: var(--space-2xl) 0;">
+
+      <div class="blog-topics" style="margin-bottom: var(--space-xl); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+        <div>
+          <span class="topic-label">读完之后:</span>
+          <a href="../index.html" class="topic-tag">返回博客列表</a>
+          <a href="../index.html?view=series" class="topic-tag">浏览全部专栏</a>
+        </div>
+        <a href="#main-content" class="topic-tag" style="margin-left: auto;">↑ 回到顶部</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+<!-- PARTIAL:FOOTER -->
+  <footer class="footer" role="contentinfo">
+  <div class="footer-inner">
+    <p class="footer-signature">写代码，做产品，也认真生活。</p>
+    <div class="footer-social">
+      <a href="https://github.com/zzdbilly" class="footer-social-link" target="_blank" rel="noopener" aria-label="GitHub">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+      </a>
+      <a href="https://twitter.com/zzdbilly" class="footer-social-link" target="_blank" rel="noopener" aria-label="X (Twitter)">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      </a>
+      <a href="/rss.xml" class="footer-social-link" target="_blank" rel="noopener" aria-label="RSS 订阅">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+      </a>
+    </div>
+    <div class="footer-links">
+      <a href="/" class="footer-link">首页</a>
+      <a href="/projects/" class="footer-link">项目</a>
+      <a href="/blog/" class="footer-link">博客</a>
+      <a href="/about/" class="footer-link">关于</a>
+    </div>
+    <p class="footer-copyright">&copy; 2026 张小猛 · loczb · Built with care</p>
+  </div>
+</footer>
+  <!-- /PARTIAL:FOOTER -->
+
+  <script defer src="../../assets/js/main.js"></script>
+  <script defer src="../../assets/js/article.js?v=c9f1a378ea"></script>
+  <script defer src="../../assets/js/share.js"></script>
+  <!-- Back to Top & Reading Progress -->
+  <button class="back-to-top" id="backToTop" aria-label="回到顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
+  <div class="reading-progress" id="readingProgress"></div>
+
+  <!-- Post Sidebar Info（左侧） -->
+  <div class="post-sidebar-info" id="postSidebar">
+    <div class="post-info-card">
+      <div class="post-info-section">
+        <div class="post-info-label">作者</div>
+        <div class="post-info-author">
+          <div class="post-info-avatar">小</div>
+          <div>
+            <div class="post-info-author-name">张小猛</div>
+            <div class="post-info-author-desc">写代码，做产品</div>
+          </div>
+        </div>
+      </div>
+      <div class="post-info-section">
+        <div class="post-info-label">文章信息</div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📅</span> 发布日期</span><span class="post-info-stat-value">2026-11-20</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">⏱️</span> 阅读时间</span><span class="post-info-stat-value">14 min read</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">4836 字</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📊</span> 章节数</span><span class="post-info-stat-value">11 节 · 20 子节</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">💻</span> 代码块</span><span class="post-info-stat-value">5 段</span></div>
+      </div>
+      <div class="post-info-section" id="postSidebarTags">
+        <div class="post-info-label">标签</div>
+        <div class="post-info-links">
+          <a href="../../blog/index.html?tag=LLM" class="post-info-link"># LLM</a>
+          <a href="../../blog/index.html?tag=%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5" class="post-info-link"># 工程实践</a>
+          <a href="../../blog/index.html?tag=%E6%95%B0%E6%8D%AE%E5%8F%AF%E9%AA%8C%E8%AF%81%E6%80%A7" class="post-info-link"># 数据可验证性</a>
+          <a href="../../blog/index.html?tag=%E8%87%AA%E5%8A%A8%E5%8C%96" class="post-info-link"># 自动化</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Post TOC -->
+  <div class="post-toc-container" id="postToc">
+    <nav class="post-toc" aria-label="文章目录">
+      <div class="post-toc-title">目录</div>
+      <ul class="post-toc-list" id="tocList">
+      </ul>
+    </nav>
+  </div>
+
+  <!-- Comment System -->
+  <script src="../../workers/comment-system/comment-widget.js?v=5d8a6a1796" defer></script>
+
+  <!-- highlight.js 代码语法高亮（本地完整构建，无外部依赖） -->
+  <script defer src="../../assets/vendor/highlight/highlight.min.js"></script>
+  <script>
+    /* 语法高亮改为「可见优先、空闲补齐」：
+       highlight.js 要遍历全篇代码块并生成数百个 span，若在 DOMContentLoaded 里同步跑完，
+       会在关键路径上长时间占住主线程（2026-09-27 实测本页长任务 1548ms、DCL 3651ms；
+       改动后长任务 145ms、DCL 1378ms）。这里 DCL 阶段只登记观察，实际高亮交给
+       IntersectionObserver（近屏 800px 内优先）+ requestIdleCallback（剩余块每片 ≤4 块），
+       首屏代码块的着色时机与视觉基本无变化。 */
+    (function() {
+      function canPaint(b) {
+        return !b.classList.contains('hljs') && !b.closest('.codehilite');
+      }
+      function paint(b) {
+        if (!canPaint(b)) return;
+        try { hljs.highlightElement(b); } catch (e) {}
+      }
+      function init() {
+        var blocks = [].slice.call(document.querySelectorAll('pre code')).filter(canPaint);
+        if (!blocks.length) return;
+        if ('IntersectionObserver' in window) {
+          var io = new IntersectionObserver(function(entries, obs) {
+            entries.forEach(function(en) {
+              if (!en.isIntersecting) return;
+              paint(en.target);
+              obs.unobserve(en.target);
+            });
+          }, { rootMargin: '800px 0px' });
+          blocks.forEach(function(b) { io.observe(b); });
+        }
+        var i = 0;
+        var idle = window.requestIdleCallback || window.setTimeout;
+        var step = function() {
+          var quota = 4;
+          while (i < blocks.length && quota-- > 0) paint(blocks[i++]);
+          if (i < blocks.length) idle(step);
+        };
+        idle(step); // 不在 DCL 里同步跑：可见块由 IntersectionObserver 处理，其余走空闲分片
+      }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+      } else {
+        init();
+      }
+    })();
+  </script>
+
+  <!-- Cloudflare Web Analytics -->
+  <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "29e7cff6f37448989538e2165cb79187"}'></script>
+</body>
+</html>

@@ -7,6 +7,14 @@
     <language>zh-CN</language>
     <atom:link href="https://709527.xyz/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>模型说「今天」的时候，它只是在复述上下文</title>
+      <link>https://709527.xyz/blog/posts/model-output-is-not-a-data-source.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/model-output-is-not-a-data-source.html</guid>
+      <description>模型没有时钟，也没有查询能力。写进外部世界的日期、计数、版本、路径和耗时，应当从权威源现取，而不是从上下文里生成。</description>
+      <category>AI</category>
+      <pubDate>Fri, 20 Nov 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
       <title>每天都能发一篇的时候，最容易回避的是那篇难写的</title>
       <link>https://709527.xyz/blog/posts/daily-publishing-selects-for-easy-topics.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/daily-publishing-selects-for-easy-topics.html</guid>
@@ -157,14 +165,6 @@
       <description>版本号的本质是缓存键。缓存键要么由内容推导，要么就是一份人工维护的谎言——手写的 ?v=1.2 迟早忘，忘了就是新代码配旧缓存，而且不会报错。</description>
       <category>前端</category>
       <pubDate>Thu, 29 Oct 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>别人的一次改名，是你的全站停机：外部标识符的耦合半径</title>
-      <link>https://709527.xyz/blog/posts/external-identifiers-coupling-radius.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/external-identifiers-coupling-radius.html</guid>
-      <description>一次账户子域改名暴露 9 处隐藏副本。外部标识符被写了几遍，改名成本就是几倍、停机半径就是几圈——硬编码等于把发布权交给别人。</description>
-      <category>DevOps</category>
-      <pubDate>Wed, 28 Oct 2026 00:00:00 +0800</pubDate>
     </item>
   </channel>
 </rss>
