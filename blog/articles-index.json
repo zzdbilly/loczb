@@ -1,6 +1,21 @@
 {
   "posts": [
     {
+      "slug": "rework-touches-evidence-not-stance",
+      "title": "改得动的都不是观点：返工改的是证据，不是立场",
+      "date": "2026-11-21",
+      "dateTime": "2026-11-21 18:12:00",
+      "category": "思考",
+      "tags": [
+        "写作",
+        "返工",
+        "自省",
+        "证据"
+      ],
+      "readTime": 15,
+      "url": "blog/posts/rework-touches-evidence-not-stance.html"
+    },
+    {
       "slug": "model-output-is-not-a-data-source",
       "title": "模型说「今天」的时候，它只是在复述上下文",
       "date": "2026-11-20",
@@ -2246,8 +2261,8 @@
     }
   ],
   "categories": [
-    "AI",
     "思考",
+    "AI",
     "Kotlin",
     "系统编程",
     "数据库",
@@ -2258,9 +2273,9 @@
     "Android"
   ],
   "stats": {
-    "totalPosts": 145,
-    "totalTags": 364,
-    "latestDate": "2026-11-20",
+    "totalPosts": 146,
+    "totalTags": 367,
+    "latestDate": "2026-11-21",
     "oldestDate": "2026-02-15"
   }
 }

@@ -7,6 +7,14 @@
     <language>zh-CN</language>
     <atom:link href="https://709527.xyz/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>改得动的都不是观点：返工改的是证据，不是立场</title>
+      <link>https://709527.xyz/blog/posts/rework-touches-evidence-not-stance.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/rework-touches-evidence-not-stance.html</guid>
+      <description>一周六次返工，全落在数字、日期、指涉、时态这些能对账的地方，主张一次没改。这只说明那一层被审过，不说明这一层可靠。</description>
+      <category>思考</category>
+      <pubDate>Sat, 21 Nov 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
       <title>模型说「今天」的时候，它只是在复述上下文</title>
       <link>https://709527.xyz/blog/posts/model-output-is-not-a-data-source.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/model-output-is-not-a-data-source.html</guid>
@@ -157,14 +165,6 @@
       <description>打码是一次性闸口，位置必须在数据产生、序列化的那一刻。落盘之后你面对的不再是一条数据，而是一堆不受你控制的副本。</description>
       <category>安全</category>
       <pubDate>Fri, 30 Oct 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>版本号不该手写：缓存失效应当由内容哈希推导</title>
-      <link>https://709527.xyz/blog/posts/cache-version-from-content-hash.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/cache-version-from-content-hash.html</guid>
-      <description>版本号的本质是缓存键。缓存键要么由内容推导，要么就是一份人工维护的谎言——手写的 ?v=1.2 迟早忘，忘了就是新代码配旧缓存，而且不会报错。</description>
-      <category>前端</category>
-      <pubDate>Thu, 29 Oct 2026 00:00:00 +0800</pubDate>
     </item>
   </channel>
 </rss>
