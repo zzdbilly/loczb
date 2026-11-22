@@ -7,6 +7,14 @@
     <language>zh-CN</language>
     <atom:link href="https://709527.xyz/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>扩展函数不参与多态：你以为的重写，编译期就被定成了重载</title>
+      <link>https://709527.xyz/blog/posts/extension-functions-are-statically-bound.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/extension-functions-are-statically-bound.html</guid>
+      <description>扩展函数编译成静态方法，按调用点的静态类型选签名；成员优先、子类不覆盖、库升级后静默换轨，它从来不是多态。</description>
+      <category>Kotlin</category>
+      <pubDate>Sun, 22 Nov 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
       <title>改得动的都不是观点：返工改的是证据，不是立场</title>
       <link>https://709527.xyz/blog/posts/rework-touches-evidence-not-stance.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/rework-touches-evidence-not-stance.html</guid>
@@ -157,14 +165,6 @@
       <description>非空类型保证的是编译期检查点，不是值本身。反序列化、反射与 Java 边界都能绕开这些检查点，所以外部数据必须在入口显式验一遍。</description>
       <category>Kotlin</category>
       <pubDate>Mon, 02 Nov 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>脱敏要做在写入端：落盘之后打码，等于没打码</title>
-      <link>https://709527.xyz/blog/posts/redact-at-write-time.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/redact-at-write-time.html</guid>
-      <description>打码是一次性闸口，位置必须在数据产生、序列化的那一刻。落盘之后你面对的不再是一条数据，而是一堆不受你控制的副本。</description>
-      <category>安全</category>
-      <pubDate>Fri, 30 Oct 2026 00:00:00 +0800</pubDate>
     </item>
   </channel>
 </rss>

@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <script>document.documentElement.classList.add("js");try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://static.cloudflareinsights.com https://loczb-comments.billymust.workers.dev; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://loczb-comments.billymust.workers.dev https://dashscope.aliyuncs.com https://709527.xyz https://www.709527.xyz https://cloudflareinsights.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
+    <script>/* 反点击劫持兜底：GitHub Pages 无法下发 X-Frame-Options / CSP frame-ancestors */(function(){if(self===top)return;try{top.location=self.location}catch(e){}setTimeout(function(){if(self!==top){document.documentElement.style.display='none';}},400);})();</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>扩展函数不参与多态：你以为的重写，编译期就被定成了重载 | 张小猛 - loczb</title>
+    <meta name="description" content="扩展函数编译成静态方法，按调用点的静态类型选签名；成员优先、子类不覆盖、库升级后静默换轨，它从来不是多态。">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="扩展函数不参与多态：你以为的重写，编译期就被定成了重载 | 张小猛 - loczb">
+    <meta property="og:description" content="扩展函数编译成静态方法，按调用点的静态类型选签名；成员优先、子类不覆盖、库升级后静默换轨，它从来不是多态。">
+    <meta property="og:url" content="https://709527.xyz/blog/posts/extension-functions-are-statically-bound.html">
+    <meta property="og:type" content="article">
+    <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
+    <meta property="og:site_name" content="loczb">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="扩展函数不参与多态：你以为的重写，编译期就被定成了重载 | 张小猛 - loczb">
+    <meta name="twitter:description" content="扩展函数编译成静态方法，按调用点的静态类型选签名；成员优先、子类不覆盖、库升级后静默换轨，它从来不是多态。">
+    <meta name="twitter:image" content="https://709527.xyz/assets/images/og-image.png">
+
+        <script type="application/ld+json">
+{
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "扩展函数不参与多态：你以为的重写，编译期就被定成了重载",
+      "description": "扩展函数编译成静态方法，按调用点的静态类型选签名；成员优先、子类不覆盖、库升级后静默换轨，它从来不是多态。",
+      "image": "https://709527.xyz/assets/images/og-image.png",
+      "author": {
+            "@type": "Person",
+            "name": "张小猛",
+            "url": "https://709527.xyz/about/"
+      },
+      "publisher": {
+            "@type": "Organization",
+            "name": "loczb",
+            "logo": {
+                  "@type": "ImageObject",
+                  "url": "https://709527.xyz/assets/images/favicon.svg"
+            }
+      },
+      "datePublished": "2026-11-22T18:43:00+08:00",
+      "dateModified": "2026-11-22T18:43:00+08:00",
+      "url": "https://709527.xyz/blog/posts/extension-functions-are-statically-bound.html",
+      "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://709527.xyz/blog/posts/extension-functions-are-statically-bound.html"
+      },
+      "keywords": "Kotlin, 静态分派, 多态, API 设计",
+      "articleSection": "Kotlin",
+      "timeRequired": "PT14M",
+      "inLanguage": "zh-CN"
+}
+    </script>
+
+    <link rel="stylesheet" href="../../assets/css/style.css?v=c8e170d8f9">
+    <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
+    <link rel="alternate icon" href="../../assets/images/favicon.ico">
+    <link rel="canonical" href="https://709527.xyz/blog/posts/extension-functions-are-statically-bound.html">
+</head>
+<body>
+  <!-- PARTIAL:SKIP_LINK -->
+  <a href="#main-content" class="skip-link">跳至主要内容</a>
+  <!-- /PARTIAL:SKIP_LINK -->
+
+  <!-- Navigation -->
+<!-- PARTIAL:NAV -->
+  <nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">
+      loc<span>zb</span>
+    </a>
+    <button class="nav-toggle" aria-label="打开菜单" aria-expanded="false" aria-controls="nav-links-menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <div class="nav-overlay"></div>
+    <ul class="nav-links" id="nav-links-menu">
+      <li><a href="/" class="nav-link" data-nav="home">首页</a></li>
+      <li><a href="/projects/" class="nav-link" data-nav="projects">项目</a></li>
+      <li><a href="/blog/" class="nav-link active" data-nav="blog">博客</a></li>
+      <li><a href="/about/" class="nav-link" data-nav="about">关于</a></li>
+    </ul>
+    <button class="theme-toggle" aria-label="切换主题" title="切换亮/暗模式">
+      <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="5"></circle>
+        <line x1="12" y1="1" x2="12" y2="3"></line>
+        <line x1="12" y1="21" x2="12" y2="23"></line>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+        <line x1="1" y1="12" x2="3" y2="12"></line>
+        <line x1="21" y1="12" x2="23" y2="12"></line>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+      </svg>
+      <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+      </svg>
+    </button>
+  </div>
+</nav>
+  <!-- /PARTIAL:NAV -->
+  <main class="section" id="main-content" style="padding-bottom: 0; padding-top: var(--space-4xl);">
+    <div class="container container-narrow">
+      <a href="../index.html" class="back-link">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        返回博客列表
+      </a>
+
+      <article class="post-content">
+        <h1>扩展函数不参与多态：你以为的重写，编译期就被定成了重载</h1>
+
+        <div class="post-meta">
+          <span class="meta-item"><span aria-hidden="true">📅</span> 2026-11-22 18:43:00</span>
+          <span class="meta-item"><span aria-hidden="true">⏱️</span> 14 min read</span>
+          <span class="meta-item"><span aria-hidden="true">👤</span> 张小猛</span>
+        </div>
+
+        <div class="post-tags">
+          <span class="tag">Kotlin</span>
+          <span class="tag">静态分派</span>
+          <span class="tag">多态</span>
+          <span class="tag">API 设计</span>
+        </div>
+
+        
+
+        <h2>一个「加了方法」的错觉</h2>
+<p><code>fun Article.render(): String</code> 这种写法，读起来像是在给 <code>Article</code> 加一个方法。调用点也像：<code>article.render()</code>，点号、参数、返回值，和成员函数没有区别。于是很多人顺手把它当成成员函数用——指望子类能换掉它，指望不同的实现类走不同的逻辑，指望升级一个库之后行为还归自己管。</p>
+<p>这三件事一件都不成立。</p>
+<p>扩展函数在 JVM 上被编译成一个静态方法，接收者变成第一个参数。它没有进类的虚方法表，没有槽位，也就没有「运行期再决定调哪个」这回事。调用点写下的那一刻，编译器就把目标签名钉死了：看的是接收者的<strong>静态（声明）类型</strong>，加上当前作用域里<strong>可见</strong>的那个扩展。</p>
+<p>这不是语法层面的小陷阱，而是把一个编译期机制当成了运行期机制。下面的内容把「想改变一个类型的行为」拆成三条可走的路，按绑定时机排一遍，再给一张表、三组对照，最后落到能执行的规则。</p>
+<h2>三条路：先按绑定时机排队</h2>
+<p>同一个需求——让某个类型在做某件事时表现不同——在 Kotlin 里至少有三种落点。它们的差别不在写法，而在「什么时候决定调用谁」。</p>
+<h3>路线一：接口方法，由实现类决定</h3>
+<p>接口声明签名，实现类提供行为。调用方只依赖接口，具体走哪段代码在运行期由对象的实际类型决定。</p>
+<pre><code class="language-kotlin">interface Syncable {
+    fun sync(): Result
+}
+
+class LocalStore : Syncable {
+    override fun sync(): Result = pushToLocalDisk()
+}
+
+class RemoteStore : Syncable {
+    override fun sync(): Result = pushToServer()
+}
+
+fun runAll(items: List&lt;Syncable&gt;) {
+    items.forEach { it.sync() }   // 这里只认 Syncable，具体实现运行期才定
+}
+</code></pre>
+<p>绑定时机是运行期。依据是对象的实际类型，JVM 通过接口方法表找到对应的实现。可覆盖：任何实现类都能给出自己的版本，新增实现不需要改调用方。</p>
+<p>代价是类型的所有权。接口得是你写的那一个，或者至少是你能改的那一个。给一个已经发布的接口加抽象方法，所有实现方都会编译失败；想加默认实现又会被 JVM 默认方法的规则和 Kotlin 的兼容性策略牵制。第三方库里的类型，这条路走不通。</p>
+<h3>路线二：open 类成员，由实际类型决定</h3>
+<p>类比接口更重，但分派规则一样：<code>open</code> 成员在子类里 <code>override</code> 之后，调用点根据对象的实际类型选实现。</p>
+<pre><code class="language-kotlin">open class Repository {
+    open fun refresh() { /* 默认实现 */ }
+}
+
+class CachedRepository : Repository() {
+    override fun refresh() { /* 先读缓存，再决定要不要回源 */ }
+}
+
+fun warmUp(repo: Repository) {
+    repo.refresh()   // 实际类型是 CachedRepository 时，走的是覆盖版本
+}
+</code></pre>
+<p>绑定时机同样是运行期，依据同样是实际类型。可覆盖的范围限于继承体系内部：子类能改，体系外的人改不了。</p>
+<p>这条路的限制也很明确。类必须是 <code>open</code> 的，方法必须是 <code>open</code> 的。Kotlin 的类默认 <code>final</code>，这不是风格偏好，是在逼你在设计时表态：这个行为允不允许被替换。一旦标了 <code>open</code>，你就把「子类可以改变行为」写进了契约，之后不能再当成实现细节随手改。反过来说，如果一个类被标了 <code>final</code>，或者方法没开 <code>open</code>，你在外面写多少个同名扩展都改变不了它的行为。</p>
+<h3>路线三：扩展函数，由静态类型和可见性决定</h3>
+<p>扩展函数的调用目标，在编译期由两件事决定：调用点处接收者的声明类型，以及那一刻作用域里能看见哪个扩展。</p>
+<pre><code class="language-kotlin">// com.example.app/model/Article.kt
+class Article(val title: String)
+
+// com.example.app/ui/Render.kt
+package com.example.app.ui
+fun Article.render(): String = &quot;[ui] $title&quot;
+
+// com.example.app.export/Plain.kt
+package com.example.app.export
+fun Article.render(): String = title
+
+// 调用方
+import com.example.app.ui.render
+fun show(a: Article) = a.render()   // 用哪个实现，由这条 import 决定
+</code></pre>
+<p>两个文件里可以存在两个同名、同签名的扩展，只要它们在不同的包里。调用方 <code>import</code> 了哪一个，<code>a.render()</code> 就绑到哪一个；两个都 <code>import</code> 进来，编译器会报重载歧义（ambiguity），而不是在运行期挑一个。这条规则本身就说明了问题：<strong>选择发生在编译期，依据是名字解析，不是对象。</strong></p>
+<p>绑定时机是编译期。依据是静态类型加可见性。不能覆盖——子类写一个同名扩展，得到的不是 <code>override</code>，是一个全新的函数。失效场景最多：成员函数同名时被旁路、换一个文件换一个 <code>import</code> 就换实现、被调方升级后行为可能悄悄换轨。</p>
+<h3>类内定义的扩展：两个接收者，两套规则</h3>
+<p>有一种写法容易让人误以为扩展也参与运行期分派：在类内部定义扩展。</p>
+<pre><code class="language-kotlin">class Presenter {
+    fun Article.render(): String = format(title)   // 分发接收者 Presenter，扩展接收者 Article
+}
+</code></pre>
+<p>这里有两个接收者，规则不同。外层那个（<code>Presenter</code>）叫分发接收者，它按运行期解析，子类可以覆盖；里层那个（<code>Article</code>）叫扩展接收者，它仍然按静态类型解析。也就是说，<code>Presenter</code> 的多态能生效，<code>Article</code> 的多态不能。把这两层混在一起谈「扩展是不是多态」，结论必然是拧的。</p>
+<h2>一张表：三种机制的绑定时机</h2>
+<p>把三条路放进同一张表，差别一目了然。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">机制</th>
+<th style="text-align: left;">绑定时机</th>
+<th style="text-align: left;">依据</th>
+<th style="text-align: left;">可覆盖</th>
+<th style="text-align: left;">失效场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">接口方法</td>
+<td style="text-align: left;">运行期</td>
+<td style="text-align: left;">对象的实际类型，走接口方法表</td>
+<td style="text-align: left;">实现类可以给出自己的实现</td>
+<td style="text-align: left;">类型不归你所有；给已发布接口加抽象方法会打断所有实现方</td>
+</tr>
+<tr>
+<td style="text-align: left;">open 类成员</td>
+<td style="text-align: left;">运行期</td>
+<td style="text-align: left;">对象的实际类型，走虚方法表</td>
+<td style="text-align: left;">子类可以 override</td>
+<td style="text-align: left;">类或方法没开 open；类型不归你所有</td>
+</tr>
+<tr>
+<td style="text-align: left;">扩展函数</td>
+<td style="text-align: left;">编译期</td>
+<td style="text-align: left;">调用点接收者的静态类型 + 当前可见的 import</td>
+<td style="text-align: left;">不能覆盖；子类同名扩展是另一个函数</td>
+<td style="text-align: left;">成员同名时被旁路；换文件、换 import 就换实现；依赖升级后可能静默换轨</td>
+</tr>
+</tbody>
+</table>
+<p>表的最后一行值得单独读一遍。「不能覆盖」和「可以被重写」是两种完全不同的能力，不是程度差别。前两行的失效场景是「你拿不到这个类型」，第三行的失效场景是「你拿到了类型，但你以为的那套运行期规则根本不存在」。</p>
+<h2>三组对照：看着一样，落点不同</h2>
+<p>下面三组写法，语法上都成立，行为上的差别不在运行期，而在编译器看代码的那一刻。</p>
+<h3>对照一：成员和扩展同名，成员赢</h3>
+<pre><code class="language-kotlin">class Report {
+    fun export(): String = &quot;member&quot;
+}
+
+fun Report.export(): String = &quot;extension&quot;
+
+fun main() {
+    println(Report().export())   // 输出 member
+}
+</code></pre>
+<p>同一个类上既有成员函数、又有同名同签名的扩展，调用总走成员函数。这是 Kotlin 的解析顺序决定的：成员优先，扩展只在成员缺位时参与候选。</p>
+<p>需要说清楚的是，编译器并不是完全无声。在扩展的声明处，通常会给一条「extension is shadowed by a member」的警告。但它是警告，不是错误；调用点不会有任何提示；如果这个扩展定义在另一个模块、由别人维护，或者构建日志被刷过去，你看到的就是一段「写了但没生效」的代码。行为已经切成成员版本，代码还在原地，谁都没被告知。</p>
+<h3>对照二：子类写同名扩展，不是重写</h3>
+<pre><code class="language-kotlin">open class Animal
+class Dog : Animal()
+
+fun Animal.describe(): String = &quot;animal&quot;
+fun Dog.describe(): String = &quot;dog&quot;
+
+fun printAnimal(a: Animal) = println(a.describe())   // 静态类型 Animal → animal
+fun printDog(d: Dog) = println(d.describe())         // 静态类型 Dog → dog
+</code></pre>
+<p>如果 <code>printAnimal(Dog())</code> 走的是运行期分派，输出应该是 <code>dog</code>；实际输出是 <code>animal</code>。原因不复杂：<code>a</code> 的声明类型是 <code>Animal</code>，编译器在这一行只看得见 <code>fun Animal.describe()</code>，于是生成对 <code>Animal</code> 那个静态方法的调用。传进来的是 <code>Dog</code> 还是 <code>Cat</code>，与这次调用无关。</p>
+<p>这也解释了为什么「子类扩展不覆盖父类扩展」不是 bug，而是同一个机制的必然结果。两个 <code>describe</code> 之间没有继承关系，只有重载关系；重载在编译期按静态类型选，选完就结束。</p>
+<h3>对照三：库新增一个成员，行为静默换轨</h3>
+<p>这是三个里最难防的，因为它不需要你改任何代码。</p>
+<p>假设你的项目里长期有一个扩展：</p>
+<pre><code class="language-kotlin">// 下游代码，com.example.app.util
+fun Session.invalidate() {   // 清本地缓存、发一条埋点、通知界面
+    clearCache()
+    track(&quot;session_invalidated&quot;)
+    notifyUi()
+}
+</code></pre>
+<p>某天依赖的库升级，<code>Session</code> 这个类型自己新增了一个成员函数 <code>fun invalidate()</code>。你的代码照常编译——扩展还在，调用点还在，签名匹配。但解析顺序变了：成员优先，调用从扩展切到成员。清缓存、埋点、通知界面这三件事，一起消失。</p>
+<p>编译不报错，测试未必覆盖到这条路径，日志上看不出异常，因为成员函数本身工作正常。真正丢的是你附加在扩展里的那层副作用。这类切换不会在运行时抛异常，也不会在调用点给提示，只有在事后比对行为时才有可能发现。</p>
+<p>这个场景不是假想出来的边缘情况，而是库演进中的常见形态：一个类型早期没有某个能力，下游用扩展补；后来类型自己补上了，下游的扩展就被顶掉。上游认为这是正常的功能增强，下游看到的是行为变化。</p>
+<h2>什么时候该用扩展</h2>
+<p>扩展不是坏东西，它只是不适合承担「多态」这个职责。把它放回它擅长的地方，价值很直接。</p>
+<h3>工具：不改变类型语义的纯函数</h3>
+<p>字符串截断、集合分块、时间格式化、JSON 字段读取——这类函数的特点是只依赖公开 API，不持有状态，不改对象的语义。写成扩展只是为了调用点读起来顺，<code>text.truncate(80)</code> 比 <code>Strings.truncate(text, 80)</code> 少一层括号。</p>
+<p>这类扩展不需要被覆盖，也不指望子类改变行为，所以编译期绑定不但不是缺点，反而让调用点更容易推理：看到 <code>truncate</code> 就知道去哪个文件找，不必在继承体系里翻。</p>
+<h3>适配：给拿不到源码的类型补一层壳</h3>
+<p>第三方 SDK 的类型、JDK 的类型、生成代码里的类型，都不能改。想给它加一个领域内顺手的入口，扩展是成本最低的做法。<code>Instant.toReadable()</code>、<code>Response.jsonBody()</code>、<code>Cursor.nextOrNull()</code> 都属于这一类。</p>
+<p>关键在命名：这类扩展应该读起来像「转换」或「取值」，而不是像「这个类型本来就该有的行为」。名字一旦起得像成员（<code>save()</code>、<code>refresh()</code>、<code>close()</code>），阅读的人就会默认它能被覆盖、能被替换，误解从命名开始。</p>
+<h3>边界：扩展碰不到 private 和 protected</h3>
+<p>扩展不是成员，所以它拿不到接收者的 <code>private</code> 和 <code>protected</code> 成员。它只能站在外部，用公开的 API 组合出行为。</p>
+<p>这条限制经常被当成不便，其实它是一道有用的边界：如果一个行为非得访问私有状态才能实现，那它本来就应该属于这个类，而不是外挂上去。硬要把扩展写在「使用方内部」来绕过可见性，得到的是一个位置诡异、依赖隐式接收者的函数，读代码的人要在两个作用域之间来回跳。</p>
+<h2>什么时候不能用扩展</h2>
+<p>反过来，有两种诉求一旦出现，扩展就应当立刻退出候选。</p>
+<h3>想让子类改变行为</h3>
+<p>只要需求里出现「不同子类做不同的事」「运行时根据实际类型选实现」，答案就是接口或 <code>open</code> 成员，而不是扩展。扩展没有虚方法表槽位，子类写同名函数得到的只是一个更具体的重载，通过父类静态类型调用时仍然命中父类那个版本。</p>
+<p>判断方法可以很直接：把调用点的变量类型写成父类，问自己「这里应该走子类的实现吗」。如果答案是「应该」，扩展就是错的工具，不管它写起来多顺手。</p>
+<h3>想被重写、想被 mock</h3>
+<p>测试里替换实现、插件式的扩展点、框架留的钩子——这些都需要运行期可替换。扩展做不到：调用目标在编译期就定死了，测试代码 <code>import</code> 另一个同名扩展，改变的是测试模块自己的解析结果，不是被测代码的。</p>
+<p>想在测试里替换一个扩展的行为，现实的做法是把它变成接口依赖注入，或者把这个函数作为参数传进去。指望用「同名的测试扩展」覆盖生产扩展，只会在两个模块各自解析到各自的版本时，得到一份看起来很绿的测试。</p>
+<h2>怎么避免静默旁路</h2>
+<p>机制本身不会改，能改的是工程上的检查点。下面三条按投入从低到高排。</p>
+<h3>成员与扩展同名：先查成员再定义</h3>
+<p>在给一个类型写扩展之前，先确认它没有同名同签名的成员，包括父类继承来的。IDE 的补全会把成员排在前面，但补全列表不是契约，换个版本可能就多一项。</p>
+<p>团队里可以加一条约定：扩展的命名带领域前缀或动词短语，避免和类型自身的词汇撞车。<code>toDisplayString()</code> 比 <code>toString()</code> 安全，<code>asJsonBody()</code> 比 <code>body()</code> 安全。撞车的代价不是编译错误，而是「写了没生效」这种最难查的故障。</p>
+<h3>库升级时的检查点</h3>
+<p>依赖升级的 PR 里，除了看 changelog 和编译结果，还应该扫一遍「新增的公开成员是否与本地扩展同名」。这一步可以脚本化：列出项目里所有扩展的「接收者类型 + 函数名」，与升级后依赖的公开 API 做交集。交集非空的地方，逐个确认调用点是否依赖了扩展里的副作用。</p>
+<p>升级后第一次全量编译时，注意 <code>shadowed by a member</code> 这类警告。它通常不是噪音，而是行为已经换了轨道的信号。把这类警告在 CI 里提升为可见的输出（至少不要被日志淹掉），成本很低。</p>
+<h3>命名与可见性收口</h3>
+<p>扩展的可见性决定了它能被谁解析到，也决定了行为变化的半径。只在一个文件里用的扩展，写成 <code>private</code>；只在一个模块里用的，用 <code>internal</code>。可见性收得越紧，被别人的同名扩展干扰、被库的新成员顶掉的概率越小，出问题时也越容易定位。</p>
+<p>反过来，把一堆扩展放进一个全局可见的 <code>Extensions.kt</code> 并用通配符 <code>import</code>，等于把解析结果交给命名空间碰撞。这不是风格问题，是行为可预测性的问题。</p>
+<h2>收束：你写的是静态函数，不是方法</h2>
+<p>回到开头那个错觉。<code>fun Article.render()</code> 不是在给 <code>Article</code> 加方法，是在当前包里声明一个静态函数，第一个参数是 <code>Article</code>。点号调用只是语法糖，编译器把它翻成 <code>RenderKt.render(article)</code>。</p>
+<p>一旦这样看，前面所有结论都不需要额外记忆：</p>
+<ul>
+<li>静态函数没有虚表槽位，所以不能被覆盖。</li>
+<li>静态函数的调用目标在编译期按签名解析，所以看静态类型，不看实际类型。</li>
+<li>静态函数的解析遵守「成员优先」，所以同名成员出现时扩展被旁路。</li>
+<li>静态函数的可见性由 <code>import</code> 和作用域决定，所以换个文件就可能换个实现。</li>
+</ul>
+<p>需要运行期决定行为时，用接口或 <code>open</code> 成员，把选择权交给实际类型。需要给拿不到源码的类型补一个顺手的入口时，用扩展，并且接受它编译期就定死这个事实。</p>
+<p>把这两件事分开，代码里就不会出现「明明写了覆盖，为什么没生效」这种问题——因为从一开始，那里就没有覆盖，只有重载。</p>
+
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="suspend-does-not-switch-threads.html">
+            <div class="related-post-card-title">suspend 不切线程：你以为的后台，只是换了个队列在等</div>
+            <div class="related-post-card-tags"><span>Kotlin</span><span>协程</span><span>并发</span></div>
+          </a>
+          <a class="related-post-card" href="exhaustiveness-is-scoped-to-a-compilation-unit.html">
+            <div class="related-post-card-title">穷尽性只在同一个编译单元里成立：跨模块加分支，你的 when 不会红</div>
+            <div class="related-post-card-tags"><span>Kotlin</span><span>sealed class</span><span>二进制兼容</span></div>
+          </a>
+          <a class="related-post-card" href="kotlin-coroutines-并发实战从入门到优雅的并发编程.html">
+            <div class="related-post-card-title">Kotlin Coroutines 并发实战：从入门到优雅的并发编程</div>
+            <div class="related-post-card-tags"><span>Kotlin</span><span>协程</span><span>并发</span></div>
+          </a>
+          <a class="related-post-card" href="kotlin-scope-functions-实战选择五个函数一个决策树.html">
+            <div class="related-post-card-title">Kotlin Scope Functions 实战选择：五个函数一个决策树</div>
+            <div class="related-post-card-tags"><span>Kotlin</span><span>Android</span><span>最佳实践</span></div>
+          </a>
+          <a class="related-post-card" href="kotlin-coroutine-exception-handling.html">
+            <div class="related-post-card-title">Kotlin Coroutine 异常处理机制全面解析</div>
+            <div class="related-post-card-tags"><span>Kotlin</span><span>协程</span><span>异常处理</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
+
+        <!-- Post Copyright & License Card -->
+        <div class="post-copyright-card">
+          <div class="copyright-header">
+            <div class="copyright-badge">
+              <span>📜</span>
+              <span>原创与知识共享协议</span>
+            </div>
+            <button class="copyright-cite-btn" id="copy-cite-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+              </svg>
+              <span>复制 Markdown 引用</span>
+            </button>
+          </div>
+          <div class="copyright-list">
+            <div class="copyright-item"><strong>文章标题：</strong>扩展函数不参与多态：你以为的重写，编译期就被定成了重载</div>
+            <div class="copyright-item"><strong>文章作者：</strong>张小猛 · loczb</div>
+            <div class="copyright-item"><strong>永久链接：</strong><a href="https://709527.xyz/blog/posts/extension-functions-are-statically-bound.html">https://709527.xyz/blog/posts/extension-functions-are-statically-bound.html</a></div>
+            <div class="copyright-item"><strong>版权声明：</strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 国际许可协议。商业转载请联系作者获得授权，非商业转载请注明出处。</div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </main>
+
+  <!-- Related Posts / Navigation -->
+  <section class="section" aria-label="读完之后" style="padding-top: 0;">
+    <div class="container container-narrow">
+      <!-- Post Nav Prev Next -->
+      <nav class="post-nav" aria-label="文章翻页导航">
+        <a href="rework-touches-evidence-not-stance.html" class="post-nav-card post-nav-prev" rel="prev">
+          <span class="post-nav-label">← 上一篇</span>
+          <span class="post-nav-title">改得动的都不是观点：返工改的是证据，不是立场</span>
+        </a>
+        <div class="post-nav-card post-nav-next disabled" aria-disabled="true">
+          <span class="post-nav-label">下一篇 →</span>
+          <span class="post-nav-title">已是最新篇博文</span>
+        </div>
+      </nav>
+      <!-- /Post Nav Prev Next -->
+      <hr style="border: none; border-top: 1px solid var(--color-border); margin: var(--space-2xl) 0;">
+
+      <div class="blog-topics" style="margin-bottom: var(--space-xl); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+        <div>
+          <span class="topic-label">读完之后:</span>
+          <a href="../index.html" class="topic-tag">返回博客列表</a>
+          <a href="../index.html?view=series" class="topic-tag">浏览全部专栏</a>
+        </div>
+        <a href="#main-content" class="topic-tag" style="margin-left: auto;">↑ 回到顶部</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+<!-- PARTIAL:FOOTER -->
+  <footer class="footer" role="contentinfo">
+  <div class="footer-inner">
+    <p class="footer-signature">写代码，做产品，也认真生活。</p>
+    <div class="footer-social">
+      <a href="https://github.com/zzdbilly" class="footer-social-link" target="_blank" rel="noopener" aria-label="GitHub">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+      </a>
+      <a href="https://twitter.com/zzdbilly" class="footer-social-link" target="_blank" rel="noopener" aria-label="X (Twitter)">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      </a>
+      <a href="/rss.xml" class="footer-social-link" target="_blank" rel="noopener" aria-label="RSS 订阅">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+      </a>
+    </div>
+    <div class="footer-links">
+      <a href="/" class="footer-link">首页</a>
+      <a href="/projects/" class="footer-link">项目</a>
+      <a href="/blog/" class="footer-link">博客</a>
+      <a href="/about/" class="footer-link">关于</a>
+    </div>
+    <p class="footer-copyright">&copy; 2026 张小猛 · loczb · Built with care</p>
+  </div>
+</footer>
+  <!-- /PARTIAL:FOOTER -->
+
+  <script defer src="../../assets/js/main.js"></script>
+  <script defer src="../../assets/js/article.js?v=c9f1a378ea"></script>
+  <script defer src="../../assets/js/share.js"></script>
+  <!-- Back to Top & Reading Progress -->
+  <button class="back-to-top" id="backToTop" aria-label="回到顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
+  <div class="reading-progress" id="readingProgress"></div>
+
+  <!-- Post Sidebar Info（左侧） -->
+  <div class="post-sidebar-info" id="postSidebar">
+    <div class="post-info-card">
+      <div class="post-info-section">
+        <div class="post-info-label">作者</div>
+        <div class="post-info-author">
+          <div class="post-info-avatar">小</div>
+          <div>
+            <div class="post-info-author-name">张小猛</div>
+            <div class="post-info-author-desc">写代码，做产品</div>
+          </div>
+        </div>
+      </div>
+      <div class="post-info-section">
+        <div class="post-info-label">文章信息</div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📅</span> 发布日期</span><span class="post-info-stat-value">2026-11-22</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">⏱️</span> 阅读时间</span><span class="post-info-stat-value">14 min read</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">4219 字</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📊</span> 章节数</span><span class="post-info-stat-value">8 节 · 15 子节</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">💻</span> 代码块</span><span class="post-info-stat-value">7 段</span></div>
+      </div>
+      <div class="post-info-section" id="postSidebarTags">
+        <div class="post-info-label">标签</div>
+        <div class="post-info-links">
+          <a href="../../blog/index.html?tag=Kotlin" class="post-info-link"># Kotlin</a>
+          <a href="../../blog/index.html?tag=%E9%9D%99%E6%80%81%E5%88%86%E6%B4%BE" class="post-info-link"># 静态分派</a>
+          <a href="../../blog/index.html?tag=%E5%A4%9A%E6%80%81" class="post-info-link"># 多态</a>
+          <a href="../../blog/index.html?tag=API%20%E8%AE%BE%E8%AE%A1" class="post-info-link"># API 设计</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Post TOC -->
+  <div class="post-toc-container" id="postToc">
+    <nav class="post-toc" aria-label="文章目录">
+      <div class="post-toc-title">目录</div>
+      <ul class="post-toc-list" id="tocList">
+      </ul>
+    </nav>
+  </div>
+
+  <!-- Comment System -->
+  <script src="../../workers/comment-system/comment-widget.js?v=5d8a6a1796" defer></script>
+
+  <!-- highlight.js 代码语法高亮（本地完整构建，无外部依赖） -->
+  <script defer src="../../assets/vendor/highlight/highlight.min.js"></script>
+  <script>
+    /* 语法高亮改为「可见优先、空闲补齐」：
+       highlight.js 要遍历全篇代码块并生成数百个 span，若在 DOMContentLoaded 里同步跑完，
+       会在关键路径上长时间占住主线程（2026-09-27 实测本页长任务 1548ms、DCL 3651ms；
+       改动后长任务 145ms、DCL 1378ms）。这里 DCL 阶段只登记观察，实际高亮交给
+       IntersectionObserver（近屏 800px 内优先）+ requestIdleCallback（剩余块每片 ≤4 块），
+       首屏代码块的着色时机与视觉基本无变化。 */
+    (function() {
+      function canPaint(b) {
+        return !b.classList.contains('hljs') && !b.closest('.codehilite');
+      }
+      function paint(b) {
+        if (!canPaint(b)) return;
+        try { hljs.highlightElement(b); } catch (e) {}
+      }
+      function init() {
+        var blocks = [].slice.call(document.querySelectorAll('pre code')).filter(canPaint);
+        if (!blocks.length) return;
+        if ('IntersectionObserver' in window) {
+          var io = new IntersectionObserver(function(entries, obs) {
+            entries.forEach(function(en) {
+              if (!en.isIntersecting) return;
+              paint(en.target);
+              obs.unobserve(en.target);
+            });
+          }, { rootMargin: '800px 0px' });
+          blocks.forEach(function(b) { io.observe(b); });
+        }
+        var i = 0;
+        var idle = window.requestIdleCallback || window.setTimeout;
+        var step = function() {
+          var quota = 4;
+          while (i < blocks.length && quota-- > 0) paint(blocks[i++]);
+          if (i < blocks.length) idle(step);
+        };
+        idle(step); // 不在 DCL 里同步跑：可见块由 IntersectionObserver 处理，其余走空闲分片
+      }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+      } else {
+        init();
+      }
+    })();
+  </script>
+
+  <!-- Cloudflare Web Analytics -->
+  <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "29e7cff6f37448989538e2165cb79187"}'></script>
+</body>
+</html>

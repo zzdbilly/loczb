@@ -1,0 +1,15 @@
+{
+  "slug": "extension-functions-are-statically-bound",
+  "title": "扩展函数不参与多态：你以为的重写，编译期就被定成了重载",
+  "description": "扩展函数编译成静态方法，按调用点的静态类型选签名；成员优先、子类不覆盖、库升级后静默换轨，它从来不是多态。",
+  "date": "2026-11-22",
+  "dateTime": "2026-11-22 18:43:00",
+  "category": "Kotlin",
+  "tags": [
+    "Kotlin",
+    "静态分派",
+    "多态",
+    "API 设计"
+  ],
+  "readTime": 14
+}

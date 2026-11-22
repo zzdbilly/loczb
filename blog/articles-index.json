@@ -1,6 +1,21 @@
 {
   "posts": [
     {
+      "slug": "extension-functions-are-statically-bound",
+      "title": "扩展函数不参与多态：你以为的重写，编译期就被定成了重载",
+      "date": "2026-11-22",
+      "dateTime": "2026-11-22 18:43:00",
+      "category": "Kotlin",
+      "tags": [
+        "Kotlin",
+        "静态分派",
+        "多态",
+        "API 设计"
+      ],
+      "readTime": 14,
+      "url": "blog/posts/extension-functions-are-statically-bound.html"
+    },
+    {
       "slug": "rework-touches-evidence-not-stance",
       "title": "改得动的都不是观点：返工改的是证据，不是立场",
       "date": "2026-11-21",
@@ -2261,9 +2276,9 @@
     }
   ],
   "categories": [
+    "Kotlin",
     "思考",
     "AI",
-    "Kotlin",
     "系统编程",
     "数据库",
     "安全",
@@ -2273,9 +2288,9 @@
     "Android"
   ],
   "stats": {
-    "totalPosts": 146,
-    "totalTags": 367,
-    "latestDate": "2026-11-21",
+    "totalPosts": 147,
+    "totalTags": 369,
+    "latestDate": "2026-11-22",
     "oldestDate": "2026-02-15"
   }
 }
