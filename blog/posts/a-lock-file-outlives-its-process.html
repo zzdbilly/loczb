@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <script>document.documentElement.classList.add("js");try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://static.cloudflareinsights.com https://loczb-comments.billymust.workers.dev; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://loczb-comments.billymust.workers.dev https://dashscope.aliyuncs.com https://709527.xyz https://www.709527.xyz https://cloudflareinsights.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
+    <script>/* 反点击劫持兜底：GitHub Pages 无法下发 X-Frame-Options / CSP frame-ancestors */(function(){if(self===top)return;try{top.location=self.location}catch(e){}setTimeout(function(){if(self!==top){document.documentElement.style.display='none';}},400);})();</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>锁文件不跟着进程走：进程崩溃后留下的那把锁，没人会来解开 | 张小猛 - loczb</title>
+    <meta name="description" content="锁的所有权决定它能不能自愈：挂在文件系统上的锁没有持有者，进程死了文件还留着；挂在 fd 或进程上的锁由内核代持，异常退出会被回收。">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="锁文件不跟着进程走：进程崩溃后留下的那把锁，没人会来解开 | 张小猛 - loczb">
+    <meta property="og:description" content="锁的所有权决定它能不能自愈：挂在文件系统上的锁没有持有者，进程死了文件还留着；挂在 fd 或进程上的锁由内核代持，异常退出会被回收。">
+    <meta property="og:url" content="https://709527.xyz/blog/posts/a-lock-file-outlives-its-process.html">
+    <meta property="og:type" content="article">
+    <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
+    <meta property="og:site_name" content="loczb">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="锁文件不跟着进程走：进程崩溃后留下的那把锁，没人会来解开 | 张小猛 - loczb">
+    <meta name="twitter:description" content="锁的所有权决定它能不能自愈：挂在文件系统上的锁没有持有者，进程死了文件还留着；挂在 fd 或进程上的锁由内核代持，异常退出会被回收。">
+    <meta name="twitter:image" content="https://709527.xyz/assets/images/og-image.png">
+
+        <script type="application/ld+json">
+{
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "锁文件不跟着进程走：进程崩溃后留下的那把锁，没人会来解开",
+      "description": "锁的所有权决定它能不能自愈：挂在文件系统上的锁没有持有者，进程死了文件还留着；挂在 fd 或进程上的锁由内核代持，异常退出会被回收。",
+      "image": "https://709527.xyz/assets/images/og-image.png",
+      "author": {
+            "@type": "Person",
+            "name": "张小猛",
+            "url": "https://709527.xyz/about/"
+      },
+      "publisher": {
+            "@type": "Organization",
+            "name": "loczb",
+            "logo": {
+                  "@type": "ImageObject",
+                  "url": "https://709527.xyz/assets/images/favicon.svg"
+            }
+      },
+      "datePublished": "2026-11-23T19:27:00+08:00",
+      "dateModified": "2026-11-23T19:27:00+08:00",
+      "url": "https://709527.xyz/blog/posts/a-lock-file-outlives-its-process.html",
+      "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://709527.xyz/blog/posts/a-lock-file-outlives-its-process.html"
+      },
+      "keywords": "Unix, 并发, 文件锁, 运维",
+      "articleSection": "系统编程",
+      "timeRequired": "PT14M",
+      "inLanguage": "zh-CN"
+}
+    </script>
+
+    <link rel="stylesheet" href="../../assets/css/style.css?v=c8e170d8f9">
+    <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
+    <link rel="alternate icon" href="../../assets/images/favicon.ico">
+    <link rel="canonical" href="https://709527.xyz/blog/posts/a-lock-file-outlives-its-process.html">
+</head>
+<body>
+  <!-- PARTIAL:SKIP_LINK -->
+  <a href="#main-content" class="skip-link">跳至主要内容</a>
+  <!-- /PARTIAL:SKIP_LINK -->
+
+  <!-- Navigation -->
+<!-- PARTIAL:NAV -->
+  <nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">
+      loc<span>zb</span>
+    </a>
+    <button class="nav-toggle" aria-label="打开菜单" aria-expanded="false" aria-controls="nav-links-menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <div class="nav-overlay"></div>
+    <ul class="nav-links" id="nav-links-menu">
+      <li><a href="/" class="nav-link" data-nav="home">首页</a></li>
+      <li><a href="/projects/" class="nav-link" data-nav="projects">项目</a></li>
+      <li><a href="/blog/" class="nav-link active" data-nav="blog">博客</a></li>
+      <li><a href="/about/" class="nav-link" data-nav="about">关于</a></li>
+    </ul>
+    <button class="theme-toggle" aria-label="切换主题" title="切换亮/暗模式">
+      <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="5"></circle>
+        <line x1="12" y1="1" x2="12" y2="3"></line>
+        <line x1="12" y1="21" x2="12" y2="23"></line>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+        <line x1="1" y1="12" x2="3" y2="12"></line>
+        <line x1="21" y1="12" x2="23" y2="12"></line>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+      </svg>
+      <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+      </svg>
+    </button>
+  </div>
+</nav>
+  <!-- /PARTIAL:NAV -->
+  <main class="section" id="main-content" style="padding-bottom: 0; padding-top: var(--space-4xl);">
+    <div class="container container-narrow">
+      <a href="../index.html" class="back-link">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        返回博客列表
+      </a>
+
+      <article class="post-content">
+        <h1>锁文件不跟着进程走：进程崩溃后留下的那把锁，没人会来解开</h1>
+
+        <div class="post-meta">
+          <span class="meta-item"><span aria-hidden="true">📅</span> 2026-11-23 19:27:00</span>
+          <span class="meta-item"><span aria-hidden="true">⏱️</span> 14 min read</span>
+          <span class="meta-item"><span aria-hidden="true">👤</span> 张小猛</span>
+        </div>
+
+        <div class="post-tags">
+          <span class="tag">Unix</span>
+          <span class="tag">并发</span>
+          <span class="tag">文件锁</span>
+          <span class="tag">运维</span>
+        </div>
+
+        
+
+        <h2>锁文件不跟着进程走：进程崩溃后留下的那把锁，没人会来解开</h2>
+<p>一个定时任务、一个部署脚本、一个备份进程，启动时都要先抢一把锁，确保同一时刻只有一个实例在跑。实现方式通常只有几行：检查某个文件在不在，不在就创建它，跑完再删掉。正常路径上它工作得很好，好到很多人写完就不再想这件事。</p>
+<p>问题出在「跑完再删掉」这个前提上。进程不一定跑完。它可能被 OOM killer 挑中，可能被 <code>kill -9</code> 打断，可能所在的机器直接掉电，也可能在容器滚动更新时被替换掉——这些路径上都没有代码去执行那行删除。于是锁留在那里，下一次启动被自己上一次的残留挡在门外。</p>
+<p>后面的分析只围绕一个属性：<strong>这把锁记在谁的名下</strong>。原子性、阻塞策略、超时、可重入这些细节都重要，但异常退出后锁还在不在，基本由所有权决定。我倾向于在评审任何一把锁之前先问这一句，因为它比「用 <code>flock</code> 还是用锁文件」这种问法更能暴露问题。</p>
+<blockquote>
+<p>约定：文中把能直接指到手册页、内核文档或协议规范的结论标为「文档事实」；由这些语义推出、没有逐条实测的结论标为「推演」。本文没有在 NFS 与容器编排的组合上做过实测，相关段落一律写成条件句。</p>
+</blockquote>
+<h2>一、先把问题问对：这把锁挂在谁身上</h2>
+<p>讨论文件锁时，容易一上来就比「谁更快」「谁更可靠」。这两个问题都排得太早。先要问的是：锁这个状态，存在哪个内核对象里，由谁负责销毁。</p>
+<p>答案是三种，对应三类实现：</p>
+<ul>
+<li>锁记在<strong>文件系统的一个名字</strong>上。名字存在即为上锁，删除即为解锁。<code>O_EXCL</code> 创建、<code>mkdir</code> 建目录都是这一类。</li>
+<li>锁记在<strong>打开的文件描述</strong>（open file description）上。<code>flock</code> 属于这一类。</li>
+<li>锁记在<strong>进程</strong>上。POSIX 记录锁（<code>fcntl</code> 的 <code>F_SETLK</code> / <code>F_SETLKW</code>）属于这一类。</li>
+</ul>
+<p>三者在正常退出时的行为几乎一样：锁没了，下一个实例能进。差别全部集中在「没人执行解锁代码」的那条路径上。</p>
+<h3>三种持有者，三种死亡方式</h3>
+<p>文件系统那一档，严格说没有持有者。持锁的进程和这把锁之间没有内核层面的引用关系，唯一的联系是「它知道这个路径代表锁」。进程死了，这个知识消失，路径还在。这就是 stale lock 的来源。</p>
+<p>fd 那一档，持有者是内核里的一个打开文件描述结构。进程终止时，内核关闭它所有的 fd；最后一个指向该描述的 fd 关闭时，锁释放。整个过程不需要进程配合。</p>
+<p>进程那一档，持有者是进程本身。进程退出，内核清理该进程持有的全部记录锁。同样不需要用户态代码参与。</p>
+<h3>一个判据：持有者死了，锁会不会跟着消失</h3>
+<p>判断一把锁能不能自愈，可以只问一句：<strong>这把锁的引用，存在哪个会随进程销毁而销毁的结构里？</strong></p>
+<p>存在文件系统的目录项里，答案是不会——目录项的生命周期和进程无关。存在打开文件描述里，答案是会。存在进程的锁表里，答案也是会。</p>
+<p>这个判据不需要读源码，也不需要知道具体系统调用怎么实现，只要判断「锁的状态是不是一个活着的内核对象的一部分」。空文件不是活物，目录也不是。</p>
+<h2>二、第一档：锁属于文件系统</h2>
+<h3>常见写法：O_EXCL 与 mkdir</h3>
+<p>最省事的一种互斥，是用「路径能不能被创建」当原子操作。<code>mkdir</code> 在本地文件系统上是原子的：两个进程同时建同一个目录，只有一个成功（文档事实：<code>mkdir(2)</code> 的创建是原子操作，失败返回 <code>EEXIST</code>）。<code>open</code> 加 <code>O_CREAT | O_EXCL</code> 同理，创建和检查在一步里完成，不存在「先 stat 再 create」那个窗口。</p>
+<pre><code class="language-bash"># 存在即上锁：拿不到就退出，不等待
+if mkdir /var/lib/app/lock.d 2&gt;/dev/null; then
+    trap 'rmdir /var/lib/app/lock.d' EXIT INT TERM
+    ./sync.sh
+else
+    echo &quot;another instance holds the lock&quot; &gt;&amp;2
+    exit 0
+fi
+</code></pre>
+<p>这段脚本在正常路径上没有问题：拿到目录，注册 <code>trap</code>，跑完或者收到 <code>INT</code>/<code>TERM</code> 时删掉目录。它甚至处理了 Ctrl-C。</p>
+<h3>崩溃时会发生什么</h3>
+<p><code>trap</code> 是用户态代码，只有进程还能执行指令时才会跑。<code>SIGKILL</code> 不能被捕获，<code>trap</code> 不会执行；段错误、OOM killer、宿主机掉电，也都轮不到它执行。</p>
+<p>于是 <code>/var/lib/app/lock.d</code> 留在磁盘上。下一次启动，<code>mkdir</code> 返回 <code>EEXIST</code>，脚本打印一行「另一个实例在跑」，退出码 0，什么也没做。从外部看，定时任务按时触发了、日志里也没有报错，只是备份已经连续几天没有真正跑过。这类故障最难被发现，因为它的表现是「安静」。</p>
+<h3>谁能清理，代价是什么</h3>
+<p>清理者只有两种：人，或者另一段专门写来清理的逻辑。</p>
+<p>人工清理的问题是它依赖有人注意到。一个退出码 0、日志一行提示的任务，很难让人注意到。清理逻辑的问题是它必须判断「这个锁是不是真的陈旧」，而这个判断本身要面对竞态：清理进程读到锁、决定删掉、在删之前真正的持有者刚好启动并重新创建了锁——清理进程删掉的是新锁。</p>
+<p>还有一个更隐蔽的代价：删除操作会暂时制造出「无锁」状态。两个等待者同时看到锁被删，同时尝试创建，谁先谁后取决于调度。文件的删除和创建不是一个原子事务（推演，依据 <code>unlink</code> 与 <code>mkdir</code> 各自的原子性不能组合成跨操作原子性）。</p>
+<h2>三、第二档：锁属于打开的文件描述</h2>
+<h3>flock 的持有者不是进程，是 open file description</h3>
+<p><code>flock(2)</code> 的锁关联到打开的文件描述，不是关联到进程，也不是关联到路径（文档事实：<code>flock(2)</code> 手册明确锁与 open file description 关联）。这个区别有几个直接后果：</p>
+<ul>
+<li>同一个进程里两次 <code>open</code> 同一个路径，得到两个描述，第二次 <code>flock</code> 会被第一次挡住。</li>
+<li><code>fork</code> 之后子进程继承同一个 fd，父子共用同一把锁；任何一方显式解锁，另一方也就没有了（文档事实：锁随 fd 继承，指向同一个描述）。</li>
+<li><code>dup</code> 出来的 fd 指向同一个描述，关掉其中一个不会释放锁，要等最后一个关闭。</li>
+</ul>
+<p>这解释了为什么 <code>flock</code> 比「文件存在」更接近自愈：它的寿命被绑定在一个内核对象上，而不是一个磁盘上的名字。</p>
+<h3>拿一个 fd，一直持有到结束</h3>
+<p>下面这段是 Python 里的常见形态。要点不在语法，在于 fd 必须活到临界区结束，中间不能被别的代码关掉。</p>
+<pre><code class="language-python">import fcntl
+import os
+import time
+
+lock_fd = os.open(&quot;/var/lib/app/sync.lock&quot;, os.O_CREAT | os.O_RDWR, 0o644)
+
+deadline = time.monotonic() + 30
+delay = 0.1
+while True:
+    try:
+        fcntl.flock(lock_fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        break
+    except BlockingIOError:
+        if time.monotonic() &gt; deadline:
+            raise SystemExit(&quot;lock timeout&quot;)
+        time.sleep(delay)
+        delay = min(delay * 2, 2.0)
+
+try:
+    run_sync()          # 临界区
+finally:
+    os.close(lock_fd)   # 关掉 fd，锁由内核释放
+</code></pre>
+<p><code>LOCK_NB</code> 让加锁失败立刻返回而不是睡眠，退避和总超时由调用方控制。这段代码的失败模式是明确的：要么拿到锁，要么在 30 秒后带着错误退出，不会无限排队。</p>
+<h3>进程退出、kill -9 与断电</h3>
+<p><code>flock</code> 的锁在最后一个引用该描述的 fd 关闭时释放（文档事实）。进程终止时，内核关闭该进程的全部 fd，因此锁释放。<code>kill -9</code> 只是让进程没有机会执行用户态代码，内核的清理路径照常走。</p>
+<p>断电是另一回事：锁表在内存里，重启后不存在。磁盘上那个 <code>/var/lib/app/sync.lock</code> 还在，但 <code>flock</code> 不关心文件是否存在，只关心有没有人持有描述（文档事实：<code>flock</code> 不依据文件内容或存在性判断）。所以断电留下的空文件是无害的，下一次 <code>open</code> 之后照样能加锁。</p>
+<p>这是它和第一档最关键的差别：<strong>残留物相同，语义不同。</strong> 同样是磁盘上多了一个文件，对 <code>flock</code> 来说它只是锁的载体，对 <code>O_EXCL</code> 来说它就是锁本身。</p>
+<h3>边界：fd 泄漏、fork 继承、以及「锁文件不能删」</h3>
+<p><code>flock</code> 不是没有坑，只是坑的位置不同。</p>
+<p>其一，如果持有 fd 的进程 fork 出子进程然后自己退出，子进程仍然持有那个描述，锁不会释放。daemon 化的脚本容易出现这种形态：父进程拿锁、fork、父进程退出，子进程继承了 fd 却没人记得它带着锁。排查时看 <code>ls -l /proc/*/fd</code> 里谁还指着那个文件，比读代码快。</p>
+<p>其二，锁文件被删掉再重建，互斥会失效。锁绑在打开的文件描述上，而描述指向某个 inode；<code>rm</code> 之后新建的文件是另一个 inode，两组进程各持一把锁，谁都挡不住谁（推演，依据 <code>flock</code> 与 inode/描述的关联）。所以清理脚本里顺手 <code>rm</code> 锁文件是一个危险动作，锁文件应当允许长期存在，内容为空也无所谓。</p>
+<p>其三，<code>flock</code> 不是 POSIX 标准的一部分，是 BSD 传统（文档事实）。Linux 有，多数 Unix 有，但语义细节和可移植性不能假定与 <code>fcntl</code> 一致。</p>
+<h2>四、第三档：锁属于进程</h2>
+<h3>fcntl 记录锁跟着进程走</h3>
+<p>POSIX 记录锁由 <code>fcntl</code> 的 <code>F_SETLK</code>（非阻塞）或 <code>F_SETLKW</code>（阻塞）设置，锁记录在内核的 inode 上，但所有者是进程（文档事实）。进程退出时，它持有的全部记录锁释放。锁不随 <code>fork</code> 继承（文档事实），这一点和 <code>flock</code> 正好相反。</p>
+<p>记录锁的名字里带「记录」，是因为它可以只锁文件的某个字节区间。这一点在数据库和日志文件里有用，在「整个文件当一把锁」的场景里，锁住 <code>0</code> 到文件末尾就够。Python 的 <code>fcntl.lockf</code> 走的就是这套接口。</p>
+<h3>那个比直觉更宽的释放规则</h3>
+<p>这里有一条容易记错的规则：<strong>进程关闭该文件的任意一个 fd，就会释放这个进程在该文件上的全部记录锁</strong>（文档事实：POSIX 与 Linux 的 <code>fcntl(2)</code> 手册都这么写）。不是关掉加锁的那一个 fd，是任意一个。</p>
+<p>这条规则的破坏力在于它把「打开文件读一下」变成了「解锁」。</p>
+<pre><code class="language-python">import fcntl
+import os
+
+lock_fd = os.open(&quot;/var/lib/app/sync.lock&quot;, os.O_CREAT | os.O_RDWR, 0o644)
+fcntl.lockf(lock_fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+
+with open(&quot;/var/lib/app/sync.lock&quot;) as f:   # 又开了一个 fd
+    previous = f.read()
+
+# with 结束，f 被关闭 —— 上面那把锁在这里就没了（文档事实）
+run_sync()
+os.close(lock_fd)
+</code></pre>
+<p>这段代码能跑，日志正常，单实例测试也过。问题只在有并发时出现：锁已经释放，第二个实例可以进来，两个进程同时改同一批文件。而报错的地方通常在数据层，离真正的原因隔着几层调用栈。</p>
+<p>规避方式不是「记得别乱开文件」，而是把规则变成结构：加锁之后不要在同一个进程里再打开这个路径，配置读完之后再加锁，或者干脆换一种锁——Linux 3.15 起提供 <code>F_OFD_SETLK</code>，锁的所有者变成打开的文件描述，关掉别的 fd 不再影响它（文档事实：Linux 内核 3.15 引入 OFD 锁；用户态是否方便调用取决于 libc 与语言绑定）。它同时保留了字节区间的粒度，是「想要记录锁语义又不想被进程级释放规则坑」时的一个选项。</p>
+<h3>记录锁真正的优势与代价</h3>
+<p>优势是它对「锁文件被删」不敏感：锁记录在 inode 上，只要还有进程持有，另一个进程即使重新创建了同名文件也不会共享同一把锁——这既是优点也是缺点，取决于你是否把「路径」当成身份。</p>
+<p>代价是它的释放语义和文件描述符的生命周期耦合得太松。任何一段打开同一文件的代码都能影响锁的状态，而这种影响在代码里不可见。</p>
+<h2>五、四种结局：三种锁放进同一张表</h2>
+<p>把三种锁放进同一组异常路径，差别会变得很清楚。下表是推演，依据是前面标为文档事实的释放规则；具体到某个系统，还要看内核版本与挂载参数。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">结局</th>
+<th style="text-align: left;">文件系统锁（<code>O_EXCL</code> / <code>mkdir</code>）</th>
+<th style="text-align: left;"><code>flock</code>（fd 级）</th>
+<th style="text-align: left;"><code>fcntl</code> 记录锁（进程级）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">正常退出</td>
+<td style="text-align: left;"><code>trap</code> 或收尾代码执行则清除；漏写就残留</td>
+<td style="text-align: left;">最后一个 fd 关闭即释放</td>
+<td style="text-align: left;">进程退出即释放</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>kill -9</code></td>
+<td style="text-align: left;">必然残留，没有代码执行清理</td>
+<td style="text-align: left;">内核关闭 fd，锁释放</td>
+<td style="text-align: left;">内核清理进程锁表，锁释放</td>
+</tr>
+<tr>
+<td style="text-align: left;">断电 / 主机重启</td>
+<td style="text-align: left;">残留在持久化目录上，下次启动被挡住</td>
+<td style="text-align: left;">内存锁表消失；磁盘上的空文件无害</td>
+<td style="text-align: left;">内存锁表消失；文件残留无影响</td>
+</tr>
+<tr>
+<td style="text-align: left;">容器重启（卷保留）</td>
+<td style="text-align: left;">锁文件或目录留在卷上，新容器被旧锁挡住</td>
+<td style="text-align: left;">容器内进程全部消失，锁释放；卷上的文件不影响</td>
+<td style="text-align: left;">同左</td>
+</tr>
+</tbody>
+</table>
+<h3>怎么读这张表</h3>
+<p>先看行：四行里只有第一行是「所有人都能对付」的。三种锁在正常退出时表现一致，这就是它们在代码评审里看起来差不多的原因。</p>
+<p>再看列：三列的差别不在锁的强度，而在锁的寿命由谁决定。第一列的寿命等于文件寿命，可能是无限的；第二列等于 fd 寿命；第三列等于进程寿命。异常路径考验的不是「锁得牢不牢」，而是「谁来宣布它结束」。</p>
+<p>最后看容器那一行：它同时暴露两个维度。锁文件在卷上，寿命跨容器；PID 在命名空间里，寿命只在本容器。两者拼在一起，就会出现「锁还在，但锁里写的那个 PID 在读取它的命名空间里指向另一个进程」这种状态——比单纯的陈旧锁更难判断，因为所有基于 PID 的检查都成功。</p>
+<h2>六、为什么人还是会选最差的那一档</h2>
+<p>如果第一档明知会留下陈旧锁，为什么它仍然是最常见的写法？把原因摊开看，会发现每一条都成立，只是它们成立的范围仅限于正常路径。</p>
+<h3>它需要的前置条件最少</h3>
+<p><code>mkdir</code> 一条命令，任何语言的标准库都能调；<code>O_EXCL</code> 在 C、Python、Go、shell 里都是一行。不需要理解 fd 的生命周期，不需要知道 <code>flock</code> 和 <code>fcntl</code> 的区别，也不需要关心进程结构——脚本里加一行判断就行。</p>
+<p><code>flock</code> 需要「拿一个 fd 并一直持有」，这句话在 shell 里意味着要控制文件描述符的分配（<code>exec 9&gt;...</code>），在 Python 里意味着不能让中间层关掉它，在有的语言里意味着要绕过运行时对文件对象的封装。这些都要求写代码的人对进程和 fd 有明确的心智模型。</p>
+<h3>它跨语言、跨工具、跨人</h3>
+<p>互斥的双方经常不是同一段代码：一个 shell 脚本和一个 Java 服务，一个 cron 任务和一个 CI step，一个 Python 采集器和一个运维手动执行的命令。让它们共享同一把 <code>flock</code> 需要每个参与者都正确使用同一套 API；让它们共享一个目录名，只要大家都同意这个路径。</p>
+<p>跨平台也是同样的道理。<code>flock</code> 在 Windows 上没有直接对应物，POSIX 记录锁在不同系统上的边界行为不完全一致，而「文件在不在」在所有平台上都成立。选择第一档，很多时候不是因为它更好，而是因为它是唯一一个所有参与者都能实现的协议（推演）。</p>
+<h3>代价被推迟到异常路径</h3>
+<p>正常路径上它的成本确实低：一次 <code>mkdir</code>，一次 <code>rmdir</code>，没有额外的 fd，没有阻塞语义要设计。这笔成本不会在写代码的时候付出，而是在「进程被 OOM killer 杀掉的那天」付出。付账的人往往不是写它的人，甚至不在同一个时区。</p>
+<p>这就是它的经济学：收益即时且可见，成本延迟且分散。任何按单次任务评估的决策，都会得出「用它就行」的结论。</p>
+<h2>七、陈旧锁怎么判定：PID 不够，时间也不一定够</h2>
+<p>如果已经用了文件存在性做锁，下一个问题就是「怎么知道这把锁是死的」。常见做法是往锁文件里写 PID，下次启动读出来，看那个进程还在不在。这个做法比「什么都不判」好，但我不会把它当成足够的判据——它有三个漏洞。</p>
+<h3>只看 PID 存在与否</h3>
+<p>第一个漏洞是 PID 复用。进程退出后，编号会被系统回收再分配（文档事实：PID 在 <code>pid_max</code> 范围内循环分配）。原来持锁的进程死了，编号被一个完全无关的进程拿到，<code>kill -0</code> 返回成功，判定结果是「锁还被持有」——于是本该清理的陈旧锁被保留，任务继续不跑。</p>
+<p>第二个漏洞是命名空间。容器里的 PID 编号只在该 PID 命名空间内有效，锁文件如果放在共享卷上，写入者记录的可能是容器内的 <code>1</code>，读取者在另一个容器里 <code>kill -0 1</code> 命中的是它自己的 init 进程。</p>
+<p>第三个漏洞是锁文件里的内容可能非常旧。一个被复制、被快照、被误写入的锁文件，里面的 PID 与当前系统毫无关系。</p>
+<h3>PID + 启动时间</h3>
+<p>更可靠的判据是把「进程身份」定义成（boot id，PID，启动时间）三元组。PID 会复用，但同一台机器同一次启动内，「PID + 启动时间」不会撞。</p>
+<pre><code class="language-python">import os
+
+
+def boot_id() -&gt; str:
+    with open(&quot;/proc/sys/kernel/random/boot_id&quot;) as f:
+        return f.read().strip()
+
+
+def starttime(pid: int) -&gt; str | None:
+    &quot;&quot;&quot;返回进程的启动时间（内核 tick 数），进程不存在时返回 None。&quot;&quot;&quot;
+    try:
+        with open(f&quot;/proc/{pid}/stat&quot;) as f:
+            raw = f.read()
+    except (FileNotFoundError, ProcessLookupError):
+        return None
+    # comm 字段可能包含空格和括号，从最后一个 ')' 之后开始切分
+    fields = raw[raw.rfind(&quot;)&quot;) + 2:].split()
+    return fields[19]   # 总第 22 个字段 starttime，切分后下标 19
+</code></pre>
+<p>启动时间的单位是内核 tick，不是秒，跨机器不可比，但在同一台机器同一次启动内足够做身份判定（文档事实：<code>/proc/&lt;pid&gt;/stat</code> 第 22 个字段为 <code>starttime</code>）。判定逻辑是：boot id 相同、PID 存活、且 starttime 与锁文件里记录的一致，才算「仍被持有」；任何一项不符，按陈旧处理（推演）。</p>
+<h3>时间戳与租约</h3>
+<p>另一种思路是不判身份，判时间：锁文件里写过期时间，超过就认为陈旧。这就是租约。</p>
+<p>租约把问题从「进程还在不在」换成了「它有没有按时续期」，好处是不依赖 PID、不依赖命名空间、跨机器也能用。代价是两个前提：临界区必须短于租期，且时钟不能漂得太多。</p>
+<p>第一个前提经常不成立。备份、全量重建索引、大批量同步，这些任务的耗时取决于数据量，写代码的人往往按「正常情况下几分钟」设定租期，遇到数据翻倍就超时。锁一过期，第二个实例进来，两个进程同时写同一批文件。</p>
+<p>第二个前提也经常不成立。机器挂起、虚拟机迁移、NTP 校正，都会让「现在几点」跳变。用单调时钟计算经过时间可以避开系统时间调整，但跨机器比较仍然依赖双方时钟大致同步（推演）。</p>
+<p>所以租约的正确用法是「可续期」：持有者定期把过期时间往后推，续期失败就主动停止工作。这样锁的有效期由「最后一次成功续期」决定，而不是由最初设定的时长决定。</p>
+<h3>主机名 + boot id：跨机器共享目录</h3>
+<p>当锁文件放在共享存储上、多个主机都可能抢时，PID 单独使用没有意义——每台机器都有自己的 PID 空间。</p>
+<p>此时锁文件至少要写四元组：主机名、boot id、PID、starttime。主机名用于路由到正确的机器去查进程，boot id 用于判断那台机器有没有重启过（重启后 <code>starttime</code> 的参照系变了），PID 与 starttime 用于在机器内部确认身份。</p>
+<p>容器环境里主机名通常就是容器 ID，容器重建后主机名改变，这反而提供了一个天然的「实例身份」——名字变了，旧锁一定是陈旧的（推演）。但如果容器使用固定的 hostname，这个信号就消失了，需要改用编排系统提供的实例 ID。</p>
+<h3>谁来判断，以及判断本身的竞态</h3>
+<p>即使判据都对，清理动作仍然要小心。两个进程同时发现锁陈旧、同时删除、同时创建，其中一个会覆盖另一个。稳妥的做法是把「判定 + 删除」做成可检测的原子步骤：先把锁路径原子地改名到一个唯一名字（<code>rename</code> 在同一文件系统内是原子的），再检查改名后的内容是不是自己刚才看到的那份；如果是，才真正删除并重建（推演，依据 <code>rename(2)</code> 的原子性）。</p>
+<p>这段逻辑不长，但它是并发代码，需要测试。很多「陈旧锁清理」的实现只测了单进程路径，上线后在两台机器同时启动时才暴露。</p>
+<h2>八、可执行的规则</h2>
+<p>把上面的分析收成几条能落地的规则。它们不解决所有问题，但能把「锁会不会自己消失」这件事变成设计时就要回答的问题。这几条是我给自己定下的默认值，不是行业规范。</p>
+<h3>规则一：让内核持有锁，而不是让文件持有锁</h3>
+<p>只要锁的持有者是一个会随进程销毁的内核对象，异常退出就有默认答案。</p>
+<pre><code class="language-bash">#!/bin/sh
+# 拿不到锁就退出；退出码 0 表示「已有实例在跑」，不是错误
+exec 9&gt;/var/lib/app/sync.lock
+if ! flock -n 9; then
+    echo &quot;another instance is running&quot; &gt;&amp;2
+    exit 0
+fi
+
+./sync.sh
+# 脚本退出时 fd 9 关闭，锁由内核回收，不需要任何清理代码
+</code></pre>
+<p><code>flock(1)</code> 用 shell 的 fd 重定向持有锁，锁的生命周期与脚本进程绑定（文档事实）。这段代码里没有 <code>trap</code>，也没有 <code>rm</code>，异常路径不需要额外处理。</p>
+<h3>规则二：等待要有上限，退避要有节奏</h3>
+<p>非阻塞加锁 + 指数退避 + 总超时。不要无限阻塞：一个卡住的实例会让后来者全部排队，等它被清理时，排队的进程一起涌进来，形成一次尖峰。</p>
+<p>超时时间要按任务的正常耗时设定，并且在日志里明确写出「等锁超时」和「任务失败」是两件事。前者通常意味着需要人工看一眼锁的持有者，后者意味着任务本身有问题。混在一起会让排查从第一步就走错方向。</p>
+<h3>规则三：如果必须用文件存在性，就必须带陈旧判定</h3>
+<p>两条路选一条：</p>
+<ul>
+<li>写（主机名，boot id，PID，starttime），启动时严格校验，任何一项不符就按陈旧处理。</li>
+<li>写过期时间，并且实现续期；临界区超过租期时主动停止，而不是继续跑。</li>
+</ul>
+<p>两条都不做，等于把清理工作外包给「某天有人发现备份没跑」。这个外包合同没有 SLA。</p>
+<h3>规则四：NFS 上先确认行为，再决定能不能依赖</h3>
+<p>这是全文最需要写成条件句的一段。NFS 上的锁行为与本地文件系统不同，而且不同版本、不同挂载参数的差别很大：</p>
+<ul>
+<li>NFSv4 把锁纳入协议本身，服务端参与锁的管理（文档事实）。</li>
+<li>NFSv3 使用单独的 NLM（Network Lock Manager）协议，依赖客户端与服务端的 <code>lockd</code> / <code>statd</code> 正常工作和互通（文档事实）。</li>
+<li>Linux 客户端在部分配置下会把 <code>flock</code> 模拟成 <code>fcntl</code> 锁，也可能在挂载参数要求下退化成纯本地锁（文档事实：Linux NFS 客户端有 <code>local_lock</code> 挂载选项，取值影响 <code>flock</code> 与 POSIX 锁的处理方式）。</li>
+</ul>
+<p>所以「<code>flock</code> 在 NFS 上能不能用」没有统一答案，取决于内核版本、NFS 版本、挂载参数、服务端实现，以及是否所有客户端都同意同一套语义。上线前用 <code>mount</code> 看清版本和选项，在目标环境里做一次双客户端互斥测试，再决定是否依赖它（推演：跨环境行为不可假定一致）。</p>
+<p><code>O_EXCL</code> 在 NFS 上同样要看版本：NFSv3 及以后支持原子性的独占创建，更老的实现存在已知缺陷（文档事实：<code>open(2)</code> 手册对 NFS 上的 <code>O_EXCL</code> 有专门说明）。这类细节不能靠记忆，查当前内核与协议版本的文档。</p>
+<h3>规则五：锁文件不要删，锁目录不要手动清</h3>
+<p><code>flock</code> 的锁绑在打开的文件描述与 inode 上，删除再创建会得到一把全新的、与旧锁无关的锁（推演）。清理脚本里顺手 <code>rm -f /var/lib/app/sync.lock</code> 看起来无害，实际会让互斥失效：老进程还持着旧 inode 上的锁，新进程在新 inode 上又拿到一把。</p>
+<p>锁文件允许永久存在，大小为 0 也无所谓。需要清理的从来不是文件，而是「谁持有它」这个状态。</p>
+<h2>九、收束：能自愈的锁，必须有人替它收尸</h2>
+<p>回到最初那个问题：这把锁挂在谁身上。</p>
+<p>挂在文件系统上，它的寿命等于文件寿命，进程的死活与它无关。挂在打开的文件描述上，寿命等于 fd。挂在进程上，寿命等于进程。三种锁在正常退出时几乎没有区别，区别全部出现在没人执行清理代码的那一刻。</p>
+<p>内核是唯一一个「一定会执行清理」的角色。进程终止时它关闭 fd、释放记录锁、回收地址空间，不需要崩溃的进程配合，也不需要有人记得写 <code>trap</code>。把锁交给内核，异常路径就有了默认答案；把锁交给一个空文件，异常路径的答案就变成了「等人来删」。</p>
+<p>如果非要用文件存在性做锁，那就得自己补上那个「人」：启动时判定陈旧、清理时保证原子、给等待加上限，并且接受这套逻辑本身也需要维护和测试。它不是不能用，而是不能白用——每一条异常路径都要自己写清楚。</p>
+<p>能自愈的锁，必须有人替它收尸。要么是内核，要么是你写的那段代码。选第一个，工作量在写的时候；选第二个，工作量在出事的时候。</p>
+
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="linux-inode-mechanism-deep-dive.html">
+            <div class="related-post-card-title">Linux inode 机制深入理解：从数据结构到实战排查</div>
+            <div class="related-post-card-tags"><span>Linux</span><span>文件系统</span><span>系统编程</span></div>
+          </a>
+          <a class="related-post-card" href="suspend-does-not-switch-threads.html">
+            <div class="related-post-card-title">suspend 不切线程：你以为的后台，只是换了个队列在等</div>
+            <div class="related-post-card-tags"><span>Kotlin</span><span>协程</span><span>并发</span></div>
+          </a>
+          <a class="related-post-card" href="handoverability-is-a-technical-metric.html">
+            <div class="related-post-card-title">只有你能跑通的那套，等于没跑通：可交接性是个技术指标</div>
+            <div class="related-post-card-tags"><span>可交接性</span><span>运维</span><span>文档</span></div>
+          </a>
+          <a class="related-post-card" href="backup-is-not-a-copy-without-a-drill.html">
+            <div class="related-post-card-title">备份不是副本：没做过恢复演练的那份，只是一堆还在的字节</div>
+            <div class="related-post-card-tags"><span>备份</span><span>容灾</span><span>运维</span></div>
+          </a>
+          <a class="related-post-card" href="choosing-and-running-a-vps.html">
+            <div class="related-post-card-title">主流 VPS 的选择和使用</div>
+            <div class="related-post-card-tags"><span>VPS</span><span>DevOps</span><span>运维</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
+
+        <!-- Post Copyright & License Card -->
+        <div class="post-copyright-card">
+          <div class="copyright-header">
+            <div class="copyright-badge">
+              <span>📜</span>
+              <span>原创与知识共享协议</span>
+            </div>
+            <button class="copyright-cite-btn" id="copy-cite-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+              </svg>
+              <span>复制 Markdown 引用</span>
+            </button>
+          </div>
+          <div class="copyright-list">
+            <div class="copyright-item"><strong>文章标题：</strong>锁文件不跟着进程走：进程崩溃后留下的那把锁，没人会来解开</div>
+            <div class="copyright-item"><strong>文章作者：</strong>张小猛 · loczb</div>
+            <div class="copyright-item"><strong>永久链接：</strong><a href="https://709527.xyz/blog/posts/a-lock-file-outlives-its-process.html">https://709527.xyz/blog/posts/a-lock-file-outlives-its-process.html</a></div>
+            <div class="copyright-item"><strong>版权声明：</strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 国际许可协议。商业转载请联系作者获得授权，非商业转载请注明出处。</div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </main>
+
+  <!-- Related Posts / Navigation -->
+  <section class="section" aria-label="读完之后" style="padding-top: 0;">
+    <div class="container container-narrow">
+      <!-- Post Nav Prev Next -->
+      <nav class="post-nav" aria-label="文章翻页导航">
+        <a href="extension-functions-are-statically-bound.html" class="post-nav-card post-nav-prev" rel="prev">
+          <span class="post-nav-label">← 上一篇</span>
+          <span class="post-nav-title">扩展函数不参与多态：你以为的重写，编译期就被定成了重载</span>
+        </a>
+        <div class="post-nav-card post-nav-next disabled" aria-disabled="true">
+          <span class="post-nav-label">下一篇 →</span>
+          <span class="post-nav-title">已是最新篇博文</span>
+        </div>
+      </nav>
+      <!-- /Post Nav Prev Next -->
+      <hr style="border: none; border-top: 1px solid var(--color-border); margin: var(--space-2xl) 0;">
+
+      <div class="blog-topics" style="margin-bottom: var(--space-xl); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+        <div>
+          <span class="topic-label">读完之后:</span>
+          <a href="../index.html" class="topic-tag">返回博客列表</a>
+          <a href="../index.html?view=series" class="topic-tag">浏览全部专栏</a>
+        </div>
+        <a href="#main-content" class="topic-tag" style="margin-left: auto;">↑ 回到顶部</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+<!-- PARTIAL:FOOTER -->
+  <footer class="footer" role="contentinfo">
+  <div class="footer-inner">
+    <p class="footer-signature">写代码，做产品，也认真生活。</p>
+    <div class="footer-social">
+      <a href="https://github.com/zzdbilly" class="footer-social-link" target="_blank" rel="noopener" aria-label="GitHub">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+      </a>
+      <a href="https://twitter.com/zzdbilly" class="footer-social-link" target="_blank" rel="noopener" aria-label="X (Twitter)">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      </a>
+      <a href="/rss.xml" class="footer-social-link" target="_blank" rel="noopener" aria-label="RSS 订阅">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+      </a>
+    </div>
+    <div class="footer-links">
+      <a href="/" class="footer-link">首页</a>
+      <a href="/projects/" class="footer-link">项目</a>
+      <a href="/blog/" class="footer-link">博客</a>
+      <a href="/about/" class="footer-link">关于</a>
+    </div>
+    <p class="footer-copyright">&copy; 2026 张小猛 · loczb · Built with care</p>
+  </div>
+</footer>
+  <!-- /PARTIAL:FOOTER -->
+
+  <script defer src="../../assets/js/main.js"></script>
+  <script defer src="../../assets/js/article.js?v=c9f1a378ea"></script>
+  <script defer src="../../assets/js/share.js"></script>
+  <!-- Back to Top & Reading Progress -->
+  <button class="back-to-top" id="backToTop" aria-label="回到顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
+  <div class="reading-progress" id="readingProgress"></div>
+
+  <!-- Post Sidebar Info（左侧） -->
+  <div class="post-sidebar-info" id="postSidebar">
+    <div class="post-info-card">
+      <div class="post-info-section">
+        <div class="post-info-label">作者</div>
+        <div class="post-info-author">
+          <div class="post-info-avatar">小</div>
+          <div>
+            <div class="post-info-author-name">张小猛</div>
+            <div class="post-info-author-desc">写代码，做产品</div>
+          </div>
+        </div>
+      </div>
+      <div class="post-info-section">
+        <div class="post-info-label">文章信息</div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📅</span> 发布日期</span><span class="post-info-stat-value">2026-11-23</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">⏱️</span> 阅读时间</span><span class="post-info-stat-value">14 min read</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">7119 字</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📊</span> 章节数</span><span class="post-info-stat-value">10 节 · 26 子节</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">💻</span> 代码块</span><span class="post-info-stat-value">5 段</span></div>
+      </div>
+      <div class="post-info-section" id="postSidebarTags">
+        <div class="post-info-label">标签</div>
+        <div class="post-info-links">
+          <a href="../../blog/index.html?tag=Unix" class="post-info-link"># Unix</a>
+          <a href="../../blog/index.html?tag=%E5%B9%B6%E5%8F%91" class="post-info-link"># 并发</a>
+          <a href="../../blog/index.html?tag=%E6%96%87%E4%BB%B6%E9%94%81" class="post-info-link"># 文件锁</a>
+          <a href="../../blog/index.html?tag=%E8%BF%90%E7%BB%B4" class="post-info-link"># 运维</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Post TOC -->
+  <div class="post-toc-container" id="postToc">
+    <nav class="post-toc" aria-label="文章目录">
+      <div class="post-toc-title">目录</div>
+      <ul class="post-toc-list" id="tocList">
+      </ul>
+    </nav>
+  </div>
+
+  <!-- Comment System -->
+  <script src="../../workers/comment-system/comment-widget.js?v=5d8a6a1796" defer></script>
+
+  <!-- highlight.js 代码语法高亮（本地完整构建，无外部依赖） -->
+  <script defer src="../../assets/vendor/highlight/highlight.min.js"></script>
+  <script>
+    /* 语法高亮改为「可见优先、空闲补齐」：
+       highlight.js 要遍历全篇代码块并生成数百个 span，若在 DOMContentLoaded 里同步跑完，
+       会在关键路径上长时间占住主线程（2026-09-27 实测本页长任务 1548ms、DCL 3651ms；
+       改动后长任务 145ms、DCL 1378ms）。这里 DCL 阶段只登记观察，实际高亮交给
+       IntersectionObserver（近屏 800px 内优先）+ requestIdleCallback（剩余块每片 ≤4 块），
+       首屏代码块的着色时机与视觉基本无变化。 */
+    (function() {
+      function canPaint(b) {
+        return !b.classList.contains('hljs') && !b.closest('.codehilite');
+      }
+      function paint(b) {
+        if (!canPaint(b)) return;
+        try { hljs.highlightElement(b); } catch (e) {}
+      }
+      function init() {
+        var blocks = [].slice.call(document.querySelectorAll('pre code')).filter(canPaint);
+        if (!blocks.length) return;
+        if ('IntersectionObserver' in window) {
+          var io = new IntersectionObserver(function(entries, obs) {
+            entries.forEach(function(en) {
+              if (!en.isIntersecting) return;
+              paint(en.target);
+              obs.unobserve(en.target);
+            });
+          }, { rootMargin: '800px 0px' });
+          blocks.forEach(function(b) { io.observe(b); });
+        }
+        var i = 0;
+        var idle = window.requestIdleCallback || window.setTimeout;
+        var step = function() {
+          var quota = 4;
+          while (i < blocks.length && quota-- > 0) paint(blocks[i++]);
+          if (i < blocks.length) idle(step);
+        };
+        idle(step); // 不在 DCL 里同步跑：可见块由 IntersectionObserver 处理，其余走空闲分片
+      }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+      } else {
+        init();
+      }
+    })();
+  </script>
+
+  <!-- Cloudflare Web Analytics -->
+  <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "29e7cff6f37448989538e2165cb79187"}'></script>
+</body>
+</html>

@@ -1,6 +1,21 @@
 {
   "posts": [
     {
+      "slug": "a-lock-file-outlives-its-process",
+      "title": "锁文件不跟着进程走：进程崩溃后留下的那把锁，没人会来解开",
+      "date": "2026-11-23",
+      "dateTime": "2026-11-23 19:27:00",
+      "category": "系统编程",
+      "tags": [
+        "Unix",
+        "并发",
+        "文件锁",
+        "运维"
+      ],
+      "readTime": 14,
+      "url": "blog/posts/a-lock-file-outlives-its-process.html"
+    },
+    {
       "slug": "extension-functions-are-statically-bound",
       "title": "扩展函数不参与多态：你以为的重写，编译期就被定成了重载",
       "date": "2026-11-22",
@@ -2276,10 +2291,10 @@
     }
   ],
   "categories": [
+    "系统编程",
     "Kotlin",
     "思考",
     "AI",
-    "系统编程",
     "数据库",
     "安全",
     "前端",
@@ -2288,9 +2303,9 @@
     "Android"
   ],
   "stats": {
-    "totalPosts": 147,
-    "totalTags": 369,
-    "latestDate": "2026-11-22",
+    "totalPosts": 148,
+    "totalTags": 371,
+    "latestDate": "2026-11-23",
     "oldestDate": "2026-02-15"
   }
 }

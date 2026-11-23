@@ -7,6 +7,14 @@
     <language>zh-CN</language>
     <atom:link href="https://709527.xyz/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>锁文件不跟着进程走：进程崩溃后留下的那把锁，没人会来解开</title>
+      <link>https://709527.xyz/blog/posts/a-lock-file-outlives-its-process.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/a-lock-file-outlives-its-process.html</guid>
+      <description>锁的所有权决定它能不能自愈：挂在文件系统上的锁没有持有者，进程死了文件还留着；挂在 fd 或进程上的锁由内核代持，异常退出会被回收。</description>
+      <category>系统编程</category>
+      <pubDate>Mon, 23 Nov 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
       <title>扩展函数不参与多态：你以为的重写，编译期就被定成了重载</title>
       <link>https://709527.xyz/blog/posts/extension-functions-are-statically-bound.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/extension-functions-are-statically-bound.html</guid>
@@ -157,14 +165,6 @@
       <description>未经自己验证的结论，署名之前成本是零；署名之后错误全归你，还以一手身份继续外传。不确定性不会消失，只是从内容转移到签名。</description>
       <category>思考</category>
       <pubDate>Tue, 03 Nov 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>空安全在边界失效：反序列化不经过你的构造函数</title>
-      <link>https://709527.xyz/blog/posts/nullable-claims-die-at-the-boundary.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/nullable-claims-die-at-the-boundary.html</guid>
-      <description>非空类型保证的是编译期检查点，不是值本身。反序列化、反射与 Java 边界都能绕开这些检查点，所以外部数据必须在入口显式验一遍。</description>
-      <category>Kotlin</category>
-      <pubDate>Mon, 02 Nov 2026 00:00:00 +0800</pubDate>
     </item>
   </channel>
 </rss>
