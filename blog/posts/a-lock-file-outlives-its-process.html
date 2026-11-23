@@ -211,7 +211,7 @@ finally:
 <p><code>LOCK_NB</code> 让加锁失败立刻返回而不是睡眠，退避和总超时由调用方控制。这段代码的失败模式是明确的：要么拿到锁，要么在 30 秒后带着错误退出，不会无限排队。</p>
 <h3>进程退出、kill -9 与断电</h3>
 <p><code>flock</code> 的锁在最后一个引用该描述的 fd 关闭时释放（文档事实）。进程终止时，内核关闭该进程的全部 fd，因此锁释放。<code>kill -9</code> 只是让进程没有机会执行用户态代码，内核的清理路径照常走。</p>
-<p>断电是另一回事：锁表在内存里，重启后不存在。磁盘上那个 <code>/var/lib/app/sync.lock</code> 还在，但 <code>flock</code> 不关心文件是否存在，只关心有没有人持有描述（文档事实：<code>flock</code> 不依据文件内容或存在性判断）。所以断电留下的空文件是无害的，下一次 <code>open</code> 之后照样能加锁。</p>
+<p>断电是另一回事：锁表在内存里，重启后不存在。磁盘上那个 <code>/var/lib/app/sync.lock</code> 还在，但 <code>flock</code> 不把「文件存在」当作锁的状态，它只看有没有人持有指向该文件的描述（文档事实：<code>flock</code> 不依据文件内容判断锁的归属）。所以断电留下的空文件是无害的，下一次 <code>open</code> 之后照样能加锁——前提是没有人把它删掉重建。</p>
 <p>这是它和第一档最关键的差别：<strong>残留物相同，语义不同。</strong> 同样是磁盘上多了一个文件，对 <code>flock</code> 来说它只是锁的载体，对 <code>O_EXCL</code> 来说它就是锁本身。</p>
 <h3>边界：fd 泄漏、fork 继承、以及「锁文件不能删」</h3>
 <p><code>flock</code> 不是没有坑，只是坑的位置不同。</p>
@@ -238,7 +238,7 @@ with open(&quot;/var/lib/app/sync.lock&quot;) as f:   # 又开了一个 fd
 run_sync()
 os.close(lock_fd)
 </code></pre>
-<p>这段代码能跑，日志正常，单实例测试也过。问题只在有并发时出现：锁已经释放，第二个实例可以进来，两个进程同时改同一批文件。而报错的地方通常在数据层，离真正的原因隔着几层调用栈。</p>
+<p>这段代码在单实例下跑起来一切正常，日志也不会有异常。问题只在有并发时出现：锁已经释放，第二个实例可以进来，两个进程同时改同一批文件。而报错的地方通常在数据层，离真正的原因隔着几层调用栈。</p>
 <p>规避方式不是「记得别乱开文件」，而是把规则变成结构：加锁之后不要在同一个进程里再打开这个路径，配置读完之后再加锁，或者干脆换一种锁——Linux 3.15 起提供 <code>F_OFD_SETLK</code>，锁的所有者变成打开的文件描述，关掉别的 fd 不再影响它（文档事实：Linux 内核 3.15 引入 OFD 锁；用户态是否方便调用取决于 libc 与语言绑定）。它同时保留了字节区间的粒度，是「想要记录锁语义又不想被进程级释放规则坑」时的一个选项。</p>
 <h3>记录锁真正的优势与代价</h3>
 <p>优势是它对「锁文件被删」不敏感：锁记录在 inode 上，只要还有进程持有，另一个进程即使重新创建了同名文件也不会共享同一把锁——这既是优点也是缺点，取决于你是否把「路径」当成身份。</p>
@@ -520,7 +520,7 @@ fi
         <div class="post-info-label">文章信息</div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📅</span> 发布日期</span><span class="post-info-stat-value">2026-11-23</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">⏱️</span> 阅读时间</span><span class="post-info-stat-value">14 min read</span></div>
-        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">7119 字</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">7147 字</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📊</span> 章节数</span><span class="post-info-stat-value">10 节 · 26 子节</span></div>
         <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">💻</span> 代码块</span><span class="post-info-stat-value">5 段</span></div>
       </div>
