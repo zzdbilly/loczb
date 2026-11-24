@@ -7,6 +7,14 @@
     <language>zh-CN</language>
     <atom:link href="https://709527.xyz/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>移动端写的是「随时会死」，服务端写的是「不会死」</title>
+      <link>https://709527.xyz/blog/posts/process-lifetime-assumptions-across-stacks.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/process-lifetime-assumptions-across-stacks.html</guid>
+      <description>跨栈代码塌的往往不是语法，而是两边对进程存活时间的相反假设：一份对照表，和三个最先塌的东西。</description>
+      <category>Android</category>
+      <pubDate>Tue, 24 Nov 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
       <title>锁文件不跟着进程走：进程崩溃后留下的那把锁，没人会来解开</title>
       <link>https://709527.xyz/blog/posts/a-lock-file-outlives-its-process.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/a-lock-file-outlives-its-process.html</guid>
@@ -157,14 +165,6 @@
       <description>部署完成只完成了第一次发布。第二次发布发生在每个已安装的客户端上，完成时间、触发条件与失败形态都不在你手里——验收必须拆成浏览器与安装态两条路径。</description>
       <category>前端</category>
       <pubDate>Wed, 04 Nov 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>二手结论最贵的时候，是它挂着你名字的时候</title>
-      <link>https://709527.xyz/blog/posts/secondhand-conclusions-carry-your-name.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/secondhand-conclusions-carry-your-name.html</guid>
-      <description>未经自己验证的结论，署名之前成本是零；署名之后错误全归你，还以一手身份继续外传。不确定性不会消失，只是从内容转移到签名。</description>
-      <category>思考</category>
-      <pubDate>Tue, 03 Nov 2026 00:00:00 +0800</pubDate>
     </item>
   </channel>
 </rss>

@@ -1,6 +1,21 @@
 {
   "posts": [
     {
+      "slug": "process-lifetime-assumptions-across-stacks",
+      "title": "移动端写的是「随时会死」，服务端写的是「不会死」",
+      "date": "2026-11-24",
+      "dateTime": "2026-11-24 19:37:00",
+      "category": "Android",
+      "tags": [
+        "Android",
+        "跨栈",
+        "进程生命周期",
+        "服务端"
+      ],
+      "readTime": 14,
+      "url": "blog/posts/process-lifetime-assumptions-across-stacks.html"
+    },
+    {
       "slug": "a-lock-file-outlives-its-process",
       "title": "锁文件不跟着进程走：进程崩溃后留下的那把锁，没人会来解开",
       "date": "2026-11-23",
@@ -2291,6 +2306,7 @@
     }
   ],
   "categories": [
+    "Android",
     "系统编程",
     "Kotlin",
     "思考",
@@ -2299,13 +2315,12 @@
     "安全",
     "前端",
     "DevOps",
-    "开发",
-    "Android"
+    "开发"
   ],
   "stats": {
-    "totalPosts": 148,
-    "totalTags": 371,
-    "latestDate": "2026-11-23",
+    "totalPosts": 149,
+    "totalTags": 374,
+    "latestDate": "2026-11-24",
     "oldestDate": "2026-02-15"
   }
 }

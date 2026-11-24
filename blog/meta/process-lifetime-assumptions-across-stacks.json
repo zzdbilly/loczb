@@ -1,0 +1,15 @@
+{
+  "slug": "process-lifetime-assumptions-across-stacks",
+  "title": "移动端写的是「随时会死」，服务端写的是「不会死」",
+  "description": "跨栈代码塌的往往不是语法，而是两边对进程存活时间的相反假设：一份对照表，和三个最先塌的东西。",
+  "date": "2026-11-24",
+  "dateTime": "2026-11-24 19:37:00",
+  "category": "Android",
+  "tags": [
+    "Android",
+    "跨栈",
+    "进程生命周期",
+    "服务端"
+  ],
+  "readTime": 14
+}

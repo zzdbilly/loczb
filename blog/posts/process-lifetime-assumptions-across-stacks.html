@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <script>document.documentElement.classList.add("js");try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://static.cloudflareinsights.com https://loczb-comments.billymust.workers.dev; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://loczb-comments.billymust.workers.dev https://dashscope.aliyuncs.com https://709527.xyz https://www.709527.xyz https://cloudflareinsights.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
+    <script>/* 反点击劫持兜底：GitHub Pages 无法下发 X-Frame-Options / CSP frame-ancestors */(function(){if(self===top)return;try{top.location=self.location}catch(e){}setTimeout(function(){if(self!==top){document.documentElement.style.display='none';}},400);})();</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>移动端写的是「随时会死」，服务端写的是「不会死」 | 张小猛 - loczb</title>
+    <meta name="description" content="跨栈代码塌的往往不是语法，而是两边对进程存活时间的相反假设：一份对照表，和三个最先塌的东西。">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="移动端写的是「随时会死」，服务端写的是「不会死」 | 张小猛 - loczb">
+    <meta property="og:description" content="跨栈代码塌的往往不是语法，而是两边对进程存活时间的相反假设：一份对照表，和三个最先塌的东西。">
+    <meta property="og:url" content="https://709527.xyz/blog/posts/process-lifetime-assumptions-across-stacks.html">
+    <meta property="og:type" content="article">
+    <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
+    <meta property="og:site_name" content="loczb">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="移动端写的是「随时会死」，服务端写的是「不会死」 | 张小猛 - loczb">
+    <meta name="twitter:description" content="跨栈代码塌的往往不是语法，而是两边对进程存活时间的相反假设：一份对照表，和三个最先塌的东西。">
+    <meta name="twitter:image" content="https://709527.xyz/assets/images/og-image.png">
+
+        <script type="application/ld+json">
+{
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "移动端写的是「随时会死」，服务端写的是「不会死」",
+      "description": "跨栈代码塌的往往不是语法，而是两边对进程存活时间的相反假设：一份对照表，和三个最先塌的东西。",
+      "image": "https://709527.xyz/assets/images/og-image.png",
+      "author": {
+            "@type": "Person",
+            "name": "张小猛",
+            "url": "https://709527.xyz/about/"
+      },
+      "publisher": {
+            "@type": "Organization",
+            "name": "loczb",
+            "logo": {
+                  "@type": "ImageObject",
+                  "url": "https://709527.xyz/assets/images/favicon.svg"
+            }
+      },
+      "datePublished": "2026-11-24T19:37:00+08:00",
+      "dateModified": "2026-11-24T19:37:00+08:00",
+      "url": "https://709527.xyz/blog/posts/process-lifetime-assumptions-across-stacks.html",
+      "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://709527.xyz/blog/posts/process-lifetime-assumptions-across-stacks.html"
+      },
+      "keywords": "Android, 跨栈, 进程生命周期, 服务端",
+      "articleSection": "Android",
+      "timeRequired": "PT14M",
+      "inLanguage": "zh-CN"
+}
+    </script>
+
+    <link rel="stylesheet" href="../../assets/css/style.css?v=c8e170d8f9">
+    <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
+    <link rel="alternate icon" href="../../assets/images/favicon.ico">
+    <link rel="canonical" href="https://709527.xyz/blog/posts/process-lifetime-assumptions-across-stacks.html">
+</head>
+<body>
+  <!-- PARTIAL:SKIP_LINK -->
+  <a href="#main-content" class="skip-link">跳至主要内容</a>
+  <!-- /PARTIAL:SKIP_LINK -->
+
+  <!-- Navigation -->
+<!-- PARTIAL:NAV -->
+  <nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">
+      loc<span>zb</span>
+    </a>
+    <button class="nav-toggle" aria-label="打开菜单" aria-expanded="false" aria-controls="nav-links-menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <div class="nav-overlay"></div>
+    <ul class="nav-links" id="nav-links-menu">
+      <li><a href="/" class="nav-link" data-nav="home">首页</a></li>
+      <li><a href="/projects/" class="nav-link" data-nav="projects">项目</a></li>
+      <li><a href="/blog/" class="nav-link active" data-nav="blog">博客</a></li>
+      <li><a href="/about/" class="nav-link" data-nav="about">关于</a></li>
+    </ul>
+    <button class="theme-toggle" aria-label="切换主题" title="切换亮/暗模式">
+      <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="5"></circle>
+        <line x1="12" y1="1" x2="12" y2="3"></line>
+        <line x1="12" y1="21" x2="12" y2="23"></line>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+        <line x1="1" y1="12" x2="3" y2="12"></line>
+        <line x1="21" y1="12" x2="23" y2="12"></line>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+      </svg>
+      <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+      </svg>
+    </button>
+  </div>
+</nav>
+  <!-- /PARTIAL:NAV -->
+  <main class="section" id="main-content" style="padding-bottom: 0; padding-top: var(--space-4xl);">
+    <div class="container container-narrow">
+      <a href="../index.html" class="back-link">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        返回博客列表
+      </a>
+
+      <article class="post-content">
+        <h1>移动端写的是「随时会死」，服务端写的是「不会死」</h1>
+
+        <div class="post-meta">
+          <span class="meta-item"><span aria-hidden="true">📅</span> 2026-11-24 19:37:00</span>
+          <span class="meta-item"><span aria-hidden="true">⏱️</span> 14 min read</span>
+          <span class="meta-item"><span aria-hidden="true">👤</span> 张小猛</span>
+        </div>
+
+        <div class="post-tags">
+          <span class="tag">Android</span>
+          <span class="tag">跨栈</span>
+          <span class="tag">进程生命周期</span>
+          <span class="tag">服务端</span>
+        </div>
+
+        
+
+        <h2>两个平台给「进程能活多久」的默认答案，是相反的</h2>
+<p>写安卓久了会形成一种直觉：屏幕上的一切随时可能消失。用户按了 Home、切到另一个应用、系统内存吃紧，进程就可能被回收；回来时 Activity 会被重建，<code>onDestroy</code> 不保证被调用，静态变量和单例全部回到初始值。这套直觉不是悲观，是平台文档写明的运行模型（文档事实）。</p>
+<p>这种直觉会渗进代码的每个角落。数据先写数据库再更新界面，后台任务交给可持久化的调度器，页面恢复时从 <code>SavedStateHandle</code> 里取回游标和选中项，而不是指望某个字段还在。写久了之后，开发者对"内存不可信"这件事不再讨论，它变成了默认前提。</p>
+<p>写服务端久了会形成另一种直觉：进程会一直在。请求进来、处理、返回，内存里的缓存越攒越热，启动时把配置和字典加载进单例，定时器里挂几个清理任务——这些写法在开发机上跑几个月都不会出事，因为开发机上那个进程确实一直在（文档事实：这是对开发机的观察，不是生产环境的保证）。</p>
+<p>两种直觉各自都对，放在一起就矛盾。同一段业务逻辑，移动端版本假设"执行随时会被打断、内存随时会清空、启动会发生很多次"，服务端版本假设"进程长活、内存可信、启动只发生一次"。这个差异很少被写进注释，也很少出现在接口文档里。它藏在 <code>object</code>、<code>companion object</code>、<code>@Singleton</code>、<code>static</code>、进程内定时器这些语法糖后面，编译器不会提示，代码评审也通常不会问。</p>
+<p>于是跨栈迁移时，塌的往往不是语法。协程能编译，定时器能跑，单例注入能过评审，类型全对、测试全绿。等到滚动发布、容器重调度、OOM kill、扩缩容这些"正常事件"发生时，问题才出来——而那时候，出错的位置离当初写下假设的那行代码已经很远了。</p>
+<p>后面这份对照表，是把这些没写下来的假设摊开。表里的"意外"一列，指的是两边各自都会遇到、但很少被写进测试的事件。</p>
+<p>（本文两类句子分开写：Android 平台行为与通用服务端事实标为「文档事实」；从默认写法推到后果的部分标为「推演」，具体是否触发取决于进程回收时机与部署方式。）</p>
+<h2>一张存活假设对照表</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">同一件事</th>
+<th style="text-align: left;">安卓的默认假设</th>
+<th style="text-align: left;">服务端的默认假设</th>
+<th style="text-align: left;">两边都会遇到的意外</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">内存里的数据</td>
+<td style="text-align: left;">随时会没，不能当真源</td>
+<td style="text-align: left;">进程活着就在，可以当真源</td>
+<td style="text-align: left;">进程被杀或实例被替换，内存归零</td>
+</tr>
+<tr>
+<td style="text-align: left;">定时任务</td>
+<td style="text-align: left;">不能依赖进程内计时器，要用可持久化调度</td>
+<td style="text-align: left;">进程内定时器够用，反正进程不关</td>
+<td style="text-align: left;">发布、缩容、崩溃时任务消失，或每个实例各跑一遍</td>
+</tr>
+<tr>
+<td style="text-align: left;">初始化</td>
+<td style="text-align: left;">每次冷启动都要重来，必须便宜且可重入</td>
+<td style="text-align: left;">启动时算一次，之后全局复用</td>
+<td style="text-align: left;">多实例各算一次；配置改了不刷新</td>
+</tr>
+<tr>
+<td style="text-align: left;">锁与标志位</td>
+<td style="text-align: left;">进程死了，标志位也该跟着失效</td>
+<td style="text-align: left;">一个布尔字段表示"正在处理"就够了</td>
+<td style="text-align: left;">持锁进程死掉，标志位永久卡住</td>
+</tr>
+<tr>
+<td style="text-align: left;">未完成的写</td>
+<td style="text-align: left;">不能假设能做完，要可恢复、可续</td>
+<td style="text-align: left;">请求处理完再返回，客户端会等</td>
+<td style="text-align: left;">进程在写到一半时被杀，留下半条记录</td>
+</tr>
+</tbody>
+</table>
+<p>这张表不是在评判谁对谁错。两边的假设都是各自约束下的局部最优：安卓的假设来自资源约束（手机内存有限、系统有权回收进程），服务端的假设来自部署形态的历史（单机、长驻、手工发布）。约束变了，假设没跟着变，问题才出现。</p>
+<p>值得逐行读一遍的是第三列。"进程被杀"在安卓上是被写进文档的常态，在服务端上则被当成故障；但滚动发布和容器重调度让"进程被杀"变成了服务端的常态。同一件事，一边写进了设计，一边留在了意外里。</p>
+<p>下面三行是真正会塌的。它们共同的特征是：错误不在编译期暴露，也不在单实例的测试里暴露。</p>
+<h2>第一个塌的东西：把进程内缓存当成数据源</h2>
+<h3>服务端在哪些时刻失去进程</h3>
+<p>滚动发布时，新版本逐批替换旧实例，旧实例上的内存缓存随着进程一起消失。容器编排重调度时，节点下线或健康检查失败都会让容器换个地方重建，本地状态不带过去。内存超限时，内核直接杀掉进程，没有优雅退出的机会。低峰缩容时，被移除的实例带着自己那份缓存一起消失。无服务器形态下，请求结束之后运行环境可能被冻结或回收，下一次冷启动从零开始。</p>
+<p>（文档事实：这些是容器与编排系统的常规行为；推演：具体到某个服务在哪个时刻触发，取决于部署方式、资源限制和回收策略。）</p>
+<p>这些事件没有一个是"故障"。它们每天都在发生，监控面板上通常是绿的，因为系统整体可用——单个实例的消失被负载均衡和副本数掩盖了。</p>
+<h3>进程没了之后，错误行为长什么样</h3>
+<p>一条典型路径：请求 A 更新数据库，同时把新值写进进程内的 Map；请求 B 读取时先查 Map，命中就返回。进程重启后 Map 空了，请求 B 回落到数据库，读到正确值——这时候看起来没问题。</p>
+<p>真正的问题在两种情况下暴露。</p>
+<p>第一种，缓存里存的是数据库里还没有的状态：预写标记、聚合中间值、去重集合、已发送消息的 id。这些东西没有持久副本，进程一死就凭空消失。业务表现是"少了一块"——少发一条通知、少做一次对账、同一个事件被处理两遍。它不会报错，只会让某个数字慢慢偏。</p>
+<p>第二种，多实例。请求 B 打到另一个实例，那个实例的缓存里是旧值，于是读到旧数据。更麻烦的是这个旧值会一直存在，直到那个实例也重启。代码里没有任何一行声明"这份内存是权威的"，但读取路径事实上把它当成了权威。</p>
+<p>还有一种更隐蔽的：缓存为空时的行为没有被设计过。进程刚启动，缓存是冷的，所有请求同时回落到数据库，数据库瞬时压力上升；如果此时还有降级开关或者熔断逻辑，系统可能直接进入降级状态，而原因只是"进程重启了"。这属于缓存击穿，但根因仍然是同一个：代码默认缓存应该一直在。</p>
+<h3>正确形态：缓存只是加速层</h3>
+<p>把内存缓存降级成"可丢失的加速层"：任何写操作先落持久层，缓存只做读加速；缓存里允许放派生值，不允许放唯一副本；进程启动时缓存为空是合法状态，不能因此报错或进入特殊分支。</p>
+<p>判断标准很朴素：把缓存整个清空、重启进程，业务结果应当不变，只是变慢。如果结果会变，那这份内存就不是缓存，是没落盘的数据。</p>
+<pre><code class="language-kotlin">// 状态分层：可丢失的、需要恢复的、必须持久化的，分开放
+class OrderRepository(
+    private val dao: OrderDao,                                     // 持久层：唯一真相
+    private val cache: MutableMap&lt;String, Order&gt; = mutableMapOf()  // 加速层：可丢
+) {
+    suspend fun get(id: String): Order =
+        cache[id] ?: dao.find(id).also { cache[id] = it }
+
+    suspend fun save(order: Order) {
+        dao.upsert(order)      // 先落盘
+        cache[order.id] = order
+    }
+}
+</code></pre>
+<p>这段代码只表达顺序：先持久化，再更新缓存。反过来写，进程在两步之间被杀，缓存里就会留下一条数据库没有的记录——下一次读命中它，等于读了一条不存在的订单。</p>
+<h2>第二个塌的东西：进程内定时器</h2>
+<h3>发布窗口里丢掉的执行</h3>
+<p>进程内的定时器绑在进程上。滚动发布时旧实例被替换，计时器跟着消失；缩容时被移除的实例同样带走自己的计时器。如果这个定时器负责的是"每分钟扫一次超时订单""每小时对一次账"，那么发布窗口内的那次执行就没了。</p>
+<p>丢一次通常没人发现，丢几次之后数据开始漂移。漂移是静默的：没有报错，没有告警，只有某天对账时数字对不上，然后往回翻日志，发现那几段时间里任务确实没跑。而日志本身也可能随着实例一起没了。</p>
+<p>还有一类是"补跑"缺失。进程内定时器通常只触发"当前这一次"，不会关心上次执行到哪。实例重启后，它从下一个周期开始，中间空掉的窗口没有人补。如果业务语义是"每小时的增量必须处理"，这个空洞就是永久的数据缺口。</p>
+<h3>多实例下的重复执行</h3>
+<p>更隐蔽的是反方向。为了保证"不丢"，把定时器留在每个实例里，于是 N 个实例各跑一遍。清理任务重复执行通常无害（删两次同样的记录），但对账、发券、发通知、计费这类带副作用的操作，重复就是事故。</p>
+<p>代码里常见的补丁是一个布尔标志位或者一行数据库记录锁。问题是标志位的生命周期又回到了进程：持锁的实例被 OOM kill，锁没人释放，任务从此卡死。有些实现会加一个"超时清理"，但清理逻辑本身又跑在进程内定时器里——用同一个假设去修同一个假设，只是把故障推迟了。</p>
+<h3>正确形态：调度外置，执行幂等</h3>
+<p>把"什么时候跑"和"跑什么"分开：调度交给外部系统（编排平台的定时任务、独立调度服务、带持久化的任务队列），执行端只保证"同一件事做多次和做一次结果相同"。</p>
+<p>执行端还需要一个租约式的互斥：拿锁时带上过期时间，处理过程中续期，进程死了锁自动过期，下一个实例能接手。这比布尔标志位多写几行，但它是唯一不依赖"进程会活着"的写法。</p>
+<pre><code class="language-text">进程内定时器                     外置调度 + 幂等执行
+─────────────────────────────    ─────────────────────────────
+绑在进程生命周期上                绑在调度系统上
+发布、缩容即丢失                  调度记录持久化，重启后补跑
+多实例各跑一遍                    由调度器决定谁跑，或租约互斥
+失败无记录                        失败进重试队列，可观测
+补跑窗口无人负责                  按业务键去重，重复投递无害
+</code></pre>
+<p>表里最后一行是关键。外置调度只解决"什么时候跑"，不解决"跑两次会怎样"。两件事都做到，任务才算真正从进程里搬出去了。</p>
+<h2>第三个塌的东西：启动时算一次的单例</h2>
+<h3>单例的生命周期其实等于进程</h3>
+<p><code>@Singleton</code>、<code>object</code>、<code>static final</code> 这些写法给人一种"全局唯一、只初始化一次"的印象。准确的说法是：在一个进程内唯一，在一个进程内初始化一次。进程换了，单例就是新的；实例多了，单例就是多份。</p>
+<p>这个区别在单实例、长驻的服务上几乎不可见，因为"进程"和"服务"是一对一的。一旦上了多副本，一对一就断了：服务还在，进程已经换了好几茬；同一时刻，服务对应着好几个进程，每个进程各有一份"全局唯一"。</p>
+<h3>多实例各算一次，配置变更后不刷新</h3>
+<p>滚动发布期间，新旧实例同时在线，各自持有一份启动时算出来的规则表。如果这期间配置中心改了规则，新实例读到新值，旧实例还是旧值，同一时刻的请求会得到两种结果。</p>
+<p>这不是缓存过期的问题，是"启动时算一次"这个动作把时间点焊死在了进程启动的那一刻。缩容扩容、蓝绿切换、灰度发布都会放大这个窗口：灰度期间两套规则并存，从外部看就是随机行为，而排查的人往往会先怀疑负载均衡或者网络。</p>
+<p>还有一类后果是启动成本。规则表越大，冷启动越慢；副本越多，冷启动越频繁；自动扩缩容时，新实例还没加载完就被健康检查判死，然后又起一个，循环几轮才稳定。根因不是加载慢，是把"必须常驻内存"当成了前提。</p>
+<h3>正确形态：要么每次读，要么带版本可刷新</h3>
+<p>两条路都行，但不能停在中间。</p>
+<p>第一条：规则表足够小、读取足够便宜，就每次用时读，或者按短周期刷新，让"过期"有上界。代价是每次读多一次查表或一次远程调用，换来的是不需要关心进程活多久。</p>
+<p>第二条：确实需要常驻内存，就带上版本号，订阅变更事件，收到新版本时整体替换引用，让读取方看到一致的快照。替换而不是原地修改，读方就不会看到半张表。</p>
+<p>最差的是第三种：启动时算一次，之后既不刷新也不带版本，靠"反正不会变"撑着。</p>
+<pre><code class="language-kotlin">// 带版本的可刷新快照：替换引用是原子的，读方永远看到完整的一份
+class RuleSnapshot(val version: Long, val rules: Map&lt;String, Rule&gt;)
+
+class RuleHolder(private val load: (Long) -&gt; RuleSnapshot) {
+    @Volatile private var current: RuleSnapshot? = null
+
+    fun get(): RuleSnapshot =
+        current ?: synchronized(this) {
+            current ?: load(0L).also { current = it }
+        }
+
+    fun onConfigChanged(newVersion: Long) {
+        current = load(newVersion)   // 整体替换，不做原地修改
+    }
+}
+</code></pre>
+<p>版本号从哪里来取决于配置系统；关键点是替换而非原地改。原地 <code>putAll</code> 在并发读下会露出中间状态，而中间状态往往就是最难复现的那类 bug。</p>
+<h2>为什么两边都没提前发现</h2>
+<p>因为两边的测试各自都跑得绿。</p>
+<p>安卓侧的测试通常在 JVM 上跑（Robolectric 或纯单元测试），进程从头到尾活着；instrumentation 测试跑在设备上，也很少主动杀进程。<code>ViewModel</code> 的测试验证的是配置变更后状态还在，这确实成立——但配置变更不是进程死亡。真正该测的场景是系统回收进程后恢复，而它在常规测试里几乎不出现，因为需要专门模拟 process death，成本比写一个断言高。</p>
+<p>服务端侧的测试更彻底地绕开了问题：单元测试不起进程，集成测试起一个进程然后跑完所有用例，端到端测试在单实例上验证主流程。三类测试都不会在"处理到一半时杀掉进程"，也不会在"两个实例同时在线"的拓扑下跑。滚动发布和多实例是部署阶段的事实，不是测试阶段的输入。</p>
+<p>预发环境也补不上。预发通常是单实例、短生命周期、人工触发，恰好是最不容易暴露存活假设的拓扑。真正能暴露问题的是"发布过程中持续有流量"和"实例数在 1 和 N 之间来回变"，而这两种状态在预发里很难长期维持。</p>
+<p>评审同样补不上。评审看的是这段代码对不对，而不是这段代码假设了什么在运行。一行 <code>private val cache = mutableMapOf()</code> 在评审里再正常不过；要看出问题，得先问"这个进程会不会死、这个类会不会有多个实例"，而这两个问题不在 diff 里。</p>
+<p>（推演：这不是某一边的疏忽，而是测试环境的拓扑与生产拓扑不一致——测试里进程的存活时间被固定住了，生产里它是变量。）</p>
+<h2>迁移清单：五件可以马上做的事</h2>
+<h3>状态分层</h3>
+<p>把状态按"可丢失 / 需恢复 / 必须持久"分三层。可丢失的放内存，需恢复的放 <code>SavedStateHandle</code> 或等价的序列化通道，必须持久化的落数据库或对象存储。</p>
+<p>分层之后，"进程死了会怎样"对每一层都有明确答案，而不是笼统地希望它别死。分层还顺带解决了另一个问题：哪一层该加锁、哪一层该做事务、哪一层可以随便重建，边界清楚了，评审时也容易看出越界。</p>
+<pre><code class="language-kotlin">// 三层各有归宿：内存态、可恢复的 UI 态、持久态
+class EditorViewModel(
+    private val saved: SavedStateHandle,   // 跨进程死亡，仅限小且可序列化
+    private val draftStore: DraftStore     // 跨进程死亡，落盘
+) : ViewModel() {
+    var cursor: Int
+        get() = saved[&quot;cursor&quot;] ?: 0
+        set(value) { saved[&quot;cursor&quot;] = value }
+
+    fun onTextChanged(text: String) {
+        draftStore.save(text)   // 正文落盘，不指望内存
+    }
+}
+</code></pre>
+<p><code>SavedStateHandle</code> 适合游标、选中项、草稿 id 这类小状态；正文本身走磁盘。把它当数据库用，序列化体积和事务语义都会出问题。</p>
+<h3>启动幂等</h3>
+<p>冷启动不是"第一次启动"，而是"又一次启动"。启动时做的事要能在任意次重复执行后得到同一结果：建表用 <code>IF NOT EXISTS</code>，迁移带版本号且可重入，初始化写库用 upsert 而不是 insert。</p>
+<p>这条纪律在安卓上是刚需（进程随时重启），在服务端上同样成立（实例随时上下）。区别只在于安卓开发者被平台逼着养成，服务端开发者没有这个压力。</p>
+<h3>优雅退出</h3>
+<p>收到终止信号后停止接新请求、等待在途请求到上限、把队列里的任务放回可重试的位置、释放租约。</p>
+<p>"优雅"有上限：OOM kill 和 <code>SIGKILL</code> 不给机会，所以优雅退出是减少损失，不是保证完成。这也是为什么关键收尾工作不能只放在关闭钩子里——钩子会跑，但不是每次都跑得到。</p>
+<pre><code class="language-bash"># 终止信号处理的三步：停接入、等在途、交还未完成的工作
+trap 'app.stop_accepting; app.drain --timeout=20s; app.release_leases' TERM INT
+</code></pre>
+<h3>租约代替标志位</h3>
+<p>任何表示"我正在处理"的状态都带过期时间，并且由持有者续期。读方判断的是"租约是否仍有效"，而不是"标志位是否为真"。这样持锁进程死掉之后，系统能自行恢复，不需要人工清标志。</p>
+<p>租约还需要一个单调时钟或数据库时间来兜底，否则各实例的本地时钟偏差会让过期判断不一致。这一条在容器环境里尤其容易踩到。</p>
+<h3>任务外置且幂等</h3>
+<p>把"必须被执行"的工作从进程内存搬到持久化队列或调度系统。执行端按业务键去重（订单号、消息 id、日期分区），保证重复投递不产生重复副作用。</p>
+<p>判断标准只有一条：同一条任务投递两次，结果与一次相同。做不到这一点，任务搬到哪里都不安全。</p>
+<h2>反向借用：安卓该从服务端学的四件事</h2>
+<p>前面说的都是服务端向安卓借纪律。反过来的借用同样成立，而且更少被提起——安卓代码习惯了自己是"随时会死"的一方，反而容易忽略"死之前和死之后"的工程质量。</p>
+<h3>幂等</h3>
+<p>安卓侧的重复执行很常见：后台任务在约束满足后重试、广播接收器收到重复广播、页面恢复时重新拉取。把写操作设计成按业务键幂等，比在客户端加"只执行一次"的标志可靠——标志本身也在内存里，进程一死就没了。</p>
+<h3>超时</h3>
+<p>移动网络的特点是"没有响应"多于"明确失败"。每个跨网络调用都该有超时，包括 DNS、连接、读取，以及整体预算。没有超时，协程会挂在挂起态，用户看到的是转圈，代码看到的是"还在进行"。</p>
+<p>超时还要能传导：上游给了 2 秒预算，下游的三次重试加起来就不能超过 2 秒，否则超时形同虚设。</p>
+<h3>重试</h3>
+<p>重试要有边界：指数退避、最大次数、可重试错误与不可重试错误分开。对 4xx 里的语义错误重试没有意义，对超时和 5xx 才值得。重试还需要幂等配合，否则一次超时可能变成两次扣款。</p>
+<h3>可观测</h3>
+<p>服务端习惯把关键路径的埋点、日志、指标一起上，安卓侧常常只留 <code>Log.d</code>。进程被回收之后，日志是唯一能还原"死之前发生了什么"的东西。至少要把关键状态转换、失败原因、重试次数落到可上传的地方，而不是只打在 logcat 里。</p>
+<p>可观测还有一层作用：它让"进程死过"这件事变得可见。没有这件事的记录，所有存活假设的问题都会被归因成"偶现"，而偶现的问题通常没人修。</p>
+<h2>判据：怎么判断一段代码在依赖存活假设</h2>
+<p>不需要读完全部代码，问五个问题就够：</p>
+<ol>
+<li>把进程杀掉再启动，这段逻辑的结果会变吗？会变的部分，是不是被当成了真相？</li>
+<li>这段代码同时跑在两个实例上，会不会做出两份副作用？</li>
+<li>这里的初始化，假设了"只会执行一次"吗？如果不是，重复执行会怎样？</li>
+<li>这个"正在处理"的标志，持有者死掉之后谁来清？</li>
+<li>这个定时任务，进程不在的那段时间里，谁来补？</li>
+</ol>
+<p>五个问题里只要有一个答不上来，那段代码就在依赖一个没写下来的假设。</p>
+<p>答不上来不等于写错了。很多场景下这个假设成立，代价也可以接受：一个只在单实例上跑的内部工具，进程内定时器就是合理选择；一个纯展示用的内存缓存，丢了重新拉一次也不贵。关键是这个假设要被知道，而不是被默认。知道之后，才能在部署形态变化时想起它。</p>
+<h2>收束：把假设写下来</h2>
+<p>两个平台没有谁更先进。安卓的假设来自资源约束：手机内存有限，系统有权随时回收进程，所以代码必须假设内存不可信、执行会中断、启动会重来。服务端的假设来自部署形态的历史：单机、长驻、手工发布，所以代码可以假设进程长活、内存可信、启动只发生一次。</p>
+<p>问题出在两种形态开始混合的时候。移动端开始接服务端逻辑（离线队列、同步、后台任务编排），服务端开始跑在多实例和编排系统上，两边的默认假设都还在，但约束已经变了。这时候塌的不是语法，是那些从来没被当成假设的假设。</p>
+<p>写下来是最便宜的一步。在类的注释里写一句"这份缓存可丢失，进程重启后为空是正常状态"，在定时任务旁边写一句"调度由外部系统负责，本方法必须幂等"，在单例上写一句"每个实例各有一份，不要假设全局唯一"。这些话不会让代码变快，但会让下一个改这段代码的人知道：他接手的不是一段逻辑，是一组关于进程能活多久的赌注。</p>
+<p>（本文涉及平台行为的描述以官方文档为准；涉及"何时会触发"的部分均为条件性推演，具体取决于进程回收时机与部署方式。）</p>
+
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="android-testing-playbook.html">
+            <div class="related-post-card-title">别再从 Espresso 开始：Android 测试分层实战手册</div>
+            <div class="related-post-card-tags"><span>Android</span><span>测试</span><span>Kotlin</span></div>
+          </a>
+          <a class="related-post-card" href="jetpack-compose-性能优化实战从卡顿到丝滑的-12-个技巧.html">
+            <div class="related-post-card-title">Jetpack Compose 性能优化实战：从卡顿到丝滑的 12 个技巧</div>
+            <div class="related-post-card-tags"><span>Jetpack Compose</span><span>Android</span><span>性能优化</span></div>
+          </a>
+          <a class="related-post-card" href="gradle-构建加速全攻略从-5-分钟到-30-秒.html">
+            <div class="related-post-card-title">Gradle 构建加速全攻略：从 5 分钟到 30 秒</div>
+            <div class="related-post-card-tags"><span>Gradle</span><span>Android</span><span>构建优化</span></div>
+          </a>
+          <a class="related-post-card" href="gradle-build-acceleration-5min-to-30sec.html">
+            <div class="related-post-card-title">Gradle 构建加速实操：我从 5 分钟做到 30 秒</div>
+            <div class="related-post-card-tags"><span>Gradle</span><span>Android</span><span>构建优化</span></div>
+          </a>
+          <a class="related-post-card" href="android-15-privacy-media-visual-permission.html">
+            <div class="related-post-card-title">Android 15 隐私新特性：所有文件都需要 MEDIA_VISUAL_PERMISSION</div>
+            <div class="related-post-card-tags"><span>Android</span><span>隐私</span><span>Android 15</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
+
+        <!-- Post Copyright & License Card -->
+        <div class="post-copyright-card">
+          <div class="copyright-header">
+            <div class="copyright-badge">
+              <span>📜</span>
+              <span>原创与知识共享协议</span>
+            </div>
+            <button class="copyright-cite-btn" id="copy-cite-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+              </svg>
+              <span>复制 Markdown 引用</span>
+            </button>
+          </div>
+          <div class="copyright-list">
+            <div class="copyright-item"><strong>文章标题：</strong>移动端写的是「随时会死」，服务端写的是「不会死」</div>
+            <div class="copyright-item"><strong>文章作者：</strong>张小猛 · loczb</div>
+            <div class="copyright-item"><strong>永久链接：</strong><a href="https://709527.xyz/blog/posts/process-lifetime-assumptions-across-stacks.html">https://709527.xyz/blog/posts/process-lifetime-assumptions-across-stacks.html</a></div>
+            <div class="copyright-item"><strong>版权声明：</strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 国际许可协议。商业转载请联系作者获得授权，非商业转载请注明出处。</div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </main>
+
+  <!-- Related Posts / Navigation -->
+  <section class="section" aria-label="读完之后" style="padding-top: 0;">
+    <div class="container container-narrow">
+      <!-- Post Nav Prev Next -->
+      <nav class="post-nav" aria-label="文章翻页导航">
+        <a href="a-lock-file-outlives-its-process.html" class="post-nav-card post-nav-prev" rel="prev">
+          <span class="post-nav-label">← 上一篇</span>
+          <span class="post-nav-title">锁文件不跟着进程走：进程崩溃后留下的那把锁，没人会来解开</span>
+        </a>
+        <div class="post-nav-card post-nav-next disabled" aria-disabled="true">
+          <span class="post-nav-label">下一篇 →</span>
+          <span class="post-nav-title">已是最新篇博文</span>
+        </div>
+      </nav>
+      <!-- /Post Nav Prev Next -->
+      <hr style="border: none; border-top: 1px solid var(--color-border); margin: var(--space-2xl) 0;">
+
+      <div class="blog-topics" style="margin-bottom: var(--space-xl); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+        <div>
+          <span class="topic-label">读完之后:</span>
+          <a href="../index.html" class="topic-tag">返回博客列表</a>
+          <a href="../index.html?view=series" class="topic-tag">浏览全部专栏</a>
+        </div>
+        <a href="#main-content" class="topic-tag" style="margin-left: auto;">↑ 回到顶部</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+<!-- PARTIAL:FOOTER -->
+  <footer class="footer" role="contentinfo">
+  <div class="footer-inner">
+    <p class="footer-signature">写代码，做产品，也认真生活。</p>
+    <div class="footer-social">
+      <a href="https://github.com/zzdbilly" class="footer-social-link" target="_blank" rel="noopener" aria-label="GitHub">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+      </a>
+      <a href="https://twitter.com/zzdbilly" class="footer-social-link" target="_blank" rel="noopener" aria-label="X (Twitter)">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      </a>
+      <a href="/rss.xml" class="footer-social-link" target="_blank" rel="noopener" aria-label="RSS 订阅">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+      </a>
+    </div>
+    <div class="footer-links">
+      <a href="/" class="footer-link">首页</a>
+      <a href="/projects/" class="footer-link">项目</a>
+      <a href="/blog/" class="footer-link">博客</a>
+      <a href="/about/" class="footer-link">关于</a>
+    </div>
+    <p class="footer-copyright">&copy; 2026 张小猛 · loczb · Built with care</p>
+  </div>
+</footer>
+  <!-- /PARTIAL:FOOTER -->
+
+  <script defer src="../../assets/js/main.js"></script>
+  <script defer src="../../assets/js/article.js?v=c9f1a378ea"></script>
+  <script defer src="../../assets/js/share.js"></script>
+  <!-- Back to Top & Reading Progress -->
+  <button class="back-to-top" id="backToTop" aria-label="回到顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
+  <div class="reading-progress" id="readingProgress"></div>
+
+  <!-- Post Sidebar Info（左侧） -->
+  <div class="post-sidebar-info" id="postSidebar">
+    <div class="post-info-card">
+      <div class="post-info-section">
+        <div class="post-info-label">作者</div>
+        <div class="post-info-author">
+          <div class="post-info-avatar">小</div>
+          <div>
+            <div class="post-info-author-name">张小猛</div>
+            <div class="post-info-author-desc">写代码，做产品</div>
+          </div>
+        </div>
+      </div>
+      <div class="post-info-section">
+        <div class="post-info-label">文章信息</div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📅</span> 发布日期</span><span class="post-info-stat-value">2026-11-24</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">⏱️</span> 阅读时间</span><span class="post-info-stat-value">14 min read</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">6216 字</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📊</span> 章节数</span><span class="post-info-stat-value">10 节 · 18 子节</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">💻</span> 代码块</span><span class="post-info-stat-value">5 段</span></div>
+      </div>
+      <div class="post-info-section" id="postSidebarTags">
+        <div class="post-info-label">标签</div>
+        <div class="post-info-links">
+          <a href="../../blog/index.html?tag=Android" class="post-info-link"># Android</a>
+          <a href="../../blog/index.html?tag=%E8%B7%A8%E6%A0%88" class="post-info-link"># 跨栈</a>
+          <a href="../../blog/index.html?tag=%E8%BF%9B%E7%A8%8B%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F" class="post-info-link"># 进程生命周期</a>
+          <a href="../../blog/index.html?tag=%E6%9C%8D%E5%8A%A1%E7%AB%AF" class="post-info-link"># 服务端</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Post TOC -->
+  <div class="post-toc-container" id="postToc">
+    <nav class="post-toc" aria-label="文章目录">
+      <div class="post-toc-title">目录</div>
+      <ul class="post-toc-list" id="tocList">
+      </ul>
+    </nav>
+  </div>
+
+  <!-- Comment System -->
+  <script src="../../workers/comment-system/comment-widget.js?v=5d8a6a1796" defer></script>
+
+  <!-- highlight.js 代码语法高亮（本地完整构建，无外部依赖） -->
+  <script defer src="../../assets/vendor/highlight/highlight.min.js"></script>
+  <script>
+    /* 语法高亮改为「可见优先、空闲补齐」：
+       highlight.js 要遍历全篇代码块并生成数百个 span，若在 DOMContentLoaded 里同步跑完，
+       会在关键路径上长时间占住主线程（2026-09-27 实测本页长任务 1548ms、DCL 3651ms；
+       改动后长任务 145ms、DCL 1378ms）。这里 DCL 阶段只登记观察，实际高亮交给
+       IntersectionObserver（近屏 800px 内优先）+ requestIdleCallback（剩余块每片 ≤4 块），
+       首屏代码块的着色时机与视觉基本无变化。 */
+    (function() {
+      function canPaint(b) {
+        return !b.classList.contains('hljs') && !b.closest('.codehilite');
+      }
+      function paint(b) {
+        if (!canPaint(b)) return;
+        try { hljs.highlightElement(b); } catch (e) {}
+      }
+      function init() {
+        var blocks = [].slice.call(document.querySelectorAll('pre code')).filter(canPaint);
+        if (!blocks.length) return;
+        if ('IntersectionObserver' in window) {
+          var io = new IntersectionObserver(function(entries, obs) {
+            entries.forEach(function(en) {
+              if (!en.isIntersecting) return;
+              paint(en.target);
+              obs.unobserve(en.target);
+            });
+          }, { rootMargin: '800px 0px' });
+          blocks.forEach(function(b) { io.observe(b); });
+        }
+        var i = 0;
+        var idle = window.requestIdleCallback || window.setTimeout;
+        var step = function() {
+          var quota = 4;
+          while (i < blocks.length && quota-- > 0) paint(blocks[i++]);
+          if (i < blocks.length) idle(step);
+        };
+        idle(step); // 不在 DCL 里同步跑：可见块由 IntersectionObserver 处理，其余走空闲分片
+      }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+      } else {
+        init();
+      }
+    })();
+  </script>
+
+  <!-- Cloudflare Web Analytics -->
+  <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "29e7cff6f37448989538e2165cb79187"}'></script>
+</body>
+</html>
