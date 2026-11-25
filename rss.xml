@@ -7,6 +7,14 @@
     <language>zh-CN</language>
     <atom:link href="https://709527.xyz/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>149 篇全量重编只要一点八秒：增量化省的是零头，赔的是基线</title>
+      <link>https://709527.xyz/blog/posts/full-rebuild-is-cheap-incremental-is-not.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/full-rebuild-is-cheap-incremental-is-not.html</guid>
+      <description>全量重建是发布正确性的定义，不是性能开销：149 篇 1.78 秒，增量化省的是零头，赔的是基线。</description>
+      <category>前端</category>
+      <pubDate>Wed, 25 Nov 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
       <title>移动端写的是「随时会死」，服务端写的是「不会死」</title>
       <link>https://709527.xyz/blog/posts/process-lifetime-assumptions-across-stacks.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/process-lifetime-assumptions-across-stacks.html</guid>
@@ -157,14 +165,6 @@
       <description>OFFSET 把「第几页」定义成相对当前位置的距离，而列表内容会变。它不报错，只是在你翻页时默默重复一条或吞掉一条。分页是一致性问题，不是 UI 问题。</description>
       <category>数据库</category>
       <pubDate>Thu, 05 Nov 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>装到主屏的那份，是你召回不了的版本</title>
-      <link>https://709527.xyz/blog/posts/installed-pwa-is-a-second-release.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/installed-pwa-is-a-second-release.html</guid>
-      <description>部署完成只完成了第一次发布。第二次发布发生在每个已安装的客户端上，完成时间、触发条件与失败形态都不在你手里——验收必须拆成浏览器与安装态两条路径。</description>
-      <category>前端</category>
-      <pubDate>Wed, 04 Nov 2026 00:00:00 +0800</pubDate>
     </item>
   </channel>
 </rss>

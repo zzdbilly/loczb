@@ -1,6 +1,21 @@
 {
   "posts": [
     {
+      "slug": "full-rebuild-is-cheap-incremental-is-not",
+      "title": "149 篇全量重编只要一点八秒：增量化省的是零头，赔的是基线",
+      "date": "2026-11-25",
+      "dateTime": "2026-11-25 16:39:00",
+      "category": "前端",
+      "tags": [
+        "构建",
+        "静态站",
+        "性能",
+        "工程权衡"
+      ],
+      "readTime": 13,
+      "url": "blog/posts/full-rebuild-is-cheap-incremental-is-not.html"
+    },
+    {
       "slug": "process-lifetime-assumptions-across-stacks",
       "title": "移动端写的是「随时会死」，服务端写的是「不会死」",
       "date": "2026-11-24",
@@ -2306,6 +2321,7 @@
     }
   ],
   "categories": [
+    "前端",
     "Android",
     "系统编程",
     "Kotlin",
@@ -2313,14 +2329,13 @@
     "AI",
     "数据库",
     "安全",
-    "前端",
     "DevOps",
     "开发"
   ],
   "stats": {
-    "totalPosts": 149,
-    "totalTags": 374,
-    "latestDate": "2026-11-24",
+    "totalPosts": 150,
+    "totalTags": 376,
+    "latestDate": "2026-11-25",
     "oldestDate": "2026-02-15"
   }
 }

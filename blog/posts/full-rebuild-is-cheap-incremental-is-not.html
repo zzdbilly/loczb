@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <script>document.documentElement.classList.add("js");try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://static.cloudflareinsights.com https://loczb-comments.billymust.workers.dev; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://loczb-comments.billymust.workers.dev https://dashscope.aliyuncs.com https://709527.xyz https://www.709527.xyz https://cloudflareinsights.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
+    <script>/* 反点击劫持兜底：GitHub Pages 无法下发 X-Frame-Options / CSP frame-ancestors */(function(){if(self===top)return;try{top.location=self.location}catch(e){}setTimeout(function(){if(self!==top){document.documentElement.style.display='none';}},400);})();</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>149 篇全量重编只要一点八秒：增量化省的是零头，赔的是基线 | 张小猛 - loczb</title>
+    <meta name="description" content="全量重建是发布正确性的定义，不是性能开销：149 篇 1.78 秒，增量化省的是零头，赔的是基线。">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="149 篇全量重编只要一点八秒：增量化省的是零头，赔的是基线 | 张小猛 - loczb">
+    <meta property="og:description" content="全量重建是发布正确性的定义，不是性能开销：149 篇 1.78 秒，增量化省的是零头，赔的是基线。">
+    <meta property="og:url" content="https://709527.xyz/blog/posts/full-rebuild-is-cheap-incremental-is-not.html">
+    <meta property="og:type" content="article">
+    <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
+    <meta property="og:site_name" content="loczb">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="149 篇全量重编只要一点八秒：增量化省的是零头，赔的是基线 | 张小猛 - loczb">
+    <meta name="twitter:description" content="全量重建是发布正确性的定义，不是性能开销：149 篇 1.78 秒，增量化省的是零头，赔的是基线。">
+    <meta name="twitter:image" content="https://709527.xyz/assets/images/og-image.png">
+
+        <script type="application/ld+json">
+{
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "149 篇全量重编只要一点八秒：增量化省的是零头，赔的是基线",
+      "description": "全量重建是发布正确性的定义，不是性能开销：149 篇 1.78 秒，增量化省的是零头，赔的是基线。",
+      "image": "https://709527.xyz/assets/images/og-image.png",
+      "author": {
+            "@type": "Person",
+            "name": "张小猛",
+            "url": "https://709527.xyz/about/"
+      },
+      "publisher": {
+            "@type": "Organization",
+            "name": "loczb",
+            "logo": {
+                  "@type": "ImageObject",
+                  "url": "https://709527.xyz/assets/images/favicon.svg"
+            }
+      },
+      "datePublished": "2026-11-25T16:39:00+08:00",
+      "dateModified": "2026-11-25T16:39:00+08:00",
+      "url": "https://709527.xyz/blog/posts/full-rebuild-is-cheap-incremental-is-not.html",
+      "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://709527.xyz/blog/posts/full-rebuild-is-cheap-incremental-is-not.html"
+      },
+      "keywords": "构建, 静态站, 性能, 工程权衡",
+      "articleSection": "前端",
+      "timeRequired": "PT13M",
+      "inLanguage": "zh-CN"
+}
+    </script>
+
+    <link rel="stylesheet" href="../../assets/css/style.css?v=c8e170d8f9">
+    <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
+    <link rel="alternate icon" href="../../assets/images/favicon.ico">
+    <link rel="canonical" href="https://709527.xyz/blog/posts/full-rebuild-is-cheap-incremental-is-not.html">
+</head>
+<body>
+  <!-- PARTIAL:SKIP_LINK -->
+  <a href="#main-content" class="skip-link">跳至主要内容</a>
+  <!-- /PARTIAL:SKIP_LINK -->
+
+  <!-- Navigation -->
+<!-- PARTIAL:NAV -->
+  <nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">
+      loc<span>zb</span>
+    </a>
+    <button class="nav-toggle" aria-label="打开菜单" aria-expanded="false" aria-controls="nav-links-menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <div class="nav-overlay"></div>
+    <ul class="nav-links" id="nav-links-menu">
+      <li><a href="/" class="nav-link" data-nav="home">首页</a></li>
+      <li><a href="/projects/" class="nav-link" data-nav="projects">项目</a></li>
+      <li><a href="/blog/" class="nav-link active" data-nav="blog">博客</a></li>
+      <li><a href="/about/" class="nav-link" data-nav="about">关于</a></li>
+    </ul>
+    <button class="theme-toggle" aria-label="切换主题" title="切换亮/暗模式">
+      <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="5"></circle>
+        <line x1="12" y1="1" x2="12" y2="3"></line>
+        <line x1="12" y1="21" x2="12" y2="23"></line>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+        <line x1="1" y1="12" x2="3" y2="12"></line>
+        <line x1="21" y1="12" x2="23" y2="12"></line>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+      </svg>
+      <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+      </svg>
+    </button>
+  </div>
+</nav>
+  <!-- /PARTIAL:NAV -->
+  <main class="section" id="main-content" style="padding-bottom: 0; padding-top: var(--space-4xl);">
+    <div class="container container-narrow">
+      <a href="../index.html" class="back-link">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        返回博客列表
+      </a>
+
+      <article class="post-content">
+        <h1>149 篇全量重编只要一点八秒：增量化省的是零头，赔的是基线</h1>
+
+        <div class="post-meta">
+          <span class="meta-item"><span aria-hidden="true">📅</span> 2026-11-25 16:39:00</span>
+          <span class="meta-item"><span aria-hidden="true">⏱️</span> 13 min read</span>
+          <span class="meta-item"><span aria-hidden="true">👤</span> 张小猛</span>
+        </div>
+
+        <div class="post-tags">
+          <span class="tag">构建</span>
+          <span class="tag">静态站</span>
+          <span class="tag">性能</span>
+          <span class="tag">工程权衡</span>
+        </div>
+
+        
+
+        <h2>先把尺子摆出来：直觉说慢，实测说一点八秒</h2>
+<p>「每次改一篇文章，都要把 149 篇全部重编一遍」——这句话我听了很久，也自己说过很久。它听起来就是个该被优化掉的毛病：明明只动了一篇，为什么要付 149 篇的代价。</p>
+<p>直到我真的按下秒表。</p>
+<p>同一个仓库，同一台机器，连着跑三次全量重编，不做任何缓存预热也不清 page cache，也就是我平时发文时机器所处的那个状态：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">第几次</th>
+<th style="text-align: right;">全量重编耗时</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">第一次</td>
+<td style="text-align: right;">1.783 s</td>
+</tr>
+<tr>
+<td style="text-align: left;">第二次</td>
+<td style="text-align: right;">1.801 s</td>
+</tr>
+<tr>
+<td style="text-align: left;">第三次</td>
+<td style="text-align: right;">1.769 s</td>
+</tr>
+<tr>
+<td style="text-align: left;">三次均值</td>
+<td style="text-align: right;">1.78 s</td>
+</tr>
+</tbody>
+</table>
+<p>149 篇，一点八秒。折到单篇大约 12 毫秒——比我按下回车到松开手指的时间还短。</p>
+<p>我没有做任何优化。这三个数字就是现有构建脚本原样跑出来的，脚本里没有 mtime 判断、没有变更集、没有「跳过未修改文件」的分支，每一次都是从 149 个 Markdown 源文件重新渲染到最后一个字节。这一点我专门翻过源码确认：整个构建过程没有任何基于文件修改时间或变更集合的逻辑。</p>
+<p>所以这篇文章不是一篇优化记。它是一篇测量记，外加一个我认为更值得讨论的问题：<strong>当你要优化的那一段本来就只有一点八秒，你优化的是什么。</strong></p>
+<h2>四段时间：一次发文到底花在哪</h2>
+<p>把一次发文拆开，本地脚本能计时的部分其实只有三段。</p>
+<h3>第一段：全量重编，1.78 秒</h3>
+<p>这一段做的事比「渲染 149 个页面」多：读 149 个源文件、解析 frontmatter、渲染正文、写出 149 个 HTML 与 149 个元数据 sidecar，然后重建列表首页与全部分页、重建首页的最新文章区、重算搜索索引、重写 RSS 与 sitemap、更新 Service Worker 的缓存版本号。</p>
+<p>也就是说，它本来就不是「149 次单篇渲染」，而是「149 次单篇渲染 + 一整套聚合视图」。聚合视图的代价和篇数是弱相关的：分类计数、标签云、分页边界这些都要遍历全量，但遍历本身几乎不花钱，花钱的是渲染与写盘。</p>
+<p>一点八秒里，真正跟篇数成正比的部分大约就是那 12 毫秒乘以 149。</p>
+<h3>第二段：产物一致性校验，0.21 秒</h3>
+<p>编译完不是就完了，还要对账：文章集合、索引集合、相关文章集合、元数据集合，四处必须能互相对上，主页面上写的篇数版本也要和实际产物一致。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">第几次</th>
+<th style="text-align: right;">产物校验耗时</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">第一次</td>
+<td style="text-align: right;">0.214 s</td>
+</tr>
+<tr>
+<td style="text-align: left;">第二次</td>
+<td style="text-align: right;">0.205 s</td>
+</tr>
+<tr>
+<td style="text-align: left;">第三次</td>
+<td style="text-align: right;">0.205 s</td>
+</tr>
+</tbody>
+</table>
+<p>三次均值 0.21 秒。它比构建快一个数量级，因为它只读不写，做的是集合比对而不是模板渲染。</p>
+<h3>第三段：内链巡检，0.15 秒</h3>
+<p>站内一共 5202 条内链，分布在 173 个 HTML 页面里，平均每页 30 条左右。巡检要把这些链接全部解析出来，逐条确认目标文件存在。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">第几次</th>
+<th style="text-align: right;">内链巡检耗时</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">第一次</td>
+<td style="text-align: right;">0.157 s</td>
+</tr>
+<tr>
+<td style="text-align: left;">第二次</td>
+<td style="text-align: right;">0.148 s</td>
+</tr>
+<tr>
+<td style="text-align: left;">第三次</td>
+<td style="text-align: right;">0.141 s</td>
+</tr>
+</tbody>
+</table>
+<p>三次均值 0.15 秒。按 5202 条算，每千条链接大约 29 毫秒。</p>
+<h3>第四段：提交、推送、上线与人眼核验</h3>
+<p>前三段加起来：</p>
+<pre><code class="language-text">全量重编   1.78 s   83.2%
+产物校验   0.21 s    9.8%
+内链巡检   0.15 s    7.0%
+----------------------------
+合计       2.14 s  100.0%
+</code></pre>
+<p>2.14 秒。</p>
+<p>然后是第四段：暂存改动、写提交、推送到远端、等托管侧构建完成、打开线上页面核对标题与首屏、确认列表页与首页都出现了新文章、确认 RSS 与 sitemap 里有它。</p>
+<p><strong>这一段我没有装计时器。</strong> 我不想在这里编一个「总共 47 秒」之类的数字，因为我确实没测。我能确定的是它的构成：一次网络往返、一次远端构建、若干次人工点击与肉眼比对。它的最小粒度不是毫秒，是「一次推送往返」和「一次人工核对」。</p>
+<p>所以「前三段 2.14 秒占一次发文总耗时的一个零头」这个判断，依据不是我把总时长量出来了，而是第四段的计量单位本来就在秒与分钟这一侧——把前三段全部优化到零，你也省不掉第四段里的任何一次往返。</p>
+<h2>三个体积：唯一跟着规模长的那条线</h2>
+<p>如果耗时不是瓶颈，那什么在随规模增长？体积。</p>
+<h3>产物 37M</h3>
+<p>不含版本库的站点产物一共 37M。其中 3242 个受控文件、173 个 HTML 页面、149 篇文章。平均下来每篇贡献约 254KB 的产物。</p>
+<h3>blog 目录 9.8M，占产物的四分之一</h3>
+<p>文章正文、列表页、分页、索引 JSON 全在这一个目录里，9.8M，占 37M 的 26.5%。折到每篇约 67KB——这里面大部分不是正文，是每篇文章页面里嵌的那份导航、相关文章卡片与站点框架。</p>
+<h3>.git 39M：历史比产物还重</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">对象</th>
+<th style="text-align: right;">体积</th>
+<th style="text-align: left;">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">站点产物（不含版本库）</td>
+<td style="text-align: right;">37M</td>
+<td style="text-align: left;">3242 个文件、173 个 HTML</td>
+</tr>
+<tr>
+<td style="text-align: left;">其中 blog 目录</td>
+<td style="text-align: right;">9.8M</td>
+<td style="text-align: left;">149 篇正文与聚合页</td>
+</tr>
+<tr>
+<td style="text-align: left;">版本库 .git</td>
+<td style="text-align: right;">39M</td>
+<td style="text-align: left;">全部历史版本</td>
+</tr>
+<tr>
+<td style="text-align: left;">两者合计</td>
+<td style="text-align: right;">76M</td>
+<td style="text-align: left;">.git 占 51.3%</td>
+</tr>
+</tbody>
+</table>
+<p>版本库比当前产物还大，是产物的 1.05 倍。折到每篇，产物贡献 254KB，历史贡献 268KB，而且历史那一份是<strong>不可逆</strong>的：只要提交过，它就在那里，除非重写历史。</p>
+<h3>体积与耗时朝相反的方向走</h3>
+<p>把两个维度放在一起看：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">维度</th>
+<th style="text-align: right;">每增加一篇的增量</th>
+<th style="text-align: left;">是否可逆</th>
+<th style="text-align: left;">是否与篇数同步</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">全量重编耗时</td>
+<td style="text-align: right;">约 12 ms</td>
+<td style="text-align: left;">可逆（随时能删缓存重来）</td>
+<td style="text-align: left;">线性，系数很小</td>
+</tr>
+<tr>
+<td style="text-align: left;">站点产物</td>
+<td style="text-align: right;">约 254 KB</td>
+<td style="text-align: left;">可逆（重新构建即可）</td>
+<td style="text-align: left;">线性</td>
+</tr>
+<tr>
+<td style="text-align: left;">版本库历史</td>
+<td style="text-align: right;">约 268 KB</td>
+<td style="text-align: left;">不可逆</td>
+<td style="text-align: left;">线性，且只增不减</td>
+</tr>
+</tbody>
+</table>
+<p>每发一篇文章，你多付 12 毫秒的构建时间、254KB 的产物、268KB 且永不消失的历史。前者是零头，后两者才是会咬人的那一侧。</p>
+<p>这也解释了我为什么对「增量化」这个方向一直提不起兴趣：它优化的是表里系数最小的那一行。</p>
+<h2>增量化真正卖的是什么，收的是什么</h2>
+<p>增量化不是没有价值，它只是有价格。价格不在实现复杂度上——那部分是一次性的——而在它把「结果」换成了「历史」。</p>
+<h3>产物漂移：磁盘不再等于全量重跑</h3>
+<p>全量构建有一个性质：<code>site/</code> 目录的内容，恒等于「拿当前源码从零跑一遍」的输出。这个等式是发布正确性的定义。</p>
+<p>增量构建打破的正是这个等式。磁盘上的产物变成了「一系列增量操作的累积结果」，而它是否等于全量重跑的结果，取决于每一条失效规则都写对了。想验证这件事，你只有一条路：</p>
+<pre><code class="language-bash"># 在一个干净副本里做，不要动正在发布的目录
+rm -rf site/
+python3 build.py --all
+git diff --stat -- site/
+</code></pre>
+<p>如果 diff 为空，说明你的增量是可信的；如果不为空，说明过去某次增量漏了依赖。而这个检查本身，就是一次全量重编——你已经把省下来的时间花回去了，只是花在了更晚、更被动的时间点。</p>
+<h3>缓存失效面：一篇文章牵动的不止三个文件</h3>
+<p>我对着产物清单过了一遍。它远不止「新增一个 HTML、一个 JSON、改一个索引」：</p>
+<ul>
+<li>文章本身的页面与元数据 sidecar</li>
+<li>列表首页（新文章要进第一页）</li>
+<li>分页边界（第一页挤出去的那篇要落到第二页，第二页同理往后推）</li>
+<li>站点首页的最新文章区与内嵌的文章数组</li>
+<li>搜索索引</li>
+<li>RSS 与 sitemap</li>
+<li>Service Worker 的缓存版本号（内容哈希变了）</li>
+<li>若干篇相邻文章的「相关文章」卡片</li>
+<li>篇数锚点所在的几个静态页面</li>
+</ul>
+<p>一份可靠的增量实现，必须为上面每一条写出「什么输入变化会触发它重建」的规则。规则的数量与产物的耦合面成正比，而不是与「改了几个文件」成正比。这就是失效面：你省下的每一毫秒，都要用一条规则去换。</p>
+<h3>构建行为随环境变</h3>
+<p>增量依赖上一次构建留下的状态。状态在，结果是一种；状态被清掉、换了机器、在 CI 的干净克隆里跑，结果是另一种。</p>
+<p>全量构建没有这个问题：同样的输入，在任何机器上都是同样的输出。CI 里那条「重新全量编译一遍，再和提交的产物逐字节比对」之所以能成立，靠的就是这个性质。如果构建本身是增量的，这条断言就退化成了「再增量一遍，看看和上次增量像不像」。</p>
+<h3>门禁从「比对全量」退化成「相信上次」</h3>
+<p>这是我认为最贵的一项。</p>
+<p>现在这套门禁能拦住东西，是因为它手里有一份独立算出来的基准：源文件重跑一遍的结果。产物和基准不一致，就红。</p>
+<p>引入增量之后，门禁能比对的就只剩下「这次增量产出的东西」和「上次增量留下的东西」。两者如果一起错——比如某次失效规则漏了，产物和缓存一起偏——门禁会安静地通过。它不再是一个校验器，而是一个记录员。</p>
+<p><strong>所以全量重建不是性能开销，它是发布正确性的定义。</strong> 一点八秒买的不是「重新生成一遍文件」，买的是「我知道磁盘上这份东西，等于源码此刻应该生成的东西」。这笔交易在 149 篇的规模上，价格低到没有必要还价。</p>
+<h2>什么情况下增量化才值得</h2>
+<p>我不是在说增量化永远不该做。它有三个成立条件，我的这套构建一个都不满足。</p>
+<h3>条件一：规模到了另一个量级</h3>
+<p>耗时如果与篇数近似线性，那么从 1.78 秒推到 10 秒，需要八百多篇——这是按每篇 12 毫秒线性外推的<strong>推演</strong>，不是实测，真实曲线会在某个点上因为内存与 IO 变陡。</p>
+<p>八百多篇之前，你省下的是几十毫秒到一两秒；八百多篇之后，全量重编才开始和「一次推送往返」处在同一个量级，那时它才真的值得被优化。</p>
+<h3>条件二：构建里有编译型步骤</h3>
+<p>类型检查、打包、代码分割、压缩、图片转码——这些步骤的单次成本是常数级的大开销，而且它们本身就是增量的（编译器自带依赖图）。在这种构建里，增量省的不是「渲染 149 个模板」，是「重新类型检查整个项目」。</p>
+<p>我这套构建里没有这些步骤。它是纯文本渲染：读 Markdown、套模板、写文件。没有依赖图可算，也就没有增量可做。</p>
+<h3>条件三：全量已经超过十秒</h3>
+<p>十秒是我给自己定的讨论阈值，<strong>经验值，不是实测</strong>。它的含义是：低于十秒，优化收益落在人的感知阈值以下，你省下的时间会被一次手动刷新抵消；高于十秒，等待开始打断工作节奏，优化才有体验上的回报。</p>
+<p>三个条件放在一起：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">条件</th>
+<th style="text-align: left;">我的现状</th>
+<th style="text-align: left;">是否满足</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">规模到另一个量级</td>
+<td style="text-align: left;">149 篇，全量 1.78 s</td>
+<td style="text-align: left;">否</td>
+</tr>
+<tr>
+<td style="text-align: left;">含编译型步骤</td>
+<td style="text-align: left;">纯 Markdown 渲染，无类型检查与打包</td>
+<td style="text-align: left;">否</td>
+</tr>
+<tr>
+<td style="text-align: left;">全量超过十秒</td>
+<td style="text-align: left;">1.78 s</td>
+<td style="text-align: left;">否</td>
+</tr>
+</tbody>
+</table>
+<p>三条全否。这就是我不动它的原因——不是因为增量难写，是因为在这里它买不到东西。</p>
+<h2>该优化的是另外三处</h2>
+<p>把「构建太慢」这个假设去掉之后，真正值得看的地方浮出来了。每一处我都给了可观测量，因为不可观测的优化等于许愿。</p>
+<h3>仓库体积：39M 的历史</h3>
+<p>可观测量：<code>.git</code> 目录体积、历史中最大的若干个 blob、单次克隆耗时。</p>
+<p>39M 对一个 149 篇的文本站来说偏重。文本的压缩率很高，这个体积大概率来自历史里的大二进制——图片、字体、某次误提交的构建产物。处理手段是清理历史中的大对象、把图片转成更省的格式、确认构建产物与依赖目录没有被提交进去。这些都不影响发布正确性，是可以放心做的减法。</p>
+<h3>门禁覆盖：5202 条内链之外还剩什么</h3>
+<p>可观测量：检查项数量、覆盖的页面数、被拦住的次数。</p>
+<p>内链已经全覆盖了：5202 条，173 个页面。没覆盖的是另外几类——外链是否可达、产物体积是否出现异常膨胀、可访问性有没有退化、页面的首字节与关键资源数量。这些检查加进去会增加门禁耗时，但增加的是「能拦住错误」的时间，而不是「重新生成一遍已经正确的文件」的时间。两者的性价比不在一个量级。</p>
+<h3>人工核验：第四段才是真瓶颈</h3>
+<p>可观测量：从推送完成到线上可访问的间隔、人工核验需要点击的次数、核验项的数量。</p>
+<p>这是唯一一段我明确知道它比 1.78 秒大的环节，也是唯一一段没有自动化兜底的环节。把「打开页面、核对标题、确认列表页、确认 RSS」这四步压成一条命令一次输出，收益比把构建从 1.78 秒压到 1.5 秒高一个数量级。</p>
+<h2>判据：先量，再决定哪一秒值得省</h2>
+<p>我现在给自己三条判据，按顺序过。</p>
+<h3>第一条：有没有数字</h3>
+<p>没有测过的「慢」不是问题，是感觉。我这次测完才知道，那个听起来该被优化的全量重编，实际是一点八秒。在此之前，我对它没有任何数字，只有一个形容词——而形容词是没法拿来做取舍的。</p>
+<h3>第二条：要省的那部分，是否大于测量噪声</h3>
+<p>三次连跑，最快 1.769 秒，最慢 1.801 秒，抖动 32 毫秒。这意味着任何小于三十毫秒的优化，在这台机器上你根本测不出它是否生效。如果你的优化目标是「省 200 毫秒」，那它就在噪声边缘，你需要跑几十次才能把信号从抖动里捞出来——而那些跑几十次的时间，早就超过你省下的时间了。</p>
+<h3>第三条：省下来的时间，是否以可验证性为代价</h3>
+<p>前两条是性价比，第三条是底线。任何让「磁盘上的产物不再等于全量重跑结果」的优化，都必须先回答一个问题：出问题的时候，我用什么独立基准去发现它。如果答案是「再全量跑一遍」，那这次优化只是把成本挪到了故障时刻。</p>
+<p>三条判据合起来，结论很朴素：<strong>优化之前先量，量完再决定哪一秒值得省。</strong> 在这套构建上，值得省的那一秒不在构建里。</p>
+<hr />
+<p>最后交代清楚这次到底做了什么：我跑了三组计时，数了产物体积与文件数，读了构建脚本确认它没有增量逻辑，然后把上面这些写下来。<strong>这次只做了测量，没有改动构建链</strong>——没有加缓存，没有加 mtime 判断，没有改构建脚本的一行代码，也没有清理仓库历史。文章里的体积优化与门禁扩展，都还是待办，不是已完成。</p>
+
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="cache-version-from-content-hash.html">
+            <div class="related-post-card-title">版本号不该手写：缓存失效应当由内容哈希推导</div>
+            <div class="related-post-card-tags"><span>缓存</span><span>构建</span><span>静态站点</span></div>
+          </a>
+          <a class="related-post-card" href="pool-size-is-a-queue-length.html">
+            <div class="related-post-card-title">连接池不是并发旋钮，是排队区的长度</div>
+            <div class="related-post-card-tags"><span>连接池</span><span>性能</span><span>PostgreSQL</span></div>
+          </a>
+          <a class="related-post-card" href="idempotent-reproducible-builds.html">
+            <div class="related-post-card-title">幂等与可复现：为什么你的构建总在产生无意义的 diff</div>
+            <div class="related-post-card-tags"><span>构建</span><span>幂等</span><span>可复现</span></div>
+          </a>
+          <a class="related-post-card" href="installed-pwa-is-a-second-release.html">
+            <div class="related-post-card-title">装到主屏的那份，是你召回不了的版本</div>
+            <div class="related-post-card-tags"><span>PWA</span><span>Service Worker</span><span>缓存</span></div>
+          </a>
+          <a class="related-post-card" href="web-worker-与前端多线程开发把主线程从繁重计算中解放出来.html">
+            <div class="related-post-card-title">Web Worker 与前端多线程开发：把主线程从繁重计算中解放出来</div>
+            <div class="related-post-card-tags"><span>前端</span><span>前端开发</span><span>JavaScript</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
+
+        <!-- Post Copyright & License Card -->
+        <div class="post-copyright-card">
+          <div class="copyright-header">
+            <div class="copyright-badge">
+              <span>📜</span>
+              <span>原创与知识共享协议</span>
+            </div>
+            <button class="copyright-cite-btn" id="copy-cite-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+              </svg>
+              <span>复制 Markdown 引用</span>
+            </button>
+          </div>
+          <div class="copyright-list">
+            <div class="copyright-item"><strong>文章标题：</strong>149 篇全量重编只要一点八秒：增量化省的是零头，赔的是基线</div>
+            <div class="copyright-item"><strong>文章作者：</strong>张小猛 · loczb</div>
+            <div class="copyright-item"><strong>永久链接：</strong><a href="https://709527.xyz/blog/posts/full-rebuild-is-cheap-incremental-is-not.html">https://709527.xyz/blog/posts/full-rebuild-is-cheap-incremental-is-not.html</a></div>
+            <div class="copyright-item"><strong>版权声明：</strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 国际许可协议。商业转载请联系作者获得授权，非商业转载请注明出处。</div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </main>
+
+  <!-- Related Posts / Navigation -->
+  <section class="section" aria-label="读完之后" style="padding-top: 0;">
+    <div class="container container-narrow">
+      <!-- Post Nav Prev Next -->
+      <nav class="post-nav" aria-label="文章翻页导航">
+        <a href="process-lifetime-assumptions-across-stacks.html" class="post-nav-card post-nav-prev" rel="prev">
+          <span class="post-nav-label">← 上一篇</span>
+          <span class="post-nav-title">移动端写的是「随时会死」，服务端写的是「不会死」</span>
+        </a>
+        <div class="post-nav-card post-nav-next disabled" aria-disabled="true">
+          <span class="post-nav-label">下一篇 →</span>
+          <span class="post-nav-title">已是最新篇博文</span>
+        </div>
+      </nav>
+      <!-- /Post Nav Prev Next -->
+      <hr style="border: none; border-top: 1px solid var(--color-border); margin: var(--space-2xl) 0;">
+
+      <div class="blog-topics" style="margin-bottom: var(--space-xl); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+        <div>
+          <span class="topic-label">读完之后:</span>
+          <a href="../index.html" class="topic-tag">返回博客列表</a>
+          <a href="../index.html?view=series" class="topic-tag">浏览全部专栏</a>
+        </div>
+        <a href="#main-content" class="topic-tag" style="margin-left: auto;">↑ 回到顶部</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+<!-- PARTIAL:FOOTER -->
+  <footer class="footer" role="contentinfo">
+  <div class="footer-inner">
+    <p class="footer-signature">写代码，做产品，也认真生活。</p>
+    <div class="footer-social">
+      <a href="https://github.com/zzdbilly" class="footer-social-link" target="_blank" rel="noopener" aria-label="GitHub">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+      </a>
+      <a href="https://twitter.com/zzdbilly" class="footer-social-link" target="_blank" rel="noopener" aria-label="X (Twitter)">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      </a>
+      <a href="/rss.xml" class="footer-social-link" target="_blank" rel="noopener" aria-label="RSS 订阅">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+      </a>
+    </div>
+    <div class="footer-links">
+      <a href="/" class="footer-link">首页</a>
+      <a href="/projects/" class="footer-link">项目</a>
+      <a href="/blog/" class="footer-link">博客</a>
+      <a href="/about/" class="footer-link">关于</a>
+    </div>
+    <p class="footer-copyright">&copy; 2026 张小猛 · loczb · Built with care</p>
+  </div>
+</footer>
+  <!-- /PARTIAL:FOOTER -->
+
+  <script defer src="../../assets/js/main.js"></script>
+  <script defer src="../../assets/js/article.js?v=c9f1a378ea"></script>
+  <script defer src="../../assets/js/share.js"></script>
+  <!-- Back to Top & Reading Progress -->
+  <button class="back-to-top" id="backToTop" aria-label="回到顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
+  <div class="reading-progress" id="readingProgress"></div>
+
+  <!-- Post Sidebar Info（左侧） -->
+  <div class="post-sidebar-info" id="postSidebar">
+    <div class="post-info-card">
+      <div class="post-info-section">
+        <div class="post-info-label">作者</div>
+        <div class="post-info-author">
+          <div class="post-info-avatar">小</div>
+          <div>
+            <div class="post-info-author-name">张小猛</div>
+            <div class="post-info-author-desc">写代码，做产品</div>
+          </div>
+        </div>
+      </div>
+      <div class="post-info-section">
+        <div class="post-info-label">文章信息</div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📅</span> 发布日期</span><span class="post-info-stat-value">2026-11-25</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">⏱️</span> 阅读时间</span><span class="post-info-stat-value">13 min read</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">3980 字</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📊</span> 章节数</span><span class="post-info-stat-value">7 节 · 21 子节</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">💻</span> 代码块</span><span class="post-info-stat-value">2 段</span></div>
+      </div>
+      <div class="post-info-section" id="postSidebarTags">
+        <div class="post-info-label">标签</div>
+        <div class="post-info-links">
+          <a href="../../blog/index.html?tag=%E6%9E%84%E5%BB%BA" class="post-info-link"># 构建</a>
+          <a href="../../blog/index.html?tag=%E9%9D%99%E6%80%81%E7%AB%99" class="post-info-link"># 静态站</a>
+          <a href="../../blog/index.html?tag=%E6%80%A7%E8%83%BD" class="post-info-link"># 性能</a>
+          <a href="../../blog/index.html?tag=%E5%B7%A5%E7%A8%8B%E6%9D%83%E8%A1%A1" class="post-info-link"># 工程权衡</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Post TOC -->
+  <div class="post-toc-container" id="postToc">
+    <nav class="post-toc" aria-label="文章目录">
+      <div class="post-toc-title">目录</div>
+      <ul class="post-toc-list" id="tocList">
+      </ul>
+    </nav>
+  </div>
+
+  <!-- Comment System -->
+  <script src="../../workers/comment-system/comment-widget.js?v=5d8a6a1796" defer></script>
+
+  <!-- highlight.js 代码语法高亮（本地完整构建，无外部依赖） -->
+  <script defer src="../../assets/vendor/highlight/highlight.min.js"></script>
+  <script>
+    /* 语法高亮改为「可见优先、空闲补齐」：
+       highlight.js 要遍历全篇代码块并生成数百个 span，若在 DOMContentLoaded 里同步跑完，
+       会在关键路径上长时间占住主线程（2026-09-27 实测本页长任务 1548ms、DCL 3651ms；
+       改动后长任务 145ms、DCL 1378ms）。这里 DCL 阶段只登记观察，实际高亮交给
+       IntersectionObserver（近屏 800px 内优先）+ requestIdleCallback（剩余块每片 ≤4 块），
+       首屏代码块的着色时机与视觉基本无变化。 */
+    (function() {
+      function canPaint(b) {
+        return !b.classList.contains('hljs') && !b.closest('.codehilite');
+      }
+      function paint(b) {
+        if (!canPaint(b)) return;
+        try { hljs.highlightElement(b); } catch (e) {}
+      }
+      function init() {
+        var blocks = [].slice.call(document.querySelectorAll('pre code')).filter(canPaint);
+        if (!blocks.length) return;
+        if ('IntersectionObserver' in window) {
+          var io = new IntersectionObserver(function(entries, obs) {
+            entries.forEach(function(en) {
+              if (!en.isIntersecting) return;
+              paint(en.target);
+              obs.unobserve(en.target);
+            });
+          }, { rootMargin: '800px 0px' });
+          blocks.forEach(function(b) { io.observe(b); });
+        }
+        var i = 0;
+        var idle = window.requestIdleCallback || window.setTimeout;
+        var step = function() {
+          var quota = 4;
+          while (i < blocks.length && quota-- > 0) paint(blocks[i++]);
+          if (i < blocks.length) idle(step);
+        };
+        idle(step); // 不在 DCL 里同步跑：可见块由 IntersectionObserver 处理，其余走空闲分片
+      }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+      } else {
+        init();
+      }
+    })();
+  </script>
+
+  <!-- Cloudflare Web Analytics -->
+  <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "29e7cff6f37448989538e2165cb79187"}'></script>
+</body>
+</html>
