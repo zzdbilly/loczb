@@ -1,6 +1,21 @@
 {
   "posts": [
     {
+      "slug": "the-weak-path-always-gets-taken",
+      "title": "留着那条更弱的路，它就一定会被走到",
+      "date": "2026-11-26",
+      "dateTime": "2026-11-26 16:50:00",
+      "category": "开发",
+      "tags": [
+        "工程实践",
+        "兼容性",
+        "重构",
+        "发布流程"
+      ],
+      "readTime": 14,
+      "url": "blog/posts/the-weak-path-always-gets-taken.html"
+    },
+    {
       "slug": "full-rebuild-is-cheap-incremental-is-not",
       "title": "149 篇全量重编只要一点八秒：增量化省的是零头，赔的是基线",
       "date": "2026-11-25",
@@ -2321,6 +2336,7 @@
     }
   ],
   "categories": [
+    "开发",
     "前端",
     "Android",
     "系统编程",
@@ -2329,13 +2345,12 @@
     "AI",
     "数据库",
     "安全",
-    "DevOps",
-    "开发"
+    "DevOps"
   ],
   "stats": {
-    "totalPosts": 150,
-    "totalTags": 376,
-    "latestDate": "2026-11-25",
+    "totalPosts": 151,
+    "totalTags": 378,
+    "latestDate": "2026-11-26",
     "oldestDate": "2026-02-15"
   }
 }
