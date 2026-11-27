@@ -1,0 +1,15 @@
+{
+  "slug": "binder-buffer-is-a-shared-budget",
+  "title": "1MB 不是建议值，是同一个进程里所有 Binder 事务共享的顶",
+  "description": "跨进程传参不是单次限额，而是按进程共享的预算：一个进程的在途事务共用一块缓冲，报错却总落在最后一个请求上。",
+  "date": "2026-11-27",
+  "dateTime": "2026-11-27 15:39:45",
+  "category": "Android",
+  "tags": [
+    "Android",
+    "Binder",
+    "IPC",
+    "性能"
+  ],
+  "readTime": 14
+}

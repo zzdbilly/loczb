@@ -1,6 +1,21 @@
 {
   "posts": [
     {
+      "slug": "binder-buffer-is-a-shared-budget",
+      "title": "1MB 不是建议值，是同一个进程里所有 Binder 事务共享的顶",
+      "date": "2026-11-27",
+      "dateTime": "2026-11-27 15:39:45",
+      "category": "Android",
+      "tags": [
+        "Android",
+        "Binder",
+        "IPC",
+        "性能"
+      ],
+      "readTime": 14,
+      "url": "blog/posts/binder-buffer-is-a-shared-budget.html"
+    },
+    {
       "slug": "the-weak-path-always-gets-taken",
       "title": "留着那条更弱的路，它就一定会被走到",
       "date": "2026-11-26",
@@ -2336,9 +2351,9 @@
     }
   ],
   "categories": [
+    "Android",
     "开发",
     "前端",
-    "Android",
     "系统编程",
     "Kotlin",
     "思考",
@@ -2348,9 +2363,9 @@
     "DevOps"
   ],
   "stats": {
-    "totalPosts": 151,
-    "totalTags": 378,
-    "latestDate": "2026-11-26",
+    "totalPosts": 152,
+    "totalTags": 380,
+    "latestDate": "2026-11-27",
     "oldestDate": "2026-02-15"
   }
 }

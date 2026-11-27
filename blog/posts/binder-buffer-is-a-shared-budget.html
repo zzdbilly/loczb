@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <script>document.documentElement.classList.add("js");try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://static.cloudflareinsights.com https://loczb-comments.billymust.workers.dev; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://loczb-comments.billymust.workers.dev https://dashscope.aliyuncs.com https://709527.xyz https://www.709527.xyz https://cloudflareinsights.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
+    <script>/* 反点击劫持兜底：GitHub Pages 无法下发 X-Frame-Options / CSP frame-ancestors */(function(){if(self===top)return;try{top.location=self.location}catch(e){}setTimeout(function(){if(self!==top){document.documentElement.style.display='none';}},400);})();</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>1MB 不是建议值，是同一个进程里所有 Binder 事务共享的顶 | 张小猛 - loczb</title>
+    <meta name="description" content="跨进程传参不是单次限额，而是按进程共享的预算：一个进程的在途事务共用一块缓冲，报错却总落在最后一个请求上。">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="1MB 不是建议值，是同一个进程里所有 Binder 事务共享的顶 | 张小猛 - loczb">
+    <meta property="og:description" content="跨进程传参不是单次限额，而是按进程共享的预算：一个进程的在途事务共用一块缓冲，报错却总落在最后一个请求上。">
+    <meta property="og:url" content="https://709527.xyz/blog/posts/binder-buffer-is-a-shared-budget.html">
+    <meta property="og:type" content="article">
+    <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
+    <meta property="og:site_name" content="loczb">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="1MB 不是建议值，是同一个进程里所有 Binder 事务共享的顶 | 张小猛 - loczb">
+    <meta name="twitter:description" content="跨进程传参不是单次限额，而是按进程共享的预算：一个进程的在途事务共用一块缓冲，报错却总落在最后一个请求上。">
+    <meta name="twitter:image" content="https://709527.xyz/assets/images/og-image.png">
+
+        <script type="application/ld+json">
+{
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "1MB 不是建议值，是同一个进程里所有 Binder 事务共享的顶",
+      "description": "跨进程传参不是单次限额，而是按进程共享的预算：一个进程的在途事务共用一块缓冲，报错却总落在最后一个请求上。",
+      "image": "https://709527.xyz/assets/images/og-image.png",
+      "author": {
+            "@type": "Person",
+            "name": "张小猛",
+            "url": "https://709527.xyz/about/"
+      },
+      "publisher": {
+            "@type": "Organization",
+            "name": "loczb",
+            "logo": {
+                  "@type": "ImageObject",
+                  "url": "https://709527.xyz/assets/images/favicon.svg"
+            }
+      },
+      "datePublished": "2026-11-27T15:39:45+08:00",
+      "dateModified": "2026-11-27T15:39:45+08:00",
+      "url": "https://709527.xyz/blog/posts/binder-buffer-is-a-shared-budget.html",
+      "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://709527.xyz/blog/posts/binder-buffer-is-a-shared-budget.html"
+      },
+      "keywords": "Android, Binder, IPC, 性能",
+      "articleSection": "Android",
+      "timeRequired": "PT14M",
+      "inLanguage": "zh-CN"
+}
+    </script>
+
+    <link rel="stylesheet" href="../../assets/css/style.css?v=c8e170d8f9">
+    <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
+    <link rel="alternate icon" href="../../assets/images/favicon.ico">
+    <link rel="canonical" href="https://709527.xyz/blog/posts/binder-buffer-is-a-shared-budget.html">
+</head>
+<body>
+  <!-- PARTIAL:SKIP_LINK -->
+  <a href="#main-content" class="skip-link">跳至主要内容</a>
+  <!-- /PARTIAL:SKIP_LINK -->
+
+  <!-- Navigation -->
+<!-- PARTIAL:NAV -->
+  <nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">
+      loc<span>zb</span>
+    </a>
+    <button class="nav-toggle" aria-label="打开菜单" aria-expanded="false" aria-controls="nav-links-menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <div class="nav-overlay"></div>
+    <ul class="nav-links" id="nav-links-menu">
+      <li><a href="/" class="nav-link" data-nav="home">首页</a></li>
+      <li><a href="/projects/" class="nav-link" data-nav="projects">项目</a></li>
+      <li><a href="/blog/" class="nav-link active" data-nav="blog">博客</a></li>
+      <li><a href="/about/" class="nav-link" data-nav="about">关于</a></li>
+    </ul>
+    <button class="theme-toggle" aria-label="切换主题" title="切换亮/暗模式">
+      <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="5"></circle>
+        <line x1="12" y1="1" x2="12" y2="3"></line>
+        <line x1="12" y1="21" x2="12" y2="23"></line>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+        <line x1="1" y1="12" x2="3" y2="12"></line>
+        <line x1="21" y1="12" x2="23" y2="12"></line>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+      </svg>
+      <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+      </svg>
+    </button>
+  </div>
+</nav>
+  <!-- /PARTIAL:NAV -->
+  <main class="section" id="main-content" style="padding-bottom: 0; padding-top: var(--space-4xl);">
+    <div class="container container-narrow">
+      <a href="../index.html" class="back-link">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        返回博客列表
+      </a>
+
+      <article class="post-content">
+        <h1>1MB 不是建议值，是同一个进程里所有 Binder 事务共享的顶</h1>
+
+        <div class="post-meta">
+          <span class="meta-item"><span aria-hidden="true">📅</span> 2026-11-27 15:39:45</span>
+          <span class="meta-item"><span aria-hidden="true">⏱️</span> 14 min read</span>
+          <span class="meta-item"><span aria-hidden="true">👤</span> 张小猛</span>
+        </div>
+
+        <div class="post-tags">
+          <span class="tag">Android</span>
+          <span class="tag">Binder</span>
+          <span class="tag">IPC</span>
+          <span class="tag">性能</span>
+        </div>
+
+        
+
+        <h2>1MB 不是建议值，是同一个进程里所有 Binder 事务共享的顶</h2>
+<p>先看一段能编译、能跑、在单页调试时也没有任何异常的代码：</p>
+<pre><code class="language-kotlin">// 示例：一个看起来没有任何问题的详情页入口
+fun openDetail(context: Context, article: Article) {
+    val intent = Intent(context, DetailActivity::class.java).apply {
+        putExtra(&quot;article&quot;, article)                 // 整个实体
+        putExtra(&quot;paragraphs&quot;, article.paragraphs)   // 长列表
+        putExtra(&quot;cover&quot;, article.coverBitmap)       // 位图
+    }
+    context.startActivity(intent)
+}
+</code></pre>
+<p>这段代码在冷启动、只点一次、列表只有十条的时候，通常看不出问题。它失效的时刻往往很具体：用户一边在同步离线包，一边点开了详情页；或者后台正在批量上报埋点，前台刚好推了一个新页面；又或者上一次打开详情页的操作还没走完，第二次点击紧跟上来。</p>
+<p>异常的名字很容易把人带偏。<code>TransactionTooLargeException</code> 读起来像是在说「你这次传的东西太大了」，于是第一反应是压缩那个对象、删几个字段、把位图换成缩略图。这些动作有时有效，但经常无效——因为真正被撑满的，不是这一次调用的额度，而是整个进程共用的那一块。</p>
+<p>把这句话先摆在前面：<strong>Binder 的事务缓冲记在进程头上，不记在调用头上。</strong> 你发出的每一个跨进程请求，都在从同一口池子里舀水。理解这一点之后，很多「明明只传了几十 KB 却崩了」的现象才有解释。</p>
+<h2>先把 1MB 这个词拆开：它属于进程，不属于调用</h2>
+<p>Android SDK 对 <code>TransactionTooLargeException</code> 的说明里有一句关键描述：Binder 事务缓冲的大小是固定的，业界常引的量级约为 1MB，并且由该进程所有在途的事务共享。这是文档事实，不是某一台设备上的实测值。不同系统版本、不同厂商的实现细节可能不同，但这个「按进程共享」的结构是理解问题的起点。</p>
+<p>初学时的直觉是把它当成一条管道的直径：一次请求不能超过这个直径，超了就被拒绝。真实的模型更像一个共用的中转仓：所有人的包裹都先放进同一个仓里，仓满了，最后来的人被拦在门口。</p>
+<h3>池是按进程分的，不是按调用分的</h3>
+<p>一个进程里可以有几十个 Binder 代理对象，指向不同的服务；可以有多个线程同时发起调用；也可以有 Service、ContentProvider、Messenger 各种入口。这些差异都不会让额度变多。池只有那一个，谁来都从里面取。</p>
+<p>这件事的直接推论是：<strong>换一个 Binder 对象、换一个目标服务、换一个线程，都不改变预算的归属。</strong> 你在 A 通道上超了，不会因为改走 B 通道就变宽；B 通道和 A 通道花的是同一笔钱。</p>
+<h3>在途事务共享同一个池</h3>
+<p>「在途」指的是从数据被写进 Binder 驱动，到接收侧把它读出去、缓冲被释放之间的这段时间。它不是一个瞬间，而是一个区间。区间里的事务都要占地方。</p>
+<p>于是「单次请求多大」这个问题，必须补上另外两个维度才有意义：同一时刻有几个请求在途，以及每个请求会在途多久。前一个由并发度决定，后一个由接收侧的处理速度决定。只盯着单次体积，等于只看三个变量里的一个。</p>
+<h3>报错现场总是指向最后一次</h3>
+<p>这是这套机制里最容易误导人的地方。</p>
+<p>当池子被占满、新事务写不进去时，异常会落在触发失败的那一次调用上，可能抛在发送侧，也可能抛在接收侧。异常信息里带的字节数，描述的往往是「当时那一次写入」的数据量，而不是池里已经躺着多少。也就是说，报错指向的是最后一个受害者，不是主要原因。</p>
+<p>如果前面几个事务各自都只有一两百 KB，最后一个只有几十 KB，异常照样会出现在最后一个身上。日志里看到的是「几十 KB 的请求导致了 TransactionTooLargeException」，看起来荒谬，实际上是账本被记错了人。</p>
+<p>用一个纯示意的表把这件事摊开（数字只为说明叠加关系，不代表任何真实设备或真实应用）：</p>
+<pre><code class="language-text">示例：同一进程内的在途事务，数字仅作示意
+时刻   事务                          单次大小    池占用
+t0    预取图片列表                  约 380 KB   约 380 KB
+t1    同步日志批量上报              约 300 KB   约 680 KB
+t2    打开详情页（整个实体）        约 260 KB   约 940 KB
+t3    设置页读取配置                约 40 KB    约 980 KB
+t4    埋点批量写入                  约 60 KB    超出，异常落在 t4
+</code></pre>
+<p>单看每一行，没有一条接近 1MB。四行叠在一起，池就满了。最后那 60 KB 的埋点请求没有任何设计错误，它只是来得最晚。</p>
+<h2>误判一：我的 Bundle 只有几十 KB，不可能超</h2>
+<p>这个判断的问题不在于数字算错，而在于用「单次」去回答一个「累计」的问题。</p>
+<h3>单次体积的直觉从哪里来</h3>
+<p>大多数接口文档、大多数示例代码、大多数同事之间的经验传递，说的都是「一次别传太大」。这句话本身没错，但它省略了主语：别传太大，是相对于什么而言。相对于单次事务的上限，几十 KB 确实很小；相对于一个同时跑着预取、上报、配置同步的进程，几十 KB 乘以在途数量之后就不再小。</p>
+<p>更麻烦的是，单次体积的直觉会让人形成一种错误的安心感：既然我只有几十 KB，那么任何 <code>TransactionTooLargeException</code> 都一定不是我的问题。这种安心感会拖长排查时间，因为你会去怀疑系统、怀疑 ROM、怀疑别的模块，而真正该看的是自己这个进程的并发结构。</p>
+<h3>序列化后的体积和内存里的体积不是一回事</h3>
+<p>Bundle 里放一个对象，写进 Parcel 时要按 Parcel 的格式重新编码：字符串带长度前缀，容器带元素个数，字段按顺序写入，还有对齐和类型标记。最终字节数和你用内存分析工具看到的对象大小不是同一个量。</p>
+<p>一个经验上「看起来只有几十 KB」的实体，序列化之后可能明显更大；一个包含大量短字符串的列表，开销尤其容易超预期，因为每个元素都有头部。这里不给具体倍数，因为倍数取决于字段类型和内容分布，任何固定比例都是编出来的。可执行的做法是量一次，而不是估一次。</p>
+<h3>并发让每次都很小失效</h3>
+<p>十个各自 80 KB 的请求，单独看都在安全区，同时在路上就是 800 KB 的量级。这个加法是示意性的，实际占用还要算上每次事务的固定开销，但方向是确定的：<strong>小请求不会互相礼让。</strong></p>
+<p>这也是为什么问题常常出现在「用了某个 SDK 之后」「加了预取之后」「埋点改成批量之后」。你没有改那个传参的函数，你只是给池子增加了同时取水的人。</p>
+<h2>误判二：之前一直好的，今天突然坏了</h2>
+<p>「一直好的」通常意味着：在你能观察到的使用路径上，池子从来没有同时被占满过。它不意味着代码是正确的。</p>
+<h3>变化往往不在你改的那一行</h3>
+<p>新增一个前台服务、把某个同步从串行改成并行、给列表加了预加载、把日志从本地文件改成实时上报、接了一个会在启动时拉配置的 SDK——这些改动都不会碰 <code>putExtra</code>，但都会改变在途事务的数量和持续时间。</p>
+<p>排查时如果只 diff 传参那一处，很容易得出「这行没动，所以不是它」的结论。有效的做法是反过来问：这个进程在崩溃前的一段时间里，一共发起了哪些跨进程调用，它们分别有多大，接收侧处理得有多快。</p>
+<h3>前一次事务没释放，会占着池</h3>
+<p>这是最隐蔽的一种。缓冲不是在发送完成时释放的，而是在接收侧读完、事务结束之后才释放。如果接收侧卡住了——主线程在做重计算、在等一把锁、在等数据库、在等网络——那块内存就一直被占着。</p>
+<p>于是会出现这样的序列：第一个请求很大，接收侧处理慢；第二个请求很小，但池里还留着第一个的账；第二个请求失败，日志里只有它。从日志看，是一个小请求崩了；从时间线看，是前一个大请求没有及时退场。</p>
+<p>推演到这里可以得到一个可操作的判断：<strong>当异常信息里的体积和你的实际数据对不上时，先去看同一时间段内还有哪些事务在途，而不是继续压缩当前这个对象。</strong> 这不是文档给出的结论，是从共享池模型推出来的排查方向。</p>
+<h3>onSaveInstanceState 走的是同一条路</h3>
+<p>Activity 的状态保存也通过 Binder 传递。<code>onSaveInstanceState</code> 收到的 Bundle，以及 <code>SavedStateHandle</code> 里存的东西，最终都要序列化后交给系统进程。它和普通的跨进程调用共享同一类约束。</p>
+<p>社区里常提到一个约 500 KB 量级的经验值，但具体行为与系统版本、厂商实现相关，不能当成契约来依赖。可靠的写法是把它当预算来管：状态里只放恢复界面所必需的最小信息，列表数据、正文、图片一律不放，需要时按 id 重新取。<code>SavedStateHandle</code> 里塞一大块 JSON 是同一类错误的另一种写法——名字叫 Handle，不代表它适合装行李。</p>
+<h2>误判三：改成在后台线程发就不会超</h2>
+<p>这个想法很自然：主线程上的调用容易卡顿，那就挪到后台。挪完之后卡顿确实少了，于是认为问题解决了。</p>
+<h3>线程换的是执行位置，不是额度</h3>
+<p>池是按进程计的，线程只是取水的人。主线程取水和后台线程取水，舀的是同一口池。把调用挪到工作线程，改变的只是「谁在等结果」，不改变「有多少水」。</p>
+<p>更常见的情况是反过来的：挪到后台之后，原本串行的几次调用变成了并发，池的占用反而上升。表面上看主线程不卡了，实际上失败的概率变高了，只是失败发生在一个没有人处理异常的地方。</p>
+<h3>异步只是把失败挪到别的时间点</h3>
+<p>同步调用失败，异常沿着调用栈往上走，容易被看见。异步调用失败，异常落在线程池的任务里，如果没有兜底，表现就是「偶现崩溃」或者「功能静默不生效」。这就是为什么有些团队在改成异步之后，问题看起来消失了，实际上只是从必现变成了难复现。</p>
+<h3>串行化能缓解，但它不是预算</h3>
+<p>把同一类请求串起来发，确实能降低并发占用，这是一种有效的止血手段。但它有两个局限：一是只能约束自己发起的请求，管不了同进程里其他模块；二是串行会拉长总耗时，接收侧一旦变慢，队列会堆积，池的占用时间反而变长。</p>
+<p>止血清创可以，把它当成长期方案不行。真正的解法还是回到预算：每一次传参都足够小，任何时候在途都不会把池占满。</p>
+<h2>传的到底是什么：一次序列化拷贝</h2>
+<p>跨进程传参不是把对象的引用递过去，而是把对象写成一串字节，交给内核搬运，再由接收侧读出来、重新构造一个对象。发送侧一份，接收侧一份，中间还有一份在池里。</p>
+<h3>写入侧：把对象变成字节</h3>
+<p>写入的过程要遍历对象图：基本类型直接写，字符串转成 Parcel 的字符串格式，集合先写长度再逐个写元素，可序列化的类按字段顺序写。每一步都有开销，也都有可能踩到「这个字段不该被传」的问题。</p>
+<p>一个容易被忽略的点是：<strong>你在发送侧持有的那个对象，和接收侧拿到的不是同一个实例。</strong> 接收侧修改它，不会影响发送侧；发送侧在发送后修改它，也不会影响已经写进 Parcel 的那份拷贝。把跨进程传参当成「把对象交出去」来设计，会自然地写出「传整个实体、让对方直接用」的代码，而这正是体积失控的来源。</p>
+<h3>读取侧：再变成一个新对象</h3>
+<p>接收侧读 Parcel 时，要为这些字节重新分配内存、重新构造对象。数据越大，分配越多，GC 压力越大，读取耗时越长。读取耗时又直接决定了缓冲被占用的时间——这是一个闭环：传得越大，读得越慢，池被占得越久，后面的请求越容易失败。</p>
+<p>所以在讨论「能不能传」的时候，真正要评估的是三件事：发送侧写多久、接收侧读多久、这块内存在池里躺多久。只算第一项，会低估风险。</p>
+<h3>拷贝的代价会叠加在池上</h3>
+<p>同一份数据，在内存里出现两次，在池里还占一次，写入和读取各消耗一次 CPU。这个结构决定了「传大对象」在任何维度上都不划算：内存、时间、失败概率，三项同时变差。</p>
+<p>如果只是想知道自己有没有超标，可以在发送前量一次：</p>
+<pre><code class="language-kotlin">// 示例：发送前给 extras 做一次序列化体积体检
+fun Bundle.parcelSizeBytes(): Int {
+    val parcel = Parcel.obtain()
+    return try {
+        writeToParcel(parcel, 0)
+        parcel.dataSize()
+    } finally {
+        parcel.recycle()
+    }
+}
+
+fun Intent.assertExtrasBudget(limitBytes: Int = 64 * 1024) {
+    val size = extras?.parcelSizeBytes() ?: 0
+    check(size &lt;= limitBytes) {
+        &quot;extras 序列化后 $size 字节，超过单次预算 $limitBytes&quot;
+    }
+}
+</code></pre>
+<p>这段代码量的是「这一次要写进去多少」，不是池里已经占了多少。它不能替代并发分析，但它能把「几十 KB」从感觉变成数字。量出来超过预期的时候，通常会发现列表、位图或者一整段 JSON 藏在某个不起眼的字段里。</p>
+<h2>把跨进程传参当成网络请求来做预算</h2>
+<p>如果两个模块之间要走 HTTP，几乎没有人会把整个数据库实体塞进请求体，然后指望对端直接使用。大家会定义 DTO、只传必要字段、给请求体设上限、大文件走对象存储、列表接口分页。跨进程传参是同一类问题，只是链路更短、延迟更低，让人误以为约束也更少。</p>
+<h3>先定字段白名单</h3>
+<p>不要从「这个对象有什么」出发，而要从「对方需要什么」出发。接收侧真正用到的字段通常只有几个：一个 id、一个来源标记、一个可选的定位参数。其余的字段要么接收侧自己能查，要么根本不该由发送侧决定。</p>
+<p>白名单还有一个附带好处：它让接口的演化变得可控。字段是显式列出来的，增加一个字段就要改两边的定义，不会出现「发送侧悄悄多带了一个大字段，接收侧根本没用」这种情况。</p>
+<h3>只传标识符，让对方自己取</h3>
+<p>这是收益最大的一条改动。把实体换成一个 id 或一个 URI，传输的体积从「和内容成正比」变成「常数」。接收侧拿到 id 之后，从数据库、ContentProvider、文件或者内存缓存里取。取不到就显示空态或重试，而不是让整个页面打不开。</p>
+<p>代价是接收侧要多一次查询。这次查询是本地的，耗时可控，而且可以按需只取当前屏幕需要的部分。相比之下，把整篇正文和所有图片先塞过 Binder，再在接收侧解析，通常是更贵的那条路。</p>
+<h3>大载荷换通道</h3>
+<p>大文件不该走 Parcel。可以写进应用私有目录，传一个 <code>file://</code> 或 <code>content://</code> URI；跨应用共享时用 <code>FileProvider</code> 加读权限授予，让接收方按 URI 自己去读。需要在进程间共享大块内存时，用文件描述符或共享内存类的机制，而不是把字节数组塞进 Bundle。</p>
+<p>判断标准很直接：如果这个数据在接收侧本来就要落盘或者本来就在盘上，那就没有必要先读进内存再序列化一次。传地址，不传内容。</p>
+<h3>能分批就分批</h3>
+<p>批量接口要支持分页或游标。一次传一百条和一次传十条，除了体积差异，更重要的是失败代价：整批失败要整批重试，分批失败就只重试那一段。分页还天然给了你一个背压点——上一批没处理完，下一批不发，池的占用就可控。</p>
+<h3>给预算留余量</h3>
+<p>不要拿 1MB 当上限来设计。那个数字是整个进程共享的总量，不是你一个模块的配额。给自己定一个远低于它的数，比如几十 KB，把剩下的留给同进程里其他不可控的调用。这个数字不需要精确，重要的是它存在，并且在代码里被检查。</p>
+<p>把几种形态放在一起对比：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">传参形态</th>
+<th style="text-align: left;">单次体积</th>
+<th style="text-align: left;">谁负责读取</th>
+<th style="text-align: left;">失败形态</th>
+<th style="text-align: left;">适用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">传整个实体</td>
+<td style="text-align: left;">与内容成正比</td>
+<td style="text-align: left;">接收侧直接用</td>
+<td style="text-align: left;">偶发超限，难复现</td>
+<td style="text-align: left;">不建议</td>
+</tr>
+<tr>
+<td style="text-align: left;">传 id</td>
+<td style="text-align: left;">常数级</td>
+<td style="text-align: left;">接收侧查库</td>
+<td style="text-align: left;">查不到，可显示空态</td>
+<td style="text-align: left;">绝大多数页面跳转</td>
+</tr>
+<tr>
+<td style="text-align: left;">传 URI</td>
+<td style="text-align: left;">常数级</td>
+<td style="text-align: left;">接收侧按权限读</td>
+<td style="text-align: left;">权限或文件缺失</td>
+<td style="text-align: left;">图片、文档、导出文件</td>
+</tr>
+<tr>
+<td style="text-align: left;">传文件描述符</td>
+<td style="text-align: left;">常数级</td>
+<td style="text-align: left;">接收侧直接读写</td>
+<td style="text-align: left;">句柄失效</td>
+<td style="text-align: left;">大块数据、流式处理</td>
+</tr>
+<tr>
+<td style="text-align: left;">分批传列表</td>
+<td style="text-align: left;">每批可控</td>
+<td style="text-align: left;">接收侧逐批处理</td>
+<td style="text-align: left;">单批失败可重试</td>
+<td style="text-align: left;">同步、导入、批量操作</td>
+</tr>
+</tbody>
+</table>
+<h2>检查清单：把应该不会超变成可执行动作</h2>
+<p>下面这几条适合放在发版前的自查里，也适合在排查偶发崩溃时逐条过一遍：</p>
+<ol>
+<li>extras、arguments、SavedStateHandle 里有没有列表、位图、整段 JSON、整个实体？有的话先列出来，逐项判断能不能换成 id。</li>
+<li>每个传过去的字段，接收侧是否真的用到了？没用到就删掉，不要因为「以后可能要用」而保留。</li>
+<li>发送前有没有对序列化体积做过一次断言？上限是不是设在几十 KB，而不是贴着 1MB？</li>
+<li>这个进程在同一时刻还可能有哪些在途调用？预取、日志上报、配置同步、埋点批量写入是否会和页面跳转撞在一起？</li>
+<li>接收侧有没有可能长时间不读？主线程重计算、等锁、等数据库、等网络，都会延长缓冲的占用时间。</li>
+<li><code>onSaveInstanceState</code> 和 <code>SavedStateHandle</code> 里放的是状态还是数据？超过几十 KB 就该考虑换存储，只留恢复所需的最小信息。</li>
+<li>大文件是否走了 URI 权限或文件描述符？有没有把文件读成 <code>ByteArray</code> 再塞进 Parcel 的写法？</li>
+<li>批量接口是否支持分页或游标？失败之后能不能只重试某一段，而不是整批重来？</li>
+</ol>
+<p>这八条里，第一条和第四条最能暴露问题。第一条决定单次体积，第四条决定同时有多少次。两者相乘，才是池真正承受的压力。</p>
+<h2>收束：预算是共享的，账记在最后一个身上</h2>
+<p>跨进程传的不是对象，是拷贝。这句话有两层含义：一是接收侧拿到的是副本，不要指望共享状态；二是这次拷贝要占内存、占时间、占一块全进程共用的缓冲。</p>
+<p>预算是共享的，账却总记在最后一个身上。异常指向最后那次调用，日志里只有最后那次的数据量，于是人很容易去修那个最晚到的、体积最小的请求。真正该做的，是回头看这个进程在同一段时间里一共舀了多少水。</p>
+<p>把跨进程传参当成网络请求来设计，是一个能落地的起点：定字段白名单、只传标识符、给体积设上限、大载荷换通道、批量接口分页。这些做法不依赖任何具体版本的阈值，也不会因为系统实现变化而失效。它们做的事情只有一件——让每一次传输都足够小，让任何时候的在途都不会把池占满。</p>
+
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="process-lifetime-assumptions-across-stacks.html">
+            <div class="related-post-card-title">移动端写的是「随时会死」，服务端写的是「不会死」</div>
+            <div class="related-post-card-tags"><span>Android</span><span>跨栈</span><span>进程生命周期</span></div>
+          </a>
+          <a class="related-post-card" href="android-testing-playbook.html">
+            <div class="related-post-card-title">别再从 Espresso 开始：Android 测试分层实战手册</div>
+            <div class="related-post-card-tags"><span>Android</span><span>测试</span><span>Kotlin</span></div>
+          </a>
+          <a class="related-post-card" href="jetpack-compose-性能优化实战从卡顿到丝滑的-12-个技巧.html">
+            <div class="related-post-card-title">Jetpack Compose 性能优化实战：从卡顿到丝滑的 12 个技巧</div>
+            <div class="related-post-card-tags"><span>Jetpack Compose</span><span>Android</span><span>性能优化</span></div>
+          </a>
+          <a class="related-post-card" href="gradle-构建加速全攻略从-5-分钟到-30-秒.html">
+            <div class="related-post-card-title">Gradle 构建加速全攻略：从 5 分钟到 30 秒</div>
+            <div class="related-post-card-tags"><span>Gradle</span><span>Android</span><span>构建优化</span></div>
+          </a>
+          <a class="related-post-card" href="gradle-build-acceleration-5min-to-30sec.html">
+            <div class="related-post-card-title">Gradle 构建加速实操：我从 5 分钟做到 30 秒</div>
+            <div class="related-post-card-tags"><span>Gradle</span><span>Android</span><span>构建优化</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
+
+        <!-- Post Copyright & License Card -->
+        <div class="post-copyright-card">
+          <div class="copyright-header">
+            <div class="copyright-badge">
+              <span>📜</span>
+              <span>原创与知识共享协议</span>
+            </div>
+            <button class="copyright-cite-btn" id="copy-cite-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+              </svg>
+              <span>复制 Markdown 引用</span>
+            </button>
+          </div>
+          <div class="copyright-list">
+            <div class="copyright-item"><strong>文章标题：</strong>1MB 不是建议值，是同一个进程里所有 Binder 事务共享的顶</div>
+            <div class="copyright-item"><strong>文章作者：</strong>张小猛 · loczb</div>
+            <div class="copyright-item"><strong>永久链接：</strong><a href="https://709527.xyz/blog/posts/binder-buffer-is-a-shared-budget.html">https://709527.xyz/blog/posts/binder-buffer-is-a-shared-budget.html</a></div>
+            <div class="copyright-item"><strong>版权声明：</strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 国际许可协议。商业转载请联系作者获得授权，非商业转载请注明出处。</div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </main>
+
+  <!-- Related Posts / Navigation -->
+  <section class="section" aria-label="读完之后" style="padding-top: 0;">
+    <div class="container container-narrow">
+      <!-- Post Nav Prev Next -->
+      <nav class="post-nav" aria-label="文章翻页导航">
+        <a href="the-weak-path-always-gets-taken.html" class="post-nav-card post-nav-prev" rel="prev">
+          <span class="post-nav-label">← 上一篇</span>
+          <span class="post-nav-title">留着那条更弱的路，它就一定会被走到</span>
+        </a>
+        <div class="post-nav-card post-nav-next disabled" aria-disabled="true">
+          <span class="post-nav-label">下一篇 →</span>
+          <span class="post-nav-title">已是最新篇博文</span>
+        </div>
+      </nav>
+      <!-- /Post Nav Prev Next -->
+      <hr style="border: none; border-top: 1px solid var(--color-border); margin: var(--space-2xl) 0;">
+
+      <div class="blog-topics" style="margin-bottom: var(--space-xl); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+        <div>
+          <span class="topic-label">读完之后:</span>
+          <a href="../index.html" class="topic-tag">返回博客列表</a>
+          <a href="../index.html?view=series" class="topic-tag">浏览全部专栏</a>
+        </div>
+        <a href="#main-content" class="topic-tag" style="margin-left: auto;">↑ 回到顶部</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+<!-- PARTIAL:FOOTER -->
+  <footer class="footer" role="contentinfo">
+  <div class="footer-inner">
+    <p class="footer-signature">写代码，做产品，也认真生活。</p>
+    <div class="footer-social">
+      <a href="https://github.com/zzdbilly" class="footer-social-link" target="_blank" rel="noopener" aria-label="GitHub">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+      </a>
+      <a href="https://twitter.com/zzdbilly" class="footer-social-link" target="_blank" rel="noopener" aria-label="X (Twitter)">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      </a>
+      <a href="/rss.xml" class="footer-social-link" target="_blank" rel="noopener" aria-label="RSS 订阅">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+      </a>
+    </div>
+    <div class="footer-links">
+      <a href="/" class="footer-link">首页</a>
+      <a href="/projects/" class="footer-link">项目</a>
+      <a href="/blog/" class="footer-link">博客</a>
+      <a href="/about/" class="footer-link">关于</a>
+    </div>
+    <p class="footer-copyright">&copy; 2026 张小猛 · loczb · Built with care</p>
+  </div>
+</footer>
+  <!-- /PARTIAL:FOOTER -->
+
+  <script defer src="../../assets/js/main.js"></script>
+  <script defer src="../../assets/js/article.js?v=c9f1a378ea"></script>
+  <script defer src="../../assets/js/share.js"></script>
+  <!-- Back to Top & Reading Progress -->
+  <button class="back-to-top" id="backToTop" aria-label="回到顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
+  <div class="reading-progress" id="readingProgress"></div>
+
+  <!-- Post Sidebar Info（左侧） -->
+  <div class="post-sidebar-info" id="postSidebar">
+    <div class="post-info-card">
+      <div class="post-info-section">
+        <div class="post-info-label">作者</div>
+        <div class="post-info-author">
+          <div class="post-info-avatar">小</div>
+          <div>
+            <div class="post-info-author-name">张小猛</div>
+            <div class="post-info-author-desc">写代码，做产品</div>
+          </div>
+        </div>
+      </div>
+      <div class="post-info-section">
+        <div class="post-info-label">文章信息</div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📅</span> 发布日期</span><span class="post-info-stat-value">2026-11-27</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">⏱️</span> 阅读时间</span><span class="post-info-stat-value">14 min read</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">5423 字</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📊</span> 章节数</span><span class="post-info-stat-value">9 节 · 20 子节</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">💻</span> 代码块</span><span class="post-info-stat-value">3 段</span></div>
+      </div>
+      <div class="post-info-section" id="postSidebarTags">
+        <div class="post-info-label">标签</div>
+        <div class="post-info-links">
+          <a href="../../blog/index.html?tag=Android" class="post-info-link"># Android</a>
+          <a href="../../blog/index.html?tag=Binder" class="post-info-link"># Binder</a>
+          <a href="../../blog/index.html?tag=IPC" class="post-info-link"># IPC</a>
+          <a href="../../blog/index.html?tag=%E6%80%A7%E8%83%BD" class="post-info-link"># 性能</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Post TOC -->
+  <div class="post-toc-container" id="postToc">
+    <nav class="post-toc" aria-label="文章目录">
+      <div class="post-toc-title">目录</div>
+      <ul class="post-toc-list" id="tocList">
+      </ul>
+    </nav>
+  </div>
+
+  <!-- Comment System -->
+  <script src="../../workers/comment-system/comment-widget.js?v=5d8a6a1796" defer></script>
+
+  <!-- highlight.js 代码语法高亮（本地完整构建，无外部依赖） -->
+  <script defer src="../../assets/vendor/highlight/highlight.min.js"></script>
+  <script>
+    /* 语法高亮改为「可见优先、空闲补齐」：
+       highlight.js 要遍历全篇代码块并生成数百个 span，若在 DOMContentLoaded 里同步跑完，
+       会在关键路径上长时间占住主线程（2026-09-27 实测本页长任务 1548ms、DCL 3651ms；
+       改动后长任务 145ms、DCL 1378ms）。这里 DCL 阶段只登记观察，实际高亮交给
+       IntersectionObserver（近屏 800px 内优先）+ requestIdleCallback（剩余块每片 ≤4 块），
+       首屏代码块的着色时机与视觉基本无变化。 */
+    (function() {
+      function canPaint(b) {
+        return !b.classList.contains('hljs') && !b.closest('.codehilite');
+      }
+      function paint(b) {
+        if (!canPaint(b)) return;
+        try { hljs.highlightElement(b); } catch (e) {}
+      }
+      function init() {
+        var blocks = [].slice.call(document.querySelectorAll('pre code')).filter(canPaint);
+        if (!blocks.length) return;
+        if ('IntersectionObserver' in window) {
+          var io = new IntersectionObserver(function(entries, obs) {
+            entries.forEach(function(en) {
+              if (!en.isIntersecting) return;
+              paint(en.target);
+              obs.unobserve(en.target);
+            });
+          }, { rootMargin: '800px 0px' });
+          blocks.forEach(function(b) { io.observe(b); });
+        }
+        var i = 0;
+        var idle = window.requestIdleCallback || window.setTimeout;
+        var step = function() {
+          var quota = 4;
+          while (i < blocks.length && quota-- > 0) paint(blocks[i++]);
+          if (i < blocks.length) idle(step);
+        };
+        idle(step); // 不在 DCL 里同步跑：可见块由 IntersectionObserver 处理，其余走空闲分片
+      }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+      } else {
+        init();
+      }
+    })();
+  </script>
+
+  <!-- Cloudflare Web Analytics -->
+  <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "29e7cff6f37448989538e2165cb79187"}'></script>
+</body>
+</html>

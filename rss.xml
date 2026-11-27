@@ -7,6 +7,14 @@
     <language>zh-CN</language>
     <atom:link href="https://709527.xyz/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>1MB 不是建议值，是同一个进程里所有 Binder 事务共享的顶</title>
+      <link>https://709527.xyz/blog/posts/binder-buffer-is-a-shared-budget.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/binder-buffer-is-a-shared-budget.html</guid>
+      <description>跨进程传参不是单次限额，而是按进程共享的预算：一个进程的在途事务共用一块缓冲，报错却总落在最后一个请求上。</description>
+      <category>Android</category>
+      <pubDate>Fri, 27 Nov 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
       <title>留着那条更弱的路，它就一定会被走到</title>
       <link>https://709527.xyz/blog/posts/the-weak-path-always-gets-taken.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/the-weak-path-always-gets-taken.html</guid>
@@ -157,14 +165,6 @@
       <description>门禁不产出功能，也不改变页面上的任何像素；它把「确知」和「撤回」的成本压下来，真正放大的是你敢试错的次数。</description>
       <category>思考</category>
       <pubDate>Sat, 07 Nov 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>连接池不是并发旋钮，是排队区的长度</title>
-      <link>https://709527.xyz/blog/posts/pool-size-is-a-queue-length.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/pool-size-is-a-queue-length.html</guid>
-      <description>把池调大只改变谁能同时进去，不改变数据库能同时干多少活。吞吐上限是 min(N,C)/R——超出 C 的那部分池，只是把排队从应用内存搬进了数据库的锁队列。</description>
-      <category>数据库</category>
-      <pubDate>Fri, 06 Nov 2026 00:00:00 +0800</pubDate>
     </item>
   </channel>
 </rss>
