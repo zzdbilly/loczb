@@ -7,6 +7,14 @@
     <language>zh-CN</language>
     <atom:link href="https://709527.xyz/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>换机砍掉的那一半配置，本来就不该存在</title>
+      <link>https://709527.xyz/blog/posts/configs-that-outlived-their-reason.html</link>
+      <guid isPermaLink="true">https://709527.xyz/blog/posts/configs-that-outlived-their-reason.html</guid>
+      <description>机器一换，旧环境里那一整层绕行配置就整体作废。迁移真正的工作不是搬运，是清点每条配置要解决的问题是否还成立。</description>
+      <category>DevOps</category>
+      <pubDate>Sat, 28 Nov 2026 00:00:00 +0800</pubDate>
+    </item>
+    <item>
       <title>1MB 不是建议值，是同一个进程里所有 Binder 事务共享的顶</title>
       <link>https://709527.xyz/blog/posts/binder-buffer-is-a-shared-budget.html</link>
       <guid isPermaLink="true">https://709527.xyz/blog/posts/binder-buffer-is-a-shared-budget.html</guid>
@@ -157,14 +165,6 @@
       <description>慢查询日志按单次耗时过滤，看不见又快又频繁的查询。单次耗时是单价，调用次数是次数，乘积才是要从预算里扣掉的总支出。</description>
       <category>数据库</category>
       <pubDate>Sun, 08 Nov 2026 00:00:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>看不见的那部分工作，决定了你以后能跑多快</title>
-      <link>https://709527.xyz/blog/posts/invisible-work-sets-your-speed.html</link>
-      <guid isPermaLink="true">https://709527.xyz/blog/posts/invisible-work-sets-your-speed.html</guid>
-      <description>门禁不产出功能，也不改变页面上的任何像素；它把「确知」和「撤回」的成本压下来，真正放大的是你敢试错的次数。</description>
-      <category>思考</category>
-      <pubDate>Sat, 07 Nov 2026 00:00:00 +0800</pubDate>
     </item>
   </channel>
 </rss>

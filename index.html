@@ -144,7 +144,7 @@
             <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
             </svg>
-            <input type="text" id="home-search-input" placeholder="即时检索 152 篇博文、专栏与项目..." autocomplete="off" aria-label="站内搜索：检索博文、专栏与项目">
+            <input type="text" id="home-search-input" placeholder="即时检索 153 篇博文、专栏与项目..." autocomplete="off" aria-label="站内搜索：检索博文、专栏与项目">
             <kbd class="search-kbd" id="search-kbd-badge">⌘K</kbd>
           </div>
           <div id="home-search-results" class="blog-search-results hero-search-dropdown"></div>
@@ -162,7 +162,7 @@
               <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
               <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
             </svg>
-            阅读 <!-- POSTS_COUNT -->152<!-- /POSTS_COUNT --> 篇博文
+            阅读 <!-- POSTS_COUNT -->153<!-- /POSTS_COUNT --> 篇博文
           </a>
         </div>
       </div>
@@ -183,26 +183,45 @@
         <article class="blog-card-featured animate-on-scroll" id="home-featured-post" style="display: block;">
           <div class="blog-card-header">
             <div class="blog-card-meta">
+              <span class="blog-date">2026-11-28</span>
+              <span>·</span>
+              <span class="blog-read-time">13 min</span>
+            </div>
+            <span class="blog-list-tag">DevOps</span>
+          </div>
+          <h3 class="blog-card-title">
+            <a href="blog/posts/configs-that-outlived-their-reason.html">换机砍掉的那一半配置，本来就不该存在</a>
+          </h3>
+          <p class="blog-card-excerpt">机器一换，旧环境里那一整层绕行配置就整体作废。迁移真正的工作不是搬运，是清点每条配置要解决的问题是否还成立。...</p>
+          <div class="blog-card-tags">
+            <span class="tech-tag">迁移</span>
+            <span class="tech-tag">配置管理</span>
+            <span class="tech-tag">技术判断</span>
+            <span class="tech-tag">运维</span>
+          </div>
+        </article>
+        
+        <!-- 最新文章列表 -->
+                <div class="blog-list">
+        <article class="blog-mini-card animate-on-scroll" data-category="Android" data-page="1">
+          <div class="blog-mini-card-header">
+            <div class="blog-list-meta">
               <span class="blog-date">2026-11-27</span>
               <span>·</span>
               <span class="blog-read-time">14 min</span>
             </div>
             <span class="blog-list-tag">Android</span>
           </div>
-          <h3 class="blog-card-title">
+          <h3 class="blog-mini-card-title">
             <a href="blog/posts/binder-buffer-is-a-shared-budget.html">1MB 不是建议值，是同一个进程里所有 Binder 事务共享的顶</a>
           </h3>
-          <p class="blog-card-excerpt">跨进程传参不是单次限额，而是按进程共享的预算：一个进程的在途事务共用一块缓冲，报错却总落在最后一个请求上。...</p>
-          <div class="blog-card-tags">
+          <p class="blog-mini-card-excerpt">跨进程传参不是单次限额，而是按进程共享的预算：一个进程的在途事务共用一块缓冲，报错却总落在最后一个请求上。</p>
+          <div class="blog-mini-card-tags">
             <span class="tech-tag">Android</span>
             <span class="tech-tag">Binder</span>
             <span class="tech-tag">IPC</span>
-            <span class="tech-tag">性能</span>
           </div>
         </article>
-        
-        <!-- 最新文章列表 -->
-                <div class="blog-list">
         <article class="blog-mini-card animate-on-scroll" data-category="开发" data-page="1">
           <div class="blog-mini-card-header">
             <div class="blog-list-meta">
@@ -222,31 +241,12 @@
             <span class="tech-tag">重构</span>
           </div>
         </article>
-        <article class="blog-mini-card animate-on-scroll" data-category="前端" data-page="1">
-          <div class="blog-mini-card-header">
-            <div class="blog-list-meta">
-              <span class="blog-date">2026-11-25</span>
-              <span>·</span>
-              <span class="blog-read-time">13 min</span>
-            </div>
-            <span class="blog-list-tag">前端</span>
-          </div>
-          <h3 class="blog-mini-card-title">
-            <a href="blog/posts/full-rebuild-is-cheap-incremental-is-not.html">149 篇全量重编只要一点八秒：增量化省的是零头，赔的是基线</a>
-          </h3>
-          <p class="blog-mini-card-excerpt">全量重建是发布正确性的定义，不是性能开销：149 篇 1.78 秒，增量化省的是零头，赔的是基线。</p>
-          <div class="blog-mini-card-tags">
-            <span class="tech-tag">构建</span>
-            <span class="tech-tag">静态站</span>
-            <span class="tech-tag">性能</span>
-          </div>
-        </article>
         </div>
         <!-- /最新文章列表 --></div>
 
       <div class="blog-view-all" style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
         <a href="blog/index.html" class="btn btn-secondary">
-          浏览全部文章 (<!-- POSTS_COUNT -->152<!-- /POSTS_COUNT --> 篇)
+          浏览全部文章 (<!-- POSTS_COUNT -->153<!-- /POSTS_COUNT --> 篇)
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M5 12h14M12 5l7 7-7 7"/>
           </svg>
@@ -290,7 +290,7 @@
               </div>
               <div class="terminal-line">
                 <span class="terminal-prompt">➜</span>
-                <span class="terminal-text"><span class="terminal-highlight">live_pulse</span> — 🟢 <!-- POSTS_COUNT -->152<!-- /POSTS_COUNT --> 篇博文 · 6 大专栏 · 原生 Android / 系统架构 / 端侧 AI 实战</span>
+                <span class="terminal-text"><span class="terminal-highlight">live_pulse</span> — 🟢 <!-- POSTS_COUNT -->153<!-- /POSTS_COUNT --> 篇博文 · 6 大专栏 · 原生 Android / 系统架构 / 端侧 AI 实战</span>
               </div>
             </div>
           </div>
@@ -398,7 +398,7 @@
           
           <div class="bento-metrics-grid">
             <div class="bento-metric-item">
-              <div class="bento-metric-num"><!-- POSTS_COUNT -->152<!-- /POSTS_COUNT --></div>
+              <div class="bento-metric-num"><!-- POSTS_COUNT -->153<!-- /POSTS_COUNT --></div>
               <div class="bento-metric-title">篇技术与思考博文</div>
             </div>
             <div class="bento-metric-item">

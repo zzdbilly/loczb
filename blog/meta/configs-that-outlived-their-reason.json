@@ -1,0 +1,15 @@
+{
+  "slug": "configs-that-outlived-their-reason",
+  "title": "换机砍掉的那一半配置，本来就不该存在",
+  "description": "机器一换，旧环境里那一整层绕行配置就整体作废。迁移真正的工作不是搬运，是清点每条配置要解决的问题是否还成立。",
+  "date": "2026-11-28",
+  "dateTime": "2026-11-28 15:42:00",
+  "category": "DevOps",
+  "tags": [
+    "迁移",
+    "配置管理",
+    "技术判断",
+    "运维"
+  ],
+  "readTime": 13
+}

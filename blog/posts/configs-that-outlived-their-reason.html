@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <script>document.documentElement.classList.add("js");try{const t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://static.cloudflareinsights.com https://loczb-comments.billymust.workers.dev; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://loczb-comments.billymust.workers.dev https://dashscope.aliyuncs.com https://709527.xyz https://www.709527.xyz https://cloudflareinsights.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
+    <script>/* 反点击劫持兜底：GitHub Pages 无法下发 X-Frame-Options / CSP frame-ancestors */(function(){if(self===top)return;try{top.location=self.location}catch(e){}setTimeout(function(){if(self!==top){document.documentElement.style.display='none';}},400);})();</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>换机砍掉的那一半配置，本来就不该存在 | 张小猛 - loczb</title>
+    <meta name="description" content="机器一换，旧环境里那一整层绕行配置就整体作废。迁移真正的工作不是搬运，是清点每条配置要解决的问题是否还成立。">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="换机砍掉的那一半配置，本来就不该存在 | 张小猛 - loczb">
+    <meta property="og:description" content="机器一换，旧环境里那一整层绕行配置就整体作废。迁移真正的工作不是搬运，是清点每条配置要解决的问题是否还成立。">
+    <meta property="og:url" content="https://709527.xyz/blog/posts/configs-that-outlived-their-reason.html">
+    <meta property="og:type" content="article">
+    <meta property="og:image" content="https://709527.xyz/assets/images/og-image.png">
+    <meta property="og:site_name" content="loczb">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="换机砍掉的那一半配置，本来就不该存在 | 张小猛 - loczb">
+    <meta name="twitter:description" content="机器一换，旧环境里那一整层绕行配置就整体作废。迁移真正的工作不是搬运，是清点每条配置要解决的问题是否还成立。">
+    <meta name="twitter:image" content="https://709527.xyz/assets/images/og-image.png">
+
+        <script type="application/ld+json">
+{
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "换机砍掉的那一半配置，本来就不该存在",
+      "description": "机器一换，旧环境里那一整层绕行配置就整体作废。迁移真正的工作不是搬运，是清点每条配置要解决的问题是否还成立。",
+      "image": "https://709527.xyz/assets/images/og-image.png",
+      "author": {
+            "@type": "Person",
+            "name": "张小猛",
+            "url": "https://709527.xyz/about/"
+      },
+      "publisher": {
+            "@type": "Organization",
+            "name": "loczb",
+            "logo": {
+                  "@type": "ImageObject",
+                  "url": "https://709527.xyz/assets/images/favicon.svg"
+            }
+      },
+      "datePublished": "2026-11-28T15:42:00+08:00",
+      "dateModified": "2026-11-28T15:42:00+08:00",
+      "url": "https://709527.xyz/blog/posts/configs-that-outlived-their-reason.html",
+      "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://709527.xyz/blog/posts/configs-that-outlived-their-reason.html"
+      },
+      "keywords": "迁移, 配置管理, 技术判断, 运维",
+      "articleSection": "DevOps",
+      "timeRequired": "PT13M",
+      "inLanguage": "zh-CN"
+}
+    </script>
+
+    <link rel="stylesheet" href="../../assets/css/style.css?v=c8e170d8f9">
+    <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
+    <link rel="alternate icon" href="../../assets/images/favicon.ico">
+    <link rel="canonical" href="https://709527.xyz/blog/posts/configs-that-outlived-their-reason.html">
+</head>
+<body>
+  <!-- PARTIAL:SKIP_LINK -->
+  <a href="#main-content" class="skip-link">跳至主要内容</a>
+  <!-- /PARTIAL:SKIP_LINK -->
+
+  <!-- Navigation -->
+<!-- PARTIAL:NAV -->
+  <nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">
+      loc<span>zb</span>
+    </a>
+    <button class="nav-toggle" aria-label="打开菜单" aria-expanded="false" aria-controls="nav-links-menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <div class="nav-overlay"></div>
+    <ul class="nav-links" id="nav-links-menu">
+      <li><a href="/" class="nav-link" data-nav="home">首页</a></li>
+      <li><a href="/projects/" class="nav-link" data-nav="projects">项目</a></li>
+      <li><a href="/blog/" class="nav-link active" data-nav="blog">博客</a></li>
+      <li><a href="/about/" class="nav-link" data-nav="about">关于</a></li>
+    </ul>
+    <button class="theme-toggle" aria-label="切换主题" title="切换亮/暗模式">
+      <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="5"></circle>
+        <line x1="12" y1="1" x2="12" y2="3"></line>
+        <line x1="12" y1="21" x2="12" y2="23"></line>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+        <line x1="1" y1="12" x2="3" y2="12"></line>
+        <line x1="21" y1="12" x2="23" y2="12"></line>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+      </svg>
+      <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+      </svg>
+    </button>
+  </div>
+</nav>
+  <!-- /PARTIAL:NAV -->
+  <main class="section" id="main-content" style="padding-bottom: 0; padding-top: var(--space-4xl);">
+    <div class="container container-narrow">
+      <a href="../index.html" class="back-link">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        返回博客列表
+      </a>
+
+      <article class="post-content">
+        <h1>换机砍掉的那一半配置，本来就不该存在</h1>
+
+        <div class="post-meta">
+          <span class="meta-item"><span aria-hidden="true">📅</span> 2026-11-28 15:42:00</span>
+          <span class="meta-item"><span aria-hidden="true">⏱️</span> 13 min read</span>
+          <span class="meta-item"><span aria-hidden="true">👤</span> 张小猛</span>
+        </div>
+
+        <div class="post-tags">
+          <span class="tag">迁移</span>
+          <span class="tag">配置管理</span>
+          <span class="tag">技术判断</span>
+          <span class="tag">运维</span>
+        </div>
+
+        
+
+        <h2>退租那天，我盯着那个空掉的配置目录</h2>
+<p>机器的退租时间是下午四点。三点出头，我把该带走的东西拷到一个目录里：几个仓库、几份笔记、一些证书文件。拷完以后还剩一个目录，是那台机器上跑了一年的绕行层——客户端进程、规则文件、系统级拦截的开关、拉它起来的守护脚本、盯着它的探针。</p>
+<p>我把这整个目录打成一个压缩包，也拷走了。</p>
+<p>新机器是三天前上线的，位置不一样，直连可达。它上面一条绕行配置都没有，也从没装上过。这三天里它跑得比旧机器顺：没有握手失败，没有规则更新后需要重启，没有「明明能上网但某个服务连不上」的时刻。</p>
+<p>那个压缩包，我后来再没打开过。</p>
+<p>我想说的不是打包错了。打包是赶时间时唯一靠谱的动作。但那个压缩包本身是一份证据：它证明我当时说不清哪些还有用。如果我能逐条说出每条配置服务于哪一个仍然存在的问题，我就不需要打包——我会知道哪些该带走、哪些该当场删掉。</p>
+<h2>被砍掉的那一层不是被淘汰，是只在旧机器上成立</h2>
+<p>先给结论：<strong>被砍掉的那一层不是被淘汰的，它从来没有被需要过——它只是在旧机器上被需要过。</strong></p>
+<p>这两个说法差得很远。淘汰意味着有一个更好的东西取代了它，你去学新东西就行；前提消失意味着它要解决的问题不存在了，没有取代者，也没有替代方案可找。混淆这两件事的代价，是你会一直觉得「少了一层东西」，然后找一个新的来补上。</p>
+<p>标题里的「一半」是个不精确的说法。我没有数过它在旧机器上占多少行、占多少配置项，也不打算事后估一个数字来撑场面。它想说的是那个下午的直观比例：新机器需要的那份配置，和旧机器实际在跑的那份配置之间，差的不是几行，是一整层。</p>
+<h2>迁移有两件事，清单上通常只有第一件</h2>
+<h3>搬运问「缺不缺」，清点问「还成不成立」</h3>
+<p>迁移包含两个动作，但绝大多数清单只写了第一个。</p>
+<p><strong>搬运</strong>的主语是新机器：新机器缺什么，就从旧机器上拿什么。<strong>清点</strong>的主语是旧配置：它当初为什么在这儿，那个理由现在还立得住吗。</p>
+<p>两个问题的答案集合形状完全不同。第一个问题的答案是「需要的东西」，天然倾向于把能搬的都搬过去——多搬不会立刻出错，少搬会立刻暴露。第二个问题的答案是「可以死掉的东西」，它的产出是负的，而且负得越准，越看不出来。</p>
+<h3>清点三问</h3>
+<p>清点一条配置，要问三个问题：</p>
+<ol>
+<li>它当初为了解决什么问题？</li>
+<li>那个问题的前提是什么？</li>
+<li>那个前提现在成立吗？</li>
+</ol>
+<p>三个问题里，第一个最难。因为配置文件里的注释写的是「做什么」，不是「为什么」。一行 <code>enabled: true</code> 告诉你它在生效，不告诉你它为什么要生效。「因为这台机器到不了目标」才是理由，而这句话通常只存在于加它那个人的脑子里，最多存在于某次提交信息里。</p>
+<p>所以清点常常卡在第一问就进行不下去。卡住的时候，多数人的处置是「那就留着吧」——留下一条答不出问题的配置，感觉上比删掉一条答不出问题的配置安全。</p>
+<h3>搬运之所以看着更像工作</h3>
+<p>搬运有进度条。文件在拷、服务在起、页面能打开、单测能过。你可以指着屏幕说「好了」。</p>
+<p>清点没有进度条。它的产出是「少了一部分东西」，而少得越对，越没人看得出来。删对了，什么都不会发生；删错了，当天就会出事。奖惩结构是反的，所以清点天然不被记进任何人的任务列表。</p>
+<p>这就是为什么迁移记录里通常只有搬运：不是没人想到清点，是清点不发生「事件」，无法被记录成一条已完成项。</p>
+<h2>假设登记簿：九条看起来天经地义的配置</h2>
+<p>下面这份登记簿，记的是旧环境里那些看起来天经地义的配置。每一条按四栏记。四栏缺一栏，就不算记过——特别是第一栏，如果只能写出「它做什么」，说明这条还没被清点。</p>
+<pre><code class="language-text">假设          ：这台机器到不了目标，所以要绕一层
+假设依赖什么  ：① 机器的网络位置  ② 目标的位置
+机器一换      ：位置变了，依赖还在，但结论反了 —— 示意，非真实配置
+处置          ：整层删（先停守护，再停进程）
+</code></pre>
+<p>这段是示意，用来演示记法，不是从哪台机器上抠下来的。</p>
+<h3>第一条 · 「到不了目标，所以要绕一层」</h3>
+<p><strong>当时的假设</strong>：这台机器的网络位置到不了要访问的目标，所以要绕一层出去。</p>
+<p><strong>假设依赖什么</strong>：两个外部事实——机器所在的位置、目标所在的位置。注意这两个都不是机器属性，是环境属性。同一台机器搬个地方，这条假设就可能从成立变成不成立。</p>
+<p><strong>机器一换，依赖还在吗</strong>：位置变了。新位置直连可达，这条假设的前提直接消失。</p>
+<p><strong>处置</strong>：整层删。</p>
+<p>这里有个容易忽略的地方：这一层不是一个软件，是一串彼此依赖的配置。客户端进程、配置或规则订阅、系统级流量拦截、按域名分流规则、健康检查与自动切换、开机自启、日志与端口占用。它们之间没有强制的引用检查，<strong>任何一环被删，其余几环不会报错，只会静默变成死配置</strong>。</p>
+<pre><code class="language-text">客户端进程
+  └─ 读取规则订阅  ← 订阅挂了，进程照跑，规则停在旧版本
+       └─ 按域名分流  ← 没有进程，规则不再被引用，文件还在
+            └─ 系统级拦截  ← 没有分流规则，拦截仍然会劫持全部流量
+                 └─ 健康检查  ← 只探端口，端口在听就是绿的
+                      └─ 开机自启  ← 守护一个已经没有意义的进程
+</code></pre>
+<p>示意。这张图的重点是每一条的输入都来自上一层，但没有任何一层会检查上一层是否还该存在。</p>
+<h3>第二条 · 「这几个域名必须绕，那几个必须直连」</h3>
+<p><strong>当时的假设</strong>：目标不是均质的——有些必须绕行，有些必须直连。数据库、内网地址、按地区计价的服务，绕出去反而更慢或者直接失败。</p>
+<p><strong>假设依赖什么</strong>：第一条成立。没有绕行层，就不存在「分流」这件事。</p>
+<p><strong>机器一换，依赖还在吗</strong>：第一条整层没了，这条的每一行都失去被引用的理由。但它不会报错：规则文件还在，匹配逻辑还在，只是没有流量再经过它。</p>
+<p><strong>处置</strong>：与第一条同批删。顺序上先删引用方，再删被引用方，反过来会在删除过程中制造一段「规则指向不存在的出口」的状态。</p>
+<pre><code class="language-yaml"># 示意：一条分流规则。真正缺的不是这一行，是它上面那行注释
+rules:
+  - domain: &quot;internal.example.com&quot;
+    action: direct        # 为什么是 direct？因为这台机器原本到不了它
+  - domain: &quot;blog.example.com&quot;
+    action: proxy         # 为什么是 proxy？因为原本必须绕
+</code></pre>
+<p>这份示意里，两行配置本身都没问题，问题在注释：它们写的是「走哪条路」，没写「当初为什么要分」。等绕行层消失，这两行会从「正确的配置」变成「正确的废话」。</p>
+<h3>第三条 · 「不是每个程序都懂绕行，所以要在系统层拦」</h3>
+<p><strong>当时的假设</strong>：有一部分程序不读环境变量、不认应用层设置，只能在系统层把流量截下来。</p>
+<p><strong>假设依赖什么</strong>：① 确实存在绕行需求；② 那部分程序还在被使用。</p>
+<p><strong>机器一换，依赖还在吗</strong>：① 消失。② 程序可能还在，但它们不再需要被截——直连本来就是它们该走的路。</p>
+<p><strong>处置</strong>：删。</p>
+<p>这一条是整层里副作用最大的一环，因为它把「所有流量」变成自己的管辖范围。它活着的时候，本机任何网络异常的默认第一嫌疑人是它；它被删了一半的时候（开关关了但路由条目、DNS 设置、虚拟网卡还在），残留物会以更难查的方式影响本机行为。具体表现取决于实现方式，这里不给通用结论，只给一条处置纪律：<strong>这一层的删除要验证「删完之后本机网络行为与从未装过它时一致」，而不只是验证「进程不在了」</strong>。</p>
+<h3>第四条 · 「进程会掉，所以要有人在开机时拉起来」</h3>
+<p><strong>当时的假设</strong>：这个东西必须常驻，掉了要自愈，重启要自动回来。</p>
+<p><strong>假设依赖什么</strong>：它必须常驻。</p>
+<p><strong>机器一换，依赖还在吗</strong>：不需要常驻的东西，不需要守护。更麻烦的是，守护脚本的存在本身会反过来制造「它很重要」的印象——下次有人看到这个 unit、这个 cron、这个 watchdog，第一判断是「这东西不能停」。</p>
+<p><strong>处置</strong>：删。顺序是先停守护，再停进程。反过来做，守护会在你停掉进程之后立刻把它拉回来，你会以为删不掉，然后放弃。</p>
+<h3>第五条 · 「这条链路要有人盯着」</h3>
+<p><strong>当时的假设</strong>：链路会断，断了要告警。</p>
+<p><strong>假设依赖什么</strong>：链路存在，且它承载的东西重要。</p>
+<p><strong>机器一换，依赖还在吗</strong>：链路不存在了，探针还在探。而它探的是端口有没有在听。</p>
+<pre><code class="language-bash"># 示意：这类探针的判据通常只有一条
+if port_listening &quot;$LISTEN_PORT&quot;; then
+  report &quot;ok&quot;
+else
+  report &quot;down&quot;
+fi
+# 它回答的是「有没有人在听」，不是「这条路还该不该存在」
+</code></pre>
+<p>端口号是示意里随手写的假值。重点是判据：一个已经不承载任何东西的端口，只要进程还在，探针就是绿的；而只要进程被删掉、端口空出来，探针会立刻转红，于是你会收到一条「服务不可用」的告警，去修一个本来该被删掉的东西。</p>
+<p><strong>处置</strong>：删探针，连同它的告警规则、静默规则、值班表里对应的那一条。只删探针不删告警规则，下一次变更会给你一条无法解释的红灯。</p>
+<h3>第六条 · 「这个端口是本机的固定事实」</h3>
+<p><strong>当时的假设</strong>：某个本地端口归这一层所有，防火墙要为它开口，容器要把它映射出去，文档里要写它。</p>
+<p><strong>假设依赖什么</strong>：这一层存在。</p>
+<p><strong>机器一换，依赖还在吗</strong>：端口空出来了。但「空出来」不等于「没人记得」：防火墙的放行规则、容器的端口映射、部署文档里的本地地址、别人脚本里写死的本地地址，都还指着它。</p>
+<p><strong>处置</strong>：删放行规则、删映射、改文档。别人脚本里的地址不能替人改，但要主动通知——这一条是清理里唯一需要跨人协作的部分，也是最容易漏的部分，因为它不在你的仓库里。</p>
+<h3>第七条 · 「日志要落在本地，方便事后翻」</h3>
+<p><strong>当时的假设</strong>：这一层会产生需要事后追溯的连接记录，所以要落盘、要轮转、要留够天数。</p>
+<p><strong>假设依赖什么</strong>：① 这一层存在；② 确实有人会去翻。</p>
+<p><strong>机器一换，依赖还在吗</strong>：① 消失；② <strong>仍然成立</strong>——不是因为绕行层，而是因为同一台机器上还有别的东西在写日志。</p>
+<p><strong>处置</strong>：<strong>留着。</strong> 要改的只有一处：采集配置里那条指向旧目录的路径。</p>
+<p>这一条是登记簿里第一个「不该删」。它的价值不挂在绕行层上，挂在「这台机器会写日志、日志要能被追溯」这个与机器位置无关的事实上。判据的差别在这里：绕行层的寿命由「到不到得了目标」决定，日志的寿命由「出事后要不要查」决定。后者换机器不会变。</p>
+<h3>第八条 · 「订阅的规则集要按时更新」</h3>
+<p><strong>当时的假设</strong>：规则会变，所以要定时拉取，保持最新。</p>
+<p><strong>假设依赖什么</strong>：① 有东西在消费这份规则；② 规则的维护方还在维护。</p>
+<p><strong>机器一换，依赖还在吗</strong>：① 消失。② 与你无关了。</p>
+<p><strong>处置</strong>：删定时任务，再删本地副本。第二步常被漏掉：任务删了，文件还在，它会以「配置」的身份继续被下一个人读到，读的人不会知道它是死的。</p>
+<p>还有一重风险不随机器消失：只要任务还在跑，它就会在你不知情的情况下覆盖本地文件。某天你翻到这份规则，会以为它是当前的决策依据；而它可能已经是一份被人改过若干轮、与你无关的策略。</p>
+<h3>第九条 · 「备份要带上这台机器自己的状态」</h3>
+<p><strong>当时的假设</strong>：这台机器的状态需要能被重建，所以要有定时任务把它抄到别处。</p>
+<p><strong>假设依赖什么</strong>：这台机器上有不可再生的状态。</p>
+<p><strong>机器一换，依赖还在吗</strong>：要分开看两种任务。</p>
+<ul>
+<li>指向旧机器自身地址的：把本机 A 目录同步到本机 B 目录、把本机状态推到本机另一个盘。前提随机器消失，<strong>删</strong>。</li>
+<li>指向一个仍然存在的远端目标的：代码仓库、对象存储、另一台还在服役的机器。前提没变，<strong>留着</strong>。</li>
+</ul>
+<p><strong>处置</strong>：一条删、一条留。判据是问「我要恢复的东西在哪」，而不是问「这个任务原来跑在哪台机器上」。搬机器时按后者筛，会把一整批备份任务当成历史包袱清掉，然后在某天发现没有备份。</p>
+<h3>压成一张表</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">条目</th>
+<th style="text-align: left;">当时的假设</th>
+<th style="text-align: left;">处置</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">一</td>
+<td style="text-align: left;">到不了目标，所以要绕</td>
+<td style="text-align: left;">整层删</td>
+</tr>
+<tr>
+<td style="text-align: left;">二</td>
+<td style="text-align: left;">有些域名要绕，有些要直连</td>
+<td style="text-align: left;">随第一条删</td>
+</tr>
+<tr>
+<td style="text-align: left;">三</td>
+<td style="text-align: left;">程序不懂绕行，要在系统层拦</td>
+<td style="text-align: left;">删，并验证网络行为复原</td>
+</tr>
+<tr>
+<td style="text-align: left;">四</td>
+<td style="text-align: left;">进程会掉，要自愈</td>
+<td style="text-align: left;">先停守护再停进程</td>
+</tr>
+<tr>
+<td style="text-align: left;">五</td>
+<td style="text-align: left;">链路要有人盯着</td>
+<td style="text-align: left;">删探针与告警规则</td>
+</tr>
+<tr>
+<td style="text-align: left;">六</td>
+<td style="text-align: left;">这个端口归它所有</td>
+<td style="text-align: left;">删放行与映射，改文档</td>
+</tr>
+<tr>
+<td style="text-align: left;">七</td>
+<td style="text-align: left;">日志要落盘、要能追溯</td>
+<td style="text-align: left;"><strong>留着</strong>，只改采集路径</td>
+</tr>
+<tr>
+<td style="text-align: left;">八</td>
+<td style="text-align: left;">规则会变，要定时拉</td>
+<td style="text-align: left;">删任务与本地副本</td>
+</tr>
+<tr>
+<td style="text-align: left;">九</td>
+<td style="text-align: left;">本机状态要能重建</td>
+<td style="text-align: left;">指向自身的删，指向远端的<strong>留着</strong></td>
+</tr>
+</tbody>
+</table>
+<p>表里九条，七条删、两条留。这个比例不是重点，重点是那两条留的判据与其余七条不同：前七条的寿命挂在「机器位置」上，后两条挂在「出事后要不要查」「数据丢了要不要能恢复」上。</p>
+<h2>为什么没人删：它在失效之后仍然「工作正常」</h2>
+<h3>探针只探端口，不探必要性</h3>
+<p>监控系统的语义是「这个东西还活着吗」，不是「这个东西还该活着吗」。前者是可观测事实，后者是意图，而从机器里读不出意图。</p>
+<p>所以一条配置失效以后，只要它还有进程、还在监听、还在写日志，所有仪表就是绿的。没有任何一条告警的判据是「它已经三个月没有服务于任何问题了」——这条判据写不出来，写出来也没法自动算。</p>
+<h3>一条没有用处的分流规则照样命中</h3>
+<p>把一条已经无用的规则留着，它的匹配逻辑仍然正确、仍然会命中、仍然按预期动作。功能正确与需求成立是两件不同的事，而监控只看前者。</p>
+<p>这是静默失效最典型的形态：它不坏，它只是不再有意义。坏了会有人修，不再有意义不会有人发现。</p>
+<h3>订阅型配置会自己变</h3>
+<p>定时拉取的规则集，会在你不知情的情况下改变行为。某天某个站打不开、某个服务连不上，你去查，会查到一条你从没写过的规则。</p>
+<p>行为变了，变更记录里没有对应条目——因为这份变更不在你的版本控制里，它在别人的仓库里。这比「忘了当初为什么加」更麻烦：你连「它是什么时候变成这样的」都答不出来。</p>
+<h3>删除不在任何人的日程上</h3>
+<p>没有哪个任务叫「本周清点不再成立的假设」。加配置有触发事件：要连某个东西、要开某个端口、要绕某个限制。删配置没有触发事件。</p>
+<p>它只在退租、换机、迁移这种被迫清点的时刻浮上来。而那时人通常在赶时间，赶时间时的默认动作是打包，不是逐条判断——于是清点被推迟到「以后」，而「以后」没有日期。</p>
+<h2>为什么非删不可：留着不是零成本</h2>
+<h3>排查时它先把人带偏</h3>
+<p>出事时的第一个动作是缩小范围。一条没人知道来历的配置会把范围扩大：你会去查它、会怀疑它、会在它身上花掉本该花在真正原因上的时间。</p>
+<p>它的第一作用不是占内存，是改变你排错的顺序。而排错顺序错了，代价按小时算。</p>
+<h3>下一个人会绕开它</h3>
+<p>下一个人——包括三个月后的自己——看到一条配置，默认假设是「有人加它是有原因的」。于是他既不删它，也不在它旁边加东西，他会绕开。</p>
+<p>绕开的代价是长期的：新方案要多考虑一个不该存在的变量，文档要多解释一段不该存在的历史，新人上手要多问一个答不上来的问题。留着一条死配置，等于给后来者留了一个必须绕行的坑，而且还看不出那是坑。</p>
+<h3>每一条都是没有出处的变量</h3>
+<p>一台机器的行为，等于它上面所有配置的总和。一条没有出处的配置，就是一个无法归因的变量。</p>
+<p>变量少的时候，你可以说「这台机器就是这样配的」；变量多到一定程度，你只能说「这台机器就是这样」。前者可维护，后者只能重启试试。</p>
+<h2>删除也要证据</h2>
+<h3>「看着像没用」不是判据</h3>
+<p>删除的判据是「问题的前提不成立」，不是「看着像没用」。区别在于：前者以问题的形状为准，后者以你的记忆为准。</p>
+<p>而记忆在这件事上不可靠——看着像没用的东西，常常只是你忘了它当初挡住了什么。凭印象删，会在几周后以一种很难回溯的方式还回来。</p>
+<h3>答不出来的，先标记观察</h3>
+<p>三问答不全的那条，处置不是删，是标记：写清它现在服务于什么问题，写不出来的就写「未知」，记下日期，然后观察它下一次出现或者不出现。</p>
+<pre><code class="language-text"># 示意：标记格式，重点是「未知」也要有日期
+# owner: unknown
+# since: 2026-xx-xx  （本次清点日期）
+# serves: 未知，观察中
+# next-review: 三个月后
+</code></pre>
+<p>「未知」加上日期，是一个可以推进的状态；「未知」不加日期，就等于永久保留。这两者在文件里长得几乎一样，在半年后差别很大。</p>
+<h3>删除也要留账</h3>
+<p>删除的记账方式和新增不一样。新增记「为什么加」，删除记「为什么可以没有」。</p>
+<p>后者更容易丢，因为删除看起来是「什么都没发生」。而它恰恰是最需要留痕的动作：下一次有人想加回来的时候，唯一能拦住他的就是这条记录。</p>
+<h2>收束：把生命周期挂到问题上</h2>
+<p>一条配置的生命周期，应该挂在「它要解决的问题」上，而不是挂在「它所在的机器」上。机器是配置的宿主，不是配置的理由。</p>
+<p>按这个标准，判断一条配置该不该活，看的是它要解决的问题还在不在，不是它在哪台机器上跑、跑了多久、有没有人维护。机器换了，问题消失的那些就该跟着消失；问题还在的那些，哪怕整个环境都换了，也要带过去。</p>
+<p>迁移做完了的标志，不是新机器能跑起来。新机器能跑起来只说明搬运做完了，那是最容易的一半。标志是：旧机器上的每一条配置，你都能说出它现在服务于哪一个仍然存在的问题。说不出的那些，要么已经在删除记录里，要么还在观察名单上，标着日期。</p>
+<p>旧机器退租那天我打包的那个压缩包，到现在也没打开过。它算不上备份——它是我当时还没做完的那份清点的替代品。</p>
+
+        <!-- Related Static -->
+        <div class="related-posts">
+          <div class="related-posts-title">📌 相关文章</div>
+          <div class="related-posts-list">
+          <a class="related-post-card" href="external-identifiers-coupling-radius.html">
+            <div class="related-post-card-title">别人的一次改名，是你的全站停机：外部标识符的耦合半径</div>
+            <div class="related-post-card-tags"><span>配置管理</span><span>部署</span><span>耦合</span></div>
+          </a>
+          <a class="related-post-card" href="choosing-and-running-a-vps.html">
+            <div class="related-post-card-title">主流 VPS 的选择和使用</div>
+            <div class="related-post-card-tags"><span>VPS</span><span>DevOps</span><span>运维</span></div>
+          </a>
+          <a class="related-post-card" href="从-openclaw-到-hermesai-agent-工作区迁移完整记录.html">
+            <div class="related-post-card-title">从 OpenClaw 到 Hermes：AI Agent 工作区迁移完整记录</div>
+            <div class="related-post-card-tags"><span>OpenClaw</span><span>Hermes</span><span>AI Agent</span></div>
+          </a>
+          <a class="related-post-card" href="vps-选购与使用指南五个常见场景的配置与避坑.html">
+            <div class="related-post-card-title">VPS 选购与使用指南：五个常见场景的配置与避坑</div>
+            <div class="related-post-card-tags"><span>VPS</span><span>DevOps</span><span>运维</span></div>
+          </a>
+          <a class="related-post-card" href="a-lock-file-outlives-its-process.html">
+            <div class="related-post-card-title">锁文件不跟着进程走：进程崩溃后留下的那把锁，没人会来解开</div>
+            <div class="related-post-card-tags"><span>Unix</span><span>并发</span><span>文件锁</span></div>
+          </a>
+          </div>
+        </div>
+
+        <!-- /Related Static -->
+
+        <!-- Post Copyright & License Card -->
+        <div class="post-copyright-card">
+          <div class="copyright-header">
+            <div class="copyright-badge">
+              <span>📜</span>
+              <span>原创与知识共享协议</span>
+            </div>
+            <button class="copyright-cite-btn" id="copy-cite-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+              </svg>
+              <span>复制 Markdown 引用</span>
+            </button>
+          </div>
+          <div class="copyright-list">
+            <div class="copyright-item"><strong>文章标题：</strong>换机砍掉的那一半配置，本来就不该存在</div>
+            <div class="copyright-item"><strong>文章作者：</strong>张小猛 · loczb</div>
+            <div class="copyright-item"><strong>永久链接：</strong><a href="https://709527.xyz/blog/posts/configs-that-outlived-their-reason.html">https://709527.xyz/blog/posts/configs-that-outlived-their-reason.html</a></div>
+            <div class="copyright-item"><strong>版权声明：</strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 国际许可协议。商业转载请联系作者获得授权，非商业转载请注明出处。</div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </main>
+
+  <!-- Related Posts / Navigation -->
+  <section class="section" aria-label="读完之后" style="padding-top: 0;">
+    <div class="container container-narrow">
+      <!-- Post Nav Prev Next -->
+      <nav class="post-nav" aria-label="文章翻页导航">
+        <a href="binder-buffer-is-a-shared-budget.html" class="post-nav-card post-nav-prev" rel="prev">
+          <span class="post-nav-label">← 上一篇</span>
+          <span class="post-nav-title">1MB 不是建议值，是同一个进程里所有 Binder 事务共享的顶</span>
+        </a>
+        <div class="post-nav-card post-nav-next disabled" aria-disabled="true">
+          <span class="post-nav-label">下一篇 →</span>
+          <span class="post-nav-title">已是最新篇博文</span>
+        </div>
+      </nav>
+      <!-- /Post Nav Prev Next -->
+      <hr style="border: none; border-top: 1px solid var(--color-border); margin: var(--space-2xl) 0;">
+
+      <div class="blog-topics" style="margin-bottom: var(--space-xl); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+        <div>
+          <span class="topic-label">读完之后:</span>
+          <a href="../index.html" class="topic-tag">返回博客列表</a>
+          <a href="../index.html?view=series" class="topic-tag">浏览全部专栏</a>
+        </div>
+        <a href="#main-content" class="topic-tag" style="margin-left: auto;">↑ 回到顶部</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+<!-- PARTIAL:FOOTER -->
+  <footer class="footer" role="contentinfo">
+  <div class="footer-inner">
+    <p class="footer-signature">写代码，做产品，也认真生活。</p>
+    <div class="footer-social">
+      <a href="https://github.com/zzdbilly" class="footer-social-link" target="_blank" rel="noopener" aria-label="GitHub">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+      </a>
+      <a href="https://twitter.com/zzdbilly" class="footer-social-link" target="_blank" rel="noopener" aria-label="X (Twitter)">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      </a>
+      <a href="/rss.xml" class="footer-social-link" target="_blank" rel="noopener" aria-label="RSS 订阅">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+      </a>
+    </div>
+    <div class="footer-links">
+      <a href="/" class="footer-link">首页</a>
+      <a href="/projects/" class="footer-link">项目</a>
+      <a href="/blog/" class="footer-link">博客</a>
+      <a href="/about/" class="footer-link">关于</a>
+    </div>
+    <p class="footer-copyright">&copy; 2026 张小猛 · loczb · Built with care</p>
+  </div>
+</footer>
+  <!-- /PARTIAL:FOOTER -->
+
+  <script defer src="../../assets/js/main.js"></script>
+  <script defer src="../../assets/js/article.js?v=c9f1a378ea"></script>
+  <script defer src="../../assets/js/share.js"></script>
+  <!-- Back to Top & Reading Progress -->
+  <button class="back-to-top" id="backToTop" aria-label="回到顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
+  <div class="reading-progress" id="readingProgress"></div>
+
+  <!-- Post Sidebar Info（左侧） -->
+  <div class="post-sidebar-info" id="postSidebar">
+    <div class="post-info-card">
+      <div class="post-info-section">
+        <div class="post-info-label">作者</div>
+        <div class="post-info-author">
+          <div class="post-info-avatar">小</div>
+          <div>
+            <div class="post-info-author-name">张小猛</div>
+            <div class="post-info-author-desc">写代码，做产品</div>
+          </div>
+        </div>
+      </div>
+      <div class="post-info-section">
+        <div class="post-info-label">文章信息</div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📅</span> 发布日期</span><span class="post-info-stat-value">2026-11-28</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">⏱️</span> 阅读时间</span><span class="post-info-stat-value">13 min read</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📝</span> 文章字数</span><span class="post-info-stat-value">5518 字</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">📊</span> 章节数</span><span class="post-info-stat-value">8 节 · 23 子节</span></div>
+        <div class="post-info-stat"><span class="post-info-stat-label"><span aria-hidden="true">💻</span> 代码块</span><span class="post-info-stat-value">5 段</span></div>
+      </div>
+      <div class="post-info-section" id="postSidebarTags">
+        <div class="post-info-label">标签</div>
+        <div class="post-info-links">
+          <a href="../../blog/index.html?tag=%E8%BF%81%E7%A7%BB" class="post-info-link"># 迁移</a>
+          <a href="../../blog/index.html?tag=%E9%85%8D%E7%BD%AE%E7%AE%A1%E7%90%86" class="post-info-link"># 配置管理</a>
+          <a href="../../blog/index.html?tag=%E6%8A%80%E6%9C%AF%E5%88%A4%E6%96%AD" class="post-info-link"># 技术判断</a>
+          <a href="../../blog/index.html?tag=%E8%BF%90%E7%BB%B4" class="post-info-link"># 运维</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Post TOC -->
+  <div class="post-toc-container" id="postToc">
+    <nav class="post-toc" aria-label="文章目录">
+      <div class="post-toc-title">目录</div>
+      <ul class="post-toc-list" id="tocList">
+      </ul>
+    </nav>
+  </div>
+
+  <!-- Comment System -->
+  <script src="../../workers/comment-system/comment-widget.js?v=5d8a6a1796" defer></script>
+
+  <!-- highlight.js 代码语法高亮（本地完整构建，无外部依赖） -->
+  <script defer src="../../assets/vendor/highlight/highlight.min.js"></script>
+  <script>
+    /* 语法高亮改为「可见优先、空闲补齐」：
+       highlight.js 要遍历全篇代码块并生成数百个 span，若在 DOMContentLoaded 里同步跑完，
+       会在关键路径上长时间占住主线程（2026-09-27 实测本页长任务 1548ms、DCL 3651ms；
+       改动后长任务 145ms、DCL 1378ms）。这里 DCL 阶段只登记观察，实际高亮交给
+       IntersectionObserver（近屏 800px 内优先）+ requestIdleCallback（剩余块每片 ≤4 块），
+       首屏代码块的着色时机与视觉基本无变化。 */
+    (function() {
+      function canPaint(b) {
+        return !b.classList.contains('hljs') && !b.closest('.codehilite');
+      }
+      function paint(b) {
+        if (!canPaint(b)) return;
+        try { hljs.highlightElement(b); } catch (e) {}
+      }
+      function init() {
+        var blocks = [].slice.call(document.querySelectorAll('pre code')).filter(canPaint);
+        if (!blocks.length) return;
+        if ('IntersectionObserver' in window) {
+          var io = new IntersectionObserver(function(entries, obs) {
+            entries.forEach(function(en) {
+              if (!en.isIntersecting) return;
+              paint(en.target);
+              obs.unobserve(en.target);
+            });
+          }, { rootMargin: '800px 0px' });
+          blocks.forEach(function(b) { io.observe(b); });
+        }
+        var i = 0;
+        var idle = window.requestIdleCallback || window.setTimeout;
+        var step = function() {
+          var quota = 4;
+          while (i < blocks.length && quota-- > 0) paint(blocks[i++]);
+          if (i < blocks.length) idle(step);
+        };
+        idle(step); // 不在 DCL 里同步跑：可见块由 IntersectionObserver 处理，其余走空闲分片
+      }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+      } else {
+        init();
+      }
+    })();
+  </script>
+
+  <!-- Cloudflare Web Analytics -->
+  <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "29e7cff6f37448989538e2165cb79187"}'></script>
+</body>
+</html>

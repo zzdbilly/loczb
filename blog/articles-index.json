@@ -1,6 +1,21 @@
 {
   "posts": [
     {
+      "slug": "configs-that-outlived-their-reason",
+      "title": "换机砍掉的那一半配置，本来就不该存在",
+      "date": "2026-11-28",
+      "dateTime": "2026-11-28 15:42:00",
+      "category": "DevOps",
+      "tags": [
+        "迁移",
+        "配置管理",
+        "技术判断",
+        "运维"
+      ],
+      "readTime": 13,
+      "url": "blog/posts/configs-that-outlived-their-reason.html"
+    },
+    {
       "slug": "binder-buffer-is-a-shared-budget",
       "title": "1MB 不是建议值，是同一个进程里所有 Binder 事务共享的顶",
       "date": "2026-11-27",
@@ -2351,6 +2366,7 @@
     }
   ],
   "categories": [
+    "DevOps",
     "Android",
     "开发",
     "前端",
@@ -2359,13 +2375,12 @@
     "思考",
     "AI",
     "数据库",
-    "安全",
-    "DevOps"
+    "安全"
   ],
   "stats": {
-    "totalPosts": 152,
-    "totalTags": 380,
-    "latestDate": "2026-11-27",
+    "totalPosts": 153,
+    "totalTags": 381,
+    "latestDate": "2026-11-28",
     "oldestDate": "2026-02-15"
   }
 }

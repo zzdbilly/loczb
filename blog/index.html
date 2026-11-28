@@ -109,7 +109,7 @@
         <div class="blog-hero-info">
           <div class="status-pill" style="margin-bottom: 0.5rem;">
             <span class="pulse-dot"></span>
-            <span><!-- POSTS_COUNT -->152<!-- /POSTS_COUNT --> 篇深度文章 · 持续迭代中</span>
+            <span><!-- POSTS_COUNT -->153<!-- /POSTS_COUNT --> 篇深度文章 · 持续迭代中</span>
           </div>
           <h1 class="blog-hero-title">技术<span class="gradient-text">博客</span></h1>
           <p class="blog-hero-subtitle">Android、Kotlin、端侧 AI、全栈架构与开发思考</p>
@@ -163,7 +163,7 @@
           <button class="view-toggle-btn active" data-view="list" role="tab" aria-selected="true" aria-controls="blog-list">
             <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h7"/></svg>
             <span class="tab-text">全部文章</span>
-            <span class="tab-badge"><!-- POSTS_COUNT -->152<!-- /POSTS_COUNT --></span>
+            <span class="tab-badge"><!-- POSTS_COUNT -->153<!-- /POSTS_COUNT --></span>
           </button>
           <button class="view-toggle-btn" data-view="series" role="tab" aria-selected="false" aria-controls="series-view">
             <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><line x1="9" y1="7" x2="15" y2="7"/><line x1="9" y1="11" x2="13" y2="11"/></svg>
@@ -179,6 +179,28 @@
       </div>
       <div class="blog-list-container" id="blog-list">
         <!-- Post List -->
+        <article class="blog-list-item spotlight-card animate-on-scroll" data-category="DevOps" data-tags="迁移,配置管理,技术判断,运维" data-page="1">
+          <div>
+            <div class="blog-list-header">
+              <div class="blog-list-meta">
+                <span class="blog-date">📅 2026-11-28</span>
+                <span>·</span>
+                <span class="blog-read-time">⏱️ 13 min</span>
+              </div>
+              <span class="blog-list-tag">DevOps</span>
+            </div>
+            <h3 class="blog-list-title">
+              <a href="posts/configs-that-outlived-their-reason.html">换机砍掉的那一半配置，本来就不该存在</a>
+            </h3>
+            <p class="blog-list-excerpt">机器一换，旧环境里那一整层绕行配置就整体作废。迁移真正的工作不是搬运，是清点每条配置要解决的问题是否还成立。</p>
+          </div>
+          <div class="blog-list-footer">
+            <div class="blog-list-tags">
+              <span class="tag-pill">#迁移</span> <span class="tag-pill">#配置管理</span> <span class="tag-pill">#技术判断</span>
+            </div>
+            <a href="posts/configs-that-outlived-their-reason.html" class="blog-read-more" aria-label="阅读全文：换机砍掉的那一半配置，本来就不该存在"><span>阅读全文</span><span class="read-more-arrow">→</span></a>
+          </div>
+        </article>
         <article class="blog-list-item spotlight-card animate-on-scroll" data-category="Android" data-tags="Android,Binder,IPC,性能" data-page="1">
           <div>
             <div class="blog-list-header">
@@ -375,28 +397,6 @@
               <span class="tag-pill">#写作</span> <span class="tag-pill">#日更</span> <span class="tag-pill">#取舍</span>
             </div>
             <a href="posts/daily-publishing-selects-for-easy-topics.html" class="blog-read-more" aria-label="阅读全文：每天都能发一篇的时候，最容易回避的是那篇难写的"><span>阅读全文</span><span class="read-more-arrow">→</span></a>
-          </div>
-        </article>
-        <article class="blog-list-item spotlight-card animate-on-scroll" data-category="Kotlin" data-tags="Kotlin,协程,并发,Android" data-page="1">
-          <div>
-            <div class="blog-list-header">
-              <div class="blog-list-meta">
-                <span class="blog-date">📅 2026-11-18</span>
-                <span>·</span>
-                <span class="blog-read-time">⏱️ 15 min</span>
-              </div>
-              <span class="blog-list-tag">Kotlin</span>
-            </div>
-            <h3 class="blog-list-title">
-              <a href="posts/suspend-does-not-switch-threads.html">suspend 不切线程：你以为的后台，只是换了个队列在等</a>
-            </h3>
-            <p class="blog-list-excerpt">suspend 回答的是「会不会挂起」，不是「跑在哪个线程」。把两个决定混成一个，就会写出标了 suspend 仍然占满主线程的代码。</p>
-          </div>
-          <div class="blog-list-footer">
-            <div class="blog-list-tags">
-              <span class="tag-pill">#Kotlin</span> <span class="tag-pill">#协程</span> <span class="tag-pill">#并发</span>
-            </div>
-            <a href="posts/suspend-does-not-switch-threads.html" class="blog-read-more" aria-label="阅读全文：suspend 不切线程：你以为的后台，只是换了个队列在等"><span>阅读全文</span><span class="read-more-arrow">→</span></a>
           </div>
         </article>
       <!-- /Post List -->
